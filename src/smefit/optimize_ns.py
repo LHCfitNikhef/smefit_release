@@ -4,8 +4,8 @@ Fitting the Wilson coefficients with NS
 import os
 import time
 
-#from mpi4py import MPI
-#from pymultinest.solve import solve
+# from mpi4py import MPI
+# from pymultinest.solve import solve
 
 from .optimize import OPTIMIZER
 
@@ -123,7 +123,7 @@ class OPTIMIZE(OPTIMIZER):
         return hypercube
 
     def clean(self):
-        """ Remove raw NS output if you want to keep raw output, don't call this method"""
+        """Remove raw NS output if you want to keep raw output, don't call this method"""
 
         filelist = [
             f for f in os.listdir(self.config["results_path"]) if f.startswith("1k-")
@@ -136,5 +136,3 @@ class OPTIMIZE(OPTIMIZER):
         """Run the minimisation with Nested Sampling"""
         print("==================================")
         print("Run NS")
-
-        

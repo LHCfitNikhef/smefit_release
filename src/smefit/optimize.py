@@ -2,9 +2,8 @@ import json
 import numpy as np
 
 from . import chi2 as chi2
-from .loader import load_datasets 
+from .loader import load_datasets
 from .loader import aggregate_coefficients
-
 
 
 class OPTIMIZER:
@@ -15,12 +14,13 @@ class OPTIMIZER:
     ----------
         config : dict
             configuration dictionary
-    """  
+    """
+
     def __init__(self, config):
         self.config = config
         self.loaded_datasets = load_datasets(self.config)
         self.coefficients = aggregate_coefficients(self.config, self.loaded_datasets)
-    
+
         for k in self.config["coefficients"]:
             if k not in self.coefficients.labels:
                 raise NotImplementedError(
@@ -31,7 +31,7 @@ class OPTIMIZER:
         if self.config["HOlambda"] == "HO":
             self.config["HOindex1"] = []
             self.config["HOindex2"] = []
-            
+
             for coeff in self.loaded_datasets.HOcorrectionsKEYS:
                 idx1 = np.where(self.coefficients.labels == coeff.split("*")[0])[0][0]
                 idx2 = np.where(self.coefficients.labels == coeff.split("*")[1])[0][0]
@@ -43,7 +43,6 @@ class OPTIMIZER:
         self.npts = None
         self.free_params = []
         self.free_param_labels = []
-
 
     def get_free_params(self):
         """Gets free parameters entering fit"""
@@ -82,7 +81,7 @@ class OPTIMIZER:
             #     new_post.append(float(self.coefficients.values[idx_fixed]))
 
             # self.coefficients.values[idx] = rotation @ np.array(new_post)
-    
+
     def propagate_params(self):
         """Propagates minimizer's updated parameters to the coefficient tuple"""
 
@@ -91,7 +90,7 @@ class OPTIMIZER:
             if self.config["coefficients"][k]["fixed"] is False:
                 idx2 = np.where(self.free_param_labels == k)[0][0]
                 self.coefficients.values[idx] = self.free_params[idx2]
-    
+
     def chi2_func(self):
         """
         Wrap the chi2 in a function for scipy optimiser. Pass noise and

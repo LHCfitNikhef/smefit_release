@@ -1,6 +1,7 @@
 import yaml
 
-class RUNNER: 
+
+class RUNNER:
     """
     Class containing all the possible smefit run methods.
 
@@ -24,7 +25,7 @@ class RUNNER:
         print(20 * "  ", r"|____/|_|  |_|_____|_|   |_| |_|  ")
         print()
         print(18 * "  ", "A Standard Model Effective Field Theory Fitter")
-        
+
     def setup_config(self, filename):
         """
         Read yaml card, update the configuration paths
@@ -53,7 +54,7 @@ class RUNNER:
 
         # Construct results folder
         res_folder = f"{self.root_path}/results"
-        res_folder_run = config['results_path']
+        res_folder_run = config["results_path"]
 
         subprocess.call(f"mkdir -p {res_folder}", shell=True)
         subprocess.call(f"mkdir -p {res_folder_run}", shell=True)
@@ -65,8 +66,6 @@ class RUNNER:
         )
 
         return config
-
-
 
     def ns(self, input_card):
         """
@@ -81,11 +80,7 @@ class RUNNER:
         config = self.setup_config(input_card)
         from .optimize_ns import OPTIMIZE
 
-        opt =OPTIMIZE(config)
+        opt = OPTIMIZE(config)
         opt.run_sampling()
-        
 
         return 0
-
-
-    

@@ -27,14 +27,13 @@ def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
     systematics i.e all uncertainties with MULT errors, then filter those out
     of ``sys_errors`` before passing that to this function.
     """
-    diagonal = stat_errors ** 2
+    diagonal = stat_errors**2
 
     is_uncorr = sys_errors.columns.isin(("UNCORR", "THEORYUNCORR"))
     diagonal += (sys_errors.loc[:, is_uncorr].to_numpy() ** 2).sum(axis=1)
 
     corr_sys_mat = sys_errors.loc[:, ~is_uncorr].to_numpy()
     return np.diag(diagonal) + corr_sys_mat @ corr_sys_mat.T
-
 
 
 def build_large_covmat(ndata, chi2_covmat, n_data_exp):
@@ -64,6 +63,3 @@ def build_large_covmat(ndata, chi2_covmat, n_data_exp):
                 covmat_array[cnt + j, cnt + k] = chi2_covmat[i][j][k]
         cnt += nexpdata
     return covmat_array
-
-
-

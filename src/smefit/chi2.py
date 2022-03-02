@@ -46,6 +46,4 @@ def compute_chi2(config, dataset, coeffs, labels):
     # Multiply diff * (cov^-1 * diff) to get chi2
     chi2_total = np.einsum("j,j->", diff, covmatdiff)
 
-
     return chi2_total, Ndat
-

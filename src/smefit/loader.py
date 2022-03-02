@@ -9,9 +9,9 @@ from .covmat import build_large_covmat
 
 
 def check_file(path):
-        """Check if path exists"""
-        if not path.exists():
-            raise FileNotFoundError(( "File '%s' does not exist.") % (path))
+    """Check if path exists"""
+    if not path.exists():
+        raise FileNotFoundError(("File '%s' does not exist.") % (path))
 
 
 class Loader:
@@ -21,17 +21,20 @@ class Loader:
 
     def __init__(self, path, setname):
         self.setname = setname
-        self.meta_folder = pathlib.Path(path) / f'commondata/meta/{self.setname}.yaml'
-        self.data_folder = pathlib.Path(path) / f'commondata/DATA_{self.setname}.dat'
-        self.sys_folder = pathlib.Path(path)  / f'commondata/systypes/SYSTYPE_{self.setname}_DEFAULT.dat'
-        self.theory_folder = pathlib.Path(path) / f'theory/{self.setname}.txt'
+        self.meta_folder = pathlib.Path(path) / f"commondata/meta/{self.setname}.yaml"
+        self.data_folder = pathlib.Path(path) / f"commondata/DATA_{self.setname}.dat"
+        self.sys_folder = (
+            pathlib.Path(path)
+            / f"commondata/systypes/SYSTYPE_{self.setname}_DEFAULT.dat"
+        )
+        self.theory_folder = pathlib.Path(path) / f"theory/{self.setname}.txt"
 
         self.dataspec = {}
         self.load_dataset()
-        
+
     def load_dataset(self):
         """Load data, systematics and corresponding theory predictions"""
-    
+
         # check that all relevant files exist
         check_file(self.meta_folder)
         check_file(self.data_folder)
@@ -39,57 +42,69 @@ class Loader:
         check_file(self.theory_folder)
 
         # load information from the meta file
-        with open(f'{self.meta_folder}') as f:
+        with open(f"{self.meta_folder}") as f:
             meta = yaml.safe_load(f)
-        
-        self.num_data = meta['npoints']
-        self.num_sys = meta['nsys']
 
-        # load data from commondata file 
-        central_values, stat_error = np.loadtxt(f'{self.data_folder}', usecols = (5,6), unpack=True, skiprows=1)
-        self.dataspec['central_values'] = central_values
+        self.num_data = meta["npoints"]
+        self.num_sys = meta["nsys"]
 
-        # Load systematics from commondata file. 
+        # load data from commondata file
+        central_values, stat_error = np.loadtxt(
+            f"{self.data_folder}", usecols=(5, 6), unpack=True, skiprows=1
+        )
+        self.dataspec["central_values"] = central_values
+
+        # Load systematics from commondata file.
         # Read values of sys first
         sys_add = list()
         sys_mult = list()
-        for i in range(0,self.num_sys):
-            add, mult = np.loadtxt(f'{self.data_folder}', usecols = (7+2*i, 8+2*i), unpack=True, skiprows=1)
+        for i in range(0, self.num_sys):
+            add, mult = np.loadtxt(
+                f"{self.data_folder}",
+                usecols=(7 + 2 * i, 8 + 2 * i),
+                unpack=True,
+                skiprows=1,
+            )
             sys_add.append(add)
             sys_mult.append(mult)
-        
+
         sys_add = np.asarray(sys_add)
         sys_mult = np.asarray(sys_mult)
 
         # Read systype file
-        type_sys, name_sys = np.genfromtxt(f'{self.sys_folder}', usecols = (1, 2), unpack=True, skip_header=1, dtype='str') 
-        
+        type_sys, name_sys = np.genfromtxt(
+            f"{self.sys_folder}",
+            usecols=(1, 2),
+            unpack=True,
+            skip_header=1,
+            dtype="str",
+        )
+
         # Identify add and mult systematics and replace the mult ones with corresponding value computed
         # from data central value. Required for implementation of t0 prescription
-        
-        indx_add = np.where(type_sys=='ADD')
-        indx_mult = np.where(type_sys=='MULT')
+
+        indx_add = np.where(type_sys == "ADD")
+        indx_mult = np.where(type_sys == "MULT")
         sys = np.zeros((self.num_sys, self.num_data))
         sys[indx_add[0]] = sys_add[indx_add[0]]
         sys[indx_mult[0]] = sys_mult[indx_mult[0]] * central_values * 1e-2
 
         # Build dataframe with shape (N_data * N_sys) and systematic name as the
         # column headers and construct covmat
-        df = pd.DataFrame(data=sys, columns=name_sys)        
-        self.dataspec['covmat'] = construct_covmat(stat_error,df)
+        df = pd.DataFrame(data=sys, columns=name_sys)
+        self.dataspec["covmat"] = construct_covmat(stat_error, df)
 
         # load theory predictions
         corrections_dic = {}
         with open(self.theory_folder) as f:
             for line in f:
                 key, *val = line.split()
-                #corrections_dic[key] = val
                 corrections_dic[key] = np.array(
                     [float(val[i]) for i in range(len(val))]
                 )
                 # save sm predictions in a vectore and remove from the dictionary
-        self.dataspec['SM_predictions'] = corrections_dic['SM']
-        corrections_dic.pop('SM', None)
+        self.dataspec["SM_predictions"] = corrections_dic["SM"]
+        corrections_dic.pop("SM", None)
 
         # Split the dictionary into lambda^-2 and lambda^-4 terms
         higherorder = {}
@@ -108,9 +123,9 @@ class Loader:
             if key in corrections_dic:
                 del corrections_dic[key]
 
-        self.dataspec['linear_corrections'] = corrections_dic
-        self.dataspec['quadratic_corrections'] = higherorder
-        
+        self.dataspec["linear_corrections"] = corrections_dic
+        self.dataspec["quadratic_corrections"] = higherorder
+
     def get_setname(self):
         """Get name of the dataset"""
         return self.setname
@@ -121,26 +136,25 @@ class Loader:
 
     def get_central_values(self):
         """Get central values"""
-        return self.dataspec['central_values']
+        return self.dataspec["central_values"]
 
     def get_covmat(self):
         """Get central values"""
-        return self.dataspec['covmat']
-    
+        return self.dataspec["covmat"]
+
     def get_sm_prediction(self):
         """Return SM prediction for the dataset"""
-        return self.dataspec['SM_predictions']
+        return self.dataspec["SM_predictions"]
 
     def get_linear_corrections(self):
         """Return linear corrections, as a dictionary with name of correction and its value"""
-        return self.dataspec['linear_corrections']
-        
+        return self.dataspec["linear_corrections"]
 
     def get_quadratic_corrections(self):
         """Return quadratic corrections, as a dictionary with name of correction and its value"""
-        return self.dataspec['quadratic_corrections']
-    
-    
+        return self.dataspec["quadratic_corrections"]
+
+
 DataTuple = namedtuple(
     "DataTuple",
     (
@@ -156,6 +170,7 @@ DataTuple = namedtuple(
     ),
 )
 
+
 def load_datasets(config):
     """
     Loads commondata, theory and SMEFT corrections into a namedtuple
@@ -164,7 +179,7 @@ def load_datasets(config):
     ----------
         config : dict
             configuration dictionary
-    """  
+    """
 
     EXP_DATA = []
     SM_THEORY = []
@@ -175,10 +190,10 @@ def load_datasets(config):
     EXP_name = []
 
     datasets = config["datasets"]
-    path = config['root_path']
+    path = config["root_path"]
 
     for sset in datasets:
-        
+
         dataset = Loader(path, sset)
         EXP_name.append(sset)
         N_data_exp.append(dataset.get_Ndata())
@@ -188,18 +203,16 @@ def load_datasets(config):
         QUAD_DICT.append(dataset.get_quadratic_corrections())
         CHI2_COVMAT.append(dataset.get_covmat())
 
-
     # Flatten
-    EXP_names = np.array(EXP_name) # array containing all the datasets names
+    EXP_names = np.array(EXP_name)  # array containing all the datasets names
     EXP_array = flatten(EXP_DATA)  # array containing all data
     SM_array = flatten(SM_THEORY)  # array containing all SM theory
-    
+
     # Construct unique large cov matrix dropping correlations between different datasets
-    ndata = len(EXP_array)  
+    ndata = len(EXP_array)
     N_data_exp = np.array(N_data_exp)
     COVMAT_array = build_large_covmat(ndata, CHI2_COVMAT, N_data_exp)
-    
-    
+
     lin_corr_keys, lin_corr_values = split_corrections_dict(LIN_DICT, ndata)
     quad_corr_keys, quad_corr_values = split_corrections_dict(QUAD_DICT, ndata)
 
@@ -215,7 +228,7 @@ def load_datasets(config):
         N_data_exp,
         COVMAT_array,
     )
-       
+
 
 def flatten(input_dict):
     """
@@ -254,7 +267,7 @@ def split_corrections_dict(corrections_dict, ndata):
 
     array = [item for sublist in corrections_dict for item in sublist]
     corr_keys = np.array(sorted(set(array)))
-    
+
     corr_values = np.zeros((ndata, len(corr_keys)))
 
     if corr_keys.size == 0:
@@ -307,7 +320,6 @@ def aggregate_coefficients(config, loaded_datasets):
 
     # All the coefficients are initialized to 0 by default
     randarr = np.zeros(len(coeff_labels))
-
 
     for k in config["coefficients"].keys():
         if k not in coeff_labels:
