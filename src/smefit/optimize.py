@@ -41,7 +41,6 @@ class OPTIMIZER:
             self.config["HOindex2"] = np.array(self.config["HOindex2"])
 
         self.npts = None
-        self.npts_V = None
         self.free_params = []
         self.free_param_labels = []
 
@@ -106,7 +105,7 @@ class OPTIMIZER:
         loaded_data = self.loaded_datasets
         coefficients = self.coefficients
 
-        current_chi2, self.npts, self.npts_V = chi2.compute_total_chi2(
+        current_chi2, self.npts = chi2.compute_chi2(
             self.config, loaded_data, coefficients.values, coefficients.labels
         )
 
