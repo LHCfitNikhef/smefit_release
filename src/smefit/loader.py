@@ -172,10 +172,10 @@ DataTuple = namedtuple(
     ),
 )
 
-# TODO: fix names convention
+# TODO fix names convention
 def load_datasets(config):
     """
-    Loads commondata, theory and SMEFT corrections into a namedtuple
+    Loads commondata, theory and |SMEFT| corrections into a namedtuple
 
     Parameters
     ----------
@@ -249,7 +249,7 @@ def flatten(input_dict):
     return np.array([item for sublist in input_dict for item in sublist])
 
 
-# TODO: split this function and simplify
+# TODO split this function and simplify
 def split_corrections_dict(corrections_dict, ndata):
     """
     Store keys for correction values and build matrix containing
@@ -287,7 +287,7 @@ def split_corrections_dict(corrections_dict, ndata):
         return corr_keys, corr_values
 
 
-# TODO: consider using a DataClass and always read coefficients properties
+# TODO consider using a DataClass and always read coefficients properties
 # from this class and not from the config
 
 CoeffTuple = namedtuple("Coefficients", ("labels", "values", "bounds"))

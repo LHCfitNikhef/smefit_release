@@ -20,12 +20,12 @@ def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
 
     Parameters
     ----------
-    stat_errors: numpy.ndarray
-        a 1-D array of statistical uncertainties
-    sys_errors: pandas.DataFrame
-        a dataframe with shape (N_data * N_sys) and systematic name as the
-        column headers. The uncertainties should be in the same units as the
-        data.
+        stat_errors: numpy.ndarray
+            a 1-D array of statistical uncertainties
+        sys_errors: pandas.DataFrame
+            a dataframe with shape (N_data * N_sys) and systematic name as the
+            column headers. The uncertainties should be in the same units as the
+            data.
 
     Returns
     -------

@@ -44,7 +44,7 @@ def compute_chi2(config, dataset, coeffs, labels):
 
     # The chi2 computation
     covmat_inv = np.linalg.inv(dataset.CovMat)
-    # TODO: einsum is slower, consider to remove it, for simple operations
+    # TODO einsum is slower, consider to remove it, for simple operations
     # Multiply cov^-1 * diff
     covmatdiff = np.einsum("ij,j->i", covmat_inv, diff)
     # Multiply diff * (cov^-1 * diff) to get chi2

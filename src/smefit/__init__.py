@@ -3,7 +3,7 @@
 
 class RUNNER:
     """
-    Container for all the possible SmeFit run methods.
+    Container for all the possible |SMEFiT| run methods.
 
     Init the root path of the package where tables,
     results, plot config and reports are be stored
@@ -71,7 +71,7 @@ class RUNNER:
 
     def ns(self, input_card):
         """
-        Run a fit with Nested Sampling given the fit name
+        Run a fit with |NS| given the fit name
 
         Parameters
         ----------

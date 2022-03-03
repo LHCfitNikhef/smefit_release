@@ -17,10 +17,10 @@ class Optimizer:
     """
 
     def __init__(self, config):
-        # TODO: move all this stuff into a from_dict method
+        # TODO move all this stuff into a from_dict method
         # attributes like self.config should be avoided
         # take only the relevant stuff you need from the config
-        # TODO: use a from_dict() classmethod to build the class, not the
+        # TODO use a from_dict() classmethod to build the class, not the
         # the init
         self.config = config
         self.loaded_datasets = load_datasets(self.config)

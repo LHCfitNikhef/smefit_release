@@ -9,7 +9,7 @@ import numpy as np
 def make_predictions(config, dataset, coeffs, labels):
     """
     Generate the corrected theory predictions for dataset `set`
-    given a set of SMEFT coefficients `coeffs`. Optionally a specific
+    given a set of |SMEFT| coefficients `coeffs`. Optionally a specific
     operator may be selected with `iop`
 
     Parameters

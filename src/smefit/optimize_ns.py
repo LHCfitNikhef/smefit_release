@@ -14,7 +14,7 @@ from .optimize import Optimizer
 
 class NSOptimizer(Optimizer):
 
-    """Optimizer specification for Nested Sampling"""
+    """Optimizer specification for |NS|"""
 
     def __init__(self, config):
 
@@ -24,7 +24,7 @@ class NSOptimizer(Optimizer):
         self.get_free_params()
         self.npar = len(self.free_params)
 
-        # TODO: same as parent class, here we need a class method
+        # TODO same as parent class, here we need a class method
         print("============================")
 
         if "nlive" in self.config.keys():
@@ -137,6 +137,6 @@ class NSOptimizer(Optimizer):
                 os.remove(os.path.join(self.config["results_path"], f))
 
     def run_sampling(self):
-        """Run the minimisation with Nested Sampling"""
+        """Run the minimisation with |NS|"""
         print("==================================")
         print("Run NS")
