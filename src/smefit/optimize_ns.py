@@ -6,10 +6,10 @@ Fitting the Wilson coefficients with NS
 import os
 import time
 
+from .optimize import Optimizer
+
 # from mpi4py import MPI
 # from pymultinest.solve import solve
-
-from .optimize import Optimizer
 
 
 class NSOptimizer(Optimizer):

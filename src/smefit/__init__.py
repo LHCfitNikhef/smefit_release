@@ -42,8 +42,10 @@ class RUNNER:
         """
 
         import subprocess
-        import yaml
         from shutil import copyfile
+
+        import yaml
+
         from .utils import set_paths
 
         config = {}

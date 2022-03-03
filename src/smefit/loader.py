@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import pathlib
-import yaml
+from collections import namedtuple
+
 import numpy as np
 import pandas as pd
+import yaml
 
-from collections import namedtuple
-from .covmat import construct_covmat
-from .covmat import build_large_covmat
+from .covmat import build_large_covmat, construct_covmat
 
 
 def check_file(path):
@@ -117,7 +117,7 @@ class Loader:
                 removeHO.append(key)
                 higherorder[key] = value
             if "^" in key:
-                new_key = "%s*%s" % (key[:-2], key[:-2])
+                new_key = "{}*{}".format(key[:-2], key[:-2])
                 removeHO.append(key)
                 higherorder[new_key] = value
 
@@ -172,7 +172,7 @@ DataTuple = namedtuple(
     ),
 )
 
-#TODO: fix names convention
+# TODO: fix names convention
 def load_datasets(config):
     """
     Loads commondata, theory and SMEFT corrections into a namedtuple
@@ -248,7 +248,8 @@ def flatten(input_dict):
     """
     return np.array([item for sublist in input_dict for item in sublist])
 
-#TODO: split this function and simplify
+
+# TODO: split this function and simplify
 def split_corrections_dict(corrections_dict, ndata):
     """
     Store keys for correction values and build matrix containing
@@ -285,7 +286,8 @@ def split_corrections_dict(corrections_dict, ndata):
                 cnt += 1
         return corr_keys, corr_values
 
-#TODO: consider using a DataClass and always read coefficients properties
+
+# TODO: consider using a DataClass and always read coefficients properties
 # from this class and not from the config
 
 CoeffTuple = namedtuple("Coefficients", ("labels", "values", "bounds"))

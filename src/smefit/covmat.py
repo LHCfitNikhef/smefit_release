@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """
-Module containing computation of covariance matrix 
+Module containing computation of covariance matrix
 """
 import numpy as np
 import pandas as pd
+
 
 def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
     """

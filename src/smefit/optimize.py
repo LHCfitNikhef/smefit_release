@@ -3,8 +3,7 @@
 import numpy as np
 
 from . import chi2 as chi2
-from .loader import load_datasets
-from .loader import aggregate_coefficients
+from .loader import aggregate_coefficients, load_datasets
 
 
 class Optimizer:
