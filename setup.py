@@ -5,8 +5,8 @@ from setuptools import setup, find_packages
 import packutil as pack
 
 # write version on the fly - inspired by numpy
-MAJOR = 2
-MINOR = 0
+MAJOR = 0
+MINOR = 1
 MICRO = 0
 
 repo_path = pathlib.Path(__file__).absolute().parent

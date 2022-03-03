@@ -157,3 +157,5 @@ nbproject
 # grunt-html-validation
 validation-status.json
 validation-report.json
+
+version.py

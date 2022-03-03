@@ -1,4 +1,6 @@
-def set_paths(root_path, pto, resultID=None):
+# -*- coding: utf-8 -*-
+
+def set_paths(root_path, pto, resultID):
     """
     Set up configurations paths given the dictionary
 
@@ -10,6 +12,11 @@ def set_paths(root_path, pto, resultID=None):
             pto for the EFT corrections LO, NLO
         resultID: str
             result ID name
+
+    Returns
+    -------
+        path_dict: dict
+            dictionary with path configuarions
     """
     # Root path
     path_dict = {"root_path": f"{root_path}"}

@@ -1,31 +1,43 @@
+# -*- coding: utf-8 -*-
+
 """
 Module containing computation of covariance matrix 
 """
 import numpy as np
 import pandas as pd
 
-# from https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats_utils.py
 def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
-    """Basic function to construct a covariance matrix (covmat), given the
+    """
+    This function is taken from: https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats_utils.py
+
+    Basic function to construct a covariance matrix (covmat), given the
     statistical error and a dataframe of systematics.
     Errors with name UNCORR or THEORYUNCORR are added in quadrature with
     the statistical error to the diagonal of the covmat.
     Other systematics are treated as correlated; their covmat contribution is
     found by multiplying them by their transpose.
+
     Parameters
     ----------
-    stat_errors: np.array
+    stat_errors: numpy.ndarray
         a 1-D array of statistical uncertainties
-    sys_errors: pd.DataFrame
+    sys_errors: pandas.DataFrame
         a dataframe with shape (N_data * N_sys) and systematic name as the
         column headers. The uncertainties should be in the same units as the
         data.
+
+    Returns
+    -------
+        cov_mat: numpy.ndarray
+            Covariance matrix
+
     Notes
     -----
     This function doesn't contain any logic to ignore certain contributions to
     the covmat, if you wanted to not include a particular systematic/set of
     systematics i.e all uncertainties with MULT errors, then filter those out
     of ``sys_errors`` before passing that to this function.
+
     """
     diagonal = stat_errors**2
 

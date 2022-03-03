@@ -1,22 +1,22 @@
-import yaml
+# -*- coding: utf-8 -*-
 
 
 class RUNNER:
     """
-    Class containing all the possible smefit run methods.
+    Container for all the possible SmeFit run methods.
 
     Init the root path of the package where tables,
     results, plot config and reports are be stored
 
     Parameters
     ----------
-        path : str
+        root_path : str
             root path
     """
 
-    def __init__(self, path):
+    def __init__(self, root_path):
 
-        self.root_path = path
+        self.root_path = root_path
 
         print(20 * "  ", r" ____  __  __ _____ _____ _ _____ ")
         print(20 * "  ", r"/ ___||  \/  | ____|  ___(_)_   _|")
@@ -76,11 +76,11 @@ class RUNNER:
             input_card : str
                 fit card name
         """
+        from .optimize_ns import NSOptimizer
 
         config = self.setup_config(input_card)
-        from .optimize_ns import OPTIMIZE
 
-        opt = OPTIMIZE(config)
+        opt = NSOptimizer(config)
         opt.run_sampling()
 
         return 0

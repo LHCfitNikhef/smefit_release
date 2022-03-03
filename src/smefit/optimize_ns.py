@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Fitting the Wilson coefficients with NS
 """
@@ -7,12 +9,12 @@ import time
 # from mpi4py import MPI
 # from pymultinest.solve import solve
 
-from .optimize import OPTIMIZER
+from .optimize import Optimizer
 
 
-class OPTIMIZE(OPTIMIZER):
+class NSOptimizer(Optimizer):
 
-    """Optimizer specification for Nested sampling"""
+    """Optimizer specification for Nested Sampling"""
 
     def __init__(self, config):
 
@@ -21,6 +23,8 @@ class OPTIMIZE(OPTIMIZER):
         # Get free parameters
         self.get_free_params()
         self.npar = len(self.free_params)
+
+        # TODO: same as parent class, here we need a class method
         print("============================")
 
         if "nlive" in self.config.keys():

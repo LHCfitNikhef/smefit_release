@@ -1,4 +1,5 @@
-import json
+# -*- coding: utf-8 -*-
+
 import numpy as np
 
 from . import chi2 as chi2
@@ -6,7 +7,7 @@ from .loader import load_datasets
 from .loader import aggregate_coefficients
 
 
-class OPTIMIZER:
+class Optimizer:
     """
     Common interface for Chi2 profile, NS and McFiT
 
@@ -17,6 +18,11 @@ class OPTIMIZER:
     """
 
     def __init__(self, config):
+        # TODO: move all this stuff into a from_dict method
+        # attributes like self.config should be avoided
+        # take only the relevant stuff you need from the config
+        # TODO: use a from_dict() classmethod to build the class, not the
+        # the init
         self.config = config
         self.loaded_datasets = load_datasets(self.config)
         self.coefficients = aggregate_coefficients(self.config, self.loaded_datasets)
