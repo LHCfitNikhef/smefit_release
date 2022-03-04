@@ -1,9 +1,8 @@
-import pathlib
+# -*- coding: utf-8 -*-
 import argparse
-#import warnings
+import pathlib
 
-from smefit import RUNNER
-
+import smefit
 
 path = pathlib.Path(__file__).absolute().parent
 
@@ -31,13 +30,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    runner = RUNNER(path)
-
-    
-    if args.mode == "NS":
-        # run NS
-        runner.ns(args.fit_cards[0])
-    else:
-        raise NotImplementedError(
-            f"MODE={args.mode} is not valid, the only implemented feature atm is NS"
-        )
+    smefit.run(path, args.mode, args.fit_cards[0])

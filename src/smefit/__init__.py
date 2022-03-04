@@ -1,88 +1,26 @@
 # -*- coding: utf-8 -*-
+from .runner import Runner
 
 
-class RUNNER:
+def run(root_path, mode, fit_card):
     """
-    Container for all the possible |SMEFiT| run methods.
-
-    Init the root path of the package where tables,
-    results, plot config and reports are be stored
+    Run the |SMEFiT| package
 
     Parameters
     ----------
-        root_path : str
-            root path
+        root_path : pathlib.Path
+            root path where data tables (Commondata and theory) are located.
+            Note also the results will be stored in this folder.
+        mode: "NS"
+            running mode: "NS" = Nested Sampling
+        fit_card: dict
+           fit run card
     """
-
-    def __init__(self, root_path):
-
-        self.root_path = root_path
-
-        print(20 * "  ", r" ____  __  __ _____ _____ _ _____ ")
-        print(20 * "  ", r"/ ___||  \/  | ____|  ___(_)_   _|")
-        print(20 * "  ", r"\___ \| |\/| |  _| | |_  | | | |  ")
-        print(20 * "  ", r" ___) | |  | | |___|  _| | | | |  ")
-        print(20 * "  ", r"|____/|_|  |_|_____|_|   |_| |_|  ")
-        print()
-        print(18 * "  ", "A Standard Model Effective Field Theory Fitter")
-
-    def setup_config(self, filename):
-        """
-        Read yaml card, update the configuration paths
-        and build the folder directory.
-
-        Parameters
-        ----------
-            filename : str
-                fit card name
-        Returns
-        -------
-            config: dict
-                configuration dict
-        """
-
-        import subprocess
-        from shutil import copyfile
-
-        import yaml
-
-        from .utils import set_paths
-
-        config = {}
-        with open(f"{self.root_path}/runcards/{filename}.yaml") as f:
-            config = yaml.safe_load(f)
-
-        config.update(set_paths(self.root_path, config["order"], config["resultID"]))
-
-        # Construct results folder
-        res_folder = f"{self.root_path}/results"
-        res_folder_run = config["results_path"]
-
-        subprocess.call(f"mkdir -p {res_folder}", shell=True)
-        subprocess.call(f"mkdir -p {res_folder_run}", shell=True)
-
-        # Copy yaml runcard to results folder
-        copyfile(
-            f"{self.root_path}/runcards/{filename}.yaml",
-            f"{config['results_path']}/{filename}.yaml",
+    runner = Runner(root_path)
+    # run NS
+    if mode == "NS":
+        runner.ns(fit_card)
+    else:
+        raise NotImplementedError(
+            f"MODE={mode} is not valid, the only implemented feature atm is NS"
         )
-
-        return config
-
-    def ns(self, input_card):
-        """
-        Run a fit with |NS| given the fit name
-
-        Parameters
-        ----------
-            input_card : str
-                fit card name
-        """
-        from .optimize_ns import NSOptimizer
-
-        config = self.setup_config(input_card)
-
-        opt = NSOptimizer(config)
-        opt.run_sampling()
-
-        return 0

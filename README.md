@@ -1,6 +1,6 @@
 # SMEFiT
 <p align="center">
-  <a href=""><img alt="SMEFiT" src=https://github.com/LHCfitNikhef/smefit_release/blob/master/docs/_assets/logo.png/>
+  <img alt="SMEFiT" src=https://github.com/lhcfitnikhef/smefit_release/blob/master/docs/_assets/logo.png/>
 </a>
 </p>
 
@@ -10,7 +10,7 @@
   <a href="https://www.codefactor.io/repository/github/lhcfitnikhef/smefit_release"><img src="https://www.codefactor.io/repository/github/lhcfitnikhef/smefit_release/badge" alt="CodeFactor" /></a>
 </p>
 
-SMEFiT is a python program for Stadard Model Effective Field Theory fits
+SMEFiT is a python program for Standard Model Effective Field Theory fits
 ## Installation
 If you want to install from source you can run:
 ```bash
