@@ -4,7 +4,6 @@
 Fitting the Wilson coefficients with NS
 """
 import os
-import time
 
 from .optimize import Optimizer
 

@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from . import chi2 as chi2
+from . import chi2
 from .loader import aggregate_coefficients, load_datasets
 
 

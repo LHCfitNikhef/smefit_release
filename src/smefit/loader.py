@@ -13,7 +13,7 @@ from .covmat import build_large_covmat, construct_covmat
 def check_file(path):
     """Check if path exists"""
     if not path.exists():
-        raise FileNotFoundError(("File '%s' does not exist.") % (path))
+        raise FileNotFoundError(f"File {path} does not exist.")
 
 
 class Loader:
@@ -44,13 +44,16 @@ class Loader:
         check_file(self.theory_folder)
 
         # load information from the meta file
-        with open(f"{self.meta_folder}") as f:
+        with open(f"{self.meta_folder}", encoding="utf-8") as f:
             meta = yaml.safe_load(f)
 
         self.num_data = meta["npoints"]
         self.num_sys = meta["nsys"]
 
         # load data from commondata file
+        # TODO: better data format?
+        # - meta contains some repetitions,
+        # - DATA_* has many unused info
         central_values, stat_error = np.loadtxt(
             f"{self.data_folder}", usecols=(5, 6), unpack=True, skiprows=1
         )
@@ -58,8 +61,8 @@ class Loader:
 
         # Load systematics from commondata file.
         # Read values of sys first
-        sys_add = list()
-        sys_mult = list()
+        sys_add = []
+        sys_mult = []
         for i in range(0, self.num_sys):
             add, mult = np.loadtxt(
                 f"{self.data_folder}",
@@ -98,26 +101,26 @@ class Loader:
 
         # load theory predictions
         corrections_dic = {}
-        with open(self.theory_folder) as f:
+        with open(self.theory_folder, encoding="utf-8") as f:
             for line in f:
                 key, *val = line.split()
                 corrections_dic[key] = np.array(
                     [float(val[i]) for i in range(len(val))]
                 )
-                # save sm predictions in a vectore and remove from the dictionary
+                # save sm predictions in a vector and remove from the dictionary
         self.dataspec["SM_predictions"] = corrections_dic["SM"]
         corrections_dic.pop("SM", None)
 
         # Split the dictionary into lambda^-2 and lambda^-4 terms
         higherorder = {}
-        removeHO = list()
+        removeHO = []
 
         for key, value in corrections_dic.items():
             if "*" in key:
                 removeHO.append(key)
                 higherorder[key] = value
             if "^" in key:
-                new_key = "{}*{}".format(key[:-2], key[:-2])
+                new_key = f"{key[:-2]}*{key[:-2]}"
                 removeHO.append(key)
                 higherorder[new_key] = value
 

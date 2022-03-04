@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import pathlib
-from setuptools import setup, find_packages
 
 import packutil as pack
+from setuptools import find_packages, setup
 
 # write version on the fly - inspired by numpy
 MAJOR = 0
@@ -22,7 +22,7 @@ def setup_package():
         filename="src/smefit/version.py",
     )
     # paste Readme
-    with open("README.md", "r") as fh:
+    with open("README.md", "r", encoding="utf-8") as fh:
         long_description = fh.read()
     # do it
     setup(
@@ -33,10 +33,10 @@ def setup_package():
         long_description_content_type="text/markdown",
         author="Tommaso Giani, Jaco Ter Hoeve, Giacomo Magni",
         author_email="tgiani@nikhef.nl",
-        #url="https://github.com/LHCfitNikhef/SMEFT",
+        # url="https://github.com/LHCfitNikhef/SMEFT",
         package_dir={"": "src/"},
         packages=find_packages("src/"),
-        #package_data={"smefit": ["tables/*.yaml"]},
+        # package_data={"smefit": ["tables/*.yaml"]},
         zip_safe=False,
         classifiers=[
             "Operating System :: Unix",
