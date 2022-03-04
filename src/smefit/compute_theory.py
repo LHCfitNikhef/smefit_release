@@ -6,7 +6,7 @@ Module for the generation of theory predictions
 import numpy as np
 
 
-def make_predictions(config, dataset, coeffs, labels):
+def make_predictions(dataset, coeffs, labels, HOindex1, HOindex2):
     """
     Generate the corrected theory predictions for dataset `set`
     given a set of |SMEFT| coefficients `coeffs`. Optionally a specific
@@ -34,9 +34,9 @@ def make_predictions(config, dataset, coeffs, labels):
     summed_corrections = dataset.CorrectionsVAL @ coeffs[idx]
 
     # Compute total quadratic correction
-    if config["HOlambda"] == "HO":
-        idx1 = config["HOindex1"]
-        idx2 = config["HOindex2"]
+    if (HOindex1 is not None):
+        idx1 = HOindex1
+        idx2 = HOindex2
         coeffs_quad = coeffs[idx1] * coeffs[idx2]
         summed_quad_corrections = dataset.HOcorrectionsVAL @ coeffs_quad
         summed_corrections += summed_quad_corrections

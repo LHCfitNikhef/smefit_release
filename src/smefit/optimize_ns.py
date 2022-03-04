@@ -15,48 +15,48 @@ class NSOptimizer(Optimizer):
 
     """Optimizer specification for |NS|"""
 
-    def __init__(self, config):
+    def __init__(self, loaded_datasets, coefficients, HOindex1, HOindex2):
 
-        super().__init__(config)
+        super().__init__(loaded_datasets, coefficients, HOindex1, HOindex2)
 
         # Get free parameters
         self.get_free_params()
-        self.npar = len(self.free_params)
+        self.npar = len(self.free_params.keys())
 
-        # TODO same as parent class, here we need a class method
-        print("============================")
+        # # TODO same as parent class, here we need a class method
+        # print("============================")
 
-        if "nlive" in self.config.keys():
-            self.live_points = self.config["nlive"]
-        else:
-            print(
-                "Number of live points (nlive) not set in the input card. Using default: 500"
-            )
-            self.live_points = 500
+        # if "nlive" in self.config.keys():
+        #     self.live_points = self.config["nlive"]
+        # else:
+        #     print(
+        #         "Number of live points (nlive) not set in the input card. Using default: 500"
+        #     )
+        #     self.live_points = 500
 
-        if "efr" in self.config.keys():
-            self.efficiency = self.config["efr"]
-        else:
-            print(
-                "Sampling efficiency (efr) not set in the input card. Using default: 0.01"
-            )
-            self.efficiency = 0.01
+        # if "efr" in self.config.keys():
+        #     self.efficiency = self.config["efr"]
+        # else:
+        #     print(
+        #         "Sampling efficiency (efr) not set in the input card. Using default: 0.01"
+        #     )
+        #     self.efficiency = 0.01
 
-        if "ceff" in self.config.keys():
-            self.const_efficiency = self.config["ceff"]
-        else:
-            print(
-                "Constant efficiency mode (ceff) not set in the input card. Using default: False"
-            )
-            self.const_efficiency = False
+        # if "ceff" in self.config.keys():
+        #     self.const_efficiency = self.config["ceff"]
+        # else:
+        #     print(
+        #         "Constant efficiency mode (ceff) not set in the input card. Using default: False"
+        #     )
+        #     self.const_efficiency = False
 
-        if "toll" in self.config.keys():
-            self.tollerance = self.config["toll"]
-        else:
-            print(
-                "Evidence tollerance (toll) not set in the input card. Using default: 0.5"
-            )
-            self.tollerance = 0.5
+        # if "toll" in self.config.keys():
+        #     self.tollerance = self.config["toll"]
+        # else:
+        #     print(
+        #         "Evidence tollerance (toll) not set in the input card. Using default: 0.5"
+        #     )
+        #     self.tollerance = 0.5
 
     def chi2_func_ns(self, params):
         """
@@ -75,7 +75,7 @@ class NSOptimizer(Optimizer):
         """
         self.free_params = params
         self.propagate_params()
-        self.set_constraints()
+        #self.set_constraints()
 
         return self.chi2_func()
 

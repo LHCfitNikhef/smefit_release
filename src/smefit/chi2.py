@@ -8,7 +8,7 @@ import numpy as np
 from . import compute_theory as pr
 
 
-def compute_chi2(config, dataset, coeffs, labels):
+def compute_chi2(dataset, coeffs, labels, HOindex1, HOindex2):
     """
     Compute the chi2
     Will need to be modified when implementing training validation split.
@@ -34,7 +34,7 @@ def compute_chi2(config, dataset, coeffs, labels):
     """
 
     # compute theory prediction for each point in the dataset
-    theory_predictions = pr.make_predictions(config, dataset, coeffs, labels)
+    theory_predictions = pr.make_predictions(dataset, coeffs, labels, HOindex1, HOindex2)
     # get central values of experimental points
     dat = dataset.Commondata
     Ndat = len(dataset.Commondata)

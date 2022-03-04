@@ -176,14 +176,16 @@ DataTuple = namedtuple(
 )
 
 # TODO fix names convention
-def load_datasets(config):
+def load_datasets(path, datasets):
     """
     Loads commondata, theory and |SMEFT| corrections into a namedtuple
 
     Parameters
     ----------
-        config : dict
-            configuration dictionary
+        datasets : list
+            list of datasets to be loaded
+        path : string
+            root path
     """
 
     EXP_DATA = []
@@ -194,8 +196,8 @@ def load_datasets(config):
     N_data_exp = []
     EXP_name = []
 
-    datasets = config["datasets"]
-    path = config["root_path"]
+    #datasets = config["datasets"]
+    #path = config["root_path"]
 
     for sset in datasets:
 
@@ -293,10 +295,10 @@ def split_corrections_dict(corrections_dict, ndata):
 # TODO consider using a DataClass and always read coefficients properties
 # from this class and not from the config
 
-CoeffTuple = namedtuple("Coefficients", ("labels", "values", "bounds"))
+CoeffTuple = namedtuple("Coefficients", ("labels", "values", "bounds", "fixed"))
 
 
-def aggregate_coefficients(config, loaded_datasets):
+def aggregate_coefficients(input_coefficients, loaded_datasets, input_bounds=None):
     """
     Aggregate all coefficient labels and construct an array of coefficient
     values of suitable size. Returns a CoeffTuple of the labels, values,
@@ -316,34 +318,35 @@ def aggregate_coefficients(config, loaded_datasets):
 
     # Give the initial point of the fit to be randomly spread around the bounds
     # specified by --bounds option (if none given, bounds are taken from setup.py)
-    coeff_labels = []
-    bounds = {}
-
+    dataset_coefficients = []
+    
     # for set in loaded_datasets:
     for key in loaded_datasets.CorrectionsKEYS:
-        coeff_labels.append(key)
+        dataset_coefficients.append(key)
 
     # Keep ordering of coefficients the same so they match to the actual corrections
-    coeff_labels, idx = np.unique(np.array(coeff_labels), return_index=True)
-    coeff_labels = coeff_labels[np.argsort(idx)]
+    dataset_coefficients, idx = np.unique(np.array(dataset_coefficients), return_index=True)
+    dataset_coefficients = dataset_coefficients[np.argsort(idx)]
 
     # All the coefficients are initialized to 0 by default
-    randarr = np.zeros(len(coeff_labels))
+    values = np.zeros(len(dataset_coefficients))
+    bounds = [(0., 0.) for i in range(0,len(dataset_coefficients))]
+    fixed = [True for i in range(0,len(dataset_coefficients)) ]
 
-    for k in config["coefficients"].keys():
-        if k not in coeff_labels:
+    #for k in config["coefficients"].keys():
+    for k in input_coefficients.keys():
+        if k not in dataset_coefficients:
             raise ValueError(
                 f"{k} is not part of fitted coefficients. Please comment it out in the setup file"
             )
-        if config["coefficients"][k]["fixed"]:
-            continue
+        
+        if input_bounds is None:
+            min_val = input_coefficients[k]["min"]
+            max_val = input_coefficients[k]["max"]
+            
+        idx = np.where(dataset_coefficients == k)[0][0]
+        bounds[idx] = (min_val, max_val)
+        values[idx] = np.random.uniform(low=min_val, high=max_val)
+        fixed[idx] = input_coefficients[k]["fixed"]
 
-        if config["bounds"] is None:
-            min_val = config["coefficients"][k]["min"]
-            max_val = config["coefficients"][k]["max"]
-
-        idx = np.where(coeff_labels == k)[0][0]
-        randarr[idx] = np.random.uniform(low=min_val, high=max_val)
-        bounds[k] = (min_val, max_val)
-
-    return CoeffTuple(coeff_labels, randarr, bounds)
+    return CoeffTuple(dataset_coefficients, values, bounds, fixed)

@@ -78,5 +78,5 @@ class Runner:
                 fit card name
         """
         config = self.setup_config(input_card)
-        opt = NSOptimizer(config)
+        opt = NSOptimizer.from_dict(config)
         opt.run_sampling()
