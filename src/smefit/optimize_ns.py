@@ -4,11 +4,11 @@
 Fitting the Wilson coefficients with NS
 """
 import os
+
 import numpy as np
 
-from .optimize import Optimizer
 from .loader import aggregate_coefficients, load_datasets
-
+from .optimize import Optimizer
 
 # from mpi4py import MPI
 # from pymultinest.solve import solve
@@ -18,8 +18,18 @@ class NSOptimizer(Optimizer):
 
     """Optimizer specification for |NS|"""
 
-    def __init__(self, live_points, efficiency, const_efficiency, tollerance, loaded_datasets, coefficients, HOindex1, HOindex2):
-        
+    def __init__(
+        self,
+        live_points,
+        efficiency,
+        const_efficiency,
+        tollerance,
+        loaded_datasets,
+        coefficients,
+        HOindex1,
+        HOindex2,
+    ):
+
         self.live_points = live_points
         self.efficiency = efficiency
         self.const_efficiency = const_efficiency
@@ -31,7 +41,6 @@ class NSOptimizer(Optimizer):
         self.get_free_params()
         self.npar = len(self.free_params.keys())
 
-    
     @classmethod
     def from_dict(cls, config):
         """
@@ -48,7 +57,7 @@ class NSOptimizer(Optimizer):
 
         loaded_datasets = load_datasets(config["root_path"], config["datasets"])
         coefficients = aggregate_coefficients(config["coefficients"], loaded_datasets)
-         
+
         for k in config["coefficients"]:
             if k not in coefficients.labels:
                 raise NotImplementedError(
@@ -69,7 +78,6 @@ class NSOptimizer(Optimizer):
         else:
             HOindex1 = None
             HOindex2 = None
-
 
         if "nlive" in config.keys():
             live_points = config["nlive"]
@@ -102,17 +110,17 @@ class NSOptimizer(Optimizer):
                 "Evidence tollerance (toll) not set in the input card. Using default: 0.5"
             )
             tollerance = 0.5
-            
+
         return cls(
-            live_points, 
-            efficiency, 
-            const_efficiency, 
+            live_points,
+            efficiency,
+            const_efficiency,
             tollerance,
             loaded_datasets,
             coefficients,
             HOindex1,
             HOindex2,
-            )
+        )
 
     def chi2_func_ns(self, params):
         """
@@ -131,7 +139,7 @@ class NSOptimizer(Optimizer):
         """
         self.free_params = params
         self.propagate_params()
-        #self.set_constraints()
+        # self.set_constraints()
 
         return self.chi2_func()
 
@@ -168,7 +176,7 @@ class NSOptimizer(Optimizer):
         """
 
         for k, label in enumerate(self.free_params.keys()):
-            
+
             idx = np.where(self.coefficients.labels == label)[0][0]
             min_val = self.coefficients.bounds[idx][0]
             max_val = self.coefficients.bounds[idx][1]
@@ -176,15 +184,15 @@ class NSOptimizer(Optimizer):
 
         return hypercube
 
-    def clean(self):
-        """Remove raw NS output if you want to keep raw output, don't call this method"""
+    # def clean(self):
+    #     """Remove raw NS output if you want to keep raw output, don't call this method"""
 
-        filelist = [
-            f for f in os.listdir(self.config["results_path"]) if f.startswith("1k-")
-        ]
-        for f in filelist:
-            if f in os.listdir(self.config["results_path"]):
-                os.remove(os.path.join(self.config["results_path"], f))
+    #     filelist = [
+    #         f for f in os.listdir(self.config["results_path"]) if f.startswith("1k-")
+    #     ]
+    #     for f in filelist:
+    #         if f in os.listdir(self.config["results_path"]):
+    #             os.remove(os.path.join(self.config["results_path"], f))
 
     def run_sampling(self):
         """Run the minimisation with |NS|"""
