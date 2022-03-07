@@ -3,8 +3,6 @@
 import numpy as np
 
 from . import chi2
-from .loader import aggregate_coefficients, load_datasets
-
 
 class Optimizer:
     """
@@ -24,52 +22,6 @@ class Optimizer:
         self.HOindex2 = HOindex2
         self.npts = None
         self.free_params = {}
-    
-    @classmethod
-    def from_dict(cls, config):
-        """
-        Create object from theory dictionary.
-        Parameters
-        ----------
-            config : dict
-                config dictionary
-        Returns
-        -------
-            cls : Optimizer
-                created object
-        """
-        
-        loaded_datasets = load_datasets(config["root_path"], config["datasets"])
-        coefficients = aggregate_coefficients(config["coefficients"], loaded_datasets)
-         
-        for k in config["coefficients"]:
-            if k not in coefficients.labels:
-                raise NotImplementedError(
-                    f"{k} does not enter the theory. Comment it out in setup script and restart."
-                )
-        # Get indice locations for quadratic corrections
-        if config["HOlambda"] == "HO":
-            HOindex1 = []
-            HOindex2 = []
-
-            for coeff in loaded_datasets.HOcorrectionsKEYS:
-                idx1 = np.where(coefficients.labels == coeff.split("*")[0])[0][0]
-                idx2 = np.where(coefficients.labels == coeff.split("*")[1])[0][0]
-                HOindex1.append(idx1)
-                HOindex2.append(idx2)
-            HOindex1 = np.array(HOindex1)
-            HOindex2 = np.array(HOindex2)
-        else:
-            HOindex1 = None
-            HOindex2 = None
-
-        return cls(
-            loaded_datasets,
-            coefficients,
-            HOindex1,
-            HOindex2,
-        )
-
         
     def get_free_params(self):
         """Gets free parameters entering fit"""

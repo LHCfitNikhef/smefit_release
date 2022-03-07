@@ -4,8 +4,11 @@
 Fitting the Wilson coefficients with NS
 """
 import os
+import numpy as np
 
 from .optimize import Optimizer
+from .loader import aggregate_coefficients, load_datasets
+
 
 # from mpi4py import MPI
 # from pymultinest.solve import solve
@@ -15,7 +18,12 @@ class NSOptimizer(Optimizer):
 
     """Optimizer specification for |NS|"""
 
-    def __init__(self, loaded_datasets, coefficients, HOindex1, HOindex2):
+    def __init__(self, live_points, efficiency, const_efficiency, tollerance, loaded_datasets, coefficients, HOindex1, HOindex2):
+        
+        self.live_points = live_points
+        self.efficiency = efficiency
+        self.const_efficiency = const_efficiency
+        self.tollerance = tollerance
 
         super().__init__(loaded_datasets, coefficients, HOindex1, HOindex2)
 
@@ -23,40 +31,88 @@ class NSOptimizer(Optimizer):
         self.get_free_params()
         self.npar = len(self.free_params.keys())
 
-        # # TODO same as parent class, here we need a class method
-        # print("============================")
+    
+    @classmethod
+    def from_dict(cls, config):
+        """
+        Create object from theory dictionary.
+        Parameters
+        ----------
+            config : dict
+                config dictionary
+        Returns
+        -------
+            cls : Optimizer
+                created object
+        """
 
-        # if "nlive" in self.config.keys():
-        #     self.live_points = self.config["nlive"]
-        # else:
-        #     print(
-        #         "Number of live points (nlive) not set in the input card. Using default: 500"
-        #     )
-        #     self.live_points = 500
+        loaded_datasets = load_datasets(config["root_path"], config["datasets"])
+        coefficients = aggregate_coefficients(config["coefficients"], loaded_datasets)
+         
+        for k in config["coefficients"]:
+            if k not in coefficients.labels:
+                raise NotImplementedError(
+                    f"{k} does not enter the theory. Comment it out in setup script and restart."
+                )
+        # Get indice locations for quadratic corrections
+        if config["HOlambda"] == "HO":
+            HOindex1 = []
+            HOindex2 = []
 
-        # if "efr" in self.config.keys():
-        #     self.efficiency = self.config["efr"]
-        # else:
-        #     print(
-        #         "Sampling efficiency (efr) not set in the input card. Using default: 0.01"
-        #     )
-        #     self.efficiency = 0.01
+            for coeff in loaded_datasets.HOcorrectionsKEYS:
+                idx1 = np.where(coefficients.labels == coeff.split("*")[0])[0][0]
+                idx2 = np.where(coefficients.labels == coeff.split("*")[1])[0][0]
+                HOindex1.append(idx1)
+                HOindex2.append(idx2)
+            HOindex1 = np.array(HOindex1)
+            HOindex2 = np.array(HOindex2)
+        else:
+            HOindex1 = None
+            HOindex2 = None
 
-        # if "ceff" in self.config.keys():
-        #     self.const_efficiency = self.config["ceff"]
-        # else:
-        #     print(
-        #         "Constant efficiency mode (ceff) not set in the input card. Using default: False"
-        #     )
-        #     self.const_efficiency = False
 
-        # if "toll" in self.config.keys():
-        #     self.tollerance = self.config["toll"]
-        # else:
-        #     print(
-        #         "Evidence tollerance (toll) not set in the input card. Using default: 0.5"
-        #     )
-        #     self.tollerance = 0.5
+        if "nlive" in config.keys():
+            live_points = config["nlive"]
+        else:
+            print(
+                "Number of live points (nlive) not set in the input card. Using default: 500"
+            )
+            live_points = 500
+
+        if "efr" in config.keys():
+            efficiency = config["efr"]
+        else:
+            print(
+                "Sampling efficiency (efr) not set in the input card. Using default: 0.01"
+            )
+            efficiency = 0.01
+
+        if "ceff" in config.keys():
+            const_efficiency = config["ceff"]
+        else:
+            print(
+                "Constant efficiency mode (ceff) not set in the input card. Using default: False"
+            )
+            const_efficiency = False
+
+        if "toll" in config.keys():
+            tollerance = config["toll"]
+        else:
+            print(
+                "Evidence tollerance (toll) not set in the input card. Using default: 0.5"
+            )
+            tollerance = 0.5
+            
+        return cls(
+            live_points, 
+            efficiency, 
+            const_efficiency, 
+            tollerance,
+            loaded_datasets,
+            coefficients,
+            HOindex1,
+            HOindex2,
+            )
 
     def chi2_func_ns(self, params):
         """
@@ -111,17 +167,12 @@ class NSOptimizer(Optimizer):
                 hypercube prior
         """
 
-        for i in range(self.npar):
-
-            label = self.free_param_labels[i]
-
-            if self.config["bounds"] is None:
-                min_val = self.config["coefficients"][label]["min"]
-                max_val = self.config["coefficients"][label]["max"]
-            else:
-                min_val, max_val = self.coefficients.bounds[label]
-
-            hypercube[i] = hypercube[i] * (max_val - min_val) + min_val
+        for k, label in enumerate(self.free_params.keys()):
+            
+            idx = np.where(self.coefficients.labels == label)[0][0]
+            min_val = self.coefficients.bounds[idx][0]
+            max_val = self.coefficients.bounds[idx][1]
+            hypercube[k] = hypercube[k] * (max_val - min_val) + min_val
 
         return hypercube
 
