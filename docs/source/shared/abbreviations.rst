@@ -4,6 +4,15 @@
 .. |SMEFT| replace::
    :abbr:`SMEFT (Standard Model Effective Field Theory)`
 
+.. |EFT| replace::
+   :abbr:`EFT (Effective Field Theory)`
+
+.. |NHO| replace::
+   :abbr:`NHO (Not Higher Order corrections, linear)`
+
+.. |HO| replace::
+   :abbr:`HO (Higher Order corrections, quadratics)`
+
 .. perturbative orders
 
 .. |LO| replace::

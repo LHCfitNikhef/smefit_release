@@ -32,7 +32,7 @@ class NSOptimizer(Optimizer):
         tolerance,
         loaded_datasets,
         coefficients,
-        HOindices,
+        ho_indices,
     ):
 
         self.live_points = live_points
@@ -40,7 +40,7 @@ class NSOptimizer(Optimizer):
         self.const_efficiency = const_efficiency
         self.tollerance = tolerance
 
-        super().__init__(loaded_datasets, coefficients, HOindices)
+        super().__init__(loaded_datasets, coefficients, ho_indices)
 
         # Get free parameters
         self.get_free_params()
@@ -69,7 +69,7 @@ class NSOptimizer(Optimizer):
                     f"{k} does not enter the theory. Comment it out in setup script and restart."
                 )
         # Get indice locations for quadratic corrections
-        HOindices = {}
+        ho_indices = {}
         if config["HOlambda"] == "HO":
             HOindex1 = []
             HOindex2 = []
@@ -79,7 +79,7 @@ class NSOptimizer(Optimizer):
                 idx2 = np.where(coefficients.labels == coeff.split("*")[1])[0][0]
                 HOindex1.append(idx1)
                 HOindex2.append(idx2)
-            HOindices = {1: np.array(HOindex1), 2: np.array(HOindex2)}
+            ho_indices = {1: np.array(HOindex1), 2: np.array(HOindex2)}
 
         if "nlive" in config.keys():
             live_points = config["nlive"]
@@ -120,7 +120,7 @@ class NSOptimizer(Optimizer):
             tollerance,
             loaded_datasets,
             coefficients,
-            HOindices,
+            ho_indices,
         )
 
     def chi2_func_ns(self, params):

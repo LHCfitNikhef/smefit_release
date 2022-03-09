@@ -3,10 +3,9 @@
 """
 Module for the generation of theory predictions
 """
-import numpy as np
 
 
-def make_predictions(dataset, coefficients, labels, HOindices):
+def make_predictions(dataset, coefficients, nho_indices, ho_indices):
     """
     Generate the corrected theory predictions for dataset
     given a set of |SMEFT| coefficients.
@@ -17,10 +16,10 @@ def make_predictions(dataset, coefficients, labels, HOindices):
             dataset tuple
         coefficients : numpy.ndarray
             |EFT| corrections
-        lables : list(str)
-            list of coefficient to include
-        HOindices: dict, None
-            dictionary with HO corrections locations. None for linear fits
+        nho_indices : list
+            list of |NHO| corrections locations
+        ho_indices: dict, None
+            dictionary of |HO| corrections locations. None for linear fits
     Returns
     -------
         corrected_theory : numpy.ndarray
@@ -28,12 +27,11 @@ def make_predictions(dataset, coefficients, labels, HOindices):
     """
 
     # Compute total linear correction
-    idx = np.where(dataset.CorrectionsKEYS == labels)[0]
-    summed_corrections = dataset.CorrectionsVAL @ coefficients[idx]
+    summed_corrections = dataset.CorrectionsVAL @ coefficients[nho_indices]
 
     # Compute total quadratic correction
-    if HOindices is not None:
-        coefficients = coefficients[HOindices[1]] * coefficients[HOindices[2]]
+    if ho_indices is not None:
+        coefficients = coefficients[ho_indices[1]] * coefficients[ho_indices[2]]
         summed_quad_corrections = dataset.HOcorrectionsVAL @ coefficients
         summed_corrections += summed_quad_corrections
 

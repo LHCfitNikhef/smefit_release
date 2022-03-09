@@ -14,11 +14,11 @@ class Optimizer:
 
     """
 
-    def __init__(self, loaded_datasets, coefficients, HOindices):
+    def __init__(self, loaded_datasets, coefficients, ho_indices):
 
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
-        self.HOindices = HOindices
+        self.ho_indices = ho_indices
         self.npts = self.loaded_datasets.Commondata.size
         self.free_params = {}
 
@@ -72,10 +72,14 @@ class Optimizer:
             current_chi2 : np.ndarray
                 chi2 function
         """
+        # TODO: can we slice at the beginning as we do for HO?
+        nho_indices = np.where(
+            self.loaded_datasets.CorrectionsKEYS == self.coefficients.lables
+        )[0]
 
         return chi2.compute_chi2(
             self.loaded_datasets,
             self.coefficients.values,
-            self.coefficients.labels,
-            self.HOindices,
+            nho_indices,
+            self.ho_indices,
         )
