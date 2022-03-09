@@ -9,28 +9,25 @@ from . import compute_theory as pr
 
 
 def compute_chi2(dataset, coefficients, nho_indices, ho_indices):
-    """
+    r"""
     Compute the chi2
     Will need to be modified when implementing training validation split.
 
     Parameters
     ----------
-        config : dict
-            configuration dictionary
         dataset : DataTuple
             dataset tuple
         coefficients : numpy.ndarray
             coefficients list
         nho_indices : list
             list of |NHO| corrections locations
-        ho_indices: dict, None
+        ho_indices : dict, None
             dictionary with HO corrections locations. None for linear fits
-
 
     Returns
     -------
-        chi2_total : numpy.ndarray
-            chi2 values
+        chi2_total : float
+            :math:`\Chi^2` value
     """
 
     # compute theory prediction for each point in the dataset

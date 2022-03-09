@@ -11,6 +11,12 @@ class Optimizer:
 
     Parameters
     ----------
+        loaded_datasets : DataTuple,
+            dataset tuple
+        coefficients :
+
+        ho_indices : dict, None
+            dictionary with HO corrections locations. None for linear fits
 
     """
 
@@ -63,23 +69,27 @@ class Optimizer:
                 self.coefficients.values[idx] = self.free_params[coefficient]
 
     def chi2_func(self):
-        """
-        Wrap the chi2 in a function for scipy optimiser. Pass noise and
-        data info as args. Log the chi2 value and values of the coefficients.
+        r"""
+        Wrap the math:`\Chi^2` in a function for scipy optimizer. Pass noise and
+        data info as args. Log the math:`\Chi^2` value and values of the coefficients.
 
         Returns
         -------
             current_chi2 : np.ndarray
-                chi2 function
+                computed :math:`\Chi^2`
         """
         # TODO: can we slice at the beginning as we do for HO?
         nho_indices = np.where(
             self.loaded_datasets.CorrectionsKEYS == self.coefficients.lables
         )[0]
 
-        return chi2.compute_chi2(
+        current_chi2 = chi2.compute_chi2(
             self.loaded_datasets,
             self.coefficients.values,
             nho_indices,
             self.ho_indices,
         )
+
+        print(self.coefficients.values)
+        print(current_chi2)
+        return current_chi2

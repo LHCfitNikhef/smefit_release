@@ -21,30 +21,43 @@ class NSOptimizer(Optimizer):
 
     Parameters
     ----------
+        loaded_datasets : DataTuple,
+            dataset tuple
+        coefficients :
 
+        ho_indices : dict, None
+            dictionary with HO corrections locations. None for linear fits
+        live_points : int
+            number of |NS| live points
+        efficiency : float
+            sampling efficiency
+        const_efficiency: bool
+            if True use the constant efficiency mode
+        tolerance: float
+            evidence tolerance
     """
 
     def __init__(
         self,
-        live_points,
-        efficiency,
-        const_efficiency,
-        tolerance,
         loaded_datasets,
         coefficients,
         ho_indices,
+        live_points=500,
+        efficiency=0.01,
+        const_efficiency=False,
+        tolerance=0.5,
     ):
 
         self.live_points = live_points
         self.efficiency = efficiency
         self.const_efficiency = const_efficiency
-        self.tollerance = tolerance
+        self.tolerance = tolerance
 
         super().__init__(loaded_datasets, coefficients, ho_indices)
 
         # Get free parameters
         self.get_free_params()
-        self.npar = len(self.free_params.keys())
+        self.npar = len(self.free_params)
 
     @classmethod
     def from_dict(cls, config):
@@ -53,7 +66,7 @@ class NSOptimizer(Optimizer):
         Parameters
         ----------
             config : dict
-                config dictionary
+                configuration dictionary
         Returns
         -------
             cls : Optimizer
@@ -81,43 +94,39 @@ class NSOptimizer(Optimizer):
                 HOindex2.append(idx2)
             ho_indices = {1: np.array(HOindex1), 2: np.array(HOindex2)}
 
-        if "nlive" in config.keys():
+        if "nlive" in config:
             live_points = config["nlive"]
         else:
             print(
                 "Number of live points (nlive) not set in the input card. Using default: 500"
             )
-            live_points = 500
 
-        if "efr" in config.keys():
+        if "efr" in config:
             efficiency = config["efr"]
         else:
             print(
                 "Sampling efficiency (efr) not set in the input card. Using default: 0.01"
             )
-            efficiency = 0.01
 
-        if "ceff" in config.keys():
+        if "ceff" in config:
             const_efficiency = config["ceff"]
         else:
             print(
                 "Constant efficiency mode (ceff) not set in the input card. Using default: False"
             )
-            const_efficiency = False
 
-        if "toll" in config.keys():
-            tollerance = config["toll"]
+        if "toll" in config:
+            tolerance = config["toll"]
         else:
             print(
-                "Evidence tollerance (toll) not set in the input card. Using default: 0.5"
+                "Evidence tolerance (toll) not set in the input card. Using default: 0.5"
             )
-            tollerance = 0.5
 
         return cls(
             live_points,
             efficiency,
             const_efficiency,
-            tollerance,
+            tolerance,
             loaded_datasets,
             coefficients,
             ho_indices,
@@ -176,7 +185,7 @@ class NSOptimizer(Optimizer):
                 hypercube prior
         """
 
-        for k, label in enumerate(self.free_params.keys()):
+        for k, label in enumerate(self.free_params):
 
             idx = np.where(self.coefficients.labels == label)[0][0]
             min_val = self.coefficients.bounds[idx][0]
