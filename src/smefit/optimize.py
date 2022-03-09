@@ -4,25 +4,24 @@ import numpy as np
 
 from . import chi2
 
+
 class Optimizer:
     """
     Common interface for Chi2 profile, NS and McFiT
 
     Parameters
     ----------
-        config : dict
-            configuration dictionary
+
     """
 
-    def __init__(self, loaded_datasets, coefficients, HOindex1, HOindex2):
+    def __init__(self, loaded_datasets, coefficients, HOindices):
 
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
-        self.HOindex1 = HOindex1
-        self.HOindex2 = HOindex2
-        self.npts = None
+        self.HOindices = HOindices
+        self.npts = self.loaded_datasets.Commondata.size
         self.free_params = {}
-        
+
     def get_free_params(self):
         """Gets free parameters entering fit"""
 
@@ -32,8 +31,6 @@ class Optimizer:
                 free_coefficient_value = self.coefficients.values[index]
                 self.free_params[free_coefficient_label] = free_coefficient_value
 
-        
-        
     # #TODO Is this function necessary now?
     # def set_constraints(self):
     #     """Sets parameter constraints"""
@@ -75,9 +72,10 @@ class Optimizer:
             current_chi2 : np.ndarray
                 chi2 function
         """
-        
-        current_chi2, self.npts = chi2.compute_chi2(
-            self.loaded_datasets, self.coefficients.values, self.coefficients.labels, self.HOindex1, self.HOindex2 
-        )
 
-        return current_chi2
+        return chi2.compute_chi2(
+            self.loaded_datasets,
+            self.coefficients.values,
+            self.coefficients.labels,
+            self.HOindices,
+        )

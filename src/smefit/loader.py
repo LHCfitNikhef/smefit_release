@@ -196,8 +196,8 @@ def load_datasets(path, datasets):
     N_data_exp = []
     EXP_name = []
 
-    #datasets = config["datasets"]
-    #path = config["root_path"]
+    # datasets = config["datasets"]
+    # path = config["root_path"]
 
     for sset in datasets:
 
@@ -319,31 +319,33 @@ def aggregate_coefficients(input_coefficients, loaded_datasets, input_bounds=Non
     # Give the initial point of the fit to be randomly spread around the bounds
     # specified by --bounds option (if none given, bounds are taken from setup.py)
     dataset_coefficients = []
-    
+
     # for set in loaded_datasets:
     for key in loaded_datasets.CorrectionsKEYS:
         dataset_coefficients.append(key)
 
     # Keep ordering of coefficients the same so they match to the actual corrections
-    dataset_coefficients, idx = np.unique(np.array(dataset_coefficients), return_index=True)
+    dataset_coefficients, idx = np.unique(
+        np.array(dataset_coefficients), return_index=True
+    )
     dataset_coefficients = dataset_coefficients[np.argsort(idx)]
 
     # All the coefficients are initialized to 0 by default
     values = np.zeros(len(dataset_coefficients))
-    bounds = [(0., 0.) for i in range(0,len(dataset_coefficients))]
-    fixed = [True for i in range(0,len(dataset_coefficients)) ]
+    bounds = [(0.0, 0.0) for i in range(0, len(dataset_coefficients))]
+    fixed = [True for i in range(0, len(dataset_coefficients))]
 
-    #for k in config["coefficients"].keys():
+    # for k in config["coefficients"].keys():
     for k in input_coefficients.keys():
         if k not in dataset_coefficients:
             raise ValueError(
                 f"{k} is not part of fitted coefficients. Please comment it out in the setup file"
             )
-        
+
         if input_bounds is None:
             min_val = input_coefficients[k]["min"]
             max_val = input_coefficients[k]["max"]
-            
+
         idx = np.where(dataset_coefficients == k)[0][0]
         bounds[idx] = (min_val, max_val)
         values[idx] = np.random.uniform(low=min_val, high=max_val)

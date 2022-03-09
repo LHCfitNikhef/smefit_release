@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 def set_paths(root_path, pto, resultID):
     """
     Set up configurations paths given the dictionary
