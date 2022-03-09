@@ -37,18 +37,11 @@ def compute_chi2(dataset, coefficients, nho_indices, ho_indices):
     theory_predictions = pr.make_predictions(
         dataset, coefficients, nho_indices, ho_indices
     )
-    # get central values of experimental points
-    dat = dataset.Commondata
+    # compute experimental central values - theory
+    diff = dataset.Commondata - theory_predictions
 
-    # compute data - theory
-    diff = dat - theory_predictions
-
-    # The chi2 computation
+    # chi2 computation
     cov_mat_inv = np.linalg.inv(dataset.CovMat)
-    # TODO einsum is slower, consider to remove it, for simple operations
-    # Multiply cov^-1 * diff
-    cov_mat_diff = np.einsum("ij,j->i", cov_mat_inv, diff)
-    # Multiply diff * (cov^-1 * diff) to get chi2
-    chi2_total = np.einsum("j,j->", diff, cov_mat_diff)
+    chi2_total = diff @ cov_mat_inv @ diff
 
     return chi2_total
