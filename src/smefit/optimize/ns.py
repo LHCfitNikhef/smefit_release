@@ -7,8 +7,8 @@ import os
 
 import numpy as np
 
-from .loader import aggregate_coefficients, load_datasets
-from .optimize import Optimizer
+from ..loader import aggregate_coefficients, load_datasets
+from . import Optimizer
 
 # from mpi4py import MPI
 # from pymultinest.solve import solve
@@ -94,43 +94,27 @@ class NSOptimizer(Optimizer):
                 HOindex2.append(idx2)
             ho_indices = {1: np.array(HOindex1), 2: np.array(HOindex2)}
 
-        if "nlive" in config:
-            live_points = config["nlive"]
-        else:
+        if "nlive" not in config:
             print(
                 "Number of live points (nlive) not set in the input card. Using default: 500"
             )
 
-        if "efr" in config:
-            efficiency = config["efr"]
-        else:
+        if "efr" not in config:
             print(
                 "Sampling efficiency (efr) not set in the input card. Using default: 0.01"
             )
 
-        if "ceff" in config:
-            const_efficiency = config["ceff"]
-        else:
+        if "ceff" not in config:
             print(
                 "Constant efficiency mode (ceff) not set in the input card. Using default: False"
             )
 
-        if "toll" in config:
-            tolerance = config["toll"]
-        else:
+        if "toll" not in config:
             print(
                 "Evidence tolerance (toll) not set in the input card. Using default: 0.5"
             )
 
-        return cls(
-            live_points,
-            efficiency,
-            const_efficiency,
-            tolerance,
-            loaded_datasets,
-            coefficients,
-            ho_indices,
-        )
+        return cls(loaded_datasets, coefficients, ho_indices, **config)
 
     def chi2_func_ns(self, params):
         """
@@ -153,7 +137,7 @@ class NSOptimizer(Optimizer):
 
         return self.chi2_func()
 
-    def myloglike(self, hypercube):
+    def GaussianLogLikelihood(self, hypercube):
         """
         Multi gaussian log likelihood function
 
@@ -170,7 +154,7 @@ class NSOptimizer(Optimizer):
 
         return -0.5 * self.chi2_func_ns(hypercube)
 
-    def myprior(self, hypercube):
+    def FlatPrior(self, hypercube):
         """
         Update the prior function
 
@@ -205,6 +189,6 @@ class NSOptimizer(Optimizer):
     #             os.remove(os.path.join(self.config["results_path"], f))
 
     def run_sampling(self):
-        """Run the minimisation with |NS|"""
+        """Run the minimization with |NS|"""
         print("==================================")
         print("Run NS")

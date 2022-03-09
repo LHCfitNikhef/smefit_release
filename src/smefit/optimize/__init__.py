@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from . import chi2
+from .. import chi2
 
 
 class Optimizer:
