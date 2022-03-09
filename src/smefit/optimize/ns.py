@@ -3,8 +3,6 @@
 """
 Fitting the Wilson coefficients with NS
 """
-import os
-
 import numpy as np
 
 from ..loader import aggregate_coefficients, load_datasets

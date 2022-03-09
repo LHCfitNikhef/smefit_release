@@ -85,7 +85,8 @@ class Loader:
             dtype="str",
         )
 
-        # Identify add and mult systematics and replace the mult ones with corresponding value computed
+        # Identify add and mult systematics
+        # and replace the mult ones with corresponding value computed
         # from data central value. Required for implementation of t0 prescription
 
         indx_add = np.where(type_sys == "ADD")
@@ -195,9 +196,6 @@ def load_datasets(path, datasets):
     CHI2_COVMAT = []
     N_data_exp = []
     EXP_name = []
-
-    # datasets = config["datasets"]
-    # path = config["root_path"]
 
     for sset in datasets:
 
