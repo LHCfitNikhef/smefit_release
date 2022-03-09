@@ -4,7 +4,7 @@ from shutil import copyfile
 
 import yaml
 
-from .optimize_ns import NSOptimizer
+from .optimize.ns import NSOptimizer
 from .utils import set_paths
 
 
