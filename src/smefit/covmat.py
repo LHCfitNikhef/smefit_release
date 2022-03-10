@@ -49,30 +49,30 @@ def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
     return np.diag(diagonal) + corr_sys_mat @ corr_sys_mat.T
 
 
-def build_large_covmat(ndata, chi2_covmat, n_data_exp):
-    """
+def build_large_covmat(chi2_covmat, n_data, n_data_exp):
+    r"""
     Build large covariance matrix (individual datsets are on diagonal, no cross-correlations)
 
     Parameters
     ----------
-        ndata : int
+        chi2_covmat: list
+            :math:`\Chi^2` covariance matrix
+        n_data : int
             total number of datapoints
         n_data_exp: list
             list of number of data per experiment
-        chi2_covmat: np.ndarray
-            chi 2 covariance matrix
 
     Returns
     -------
         covmat_array: np.ndarray
             total experimental covariance matrix
     """
-    covmat_array = np.zeros((ndata, ndata))
+    covmat_array = np.zeros((n_data, n_data))
     cnt = 0
 
-    for i, nexpdata in enumerate(n_data_exp):
-        for j in range(nexpdata):
-            for k in range(nexpdata):
+    for i, n_exp in enumerate(n_data_exp):
+        for j in range(n_exp):
+            for k in range(n_exp):
                 covmat_array[cnt + j, cnt + k] = chi2_covmat[i][j][k]
-        cnt += nexpdata
+        cnt += n_exp
     return covmat_array

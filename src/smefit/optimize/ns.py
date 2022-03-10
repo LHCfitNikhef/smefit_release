@@ -5,7 +5,8 @@ Fitting the Wilson coefficients with NS
 """
 import numpy as np
 
-from ..loader import aggregate_coefficients, load_datasets
+from ..coefficients import aggregate_coefficients
+from ..loader import load_datasets
 from . import Optimizer
 
 # from mpi4py import MPI
@@ -61,17 +62,21 @@ class NSOptimizer(Optimizer):
     def from_dict(cls, config):
         """
         Create object from theory dictionary.
+
         Parameters
         ----------
             config : dict
                 configuration dictionary
+
         Returns
         -------
             cls : Optimizer
                 created object
         """
 
-        loaded_datasets = load_datasets(config["root_path"], config["datasets"])
+        loaded_datasets = load_datasets(
+            config["root_path"], config["datasets"], config["coefficients"]
+        )
         coefficients = aggregate_coefficients(config["coefficients"], loaded_datasets)
 
         for k in config["coefficients"]:

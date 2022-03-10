@@ -5,7 +5,6 @@ from collections import namedtuple
 
 import numpy as np
 import pandas as pd
-import yaml
 
 from .covmat import build_large_covmat, construct_covmat
 
@@ -18,54 +17,76 @@ def check_file(path):
 
 class Loader:
     """
-    Class to check and load commondata and corresponding theory predictions
+    Class to check, load commondata and corresponding theory predictions
+
+    Attributes
+    ----------
+        path: pathlib.path
+            path to commondata folder, commondata excluded
+        theory_path: pathlib.Path, optional
+            path to theory folder, theory excluded.
+            Default it assumes to be the same as path
+
+    Parameters
+    ----------
+        setname: str
+            dataset name to load
+        operators_to_keep : list
+            list of operators for which corrections are loaded
     """
 
-    def __init__(self, path, setname):
+    path = pathlib.Path()
+    theory_path = pathlib.Path(path)
+    _data_folder = pathlib.Path(path) / "commondata"
+    _sys_folder = pathlib.Path(path) / "commondata/systypes"
+    _theory_folder = pathlib.Path(theory_path) / "theory"
+
+    def __init__(self, setname, operators_to_keep):
         self.setname = setname
-        self.meta_folder = pathlib.Path(path) / f"commondata/meta/{self.setname}.yaml"
-        self.data_folder = pathlib.Path(path) / f"commondata/DATA_{self.setname}.dat"
-        self.sys_folder = (
-            pathlib.Path(path)
-            / f"commondata/systypes/SYSTYPE_{self.setname}_DEFAULT.dat"
-        )
-        self.theory_folder = pathlib.Path(path) / f"theory/{self.setname}.txt"
 
         self.dataspec = {}
-        self.load_dataset()
+        (
+            self.dataspec["central_values"],
+            self.dataspec["covmat"],
+        ) = self.load_experimental_data()
+        (
+            self.dataspec["SM_predictions"],
+            self.dataspec["nho_corrections"],
+            self.dataspec["ho_corrections"],
+        ) = self.load_theory(operators_to_keep)
 
-    def load_dataset(self):
-        """Load data, systematics and corresponding theory predictions"""
+    def load_experimental_data(self):
+        """
+        Load experimental data with corresponding uncertainties
 
-        # check that all relevant files exist
-        check_file(self.meta_folder)
-        check_file(self.data_folder)
-        check_file(self.sys_folder)
-        check_file(self.theory_folder)
+        Returns
+        -------
+            cental_values: numpy.ndarray
+                experimental central values
+            covmat : numpy.ndarray
+                experimental covariance matrix
+        """
+        data_file = self._data_folder / f"DATA_{self.setname}.dat"
+        sys_file = self._sys_folder / f"SYSTYPE_{self.setname}_DEFAULT.dat"
 
-        # load information from the meta file
-        with open(f"{self.meta_folder}", encoding="utf-8") as f:
-            meta = yaml.safe_load(f)
-
-        self.num_data = meta["npoints"]
-        self.num_sys = meta["nsys"]
+        check_file(data_file)
+        check_file(sys_file)
 
         # load data from commondata file
         # TODO: better data format?
-        # - meta contains some repetitions,
         # - DATA_* has many unused info
+        num_data, num_sys = np.loadtxt(data_file, usecols=(1, 2), max_rows=1)
         central_values, stat_error = np.loadtxt(
-            f"{self.data_folder}", usecols=(5, 6), unpack=True, skiprows=1
+            data_file, usecols=(5, 6), unpack=True, skiprows=1
         )
-        self.dataspec["central_values"] = central_values
 
         # Load systematics from commondata file.
         # Read values of sys first
         sys_add = []
         sys_mult = []
-        for i in range(0, self.num_sys):
+        for i in range(0, num_sys):
             add, mult = np.loadtxt(
-                f"{self.data_folder}",
+                data_file,
                 usecols=(7 + 2 * i, 8 + 2 * i),
                 unpack=True,
                 skiprows=1,
@@ -78,7 +99,7 @@ class Loader:
 
         # Read systype file
         type_sys, name_sys = np.genfromtxt(
-            f"{self.sys_folder}",
+            sys_file,
             usecols=(1, 2),
             unpack=True,
             skip_header=1,
@@ -91,76 +112,181 @@ class Loader:
 
         indx_add = np.where(type_sys == "ADD")
         indx_mult = np.where(type_sys == "MULT")
-        sys = np.zeros((self.num_sys, self.num_data))
+        sys = np.zeros((num_sys, num_data))
         sys[indx_add[0]] = sys_add[indx_add[0]]
         sys[indx_mult[0]] = sys_mult[indx_mult[0]] * central_values * 1e-2
 
         # Build dataframe with shape (N_data * N_sys) and systematic name as the
         # column headers and construct covmat
         df = pd.DataFrame(data=sys, columns=name_sys)
-        self.dataspec["covmat"] = construct_covmat(stat_error, df)
+
+        return central_values, construct_covmat(stat_error, df)
+
+    def load_theory(self, operators_to_keep):
+        """
+        Load theory predictions
+
+        Parameters
+        ----------
+            operators_to_keep: list
+                list of operators to keep
+
+
+        Returns
+        -------
+            sm: numpy.ndarray
+                |SM| predictions
+            nho_dict: dict
+                dictionary with |NHO| corrections
+            ho_dict: dict
+                dictionary with |HO| corrections
+        """
+        theory_file = self._theory_folder / f"{self.setname}.txt"
+        check_file(theory_file)
 
         # load theory predictions
-        corrections_dic = {}
-        with open(self.theory_folder, encoding="utf-8") as f:
+        corrections_dict = {}
+        with open(theory_file, encoding="utf-8") as f:
             for line in f:
                 key, *val = line.split()
-                corrections_dic[key] = np.array(
-                    [float(val[i]) for i in range(len(val))]
-                )
-                # save sm predictions in a vector and remove from the dictionary
-        self.dataspec["SM_predictions"] = corrections_dic["SM"]
-        corrections_dic.pop("SM", None)
+                corrections_dict[key] = np.array([float(v) for v in val])
 
-        # Split the dictionary into lambda^-2 and lambda^-4 terms
-        higherorder = {}
-        removeHO = []
+        # Split the dictionary into SM, lambda^-2 and lambda^-4 terms
+        # keep only needed corrections
+        ho_dict = {}
+        nho_dict = {}
 
-        for key, value in corrections_dic.items():
+        def is_to_keep(op1, op2=None):
+            if op2 is None:
+                return op1 in operators_to_keep
+            return op1 in operators_to_keep and op2 in operators_to_keep
+
+        for key, value in corrections_dict.items():
             if "*" in key:
-                removeHO.append(key)
-                higherorder[key] = value
-            if "^" in key:
-                new_key = f"{key[:-2]}*{key[:-2]}"
-                removeHO.append(key)
-                higherorder[new_key] = value
+                op1, op2 = key.split("*")
+                if is_to_keep(op1, op2):
+                    ho_dict[key] = value
+            elif "^" in key:
+                op = key[:-2]
+                if is_to_keep(op):
+                    new_key = f"{op}*{op}"
+                    ho_dict[new_key] = value
+            elif "SM" not in key:
+                if is_to_keep(key):
+                    nho_dict[key] = value
 
-        for key in removeHO:
-            if key in corrections_dic:
-                del corrections_dic[key]
+        # TODO: make sure we store theory and for EFT and SM in the same file,
+        # for most of the old tables the things do not coincide
+        return corrections_dict["SM"], nho_dict, ho_dict
 
-        self.dataspec["linear_corrections"] = corrections_dic
-        self.dataspec["quadratic_corrections"] = higherorder
+    @property
+    def n_data(self):
+        """
+        Number of data
 
-    def get_setname(self):
-        """Get name of the dataset"""
-        return self.setname
+        Returns:
+        --------
+            n_data: int
+                number of experimental data
+        """
+        return self.dataspec["central_values"].size
 
-    def get_Ndata(self):
-        """Get number of data"""
-        return self.num_data
+    @property
+    def central_values(self):
+        """
+        Central values
 
-    def get_central_values(self):
-        """Get central values"""
+        Returns:
+        --------
+            central_values: numpy.ndarray
+                experimental central values
+        """
         return self.dataspec["central_values"]
 
-    def get_covmat(self):
-        """Get central values"""
+    @property
+    def covmat(self):
+        """
+        Covariance matrix
+
+        Returns:
+        --------
+            covmat: numpy.ndarray
+                experimental covariance matrix
+        """
         return self.dataspec["covmat"]
 
-    def get_sm_prediction(self):
-        """Return SM prediction for the dataset"""
+    @property
+    def sm_prediction(self):
+        """
+        |SM| prediction for the dataset
+
+        Returns:
+        --------
+            SM_predictions : numpy.ndarray
+                best |SM| prediction
+        """
         return self.dataspec["SM_predictions"]
 
-    def get_linear_corrections(self):
-        """Return linear corrections, as a dictionary with name of correction and its value"""
-        return self.dataspec["linear_corrections"]
+    @property
+    def nho_corrections(self):
+        """
+        |NHO| corrections
 
-    def get_quadratic_corrections(self):
-        """Return quadratic corrections, as a dictionary with name of correction and its value"""
-        return self.dataspec["quadratic_corrections"]
+        Returns:
+        --------
+            nho_corrections : dict
+                dictionary with operator names and |NHO| correctsions
+        """
+        return self.dataspec["nho_corrections"]
+
+    @property
+    def ho_corrections(self):
+        """
+        |HO| corrections
+
+        Returns:
+        --------
+            ho_corrections : dict
+                dictionary with operator names and |HO| correctsions
+        """
+        return self.dataspec["ho_corrections"]
 
 
+def split_corrections_dict(corrections_list, n_data_tot):
+    """
+    Construct a unique list of correction name,
+    with corresponding values.
+
+    Parameters
+    ----------
+        corrections_list : list(dict)
+            list containing corrections per experiment
+        n_data_tot : int
+            total number of experimental datapoints
+
+    Returns
+    -------
+        corr_keys : np.ndarray
+            array containing correction names
+        corr_values : np.ndarray
+            matrix with correction values (n_data_tot,corr_keys.size)
+    """
+
+    corr_keys = np.unique(np.array([(*c,) for c in corrections_list]).flatten())
+    corr_values = np.zeros((n_data_tot, corr_keys.size))
+
+    cnt = 0
+    # loop on experiments
+    for correction_dict in corrections_list:
+        for key, values in correction_dict.items():
+            idx = np.where(corr_keys == key)[0][0]
+            n_dat = values.size
+            corr_values[cnt : cnt + n_dat, idx] = values
+
+    return corr_keys, corr_values
+
+
+# TODO: fix name convention, aggregate keys and vals?
 DataTuple = namedtuple(
     "DataTuple",
     (
@@ -176,177 +302,60 @@ DataTuple = namedtuple(
     ),
 )
 
-# TODO fix names convention
-def load_datasets(path, datasets):
+
+def load_datasets(path, datasets, operators_to_keep):
     """
-    Loads commondata, theory and |SMEFT| corrections into a namedtuple
+    Loads experimental data, theory and |SMEFT| corrections into a namedtuple
 
     Parameters
     ----------
+        path : str
+            root path
         datasets : list
             list of datasets to be loaded
-        path : string
-            root path
+        operators_to_keep: list
+            list of operators for which corrections are loaded
     """
 
-    EXP_DATA = []
-    SM_THEORY = []
-    LIN_DICT = []
-    QUAD_DICT = []
-    CHI2_COVMAT = []
-    N_data_exp = []
-    EXP_name = []
+    exp_data = []
+    sm_theory = []
+    nho_corr_list = []
+    ho_corr_list = []
+    chi2_covmat = []
+    n_data_exp = []
+    exp_name = []
 
-    for sset in datasets:
+    Loader.path = path
 
-        dataset = Loader(path, sset)
-        EXP_name.append(sset)
-        N_data_exp.append(dataset.get_Ndata())
-        EXP_DATA.append(dataset.get_central_values())
-        SM_THEORY.append(dataset.get_sm_prediction())
-        LIN_DICT.append(dataset.get_linear_corrections())
-        QUAD_DICT.append(dataset.get_quadratic_corrections())
-        CHI2_COVMAT.append(dataset.get_covmat())
+    for sset in np.unique(datasets):
 
-    # Flatten
-    EXP_names = np.array(EXP_name)  # array containing all the datasets names
-    EXP_array = flatten(EXP_DATA)  # array containing all data
-    SM_array = flatten(SM_THEORY)  # array containing all SM theory
+        dataset = Loader(sset, operators_to_keep)
+        exp_name.append(sset)
+        n_data_exp.append(dataset.n_data)
 
-    # Construct unique large cov matrix dropping correlations between different datasets
-    ndata = len(EXP_array)
-    N_data_exp = np.array(N_data_exp)
-    COVMAT_array = build_large_covmat(ndata, CHI2_COVMAT, N_data_exp)
+        exp_data.extend(dataset.central_values)
+        sm_theory.extend(dataset.sm_prediction)
 
-    lin_corr_keys, lin_corr_values = split_corrections_dict(LIN_DICT, ndata)
-    quad_corr_keys, quad_corr_values = split_corrections_dict(QUAD_DICT, ndata)
+        nho_corr_list.append(dataset.nho_corrections)
+        nho_corr_list.append(dataset.ho_corrections)
+        chi2_covmat.append(dataset.covmat)
+
+    exp_data = np.array(exp_data)
+    n_data_tot = exp_data.size
+
+    lin_corr_keys, lin_corr_values = split_corrections_dict(nho_corr_list, n_data_tot)
+    quad_corr_keys, quad_corr_values = split_corrections_dict(ho_corr_list, n_data_tot)
 
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
-        EXP_array,
-        SM_array,
+        exp_data,
+        np.array(sm_theory),
         lin_corr_keys,
         lin_corr_values,
         quad_corr_keys,
         quad_corr_values,
-        EXP_names,
-        N_data_exp,
-        COVMAT_array,
+        np.array(exp_name),
+        np.array(n_data_exp),
+        # Construct unique large cov matrix dropping correlations between different datasets
+        build_large_covmat(chi2_covmat, n_data_tot, n_data_exp),
     )
-
-
-def flatten(input_dict):
-    """
-    Flatten a dictionary per experiment into a single array
-
-    Parameters
-    ----------
-        in_dict : dict
-            array containing values per experiment
-
-    Returns
-    -------
-        np.ndarray
-            arrays containing values
-    """
-    return np.array([item for sublist in input_dict for item in sublist])
-
-
-# TODO split this function and simplify
-def split_corrections_dict(corrections_dict, ndata):
-    """
-    Store keys for correction values and build matrix containing
-    the corrections for each coefficient
-
-    Parameters
-    ----------
-        corrections_dict : dict
-            array containing corrections per experiment
-        ndata : int
-            number of experimental datapoints
-
-    Returns
-    -------
-        keys, vals : np.ndarray, np.ndarray
-            arrays containing keys (experiments) and corrections
-    """
-
-    array = [item for sublist in corrections_dict for item in sublist]
-    corr_keys = np.array(sorted(set(array)))
-
-    corr_values = np.zeros((ndata, len(corr_keys)))
-
-    if corr_keys.size == 0:
-        return corr_keys, corr_values
-    else:
-        cnt = 0
-        for correction_dict in corrections_dict:
-            dummy_key = list(correction_dict.keys())[0]
-            for j in range(len(correction_dict[dummy_key])):
-                for key in correction_dict:
-                    idx = np.where(corr_keys == key)[0][0]
-                    corr_values[cnt, idx] = float(correction_dict[key][j])
-                cnt += 1
-        return corr_keys, corr_values
-
-
-# TODO consider using a DataClass and always read coefficients properties
-# from this class and not from the config
-
-CoeffTuple = namedtuple("Coefficients", ("labels", "values", "bounds", "fixed"))
-
-
-def aggregate_coefficients(input_coefficients, loaded_datasets, input_bounds=None):
-    """
-    Aggregate all coefficient labels and construct an array of coefficient
-    values of suitable size. Returns a CoeffTuple of the labels, values,
-    and bounds
-
-    Parameters
-    ----------
-        config : dict
-            config dictionary
-        loaded_datasets : DataTuple
-            loaded datasets
-    Returns
-    -------
-        CT_CoeffTuple : CoeffTuple
-            CoeffTuple of the labels, values and bounds
-    """
-
-    # Give the initial point of the fit to be randomly spread around the bounds
-    # specified by --bounds option (if none given, bounds are taken from setup.py)
-    dataset_coefficients = []
-
-    # for set in loaded_datasets:
-    for key in loaded_datasets.CorrectionsKEYS:
-        dataset_coefficients.append(key)
-
-    # Keep ordering of coefficients the same so they match to the actual corrections
-    dataset_coefficients, idx = np.unique(
-        np.array(dataset_coefficients), return_index=True
-    )
-    dataset_coefficients = dataset_coefficients[np.argsort(idx)]
-
-    # All the coefficients are initialized to 0 by default
-    values = np.zeros(len(dataset_coefficients))
-    bounds = [(0.0, 0.0) for i in range(0, len(dataset_coefficients))]
-    fixed = [True for i in range(0, len(dataset_coefficients))]
-
-    # for k in config["coefficients"].keys():
-    for k in input_coefficients.keys():
-        if k not in dataset_coefficients:
-            raise ValueError(
-                f"{k} is not part of fitted coefficients. Please comment it out in the setup file"
-            )
-
-        if input_bounds is None:
-            min_val = input_coefficients[k]["min"]
-            max_val = input_coefficients[k]["max"]
-
-        idx = np.where(dataset_coefficients == k)[0][0]
-        bounds[idx] = (min_val, max_val)
-        values[idx] = np.random.uniform(low=min_val, high=max_val)
-        fixed[idx] = input_coefficients[k]["fixed"]
-
-    return CoeffTuple(dataset_coefficients, values, bounds, fixed)
