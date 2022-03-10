@@ -5,7 +5,7 @@ Fitting the Wilson coefficients with NS
 """
 import numpy as np
 
-from ..coefficients import aggregate_coefficients
+from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
 
@@ -77,7 +77,7 @@ class NSOptimizer(Optimizer):
         loaded_datasets = load_datasets(
             config["root_path"], config["datasets"], config["coefficients"]
         )
-        coefficients = aggregate_coefficients(config["coefficients"], loaded_datasets)
+        coefficients = CoefficientManager(config["coefficients"])
 
         for k in config["coefficients"]:
             if k not in coefficients.labels:
