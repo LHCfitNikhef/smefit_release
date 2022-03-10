@@ -34,7 +34,6 @@ def compute_chi2(dataset, coefficients_values, use_quad):
     diff = dataset.Commondata - theory_predictions
 
     # chi2 computation
-    cov_mat_inv = np.linalg.inv(dataset.CovMat)
-    chi2_total = diff @ cov_mat_inv @ diff
+    chi2_total = diff @ dataset.InvCovMat @ diff
 
     return chi2_total

@@ -293,17 +293,16 @@ def split_corrections_dict(corrections_list, n_data_tot):
     return corr_values
 
 
-# TODO: fix name convention, aggregate keys and vals?
 DataTuple = namedtuple(
     "DataTuple",
     (
         "Commondata",
         "SMTheory",
-        "CorrectionsVAL",
-        "HOcorrectionsVAL",
+        "LinearCorrections",
+        "QuadraticCorrections",
         "ExpNames",
         "NdataExp",
-        "CovMat",
+        "InvCovMat",
     ),
 )
 
@@ -353,6 +352,9 @@ def load_datasets(path, datasets, operators_to_keep, use_quad):
     lin_corr_values = split_corrections_dict(lin_corr_list, n_data_tot)
     quad_corr_values = split_corrections_dict(quad_corr_list, n_data_tot)
 
+    # Construct unique large cov matrix dropping correlations between different datasets
+    covmat = (build_large_covmat(chi2_covmat, n_data_tot, n_data_exp),)
+
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
         exp_data,
@@ -361,6 +363,5 @@ def load_datasets(path, datasets, operators_to_keep, use_quad):
         quad_corr_values,
         np.array(exp_name),
         np.array(n_data_exp),
-        # Construct unique large cov matrix dropping correlations between different datasets
-        build_large_covmat(chi2_covmat, n_data_tot, n_data_exp),
+        np.linalg.inv(covmat),
     )

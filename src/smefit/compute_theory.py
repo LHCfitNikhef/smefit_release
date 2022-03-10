@@ -35,12 +35,14 @@ def make_predictions(dataset, coefficients_values, use_quad):
     """
 
     # Compute total linear correction
-    summed_corrections = dataset.CorrectionsVAL @ coefficients_values
+    summed_corrections = dataset.LinearCorrections @ coefficients_values
 
     # Compute total quadratic correction
     if use_quad:
         coeff_outer_coeff = np.outer(coefficients_values, coefficients_values)
-        summed_quad_corrections = dataset.HOcorrectionsVAL @ flatten(coeff_outer_coeff)
+        summed_quad_corrections = dataset.QuadraticCorrections @ flatten(
+            coeff_outer_coeff
+        )
         summed_corrections += summed_quad_corrections
 
     # Sum of SM theory + SMEFT corrections
