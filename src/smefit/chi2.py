@@ -8,7 +8,7 @@ import numpy as np
 from . import compute_theory as pr
 
 
-def compute_chi2(dataset, coefficients, nho_indices, ho_indices):
+def compute_chi2(dataset, coefficients, lin_indices, quad_indices):
     r"""
     Compute the chi2
     Will need to be modified when implementing training validation split.
@@ -19,9 +19,9 @@ def compute_chi2(dataset, coefficients, nho_indices, ho_indices):
             dataset tuple
         coefficients : numpy.ndarray
             coefficients list
-        nho_indices : list
+        lin_indices : list
             list of |NHO| corrections locations
-        ho_indices : dict, None
+        quad_indices : dict, None
             dictionary with HO corrections locations. None for linear fits
 
     Returns
@@ -32,7 +32,7 @@ def compute_chi2(dataset, coefficients, nho_indices, ho_indices):
 
     # compute theory prediction for each point in the dataset
     theory_predictions = pr.make_predictions(
-        dataset, coefficients, nho_indices, ho_indices
+        dataset, coefficients, lin_indices, quad_indices
     )
     # compute experimental central values - theory
     diff = dataset.Commondata - theory_predictions

@@ -15,16 +15,16 @@ class Optimizer:
             dataset tuple
         coefficients :
 
-        ho_indices : dict, None
+        quad_indices : dict, None
             dictionary with HO corrections locations. None for linear fits
 
     """
 
-    def __init__(self, loaded_datasets, coefficients, ho_indices):
+    def __init__(self, loaded_datasets, coefficients, quad_indices):
 
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
-        self.ho_indices = ho_indices
+        self.quad_indices = quad_indices
         self.npts = self.loaded_datasets.Commondata.size
         self.free_params = {}
 
@@ -79,15 +79,15 @@ class Optimizer:
                 computed :math:`\Chi^2`
         """
         # TODO: can we slice at the beginning as we do for HO?
-        nho_indices = np.where(
+        lin_indices = np.where(
             self.loaded_datasets.CorrectionsKEYS == self.coefficients.lables
         )[0]
 
         current_chi2 = chi2.compute_chi2(
             self.loaded_datasets,
             self.coefficients.values,
-            nho_indices,
-            self.ho_indices,
+            lin_indices,
+            self.quad_indices,
         )
 
         print(self.coefficients.values)

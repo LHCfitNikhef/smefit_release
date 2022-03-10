@@ -24,7 +24,7 @@ class NSOptimizer(Optimizer):
             dataset tuple
         coefficients :
 
-        ho_indices : dict, None
+        quad_indices : dict, None
             dictionary with HO corrections locations. None for linear fits
         live_points : int
             number of |NS| live points
@@ -40,7 +40,7 @@ class NSOptimizer(Optimizer):
         self,
         loaded_datasets,
         coefficients,
-        ho_indices,
+        quad_indices,
         live_points=500,
         efficiency=0.01,
         const_efficiency=False,
@@ -52,7 +52,7 @@ class NSOptimizer(Optimizer):
         self.const_efficiency = const_efficiency
         self.tolerance = tolerance
 
-        super().__init__(loaded_datasets, coefficients, ho_indices)
+        super().__init__(loaded_datasets, coefficients, quad_indices)
 
         # Get free parameters
         self.get_free_params()
@@ -85,7 +85,7 @@ class NSOptimizer(Optimizer):
                     f"{k} does not enter the theory. Comment it out in setup script and restart."
                 )
         # Get indice locations for quadratic corrections
-        ho_indices = {}
+        quad_indices = {}
         if config["HOlambda"] == "HO":
             HOindex1 = []
             HOindex2 = []
@@ -95,7 +95,7 @@ class NSOptimizer(Optimizer):
                 idx2 = np.where(coefficients.labels == coeff.split("*")[1])[0][0]
                 HOindex1.append(idx1)
                 HOindex2.append(idx2)
-            ho_indices = {1: np.array(HOindex1), 2: np.array(HOindex2)}
+            quad_indices = {1: np.array(HOindex1), 2: np.array(HOindex2)}
 
         if "nlive" not in config:
             print(
@@ -117,7 +117,7 @@ class NSOptimizer(Optimizer):
                 "Evidence tolerance (toll) not set in the input card. Using default: 0.5"
             )
 
-        return cls(loaded_datasets, coefficients, ho_indices, **config)
+        return cls(loaded_datasets, coefficients, quad_indices, **config)
 
     def chi2_func_ns(self, params):
         """

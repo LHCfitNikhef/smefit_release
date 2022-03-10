@@ -51,8 +51,8 @@ class Loader:
         ) = self.load_experimental_data()
         (
             self.dataspec["SM_predictions"],
-            self.dataspec["nho_corrections"],
-            self.dataspec["ho_corrections"],
+            self.dataspec["lin_corrections"],
+            self.dataspec["quad_corrections"],
         ) = self.load_theory(operators_to_keep)
 
     def load_experimental_data(self):
@@ -136,9 +136,9 @@ class Loader:
         -------
             sm: numpy.ndarray
                 |SM| predictions
-            nho_dict: dict
+            lin_dict: dict
                 dictionary with |NHO| corrections
-            ho_dict: dict
+            quad_dict: dict
                 dictionary with |HO| corrections
         """
         theory_file = self._theory_folder / f"{self.setname}.txt"
@@ -153,8 +153,8 @@ class Loader:
 
         # Split the dictionary into SM, lambda^-2 and lambda^-4 terms
         # keep only needed corrections
-        ho_dict = {}
-        nho_dict = {}
+        quad_dict = {}
+        lin_dict = {}
 
         def is_to_keep(op1, op2=None):
             if op2 is None:
@@ -165,19 +165,19 @@ class Loader:
             if "*" in key:
                 op1, op2 = key.split("*")
                 if is_to_keep(op1, op2):
-                    ho_dict[key] = value
+                    quad_dict[key] = value
             elif "^" in key:
                 op = key[:-2]
                 if is_to_keep(op):
                     new_key = f"{op}*{op}"
-                    ho_dict[new_key] = value
+                    quad_dict[new_key] = value
             elif "SM" not in key:
                 if is_to_keep(key):
-                    nho_dict[key] = value
+                    lin_dict[key] = value
 
         # TODO: make sure we store theory and for EFT and SM in the same file,
         # for most of the old tables the things do not coincide
-        return corrections_dict["SM"], nho_dict, ho_dict
+        return corrections_dict["SM"], lin_dict, quad_dict
 
     @property
     def n_data(self):
@@ -228,28 +228,28 @@ class Loader:
         return self.dataspec["SM_predictions"]
 
     @property
-    def nho_corrections(self):
+    def lin_corrections(self):
         """
         |NHO| corrections
 
         Returns:
         --------
-            nho_corrections : dict
+            lin_corrections : dict
                 dictionary with operator names and |NHO| correctsions
         """
-        return self.dataspec["nho_corrections"]
+        return self.dataspec["lin_corrections"]
 
     @property
-    def ho_corrections(self):
+    def quad_corrections(self):
         """
         |HO| corrections
 
         Returns:
         --------
-            ho_corrections : dict
+            quad_corrections : dict
                 dictionary with operator names and |HO| correctsions
         """
-        return self.dataspec["ho_corrections"]
+        return self.dataspec["quad_corrections"]
 
 
 def split_corrections_dict(corrections_list, n_data_tot):
@@ -319,8 +319,8 @@ def load_datasets(path, datasets, operators_to_keep):
 
     exp_data = []
     sm_theory = []
-    nho_corr_list = []
-    ho_corr_list = []
+    lin_corr_list = []
+    quad_corr_list = []
     chi2_covmat = []
     n_data_exp = []
     exp_name = []
@@ -336,15 +336,17 @@ def load_datasets(path, datasets, operators_to_keep):
         exp_data.extend(dataset.central_values)
         sm_theory.extend(dataset.sm_prediction)
 
-        nho_corr_list.append(dataset.nho_corrections)
-        nho_corr_list.append(dataset.ho_corrections)
+        lin_corr_list.append(dataset.lin_corrections)
+        lin_corr_list.append(dataset.quad_corrections)
         chi2_covmat.append(dataset.covmat)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
-    lin_corr_keys, lin_corr_values = split_corrections_dict(nho_corr_list, n_data_tot)
-    quad_corr_keys, quad_corr_values = split_corrections_dict(ho_corr_list, n_data_tot)
+    lin_corr_keys, lin_corr_values = split_corrections_dict(lin_corr_list, n_data_tot)
+    quad_corr_keys, quad_corr_values = split_corrections_dict(
+        quad_corr_list, n_data_tot
+    )
 
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
