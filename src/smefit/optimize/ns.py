@@ -75,7 +75,10 @@ class NSOptimizer(Optimizer):
         """
 
         loaded_datasets = load_datasets(
-            config["root_path"], config["datasets"], config["coefficients"]
+            config["root_path"],
+            config["datasets"],
+            config["coefficients"],
+            config["use_quad"],
         )
         coefficients = CoefficientManager(config["coefficients"])
 

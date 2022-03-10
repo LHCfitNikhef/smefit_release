@@ -33,6 +33,8 @@ class Loader:
             dataset name to load
         operators_to_keep : list
             list of operators for which corrections are loaded
+        use_quad : bool
+            if True loads also |HO| corrections
     """
 
     path = pathlib.Path()
@@ -41,7 +43,7 @@ class Loader:
     _sys_folder = pathlib.Path(path) / "commondata/systypes"
     _theory_folder = pathlib.Path(theory_path) / "theory"
 
-    def __init__(self, setname, operators_to_keep):
+    def __init__(self, setname, operators_to_keep, use_quad):
         self.setname = setname
 
         self.dataspec = {}
@@ -53,7 +55,7 @@ class Loader:
             self.dataspec["SM_predictions"],
             self.dataspec["lin_corrections"],
             self.dataspec["quad_corrections"],
-        ) = self.load_theory(operators_to_keep)
+        ) = self.load_theory(operators_to_keep, use_quad)
 
     def load_experimental_data(self):
         """
@@ -122,7 +124,7 @@ class Loader:
 
         return central_values, construct_covmat(stat_error, df)
 
-    def load_theory(self, operators_to_keep):
+    def load_theory(self, operators_to_keep, use_quad):
         """
         Load theory predictions
 
@@ -130,7 +132,8 @@ class Loader:
         ----------
             operators_to_keep: list
                 list of operators to keep
-
+            use_quad: bool
+                if True returns also |HO| corrections
 
         Returns
         -------
@@ -139,7 +142,7 @@ class Loader:
             lin_dict: dict
                 dictionary with |NHO| corrections
             quad_dict: dict
-                dictionary with |HO| corrections
+                dictionary with |HO| corrections, empty if not use_quad
         """
         theory_file = self._theory_folder / f"{self.setname}.txt"
         check_file(theory_file)
@@ -162,18 +165,23 @@ class Loader:
             return op1 in operators_to_keep and op2 in operators_to_keep
 
         for key, value in corrections_dict.items():
-            if "*" in key:
-                op1, op2 = key.split("*")
-                if is_to_keep(op1, op2):
-                    quad_dict[key] = value
-            elif "^" in key:
-                op = key[:-2]
-                if is_to_keep(op):
-                    new_key = f"{op}*{op}"
-                    quad_dict[new_key] = value
-            elif "SM" not in key:
-                if is_to_keep(key):
-                    lin_dict[key] = value
+
+            # is linear ?
+            if is_to_keep(key):
+                lin_dict[key] = value
+            # use quadratic ?
+            elif use_quad:
+                # cross terms
+                if "*" in key:
+                    op1, op2 = key.split("*")
+                    if is_to_keep(op1, op2):
+                        quad_dict[key] = value
+                # squared terms
+                elif "^" in key:
+                    op = key[:-2]
+                    if is_to_keep(op):
+                        new_key = f"{op}*{op}"
+                        quad_dict[new_key] = value
 
         # TODO: make sure we store theory and for EFT and SM in the same file,
         # for most of the old tables the things do not coincide
@@ -303,7 +311,7 @@ DataTuple = namedtuple(
 )
 
 
-def load_datasets(path, datasets, operators_to_keep):
+def load_datasets(path, datasets, operators_to_keep, use_quad):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
 
@@ -315,6 +323,8 @@ def load_datasets(path, datasets, operators_to_keep):
             list of datasets to be loaded
         operators_to_keep: list
             list of operators for which corrections are loaded
+        use_quad: bool
+            if True loads also |HO| corrections
     """
 
     exp_data = []
@@ -329,7 +339,7 @@ def load_datasets(path, datasets, operators_to_keep):
 
     for sset in np.unique(datasets):
 
-        dataset = Loader(sset, operators_to_keep)
+        dataset = Loader(sset, operators_to_keep, use_quad)
         exp_name.append(sset)
         n_data_exp.append(dataset.n_data)
 

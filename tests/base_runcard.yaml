@@ -1,0 +1,28 @@
+# Input YAML configurations for SMEFiT code
+
+# Result ID
+resultID: test
+
+# pQCD order (LO or NLO)
+order: LO
+
+# SMEFT Expansion Order (NHO = Lambda^-2 , HO = Lambda^-4)
+use_quad: True
+
+# Set parameter bounds to previous SCAN result
+bounds: Null
+
+
+# Datasets to include
+datasets:
+
+  # STXS combinatio
+  - ATLAS_STXS_2020
+
+
+# Coefficients to fit
+coefficients:
+
+  #cHe_cHl1_01: {'fixed': False, 'value': 0.0, 'min': -25.0, 'max': 25.0}
+  cHl3_cll1_ev1: {'min': -25.0, 'max': 25.0}
+  cHq3: {'min': -25.0, 'max': 25.0}
