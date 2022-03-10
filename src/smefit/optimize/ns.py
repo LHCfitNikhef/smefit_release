@@ -20,12 +20,12 @@ class NSOptimizer(Optimizer):
 
     Parameters
     ----------
-        loaded_datasets : DataTuple,
+        loaded_datasets : `smefit.loader.DataTuple`,
             dataset tuple
-        coefficients :
-
-        quad_indices : dict, None
-            dictionary with HO corrections locations. None for linear fits
+        coefficients : `smefit.coefficients.CoefficientManager`
+            instance of `CoefficientManager` with all the relevant coefficients to fit
+        use_quad : bool
+            If True use also |HO| corrections
         live_points : int
             number of |NS| live points
         efficiency : float
@@ -87,19 +87,6 @@ class NSOptimizer(Optimizer):
                 raise NotImplementedError(
                     f"{k} does not enter the theory. Comment it out in setup script and restart."
                 )
-        # Get indice locations for quadratic corrections
-        quad_indices = {}
-        if config["HOlambda"] == "HO":
-            HOindex1 = []
-            HOindex2 = []
-
-            for coeff in loaded_datasets.HOcorrectionsKEYS:
-                idx1 = np.where(coefficients.labels == coeff.split("*")[0])[0][0]
-                idx2 = np.where(coefficients.labels == coeff.split("*")[1])[0][0]
-                HOindex1.append(idx1)
-                HOindex2.append(idx2)
-            quad_indices = {1: np.array(HOindex1), 2: np.array(HOindex2)}
-
         if "nlive" not in config:
             print(
                 "Number of live points (nlive) not set in the input card. Using default: 500"
@@ -120,7 +107,7 @@ class NSOptimizer(Optimizer):
                 "Evidence tolerance (toll) not set in the input card. Using default: 0.5"
             )
 
-        return cls(loaded_datasets, coefficients, quad_indices, **config)
+        return cls(loaded_datasets, coefficients, **config)
 
     def chi2_func_ns(self, params):
         """

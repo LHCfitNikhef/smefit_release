@@ -5,11 +5,11 @@ import numpy as np
 from smefit import coefficients
 
 coeff_dict = {
-    "op_a": {
+    "op_b": {
         "min": -1,
         "max": 1,
     },
-    "op_b": {
+    "op_a": {
         "min": -2,
         "max": 1,
     },
@@ -38,8 +38,22 @@ class TestCoefficient:
 
 
 class TestCoefficientManager:
+
+    c_list = coefficients.CoefficientManager(coeff_dict)
+
     def test_init(self):
-        c_list = coefficients.CoefficientManager(coeff_dict)
 
         # np.testing.assert_allclose(c_list.elements,["op_a", "op_b"])
-        np.testing.assert_allclose(c_list.min, [-1, -2])
+        assert self.c_list[0].op_name == "op_a"
+        np.testing.assert_allclose(self.c_list.min, [-2, -1])
+
+    def test_outer(self):
+        c_list_1 = self.c_list
+        quad_mat = self.c_list.outer(c_list_1)
+        np.testing.assert_allclose(quad_mat, quad_mat.T)
+
+    def test_flatten(self):
+        c_list_1 = self.c_list
+        quad_mat = self.c_list.outer(c_list_1)
+        c_list_1.flatten(quad_mat)
+        np.testing.assert_allclose(quad_mat, quad_mat.T)

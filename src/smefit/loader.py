@@ -274,24 +274,23 @@ def split_corrections_dict(corrections_list, n_data_tot):
 
     Returns
     -------
-        corr_keys : np.ndarray
-            array containing correction names
         corr_values : np.ndarray
-            matrix with correction values (n_data_tot,corr_keys.size)
+            matrix with correction values (n_data_tot, sorted_keys.size)
     """
 
-    corr_keys = np.unique(np.array([(*c,) for c in corrections_list]).flatten())
-    corr_values = np.zeros((n_data_tot, corr_keys.size))
+    sorted_keys = np.unique(np.array([(*c,) for c in corrections_list]).flatten())
+    corr_values = np.zeros((n_data_tot, sorted_keys.size))
 
     cnt = 0
     # loop on experiments
     for correction_dict in corrections_list:
+        # loop on corrections
         for key, values in correction_dict.items():
-            idx = np.where(corr_keys == key)[0][0]
+            idx = np.where(sorted_keys == key)[0][0]
             n_dat = values.size
             corr_values[cnt : cnt + n_dat, idx] = values
 
-    return corr_keys, corr_values
+    return corr_values
 
 
 # TODO: fix name convention, aggregate keys and vals?
@@ -300,9 +299,7 @@ DataTuple = namedtuple(
     (
         "Commondata",
         "SMTheory",
-        "CorrectionsKEYS",
         "CorrectionsVAL",
-        "HOcorrectionsKEYS",
         "HOcorrectionsVAL",
         "ExpNames",
         "NdataExp",
@@ -353,18 +350,14 @@ def load_datasets(path, datasets, operators_to_keep, use_quad):
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
-    lin_corr_keys, lin_corr_values = split_corrections_dict(lin_corr_list, n_data_tot)
-    quad_corr_keys, quad_corr_values = split_corrections_dict(
-        quad_corr_list, n_data_tot
-    )
+    lin_corr_values = split_corrections_dict(lin_corr_list, n_data_tot)
+    quad_corr_values = split_corrections_dict(quad_corr_list, n_data_tot)
 
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
         exp_data,
         np.array(sm_theory),
-        lin_corr_keys,
         lin_corr_values,
-        quad_corr_keys,
         quad_corr_values,
         np.array(exp_name),
         np.array(n_data_exp),

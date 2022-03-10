@@ -20,11 +20,11 @@ class Optimizer:
 
     """
 
-    def __init__(self, loaded_datasets, coefficients, quad_indices):
+    def __init__(self, loaded_datasets, coefficients, use_quad):
 
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
-        self.quad_indices = quad_indices
+        self.use_quad = use_quad
         self.npts = self.loaded_datasets.Commondata.size
         self.free_params = {}
 
@@ -78,16 +78,11 @@ class Optimizer:
             current_chi2 : np.ndarray
                 computed :math:`\Chi^2`
         """
-        # TODO: can we slice at the beginning as we do for HO?
-        lin_indices = np.where(
-            self.loaded_datasets.CorrectionsKEYS == self.coefficients.lables
-        )[0]
 
         current_chi2 = chi2.compute_chi2(
             self.loaded_datasets,
-            self.coefficients.values,
-            lin_indices,
-            self.quad_indices,
+            self.coefficients.value,
+            self.use_quad,
         )
 
         print(self.coefficients.values)
