@@ -4,6 +4,7 @@ import subprocess
 from shutil import copyfile
 
 import yaml
+from mpi4py import MPI
 
 from .optimize.ns import NSOptimizer
 
@@ -72,16 +73,31 @@ class Runner:
             res_folder_fit / f"{self.run_card_name}.yaml",
         )
 
-    def ns(self):
+    def ns(self, input_card):
         """
         Run a fit with |NS| given the fit name
 
         Parameters
         ----------
-            input_card : str
+            input_card : str, dict
                 fit card name
         """
-        config = self.load_config()
-        self.setup_result_folder(config["result_path"])
+        print("RUNNING: Nested Sampling Fit ")
+
+        comm = MPI.COMM_WORLD
+        rank = comm.Get_rank()
+
+        if rank == 0:
+            if isinstance(input_card, dict):
+                config = input_card
+            else:
+                config = self.load_config()
+            self.setup_result_folder(config["result_path"])
+        else:
+            config = None
+
+        config = comm.bcast(config, root=0)
+
+        # Run optimizer
         opt = NSOptimizer.from_dict(config)
         opt.run_sampling()

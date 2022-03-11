@@ -3,14 +3,14 @@
 """
 Fitting the Wilson coefficients with NS
 """
+import time
+
 import numpy as np
+from pymultinest.solve import solve
 
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
-
-# from mpi4py import MPI
-# from pymultinest.solve import solve
 
 
 class NSOptimizer(Optimizer):
@@ -47,17 +47,12 @@ class NSOptimizer(Optimizer):
         const_efficiency=False,
         tolerance=0.5,
     ):
-
+        super().__init__(result_path, loaded_datasets, coefficients, use_quad)
         self.live_points = live_points
         self.efficiency = efficiency
         self.const_efficiency = const_efficiency
         self.tolerance = tolerance
-
-        super().__init__(result_path, loaded_datasets, coefficients, use_quad)
-
-        # Get free parameters
-        self.get_free_params()
-        self.npar = len(self.free_params)
+        self.npar = self.free_parameters.size
 
     @classmethod
     def from_dict(cls, config):
@@ -132,13 +127,12 @@ class NSOptimizer(Optimizer):
                 chi2 function
 
         """
-        self.free_params = params
-        self.propagate_params()
-        # self.set_constraints()
+        self.free_parameters.value = params
+        self.coefficients.set_constraints()
 
         return self.chi2_func()
 
-    def GaussianLogLikelihood(self, hypercube):
+    def gaussian_loglikelihood(self, hypercube):
         """
         Multi gaussian log likelihood function
 
@@ -155,29 +149,24 @@ class NSOptimizer(Optimizer):
 
         return -0.5 * self.chi2_func_ns(hypercube)
 
-    def FlatPrior(self, hypercube):
+    def flat_prior(self, hypercube):
         """
         Update the prior function
 
         Parameters
         ----------
-            hypercube :  np.ndarray
+            hypercube : np.ndarray
                 hypercube prior
 
         Returns
         -------
-            hypercube : np.ndarray
-                hypercube prior
+            flat_prior : np.ndarray
+                updated hypercube prior
         """
 
-        for k, label in enumerate(self.free_params):
-
-            idx = np.where(self.coefficients.labels == label)[0][0]
-            min_val = self.coefficients.bounds[idx][0]
-            max_val = self.coefficients.bounds[idx][1]
-            hypercube[k] = hypercube[k] * (max_val - min_val) + min_val
-
-        return hypercube
+        min_val = self.free_parameters.min
+        max_val = self.free_parameters.max
+        return hypercube * (max_val - min_val) + min_val
 
     # def clean(self):
     #     """Remove raw NS output if you want to keep raw output, don't call this method"""
@@ -190,13 +179,13 @@ class NSOptimizer(Optimizer):
     #             os.remove(os.path.join(self.config["results_path"], f))
 
     def run_sampling(self):
-        """Run the minimisation with Nested Sampling"""
+        """Run the minimization with Nested Sampling"""
 
         # Prefix for results
-        prefix = self.config["results_path"] + f"/{self.nlive}-"
+        prefix = self.results_path / f"{self.live_points}_"
 
         # Additional check
-        # Multinest will crash if the lenght of the results
+        # Multinest will crash if the length of the results
         # path+post_equal_weights.txt is longer than 100.
         # you can solve this making you path or fit id shorter.
         # Otherwise you can hack /pymultinest/solve.py
@@ -210,8 +199,8 @@ class NSOptimizer(Optimizer):
         t1 = time.time()
 
         result = solve(
-            LogLikelihood=self.myloglike,
-            Prior=self.myprior,
+            LogLikelihood=self.gaussian_loglikelihood,
+            Prior=self.flat_prior,
             n_dims=self.npar,
             n_params=self.npar,
             outputfiles_basename=prefix,
@@ -220,15 +209,14 @@ class NSOptimizer(Optimizer):
             verbose=True,
             importance_nested_sampling=True,
             const_efficiency_mode=self.const_efficiency,
-            evidence_tolerance=self.tollerance,
+            evidence_tolerance=self.tolerance,
         )
 
         t2 = time.time()
 
         print("Time = ", (t2 - t1) / 60.0)
-
         print()
-        print("evidence: %(logZ).1f +- %(logZerr).1f" % result)
+        print(f"evidence: %(logZ){result[0]:1f} +- %(logZerr){result[1]:1f}")
         print()
         print("parameter values:")
         for par, col in zip(self.free_param_labels, result["samples"].transpose()):

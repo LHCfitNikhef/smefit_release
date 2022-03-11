@@ -51,6 +51,8 @@ def setup_package():
             "pyyaml",
             "numpy",
             "pandas",
+            "mpi4py",
+            "pymultinest",
         ],
         python_requires=">=3.7",
     )

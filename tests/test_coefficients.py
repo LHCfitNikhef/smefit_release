@@ -46,14 +46,3 @@ class TestCoefficientManager:
         # np.testing.assert_allclose(c_list.elements,["op_a", "op_b"])
         assert self.c_list[0].op_name == "op_a"
         np.testing.assert_allclose(self.c_list.min, [-2, -1])
-
-    def test_outer(self):
-        c_list_1 = self.c_list
-        quad_mat = self.c_list.outer(c_list_1)
-        np.testing.assert_allclose(quad_mat, quad_mat.T)
-
-    def test_flatten(self):
-        c_list_1 = self.c_list
-        quad_mat = self.c_list.outer(c_list_1)
-        c_list_1.flatten(quad_mat)
-        np.testing.assert_allclose(quad_mat, quad_mat.T)
