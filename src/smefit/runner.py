@@ -18,8 +18,10 @@ class Runner:
 
     Parameters
     ----------
-        runcard_folder : pathlib.Path
+        runcard_folder : str, pathlib.Path
             root path
+        run_card_name : str
+            runcard name
     """
 
     def __init__(self, runcard_folder, run_card_name):

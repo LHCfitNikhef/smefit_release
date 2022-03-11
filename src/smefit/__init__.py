@@ -16,7 +16,7 @@ def run(root_path, mode, fit_card):
         fit_card: dict
            fit run card
     """
-    runner = Runner(root_path)
+    runner = Runner(root_path, run_card_name)
     # run NS
     if mode == "NS":
         runner.ns(fit_card)
