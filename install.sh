@@ -3,16 +3,18 @@
 # get openmipi lib dev
 sudo apt install libopenmpi-dev
 
+PATH=$PWD
 # install Multinest
 git clone https://github.com/farhanferoz/MultiNest.git
 cd MultiNest/MultiNest_v3.12_CMake/multinest
 mkdir build && cd $_
 cmake ..
 make
+cd $PATH
 
 # upgrade pip
 python -m pip install --upgrade pip
 
 # install smefit
-python -m pip install packutil
-python setup.py install
+pip install packutil
+pip install .
