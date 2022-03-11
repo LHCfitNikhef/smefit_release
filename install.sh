@@ -15,4 +15,4 @@ python -m pip install --upgrade pip
 
 # install smefit
 pip install packutil
-pip install .
+pip install setup.py
