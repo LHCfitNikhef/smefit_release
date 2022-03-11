@@ -1,7 +1,13 @@
 # Input YAML configurations for SMEFiT code
 
-# Result ID
-resultID: test
+# absolute path where results are stored
+result_path:
+
+# path to common data
+data_path:
+
+# path to theory tables, default same as data path
+theory_path: null
 
 # pQCD order (LO or NLO)
 order: LO

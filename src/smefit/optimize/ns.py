@@ -40,7 +40,8 @@ class NSOptimizer(Optimizer):
         self,
         loaded_datasets,
         coefficients,
-        quad_indices,
+        result_path,
+        use_quad,
         live_points=500,
         efficiency=0.01,
         const_efficiency=False,
@@ -52,7 +53,7 @@ class NSOptimizer(Optimizer):
         self.const_efficiency = const_efficiency
         self.tolerance = tolerance
 
-        super().__init__(loaded_datasets, coefficients, quad_indices)
+        super().__init__(result_path, loaded_datasets, coefficients, use_quad)
 
         # Get free parameters
         self.get_free_params()
@@ -75,10 +76,11 @@ class NSOptimizer(Optimizer):
         """
 
         loaded_datasets = load_datasets(
-            config["root_path"],
+            config["data_path"],
             config["datasets"],
             config["coefficients"],
             config["use_quad"],
+            config["theory_path"] if "theory_path" in config else None,
         )
         coefficients = CoefficientManager(config["coefficients"])
 
@@ -107,7 +109,13 @@ class NSOptimizer(Optimizer):
                 "Evidence tolerance (toll) not set in the input card. Using default: 0.5"
             )
 
-        return cls(loaded_datasets, coefficients, **config)
+        return cls(
+            loaded_datasets,
+            coefficients,
+            config["result_path"],
+            config["use_quad"],
+            **config,
+        )
 
     def chi2_func_ns(self, params):
         """
@@ -182,6 +190,50 @@ class NSOptimizer(Optimizer):
     #             os.remove(os.path.join(self.config["results_path"], f))
 
     def run_sampling(self):
-        """Run the minimization with |NS|"""
-        print("==================================")
-        print("Run NS")
+        """Run the minimisation with Nested Sampling"""
+
+        # Prefix for results
+        prefix = self.config["results_path"] + f"/{self.nlive}-"
+
+        # Additional check
+        # Multinest will crash if the lenght of the results
+        # path+post_equal_weights.txt is longer than 100.
+        # you can solve this making you path or fit id shorter.
+        # Otherwise you can hack /pymultinest/solve.py
+        if len(f"{prefix}post_equal_weights.txt") >= 100:
+            raise UserWarning(
+                f"Py multinest support a buffer or maximum 100 characters: \
+                    {prefix}post_equal_weights.txt is too long, \
+                         please chose a shorter path or Fit ID"
+            )
+
+        t1 = time.time()
+
+        result = solve(
+            LogLikelihood=self.myloglike,
+            Prior=self.myprior,
+            n_dims=self.npar,
+            n_params=self.npar,
+            outputfiles_basename=prefix,
+            n_live_points=self.live_points,
+            sampling_efficiency=self.efficiency,
+            verbose=True,
+            importance_nested_sampling=True,
+            const_efficiency_mode=self.const_efficiency,
+            evidence_tolerance=self.tollerance,
+        )
+
+        t2 = time.time()
+
+        print("Time = ", (t2 - t1) / 60.0)
+
+        print()
+        print("evidence: %(logZ).1f +- %(logZerr).1f" % result)
+        print()
+        print("parameter values:")
+        for par, col in zip(self.free_param_labels, result["samples"].transpose()):
+            print("%15s : %.3f +- %.3f" % (par, col.mean(), col.std()))
+        print(len(result["samples"]))
+
+        self.save(result)
+        self.clean()

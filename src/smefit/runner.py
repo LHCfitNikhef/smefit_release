@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
+import pathlib
 import subprocess
 from shutil import copyfile
 
 import yaml
 
 from .optimize.ns import NSOptimizer
-from .utils import set_paths
 
 
 class Runner:
@@ -17,13 +17,14 @@ class Runner:
 
     Parameters
     ----------
-        root_path : pathlib.Path
+        runcard_folder : pathlib.Path
             root path
     """
 
-    def __init__(self, root_path):
+    def __init__(self, runcard_folder, run_card_name):
 
-        self.root_path = root_path
+        self.runcard_folder = pathlib.Path(runcard_folder)
+        self.run_card_name = run_card_name
 
         print(20 * "  ", r" ____  __  __ _____ _____ _ _____ ")
         print(20 * "  ", r"/ ___||  \/  | ____|  ___(_)_   _|")
@@ -33,7 +34,19 @@ class Runner:
         print()
         print(18 * "  ", "A Standard Model Effective Field Theory Fitter")
 
-    def setup_config(self, filename):
+    def load_config(self):
+        """
+        Load runcard file
+        """
+        config = {}
+        with open(
+            self.runcard_folder / f"{self.run_card_name}.yaml", encoding="utf-8"
+        ) as f:
+            config = yaml.safe_load(f)
+
+        return config
+
+    def setup_result_folder(self, result_folder):
         """
         Read yaml card, update the configuration paths
         and build the folder directory.
@@ -42,33 +55,24 @@ class Runner:
         ----------
             filename : str
                 fit card name
-        Returns
-        -------
-            config: dict
-                configuration dict
+
         """
-        config = {}
-        with open(f"{self.root_path}/runcards/{filename}.yaml", encoding="utf-8") as f:
-            config = yaml.safe_load(f)
-
-        config.update(set_paths(self.root_path, config["order"], config["resultID"]))
-
         # Construct results folder
-        res_folder = f"{self.root_path}/results"
-        res_folder_fit = config["results_path"]
+        result_folder = pathlib.Path(result_folder)
+        res_folder_fit = result_folder / self.run_card_name
 
-        subprocess.call(f"mkdir -p {res_folder}", shell=True)
+        subprocess.call(f"mkdir -p {result_folder}", shell=True)
+        if res_folder_fit.exist():
+            raise Warning(f"{res_folder_fit} already found, overwriting old results")
         subprocess.call(f"mkdir -p {res_folder_fit}", shell=True)
 
         # Copy yaml runcard to results folder
         copyfile(
-            f"{self.root_path}/runcards/{filename}.yaml",
-            f"{config['results_path']}/{filename}.yaml",
+            self.runcard_folder / f"{self.run_card_name}.yaml",
+            res_folder_fit / f"{self.run_card_name}.yaml",
         )
 
-        return config
-
-    def ns(self, input_card):
+    def ns(self):
         """
         Run a fit with |NS| given the fit name
 
@@ -77,6 +81,7 @@ class Runner:
             input_card : str
                 fit card name
         """
-        config = self.setup_config(input_card)
+        config = self.load_config()
+        self.setup_result_folder(config["result_path"])
         opt = NSOptimizer.from_dict(config)
         opt.run_sampling()

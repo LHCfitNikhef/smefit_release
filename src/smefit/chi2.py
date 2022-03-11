@@ -3,8 +3,6 @@
 """
 Module for the computation of chi-squared values
 """
-import numpy as np
-
 from . import compute_theory as pr
 
 

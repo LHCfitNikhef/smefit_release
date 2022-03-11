@@ -21,11 +21,11 @@ class Loader:
 
     Attributes
     ----------
-        path: pathlib.path
+        commondata_path: pathlib.path
             path to commondata folder, commondata excluded
         theory_path: pathlib.Path, optional
             path to theory folder, theory excluded.
-            Default it assumes to be the same as path
+            Default it assumes to be the same as commondata_path
 
     Parameters
     ----------
@@ -37,11 +37,11 @@ class Loader:
             if True loads also |HO| corrections
     """
 
-    path = pathlib.Path()
-    theory_path = pathlib.Path(path)
-    _data_folder = pathlib.Path(path) / "commondata"
-    _sys_folder = pathlib.Path(path) / "commondata/systypes"
-    _theory_folder = pathlib.Path(theory_path) / "theory"
+    commondata_path = pathlib.Path()
+    theory_path = pathlib.Path(commondata_path)
+    _data_folder = pathlib.Path(commondata_path) / "commondata"
+    _sys_folder = pathlib.Path(commondata_path) / "commondata/systypes"
+    _theory_folder = theory_path / "theory"
 
     def __init__(self, setname, operators_to_keep, use_quad):
         self.setname = setname
@@ -307,20 +307,25 @@ DataTuple = namedtuple(
 )
 
 
-def load_datasets(path, datasets, operators_to_keep, use_quad):
+def load_datasets(
+    commondata_path, datasets, operators_to_keep, use_quad, theory_path=None
+):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
 
     Parameters
     ----------
-        path : str
-            root path
+        commondata_path : str, pathlib.Path
+            path to commondata folder, commondata excluded
         datasets : list
             list of datasets to be loaded
         operators_to_keep: list
             list of operators for which corrections are loaded
         use_quad: bool
             if True loads also |HO| corrections
+        theory_path : str, pathlib.Path, optional
+            path to theory folder, theory excluded.
+            Default it assumes to be the same as commondata_path
     """
 
     exp_data = []
@@ -331,7 +336,9 @@ def load_datasets(path, datasets, operators_to_keep, use_quad):
     n_data_exp = []
     exp_name = []
 
-    Loader.path = path
+    Loader.commondata_path = commondata_path
+    if theory_path is not None:
+        Loader.theory_path = theory_path
 
     for sset in np.unique(datasets):
 
