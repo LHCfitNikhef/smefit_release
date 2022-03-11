@@ -2,21 +2,21 @@
 from .runner import Runner
 
 
-def run(root_path, mode, fit_card):
+def run(runcard_folder, mode, fit_card):
     """
     Run the |SMEFiT| package
 
     Parameters
     ----------
-        root_path : pathlib.Path
-            root path where data tables (Commondata and theory) are located.
+        runcard_folder : pathlib.Path
+            path to runcard folder
             Note also the results will be stored in this folder.
         mode: "NS"
             running mode: "NS" = Nested Sampling
         fit_card: dict
            fit run card
     """
-    runner = Runner(root_path, fit_card)
+    runner = Runner(runcard_folder, fit_card)
     # run NS
     if mode == "NS":
         runner.ns()

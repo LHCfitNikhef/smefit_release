@@ -6,6 +6,7 @@ from collections import namedtuple
 import numpy as np
 import pandas as pd
 
+from .basis_rotation import rotate_to_fit_basis
 from .covmat import build_large_covmat, construct_covmat
 
 
@@ -35,6 +36,8 @@ class Loader:
             list of operators for which corrections are loaded
         use_quad : bool
             if True loads also |HO| corrections
+        rot_to_fit_basis: dict, None
+            matrix rotation to fit basis or None
     """
 
     commondata_path = pathlib.Path()
@@ -43,7 +46,7 @@ class Loader:
     _sys_folder = pathlib.Path(commondata_path) / "commondata/systypes"
     _theory_folder = theory_path / "theory"
 
-    def __init__(self, setname, operators_to_keep, use_quad):
+    def __init__(self, setname, operators_to_keep, use_quad, rot_to_fit_basis):
         self.setname = setname
 
         self.dataspec = {}
@@ -55,7 +58,7 @@ class Loader:
             self.dataspec["SM_predictions"],
             self.dataspec["lin_corrections"],
             self.dataspec["quad_corrections"],
-        ) = self.load_theory(operators_to_keep, use_quad)
+        ) = self.load_theory(operators_to_keep, use_quad, rot_to_fit_basis)
 
     def load_experimental_data(self):
         """
@@ -124,7 +127,7 @@ class Loader:
 
         return central_values, construct_covmat(stat_error, df)
 
-    def load_theory(self, operators_to_keep, use_quad):
+    def load_theory(self, operators_to_keep, use_quad, rotation_matrix=None):
         """
         Load theory predictions
 
@@ -134,6 +137,8 @@ class Loader:
                 list of operators to keep
             use_quad: bool
                 if True returns also |HO| corrections
+            rotation_matrix: numpy.ndarray
+                rotation matrix from tables basis to fitting basis
 
         Returns
         -------
@@ -153,6 +158,10 @@ class Loader:
             for line in f:
                 key, *val = line.split()
                 corrections_dict[key] = np.array([float(v) for v in val])
+
+        # rotate corrections to fitting basis
+        if rotation_matrix is not None:
+            corrections_dict = rotate_to_fit_basis(corrections_dict, rotation_matrix)
 
         # Split the dictionary into SM, lambda^-2 and lambda^-4 terms
         # keep only needed corrections
@@ -308,7 +317,12 @@ DataTuple = namedtuple(
 
 
 def load_datasets(
-    commondata_path, datasets, operators_to_keep, use_quad, theory_path=None
+    commondata_path,
+    datasets,
+    operators_to_keep,
+    use_quad,
+    theory_path=None,
+    rot_to_fit_basis=None,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
@@ -326,6 +340,8 @@ def load_datasets(
         theory_path : str, pathlib.Path, optional
             path to theory folder, theory excluded.
             Default it assumes to be the same as commondata_path
+        rot_to_fit_basis: dict, optional
+            matrix rotation to fit basis or None
     """
 
     exp_data = []
@@ -342,7 +358,7 @@ def load_datasets(
 
     for sset in np.unique(datasets):
 
-        dataset = Loader(sset, operators_to_keep, use_quad)
+        dataset = Loader(sset, operators_to_keep, use_quad, rot_to_fit_basis)
         exp_name.append(sset)
         n_data_exp.append(dataset.n_data)
 

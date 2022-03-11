@@ -8,14 +8,18 @@ class Optimizer:
 
     Parameters
     ----------
+        results_path : pathlib.path
+
         loaded_datasets : DataTuple,
             dataset tuple
         coefficients :
 
-        quad_indices : dict, None
-            dictionary with HO corrections locations. None for linear fits
+        use_quad :
+            if True include also |HO| correction
 
     """
+
+    # TODO: docstring
 
     def __init__(self, results_path, loaded_datasets, coefficients, use_quad):
 
