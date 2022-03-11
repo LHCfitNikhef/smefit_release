@@ -3,9 +3,10 @@
 """
 Fitting the Wilson coefficients with NS
 """
+import json
+import os
 import time
 
-import numpy as np
 from pymultinest.solve import solve
 
 from ..coefficients import CoefficientManager
@@ -168,15 +169,12 @@ class NSOptimizer(Optimizer):
         max_val = self.free_parameters.max
         return hypercube * (max_val - min_val) + min_val
 
-    # def clean(self):
-    #     """Remove raw NS output if you want to keep raw output, don't call this method"""
+    def clean(self):
+        """Remove raw |NS| output if you want to keep raw output, don't call this method"""
 
-    #     filelist = [
-    #         f for f in os.listdir(self.config["results_path"]) if f.startswith("1k-")
-    #     ]
-    #     for f in filelist:
-    #         if f in os.listdir(self.config["results_path"]):
-    #             os.remove(os.path.join(self.config["results_path"], f))
+        for f in os.listdir(self.results_path):
+            if f.startswith(f"{self.live_points}_"):
+                os.remove(self.results_path / f)
 
     def run_sampling(self):
         """Run the minimization with Nested Sampling"""
@@ -214,14 +212,41 @@ class NSOptimizer(Optimizer):
 
         t2 = time.time()
 
-        print("Time = ", (t2 - t1) / 60.0)
-        print()
-        print(f"evidence: %(logZ){result[0]:1f} +- %(logZerr){result[1]:1f}")
-        print()
+        print("Time = ", (t2 - t1) / 60.0, "\n")
+        print(
+            f"evidence: %(logZ){result['logZ']:1f} +- %(logZerr){result['logZerr']:1f} \n"
+        )
         print("parameter values:")
-        for par, col in zip(self.free_param_labels, result["samples"].transpose()):
-            print("%15s : %.3f +- %.3f" % (par, col.mean(), col.std()))
-        print(len(result["samples"]))
+        for par, col in zip(self.free_parameters.op_name, result["samples"].T):
+            print(f"{par} : {col.mean():3f} +- {col.std():3f}")
+        print(f"Number of samples: {result['samples'].shape[0]}")
 
         self.save(result)
         self.clean()
+
+    def save(self, result):
+        """
+        Save |NS| replicas to json inside a dictionary:
+        {coff: [replicas values]}
+
+        Parameters
+        ----------
+            result : dict
+                result dictionary
+
+        """
+        # TODO: move to __init__?
+        values = {}
+        for c in self.coefficients.op_name:
+            values[c] = []
+
+        for sample in result["samples"]:
+
+            self.free_parameters.value = sample
+            self.coefficients.set_constraints()
+
+            for c in self.coefficients.op_name:
+                values[c].append(self.coefficients.get_from_name(c).value)
+
+        with open(self.results_path / "posterior.json", "w", encoding="utf-8") as f:
+            json.dump(values, f)
