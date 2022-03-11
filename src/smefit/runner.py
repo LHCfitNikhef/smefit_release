@@ -75,14 +75,9 @@ class Runner:
             res_folder_fit / f"{self.run_card_name}.yaml",
         )
 
-    def ns(self, input_card):
+    def ns(self):
         """
-        Run a fit with |NS| given the fit name
-
-        Parameters
-        ----------
-            input_card : str, dict
-                fit card name
+        Run a fit with |NS|
         """
         print("RUNNING: Nested Sampling Fit ")
 
@@ -90,10 +85,7 @@ class Runner:
         rank = comm.Get_rank()
 
         if rank == 0:
-            if isinstance(input_card, dict):
-                config = input_card
-            else:
-                config = self.load_config()
+            config = self.load_config()
             self.setup_result_folder(config["result_path"])
         else:
             config = None

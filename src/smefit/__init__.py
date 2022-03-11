@@ -16,10 +16,10 @@ def run(root_path, mode, fit_card):
         fit_card: dict
            fit run card
     """
-    runner = Runner(root_path, run_card_name)
+    runner = Runner(root_path, fit_card)
     # run NS
     if mode == "NS":
-        runner.ns(fit_card)
+        runner.ns()
     else:
         raise NotImplementedError(
             f"MODE={mode} is not valid, the only implemented feature atm is NS"
