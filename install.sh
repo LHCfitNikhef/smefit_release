@@ -6,7 +6,7 @@ sudo apt install libopenmpi-dev
 # install Multinest
 git clone https://github.com/farhanferoz/MultiNest.git
 cd MultiNest/MultiNest_v3.12_CMake/multinest
-mkrdir build && cd $_
+mkdir build && cd $_
 cmake ..
 make
 
