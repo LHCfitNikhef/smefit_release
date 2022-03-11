@@ -3,14 +3,13 @@
 # get openmipi lib dev
 sudo apt install libopenmpi-dev
 
-PATH=$PWD
 # install Multinest
 git clone https://github.com/farhanferoz/MultiNest.git
 cd MultiNest/MultiNest_v3.12_CMake/multinest
 mkdir build && cd $_
 cmake ..
 make
-cd $PATH
+cd ../../../../
 
 # upgrade pip
 python -m pip install --upgrade pip
