@@ -26,7 +26,6 @@ jobs:
         run: |
           chmod +x install.sh
           ./install.sh
-          export LD_LIBRARY_PATH=$PWD'/MultiNest/MultiNest_v3.12_CMake/multinest/lib':$LD_LIBRARY_PATH
       - name: Lint with pylint
         run: |
           pip install pylint

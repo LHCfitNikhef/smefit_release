@@ -32,3 +32,5 @@ coefficients:
   #cHe_cHl1_01: {'fixed': False, 'value': 0.0, 'min': -25.0, 'max': 25.0}
   cHl3_cll1_ev1: {'min': -25.0, 'max': 25.0}
   cHq3: {'min': -25.0, 'max': 25.0}
+
+rot_to_fit_basis: null

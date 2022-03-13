@@ -24,4 +24,4 @@ def rotate_to_fit_basis(theory_dict, rotation_matrix):
 
     pd.DataFrame(theory_dict)
 
-    return
+    return theory_dict
