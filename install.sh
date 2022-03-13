@@ -9,6 +9,7 @@ cd MultiNest/MultiNest_v3.12_CMake/multinest
 mkdir build && cd $_
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr/
 make
+sudo make install
 cd ../../../../
 
 # upgrade pip
