@@ -11,6 +11,10 @@ MICRO = 0
 
 repo_path = pathlib.Path(__file__).absolute().parent
 
+# TODO: remove this setup.py into pyproject .toml
+
+# TODO: is it necessary to deploy on pypi?
+
 
 def setup_package():
     # write version

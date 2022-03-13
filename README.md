@@ -13,6 +13,9 @@
 SMEFiT is a python program for Standard Model Effective Field Theory fits
 ## Installation
 If you want to install from source you can run:
+
+### TODO: update readme
+
 ```bash
 git clone https://github.com/LHCfitNikhef/smefit_release.git
 cd smefit_release
