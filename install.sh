@@ -6,6 +6,7 @@ while getopts :p: flag
 do
     case "${flag}" in
         p) MULTINEST_INSTALLATION_PATH=${OPTARG};;
+        *) usage ;;
     esac
 done
 
