@@ -1,7 +1,18 @@
-# /bin/bash
+#! /bin/bash
 
-# TODO: add flag for multinest path
-MULTINEST_INSTALLATION_PATH=$1
+usage() { echo "Usage: $0 -p MULTINEST_INSTALLATION_PATH"; exit 1; }
+
+while getopts :p: flag
+do
+    case "${flag}" in
+        p) MULTINEST_INSTALLATION_PATH=${OPTARG};;
+    esac
+done
+
+if [ -z "${path}" ]; then
+    usage
+fi
+
 
 # TODO: try to detect if multinest is already installed and skip
 
