@@ -9,7 +9,7 @@ do
     esac
 done
 
-if [ -z "${path}" ]; then
+if [ -z "${MULTINEST_INSTALLATION_PATH}" ]; then
     usage
 fi
 
