@@ -159,46 +159,45 @@ class Loader:
                 key, *val = line.split()
                 corrections_dict[key] = np.array([float(v) for v in val])
 
-        # TODO: fixme the correct order is: split, rotation, is_to_keep
-
-        # rotate corrections to fitting basis
-        if rotation_matrix is not None:
-            corrections_dict = rotate_to_fit_basis(
-                corrections_dict, rotation_matrix, use_quad
-            )
-
-        # Split the dictionary into SM, lambda^-2 and lambda^-4 terms
-        # keep only needed corrections
         quad_dict = {}
         lin_dict = {}
 
+        # split corrections into a linear and quadratic dict
+        for key, value in corrections_dict.items():
+
+            # cross terms
+            if "*" in key and use_quad:
+                quad_dict[key] = value
+            # squared terms
+            # TODO: remove this notation
+            elif "^" in key and use_quad:
+                new_key = f"{key[:-2]}*{key[:-2]}"
+                quad_dict[new_key] = value
+            # linear terms
+            elif "SM" not in key:
+                lin_dict[key] = value
+
+        # rotate corrections to fitting basis
+        if rotation_matrix is not None:
+            lin_dict, quad_dict = rotate_to_fit_basis(
+                lin_dict, quad_dict, rotation_matrix
+            )
+
+        # TODO: Move inside the rotation? can save some loops in case of rotation, but less clear
+        # select corrections to keep
         def is_to_keep(op1, op2=None):
             if op2 is None:
                 return op1 in operators_to_keep
             return op1 in operators_to_keep and op2 in operators_to_keep
 
-        for key, value in corrections_dict.items():
-
-            # is linear ?
-            if is_to_keep(key):
-                lin_dict[key] = value
-            # use quadratic ?
-            elif use_quad:
-                # cross terms
-                if "*" in key:
-                    op1, op2 = key.split("*")
-                    if is_to_keep(op1, op2):
-                        quad_dict[key] = value
-                # squared terms
-                elif "^" in key:
-                    op = key[:-2]
-                    if is_to_keep(op):
-                        new_key = f"{op}*{op}"
-                        quad_dict[new_key] = value
+        lin_dict_to_keep = {k: val for k, val in lin_dict.items() if is_to_keep(k)}
+        quad_dict_to_keep = {
+            k: val for k, val in quad_dict.items() if is_to_keep(k.split("*"))
+        }
 
         # TODO: make sure we store theory and for EFT and SM in the same file,
         # for most of the old tables the things do not coincide
-        return corrections_dict["SM"], lin_dict, quad_dict
+        return corrections_dict["SM"], lin_dict_to_keep, quad_dict_to_keep
 
     @property
     def n_data(self):
