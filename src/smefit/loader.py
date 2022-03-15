@@ -159,9 +159,13 @@ class Loader:
                 key, *val = line.split()
                 corrections_dict[key] = np.array([float(v) for v in val])
 
+        # TODO: fixme the correct order is: split, rotation, is_to_keep
+
         # rotate corrections to fitting basis
         if rotation_matrix is not None:
-            corrections_dict = rotate_to_fit_basis(corrections_dict, rotation_matrix)
+            corrections_dict = rotate_to_fit_basis(
+                corrections_dict, rotation_matrix, use_quad
+            )
 
         # Split the dictionary into SM, lambda^-2 and lambda^-4 terms
         # keep only needed corrections

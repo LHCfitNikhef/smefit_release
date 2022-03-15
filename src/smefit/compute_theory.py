@@ -6,12 +6,19 @@ Module for the generation of theory predictions
 import numpy as np
 
 
-def flatten(quad_mat):
+def flatten(quad_mat, index=0):
     """
     Delete lower triangular part of a quadratic matrix
     and flatten it into an array
+
+    Parameters
+    ----------
+        quad_mat: numpy.ndarray
+            tensor to flatten
+        index: int
+            index along which the triangular part is selected
     """
-    size = quad_mat.shape[0]
+    size = quad_mat.shape[index]
     return quad_mat[np.triu_indices(size)]
 
 
