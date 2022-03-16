@@ -26,9 +26,6 @@ class Optimizer:
         self.results_path = pathlib.Path(results_path)
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
-        import pdb
-
-        pdb.set_trace()
         self.use_quad = use_quad
         self.npts = self.loaded_datasets.Commondata.size
 
