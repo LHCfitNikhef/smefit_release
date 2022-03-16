@@ -55,7 +55,7 @@ class NSOptimizer(Optimizer):
         self.efficiency = efficiency
         self.const_efficiency = const_efficiency
         self.tolerance = tolerance
-        self.npar = self.free_parameters.elements.size
+        self.npar = self.free_parameters.size
         self.results_ID = results_ID
 
     @classmethod
@@ -82,13 +82,14 @@ class NSOptimizer(Optimizer):
             config["theory_path"] if "theory_path" in config else None,
             config["rot_to_fit_basis"] if "rot_to_fit_basis" in config else None,
         )
-        coefficients = CoefficientManager.from_dict(config["coefficients"])
 
         for k in config["coefficients"]:
-            if k not in coefficients.op_name:
+            if k not in loaded_datasets.OperatorsNames:
                 raise NotImplementedError(
                     f"{k} does not enter the theory. Comment it out in setup script and restart."
                 )
+        coefficients = CoefficientManager.from_dict(config["coefficients"])
+
         if "nlive" not in config:
             print(
                 "Number of live points (nlive) not set in the input card. Using default: 500"
@@ -148,7 +149,9 @@ class NSOptimizer(Optimizer):
                 chi2 function
 
         """
-        self.free_parameters.value = params
+        # TODO: is this optimal?
+        for i, par in enumerate(self.free_parameters):
+            par.value = params[i]
         self.coefficients.set_constraints()
 
         return self.chi2_func()
@@ -184,9 +187,11 @@ class NSOptimizer(Optimizer):
             flat_prior : np.ndarray
                 updated hypercube prior
         """
-        min_val = self.free_parameters.min
-        max_val = self.free_parameters.max
-        return hypercube * (max_val - min_val) + min_val
+        for i, par in enumerate(self.free_parameters):
+            min_val = par.min
+            max_val = par.max
+            hypercube[i] = hypercube[i] * (max_val - min_val) + min_val
+        return hypercube
 
     def clean(self):
         """Remove raw |NS| output if you want to keep raw output, don't call this method"""
@@ -232,12 +237,10 @@ class NSOptimizer(Optimizer):
         t2 = time.time()
 
         print("Time = ", (t2 - t1) / 60.0, "\n")
-        print(
-            f"evidence: %(logZ){result['logZ']:1f} +- %(logZerr){result['logZerr']:1f} \n"
-        )
+        print(f"evidence: {result['logZ']:1f} +- {result['logZerr']:1f} \n")
         print("parameter values:")
-        for par, col in zip(self.free_parameters.op_name, result["samples"].T):
-            print(f"{par} : {col.mean():3f} +- {col.std():3f}")
+        for par, col in zip(self.free_parameters, result["samples"].T):
+            print(f"{par.op_name} : {col.mean():3f} +- {col.std():3f}")
         print(f"Number of samples: {result['samples'].shape[0]}")
 
         self.save(result)
@@ -261,11 +264,13 @@ class NSOptimizer(Optimizer):
 
         for sample in result["samples"]:
 
-            self.free_parameters.value = sample
+            for i, par in enumerate(self.free_parameters):
+                par.value = sample[i]
+
             self.coefficients.set_constraints()
 
             for c in self.coefficients.op_name:
-                values[c].append(self.coefficients.get_from_name(c).value)
+                values[c].append(float(self.coefficients.get_from_name(c)[0].value))
 
         with open(self.results_path / "posterior.json", "w", encoding="utf-8") as f:
             json.dump(values, f)

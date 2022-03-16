@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from tkinter.messagebox import NO
-
 import numpy as np
 
 
@@ -115,10 +113,14 @@ class CoefficientManager:
 
     def get_from_name(self, item):
         """Return the list sliced by names"""
-        return self.elements[self.op_name == item][0]
+        return self[self.op_name == item]
 
     def __getitem__(self, item):
         return self.elements[item]
+
+    def free_parameters(self):
+        """Returns the list containing only free parameters"""
+        return self[self.is_free]
 
     def set_constraints(self):
         r"""
@@ -136,18 +138,14 @@ class CoefficientManager:
                 continue
 
             # fixed to multiple values
-            constain_dict = coefficient_fixed.constrain
-            free_dofs = self.get_from_name((*constain_dict,)).value
+            constrain_dict = coefficient_fixed.constrain
+            free_dofs = []
+            for free_par in self.get_from_name((*constrain_dict,)):
+                free_dofs.append(free_par.value)
 
             # matrix with multiplicative factors and exponenets
-            fact_exp = np.array((*constain_dict.values(),))
+            fact_exp = np.array((*constrain_dict.values(),))
 
-            self.get_from_name(coefficient_fixed).value = fact_exp[:, 0] @ np.power(
+            self.get_from_name(coefficient_fixed)[0].value = fact_exp[:, 0] @ np.power(
                 free_dofs, fact_exp[:, 1]
             )
-
-
-def free_parameters(full_list):
-    """Returns the class containing only free parameters"""
-    free_elements = full_list.elements[full_list.is_free]
-    return CoefficientManager(free_elements)

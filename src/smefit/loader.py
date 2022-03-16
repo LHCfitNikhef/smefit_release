@@ -288,6 +288,8 @@ def construct_corrections_matrix(corrections_list, n_data_tot):
 
     Returns
     -------
+        sorted_keys : np.ndarray
+            unique list of opearators for which at least one correction is present
         corr_values : np.ndarray
             matrix with correction values (n_data_tot, sorted_keys.size)
     """
@@ -304,7 +306,7 @@ def construct_corrections_matrix(corrections_list, n_data_tot):
             n_dat = values.size
             corr_values[cnt : cnt + n_dat, idx] = values
 
-    return corr_values
+    return sorted_keys, corr_values
 
 
 DataTuple = namedtuple(
@@ -312,6 +314,7 @@ DataTuple = namedtuple(
     (
         "Commondata",
         "SMTheory",
+        "OperatorsNames",
         "LinearCorrections",
         "QuadraticCorrections",
         "ExpNames",
@@ -377,8 +380,10 @@ def load_datasets(
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
-    lin_corr_values = construct_corrections_matrix(lin_corr_list, n_data_tot)
-    quad_corr_values = construct_corrections_matrix(quad_corr_list, n_data_tot)
+    operators_names, lin_corr_values = construct_corrections_matrix(
+        lin_corr_list, n_data_tot
+    )
+    _, quad_corr_values = construct_corrections_matrix(quad_corr_list, n_data_tot)
 
     # Construct unique large cov matrix dropping correlations between different datasets
     covmat = (build_large_covmat(chi2_covmat, n_data_tot, n_data_exp),)
@@ -387,6 +392,7 @@ def load_datasets(
     return DataTuple(
         exp_data,
         np.array(sm_theory),
+        operators_names,
         lin_corr_values,
         quad_corr_values,
         np.array(exp_name),
