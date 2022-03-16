@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import pathlib
+
 from .. import chi2
+from ..coefficients import free_parameters
 
 
 class Optimizer:
@@ -32,7 +34,7 @@ class Optimizer:
     @property
     def free_parameters(self):
         """Returns the free parameters entering fit"""
-        return self.coefficients.free_parameters()
+        return free_parameters(self.coefficients)
 
     def chi2_func(self):
         r"""

@@ -85,13 +85,17 @@ class CoefficientManager:
 
     """
 
-    def __init__(self, coefficient_config):
-        self.elements = []
+    def __init__(self, coefficient_list):
+        self.elements = coefficient_list
+
+    @classmethod
+    def from_dict(cls, coefficient_config):
+        elements = []
         for name, property_dict in coefficient_config.items():
             constrain = (
                 property_dict["constrain"] if "constrain" in property_dict else False
             )
-            self.elements.append(
+            elements.append(
                 Coefficient(
                     name,
                     property_dict["min"],
@@ -101,7 +105,7 @@ class CoefficientManager:
                 )
             )
         # make sure elements are sorted by names
-        self.elements = np.unique(self.elements)
+        return cls(np.unique(elements))
 
     def __getattr__(self, attr):
         vals = []
@@ -111,14 +115,10 @@ class CoefficientManager:
 
     def get_from_name(self, item):
         """Return the list sliced by names"""
-        return self.elements[self.op_name == item]
+        return self.elements[self.op_name == item][0]
 
     def __getitem__(self, item):
         return self.elements[item]
-
-    def free_parameters(self):
-        """Returns the list containing only free parameters"""
-        return self.elements[self.is_free]
 
     def set_constraints(self):
         r"""
@@ -129,7 +129,7 @@ class CoefficientManager:
         """
 
         # loop pn fixed coefficients
-        for coefficient_fixed in self.elements[not self.is_free]:
+        for coefficient_fixed in self[np.invert(self.is_free)]:
 
             # skip coefficient fixed to a single value
             if coefficient_fixed.constrain is None:
@@ -145,3 +145,9 @@ class CoefficientManager:
             self.get_from_name(coefficient_fixed).value = fact_exp[:, 0] @ np.power(
                 free_dofs, fact_exp[:, 1]
             )
+
+
+def free_parameters(full_list):
+    """Returns the class containing only free parameters"""
+    free_elements = full_list.elements[full_list.is_free]
+    return CoefficientManager(free_elements)
