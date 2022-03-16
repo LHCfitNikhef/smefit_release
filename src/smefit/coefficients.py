@@ -111,15 +111,14 @@ class CoefficientManager:
 
     def get_from_name(self, item):
         """Return the list sliced by names"""
-        return self.elements[self.elements.op_name == item]
+        return self.elements[self.op_name == item]
 
     def __getitem__(self, item):
         return self.elements[item]
 
-    @property
     def free_parameters(self):
         """Returns the list containing only free parameters"""
-        return self.elements[self.elements.is_free]
+        return self.elements[self.is_free]
 
     def set_constraints(self):
         r"""
@@ -130,7 +129,7 @@ class CoefficientManager:
         """
 
         # loop pn fixed coefficients
-        for coefficient_fixed in self.elements[not self.elements.is_free]:
+        for coefficient_fixed in self.elements[not self.is_free]:
 
             # skip coefficient fixed to a single value
             if coefficient_fixed.constrain is None:

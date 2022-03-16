@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import pathlib
 import subprocess
+import warnings
+
 from shutil import copyfile
 
 import yaml
@@ -65,8 +67,8 @@ class Runner:
         res_folder_fit = result_folder / self.run_card_name
 
         subprocess.call(f"mkdir -p {result_folder}", shell=True)
-        if res_folder_fit.exist():
-            raise Warning(f"{res_folder_fit} already found, overwriting old results")
+        if res_folder_fit.exists():
+            warnings.warn(f"{res_folder_fit} already found, overwriting old results")
         subprocess.call(f"mkdir -p {res_folder_fit}", shell=True)
 
         # Copy yaml runcard to results folder
@@ -86,6 +88,7 @@ class Runner:
 
         if rank == 0:
             config = self.load_config()
+            config["results_ID"] = self.run_card_name
             self.setup_result_folder(config["result_path"])
         else:
             config = None

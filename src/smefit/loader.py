@@ -80,7 +80,7 @@ class Loader:
         # load data from commondata file
         # TODO: better data format?
         # - DATA_* has many unused info
-        num_data, num_sys = np.loadtxt(data_file, usecols=(1, 2), max_rows=1)
+        num_data, num_sys = np.loadtxt(data_file, usecols=(1, 2), max_rows=1, dtype=int)
         central_values, stat_error = np.loadtxt(
             data_file, usecols=(5, 6), unpack=True, skiprows=1
         )
@@ -192,7 +192,9 @@ class Loader:
 
         lin_dict_to_keep = {k: val for k, val in lin_dict.items() if is_to_keep(k)}
         quad_dict_to_keep = {
-            k: val for k, val in quad_dict.items() if is_to_keep(k.split("*"))
+            k: val
+            for k, val in quad_dict.items()
+            if is_to_keep(k.split("*")[0], k.split("*")[1])
         }
 
         # TODO: make sure we store theory and for EFT and SM in the same file,
@@ -272,7 +274,7 @@ class Loader:
         return self.dataspec["quad_corrections"]
 
 
-def split_corrections_dict(corrections_list, n_data_tot):
+def construct_corrections_matrix(corrections_list, n_data_tot):
     """
     Construct a unique list of correction name,
     with corresponding values.
@@ -369,14 +371,14 @@ def load_datasets(
         sm_theory.extend(dataset.sm_prediction)
 
         lin_corr_list.append(dataset.lin_corrections)
-        lin_corr_list.append(dataset.quad_corrections)
+        quad_corr_list.append(dataset.quad_corrections)
         chi2_covmat.append(dataset.covmat)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
-    lin_corr_values = split_corrections_dict(lin_corr_list, n_data_tot)
-    quad_corr_values = split_corrections_dict(quad_corr_list, n_data_tot)
+    lin_corr_values = construct_corrections_matrix(lin_corr_list, n_data_tot)
+    quad_corr_values = construct_corrections_matrix(quad_corr_list, n_data_tot)
 
     # Construct unique large cov matrix dropping correlations between different datasets
     covmat = (build_large_covmat(chi2_covmat, n_data_tot, n_data_exp),)

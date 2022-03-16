@@ -6,6 +6,7 @@ Fitting the Wilson coefficients with NS
 import json
 import os
 import time
+import warnings
 
 from pymultinest.solve import solve
 
@@ -43,6 +44,7 @@ class NSOptimizer(Optimizer):
         coefficients,
         result_path,
         use_quad,
+        results_ID,
         live_points=500,
         efficiency=0.01,
         const_efficiency=False,
@@ -54,6 +56,7 @@ class NSOptimizer(Optimizer):
         self.const_efficiency = const_efficiency
         self.tolerance = tolerance
         self.npar = self.free_parameters.size
+        self.results_ID = results_ID
 
     @classmethod
     def from_dict(cls, config):
@@ -82,7 +85,7 @@ class NSOptimizer(Optimizer):
         coefficients = CoefficientManager(config["coefficients"])
 
         for k in config["coefficients"]:
-            if k not in coefficients.labels:
+            if k not in coefficients.op_name:
                 raise NotImplementedError(
                     f"{k} does not enter the theory. Comment it out in setup script and restart."
                 )
@@ -90,28 +93,44 @@ class NSOptimizer(Optimizer):
             print(
                 "Number of live points (nlive) not set in the input card. Using default: 500"
             )
+            nlive = 500
+        else:
+            nlive = config["nlive"]
 
         if "efr" not in config:
-            print(
+            warnings.warn(
                 "Sampling efficiency (efr) not set in the input card. Using default: 0.01"
             )
+            efr = 0.01
+        else:
+            efr = config["efr"]
 
         if "ceff" not in config:
-            print(
+            warnings.warn(
                 "Constant efficiency mode (ceff) not set in the input card. Using default: False"
             )
+            ceff = False
+        else:
+            ceff = config["ceff"]
 
         if "toll" not in config:
-            print(
+            warnings.warn(
                 "Evidence tolerance (toll) not set in the input card. Using default: 0.5"
             )
+            toll = 0.5
+        else:
+            toll = config["toll"]
 
         return cls(
             loaded_datasets,
             coefficients,
             config["result_path"],
             config["use_quad"],
-            **config,
+            config["results_ID"],
+            live_points=nlive,
+            efficiency=efr,
+            const_efficiency=ceff,
+            tolerance=toll,
         )
 
     def chi2_func_ns(self, params):
@@ -165,7 +184,6 @@ class NSOptimizer(Optimizer):
             flat_prior : np.ndarray
                 updated hypercube prior
         """
-
         min_val = self.free_parameters.min
         max_val = self.free_parameters.max
         return hypercube * (max_val - min_val) + min_val
@@ -181,7 +199,7 @@ class NSOptimizer(Optimizer):
         """Run the minimization with Nested Sampling"""
 
         # Prefix for results
-        prefix = self.results_path / f"{self.live_points}_"
+        prefix = self.results_path / f"{self.results_ID}/{self.live_points}_"
 
         # Additional check
         # Multinest will crash if the length of the results
@@ -202,7 +220,7 @@ class NSOptimizer(Optimizer):
             Prior=self.flat_prior,
             n_dims=self.npar,
             n_params=self.npar,
-            outputfiles_basename=prefix,
+            outputfiles_basename=str(prefix),
             n_live_points=self.live_points,
             sampling_efficiency=self.efficiency,
             verbose=True,

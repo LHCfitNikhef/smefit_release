@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import pathlib
 from .. import chi2
 
 
@@ -22,17 +23,19 @@ class Optimizer:
     # TODO: docstring
 
     def __init__(self, results_path, loaded_datasets, coefficients, use_quad):
-
-        self.results_path = results_path
+        self.results_path = pathlib.Path(results_path)
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
+        import pdb
+
+        pdb.set_trace()
         self.use_quad = use_quad
         self.npts = self.loaded_datasets.Commondata.size
 
     @property
     def free_parameters(self):
         """Returns the free parameters entering fit"""
-        return self.coefficients.free_parameters
+        return self.coefficients.free_parameters()
 
     def chi2_func(self):
         r"""
