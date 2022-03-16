@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Implement the corrections table basis roation"""
+"""Implement the corrections table basis rotation"""
 import numpy as np
 import pandas as pd
 
@@ -22,6 +22,7 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix):
             rotation matrix from tables basis to fitting basis
 
     Returns
+    -------
         lin_dict_fit_basis: dict
             theory dictionary with linear operator corrections in the fit
             basis
@@ -33,9 +34,9 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix):
     quad_dict_fit_basis = {}
 
     # select the columns corresponding to the
-    # relevent corrections for the operator card basis
-    R = rotation_matrix.loc[lin_df.columns, :]
-    lin_dict_fit_basis = lin_df @ R
+    # relevant corrections for the operator card basis
+    R = rotation_matrix[lin_df.columns]
+    lin_dict_fit_basis = lin_df @ R.T
 
     # look at the quadratic corrections?
     if quad_dict == {}:
@@ -46,8 +47,8 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix):
     # and build an (n_op_table, n_dat, n_op_fit, n_op_fit) tensor
     for col, values in quad_dict.items():
         o1, o2 = col.split("*")
-        r1 = R.loc[o1, :]
-        r2 = R.loc[o2, :]
+        r1 = R[o1]
+        r2 = R[o2]
         r1r2 = np.outer(r1, r2)
         r1r2o1o2 = np.einsum("i,kj->ikj", values, r1r2)
         tensor.append(r1r2o1o2)
@@ -57,11 +58,11 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix):
     new_quad_corrections = tensor.sum(axis=0)
 
     # flatten the tensor (n_dat, n_op_fit, n_op_fit) -> (n_dat, n_op_fit_pairs)
-    new_quad_matrix = flatten(new_quad_corrections, index=1)
+    new_quad_matrix = flatten(new_quad_corrections, axis=1)
 
     # build the new quadratic corrections dictionary
-    for i, r1 in enumerate(rotation_matrix.columns):
-        for r2 in rotation_matrix.columns:
+    for i, r1 in enumerate(R.index):
+        for r2 in R.index:
             new_key = f"{r1}*{r2}"
             if new_key not in quad_dict_fit_basis:
                 quad_dict_fit_basis[new_key] = new_quad_matrix[:, i]

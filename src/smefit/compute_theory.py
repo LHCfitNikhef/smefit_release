@@ -6,7 +6,7 @@ Module for the generation of theory predictions
 import numpy as np
 
 
-def flatten(quad_mat, index=0):
+def flatten(quad_mat, axis=0):
     """
     Delete lower triangular part of a quadratic matrix
     and flatten it into an array
@@ -15,10 +15,10 @@ def flatten(quad_mat, index=0):
     ----------
         quad_mat: numpy.ndarray
             tensor to flatten
-        index: int
-            index along which the triangular part is selected
+        axis: int
+            axis along which the triangular part is selected
     """
-    size = quad_mat.shape[index]
+    size = quad_mat.shape[axis]
     return quad_mat[np.triu_indices(size)]
 
 
