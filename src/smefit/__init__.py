@@ -16,7 +16,7 @@ def run(runcard_folder, mode, fit_card):
         fit_card: dict
            fit run card
     """
-    runner = Runner(runcard_folder, fit_card)
+    runner = Runner.from_file(runcard_folder, fit_card)
     # run NS
     if mode == "NS":
         runner.ns()

@@ -2,7 +2,6 @@
 import pathlib
 import subprocess
 import warnings
-
 from shutil import copyfile
 
 import yaml
@@ -20,16 +19,13 @@ class Runner:
 
     Parameters
     ----------
-        runcard_folder : str, pathlib.Path
-            root path
-        run_card_name : str
-            runcard name
+        run_card : dict
+            run card dictionary
+        runcard_folder: pathlib.Path, None
+            path to runcard folder if already present
     """
 
-    def __init__(self, runcard_folder, run_card_name):
-
-        self.runcard_folder = pathlib.Path(runcard_folder)
-        self.run_card_name = run_card_name
+    def __init__(self, run_card, runcard_folder=None):
 
         print(20 * "  ", r" ____  __  __ _____ _____ _ _____ ")
         print(20 * "  ", r"/ ___||  \/  | ____|  ___(_)_   _|")
@@ -39,43 +35,64 @@ class Runner:
         print()
         print(18 * "  ", "A Standard Model Effective Field Theory Fitter")
 
-    def load_config(self):
+        self.run_card = run_card
+        self.runcard_folder = runcard_folder
+        self.setup_result_folder()
+
+    def setup_result_folder(self):
         """
-        Load runcard file
-        """
-        config = {}
-        with open(
-            self.runcard_folder / f"{self.run_card_name}.yaml", encoding="utf-8"
-        ) as f:
-            config = yaml.safe_load(f)
-
-        return config
-
-    def setup_result_folder(self, result_folder):
-        """
-        Read yaml card, update the configuration paths
-        and build the folder directory.
-
-        Parameters
-        ----------
-            filename : str
-                fit card name
-
+        Create result folder and copy the runcard there
         """
         # Construct results folder
-        result_folder = pathlib.Path(result_folder)
-        res_folder_fit = result_folder / self.run_card_name
+        run_card_id = self.run_card["results_ID"]
+        result_folder = pathlib.Path(self.run_card["result_path"])
+        res_folder_fit = result_folder / run_card_id
 
         subprocess.call(f"mkdir -p {result_folder}", shell=True)
         if res_folder_fit.exists():
             warnings.warn(f"{res_folder_fit} already found, overwriting old results")
         subprocess.call(f"mkdir -p {res_folder_fit}", shell=True)
 
-        # Copy yaml runcard to results folder
-        copyfile(
-            self.runcard_folder / f"{self.run_card_name}.yaml",
-            res_folder_fit / f"{self.run_card_name}.yaml",
-        )
+        # Copy yaml runcard to results folder or dump it
+        # in case no given file is passed
+        runcard_copy = res_folder_fit / f"{run_card_id}.yaml"
+        if self.runcard_folder is None:
+            with open(runcard_copy, encoding="utf-8") as f:
+                yaml.dump(self.run_card, f, default_flow_style=False)
+        else:
+            copyfile(
+                self.runcard_folder / f"{run_card_id}.yaml",
+                runcard_copy,
+            )
+
+    @classmethod
+    def from_file(cls, runcard_folder, run_card_name):
+        """
+        Create Runner from a runcard file
+
+        Parameters
+        ----------
+        runcard_folder: pathlib.Path, str
+            path to runcard folder if already present
+        run_card_name : srt
+            run card name
+
+        Returns
+        -------
+            runner: `smefit.runner.Runner`
+                instance of class Runner
+        """
+        config = {}
+        # load file
+        runcard_folder = pathlib.Path(runcard_folder)
+        with open(runcard_folder / f"{run_card_name}.yaml", encoding="utf-8") as f:
+            config = yaml.safe_load(f)
+
+        # set result ID to runcard name by default
+        if "results_ID" not in config:
+            config["results_ID"] = run_card_name
+
+        return cls(config, runcard_folder)
 
     def ns(self):
         """
@@ -87,14 +104,11 @@ class Runner:
         rank = comm.Get_rank()
 
         if rank == 0:
-            config = self.load_config()
-            config["results_ID"] = self.run_card_name
-            self.setup_result_folder(config["result_path"])
+            config = self.run_card
+            opt = NSOptimizer.from_dict(config)
         else:
-            config = None
-
-        config = comm.bcast(config, root=0)
+            opt = None
 
         # Run optimizer
-        opt = NSOptimizer.from_dict(config)
+        opt = comm.bcast(opt, root=0)
         opt.run_sampling()

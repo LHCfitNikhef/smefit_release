@@ -260,7 +260,7 @@ class NSOptimizer(Optimizer):
 
         for sample in result["samples"]:
 
-            self.coefficients.free_parameter.value = sample
+            self.coefficients.free_parameters.value = sample
             self.coefficients.set_constraints()
 
             for c in self.coefficients.op_name:
