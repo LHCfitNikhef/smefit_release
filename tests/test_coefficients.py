@@ -13,6 +13,12 @@ coeff_dict = {
         "min": -2,
         "max": 1,
     },
+    "op_c": {
+        "constrain": True,
+        "value": 1,
+        "min": -2,
+        "max": 1,
+    },
 }
 
 
@@ -23,8 +29,8 @@ class TestCoefficient:
         maximum = 1
         c_test = coefficients.Coefficient(name, minimum, maximum)
         assert c_test.op_name == name
-        assert c_test.min == minimum
-        assert c_test.max == maximum
+        assert c_test.minimum == minimum
+        assert c_test.maximum == maximum
         assert c_test.value <= maximum and c_test.value >= minimum
 
     def test_add(self):
@@ -39,10 +45,10 @@ class TestCoefficient:
 
 class TestCoefficientManager:
 
-    c_list = coefficients.CoefficientManager(coeff_dict)
+    c_list = coefficients.CoefficientManager.from_dict(coeff_dict)
 
     def test_init(self):
 
-        # np.testing.assert_allclose(c_list.elements,["op_a", "op_b"])
+        # np.testing.assert_allclose(self.c_list.elements,["op_a", "op_b"])
         assert self.c_list[0].op_name == "op_a"
-        np.testing.assert_allclose(self.c_list.min, [-2, -1])
+        np.testing.assert_allclose(self.c_list.minimum, [-2, -1, -2])

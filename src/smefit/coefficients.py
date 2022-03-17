@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing import Iterable
+
 import numpy as np
 
 
@@ -26,8 +28,8 @@ class Coefficient:
 
     def __init__(self, name, minimum, maximum, value=None, constrain=False):
         self.op_name = name
-        self.min = minimum
-        self.max = maximum
+        self.minimum = minimum
+        self.maximum = maximum
 
         # determine if the parameter is free
         self.is_free = False
@@ -44,14 +46,17 @@ class Coefficient:
                     f"Wilson Coefficient {self.op_name} is fixed, but no value is specified"
                 )
         elif isinstance(constrain, dict):
-
             self.constrain = constrain.copy()
             # update syntax for linear values
             for key, factor in constrain.items():
                 if isinstance(factor, (int, float)):
-                    self.constrain[key] = (factor, 1)
-
-            raise ValueError(f"Unknown specified constrain {constrain}")
+                    self.constrain[key] = np.array([factor, 1])
+                else:
+                    factor = np.array(factor)
+                    # if factor has not 2 elements or is not a number raise error
+                    if factor.size > 2 or factor.dtype not in [int, float]:
+                        raise ValueError(f"Unknown specified constrain {constrain}")
+                    self.constrain[key] = factor
 
         # if no value is already there, the parameter is free
         self.value = value
@@ -72,22 +77,46 @@ class Coefficient:
         self.value += coeff_other.value
 
 
-class CoefficientManager:
+class CoefficientManager(np.ndarray):
     """
     Coefficient objcts manager
 
     Parameters
     ----------
-        coefficient_config: dict
-            dictionary with all the coefficients names and properties
+        input_array: np.ndarray or list
+            list of `smefit.coefficients.Coefficient` instanceses
 
     """
 
-    def __init__(self, coefficient_list):
-        self.elements = coefficient_list
+    def __new__(cls, input_array):
+        # Input array is an already formed ndarray instance
+        # We first cast to be our class type
+        obj = np.asarray(input_array, dtype=object).view(cls)
+        # add the new attribute to the created instance
+        # obj.info = info
+        # Finally, we must return the newly created object:
+        return obj
+
+    def __array_finalize__(self, obj):
+        # see InfoArray.__array_finalize__ for comments
+        if obj is None:
+            return
 
     @classmethod
     def from_dict(cls, coefficient_config):
+        """
+        Create a coefficientManager from a dictionary
+
+        Parmeters
+        ---------
+            coefficient_config : dict
+                coefficients configuration dictionary
+
+        Returns
+        -------
+            coefficient_manager: `smefit.coefficients.CoefficientManager`
+                instance of the class
+        """
         elements = []
         for name, property_dict in coefficient_config.items():
             constrain = (
@@ -107,24 +136,29 @@ class CoefficientManager:
 
     def __getattr__(self, attr):
         vals = []
-        for obj in self.elements:
+        for obj in self:
             vals.append(getattr(obj, attr))
         return np.array(vals)
 
+    def __setattr__(self, attr, value):
+        if not isinstance(value, Iterable):
+            value = [value]
+        for obj, val in zip(self, value):
+            setattr(obj, attr, val)
+
     def get_from_name(self, item):
-        """Return the list sliced by names"""
+        """Return the class sliced by names"""
         return self[self.op_name == item]
 
-    def __getitem__(self, item):
-        return self.elements[item]
-
+    @property
     def free_parameters(self):
-        """Returns the list containing only free parameters"""
+        """Returns the class containing only free parameters"""
         return self[self.is_free]
 
     def set_constraints(self):
         r"""
-        Sets constraints between coefficients:
+        Sets constraints between coefficients according to the
+        coefficient.constrain information:
 
         .. :math:
             c_{m} = \sum_{i=1} a_{i} c_{i}^{n_{i}}
@@ -139,13 +173,11 @@ class CoefficientManager:
 
             # fixed to multiple values
             constrain_dict = coefficient_fixed.constrain
-            free_dofs = []
-            for free_par in self.get_from_name((*constrain_dict,)):
-                free_dofs.append(free_par.value)
+            free_dofs = self.get_from_name((*constrain_dict,)).value
 
             # matrix with multiplicative factors and exponenets
             fact_exp = np.array((*constrain_dict.values(),))
 
-            self.get_from_name(coefficient_fixed)[0].value = fact_exp[:, 0] @ np.power(
-                free_dofs, fact_exp[:, 1]
-            )
+            self.get_from_name(coefficient_fixed.op_name).value = fact_exp[
+                :, 0
+            ] @ np.power(free_dofs, fact_exp[:, 1])

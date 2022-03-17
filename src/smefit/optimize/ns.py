@@ -149,9 +149,7 @@ class NSOptimizer(Optimizer):
                 chi2 function
 
         """
-        # TODO: is this optimal?
-        for i, par in enumerate(self.free_parameters):
-            par.value = params[i]
+        self.free_parameters.value = params
         self.coefficients.set_constraints()
 
         return self.chi2_func()
@@ -187,11 +185,9 @@ class NSOptimizer(Optimizer):
             flat_prior : np.ndarray
                 updated hypercube prior
         """
-        for i, par in enumerate(self.free_parameters):
-            min_val = par.min
-            max_val = par.max
-            hypercube[i] = hypercube[i] * (max_val - min_val) + min_val
-        return hypercube
+        min_val = self.free_parameters.minimum
+        max_val = self.free_parameters.maximum
+        return hypercube * (max_val - min_val) + min_val
 
     def clean(self):
         """Remove raw |NS| output if you want to keep raw output, don't call this method"""
@@ -264,9 +260,7 @@ class NSOptimizer(Optimizer):
 
         for sample in result["samples"]:
 
-            for i, par in enumerate(self.free_parameters):
-                par.value = sample[i]
-
+            self.coefficients.free_parameter.value = sample
             self.coefficients.set_constraints()
 
             for c in self.coefficients.op_name:

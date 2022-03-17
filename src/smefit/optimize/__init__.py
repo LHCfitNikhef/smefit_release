@@ -33,7 +33,7 @@ class Optimizer:
     @property
     def free_parameters(self):
         """Returns the free parameters entering fit"""
-        return self.coefficients.free_parameters()
+        return self.coefficients.free_parameters
 
     def chi2_func(self):
         r"""
