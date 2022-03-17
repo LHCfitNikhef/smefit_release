@@ -206,8 +206,8 @@ class Loader:
         """
         Number of data
 
-        Returns:
-        --------
+        Returns
+        -------
             n_data: int
                 number of experimental data
         """
@@ -218,8 +218,8 @@ class Loader:
         """
         Central values
 
-        Returns:
-        --------
+        Returns
+        -------
             central_values: numpy.ndarray
                 experimental central values
         """
@@ -230,8 +230,8 @@ class Loader:
         """
         Covariance matrix
 
-        Returns:
-        --------
+        Returns
+        -------
             covmat: numpy.ndarray
                 experimental covariance matrix
         """
@@ -242,8 +242,8 @@ class Loader:
         """
         |SM| prediction for the dataset
 
-        Returns:
-        --------
+        Returns
+        -------
             SM_predictions : numpy.ndarray
                 best |SM| prediction
         """
@@ -254,8 +254,8 @@ class Loader:
         """
         |NHO| corrections
 
-        Returns:
-        --------
+        Returns
+        -------
             lin_corrections : dict
                 dictionary with operator names and |NHO| correctsions
         """
@@ -266,8 +266,8 @@ class Loader:
         """
         |HO| corrections
 
-        Returns:
-        --------
+        Returns
+        -------
             quad_corrections : dict
                 dictionary with operator names and |HO| correctsions
         """
