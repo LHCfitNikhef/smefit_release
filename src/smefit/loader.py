@@ -42,11 +42,13 @@ class Loader:
 
     commondata_path = pathlib.Path()
     theory_path = pathlib.Path(commondata_path)
-    _data_folder = pathlib.Path(commondata_path) / "commondata"
-    _sys_folder = pathlib.Path(commondata_path) / "commondata/systypes"
-    _theory_folder = theory_path / "theory"
 
     def __init__(self, setname, operators_to_keep, use_quad, rot_to_fit_basis):
+
+        self._data_folder = self.commondata_path / f"commondata"
+        self._sys_folder = self.commondata_path / f"commondata/systypes"
+        self._theory_folder = self.theory_path / "theory"
+
         self.setname = setname
 
         self.dataspec = {}
@@ -123,8 +125,7 @@ class Loader:
 
         # Build dataframe with shape (N_data * N_sys) and systematic name as the
         # column headers and construct covmat
-        df = pd.DataFrame(data=sys, columns=name_sys)
-
+        df = pd.DataFrame(data=sys.T, columns=name_sys)
         return central_values, construct_covmat(stat_error, df)
 
     def load_theory(self, operators_to_keep, use_quad, rotation_matrix=None):
@@ -360,9 +361,11 @@ def load_datasets(
     n_data_exp = []
     exp_name = []
 
-    Loader.commondata_path = commondata_path
+    Loader.commondata_path = pathlib.Path(commondata_path)
     if theory_path is not None:
-        Loader.theory_path = theory_path
+        Loader.theory_path = pathlib.Path(theory_path)
+    else:
+        Loader.theory_path = pathlib.Path(commondata_path)
 
     for sset in np.unique(datasets):
 
