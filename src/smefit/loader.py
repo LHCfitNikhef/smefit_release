@@ -45,8 +45,8 @@ class Loader:
 
     def __init__(self, setname, operators_to_keep, use_quad, rot_to_fit_basis):
 
-        self._data_folder = self.commondata_path / f"commondata"
-        self._sys_folder = self.commondata_path / f"commondata/systypes"
+        self._data_folder = self.commondata_path / "commondata"
+        self._sys_folder = self.commondata_path / "commondata/systypes"
         self._theory_folder = self.theory_path / "theory"
 
         self.setname = setname
