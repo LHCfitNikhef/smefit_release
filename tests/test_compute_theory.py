@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-"""Test compute_theory module"""
+"""Test compute_theory and chi2 module"""
 import numpy as np
 
 from smefit import loader
 from smefit import compute_theory
+from smefit import chi2
 
 matrix = np.asarray([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 flatten_matrix = np.asarray([1, 2, 3, 5, 6, 9])
@@ -30,8 +31,12 @@ linear_term = lin_corr_values @ wilson_coeff_values
 quadratic_term = quad_corr_values @ compute_theory.flatten(
     np.outer(wilson_coeff_values, wilson_coeff_values)
 )
+
 corrected_linear = sm_theory + linear_term
 corrected_quadratic = sm_theory + linear_term + quadratic_term
+
+diff = corrected_quadratic - exp_data
+chi2_test = diff @ np.linalg.inv(covmat) @ diff
 
 dataset = loader.DataTuple(
     exp_data,
@@ -53,4 +58,10 @@ def test_make_predictions():
     np.testing.assert_allclose(
         compute_theory.make_predictions(dataset, wilson_coeff_values, True),
         corrected_quadratic,
+    )
+
+
+def test_compute_chi2():
+    np.testing.assert_allclose(
+        chi2.compute_chi2(dataset, wilson_coeff_values, True), chi2_test
     )
