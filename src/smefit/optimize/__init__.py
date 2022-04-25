@@ -37,7 +37,7 @@ class Optimizer:
 
     def chi2_func(self):
         r"""
-        Wrap the math:`\Chi^2` in a function for scipy optimizer. Pass noise and
+        Wrap the math:`\Chi^2` in a function for the optimizer. Pass noise and
         data info as args. Log the math:`\Chi^2` value and values of the coefficients.
 
         Returns

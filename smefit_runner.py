@@ -4,7 +4,7 @@ import pathlib
 
 import smefit
 
-path = pathlib.Path(__file__).absolute().parent 
+path = pathlib.Path(__file__).absolute().parent
 
 if __name__ == "__main__":
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
         "-p",
         "--runcard_path",
         required=False,
-        default=path / 'runcards',
+        default=path / "runcards",
         type=str,
         help="path to runcard",
     )

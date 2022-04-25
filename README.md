@@ -21,6 +21,28 @@ git clone https://github.com/LHCfitNikhef/smefit_release.git
 cd smefit_release
 python setup.py install
 ```
+
+## Running
+To run the code you can do:
+
+```bash
+python -n NS -f your_runcard_name
+```
+
+### Ruuning in parallel
+To run smefit in parallel you need to install inside your python environnement:
+
+```bash
+onpenmpi version = 4.0.2
+mpi4py = 3.0.3
+```
+
+then you can run doing:
+
+```bash
+mpiexec -n number_of_cores python -n NS -f your_runcard_name
+```
+
 ## Documentation
 If you want to build the documentation do:
 ```bash

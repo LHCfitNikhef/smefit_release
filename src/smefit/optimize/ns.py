@@ -8,6 +8,7 @@ import os
 import time
 import warnings
 
+from mpi4py import MPI
 from pymultinest.solve import solve
 
 from ..coefficients import CoefficientManager
@@ -50,7 +51,9 @@ class NSOptimizer(Optimizer):
         const_efficiency=False,
         tolerance=0.5,
     ):
-        super().__init__(result_path, loaded_datasets, coefficients, use_quad)
+        super().__init__(
+            f"{result_path}/{results_ID}", loaded_datasets, coefficients, use_quad
+        )
         self.live_points = live_points
         self.efficiency = efficiency
         self.const_efficiency = const_efficiency
@@ -136,7 +139,7 @@ class NSOptimizer(Optimizer):
 
     def chi2_func_ns(self, params):
         """
-        Wrap the chi2 in a function for scipy optimiser. Pass noise and
+        Wrap the chi2 in a function for the optimizer. Pass noise and
         data info as args. Log the chi2 value and values of the coefficients.
 
         Parameters
@@ -200,7 +203,7 @@ class NSOptimizer(Optimizer):
         """Run the minimization with Nested Sampling"""
 
         # Prefix for results
-        prefix = self.results_path / f"{self.results_ID}/{self.live_points}_"
+        prefix = self.results_path / f"{self.live_points}_"
 
         # Additional check
         # Multinest will crash if the length of the results
@@ -239,8 +242,12 @@ class NSOptimizer(Optimizer):
             print(f"{par.op_name} : {col.mean():3f} +- {col.std():3f}")
         print(f"Number of samples: {result['samples'].shape[0]}")
 
-        self.save(result)
-        self.clean()
+        comm = MPI.COMM_WORLD
+        rank = comm.Get_rank()
+
+        if rank == 0:
+            self.save(result)
+            self.clean()
 
     def save(self, result):
         """
@@ -264,7 +271,7 @@ class NSOptimizer(Optimizer):
             self.coefficients.set_constraints()
 
             for c in self.coefficients.op_name:
-                values[c].append(float(self.coefficients.get_from_name(c)[0].value))
+                values[c].append(float(self.coefficients.get_from_name(c).value))
 
         with open(self.results_path / "posterior.json", "w", encoding="utf-8") as f:
             json.dump(values, f)
