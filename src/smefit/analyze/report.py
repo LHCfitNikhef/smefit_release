@@ -4,14 +4,9 @@ import pandas as pd
 from matplotlib import rc, use
 
 from ..fit_manager import FitManager
+from .coefficients_utils import CoefficientsPlotter, compute_confidence_level
+from .latex_tools import combine_plots, latex_packages, run_pdflatex
 from .summary import SummaryWriter
-
-# from .coefficients_utils import (
-#     CoefficientsPlotter,
-#     compute_confidence_level,
-# )
-# from .tools import latex_packages, run_pdflatex, combine_plots
-
 
 # global mathplotlib settings
 use("PDF")
@@ -109,124 +104,99 @@ class Report:
         lines = SummaryWriter(self.fits, self.data_info, self.coeff_info).write()
         run_pdflatex(self.report, lines, "summary")
 
-    # def coefficients(
-    #     self,
-    #     hide_dofs=None,
-    #     show_only=None,
-    #     logo=True,
-    #     bar_cl=95,
-    #     residuals_cl=68,
-    #     residuals_histogram=True,
-    #     energy_cl=95,
-    #     post_histograms=True,
-    #     table=True,
-    #     double_solution=None,
-    # ):
-    #     """
-    #     Coefficients plots and table runner.
+    def coefficients(
+        self,
+        scatter_plot=None,
+        confidence_level_bar=None,
+        posterior_histograms=True,
+        hide_dofs=None,
+        show_only=None,
+        logo=True,
+        table=True,
+        double_solution=None,
+    ):
+        """
+        Coefficients plots and table runner.
 
-    #     Parameters
-    #     ----------
-    #         hide_dofs: list
-    #             list of operator not to display
-    #         show_only: list
-    #             list of all the operator to display, if None all the free dof are presented
-    #         logo: bool
-    #             if True add logo to the plots
-    #         bar_cl: 68,95, None
-    #             confidence level for bar plot. If None, no bar plot is produced
-    #         residuals_cl: 68,95, None
-    #             confidence level for residual plot. If None, no residual plot is produced
-    #         residuals_histogram: bool
-    #             if True plot the residual histogram distribution
-    #         energy_cl: 68,95, None
-    #             confidence level for energy reach plot. If None, no energy reach plot is produced
-    #         post_histograms: bool
-    #             if True plot the posterior distribution for each coefficient
-    #         table: bool, optional
-    #             write the latex confidence level table per coefficient
-    #         double_solution: dict
-    #             operator with double solution per fit
-    #     """
+        Parameters
+        ----------
+            hide_dofs: list
+                list of operator not to display
+            show_only: list
+                list of all the operator to display, if None all the free dof are presented
+            logo: bool
+                if True add logo to the plots
+            scatter_plot: None, dict
+                kwarg confidence level bar plot or None
+            confidence_level_bar: None, dict
+                kwarg scatter plot or None
+            posterior_histograms: bool
+                if True plot the posterior distribution for each coefficient
+            table: bool, optional
+                write the latex confidence level table per coefficient
+            double_solution: dict
+                operator with double solution per fit
+        """
 
-    #     free_coeff_config = self.coeff_info
-    #     if show_only is not None:
-    #         free_coeff_config = free_coeff_config.loc[:, show_only]
-    #     if hide_dofs is not None:
-    #         free_coeff_config = free_coeff_config.drop(hide_dofs, level=1)
+        free_coeff_config = self.coeff_info
+        if show_only is not None:
+            free_coeff_config = free_coeff_config.loc[:, show_only]
+        if hide_dofs is not None:
+            free_coeff_config = free_coeff_config.drop(hide_dofs, level=1)
 
-    #     temp_list = []
-    #     for fit in self.fits:
-    #         for c, c_dict in fit.config["coefficients"].items():
-    #             if c_dict["fixed"] is True:
-    #                 continue
-    #             if c not in temp_list:
-    #                 temp_list.append(c)
-    #     free_coeff_config = free_coeff_config.loc[:, temp_list]
+        temp_list = []
+        for fit in self.fits:
+            for c, c_dict in fit.config["coefficients"].items():
+                if "value" in c_dict:
+                    continue
+                if c not in temp_list:
+                    temp_list.append(c)
+        free_coeff_config = free_coeff_config.loc[:, temp_list]
 
-    #     coeff_plt = CoefficientsPlotter(
-    #         self.report,
-    #         free_coeff_config,
-    #         logo=logo,
-    #     )
+        coeff_plt = CoefficientsPlotter(
+            self.report,
+            free_coeff_config,
+            logo=logo,
+        )
 
-    #     # compute confidence level bounds
-    #     bounds_dict = {}
-    #     for fit in self.fits:
+        # compute confidence level bounds
+        bounds_dict = {}
+        for fit in self.fits:
+            bounds_dict[fit.label] = compute_confidence_level(
+                fit.results,
+                coeff_plt.coeff_df,
+                double_solution[fit.name] if fit.name in double_solution else None,
+            )
 
-    #         # propagate constraints if needed
-    #         fit.propagate_constraints()
+        if scatter_plot is not None:
+            print(2 * "  ", "Plotting: Central values and Confidence Level bounds")
+            coeff_plt.plot_coeffs(bounds_dict, **scatter_plot)
 
-    #         bounds_dict[fit.label] = compute_confidence_level(
-    #             fit.results,
-    #             coeff_plt.coeff_df,
-    #             double_solution[fit.name] if fit.name in double_solution else None,
-    #         )
+        # when we plot the 95% CL we show 95% CL for null solutions.
+        # the error coming from a degenerate solution is not taken into account.
+        if confidence_level_bar is not None:
+            print(2 * "  ", "Plotting: Confidence Level error bars")
+            bar_cl = confidence_level_bar["confidence_level"]
+            confidence_level_bar.pop("confidence_level")
+            zero_sol = 0
+            coeff_plt.plot_coeffs_bar(
+                {
+                    name: -bound_df.loc[zero_sol, f"low{bar_cl}"]
+                    + bound_df.loc[zero_sol, f"high{bar_cl}"]
+                    for name, bound_df in bounds_dict.items()
+                },
+                **confidence_level_bar,
+            )
 
-    #     print(2 * "  ", "Plotting: Central values and Confidence Level bounds")
-    #     coeff_plt.plot_coeffs(bounds_dict)
+        if posterior_histograms:
+            print(2 * "  ", "Plotting: Posterior histograms")
+            coeff_plt.plot_posteriors(
+                [fit.results for fit in self.fits],
+                labels=[fit.label for fit in self.fits],
+                disjointed_lists=list((*double_solution.values(),)),
+            )
+        if table:
+            print(2 * "  ", "Writing: Confidence level table")
+            lines = coeff_plt.write_cl_table(bounds_dict)
 
-    #     # TODO: when we plot the 95% CL we show 95% CL for null solutions.
-    #     # the error coming from a degenerate solution is not taken into account.
-    #     # Is this what we really want??
-    #     null_solution = 0
-    #     if bar_cl is not None:
-    #         print(2 * "  ", "Plotting: Confidence Level error bars")
-    #         coeff_plt.plot_coeffs_bar(
-    #             {
-    #                 name: -bound_df.loc[null_solution, f"low{bar_cl}"]
-    #                 + bound_df.loc[null_solution, f"high{bar_cl}"]
-    #                 for name, bound_df in bounds_dict.items()
-    #             }
-    #         )
-    #     if residuals_cl is not None:
-    #         print(2 * "  ", "Plotting: Residuals")
-    #         residuals_dict = {
-    #             name: bound_df.loc[null_solution, "mid"]
-    #             / bound_df.loc[null_solution, f"mean_err{residuals_cl}"]
-    #             for name, bound_df in bounds_dict.items()
-    #         }
-    #         coeff_plt.plot_residuals_bar(residuals_dict)
-    #         if residuals_histogram:
-    #             coeff_plt.plot_residuals_hist(residuals_dict)
-
-    #     if energy_cl is not None:
-    #         print(2 * "  ", "Plotting: Energy reach")
-    #         energy_dict = {
-    #             name: 1.0 / np.sqrt(bound_df.loc[null_solution, f"mean_err{energy_cl}"])
-    #             for name, bound_df in bounds_dict.items()
-    #         }
-    #         coeff_plt.plot_energy(energy_dict)
-
-    #     if post_histograms is not None:
-    #         print(2 * "  ", "Plotting: Posterior histograms")
-    #         coeff_plt.plot_posteriors(
-    #             [fit.results for fit in self.fits],
-    #             labels=[fit.label for fit in self.fits],
-    #             disjointed_lists=list((*double_solution.values(),)),
-    #         )
-    #     if table is not None:
-    #         print(2 * "  ", "Writing: Confidence level table")
-    #         lines = coeff_plt.write_cl_table(bounds_dict)
-
-    #     combine_plots(self.report, lines, "coefficient_plots", "Coeffs_")
+        combine_plots(self.report, lines, "coefficient_plots", "Coeffs_")
