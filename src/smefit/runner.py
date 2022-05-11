@@ -44,7 +44,7 @@ class Runner:
         Create result folder and copy the runcard there
         """
         # Construct results folder
-        run_card_id = self.run_card["results_ID"]
+        run_card_id = self.run_card["result_ID"]
         result_folder = pathlib.Path(self.run_card["result_path"])
         res_folder_fit = result_folder / run_card_id
 
@@ -89,8 +89,8 @@ class Runner:
             config = yaml.safe_load(f)
 
         # set result ID to runcard name by default
-        if "results_ID" not in config:
-            config["results_ID"] = run_card_name
+        if "result_ID" not in config:
+            config["result_ID"] = run_card_name
 
         return cls(config, runcard_folder)
 

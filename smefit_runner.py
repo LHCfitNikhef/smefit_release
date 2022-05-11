@@ -16,7 +16,7 @@ if __name__ == "__main__":
         required=True,
         default=None,
         type=str,
-        help="mode: NS (Nested Sampling)",
+        help="mode: NS (Nested Sampling), R (Fit Report)",
     )
     parser.add_argument(
         "-f",

@@ -57,6 +57,7 @@ def setup_package():
             "pandas",
             "mpi4py",
             "pymultinest",
+            "PyPDF2",
         ],
         python_requires=">=3.7",
     )

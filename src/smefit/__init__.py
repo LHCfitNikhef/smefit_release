@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from .analyze import run_report
 from .runner import Runner
 
 
@@ -16,11 +17,11 @@ def run(runcard_folder, mode, fit_card):
         fit_card: dict
            fit run card
     """
-    runner = Runner.from_file(runcard_folder, fit_card)
     # run NS
     if mode == "NS":
+        runner = Runner.from_file(runcard_folder, fit_card)
         runner.ns()
+    elif mode == "R":
+        run_report(runcard_folder, fit_card)
     else:
-        raise NotImplementedError(
-            f"MODE={mode} is not valid, the only implemented feature atm is NS"
-        )
+        raise NotImplementedError(f"MODE={mode} is not valid, chose between R, NS.")

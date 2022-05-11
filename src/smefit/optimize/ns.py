@@ -45,21 +45,21 @@ class NSOptimizer(Optimizer):
         coefficients,
         result_path,
         use_quad,
-        results_ID,
+        result_ID,
         live_points=500,
         efficiency=0.01,
         const_efficiency=False,
         tolerance=0.5,
     ):
         super().__init__(
-            f"{result_path}/{results_ID}", loaded_datasets, coefficients, use_quad
+            f"{result_path}/{result_ID}", loaded_datasets, coefficients, use_quad
         )
         self.live_points = live_points
         self.efficiency = efficiency
         self.const_efficiency = const_efficiency
         self.tolerance = tolerance
         self.npar = self.free_parameters.size
-        self.results_ID = results_ID
+        self.result_ID = result_ID
 
     @classmethod
     def from_dict(cls, config):
@@ -130,7 +130,7 @@ class NSOptimizer(Optimizer):
             coefficients,
             config["result_path"],
             config["use_quad"],
-            config["results_ID"],
+            config["result_ID"],
             live_points=nlive,
             efficiency=efr,
             const_efficiency=ceff,
