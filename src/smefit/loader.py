@@ -39,6 +39,8 @@ class Loader:
             EFT perturbative order
         use_quad : bool
             if True loads also |HO| corrections
+        use_theory_covmat: bool
+            if True add the theory covariance matrix to the experimental one
         rot_to_fit_basis: dict, None
             matrix rotation to fit basis or None
     """
@@ -46,7 +48,15 @@ class Loader:
     commondata_path = pathlib.Path()
     theory_path = pathlib.Path(commondata_path)
 
-    def __init__(self, setname, operators_to_keep, order, use_quad, rot_to_fit_basis):
+    def __init__(
+        self,
+        setname,
+        operators_to_keep,
+        order,
+        use_quad,
+        use_theory_covmat,
+        rot_to_fit_basis,
+    ):
 
         self._data_folder = self.commondata_path
         self._sys_folder = self.commondata_path / "systypes"
@@ -61,9 +71,12 @@ class Loader:
         ) = self.load_experimental_data()
         (
             self.dataspec["SM_predictions"],
+            self.dataspec["theory_covmat"],
             self.dataspec["lin_corrections"],
             self.dataspec["quad_corrections"],
-        ) = self.load_theory(operators_to_keep, order, use_quad, rot_to_fit_basis)
+        ) = self.load_theory(
+            operators_to_keep, order, use_quad, use_theory_covmat, rot_to_fit_basis
+        )
 
     def load_experimental_data(self):
         """
@@ -131,7 +144,14 @@ class Loader:
         df = pd.DataFrame(data=sys.T, columns=name_sys)
         return central_values, construct_covmat(stat_error, df)
 
-    def load_theory(self, operators_to_keep, order, use_quad, rotation_matrix=None):
+    def load_theory(
+        self,
+        operators_to_keep,
+        order,
+        use_quad,
+        use_theory_covmat,
+        rotation_matrix=None,
+    ):
         """
         Load theory predictions
 
@@ -143,6 +163,8 @@ class Loader:
                 EFT perturbative order
             use_quad: bool
                 if True returns also |HO| corrections
+            use_theory_covmat: bool
+                if True add the theory covariance matrix to the experimental one
             rotation_matrix: numpy.ndarray
                 rotation matrix from tables basis to fitting basis
 
@@ -161,8 +183,6 @@ class Loader:
         # load theory predictions
         with open(theory_file, encoding="utf-8") as f:
             raw_th_data = json.load(f)
-
-        best_sm = raw_th_data["best_sm"]
 
         quad_dict = {}
         lin_dict = {}
@@ -197,9 +217,12 @@ class Loader:
             if is_to_keep(k.split("*")[0], k.split("*")[1])
         }
 
-        # TODO: make sure we store theory and for EFT and SM in the same file,
-        # for most of the old tables the things do not coincide
-        return best_sm, lin_dict_to_keep, quad_dict_to_keep
+        best_sm = np.array(raw_th_data["best_sm"])
+        th_cov = np.zeros((best_sm.size, best_sm.size))
+        if use_theory_covmat:
+            th_cov = raw_th_data["theory_cov"]
+
+        return raw_th_data["best_sm"], th_cov, lin_dict_to_keep, quad_dict_to_keep
 
     @property
     def n_data(self):
@@ -235,7 +258,7 @@ class Loader:
             covmat: numpy.ndarray
                 experimental covariance matrix
         """
-        return self.dataspec["covmat"]
+        return self.dataspec["covmat"] + self.dataspec["theory_covmat"]
 
     @property
     def sm_prediction(self):
@@ -330,6 +353,7 @@ def load_datasets(
     operators_to_keep,
     order,
     use_quad,
+    use_thory_covmat,
     theory_path=None,
     rot_to_fit_basis=None,
 ):
@@ -348,6 +372,8 @@ def load_datasets(
             EFT perturbative order
         use_quad: bool
             if True loads also |HO| corrections
+        use_theory_covmat: bool
+            if True add the theory covariance matrix to the experimental one
         theory_path : str, pathlib.Path, optional
             path to theory folder, theory excluded.
             Default it assumes to be the same as commondata_path
@@ -371,7 +397,9 @@ def load_datasets(
 
     for sset in np.unique(datasets):
 
-        dataset = Loader(sset, operators_to_keep, order, use_quad, rot_to_fit_basis)
+        dataset = Loader(
+            sset, operators_to_keep, order, use_quad, use_thory_covmat, rot_to_fit_basis
+        )
         exp_name.append(sset)
         n_data_exp.append(dataset.n_data)
 
