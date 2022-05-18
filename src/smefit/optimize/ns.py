@@ -81,6 +81,7 @@ class NSOptimizer(Optimizer):
             config["data_path"],
             config["datasets"],
             config["coefficients"],
+            config["order"],
             config["use_quad"],
             config["theory_path"] if "theory_path" in config else None,
             config["rot_to_fit_basis"] if "rot_to_fit_basis" in config else None,

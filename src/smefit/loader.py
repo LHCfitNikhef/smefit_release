@@ -35,6 +35,8 @@ class Loader:
             dataset name to load
         operators_to_keep : list
             list of operators for which corrections are loaded
+        order: "LO", "NLO"
+            EFT perturbative order
         use_quad : bool
             if True loads also |HO| corrections
         rot_to_fit_basis: dict, None
@@ -44,10 +46,7 @@ class Loader:
     commondata_path = pathlib.Path()
     theory_path = pathlib.Path(commondata_path)
 
-    def __init__(self, setname, operators_to_keep, use_quad, rot_to_fit_basis):
-
-        # TODO: pass the proper correct order
-        order = "LO"
+    def __init__(self, setname, operators_to_keep, order, use_quad, rot_to_fit_basis):
 
         self._data_folder = self.commondata_path
         self._sys_folder = self.commondata_path / "systypes"
@@ -329,6 +328,7 @@ def load_datasets(
     commondata_path,
     datasets,
     operators_to_keep,
+    order,
     use_quad,
     theory_path=None,
     rot_to_fit_basis=None,
@@ -344,6 +344,8 @@ def load_datasets(
             list of datasets to be loaded
         operators_to_keep: list
             list of operators for which corrections are loaded
+        order: "LO", "NLO"
+            EFT perturbative order
         use_quad: bool
             if True loads also |HO| corrections
         theory_path : str, pathlib.Path, optional
@@ -369,7 +371,7 @@ def load_datasets(
 
     for sset in np.unique(datasets):
 
-        dataset = Loader(sset, operators_to_keep, use_quad, rot_to_fit_basis)
+        dataset = Loader(sset, operators_to_keep, order, use_quad, rot_to_fit_basis)
         exp_name.append(sset)
         n_data_exp.append(dataset.n_data)
 
