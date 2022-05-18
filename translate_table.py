@@ -56,8 +56,8 @@ def dump_to_json(data_dict, dataset):
     with open(f"{new_table_path}/theory/{dataset}.json", "w") as f:
         data_dict["best_sm"] = data_dict["best_sm"].tolist()
         data_dict["theory_cov"] = data_dict["theory_cov"].tolist()
-        data_dict["LO"] = data_dict["LO"].to_dict()
-        data_dict["NLO"] = data_dict["NLO"].to_dict()
+        data_dict["LO"] = (data_dict["LO"].T).to_dict("list")
+        data_dict["NLO"] = (data_dict["NLO"].T).to_dict("list")
         json.dump(data_dict, f)
 
 

@@ -177,9 +177,8 @@ class Loader:
             quad_dict: dict
                 dictionary with |HO| corrections, empty if not use_quad
         """
-        theory_file = self._theory_folder / f"{self.setname}.txt"
+        theory_file = self._theory_folder / f"{self.setname}.json"
         check_file(theory_file)
-
         # load theory predictions
         with open(theory_file, encoding="utf-8") as f:
             raw_th_data = json.load(f)
@@ -192,10 +191,10 @@ class Loader:
 
             # quadratic terms
             if "*" in key and use_quad:
-                quad_dict[key] = value
+                quad_dict[key] = np.array(value)
             # linear terms
             elif "SM" not in key:
-                lin_dict[key] = value
+                lin_dict[key] = np.array(value)
 
         # rotate corrections to fitting basis
         if rotation_matrix is not None:
