@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import json
 import pathlib
 from collections import namedtuple
 
@@ -45,6 +46,9 @@ class Loader:
 
     def __init__(self, setname, operators_to_keep, use_quad, rot_to_fit_basis):
 
+        # TODO: pass the proper correct order
+        order = "LO"
+
         self._data_folder = self.commondata_path
         self._sys_folder = self.commondata_path / "systypes"
         self._theory_folder = self.theory_path
@@ -60,7 +64,7 @@ class Loader:
             self.dataspec["SM_predictions"],
             self.dataspec["lin_corrections"],
             self.dataspec["quad_corrections"],
-        ) = self.load_theory(operators_to_keep, use_quad, rot_to_fit_basis)
+        ) = self.load_theory(operators_to_keep, order, use_quad, rot_to_fit_basis)
 
     def load_experimental_data(self):
         """
@@ -128,7 +132,7 @@ class Loader:
         df = pd.DataFrame(data=sys.T, columns=name_sys)
         return central_values, construct_covmat(stat_error, df)
 
-    def load_theory(self, operators_to_keep, use_quad, rotation_matrix=None):
+    def load_theory(self, operators_to_keep, order, use_quad, rotation_matrix=None):
         """
         Load theory predictions
 
@@ -136,6 +140,8 @@ class Loader:
         ----------
             operators_to_keep: list
                 list of operators to keep
+            order: "LO", "NLO"
+                EFT perturbative order
             use_quad: bool
                 if True returns also |HO| corrections
             rotation_matrix: numpy.ndarray
@@ -154,26 +160,20 @@ class Loader:
         check_file(theory_file)
 
         # load theory predictions
-        corrections_dict = {}
         with open(theory_file, encoding="utf-8") as f:
-            for line in f:
-                key, *val = line.split()
-                corrections_dict[key] = np.array([float(v) for v in val])
+            raw_th_data = json.load(f)
+
+        best_sm = raw_th_data["best_sm"]
 
         quad_dict = {}
         lin_dict = {}
 
         # split corrections into a linear and quadratic dict
-        for key, value in corrections_dict.items():
+        for key, value in raw_th_data[order].items():
 
-            # cross terms
+            # quadratic terms
             if "*" in key and use_quad:
                 quad_dict[key] = value
-            # squared terms
-            # TODO: remove this notation
-            elif "^" in key and use_quad:
-                new_key = f"{key[:-2]}*{key[:-2]}"
-                quad_dict[new_key] = value
             # linear terms
             elif "SM" not in key:
                 lin_dict[key] = value
@@ -200,7 +200,7 @@ class Loader:
 
         # TODO: make sure we store theory and for EFT and SM in the same file,
         # for most of the old tables the things do not coincide
-        return corrections_dict["SM"], lin_dict_to_keep, quad_dict_to_keep
+        return best_sm, lin_dict_to_keep, quad_dict_to_keep
 
     @property
     def n_data(self):
