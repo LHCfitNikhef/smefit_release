@@ -53,7 +53,7 @@ def change_label_names(df):
 
 
 def dump_to_json(data_dict, dataset):
-    with open(f"{new_table_path}/theory/{dataset}.json", "w") as f:
+    with open(f"{new_table_path}/theory/{dataset}.json", "w", encoding="utf-8") as f:
         data_dict["best_sm"] = data_dict["best_sm"].tolist()
         data_dict["theory_cov"] = data_dict["theory_cov"].tolist()
         data_dict["LO"] = (data_dict["LO"].T).to_dict("list")

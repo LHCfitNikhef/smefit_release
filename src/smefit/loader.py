@@ -315,7 +315,7 @@ class Loader:
         return self.dataspec["quad_corrections"]
 
 
-def construct_corrections_matrix(corrections_list, n_data_tot):
+def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None):
     """
     Construct a unique list of correction name,
     with corresponding values.
@@ -325,27 +325,39 @@ def construct_corrections_matrix(corrections_list, n_data_tot):
         corrections_list : list(dict)
             list containing corrections per experiment
         n_data_tot : int
-            total number of experimental datapoints
+            total number of experimental data points
 
     Returns
     -------
         sorted_keys : np.ndarray
-            unique list of opearators for which at least one correction is present
+            unique list of operators for which at least one correction is present
         corr_values : np.ndarray
             matrix with correction values (n_data_tot, sorted_keys.size)
     """
 
+    if sorted_keys is None:
+        tmp = [
+            [
+                *c,
+            ]
+            for c in corrections_list
+        ]
+        sorted_keys = np.unique([item for sublist in tmp for item in sublist])
 
-    tmp = [ [*c,] for c in corrections_list]
-    sorted_keys = np.unique([item for sublist in tmp for item in sublist])
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
-    
-    #import pdb; pdb.set_trace()
+
+    # import pdb; pdb.set_trace()
     cnt = 0
     # loop on experiments
     for correction_dict in corrections_list:
         # loop on corrections
         for key, values in correction_dict.items():
+
+            if "*" in key:
+                op1, op2 = key.split("*")
+                if op2 < op1:
+                    key = f"{op2}*{op1}"
+
             idx = np.where(sorted_keys == key)[0][0]
             n_dat = values.size
             corr_values[cnt : cnt + n_dat, idx] = values
@@ -442,7 +454,21 @@ def load_datasets(
     operators_names, lin_corr_values = construct_corrections_matrix(
         lin_corr_list, n_data_tot
     )
-    _, quad_corr_values = construct_corrections_matrix(quad_corr_list, n_data_tot)
+
+    if use_quad:
+        quad_corrections_names = []
+        for op1 in operators_names:
+            for op2 in operators_names:
+                if (
+                    f"{op1}*{op2}" not in quad_corrections_names
+                    and f"{op2}*{op1}" not in quad_corrections_names
+                ):
+                    quad_corrections_names.append(f"{op1}*{op2}")
+        _, quad_corr_values = construct_corrections_matrix(
+            quad_corr_list, n_data_tot, np.array(quad_corrections_names)
+        )
+    else:
+        quad_corr_values = None
 
     # Construct unique large cov matrix dropping correlations between different datasets
     covmat = (build_large_covmat(chi2_covmat, n_data_tot, n_data_exp),)
