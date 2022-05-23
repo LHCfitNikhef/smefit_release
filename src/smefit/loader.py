@@ -94,15 +94,15 @@ class Loader:
 
         check_file(data_file)
         check_file(sys_file)
+        print(f"Loaging datset : {self.setname}")
 
         # load data from commondata file
         # TODO: better data format?
         # - DATA_* has many unused info
-        num_data, num_sys = np.loadtxt(data_file, usecols=(1, 2), max_rows=1, dtype=int)
+        num_sys, num_data = np.loadtxt(data_file, usecols=(1, 2), max_rows=1, dtype=int)
         central_values, stat_error = np.loadtxt(
             data_file, usecols=(5, 6), unpack=True, skiprows=1
         )
-
         # Load systematics from commondata file.
         # Read values of sys first
         sys_add = []
@@ -121,27 +121,46 @@ class Loader:
         sys_mult = np.asarray(sys_mult)
 
         # Read systype file
-        type_sys, name_sys = np.genfromtxt(
-            sys_file,
-            usecols=(1, 2),
-            unpack=True,
-            skip_header=1,
-            dtype="str",
-        )
+        if num_sys != 0:
+            type_sys, name_sys = np.genfromtxt(
+                sys_file,
+                usecols=(1, 2),
+                unpack=True,
+                skip_header=1,
+                dtype="str",
+            )
 
-        # Identify add and mult systematics
-        # and replace the mult ones with corresponding value computed
-        # from data central value. Required for implementation of t0 prescription
+            # Identify add and mult systematics
+            # and replace the mult ones with corresponding value computed
+            # from data central value. Required for implementation of t0 prescription
 
-        indx_add = np.where(type_sys == "ADD")
-        indx_mult = np.where(type_sys == "MULT")
-        sys = np.zeros((num_sys, num_data))
-        sys[indx_add[0]] = sys_add[indx_add[0]]
-        sys[indx_mult[0]] = sys_mult[indx_mult[0]] * central_values * 1e-2
+            indx_add = np.where(type_sys == "ADD")[0]
+            indx_mult = np.where(type_sys == "MULT")[0]
+            sys = np.zeros((num_sys, num_data))
+            sys[indx_add] = sys_add[indx_add].reshape(sys[indx_add].shape)
+            sys[indx_mult] = (
+                sys_mult[indx_mult].reshape(sys[indx_mult].shape)
+                * central_values
+                * 1e-2
+            )
 
-        # Build dataframe with shape (N_data * N_sys) and systematic name as the
-        # column headers and construct covmat
+            # Build dataframe with shape (N_data * N_sys) and systematic name as the
+            # column headers and construct covmat
+
+            # limit case with 1 sys
+            if num_sys == 1:
+                name_sys = [name_sys]
+        # limit case no sys
+        else:
+            name_sys = ["UNCORR"]
+            sys = np.zeros((num_sys + 1, num_data))
+
         df = pd.DataFrame(data=sys.T, columns=name_sys)
+
+        # limit case 1 data
+        if num_data == 1:
+            central_values = np.asarray([central_values])
+
         return central_values, construct_covmat(stat_error, df)
 
     def load_theory(
@@ -318,7 +337,7 @@ def construct_corrections_matrix(corrections_list, n_data_tot):
 
     sorted_keys = np.unique(np.array([(*c,) for c in corrections_list]).flatten())
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
-
+    # import pdb; pdb.set_trace()
     cnt = 0
     # loop on experiments
     for correction_dict in corrections_list:
@@ -352,7 +371,7 @@ def load_datasets(
     operators_to_keep,
     order,
     use_quad,
-    use_thory_covmat,
+    use_theory_covmat,
     theory_path=None,
     rot_to_fit_basis=None,
 ):
@@ -397,7 +416,12 @@ def load_datasets(
     for sset in np.unique(datasets):
 
         dataset = Loader(
-            sset, operators_to_keep, order, use_quad, use_thory_covmat, rot_to_fit_basis
+            sset,
+            operators_to_keep,
+            order,
+            use_quad,
+            use_theory_covmat,
+            rot_to_fit_basis,
         )
         exp_name.append(sset)
         n_data_exp.append(dataset.n_data)
