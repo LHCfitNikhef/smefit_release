@@ -335,9 +335,12 @@ def construct_corrections_matrix(corrections_list, n_data_tot):
             matrix with correction values (n_data_tot, sorted_keys.size)
     """
 
-    sorted_keys = np.unique(np.array([(*c,) for c in corrections_list]).flatten())
+
+    tmp = [ [*c,] for c in corrections_list]
+    sorted_keys = np.unique([item for sublist in tmp for item in sublist])
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
-    # import pdb; pdb.set_trace()
+    
+    #import pdb; pdb.set_trace()
     cnt = 0
     # loop on experiments
     for correction_dict in corrections_list:
