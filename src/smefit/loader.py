@@ -326,6 +326,8 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
             list containing corrections per experiment
         n_data_tot : int
             total number of experimental data points
+        sorted_keys: numpy.ndarray
+            list of sorted operator corrections
 
     Returns
     -------
@@ -346,7 +348,6 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
 
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
 
-    # import pdb; pdb.set_trace()
     cnt = 0
     # loop on experiments
     for correction_dict in corrections_list:
