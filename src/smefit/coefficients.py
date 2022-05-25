@@ -84,7 +84,7 @@ class CoefficientManager(np.ndarray):
     Parameters
     ----------
         input_array: np.ndarray or list
-            list of `smefit.coefficients.Coefficient` instanceses
+            list of `smefit.coefficients.Coefficient` instances
 
     """
 
@@ -175,7 +175,7 @@ class CoefficientManager(np.ndarray):
             constrain_dict = coefficient_fixed.constrain
             free_dofs = self.get_from_name((*constrain_dict,)).value
 
-            # matrix with multiplicative factors and exponenets
+            # matrix with multiplicative factors and exponents
             fact_exp = np.array((*constrain_dict.values(),))
 
             self.get_from_name(coefficient_fixed.op_name).value = fact_exp[
