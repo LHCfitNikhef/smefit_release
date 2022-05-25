@@ -44,6 +44,7 @@ class Runner:
         Create result folder and copy the runcard there
         """
         # Construct results folder
+        run_card_name = self.run_card["runcard_name"]
         run_card_id = self.run_card["result_ID"]
         result_folder = pathlib.Path(self.run_card["result_path"])
         res_folder_fit = result_folder / run_card_id
@@ -61,7 +62,7 @@ class Runner:
                 yaml.dump(self.run_card, f, default_flow_style=False)
         else:
             copyfile(
-                self.runcard_folder / f"{run_card_id}.yaml",
+                self.runcard_folder / f"{run_card_name}.yaml",
                 runcard_copy,
             )
 
@@ -88,6 +89,7 @@ class Runner:
         with open(runcard_folder / f"{run_card_name}.yaml", encoding="utf-8") as f:
             config = yaml.safe_load(f)
 
+        config["runcard_name"] = run_card_name
         # set result ID to runcard name by default
         if "result_ID" not in config:
             config["result_ID"] = run_card_name
