@@ -208,5 +208,5 @@ class CoefficientManager(np.ndarray):
                 # matrix with multiplicative factors and exponents
                 fact_exp = np.array((*add_factor_dict.values(),))
                 self.get_from_name(coefficient_fixed.op_name).value += np.prod(
-                    fact_exp[:, 0]
-                ) * np.prod(np.power(free_dofs, fact_exp[:, 1]))
+                    fact_exp[:, 0] * np.power(free_dofs, fact_exp[:, 1])
+                )
