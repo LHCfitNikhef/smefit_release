@@ -194,6 +194,7 @@ class CoefficientManager(np.ndarray):
 
         # loop pn fixed coefficients
         for coefficient_fixed in self[np.invert(self.is_free)]:
+            temp = 0.0
 
             # skip coefficient fixed to a single value
             if coefficient_fixed.constrain is None:
@@ -207,6 +208,5 @@ class CoefficientManager(np.ndarray):
 
                 # matrix with multiplicative factors and exponents
                 fact_exp = np.array((*add_factor_dict.values(),))
-                self.get_from_name(coefficient_fixed.op_name).value += np.prod(
-                    fact_exp[:, 0] * np.power(free_dofs, fact_exp[:, 1])
-                )
+                temp += np.prod(fact_exp[:, 0] * np.power(free_dofs, fact_exp[:, 1]))
+            self.get_from_name(coefficient_fixed.op_name).value = temp
