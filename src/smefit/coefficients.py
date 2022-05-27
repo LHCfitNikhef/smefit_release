@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Iterable
+from collections.abc import Iterable
 
 import numpy as np
 
@@ -14,14 +14,14 @@ class Coefficient:
         name: str
             name of the operator corresponding to the Wilson coefficient
         minimum : float
-            mimimum value
+            minimum value
         maximum : float
             maximum value
         value : float, optional
             best value. If None set to random between minimum and maximum
         constrain : dict, bool
             - if False, the parameter is free, default option
-            - if True, the parameeter is fixed to the given value
+            - if True, the parameter is fixed to the given value
             - if dict the parameter is fixed to a function of other coefficients
 
     """
@@ -34,6 +34,7 @@ class Coefficient:
         # determine if the parameter is free
         self.is_free = False
         self.constrain = None
+
         if constrain is False:
             if value is not None:
                 raise ValueError(
@@ -46,22 +47,49 @@ class Coefficient:
                     f"Wilson Coefficient {self.op_name} is fixed, but no value is specified"
                 )
         elif isinstance(constrain, dict):
-            self.constrain = constrain.copy()
-            # update syntax for linear values
-            for key, factor in constrain.items():
-                if isinstance(factor, (int, float)):
-                    self.constrain[key] = np.array([factor, 1])
-                else:
-                    factor = np.array(factor)
-                    # if factor has not 2 elements or is not a number raise error
-                    if factor.size > 2 or factor.dtype not in [int, float]:
-                        raise ValueError(f"Unknown specified constrain {constrain}")
-                    self.constrain[key] = factor
+            value = 0.0
+            self.constrain = [self.build_additive_factor_dict(constrain)]
+        elif isinstance(constrain, list):
+            value = 0.0
+            self.constrain = [
+                self.build_additive_factor_dict(fact_dict) for fact_dict in constrain
+            ]
 
         # if no value is already there, the parameter is free
         self.value = value
         if value is None:
             self.value = np.random.uniform(low=minimum, high=maximum)
+
+    @staticmethod
+    def build_additive_factor_dict(constrain):
+        r"""
+        Build the dictionary for each additive factor appearing in the constrain:
+
+        .. :math:
+             \prod_{i=1} a_{i} c_{i}^{n_{i}}
+
+        Parameters
+        ----------
+            constrain: dict
+                dict object with the form {'c1': a1, 'c2': [a2,n2], ...}
+
+        Returns
+        -------
+            factor_dict: dict
+                dict object with the form {'c1': [a1,1], 'c2': [a2,n2], ...}
+        """
+        factor_dict = {}
+        # loop on free parameters appearing in the factor
+        for key, factor in constrain.items():
+            if isinstance(factor, (int, float)):
+                factor_dict[key] = np.array([factor, 1])
+            else:
+                factor = np.array(factor)
+                # if factor has not 2 elements or is not a number raise error
+                if factor.size > 2 or factor.dtype not in [int, float]:
+                    raise ValueError(f"Unknown specified constrain {constrain}")
+                factor_dict[key] = factor
+        return factor_dict
 
     def __repr__(self):
         return self.op_name
@@ -107,8 +135,8 @@ class CoefficientManager(np.ndarray):
         """
         Create a coefficientManager from a dictionary
 
-        Parmeters
-        ---------
+        Parameters
+        ----------
             coefficient_config : dict
                 coefficients configuration dictionary
 
@@ -147,7 +175,7 @@ class CoefficientManager(np.ndarray):
             setattr(obj, attr, val)
 
     def get_from_name(self, item):
-        """Return the class sliced by names"""
+        """Return the single element from the class with the given name"""
         return self[self.op_name == item]
 
     @property
@@ -161,7 +189,7 @@ class CoefficientManager(np.ndarray):
         coefficient.constrain information:
 
         .. :math:
-            c_{m} = \sum_{i=1} a_{i} c_{i}^{n_{i}}
+            c_{m} = \sum_{i=1} \prod_{j=1}^{N_i} a_{i,j} c_{i,j}^{n_{i,j}}
         """
 
         # loop pn fixed coefficients
@@ -171,13 +199,14 @@ class CoefficientManager(np.ndarray):
             if coefficient_fixed.constrain is None:
                 continue
 
-            # fixed to multiple values
-            constrain_dict = coefficient_fixed.constrain
-            free_dofs = self.get_from_name((*constrain_dict,)).value
+            for add_factor_dict in coefficient_fixed.constrain:
 
-            # matrix with multiplicative factors and exponents
-            fact_exp = np.array((*constrain_dict.values(),))
+                free_dofs = []
+                for fixed_name in add_factor_dict:
+                    free_dofs.append(float(self.get_from_name(fixed_name).value))
 
-            self.get_from_name(coefficient_fixed.op_name).value = fact_exp[
-                :, 0
-            ] @ np.power(free_dofs, fact_exp[:, 1])
+                # matrix with multiplicative factors and exponents
+                fact_exp = np.array((*add_factor_dict.values(),))
+                self.get_from_name(coefficient_fixed.op_name).value += np.prod(
+                    fact_exp[:, 0]
+                ) * np.prod(np.power(free_dofs, fact_exp[:, 1]))
