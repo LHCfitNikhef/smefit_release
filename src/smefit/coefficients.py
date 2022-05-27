@@ -73,8 +73,8 @@ class Coefficient:
         return self.op_name < coeff_other.op_name
 
     def __add__(self, coeff_other):
-        # TODO: fix and return a new object
         self.value += coeff_other.value
+        return self
 
 
 class CoefficientManager(np.ndarray):

@@ -23,24 +23,40 @@ coeff_dict = {
 
 
 class TestCoefficient:
+
+    name = "op_a"
+    minimum = -1
+    maximum = 1
+    c_test = coefficients.Coefficient(name, minimum, maximum)
+
     def test_init(self):
-        name = "op_a"
-        minimum = -1
-        maximum = 1
-        c_test = coefficients.Coefficient(name, minimum, maximum)
-        assert c_test.op_name == name
-        assert c_test.minimum == minimum
-        assert c_test.maximum == maximum
-        assert c_test.value <= maximum and c_test.value >= minimum
+
+        assert self.c_test.op_name == self.name
+        assert self.c_test.minimum == self.minimum
+        assert self.c_test.maximum == self.maximum
+        assert self.c_test.value <= self.maximum and self.c_test.value >= self.minimum
 
     def test_add(self):
-        pass
+        rand_val_2 = np.random.rand()
+        rand_val_1 = self.c_test.value
+        c_2 = coefficients.Coefficient(
+            "op_a", np.random.rand(), np.random.rand(), value=rand_val_2, constrain=True
+        )
+        self.c_test += c_2
+        assert self.c_test.value == rand_val_1 + rand_val_2
 
     def test_eq(self):
-        pass
+        c_same = coefficients.Coefficient("op_a", np.random.rand(), np.random.rand())
+        assert self.c_test == c_same
+
+    def test_lt(self):
+        c_same = coefficients.Coefficient("op_a", np.random.rand(), np.random.rand())
+        assert not self.c_test < c_same
+        c_diff = coefficients.Coefficient("op_c", np.random.rand(), np.random.rand())
+        assert self.c_test < c_diff
 
     def test_repr(self):
-        pass
+        assert repr(self.c_test) == self.name
 
 
 class TestCoefficientManager:
