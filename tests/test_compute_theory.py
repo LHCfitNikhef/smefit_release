@@ -21,23 +21,23 @@ class TestPredictions:
     sm_theory = np.array(
         [
             1,
-            1,
+            1.2,
         ]
     )
     operators_names = np.array(["Op1", "Op2"])
     lin_corr_values = np.array(
         [
             [0.1, 0.2],
-            [0.1, 0.2],
+            [0.3, 0.4],
         ]
     )  # Op1, Op2
     quad_corr_values = np.array(
         [
             [0.3, 0.4, 0.5],
-            [0.3, 0.4, 0.5],
+            [0.6, 0.7, 0.8],
         ]
     )  # Op1^2, Op1*Op2, Op2^2
-    covmat = np.diag(np.ones(2))
+    covmat = np.array([[0.01, 0.02], [0.02, 0.03]])
     dataset = loader.DataTuple(
         exp_data,
         sm_theory,
