@@ -362,6 +362,7 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
             idx = np.where(sorted_keys == key)[0][0]
             n_dat = values.size
             corr_values[cnt : cnt + n_dat, idx] = values
+        cnt += n_dat
 
     return sorted_keys, corr_values
 
@@ -473,7 +474,6 @@ def load_datasets(
 
     # Construct unique large cov matrix dropping correlations between different datasets
     covmat = (build_large_covmat(chi2_covmat, n_data_tot, n_data_exp),)
-
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
         exp_data,
