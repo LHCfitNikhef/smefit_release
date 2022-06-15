@@ -78,7 +78,11 @@ def test_load_datasets():
 
             # construct expected lin corr tables
             lin_corr_1 = np.asarray(
-                [theory_test_1[order]["Op1"], theory_test_1[order]["Op2"], [0.0, 0.0]]
+                [
+                    theory_test_1[order]["Op1"],
+                    theory_test_1[order]["Op2"],
+                    [0.0, 0.0],
+                ]
             ).T
 
             lin_corr_2 = np.asarray(
