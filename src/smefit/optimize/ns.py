@@ -88,11 +88,14 @@ class NSOptimizer(Optimizer):
             config["rot_to_fit_basis"] if "rot_to_fit_basis" in config else None,
         )
 
+        missing_operators = []
         for k in config["coefficients"]:
             if k not in loaded_datasets.OperatorsNames:
-                raise NotImplementedError(
-                    f"{k} does not enter the theory. Comment it out in setup script and restart."
-                )
+                missing_operators.append(k)
+        if missing_operators:
+            raise NotImplementedError(
+                f"{missing_operators} not in the theory. Comment it out in setup script and restart."
+            )
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
         if "nlive" not in config:

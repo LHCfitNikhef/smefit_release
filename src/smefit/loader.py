@@ -212,7 +212,7 @@ class Loader:
             if "*" in key and use_quad:
                 quad_dict[key] = np.array(value)
             # linear terms
-            elif "SM" not in key:
+            elif "SM" not in key and "*" not in key:
                 lin_dict[key] = np.array(value)
 
         # rotate corrections to fitting basis
@@ -445,17 +445,22 @@ def load_datasets(
 
         exp_data.extend(dataset.central_values)
         sm_theory.extend(dataset.sm_prediction)
-
-        lin_corr_list.append(dataset.lin_corrections)
+        if dataset.lin_corrections:
+            lin_corr_list.append(dataset.lin_corrections)
         quad_corr_list.append(dataset.quad_corrections)
         chi2_covmat.append(dataset.covmat)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
-    operators_names, lin_corr_values = construct_corrections_matrix(
-        lin_corr_list, n_data_tot
-    )
+    if lin_corr_list:
+        operators_names, lin_corr_values = construct_corrections_matrix(
+            lin_corr_list, n_data_tot
+        )
+    else:
+        raise NotImplementedError(
+            f"None of the specified operators are contained in the dataset"
+        )
 
     if use_quad:
         quad_corrections_names = []
