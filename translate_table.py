@@ -5,7 +5,7 @@ import pathlib
 import numpy as np
 import pandas as pd
 
-old_table_path = "/Volumes/Git_Workspace/physicstools/SMEFT/code/tables"
+old_table_path = "/data/theorie/tgiani/SMEFT/code/tables"
 new_table_path = pathlib.Path(__file__).parent
 
 
@@ -28,8 +28,8 @@ def load_data(dataset):
     out_dict["theory_cov"] = np.array(th_cov)
 
     # read operator_res tables
-    op_res = {}
     for order in ["LO", "NLO"]:
+        op_res = {}
         with open(
             f"{old_table_path}/operator_res/{order}/{dataset}.txt",
             "r",

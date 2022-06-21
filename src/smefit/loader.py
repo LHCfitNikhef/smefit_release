@@ -342,15 +342,13 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
             [
                 *c,
             ]
-            for c in corrections_list
+            for _, c in corrections_list
         ]
         sorted_keys = np.unique([item for sublist in tmp for item in sublist])
-
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
-
     cnt = 0
     # loop on experiments
-    for correction_dict in corrections_list:
+    for n_dat, correction_dict in corrections_list:
         # loop on corrections
         for key, values in correction_dict.items():
 
@@ -360,7 +358,6 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
                     key = f"{op2}*{op1}"
 
             idx = np.where(sorted_keys == key)[0][0]
-            n_dat = values.size
             corr_values[cnt : cnt + n_dat, idx] = values
         cnt += n_dat
 
@@ -445,22 +442,16 @@ def load_datasets(
 
         exp_data.extend(dataset.central_values)
         sm_theory.extend(dataset.sm_prediction)
-        if dataset.lin_corrections:
-            lin_corr_list.append(dataset.lin_corrections)
-        quad_corr_list.append(dataset.quad_corrections)
+        lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
+        quad_corr_list.append([dataset.n_data, dataset.quad_corrections])
         chi2_covmat.append(dataset.covmat)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
-    if lin_corr_list:
-        operators_names, lin_corr_values = construct_corrections_matrix(
-            lin_corr_list, n_data_tot
-        )
-    else:
-        raise NotImplementedError(
-            f"None of the specified operators are contained in the dataset"
-        )
+    operators_names, lin_corr_values = construct_corrections_matrix(
+        lin_corr_list, n_data_tot
+    )
 
     if use_quad:
         quad_corrections_names = []
