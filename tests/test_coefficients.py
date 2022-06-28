@@ -39,6 +39,17 @@ coeff_dict = {
     },
 }
 
+coeff_dict_free = {
+    "c_b": {
+        "min": -1,
+        "max": 1,
+    },
+    "c_a": {
+        "min": -2,
+        "max": 1,
+    },
+}
+
 
 class TestCoefficient:
 
@@ -46,6 +57,7 @@ class TestCoefficient:
     minimum = -1
     maximum = 1
     c_test = coefficients.Coefficient(name, minimum, maximum)
+    constrain_test = {"c_b": np.array([-0.1, 1])}
 
     def test_init(self):
 
@@ -53,6 +65,15 @@ class TestCoefficient:
         assert self.c_test.minimum == self.minimum
         assert self.c_test.maximum == self.maximum
         assert self.c_test.value <= self.maximum and self.c_test.value >= self.minimum
+
+    def test_build_additive_factor_dict(self):
+
+        np.testing.assert_equal(
+            self.constrain_test,
+            coefficients.Coefficient.build_additive_factor_dict(
+                coeff_dict["c_d"]["constrain"]
+            ),
+        )
 
     def test_add(self):
         rand_val_2 = np.random.rand()
@@ -86,6 +107,11 @@ class TestCoefficientManager:
         assert self.c_list[0].op_name == "c_a"
         np.testing.assert_equal(self.c_list.minimum, [-2, -1, -2, -3, -4, -5])
 
+    def test_free_parameters(self):
+
+        c_list_free = coefficients.CoefficientManager.from_dict(coeff_dict_free)
+        np.testing.assert_equal(self.c_list.free_parameters, c_list_free)
+
     def test_set_constrains(self):
         c_a = self.c_list.get_from_name("c_a").value
         c_b = self.c_list.get_from_name("c_b").value
@@ -94,6 +120,7 @@ class TestCoefficientManager:
         c_e = self.c_list.get_from_name("c_e").value
         c_f = self.c_list.get_from_name("c_f").value
 
+        np.testing.assert_equal(c_c, 1.0)
         np.testing.assert_equal(c_d, 0.0)
         np.testing.assert_equal(c_e, 0.0)
         np.testing.assert_equal(c_f, 0.0)
