@@ -7,7 +7,7 @@ import smefit.optimize as opt
 commondata_path = pathlib.Path(__file__).parents[0] / "fake_data"
 
 
-# fix the wilson coefficients to 1 and compute the corresponding expected value of the chi2
+# fix the wilson coefficients to some random value and compute the corresponding expected chi2
 
 coeffs_dict = {
     "Op1": {
@@ -29,6 +29,11 @@ coeffs_dict = {
         "max": 1,
     },
 }
+
+random_point = np.random.rand(3)
+prior = random_point * (
+    np.array([1.0, 1.0, 1.0]) - np.array([-2.0, -2.0, -2.0])
+) + np.array([-2.0, -2.0, -2.0])
 
 # genaret random values for the wilson coefficients
 wilson_coeff = np.random.rand(3)
@@ -116,3 +121,12 @@ class TestOptimize:
         np.testing.assert_allclose(
             self.test_opt.chi2_func_ns(params), chi2_tot, rtol=1e-10
         )
+
+    def test_gaussian_loglikelihood(self):
+        params = wilson_coeff
+        np.testing.assert_allclose(
+            self.test_opt.gaussian_loglikelihood(params), -0.5 * chi2_tot, rtol=1e-10
+        )
+
+    def test_flat_prior(self):
+        np.testing.assert_equal(self.test_opt.flat_prior(random_point), prior)
