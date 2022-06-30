@@ -102,13 +102,11 @@ class Loader:
 
         num_sys = data_dict["num_sys"]
         num_data = data_dict["num_data"]
-        
+
         # Load systematics from commondata file.
         # Read values of sys first
 
         sys_add = np.array(data_dict["systematics"])
-         
-
 
         # Read systype file
         if num_sys != 0:
@@ -116,8 +114,8 @@ class Loader:
             name_sys = data_dict["sys_names"]
 
             # express systematics as percentage values of the central values
-            sys_mult = abs(sys_add/central_values*1e2)
-            
+            sys_mult = abs(sys_add / central_values * 1e2)
+
             # Identify add and mult systematics
             # and replace the mult ones with corresponding value computed
             # from data central value. Required for implementation of t0 prescription
