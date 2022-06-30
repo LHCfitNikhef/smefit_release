@@ -47,7 +47,7 @@ def load_data(dataset):
     else: 
         type_sys = np.array([])
         name_sys = np.array([])
-    return central_values, stat_error, sys_add, type_sys, name_sys
+    return central_values, num_data, num_sys, stat_error, sys_add, type_sys, name_sys
 
 
 if __name__ == "__main__":
@@ -135,8 +135,10 @@ if __name__ == "__main__":
     for dataset in datasets:
 
         print(f'Converting dataset: {dataset}')
-        central_values, stat_error, sys_add, type_sys, name_sys = load_data(dataset)
+        central_values, num_data, num_sys, stat_error, sys_add, type_sys, name_sys = load_data(dataset)
         exp_name = {'dataset_name': dataset}
+        num_data = {'num_data': num_data.tolist()}
+        num_sys = {'num_sys': num_sys.tolist()}
         data_central_yaml = {'data_central' : central_values.tolist()}
         stat = {'statistical_error' : stat_error.tolist()}
         sys = {'systematics' : sys_add.tolist()}
@@ -145,6 +147,8 @@ if __name__ == "__main__":
 
         with open(f'{new_commondata_path}/{dataset}.yaml', 'w') as file:
             yaml.dump(exp_name, file, sort_keys=False)
+            yaml.dump(num_data, file, sort_keys=False)
+            yaml.dump(num_sys, file, sort_keys=False)
             yaml.dump(data_central_yaml, file, sort_keys=False)
             yaml.dump(stat, file, sort_keys=False)
             yaml.dump(sys, file, sort_keys=False)

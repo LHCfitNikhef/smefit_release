@@ -2,6 +2,7 @@
 
 import json
 import pathlib
+import yaml
 from collections import namedtuple
 
 import numpy as np
@@ -93,25 +94,29 @@ class Loader:
         check_file(data_file)
 
         print(f"Loaging datset : {self.setname}")
-        with open(data_file, encpding="utf-8" as f):
+        with open(data_file, encoding="utf-8") as f:
             data_dict = yaml.safe_load(f)
 
         central_values = np.array(data_dict["data_central"])
-        num_sys = len(data_dict["systematics"])
-        num_data = len(data_dict["data_central"])
+        stat_error = np.array(data_dict["statistical_error"])
+
+        num_sys = data_dict["num_sys"]
+        num_data = data_dict["num_data"]
         
         # Load systematics from commondata file.
         # Read values of sys first
 
-        sys_add = np.array(data_dict(["systematics"]))
-        # express systematics as percentage values of the central values
-        sys_mult = sys_add/central_values*1e2 
+        sys_add = np.array(data_dict["systematics"])
+         
 
 
         # Read systype file
         if num_sys != 0:
             type_sys = np.array(data_dict["sys_type"])
-            name_sys = np.array(data_dict["sys_name"])
+            name_sys = data_dict["sys_names"]
+
+            # express systematics as percentage values of the central values
+            sys_mult = abs(sys_add/central_values*1e2)
             
             # Identify add and mult systematics
             # and replace the mult ones with corresponding value computed
