@@ -49,7 +49,7 @@ class Optimizer:
         table.add_column("Chi^2")
         for name, val in chi2_dict.items():
             table.add_row(str(name), f"{val:.3}")
-        table.add_row("Total", f"{(chi2_tot[0]/self.npts):.3}")
+        table.add_row("Total", f"{(chi2_tot/self.npts):.3}")
         return table
 
     def chi2_func(self):

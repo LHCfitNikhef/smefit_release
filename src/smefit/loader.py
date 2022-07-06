@@ -455,7 +455,7 @@ def load_datasets(
         quad_corr_values = None
 
     # Construct unique large cov matrix dropping correlations between different datasets
-    covmat = (build_large_covmat(chi2_covmat, n_data_tot, n_data_exp),)
+    covmat = build_large_covmat(chi2_covmat, n_data_tot, n_data_exp)
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
         exp_data,

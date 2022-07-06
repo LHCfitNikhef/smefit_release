@@ -42,7 +42,7 @@ def compute_chi2(dataset, coefficients_values, use_quad):
     cnt = 0
     for data_name, ndat in zip(dataset.ExpNames, dataset.NdataExp):
         chi2_dict[data_name] = float(
-            chi2_vect[0, cnt : cnt + ndat] @ diff[cnt : cnt + ndat] / ndat
+            chi2_vect[cnt : cnt + ndat] @ diff[cnt : cnt + ndat] / ndat
         )
         cnt += ndat
     return chi2_total, chi2_dict

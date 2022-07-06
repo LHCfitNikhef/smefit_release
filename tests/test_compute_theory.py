@@ -45,7 +45,7 @@ class TestPredictions:
         lin_corr_values,
         quad_corr_values,
         np.array(["exp1"]),
-        exp_data.size,
+        np.array([exp_data.size]),
         np.linalg.inv(covmat),
     )
     wilson_coeff = np.array([0.5, 0.6])
@@ -93,6 +93,6 @@ class TestPredictions:
             self.dataset, self.wilson_coeff, True
         )
         np.testing.assert_allclose(
-            chi2.compute_chi2(self.dataset, self.wilson_coeff, True),
+            chi2.compute_chi2(self.dataset, self.wilson_coeff, True)[0],
             diff @ np.linalg.inv(self.covmat) @ diff,
         )
