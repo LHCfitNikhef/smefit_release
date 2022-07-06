@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import json
 import pathlib
+import sys
 
 import numpy as np
 import pandas as pd
 
-old_table_path = "/data/theorie/tgiani/SMEFT/code/tables"
 new_table_path = pathlib.Path(__file__).parent
 
 
@@ -62,7 +62,7 @@ def dump_to_json(data_dict, dataset):
 
 
 if __name__ == "__main__":
-
+    old_table_path = pathlib.Path(sys.argv[1])
     datasets = [
         "ATLAS_tt_8TeV_ljets_Mtt",
         "ATLAS_tt_8TeV_dilep_Mtt",

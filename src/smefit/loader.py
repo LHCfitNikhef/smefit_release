@@ -6,6 +6,7 @@ from collections import namedtuple
 
 import numpy as np
 import pandas as pd
+import yaml
 
 from .basis_rotation import rotate_to_fit_basis
 from .covmat import build_large_covmat, construct_covmat
@@ -89,46 +90,31 @@ class Loader:
             covmat : numpy.ndarray
                 experimental covariance matrix
         """
-        data_file = self._data_folder / f"DATA_{self.setname}.dat"
-        sys_file = self._sys_folder / f"SYSTYPE_{self.setname}_DEFAULT.dat"
-
+        data_file = self._data_folder / f"{self.setname}.yaml"
         check_file(data_file)
-        check_file(sys_file)
-        print(f"Loaging datset : {self.setname}")
 
-        # load data from commondata file
-        # TODO: better data format?
-        # - DATA_* has many unused info
-        num_sys, num_data = np.loadtxt(data_file, usecols=(1, 2), max_rows=1, dtype=int)
-        central_values, stat_error = np.loadtxt(
-            data_file, usecols=(5, 6), unpack=True, skiprows=1
-        )
+        print(f"Loaging datset : {self.setname}")
+        with open(data_file, encoding="utf-8") as f:
+            data_dict = yaml.safe_load(f)
+
+        central_values = np.array(data_dict["data_central"])
+        stat_error = np.array(data_dict["statistical_error"])
+
+        num_sys = data_dict["num_sys"]
+        num_data = data_dict["num_data"]
+
         # Load systematics from commondata file.
         # Read values of sys first
-        sys_add = []
-        sys_mult = []
-        for i in range(0, num_sys):
-            add, mult = np.loadtxt(
-                data_file,
-                usecols=(7 + 2 * i, 8 + 2 * i),
-                unpack=True,
-                skiprows=1,
-            )
-            sys_add.append(add)
-            sys_mult.append(mult)
 
-        sys_add = np.asarray(sys_add)
-        sys_mult = np.asarray(sys_mult)
+        sys_add = np.array(data_dict["systematics"])
 
         # Read systype file
         if num_sys != 0:
-            type_sys, name_sys = np.genfromtxt(
-                sys_file,
-                usecols=(1, 2),
-                unpack=True,
-                skip_header=1,
-                dtype="str",
-            )
+            type_sys = np.array(data_dict["sys_type"])
+            name_sys = data_dict["sys_names"]
+
+            # express systematics as percentage values of the central values
+            sys_mult = abs(sys_add / central_values * 1e2)
 
             # Identify add and mult systematics
             # and replace the mult ones with corresponding value computed
