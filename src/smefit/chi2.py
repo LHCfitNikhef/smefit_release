@@ -24,6 +24,8 @@ def compute_chi2(dataset, coefficients_values, use_quad):
     -------
         chi2_total : float
             :math:`\Chi^2` value
+        chi2_dict : dict
+            reduced :math:`\Chi^2` value for each dataset
     """
 
     # compute theory prediction for each point in the dataset
@@ -32,6 +34,15 @@ def compute_chi2(dataset, coefficients_values, use_quad):
     diff = dataset.Commondata - theory_predictions
 
     # chi2 computation
-    chi2_total = diff @ dataset.InvCovMat @ diff
+    chi2_vect = diff @ dataset.InvCovMat
+    chi2_total = chi2_vect @ diff
 
-    return chi2_total
+    # chi2 per dataset
+    chi2_dict = {}
+    cnt = 0
+    for data_name, ndat in zip(dataset.ExpNames, dataset.NdataExp):
+        chi2_dict[data_name] = float(
+            chi2_vect[0, cnt : cnt + ndat] @ diff[cnt : cnt + ndat] / ndat
+        )
+        cnt += ndat
+    return chi2_total, chi2_dict

@@ -232,7 +232,7 @@ class NSOptimizer(Optimizer):
             outputfiles_basename=str(prefix),
             n_live_points=self.live_points,
             sampling_efficiency=self.efficiency,
-            verbose=True,
+            verbose=False,
             importance_nested_sampling=True,
             const_efficiency_mode=self.const_efficiency,
             evidence_tolerance=self.tolerance,
@@ -240,7 +240,7 @@ class NSOptimizer(Optimizer):
 
         t2 = time.time()
 
-        print("Time = ", (t2 - t1) / 60.0, "\n")
+        print("Time = ", (t2 - t1) / 60.0, " minutes\n")
         print(f"evidence: {result['logZ']:1f} +- {result['logZerr']:1f} \n")
         print("parameter values:")
         for par, col in zip(self.free_parameters, result["samples"].T):
