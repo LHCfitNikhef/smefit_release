@@ -46,7 +46,7 @@ class Optimizer:
     def generate_chi2_table(self, chi2_dict, chi2_tot):
         table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
         table.add_column("Dataset", style="bold green", no_wrap=True)
-        table.add_column("Chi^2")
+        table.add_column("Chi^2 /N_dat")
         for name, val in chi2_dict.items():
             table.add_row(str(name), f"{val:.3}")
         table.add_row("Total", f"{(chi2_tot/self.npts):.3}")
@@ -62,13 +62,19 @@ class Optimizer:
             current_chi2 : np.ndarray
                 computed :math:`\Chi^2`
         """
-        chi2_tot, chi2_dict = chi2.compute_chi2(
-            self.loaded_datasets,
-            self.coefficients.value,
-            self.use_quad,
-        )
         self.counter += 1
-        if (self.counter % print_rate) == 0:
+        print_log = (self.counter % print_rate) == 0
+
+        if print_log:
+            chi2_tot, chi2_dict = chi2.compute_chi2(
+                self.loaded_datasets, self.coefficients.value, self.use_quad, True
+            )
             console = Console()
             console.print(self.generate_chi2_table(chi2_dict, chi2_tot))
+        else:
+            chi2_tot = chi2.compute_chi2(
+                self.loaded_datasets,
+                self.coefficients.value,
+                self.use_quad,
+            )
         return chi2_tot

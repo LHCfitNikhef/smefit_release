@@ -93,6 +93,6 @@ class TestPredictions:
             self.dataset, self.wilson_coeff, True
         )
         np.testing.assert_allclose(
-            chi2.compute_chi2(self.dataset, self.wilson_coeff, True)[0],
+            chi2.compute_chi2(self.dataset, self.wilson_coeff, True),
             diff @ np.linalg.inv(self.covmat) @ diff,
         )

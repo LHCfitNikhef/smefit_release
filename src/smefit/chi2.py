@@ -3,10 +3,12 @@
 """
 Module for the computation of chi-squared values
 """
+import re
+
 from . import compute_theory as pr
 
 
-def compute_chi2(dataset, coefficients_values, use_quad):
+def compute_chi2(dataset, coefficients_values, use_quad, compute_per_dataset=False):
     r"""
     Compute the chi2
     Will need to be modified when implementing training validation split.
@@ -19,6 +21,8 @@ def compute_chi2(dataset, coefficients_values, use_quad):
             |EFT| coefficients values
         use_quad: bool
             if True include also |HO| corrections
+        compute_per_dataset: bool
+            if True returns the :math:`\Chi^2` per dataset
 
     Returns
     -------
@@ -38,11 +42,13 @@ def compute_chi2(dataset, coefficients_values, use_quad):
     chi2_total = chi2_vect @ diff
 
     # chi2 per dataset
-    chi2_dict = {}
-    cnt = 0
-    for data_name, ndat in zip(dataset.ExpNames, dataset.NdataExp):
-        chi2_dict[data_name] = float(
-            chi2_vect[cnt : cnt + ndat] @ diff[cnt : cnt + ndat] / ndat
-        )
-        cnt += ndat
-    return chi2_total, chi2_dict
+    if compute_per_dataset:
+        chi2_dict = {}
+        cnt = 0
+        for data_name, ndat in zip(dataset.ExpNames, dataset.NdataExp):
+            chi2_dict[data_name] = float(
+                chi2_vect[cnt : cnt + ndat] @ diff[cnt : cnt + ndat] / ndat
+            )
+            cnt += ndat
+        return chi2_total, chi2_dict
+    return chi2_total
