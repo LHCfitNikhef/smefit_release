@@ -6,8 +6,7 @@ from rich.style import Style
 from rich.table import Table
 
 from .. import chi2
-
-print_rate = 5000
+from ..loader import get_dataset
 
 
 class Optimizer:
@@ -27,6 +26,8 @@ class Optimizer:
 
     """
 
+    print_rate = 1
+
     # TODO: docstring
 
     def __init__(self, results_path, loaded_datasets, coefficients, use_quad):
@@ -44,15 +45,26 @@ class Optimizer:
         return self.coefficients.free_parameters
 
     def generate_chi2_table(self, chi2_dict, chi2_tot):
+        r"""Generate log :math:`\Chi^2` table"""
         table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
         table.add_column("Dataset", style="bold green", no_wrap=True)
-        table.add_column("Chi^2 /N_dat")
-        for name, val in chi2_dict.items():
-            table.add_row(str(name), f"{val:.3}")
-        table.add_row("Total", f"{(chi2_tot/self.npts):.3}")
+
+        if isinstance(chi2_tot, float):
+            table.add_column("Chi^2 /N_dat")
+            for name, val in chi2_dict.items():
+                table.add_row(str(name), f"{val:.3}")
+            table.add_row("Total", f"{(chi2_tot/self.npts):.3}")
+        else:
+            table.add_column("Chi Tr/N_dat")
+            table.add_column("Chi Val/N_dat")
+            for name, val in chi2_dict.items():
+                table.add_row(str(name), f"{val[0]:.3}")
+                table.add_row(str(name), f"{val[1]:.3}")
+            table.add_row("Total", f"{(chi2_tot[0]/self.npts):.3}")
+            table.add_row("Total", f"{(chi2_tot[1]/self.npts):.3}")
         return table
 
-    def chi2_func(self, use_replica=False, is_training=True):
+    def chi2_func(self, use_replica=False):
         r"""
         Wrap the math:`\Chi^2` in a function for the optimizer. Pass noise and
         data info as args. Log the math:`\Chi^2` value and values of the coefficients.
@@ -63,19 +75,26 @@ class Optimizer:
                 computed :math:`\Chi^2`
         """
         self.counter += 1
-        print_log = (self.counter % print_rate) == 0
+        print_log = (self.counter % self.print_rate) == 0
 
-        # if print_log:
-        #     chi2_tot, chi2_dict = chi2.compute_chi2(
-        #         self.loaded_datasets, self.coefficients.value, self.use_quad, use_replica, is_training, True
-        #     )
-        #     console = Console()
-        #     console.print(self.generate_chi2_table(chi2_dict, chi2_tot))
-        # else:
         chi2_tot = chi2.compute_chi2(
             self.loaded_datasets,
             self.coefficients.value,
             self.use_quad,
             use_replica,
         )
+
+        if print_log:
+            chi2_dict = {}
+            for data_name in self.loaded_datasets.ExpNames:
+                dataset = get_dataset(self.loaded_datasets, data_name)
+                chi2_dict[data_name] = chi2.compute_chi2(
+                    dataset,
+                    self.coefficients.value,
+                    self.use_quad,
+                    use_replica,
+                )
+            console = Console()
+            console.print(self.generate_chi2_table(chi2_dict, chi2_tot))
+
         return chi2_tot

@@ -304,7 +304,7 @@ class Loader:
     def training_mask(self):
         if self.n_data < 5:
             return np.full(self.n_data, True)
-        return np.array(np.round(np.random.rand(self.n_data),0),dtype=bool)
+        return np.array(np.round(np.random.rand(self.n_data), 0), dtype=bool)
 
 
 def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None):
@@ -478,5 +478,28 @@ def load_datasets(
         np.array(n_data_exp),
         np.linalg.inv(covmat),
         replica,
-        np.array(training_mask)
+        np.array(training_mask),
+    )
+
+
+def get_dataset(datasets, data_name):
+
+    idx = np.where(datasets.ExpNames == data_name)[0][0]
+    ndata = datasets.NdataExp[idx]
+    posix_in = datasets.NdataExp[:idx].sum()
+    posix_out = posix_in + ndata
+
+    return DataTuple(
+        datasets.Commondata[posix_in:posix_out],
+        datasets.SMTheory[posix_in:posix_out],
+        datasets.OperatorsNames,
+        datasets.LinearCorrections[posix_in:posix_out],
+        datasets.QuadraticCorrections[posix_in:posix_out]
+        if datasets.QuadraticCorrections is not None
+        else None,
+        data_name,
+        ndata,
+        datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],
+        datasets.Replica[posix_in:posix_out],
+        datasets.TrainingMask[posix_in:posix_out],
     )

@@ -39,6 +39,8 @@ class NSOptimizer(Optimizer):
             evidence tolerance
     """
 
+    print_rate = 5000
+
     def __init__(
         self,
         loaded_datasets,

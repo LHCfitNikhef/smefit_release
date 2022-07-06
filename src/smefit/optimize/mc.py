@@ -3,17 +3,10 @@
 """
 Fitting the Wilson coefficients with MC
 """
-import json
-import os
-import time
-import warnings
 import copy
-import numpy as np
+import json
+
 import scipy.optimize as opt
-
-
-from mpi4py import MPI
-from pymultinest.solve import solve
 
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
@@ -88,7 +81,7 @@ class MCOptimizer(Optimizer):
                 f"{missing_operators} not in the theory. Comment it out in setup script and restart."
             )
         coefficients = CoefficientManager.from_dict(config["coefficients"])
-        
+
         return cls(
             loaded_datasets,
             coefficients,
@@ -97,18 +90,16 @@ class MCOptimizer(Optimizer):
             config["result_ID"],
         )
 
-
     def get_status(self, chi2):
 
         if len(self.cost_values) == 0:
             self.cost_values.append(chi2)
-        
+
         if chi2 < self.cost_values[-1]:
             self.cost_values.append(chi2)
             self.coeff_steps.append(copy.deepcopy(self.free_parameters.value))
             print(chi2)
             self.epoch += 1
-
 
     def chi2_func_mc(self, params):
         """
@@ -132,18 +123,22 @@ class MCOptimizer(Optimizer):
 
         return current_chi2
 
-
     def run_sampling(self):
         """Run the minimization with Nested Sampling"""
 
         print("running...")
-        bounds = [(self.free_parameters.minimum[i], self.free_parameters.maximum[i]) for i in range(0,self.free_parameters.value.size)]
+        bounds = [
+            (self.free_parameters.minimum[i], self.free_parameters.maximum[i])
+            for i in range(0, self.free_parameters.value.size)
+        ]
         scipy_min = opt.minimize(
-            self.chi2_func_mc, self.free_parameters.value, method="trust-constr", bounds=bounds
+            self.chi2_func_mc,
+            self.free_parameters.value,
+            method="trust-constr",
+            bounds=bounds,
         )
         # t1 = time.time()
 
-        
         # t2 = time.time()
 
         # print("Time = ", (t2 - t1) / 60.0, "\n")
@@ -152,7 +147,6 @@ class MCOptimizer(Optimizer):
         # for par, col in zip(self.free_parameters, result["samples"].T):
         #     print(f"{par.op_name} : {col.mean():3f} +- {col.std():3f}")
         # print(f"Number of samples: {result['samples'].shape[0]}")
-
 
         # if rank == 0:
         #     self.save(result)
