@@ -2,11 +2,11 @@
 
 import json
 import pathlib
-import yaml
 from collections import namedtuple
 
 import numpy as np
 import pandas as pd
+import yaml
 
 from .basis_rotation import rotate_to_fit_basis
 from .covmat import build_large_covmat, construct_covmat

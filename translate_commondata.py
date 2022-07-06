@@ -1,9 +1,10 @@
-import yaml
-import json
+# -*- coding: utf-8 -*-
 import pathlib
-import numpy as np
+import sys
 
-old_commondata_path = pathlib.Path("/data/theorie/tgiani/SMEFT/code/tables/commondata")
+import numpy as np
+import yaml
+
 new_commondata_path = pathlib.Path(__file__).parent / "commondata"
 
 
@@ -44,13 +45,14 @@ def load_data(dataset):
             skip_header=1,
             dtype="str",
         )
-    else: 
+    else:
         type_sys = np.array([])
         name_sys = np.array([])
     return central_values, num_data, num_sys, stat_error, sys_add, type_sys, name_sys
 
 
 if __name__ == "__main__":
+    old_commondata_path = pathlib.Path(sys.argv[1])
     datasets = [
         "ATLAS_tt_8TeV_ljets_Mtt",
         "ATLAS_tt_8TeV_dilep_Mtt",
@@ -130,22 +132,30 @@ if __name__ == "__main__":
         "LEP_eeWW_189GeV",
         "LEP_eeWW_198GeV",
         "LEP_eeWW_206GeV",
-    ] 
+    ]
 
     for dataset in datasets:
 
-        print(f'Converting dataset: {dataset}')
-        central_values, num_data, num_sys, stat_error, sys_add, type_sys, name_sys = load_data(dataset)
-        exp_name = {'dataset_name': dataset}
-        num_data = {'num_data': num_data.tolist()}
-        num_sys = {'num_sys': num_sys.tolist()}
-        data_central_yaml = {'data_central' : central_values.tolist()}
-        stat = {'statistical_error' : stat_error.tolist()}
-        sys = {'systematics' : sys_add.tolist()}
-        sys_names = {'sys_names': name_sys.tolist()}
-        sys_type = {'sys_type': type_sys.tolist()}
+        print(f"Converting dataset: {dataset}")
+        (
+            central_values,
+            num_data,
+            num_sys,
+            stat_error,
+            sys_add,
+            type_sys,
+            name_sys,
+        ) = load_data(dataset)
+        exp_name = {"dataset_name": dataset}
+        num_data = {"num_data": num_data.tolist()}
+        num_sys = {"num_sys": num_sys.tolist()}
+        data_central_yaml = {"data_central": central_values.tolist()}
+        stat = {"statistical_error": stat_error.tolist()}
+        sys = {"systematics": sys_add.tolist()}
+        sys_names = {"sys_names": name_sys.tolist()}
+        sys_type = {"sys_type": type_sys.tolist()}
 
-        with open(f'{new_commondata_path}/{dataset}.yaml', 'w') as file:
+        with open(f"{new_commondata_path}/{dataset}.yaml", "w") as file:
             yaml.dump(exp_name, file, sort_keys=False)
             yaml.dump(num_data, file, sort_keys=False)
             yaml.dump(num_sys, file, sort_keys=False)
@@ -154,4 +164,3 @@ if __name__ == "__main__":
             yaml.dump(sys, file, sort_keys=False)
             yaml.dump(sys_names, file, sort_keys=False)
             yaml.dump(sys_type, file, sort_keys=False)
-
