@@ -8,6 +8,7 @@ import yaml
 from mpi4py import MPI
 
 from .optimize.ns import NSOptimizer
+from .optimize.mc import MCOptimizer
 
 
 class Runner:
@@ -113,4 +114,13 @@ class Runner:
 
         # Run optimizer
         opt = comm.bcast(opt, root=0)
+        opt.run_sampling()
+
+    def mc(self):
+        """
+        Run a fit with MC
+        """
+        print("RUNNING: MonteCarlo Fit")
+        config = self.run_card
+        opt = MCOptimizer.from_dict(config)
         opt.run_sampling()

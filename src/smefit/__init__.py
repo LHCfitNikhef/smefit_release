@@ -21,6 +21,9 @@ def run(runcard_folder, mode, fit_card):
     if mode == "NS":
         runner = Runner.from_file(runcard_folder, fit_card)
         runner.ns()
+    elif mode == "MC":
+        runner = Runner.from_file(runcard_folder, fit_card)
+        runner.mc()
     elif mode == "R":
         run_report(runcard_folder, fit_card)
     else:

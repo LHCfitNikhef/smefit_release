@@ -361,6 +361,7 @@ DataTuple = namedtuple(
         "ExpNames",
         "NdataExp",
         "InvCovMat",
+        "Replica",
     ),
 )
 
@@ -456,6 +457,7 @@ def load_datasets(
 
     # Construct unique large cov matrix dropping correlations between different datasets
     covmat = build_large_covmat(chi2_covmat, n_data_tot, n_data_exp)
+    replica = np.random.multivariate_normal(exp_data, covmat)
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
         exp_data,
@@ -466,4 +468,5 @@ def load_datasets(
         np.array(exp_name),
         np.array(n_data_exp),
         np.linalg.inv(covmat),
+        replica,
     )
