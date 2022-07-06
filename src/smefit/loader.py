@@ -302,9 +302,9 @@ class Loader:
 
     @property
     def training_mask(self):
-        if self.n_dat < 5:
-            return np.full(self.n_dat, True)
-        return np.array(np.round(np.random.rand(self.n_dat),0),dtype=bool)
+        if self.n_data < 5:
+            return np.full(self.n_data, True)
+        return np.array(np.round(np.random.rand(self.n_data),0),dtype=bool)
 
 
 def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None):
@@ -440,7 +440,7 @@ def load_datasets(
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
         quad_corr_list.append([dataset.n_data, dataset.quad_corrections])
         chi2_covmat.append(dataset.covmat)
-        training_mask.append(dataset.training_mask)
+        training_mask.extend(dataset.training_mask)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size

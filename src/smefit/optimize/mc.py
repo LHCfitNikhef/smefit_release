@@ -7,7 +7,10 @@ import json
 import os
 import time
 import warnings
+import copy
 import numpy as np
+import scipy.optimize as opt
+
 
 from mpi4py import MPI
 from pymultinest.solve import solve
@@ -45,6 +48,9 @@ class MCOptimizer(Optimizer):
         )
         self.npar = self.free_parameters.size
         self.result_ID = result_ID
+        self.cost_values = []
+        self.coeff_steps = []
+        self.epoch = 0
 
     @classmethod
     def from_dict(cls, config):
@@ -91,6 +97,19 @@ class MCOptimizer(Optimizer):
             config["result_ID"],
         )
 
+
+    def get_status(self, chi2):
+
+        if len(self.cost_values) == 0:
+            self.cost_values.append(chi2)
+        
+        if chi2 < self.cost_values[-1]:
+            self.cost_values.append(chi2)
+            self.coeff_steps.append(copy.deepcopy(self.free_parameters.value))
+            print(chi2)
+            self.epoch += 1
+
+
     def chi2_func_mc(self, params):
         """
         Wrap the chi2 in a function for the optimizer. Pass noise and
@@ -108,14 +127,20 @@ class MCOptimizer(Optimizer):
         """
         self.free_parameters.value = params
         self.coefficients.set_constraints()
+        current_chi2 = self.chi2_func(True)[0]
+        self.get_status(current_chi2)
 
-        return self.chi2_func(True)
+        return current_chi2
 
 
     def run_sampling(self):
         """Run the minimization with Nested Sampling"""
 
         print("running...")
+        bounds = [(self.free_parameters.minimum[i], self.free_parameters.maximum[i]) for i in range(0,self.free_parameters.value.size)]
+        scipy_min = opt.minimize(
+            self.chi2_func_mc, self.free_parameters.value, method="trust-constr", bounds=bounds
+        )
         # t1 = time.time()
 
         

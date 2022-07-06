@@ -39,11 +39,12 @@ def compute_chi2(dataset, coefficients_values, use_quad, use_replica, compute_pe
     theory_predictions = pr.make_predictions(dataset, coefficients_values, use_quad)
     # compute experimental central values - theory
     if use_replica:
-        mask = dataset.training_mask
+        #import pdb; pdb.set_trace()
+        mask = dataset.TrainingMask
         diff_tr = dataset.Replica[mask] - theory_predictions[mask]
         invcovmat_tr = dataset.InvCovMat[mask].T[mask]
 
-        mask = ~dataset.training_mask
+        mask = ~dataset.TrainingMask
         diff_val = dataset.Replica[mask] - theory_predictions[mask]
         invcovmat_val = dataset.InvCovMat[mask].T[mask]
 
