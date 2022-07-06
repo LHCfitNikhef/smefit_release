@@ -300,6 +300,12 @@ class Loader:
         """
         return self.dataspec["quad_corrections"]
 
+    @property
+    def training_mask(self):
+        if self.n_dat < 5:
+            return np.full(self.n_dat, True)
+        return np.array(np.round(np.random.rand(self.n_dat),0),dtype=bool)
+
 
 def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None):
     """
@@ -362,6 +368,7 @@ DataTuple = namedtuple(
         "NdataExp",
         "InvCovMat",
         "Replica",
+        "TrainingMask",
     ),
 )
 
@@ -407,6 +414,7 @@ def load_datasets(
     chi2_covmat = []
     n_data_exp = []
     exp_name = []
+    training_mask = []
 
     Loader.commondata_path = pathlib.Path(commondata_path)
     if theory_path is not None:
@@ -432,6 +440,7 @@ def load_datasets(
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
         quad_corr_list.append([dataset.n_data, dataset.quad_corrections])
         chi2_covmat.append(dataset.covmat)
+        training_mask.append(dataset.training_mask)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
@@ -469,4 +478,5 @@ def load_datasets(
         np.array(n_data_exp),
         np.linalg.inv(covmat),
         replica,
+        np.array(training_mask)
     )

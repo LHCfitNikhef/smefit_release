@@ -52,7 +52,7 @@ class Optimizer:
         table.add_row("Total", f"{(chi2_tot/self.npts):.3}")
         return table
 
-    def chi2_func(self, use_replica=False):
+    def chi2_func(self, use_replica=False, is_training=True):
         r"""
         Wrap the math:`\Chi^2` in a function for the optimizer. Pass noise and
         data info as args. Log the math:`\Chi^2` value and values of the coefficients.
@@ -65,17 +65,17 @@ class Optimizer:
         self.counter += 1
         print_log = (self.counter % print_rate) == 0
 
-        if print_log:
-            chi2_tot, chi2_dict = chi2.compute_chi2(
-                self.loaded_datasets, self.coefficients.value, self.use_quad, use_replica, True
-            )
-            console = Console()
-            console.print(self.generate_chi2_table(chi2_dict, chi2_tot))
-        else:
-            chi2_tot = chi2.compute_chi2(
-                self.loaded_datasets,
-                self.coefficients.value,
-                self.use_quad,
-                use_replica,
-            )
+        # if print_log:
+        #     chi2_tot, chi2_dict = chi2.compute_chi2(
+        #         self.loaded_datasets, self.coefficients.value, self.use_quad, use_replica, is_training, True
+        #     )
+        #     console = Console()
+        #     console.print(self.generate_chi2_table(chi2_dict, chi2_tot))
+        # else:
+        chi2_tot = chi2.compute_chi2(
+            self.loaded_datasets,
+            self.coefficients.value,
+            self.use_quad,
+            use_replica,
+        )
         return chi2_tot
