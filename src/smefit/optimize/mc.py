@@ -35,18 +35,21 @@ class MCOptimizer(Optimizer):
         result_path,
         use_quad,
         result_ID,
+        replica,
     ):
         super().__init__(
             f"{result_path}/{result_ID}", loaded_datasets, coefficients, use_quad
         )
         self.npar = self.free_parameters.size
         self.result_ID = result_ID
-        self.cost_values = []
+        self.chi2_tr_values = []
+        self.chi2_val_values = []
         self.coeff_steps = []
+        self.replica = replica
         self.epoch = 0
 
     @classmethod
-    def from_dict(cls, config):
+    def from_dict(cls, config, replica):
         """
         Create object from theory dictionary.
 
@@ -88,17 +91,18 @@ class MCOptimizer(Optimizer):
             config["result_path"],
             config["use_quad"],
             config["result_ID"],
+            replica,
         )
 
-    def get_status(self, chi2):
+    def get_status(self, chi2_tr, chi2_val):
 
-        if len(self.cost_values) == 0:
-            self.cost_values.append(chi2)
+        if len(self.chi2_tr_values) == 0:
+            self.chi2_tr_values.append(chi2_tr)
 
-        if chi2 < self.cost_values[-1]:
-            self.cost_values.append(chi2)
-            self.coeff_steps.append(copy.deepcopy(self.free_parameters.value))
-            print(chi2)
+        if chi2_tr < self.chi2_tr_values[-1]:
+            self.chi2_tr_values.append(chi2_tr)
+            self.chi2_val_values.append(chi2_val)
+            self.coeff_steps.append(self.free_parameters.value)
             self.epoch += 1
 
     def chi2_func_mc(self, params):
@@ -118,15 +122,14 @@ class MCOptimizer(Optimizer):
         """
         self.free_parameters.value = params
         self.coefficients.set_constraints()
-        current_chi2 = self.chi2_func(True)[0]
-        self.get_status(current_chi2)
+        current_chi2_tr, current_chi2_val = self.chi2_func(True)
+        self.get_status(current_chi2_tr, current_chi2_val)
 
-        return current_chi2
+        return current_chi2_tr
 
-    def run_sampling(self):
+    def run_sampling(self, use_lookback=True):
         """Run the minimization with Nested Sampling"""
 
-        print("running...")
         bounds = [
             (self.free_parameters.minimum[i], self.free_parameters.maximum[i])
             for i in range(0, self.free_parameters.value.size)
@@ -137,25 +140,22 @@ class MCOptimizer(Optimizer):
             method="trust-constr",
             bounds=bounds,
         )
-        # t1 = time.time()
 
-        # t2 = time.time()
+        if use_lookback:
+            # find minimum of chi2_val and its position
+            min_chi2_val = min(self.chi2_val_values)
+            index = self.chi2_val_values.index(min_chi2_val)
+            # select corresponding coeffs values
+            best_values = self.coeff_steps[index]
+        else:
+            best_values = np.array(scipy_min.x)
 
-        # print("Time = ", (t2 - t1) / 60.0, "\n")
-        # print(f"evidence: {result['logZ']:1f} +- {result['logZerr']:1f} \n")
-        # print("parameter values:")
-        # for par, col in zip(self.free_parameters, result["samples"].T):
-        #     print(f"{par.op_name} : {col.mean():3f} +- {col.std():3f}")
-        # print(f"Number of samples: {result['samples'].shape[0]}")
-
-        # if rank == 0:
-        #     self.save(result)
-        #     self.clean()
+        return best_values
 
     def save(self, result):
         """
-        Save |NS| replicas to json inside a dictionary:
-        {coff: [replicas values]}
+        Save MC replicas to json inside a dictionary:
+        {coff: replica values}
 
         Parameters
         ----------
@@ -165,16 +165,13 @@ class MCOptimizer(Optimizer):
         """
         # TODO: move to __init__?
         values = {}
-        for c in self.coefficients.op_name:
-            values[c] = []
+        for c, value in zip(self.coefficients.op_name, result):
+            values[c] = value
 
-        for sample in result["samples"]:
-
-            self.coefficients.free_parameters.value = sample
-            self.coefficients.set_constraints()
-
-            for c in self.coefficients.op_name:
-                values[c].append(float(self.coefficients.get_from_name(c).value))
-
-        with open(self.results_path / "posterior.json", "w", encoding="utf-8") as f:
+        with open(
+            self.results_path
+            / f"replica_{self.replica}/coefficients_rep_{self.replica}.json",
+            "w",
+            encoding="utf-8",
+        ) as f:
             json.dump(values, f)

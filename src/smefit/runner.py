@@ -26,7 +26,7 @@ class Runner:
             path to runcard folder if already present
     """
 
-    def __init__(self, run_card, runcard_folder=None):
+    def __init__(self, run_card, replica=None, runcard_folder=None):
 
         print(20 * "  ", r" ____  __  __ _____ _____ _ _____ ")
         print(20 * "  ", r"/ ___||  \/  | ____|  ___(_)_   _|")
@@ -38,6 +38,7 @@ class Runner:
 
         self.run_card = run_card
         self.runcard_folder = runcard_folder
+        self.replica = replica
         self.setup_result_folder()
 
     def setup_result_folder(self):
@@ -48,7 +49,10 @@ class Runner:
         run_card_name = self.run_card["runcard_name"]
         run_card_id = self.run_card["result_ID"]
         result_folder = pathlib.Path(self.run_card["result_path"])
-        res_folder_fit = result_folder / run_card_id
+        if self.replica is not None:
+            res_folder_fit = result_folder / run_card_id / f"replica_{self.replica}"
+        else:
+            res_folder_fit = result_folder / run_card_id
 
         subprocess.call(f"mkdir -p {result_folder}", shell=True)
         if res_folder_fit.exists():
@@ -57,7 +61,7 @@ class Runner:
 
         # Copy yaml runcard to results folder or dump it
         # in case no given file is passed
-        runcard_copy = res_folder_fit / f"{run_card_id}.yaml"
+        runcard_copy = result_folder / run_card_id / f"{run_card_id}.yaml"
         if self.runcard_folder is None:
             with open(runcard_copy, encoding="utf-8") as f:
                 yaml.dump(self.run_card, f, default_flow_style=False)
@@ -68,7 +72,7 @@ class Runner:
             )
 
     @classmethod
-    def from_file(cls, runcard_folder, run_card_name):
+    def from_file(cls, runcard_folder, run_card_name, replica=None):
         """
         Create Runner from a runcard file
 
@@ -95,7 +99,7 @@ class Runner:
         if "result_ID" not in config:
             config["result_ID"] = run_card_name
 
-        return cls(config, runcard_folder)
+        return cls(config, replica, runcard_folder)
 
     def ns(self):
         """
@@ -122,5 +126,6 @@ class Runner:
         """
         print("RUNNING: MonteCarlo Fit")
         config = self.run_card
-        opt = MCOptimizer.from_dict(config)
-        opt.run_sampling()
+        opt = MCOptimizer.from_dict(config, self.replica)
+        result = opt.run_sampling()
+        opt.save(result)

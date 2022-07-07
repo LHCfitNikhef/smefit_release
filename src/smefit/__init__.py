@@ -3,7 +3,7 @@ from .analyze import run_report
 from .runner import Runner
 
 
-def run(runcard_folder, mode, fit_card):
+def run(runcard_folder, mode, fit_card, replica=None):
     """
     Run the |SMEFiT| package
 
@@ -22,8 +22,13 @@ def run(runcard_folder, mode, fit_card):
         runner = Runner.from_file(runcard_folder, fit_card)
         runner.ns()
     elif mode == "MC":
-        runner = Runner.from_file(runcard_folder, fit_card)
-        runner.mc()
+        if replica is not None:
+            runner = Runner.from_file(runcard_folder, fit_card, replica)
+            runner.mc()
+        else:
+            raise ValueError(
+                "Montecarlo method requires to select replica number. Usage: -n replica_number"
+            )
     elif mode == "R":
         run_report(runcard_folder, fit_card)
     else:
