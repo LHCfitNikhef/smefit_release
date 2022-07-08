@@ -49,7 +49,7 @@ class MCOptimizer(Optimizer):
         self.epoch = 0
 
     @classmethod
-    def from_dict(cls, config, replica):
+    def from_dict(cls, config):
         """
         Create object from theory dictionary.
 
@@ -91,7 +91,7 @@ class MCOptimizer(Optimizer):
             config["result_path"],
             config["use_quad"],
             config["result_ID"],
-            replica,
+            config["replica"],
         )
 
     def get_status(self, chi2_tr, chi2_val):

@@ -26,7 +26,7 @@ class Runner:
             path to runcard folder if already present
     """
 
-    def __init__(self, run_card, replica=None, runcard_folder=None):
+    def __init__(self, run_card, runcard_folder=None):
 
         print(20 * "  ", r" ____  __  __ _____ _____ _ _____ ")
         print(20 * "  ", r"/ ___||  \/  | ____|  ___(_)_   _|")
@@ -38,7 +38,6 @@ class Runner:
 
         self.run_card = run_card
         self.runcard_folder = runcard_folder
-        self.replica = replica
         self.setup_result_folder()
 
     def setup_result_folder(self):
@@ -49,8 +48,10 @@ class Runner:
         run_card_name = self.run_card["runcard_name"]
         run_card_id = self.run_card["result_ID"]
         result_folder = pathlib.Path(self.run_card["result_path"])
-        if self.replica is not None:
-            res_folder_fit = result_folder / run_card_id / f"replica_{self.replica}"
+        if self.run_card["replica"] is not None:
+            res_folder_fit = (
+                result_folder / run_card_id / f"replica_{self.run_card['replica']}"
+            )
         else:
             res_folder_fit = result_folder / run_card_id
 
@@ -95,11 +96,12 @@ class Runner:
             config = yaml.safe_load(f)
 
         config["runcard_name"] = run_card_name
+        config["replica"] = replica
         # set result ID to runcard name by default
         if "result_ID" not in config:
             config["result_ID"] = run_card_name
 
-        return cls(config, replica, runcard_folder)
+        return cls(config, runcard_folder)
 
     def ns(self):
         """
@@ -126,6 +128,6 @@ class Runner:
         """
         print("RUNNING: MonteCarlo Fit")
         config = self.run_card
-        opt = MCOptimizer.from_dict(config, self.replica)
+        opt = MCOptimizer.from_dict(config)
         result = opt.run_sampling()
         opt.save(result)
