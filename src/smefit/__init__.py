@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from .analyze import run_report
+from .postfit import Postfit
 from .runner import Runner
 
 
@@ -29,7 +30,15 @@ def run(runcard_folder, mode, fit_card, replica=None):
             raise ValueError(
                 "Montecarlo method requires to select replica number. Usage: -n replica_number"
             )
+    elif mode == "PF":
+        if replica is not None:
+            postfit = Postfit.from_file(runcard_folder, fit_card)
+            postfit.save(replica)
+        else:
+            raise ValueError(
+                "PostFit method requires to select the number of replicas. Usage: -n replicas_number"
+            )
     elif mode == "R":
         run_report(runcard_folder, fit_card)
     else:
-        raise NotImplementedError(f"MODE={mode} is not valid, chose between R, NS.")
+        raise NotImplementedError(f"MODE={mode} is not valid, chose between NS, MC, PF and R.")

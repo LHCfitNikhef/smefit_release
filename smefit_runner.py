@@ -16,7 +16,7 @@ if __name__ == "__main__":
         required=True,
         default=None,
         type=str,
-        help="mode: NS (Nested Sampling), MC (MonteCarlo) R (Fit Report)",
+        help="mode: NS (Nested Sampling), MC (MonteCarlo), PF (PostFit), R (Fit Report)",
     )
     parser.add_argument(
         "-f",
@@ -33,7 +33,7 @@ if __name__ == "__main__":
         required=False,
         default=None,
         type=int,
-        help="number of replicas, only for McFit",
+        help="number of replicas, only for McFit and PostFit",
     )
     parser.add_argument(
         "-p",

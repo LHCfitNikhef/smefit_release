@@ -140,10 +140,11 @@ class MCOptimizer(Optimizer):
             bounds=bounds,
         )
 
+        final_chi2 = self.chi2_values[-1] / self.npts
         best_values = np.array(scipy_min.x)
-        return best_values
+        return best_values, final_chi2
 
-    def save(self, result):
+    def save(self, result, chi2):
         """
         Save MC replicas to json inside a dictionary:
         {coff: replica values}
@@ -156,6 +157,7 @@ class MCOptimizer(Optimizer):
         """
         # TODO: move to __init__?
         values = {}
+        values["chi2"] = chi2
         for c, value in zip(self.coefficients.op_name, result):
             values[c] = value
 
