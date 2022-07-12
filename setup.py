@@ -58,6 +58,7 @@ def setup_package():
             "mpi4py",
             "pymultinest",
             "PyPDF2",
+            "scipy",
         ],
         python_requires=">=3.7",
     )
