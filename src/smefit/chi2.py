@@ -6,7 +6,7 @@ Module for the computation of chi-squared values
 from . import compute_theory as pr
 
 
-def compute_chi2(dataset, coefficients_values, use_quad):
+def compute_chi2(dataset, coefficients_values, use_quad, use_replica=False):
     r"""
     Compute the chi2
     Will need to be modified when implementing training validation split.
@@ -32,6 +32,10 @@ def compute_chi2(dataset, coefficients_values, use_quad):
     theory_predictions = pr.make_predictions(dataset, coefficients_values, use_quad)
 
     # compute experimental central values - theory
-    diff = dataset.Commondata - theory_predictions
+    if use_replica:
+        diff = dataset.Replica - theory_predictions
+    else:
+        diff = dataset.Commondata - theory_predictions
+
     invcovmat = dataset.InvCovMat
     return diff @ invcovmat @ diff

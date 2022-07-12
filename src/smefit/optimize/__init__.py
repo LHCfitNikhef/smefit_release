@@ -48,15 +48,15 @@ class Optimizer:
         r"""Generate log :math:`\Chi^2` table"""
         table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
         table.add_column("Dataset", style="bold green", no_wrap=True)
-        
+
         table.add_column("Chi^2 /N_dat")
         for name, val in chi2_dict.items():
             table.add_row(str(name), f"{val:.3}")
         table.add_row("Total", f"{(chi2_tot/self.npts):.3}")
-        
+
         return table
 
-    def chi2_func(self):
+    def chi2_func(self, use_replica=False):
         r"""
         Wrap the math:`\Chi^2` in a function for the optimizer. Pass noise and
         data info as args. Log the math:`\Chi^2` value and values of the coefficients.
@@ -73,6 +73,7 @@ class Optimizer:
             self.loaded_datasets,
             self.coefficients.value,
             self.use_quad,
+            use_replica,
         )
 
         if print_log:
@@ -84,6 +85,7 @@ class Optimizer:
                         dataset,
                         self.coefficients.value,
                         self.use_quad,
+                        use_replica,
                     )
                     / dataset.NdataExp
                 )

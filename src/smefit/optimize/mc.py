@@ -121,7 +121,7 @@ class MCOptimizer(Optimizer):
         """
         self.free_parameters.value = params
         self.coefficients.set_constraints()
-        current_chi2 = self.chi2_func()
+        current_chi2 = self.chi2_func(True)
         self.get_status(current_chi2)
 
         return current_chi2
@@ -140,7 +140,6 @@ class MCOptimizer(Optimizer):
             bounds=bounds,
         )
 
-        
         best_values = np.array(scipy_min.x)
         return best_values
 
