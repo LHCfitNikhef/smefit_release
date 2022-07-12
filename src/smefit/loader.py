@@ -300,12 +300,6 @@ class Loader:
         """
         return self.dataspec["quad_corrections"]
 
-    @property
-    def training_mask(self):
-        if self.n_data < 5:
-            return np.full(self.n_data, True)
-        return np.array(np.round(np.random.rand(self.n_data), 0), dtype=bool)
-
 
 def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None):
     """
@@ -368,7 +362,6 @@ DataTuple = namedtuple(
         "NdataExp",
         "InvCovMat",
         "Replica",
-        "TrainingMask",
     ),
 )
 
@@ -414,7 +407,6 @@ def load_datasets(
     chi2_covmat = []
     n_data_exp = []
     exp_name = []
-    training_mask = []
 
     Loader.commondata_path = pathlib.Path(commondata_path)
     if theory_path is not None:
@@ -440,7 +432,6 @@ def load_datasets(
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
         quad_corr_list.append([dataset.n_data, dataset.quad_corrections])
         chi2_covmat.append(dataset.covmat)
-        training_mask.extend(dataset.training_mask)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
@@ -478,7 +469,6 @@ def load_datasets(
         np.array(n_data_exp),
         np.linalg.inv(covmat),
         replica,
-        np.array(training_mask),
     )
 
 
@@ -501,5 +491,4 @@ def get_dataset(datasets, data_name):
         ndata,
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],
         datasets.Replica[posix_in:posix_out],
-        datasets.TrainingMask[posix_in:posix_out],
     )

@@ -6,6 +6,7 @@ Fitting the Wilson coefficients with MC
 import copy
 import json
 
+import numpy as np
 import scipy.optimize as opt
 
 from ..coefficients import CoefficientManager
@@ -42,8 +43,7 @@ class MCOptimizer(Optimizer):
         )
         self.npar = self.free_parameters.size
         self.result_ID = result_ID
-        self.chi2_tr_values = []
-        self.chi2_val_values = []
+        self.chi2_values = []
         self.coeff_steps = []
         self.replica = replica
         self.epoch = 0
@@ -94,14 +94,13 @@ class MCOptimizer(Optimizer):
             config["replica"],
         )
 
-    def get_status(self, chi2_tr, chi2_val):
+    def get_status(self, chi2):
 
-        if len(self.chi2_tr_values) == 0:
-            self.chi2_tr_values.append(chi2_tr)
+        if len(self.chi2_values) == 0:
+            self.chi2_values.append(chi2)
 
-        if chi2_tr < self.chi2_tr_values[-1]:
-            self.chi2_tr_values.append(chi2_tr)
-            self.chi2_val_values.append(chi2_val)
+        if chi2 < self.chi2_values[-1]:
+            self.chi2_values.append(chi2)
             self.coeff_steps.append(self.free_parameters.value)
             self.epoch += 1
 
@@ -122,12 +121,12 @@ class MCOptimizer(Optimizer):
         """
         self.free_parameters.value = params
         self.coefficients.set_constraints()
-        current_chi2_tr, current_chi2_val = self.chi2_func(True)
-        self.get_status(current_chi2_tr, current_chi2_val)
+        current_chi2 = self.chi2_func()
+        self.get_status(current_chi2)
 
-        return current_chi2_tr
+        return current_chi2
 
-    def run_sampling(self, use_lookback=True):
+    def run_sampling(self):
         """Run the minimization with Nested Sampling"""
 
         bounds = [
@@ -141,15 +140,8 @@ class MCOptimizer(Optimizer):
             bounds=bounds,
         )
 
-        if use_lookback:
-            # find minimum of chi2_val and its position
-            min_chi2_val = min(self.chi2_val_values)
-            index = self.chi2_val_values.index(min_chi2_val)
-            # select corresponding coeffs values
-            best_values = self.coeff_steps[index]
-        else:
-            best_values = np.array(scipy_min.x)
-
+        
+        best_values = np.array(scipy_min.x)
         return best_values
 
     def save(self, result):
