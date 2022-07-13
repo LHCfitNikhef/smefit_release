@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from . import analyze, optimize, runner, version
+from . import analyze, optimize, runner
