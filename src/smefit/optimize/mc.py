@@ -3,7 +3,6 @@
 """
 Fitting the Wilson coefficients with MC
 """
-import copy
 import json
 
 import numpy as np
@@ -41,8 +40,6 @@ class MCOptimizer(Optimizer):
         super().__init__(
             f"{result_path}/{result_ID}", loaded_datasets, coefficients, use_quad
         )
-        self.npar = self.free_parameters.size
-        self.result_ID = result_ID
         self.chi2_values = []
         self.coeff_steps = []
         self.replica = replica
