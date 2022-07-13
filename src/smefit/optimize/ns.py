@@ -267,7 +267,6 @@ class NSOptimizer(Optimizer):
                 result dictionary
 
         """
-        # TODO: move to __init__?
         values = {}
         for c in self.coefficients.op_name:
             values[c] = []

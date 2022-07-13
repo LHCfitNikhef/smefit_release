@@ -152,7 +152,6 @@ class MCOptimizer(Optimizer):
                 result dictionary
 
         """
-        # TODO: move to __init__?
         values = {}
         values["chi2"] = chi2
         for c, value in zip(self.coefficients.op_name, result):

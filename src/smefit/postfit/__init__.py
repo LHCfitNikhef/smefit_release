@@ -1,12 +1,15 @@
+# -*- coding: utf-8 -*-
 import json
-import yaml
+import os
+import os.path
 import pathlib
-import os, os.path
+
 import numpy as np
+import yaml
 
 
 class Postfit:
-    def __init__(self, run_card, runcard_folder):
+    def __init__(self, run_card, chi2_threshold=3.0):
 
         self.results_folder = (
             pathlib.Path(run_card["result_path"]) / run_card["result_ID"]
@@ -14,6 +17,7 @@ class Postfit:
         self.finished_replicas = len(
             [name for name in os.listdir(self.results_folder) if "replica_" in name]
         )
+        self.chi2_threshold = chi2_threshold
 
     @classmethod
     def from_file(cls, runcard_folder, run_card_name):
@@ -36,24 +40,24 @@ class Postfit:
         postfit_res = []
 
         if nrep > self.finished_replicas:
-            print(f"Only {self.finished_replicas} available")
-            exit(1)
+            raise ValueError(f"Only {self.finished_replicas} available")
 
         for rep in range(1, nrep + 1):
             rep_res = []
             with open(
-                self.results_folder / f"replica_{rep}/coefficients_rep_{rep}.json"
+                self.results_folder / f"replica_{rep}/coefficients_rep_{rep}.json",
+                encoding="utf-8",
             ) as f:
                 res = json.load(f)
 
             if len(postfit_res) == 0:
                 coeffs = res.keys()
 
-            if res["chi2"] > 3.0:
+            if res["chi2"] > self.chi2_threshold:
                 continue
 
             del res["chi2"]
-            for coeff in res.keys():
+            for coeff in res:
                 rep_res.append(res[coeff])
 
             postfit_res.append(rep_res)
@@ -70,6 +74,6 @@ class Postfit:
                 posterior[c] = list(np.array(postfit_res).T[i, :])
 
             with open(
-                self.results_folder / "posterior_mc.json", "w", encoding="utf-8"
+                self.results_folder / "posterior.json", "w", encoding="utf-8"
             ) as f:
                 json.dump(posterior, f)
