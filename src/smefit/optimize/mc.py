@@ -3,6 +3,7 @@
 """
 Fitting the Wilson coefficients with MC
 """
+import copy
 import json
 
 import numpy as np
@@ -101,7 +102,7 @@ class MCOptimizer(Optimizer):
             self.coeff_steps.append(self.free_parameters.value)
             self.epoch += 1
 
-    def chi2_func_mc(self, params):
+    def chi2_func_mc(self, params, print_log=True):
         """
         Wrap the chi2 in a function for the optimizer. Pass noise and
         data info as args. Log the chi2 value and values of the coefficients.
@@ -118,19 +119,41 @@ class MCOptimizer(Optimizer):
         """
         self.free_parameters.value = params
         self.coefficients.set_constraints()
-        current_chi2 = self.chi2_func(True)
+        current_chi2 = self.chi2_func(True, print_log)
         self.get_status(current_chi2)
 
         return current_chi2
 
+    def chi2_scan(self):
+        """Individual chi2 scan"""
+        free_temp = copy.deepcopy(self.free_parameters)
+        for coeff in free_temp:
+            coeff.is_free = False
+            coeff.value = 0.0
+
+        def regularized_chi2_func(xs):
+            roots = []
+            for x in xs:
+                coeff.value = x
+                chi2 = self.chi2_func_mc(free_temp.value, print_log=False)
+                roots.append(chi2 / self.npts - 2.0)
+            return roots
+
+        bounds = []
+        for coeff in free_temp:
+            coeff.is_free = True
+            roots = opt.fsolve(regularized_chi2_func, [-50, 50], xtol=1e-6)
+            bounds.append(roots)
+            coeff.is_free = False
+            print(f"Chi^2 scan terminated, found bounds for {coeff.op_name}: {roots}")
+        return bounds
+
     def run_sampling(self):
         """Run the minimization with Nested Sampling"""
 
-        bounds = [
-            (self.free_parameters.minimum[i], self.free_parameters.maximum[i])
-            for i in range(0, self.free_parameters.value.size)
-        ]
-        scipy_min = opt.minimize(
+        bounds = self.chi2_scan()
+        # TODO: other minimization options?
+        opt.minimize(
             self.chi2_func_mc,
             self.free_parameters.value,
             method="trust-constr",

@@ -56,7 +56,7 @@ class Optimizer:
 
         return table
 
-    def chi2_func(self, use_replica=False):
+    def chi2_func(self, use_replica=False, print_log=True):
         r"""
         Wrap the math:`\Chi^2` in a function for the optimizer. Pass noise and
         data info as args. Log the math:`\Chi^2` value and values of the coefficients.
@@ -67,7 +67,8 @@ class Optimizer:
                 computed :math:`\Chi^2`
         """
         self.counter += 1
-        print_log = (self.counter % self.print_rate) == 0
+        if print_log:
+            print_log = (self.counter % self.print_rate) == 0
 
         chi2_tot = chi2.compute_chi2(
             self.loaded_datasets,
