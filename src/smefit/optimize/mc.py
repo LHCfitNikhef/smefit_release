@@ -125,7 +125,8 @@ class MCOptimizer(Optimizer):
         return current_chi2
 
     def chi2_scan(self):
-        """Individual chi2 scan"""
+        r"""Individual :math:`\Chi^2` scan"""
+        # set all the coefficients to 0 and fixed
         free_temp = copy.deepcopy(self.free_parameters)
         for coeff in free_temp:
             coeff.is_free = False
@@ -135,17 +136,20 @@ class MCOptimizer(Optimizer):
             roots = []
             for x in xs:
                 coeff.value = x
-                chi2 = self.chi2_func_mc(free_temp.value, print_log=False)
+                chi2 = self.chi2_func_mc(free_temp.value, print_log=True)
                 roots.append(chi2 / self.npts - 2.0)
             return roots
 
+        # fin the bound for each coefficient
         bounds = []
         for coeff in free_temp:
             coeff.is_free = True
             roots = opt.fsolve(regularized_chi2_func, [-50, 50], xtol=1e-6)
             bounds.append(roots)
             coeff.is_free = False
-            print(f"Chi^2 scan terminated, found bounds for {coeff.op_name}: {roots}")
+            coeff.value = 0.0
+            print(f"Chi^2 scan, bounds for {coeff.op_name}: {roots}")
+
         return bounds
 
     def run_sampling(self):
