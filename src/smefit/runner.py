@@ -129,5 +129,5 @@ class Runner:
         print("RUNNING: MonteCarlo Fit")
         config = self.run_card
         opt = MCOptimizer.from_dict(config)
-        result, final_chi2 = opt.run_sampling()
-        opt.save(result, final_chi2)
+        opt.run_sampling()
+        opt.save()

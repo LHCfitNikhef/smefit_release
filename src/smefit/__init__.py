@@ -41,4 +41,6 @@ def run(runcard_folder, mode, fit_card, replica=None):
     elif mode == "R":
         run_report(runcard_folder, fit_card)
     else:
-        raise NotImplementedError(f"MODE={mode} is not valid, chose between NS, MC, PF and R.")
+        raise NotImplementedError(
+            f"MODE={mode} is not valid, chose between NS, MC, PF and R."
+        )

@@ -204,6 +204,10 @@ class CoefficientManager(np.ndarray):
 
                 free_dofs = []
                 for fixed_name in add_factor_dict:
+                    if self.get_from_name(fixed_name).value.size == 0:
+                        raise ValueError(
+                            f"The operator {fixed_name} is used as a contrain but it is not specified"
+                        )
                     free_dofs.append(float(self.get_from_name(fixed_name).value))
 
                 # matrix with multiplicative factors and exponents
