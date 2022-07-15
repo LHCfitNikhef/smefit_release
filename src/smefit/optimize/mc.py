@@ -9,6 +9,7 @@ import json
 import numpy as np
 import scipy.optimize as opt
 
+from ..chi2 import compute_chi2
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
@@ -126,30 +127,42 @@ class MCOptimizer(Optimizer):
 
     def chi2_scan(self):
         r"""Individual :math:`\Chi^2` scan"""
+
         # set all the coefficients to 0 and fixed
-        free_temp = copy.deepcopy(self.free_parameters)
-        for coeff in free_temp:
+        coefficient_temp = copy.deepcopy(self.coefficients)
+        for coeff in coefficient_temp:
             coeff.is_free = False
             coeff.value = 0.0
 
+        # chi2 - 2 == 0
         def regularized_chi2_func(xs):
             roots = []
             for x in xs:
                 coeff.value = x
-                chi2 = self.chi2_func_mc(free_temp.value, print_log=True)
+                coefficient_temp.set_constraints()
+                chi2 = compute_chi2(
+                    self.loaded_datasets,
+                    coefficient_temp.value,
+                    self.use_quad,
+                    False,
+                )
                 roots.append(chi2 / self.npts - 2.0)
             return roots
 
         # fin the bound for each coefficient
         bounds = []
-        for coeff in free_temp:
+        for coeff in coefficient_temp:
+            if coeff not in self.free_parameters:
+                continue
             coeff.is_free = True
-            roots = opt.fsolve(regularized_chi2_func, [-50, 50], xtol=1e-6)
+            roots = opt.fsolve(
+                regularized_chi2_func, [-1000, 1000], xtol=1e-6, maxfev=400
+            )
             bounds.append(roots)
             coeff.is_free = False
             coeff.value = 0.0
+            coefficient_temp.set_constraints()
             print(f"Chi^2 scan, bounds for {coeff.op_name}: {roots}")
-
         return bounds
 
     def run_sampling(self):
