@@ -168,13 +168,13 @@ class MCOptimizer(Optimizer):
     def run_sampling(self):
         """Run the minimization with Nested Sampling"""
 
-        bounds = self.chi2_scan()
+        #bounds = self.chi2_scan()
         # TODO: other minimization options?
         opt.minimize(
             self.chi2_func_mc,
             self.free_parameters.value,
             method="trust-constr",
-            bounds=bounds,
+            bounds=None,
         )
 
     def save(self):
