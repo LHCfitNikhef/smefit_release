@@ -24,8 +24,6 @@ def compute_chi2(dataset, coefficients_values, use_quad, use_replica=False):
     -------
         chi2_total : float
             :math:`\Chi^2` value
-        chi2_dict : dict
-            reduced :math:`\Chi^2` value for each dataset
     """
 
     # compute theory prediction for each point in the dataset

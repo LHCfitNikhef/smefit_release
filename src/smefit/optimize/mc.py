@@ -3,11 +3,13 @@
 """
 Fitting the Wilson coefficients with MC
 """
+import copy
 import json
 
 import numpy as np
 import scipy.optimize as opt
 
+from ..chi2 import compute_chi2
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
@@ -101,7 +103,7 @@ class MCOptimizer(Optimizer):
             self.coeff_steps.append(self.free_parameters.value)
             self.epoch += 1
 
-    def chi2_func_mc(self, params):
+    def chi2_func_mc(self, params, print_log=True):
         """
         Wrap the chi2 in a function for the optimizer. Pass noise and
         data info as args. Log the chi2 value and values of the coefficients.
@@ -118,30 +120,64 @@ class MCOptimizer(Optimizer):
         """
         self.free_parameters.value = params
         self.coefficients.set_constraints()
-        current_chi2 = self.chi2_func(True)
+        current_chi2 = self.chi2_func(True, print_log)
         self.get_status(current_chi2)
 
         return current_chi2
 
+    def chi2_scan(self):
+        r"""Individual :math:`\Chi^2` scan"""
+
+        # set all the coefficients to 0 and fixed
+        coefficient_temp = copy.deepcopy(self.coefficients)
+        for coeff in coefficient_temp:
+            coeff.is_free = False
+            coeff.value = 0.0
+
+        # chi2 - 2 == 0
+        def regularized_chi2_func(xs):
+            roots = []
+            for x in xs:
+                coeff.value = x
+                coefficient_temp.set_constraints()
+                chi2 = compute_chi2(
+                    self.loaded_datasets,
+                    coefficient_temp.value,
+                    self.use_quad,
+                    False,
+                )
+                roots.append(chi2 / self.npts - 2.0)
+            return roots
+
+        # fin the bound for each coefficient
+        bounds = []
+        for coeff in coefficient_temp:
+            if coeff not in self.free_parameters:
+                continue
+            coeff.is_free = True
+            roots = opt.fsolve(
+                regularized_chi2_func, [-1000, 1000], xtol=1e-6, maxfev=400
+            )
+            bounds.append(roots)
+            coeff.is_free = False
+            coeff.value = 0.0
+            coefficient_temp.set_constraints()
+            print(f"Chi^2 scan, bounds for {coeff.op_name}: {roots}")
+        return bounds
+
     def run_sampling(self):
         """Run the minimization with Nested Sampling"""
 
-        bounds = [
-            (self.free_parameters.minimum[i], self.free_parameters.maximum[i])
-            for i in range(0, self.free_parameters.value.size)
-        ]
-        scipy_min = opt.minimize(
+        #bounds = self.chi2_scan()
+        # TODO: other minimization options?
+        opt.minimize(
             self.chi2_func_mc,
             self.free_parameters.value,
             method="trust-constr",
-            bounds=bounds,
+            bounds=None,
         )
 
-        final_chi2 = self.chi2_values[-1] / self.npts
-        best_values = np.array(scipy_min.x)
-        return best_values, final_chi2
-
-    def save(self, result, chi2):
+    def save(self):
         """
         Save MC replicas to json inside a dictionary:
         {coff: replica values}
@@ -153,8 +189,8 @@ class MCOptimizer(Optimizer):
 
         """
         values = {}
-        values["chi2"] = chi2
-        for c, value in zip(self.coefficients.op_name, result):
+        values["chi2"] = self.chi2_values[-1] / self.npts
+        for c, value in zip(self.coefficients.op_name, self.coefficients.value):
             values[c] = value
 
         with open(

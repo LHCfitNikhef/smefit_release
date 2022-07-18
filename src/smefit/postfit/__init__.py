@@ -33,7 +33,7 @@ class Postfit:
         if "result_ID" not in config:
             config["result_ID"] = run_card_name
 
-        return cls(config, runcard_folder)
+        return cls(config)
 
     def save(self, nrep):
 

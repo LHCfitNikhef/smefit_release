@@ -114,7 +114,7 @@ class Loader:
             name_sys = data_dict["sys_names"]
 
             # express systematics as percentage values of the central values
-            sys_mult = abs(sys_add / central_values * 1e2)
+            sys_mult = sys_add / central_values * 1e2
 
             # Identify add and mult systematics
             # and replace the mult ones with corresponding value computed
@@ -129,7 +129,6 @@ class Loader:
                 * central_values
                 * 1e-2
             )
-
             # Build dataframe with shape (N_data * N_sys) and systematic name as the
             # column headers and construct covmat
 
@@ -458,6 +457,7 @@ def load_datasets(
     # Construct unique large cov matrix dropping correlations between different datasets
     covmat = build_large_covmat(chi2_covmat, n_data_tot, n_data_exp)
     replica = np.random.multivariate_normal(exp_data, covmat)
+    # import pdb; pdb.set_trace()
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
         exp_data,
