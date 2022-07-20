@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
-import os
-import os.path
 import pathlib
+import shutil
 
 import numpy as np
 import yaml
@@ -12,11 +11,13 @@ class Postfit:
     def __init__(self, run_card, chi2_threshold=3.0):
 
         self.results_folder = (
-            pathlib.Path(run_card["result_path"]) / run_card["result_ID"]
+            pathlib.Path(run_card["result_path"]).absolute() / run_card["result_ID"]
         )
-        self.finished_replicas = len(
-            [name for name in os.listdir(self.results_folder) if "replica_" in name]
-        )
+        self.finished_replicas = 0
+        for name in self.results_folder.iterdir():
+            if "replica_" in str(name):
+                self.finished_replicas += 1
+
         self.chi2_threshold = chi2_threshold
 
     @classmethod
@@ -77,3 +78,8 @@ class Postfit:
                 self.results_folder / "posterior.json", "w", encoding="utf-8"
             ) as f:
                 json.dump(posterior, f)
+
+    def clean(self):
+        for replica_folder in self.results_folder.iterdir():
+            if "replica_" in str(replica_folder):
+                shutil.rmtree(replica_folder)

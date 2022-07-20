@@ -374,6 +374,7 @@ def load_datasets(
     use_theory_covmat,
     theory_path=None,
     rot_to_fit_basis=None,
+    has_uv_coupligs=False,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
@@ -435,8 +436,11 @@ def load_datasets(
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
+    sorted_keys = None
+    if has_uv_coupligs:
+        sorted_keys = np.unique((*operators_to_keep,))
     operators_names, lin_corr_values = construct_corrections_matrix(
-        lin_corr_list, n_data_tot
+        lin_corr_list, n_data_tot, sorted_keys
     )
 
     if use_quad:
@@ -457,7 +461,6 @@ def load_datasets(
     # Construct unique large cov matrix dropping correlations between different datasets
     covmat = build_large_covmat(chi2_covmat, n_data_tot, n_data_exp)
     replica = np.random.multivariate_normal(exp_data, covmat)
-    # import pdb; pdb.set_trace()
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
         exp_data,

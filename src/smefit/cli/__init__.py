@@ -30,6 +30,7 @@ fit_card = click.option(
 n_replica = click.option(
     "-n",
     "--n_replica",
+    type=int,
     default=None,
     required=True,
     help="Number of the replica",
@@ -57,9 +58,19 @@ def monte_carlo_fit(runcard_path, fit_card, n_replica):
 @runcard_path
 @fit_card
 @n_replica
-def post_fit(runcard_path, fit_card, n_replica):
+@click.option(
+    "-c",
+    "--clean_rep",
+    is_flag=True,
+    default=False,
+    required=False,
+    help="remove the replica file",
+)
+def post_fit(runcard_path, fit_card, n_replica, clean_rep):
     postfit = Postfit.from_file(runcard_path, fit_card)
     postfit.save(n_replica)
+    if clean_rep:
+        postfit.clean()
 
 
 @base_command.command("R")

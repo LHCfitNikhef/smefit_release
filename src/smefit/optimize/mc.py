@@ -72,6 +72,7 @@ class MCOptimizer(Optimizer):
             config["use_theory_covmat"],
             config["theory_path"] if "theory_path" in config else None,
             config["rot_to_fit_basis"] if "rot_to_fit_basis" in config else None,
+            config["uv_coupligs"] if "uv_coupligs" in config else False,
         )
 
         missing_operators = []
@@ -168,13 +169,15 @@ class MCOptimizer(Optimizer):
     def run_sampling(self):
         """Run the minimization with Nested Sampling"""
 
-        #bounds = self.chi2_scan()
+        bounds = np.array(
+            [self.free_parameters.minimum, self.free_parameters.maximum]
+        ).T
         # TODO: other minimization options?
         opt.minimize(
             self.chi2_func_mc,
             self.free_parameters.value,
             method="trust-constr",
-            bounds=None,
+            bounds=bounds,
         )
 
     def save(self):
@@ -190,7 +193,9 @@ class MCOptimizer(Optimizer):
         """
         values = {}
         values["chi2"] = self.chi2_values[-1] / self.npts
+        print("Saving best values: ")
         for c, value in zip(self.coefficients.op_name, self.coefficients.value):
+            print(f"{c} = {value}")
             values[c] = value
 
         with open(

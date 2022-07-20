@@ -88,6 +88,7 @@ class NSOptimizer(Optimizer):
             config["use_theory_covmat"],
             config["theory_path"] if "theory_path" in config else None,
             config["rot_to_fit_basis"] if "rot_to_fit_basis" in config else None,
+            config["uv_coupligs"] if "uv_coupligs" in config else False,
         )
 
         missing_operators = []
