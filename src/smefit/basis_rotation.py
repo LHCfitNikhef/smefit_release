@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """Implement the corrections table basis rotation"""
+import json
 import numpy as np
 import pandas as pd
 
 from .compute_theory import flatten
 
 
-def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix):
+def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix_path):
     """
     Rotate to fitting basis
 
@@ -30,6 +31,10 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix):
             theory dictionary with quadratic operator corrections in the fit
             basis, emptry if quadratic corrections are not used
     """
+    f = open(rotation_matrix_path)
+    rot = json.load(f)
+    rotation_matrix = pd.DataFrame(data=rot['matrix'], index=rot['ypars'], columns=rot['xpars'])
+
     lin_df = pd.DataFrame(lin_dict)
     quad_dict_fit_basis = {}
 
