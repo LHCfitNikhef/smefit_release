@@ -119,7 +119,7 @@ class MCOptimizer(Optimizer):
                 chi2 function
 
         """
-        self.free_parameters.value = params
+        self.coefficients.set_free_parameters(params)
         self.coefficients.set_constraints()
         current_chi2 = self.chi2_func(True, print_log)
         self.get_status(current_chi2)
@@ -163,7 +163,7 @@ class MCOptimizer(Optimizer):
             coeff.is_free = False
             coeff.value = 0.0
             coefficient_temp.set_constraints()
-            print(f"Chi^2 scan, bounds for {coeff.op_name}: {roots}")
+            print(f"Chi^2 scan, bounds for {coeff.name}: {roots}")
         return bounds
 
     def run_sampling(self):
@@ -194,7 +194,7 @@ class MCOptimizer(Optimizer):
         values = {}
         values["chi2"] = self.chi2_values[-1] / self.npts
         print("Saving best values: ")
-        for c, value in zip(self.coefficients.op_name, self.coefficients.value):
+        for c, value in zip(self.coefficients.name, self.coefficients.value):
             print(f"{c} = {value}")
             values[c] = value
 
