@@ -3,6 +3,7 @@
 from collections.abc import Iterable
 
 import numpy as np
+import pandas as pd
 
 
 class Coefficient:
@@ -27,7 +28,7 @@ class Coefficient:
     """
 
     def __init__(self, name, minimum, maximum, value=None, constrain=False):
-        self.op_name = name
+        self.name = name
         self.minimum = minimum
         self.maximum = maximum
 
@@ -38,13 +39,13 @@ class Coefficient:
         if constrain is False:
             if value is not None:
                 raise ValueError(
-                    f"Wilson Coefficient {self.op_name} is free, but a value is specified"
+                    f"Wilson Coefficient {self.name} is free, but a value is specified"
                 )
             self.is_free = True
         elif constrain is True:
             if value is None:
                 raise ValueError(
-                    f"Wilson Coefficient {self.op_name} is fixed, but no value is specified"
+                    f"Wilson Coefficient {self.name} is fixed, but no value is specified"
                 )
         elif isinstance(constrain, dict):
             value = 0.0
@@ -92,20 +93,20 @@ class Coefficient:
         return factor_dict
 
     def __repr__(self):
-        return self.op_name
+        return self.name
 
     def __eq__(self, coeff_other):
-        return self.op_name == coeff_other.op_name
+        return self.name == coeff_other.name
 
     def __lt__(self, coeff_other):
-        return self.op_name < coeff_other.op_name
+        return self.name < coeff_other.name
 
     def __add__(self, coeff_other):
         self.value += coeff_other.value
         return self
 
 
-class CoefficientManager(np.ndarray):
+class CoefficientManager:
     """
     Coefficient objcts manager
 
@@ -116,19 +117,33 @@ class CoefficientManager(np.ndarray):
 
     """
 
-    def __new__(cls, input_array):
-        # Input array is an already formed ndarray instance
-        # We first cast to be our class type
-        obj = np.asarray(input_array, dtype=object).view(cls)
-        # add the new attribute to the created instance
-        # obj.info = info
-        # Finally, we must return the newly created object:
-        return obj
+    def __init__(self, input_array):
+        # all the numerical informations are stored into a DataFrame
+        self._table = pd.DataFrame(
+            np.array([[o.value, o.minimum, o.maximum] for o in input_array], dtype=float),
+            columns=["value", "minimum", "maximum"],
+        )
+        self._table.index = np.array([o.name for o in input_array], dtype=str)
+        self.is_free = np.array([o.is_free for o in input_array], dtype=bool)
 
-    def __array_finalize__(self, obj):
-        # see InfoArray.__array_finalize__ for comments
-        if obj is None:
-            return
+        # NOTE: this will not be updated.
+        self._objlist = input_array
+
+    @property
+    def name(self):
+        return np.array(self._table.index, dtype=str)
+
+    @property
+    def value(self):
+        return self._table.value.values
+
+    @property
+    def minimum(self):
+        return self._table.minimum.values
+
+    @property
+    def maximum(self):
+        return self._table.maximum.values
 
     @classmethod
     def from_dict(cls, coefficient_config):
@@ -162,26 +177,21 @@ class CoefficientManager(np.ndarray):
         # make sure elements are sorted by names
         return cls(np.unique(elements))
 
-    def __getattr__(self, attr):
-        vals = []
-        for obj in self:
-            vals.append(getattr(obj, attr))
-        return np.array(vals)
-
-    def __setattr__(self, attr, value):
-        if not isinstance(value, Iterable):
-            value = [value]
-        for obj, val in zip(self, value):
-            setattr(obj, attr, val)
-
-    def get_from_name(self, item):
-        """Return the single element from the class with the given name"""
-        return self[self.op_name == item]
+    def __getitem__(self, idx):
+        # TODO: shall it restur the object list element?
+        # in that case it has to be updated
+        if isinstance(idx, int):
+            return self._table.iloc[idx]
+        return self._table.loc[idx]
 
     @property
     def free_parameters(self):
-        """Returns the class containing only free parameters"""
-        return self[self.is_free]
+        """Returns the table containing only free parameters"""
+        return self._table[self.is_free]
+
+    def set_free_parameters(self, value):
+        """Set the values of the free parmaters"""
+        self._table.iloc[self.is_free, 0] = value
 
     def set_constraints(self):
         r"""
@@ -193,24 +203,20 @@ class CoefficientManager(np.ndarray):
         """
 
         # loop pn fixed coefficients
-        for coefficient_fixed in self[np.invert(self.is_free)]:
-            temp = 0.0
+        for coefficient_fixed in self._objlist[np.invert(self.is_free)]:
 
             # skip coefficient fixed to a single value
             if coefficient_fixed.constrain is None:
                 continue
 
+            temp = 0.0
             for add_factor_dict in coefficient_fixed.constrain:
 
-                free_dofs = []
-                for fixed_name in add_factor_dict:
-                    if self.get_from_name(fixed_name).value.size == 0:
-                        raise ValueError(
-                            f"The operator {fixed_name} is used as a contrain but it is not specified"
-                        )
-                    free_dofs.append(float(self.get_from_name(fixed_name).value))
+                free_dofs = [
+                    self._table.at[fixed_name, 'value'] for fixed_name in add_factor_dict 
+                ]
 
                 # matrix with multiplicative factors and exponents
-                fact_exp = np.array((*add_factor_dict.values(),))
+                fact_exp = np.array((*add_factor_dict.values(),), dtype=float)
                 temp += np.prod(fact_exp[:, 0] * np.power(free_dofs, fact_exp[:, 1]))
-            self.get_from_name(coefficient_fixed.op_name).value = temp
+            self._table.at[coefficient_fixed.name, 'value'] = temp

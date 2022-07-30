@@ -60,7 +60,7 @@ class NSOptimizer(Optimizer):
         self.efficiency = efficiency
         self.const_efficiency = const_efficiency
         self.tolerance = tolerance
-        self.npar = self.free_parameters.size
+        self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
 
     @classmethod
@@ -160,7 +160,7 @@ class NSOptimizer(Optimizer):
                 chi2 function
 
         """
-        self.free_parameters.value = params
+        self.coefficients.set_free_parameters(params)
         self.coefficients.set_constraints()
 
         return self.chi2_func()
@@ -246,8 +246,8 @@ class NSOptimizer(Optimizer):
         print("Time = ", (t2 - t1) / 60.0, " minutes\n")
         print(f"evidence: {result['logZ']:1f} +- {result['logZerr']:1f} \n")
         print("parameter values:")
-        for par, col in zip(self.free_parameters, result["samples"].T):
-            print(f"{par.op_name} : {col.mean():3f} +- {col.std():3f}")
+        for par, col in zip(self.free_parameters.index, result["samples"].T):
+            print(f"{par} : {col.mean():3f} +- {col.std():3f}")
         print(f"Number of samples: {result['samples'].shape[0]}")
 
         comm = MPI.COMM_WORLD
@@ -269,16 +269,16 @@ class NSOptimizer(Optimizer):
 
         """
         values = {}
-        for c in self.coefficients.op_name:
+        for c in self.coefficients.name:
             values[c] = []
 
         for sample in result["samples"]:
 
-            self.coefficients.free_parameters.value = sample
+            self.coefficients.set_free_parameters(sample)
             self.coefficients.set_constraints()
 
-            for c in self.coefficients.op_name:
-                values[c].append(float(self.coefficients.get_from_name(c).value))
+            for c in self.coefficients.name:
+                values[c].append(self.coefficients[c].value)
 
         with open(self.results_path / "posterior.json", "w", encoding="utf-8") as f:
             json.dump(values, f)

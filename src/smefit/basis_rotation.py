@@ -33,7 +33,9 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix_path):
     """
     f = open(rotation_matrix_path)
     rot = json.load(f)
-    rotation_matrix = pd.DataFrame(data=rot['matrix'], index=rot['ypars'], columns=rot['xpars'])
+    rotation_matrix = pd.DataFrame(
+        data=rot["matrix"], index=rot["ypars"], columns=rot["xpars"]
+    )
 
     lin_df = pd.DataFrame(lin_dict)
     quad_dict_fit_basis = {}
