@@ -33,10 +33,11 @@ python -n NS -f your_runcard_name
 To run smefit in parallel you need to install inside your python environnement:
 
 ```bash
-mpi4py = 3.1.3
+openmpi = 4.1.4 (4.0.2)
+mpi4py = 3.1.3 (3.0.3)
 ```
 
-then you can run doing:
+with python 3.10 (3.9). Then you can run doing:
 
 ```bash
 mpiexec -n number_of_cores python -n NS -f your_runcard_name
