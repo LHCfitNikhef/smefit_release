@@ -3,6 +3,8 @@
 """
 Module for the computation of chi-squared values
 """
+import numpy as np
+
 from . import compute_theory as pr
 
 
@@ -36,4 +38,5 @@ def compute_chi2(dataset, coefficients_values, use_quad, use_replica=False):
         diff = dataset.Commondata - theory_predictions
 
     invcovmat = dataset.InvCovMat
-    return diff @ invcovmat @ diff
+    # note @ is slower when running with mpiexec
+    return np.einsum("i,ij,j->", diff, invcovmat, diff)
