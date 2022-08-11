@@ -43,7 +43,9 @@ class Postfit:
         if nrep > self.finished_replicas:
             raise ValueError(f"Only {self.finished_replicas} available")
 
-        for rep in range(1, nrep + 1):
+        for rep in range(1, self.finished_replicas):
+            if len(postfit_res) == nrep:
+                break
             rep_res = []
             with open(
                 self.results_folder / f"replica_{rep}/coefficients_rep_{rep}.json",
