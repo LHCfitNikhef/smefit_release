@@ -120,7 +120,9 @@ class CoefficientManager:
     def __init__(self, input_array):
         # all the numerical informations are stored into a DataFrame
         self._table = pd.DataFrame(
-            np.array([[o.value, o.minimum, o.maximum] for o in input_array], dtype=float),
+            np.array(
+                [[o.value, o.minimum, o.maximum] for o in input_array], dtype=float
+            ),
             columns=["value", "minimum", "maximum"],
         )
         self._table.index = np.array([o.name for o in input_array], dtype=str)
@@ -213,10 +215,11 @@ class CoefficientManager:
             for add_factor_dict in coefficient_fixed.constrain:
 
                 free_dofs = [
-                    self._table.at[fixed_name, 'value'] for fixed_name in add_factor_dict 
+                    self._table.at[fixed_name, "value"]
+                    for fixed_name in add_factor_dict
                 ]
 
                 # matrix with multiplicative factors and exponents
                 fact_exp = np.array((*add_factor_dict.values(),), dtype=float)
                 temp += np.prod(fact_exp[:, 0] * np.power(free_dofs, fact_exp[:, 1]))
-            self._table.at[coefficient_fixed.name, 'value'] = temp
+            self._table.at[coefficient_fixed.name, "value"] = temp

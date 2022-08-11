@@ -2,6 +2,7 @@
 import pathlib
 
 import click
+from mpi4py import MPI
 
 from ..analyze import run_report
 from ..postfit import Postfit
@@ -41,7 +42,16 @@ n_replica = click.option(
 @runcard_path
 @fit_card
 def nested_sampling(runcard_path, fit_card):
-    runner = Runner.from_file(runcard_path, fit_card)
+
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+
+    if rank == 0:
+        runner = Runner.from_file(runcard_path, fit_card)
+    else:
+        runner = None
+
+    runner = comm.bcast(runner, root=0)
     runner.ns()
 
 

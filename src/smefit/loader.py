@@ -93,7 +93,7 @@ class Loader:
         data_file = self._data_folder / f"{self.setname}.yaml"
         check_file(data_file)
 
-        print(f"Loaging datset : {self.setname}")
+        print(f"Loading datset : {self.setname}")
         with open(data_file, encoding="utf-8") as f:
             data_dict = yaml.safe_load(f)
 

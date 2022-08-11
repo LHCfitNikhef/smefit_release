@@ -42,13 +42,17 @@ def make_predictions(dataset, coefficients_values, use_quad):
     """
 
     # Compute total linear correction
-    summed_corrections = dataset.LinearCorrections @ coefficients_values
+    # note @ is slower when running with mpiexec
+    summed_corrections = np.einsum(
+        "ij,j->i", dataset.LinearCorrections, coefficients_values
+    )
 
     # Compute total quadratic correction
     if use_quad:
         coeff_outer_coeff = np.outer(coefficients_values, coefficients_values)
-        summed_quad_corrections = dataset.QuadraticCorrections @ flatten(
-            coeff_outer_coeff
+        # note @ is slower when running with mpiexec
+        summed_quad_corrections = np.einsum(
+            "ij,j->i", dataset.QuadraticCorrections, flatten(coeff_outer_coeff)
         )
         summed_corrections += summed_quad_corrections
 
