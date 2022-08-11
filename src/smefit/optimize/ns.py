@@ -6,14 +6,18 @@ Fitting the Wilson coefficients with NS
 import json
 import os
 import time
-import warnings
 
 from mpi4py import MPI
 from pymultinest.solve import solve
+from rich.style import Style
+from rich.table import Table
 
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
+from ..log import console, logging
 from . import Optimizer
+
+_logger = logging.getLogger(__name__)
 
 
 class NSOptimizer(Optimizer):
@@ -102,7 +106,7 @@ class NSOptimizer(Optimizer):
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
         if "nlive" not in config:
-            print(
+            _logger.info(
                 "Number of live points (nlive) not set in the input card. Using default: 500"
             )
             nlive = 500
@@ -110,7 +114,7 @@ class NSOptimizer(Optimizer):
             nlive = config["nlive"]
 
         if "efr" not in config:
-            warnings.warn(
+            _logger.warn(
                 "Sampling efficiency (efr) not set in the input card. Using default: 0.01"
             )
             efr = 0.01
@@ -118,7 +122,7 @@ class NSOptimizer(Optimizer):
             efr = config["efr"]
 
         if "ceff" not in config:
-            warnings.warn(
+            _logger.warn(
                 "Constant efficiency mode (ceff) not set in the input card. Using default: False"
             )
             ceff = False
@@ -126,7 +130,7 @@ class NSOptimizer(Optimizer):
             ceff = config["ceff"]
 
         if "toll" not in config:
-            warnings.warn(
+            _logger.warn(
                 "Evidence tolerance (toll) not set in the input card. Using default: 0.5"
             )
             toll = 0.5
@@ -243,12 +247,16 @@ class NSOptimizer(Optimizer):
 
         t2 = time.time()
 
-        print("Time = ", (t2 - t1) / 60.0, " minutes\n")
-        print(f"evidence: {result['logZ']:1f} +- {result['logZerr']:1f} \n")
-        print("parameter values:")
+        _logger.info(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
+        _logger.info(f"Number of samples: {result['samples'].shape[0]}")
+
+        table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
+        table.add_column("Parameter", style="bold red", no_wrap=True)
+        table.add_column("Best value")
+        table.add_column("Error")
         for par, col in zip(self.free_parameters.index, result["samples"].T):
-            print(f"{par} : {col.mean():3f} +- {col.std():3f}")
-        print(f"Number of samples: {result['samples'].shape[0]}")
+            table.add_row(f"{par}", f"{col.mean():.3f}", f"{col.std():.3f}")
+        console.print(table)
 
         comm = MPI.COMM_WORLD
         rank = comm.Get_rank()

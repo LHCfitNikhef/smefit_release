@@ -7,6 +7,7 @@ from rich.table import Table
 
 from .. import chi2
 from ..loader import get_dataset
+from ..log import console
 
 
 class Optimizer:
@@ -26,7 +27,7 @@ class Optimizer:
 
     """
 
-    print_rate = 10
+    print_rate = 100
 
     # TODO: docstring
 
@@ -90,7 +91,6 @@ class Optimizer:
                     )
                     / dataset.NdataExp
                 )
-            console = Console()
             console.print(self.generate_chi2_table(chi2_dict, chi2_tot))
 
         return chi2_tot

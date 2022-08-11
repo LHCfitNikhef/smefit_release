@@ -10,6 +10,9 @@ import yaml
 
 from .basis_rotation import rotate_to_fit_basis
 from .covmat import build_large_covmat, construct_covmat
+from .log import logging
+
+_logger = logging.getLogger(__name__)
 
 
 def check_file(path):
@@ -93,7 +96,7 @@ class Loader:
         data_file = self._data_folder / f"{self.setname}.yaml"
         check_file(data_file)
 
-        print(f"Loading datset : {self.setname}")
+        _logger.info(f"Loading dataset : {self.setname}")
         with open(data_file, encoding="utf-8") as f:
             data_dict = yaml.safe_load(f)
 

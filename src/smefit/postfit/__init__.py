@@ -6,6 +6,10 @@ import shutil
 import numpy as np
 import yaml
 
+from ..log import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class Postfit:
     def __init__(self, run_card, chi2_threshold=3.0):
@@ -66,7 +70,7 @@ class Postfit:
             postfit_res.append(rep_res)
 
         if len(postfit_res) < nrep:
-            print(
+            _logger.warn(
                 f"Only {len(postfit_res)} replicas pass postfit, please run some more"
             )
 

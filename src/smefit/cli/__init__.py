@@ -5,9 +5,14 @@ import click
 from mpi4py import MPI
 
 from ..analyze import run_report
+from ..log import logging, print_banner
 from ..postfit import Postfit
 from ..runner import Runner
 from .base import base_command, root_path
+
+_logger = logging.getLogger(__name__)
+print_banner(_logger)
+
 
 runcard_path = click.option(
     "-p",
@@ -47,6 +52,7 @@ def nested_sampling(runcard_path, fit_card):
     rank = comm.Get_rank()
 
     if rank == 0:
+        _logger.info("Running : Nested Sampling Fit ")
         runner = Runner.from_file(runcard_path, fit_card)
     else:
         runner = None
@@ -60,6 +66,7 @@ def nested_sampling(runcard_path, fit_card):
 @fit_card
 @n_replica
 def monte_carlo_fit(runcard_path, fit_card, n_replica):
+    _logger.info("Running : MonteCarlo Fit")
     runner = Runner.from_file(runcard_path, fit_card, n_replica)
     runner.mc()
 

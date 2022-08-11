@@ -8,11 +8,16 @@ import json
 
 import numpy as np
 import scipy.optimize as opt
+from rich.style import Style
+from rich.table import Table
 
 from ..chi2 import compute_chi2
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
+from ..log import console, logging
 from . import Optimizer
+
+_logger = logging.getLogger(__name__)
 
 
 class MCOptimizer(Optimizer):
@@ -163,7 +168,7 @@ class MCOptimizer(Optimizer):
             coeff.is_free = False
             coeff.value = 0.0
             coefficient_temp.set_constraints()
-            print(f"Chi^2 scan, bounds for {coeff.name}: {roots}")
+            _logger.info(f"Chi^2 scan : bounds for {coeff.name}: {roots}")
         return bounds
 
     def run_sampling(self):
@@ -193,10 +198,13 @@ class MCOptimizer(Optimizer):
         """
         values = {}
         values["chi2"] = self.chi2_values[-1] / self.npts
-        print("Saving best values: ")
-        for c, value in zip(self.coefficients.name, self.coefficients.value):
-            print(f"{c} = {value}")
-            values[c] = value
+        table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
+        table.add_column("Parameter", style="bold red", no_wrap=True)
+        table.add_column("Best value")
+        for par, value in zip(self.coefficients.name, self.coefficients.value):
+            table.add_row(f"{par}", f"{value:.3f}")
+            values[par] = value
+        console.print(table)
 
         with open(
             self.results_path
