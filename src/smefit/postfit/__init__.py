@@ -70,7 +70,7 @@ class Postfit:
             postfit_res.append(rep_res)
 
         if len(postfit_res) < nrep:
-            _logger.warn(
+            _logger.warning(
                 f"Only {len(postfit_res)} replicas pass postfit, please run some more"
             )
 

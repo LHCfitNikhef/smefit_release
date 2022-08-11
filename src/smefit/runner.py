@@ -51,7 +51,7 @@ class Runner:
 
         subprocess.call(f"mkdir -p {result_folder}", shell=True)
         if res_folder_fit.exists():
-            _logger.warn(f"{res_folder_fit} already found, overwriting old results")
+            _logger.warning(f"{res_folder_fit} already found, overwriting old results")
         subprocess.call(f"mkdir -p {res_folder_fit}", shell=True)
 
         # Copy yaml runcard to results folder or dump it

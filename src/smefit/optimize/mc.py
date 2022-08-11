@@ -11,13 +11,11 @@ import scipy.optimize as opt
 from rich.style import Style
 from rich.table import Table
 
+from .. import log
 from ..chi2 import compute_chi2
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
-from ..log import console, logging
 from . import Optimizer
-
-_logger = logging.getLogger(__name__)
 
 
 class MCOptimizer(Optimizer):
@@ -168,7 +166,7 @@ class MCOptimizer(Optimizer):
             coeff.is_free = False
             coeff.value = 0.0
             coefficient_temp.set_constraints()
-            _logger.info(f"Chi^2 scan : bounds for {coeff.name}: {roots}")
+            log.console.log(f"Chi^2 scan : bounds for {coeff.name}: {roots}")
         return bounds
 
     def run_sampling(self):
@@ -204,7 +202,7 @@ class MCOptimizer(Optimizer):
         for par, value in zip(self.coefficients.name, self.coefficients.value):
             table.add_row(f"{par}", f"{value:.3f}")
             values[par] = value
-        console.print(table)
+        log.console.print(table)
 
         with open(
             self.results_path

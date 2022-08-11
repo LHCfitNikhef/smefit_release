@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import pathlib
 
-from rich.console import Console
+from mpi4py import MPI
 from rich.style import Style
 from rich.table import Table
 
-from .. import chi2
+from .. import chi2, log
 from ..loader import get_dataset
-from ..log import console
 
 
 class Optimizer:
@@ -67,9 +66,15 @@ class Optimizer:
             current_chi2 : np.ndarray
                 computed :math:`\Chi^2`
         """
-        self.counter += 1
-        if print_log:
-            print_log = (self.counter % self.print_rate) == 0
+
+        comm = MPI.COMM_WORLD
+        rank = comm.Get_rank()
+        if rank == 0:
+            self.counter += 1
+            if print_log:
+                print_log = (self.counter % self.print_rate) == 0
+        else:
+            print_log = False
 
         chi2_tot = chi2.compute_chi2(
             self.loaded_datasets,
@@ -91,6 +96,6 @@ class Optimizer:
                     )
                     / dataset.NdataExp
                 )
-            console.print(self.generate_chi2_table(chi2_dict, chi2_tot))
+            log.console.print(self.generate_chi2_table(chi2_dict, chi2_tot))
 
         return chi2_tot

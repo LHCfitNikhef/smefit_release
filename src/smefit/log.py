@@ -13,11 +13,19 @@ logging.basicConfig(
     handlers=[RichHandler()],
 )
 
-# TODO: eventually redirect the output to a log file
-console = Console()
+
+def setup_console(logfile):
+    global console
+    if logfile is not None:
+        log_object = open(logfile, "w", encoding="utf-8")
+    else:
+        log_object = None
+    console = Console(
+        file=log_object,
+    )
 
 
-def print_banner(logger):
+def print_banner():
     banner = rich.align.Align(
         rich.panel.Panel.fit(
             inspect.cleandoc(
