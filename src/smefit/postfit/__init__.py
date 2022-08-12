@@ -12,11 +12,9 @@ _logger = logging.getLogger(__name__)
 
 
 class Postfit:
-    def __init__(self, run_card, chi2_threshold=3.0):
+    def __init__(self, result_path, result_ID, chi2_threshold):
 
-        self.results_folder = (
-            pathlib.Path(run_card["result_path"]).absolute() / run_card["result_ID"]
-        )
+        self.results_folder = pathlib.Path(result_path).absolute() / result_ID
         self.finished_replicas = 0
         for name in self.results_folder.iterdir():
             if "replica_" in str(name):
@@ -27,18 +25,20 @@ class Postfit:
     @classmethod
     def from_file(cls, runcard_folder, run_card_name):
 
-        config = {}
         # load file
         runcard_folder = pathlib.Path(runcard_folder)
         with open(runcard_folder / f"{run_card_name}.yaml", encoding="utf-8") as f:
             config = yaml.safe_load(f)
 
-        config["runcard_name"] = run_card_name
         # set result ID to runcard name by default
-        if "result_ID" not in config:
-            config["result_ID"] = run_card_name
+        result_ID = config.get("result_ID", run_card_name)
 
-        return cls(config)
+        # get the chi2_threshold, by default is 3.0
+        if "chi2_threshold" not in config:
+            _logger.warning("chi2_threshold not set, using default value of 3.0")
+        chi2_threshold = config.get("chi2_threshold", 3.0)
+
+        return cls(config["result_path"], result_ID, chi2_threshold)
 
     def save(self, nrep):
 
