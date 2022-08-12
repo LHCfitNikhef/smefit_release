@@ -47,7 +47,7 @@ class Postfit:
         if nrep > self.finished_replicas:
             raise ValueError(f"Only {self.finished_replicas} available")
 
-        for rep in range(1, self.finished_replicas):
+        for rep in range(1, self.finished_replicas + 1):
             if len(postfit_res) == nrep:
                 break
             rep_res = []
@@ -61,6 +61,7 @@ class Postfit:
                 coeffs = res.keys()
 
             if res["chi2"] > self.chi2_threshold:
+                _logger.warning(f"Discarding replica: {rep}")
                 continue
 
             del res["chi2"]

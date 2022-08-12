@@ -91,9 +91,9 @@ class NSOptimizer(Optimizer):
             config["order"],
             config["use_quad"],
             config["use_theory_covmat"],
-            config["theory_path"] if "theory_path" in config else None,
-            config["rot_to_fit_basis"] if "rot_to_fit_basis" in config else None,
-            config["uv_coupligs"] if "uv_coupligs" in config else False,
+            config.get("theory_path", None),
+            config.get("rot_to_fit_basis", None),
+            config.get("uv_coupligs", False),
         )
 
         missing_operators = []

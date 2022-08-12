@@ -173,7 +173,7 @@ class CoefficientManager:
                     property_dict["min"],
                     property_dict["max"],
                     constrain=constrain,
-                    value=property_dict["value"] if "value" in property_dict else None,
+                    value=property_dict.get("value", None),
                 )
             )
         # make sure elements are sorted by names
