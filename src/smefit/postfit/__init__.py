@@ -43,6 +43,7 @@ class Postfit:
     def save(self, nrep):
 
         postfit_res = []
+        chi2_list = []
 
         if nrep > self.finished_replicas:
             raise ValueError(f"Only {self.finished_replicas} available")
@@ -64,12 +65,14 @@ class Postfit:
                 _logger.warning(f"Discarding replica: {rep}")
                 continue
 
+            chi2_list.append(res["chi2"])
             del res["chi2"]
             for coeff in res:
                 rep_res.append(res[coeff])
 
             postfit_res.append(rep_res)
 
+        _logger.info(f"Chi2 average : {np.mean(chi2_list)}")
         if len(postfit_res) < nrep:
             _logger.warning(
                 f"Only {len(postfit_res)} replicas pass postfit, please run some more"

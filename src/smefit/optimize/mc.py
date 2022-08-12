@@ -145,7 +145,7 @@ class MCOptimizer(Optimizer):
                 coeff.value = x
                 coefficient_temp.set_constraints()
                 chi2 = compute_chi2(
-                    self.loaded_datasets,
+                    loaded_datasets_tmp,
                     coefficient_temp.value,
                     self.use_quad,
                     False,
