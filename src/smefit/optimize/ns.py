@@ -15,10 +15,9 @@ from rich.table import Table
 from .. import log
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
-from ..log import logging
 from . import Optimizer
 
-_logger = logging.getLogger(__name__)
+_logger = log.logging.getLogger(__name__)
 
 
 class NSOptimizer(Optimizer):
