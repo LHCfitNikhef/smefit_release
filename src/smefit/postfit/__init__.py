@@ -21,6 +21,7 @@ class Postfit:
                 self.finished_replicas += 1
 
         self.chi2_threshold = chi2_threshold
+        self.not_completed = False
 
     @classmethod
     def from_file(cls, runcard_folder, run_card_name):
@@ -77,6 +78,7 @@ class Postfit:
             _logger.warning(
                 f"Only {len(postfit_res)} replicas pass postfit, please run some more"
             )
+            self.not_completed = True
 
         else:
 
@@ -90,6 +92,9 @@ class Postfit:
                 json.dump(posterior, f)
 
     def clean(self):
+        if self.not_completed:
+            _logger.warning("Cleaning not done, since you don't have enough replicas.")
+            return
         for replica_folder in self.results_folder.iterdir():
             if "replica_" in str(replica_folder):
                 shutil.rmtree(replica_folder)
