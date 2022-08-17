@@ -168,7 +168,7 @@ class Report:
             bounds_dict[fit.label] = compute_confidence_level(
                 fit.results,
                 coeff_plt.coeff_df,
-                double_solution[fit.name] if fit.name in double_solution else None,
+                double_solution.get(fit.name, None),
             )
 
         if scatter_plot is not None:

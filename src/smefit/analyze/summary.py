@@ -1,20 +1,34 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+from ..coefficients import Coefficient
 from .latex_tools import latex_packages, multicolum_table_header
 
 
 def add_bounded_coeff(coeff_dict, coeff_df):
-    """zip fixed values and coefficients"""
+    """Build constrain formula"""
     line = r" & & = "
-    for op, val in zip(coeff_dict["fixed"], coeff_dict["value"]):
-        latex_name = coeff_df[:, op].values[0]
-        sign = "+" if val > 0 else "$-$"
-        line += rf"{sign}\ {np.abs(val):3f}\ {latex_name}"
-        if isinstance(val, dict):
-            for non_lin_op, power in val.items():
-                non_lin_name = coeff_df[:, non_lin_op].values[0]
-                line += rf"\ {non_lin_name}^{power} "
+    temp_c = Coefficient(
+        "temp_c",
+        coeff_dict["min"],
+        coeff_dict["max"],
+        constrain=coeff_dict["constrain"],
+        value=coeff_dict.get("value", None),
+    )
+    if temp_c.constrain is None:
+        fact = temp_c.value
+        sign = "+" if fact >= 0 else "$-$"
+        line += rf"{sign}\ {fact}"
+        return line
+    for constrain in temp_c.constrain:
+        for op, val in constrain.items():
+            fact, exp = val
+            latex_name = coeff_df[:, op].values[0]
+            sign = "+" if fact > 0 else "$-$"
+            if exp > 1:
+                line += rf"{sign}\ {np.abs(fact):.3f}\ $(${latex_name}$)^{exp}$"
+            else:
+                line += rf"{sign}\ {np.abs(fact):.3f}\ {latex_name}"
     return line
 
 
