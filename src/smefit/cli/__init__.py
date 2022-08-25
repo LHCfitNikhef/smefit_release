@@ -2,8 +2,11 @@
 import pathlib
 
 import click
+from mpi4py import MPI
 
+from .. import log
 from ..analyze import run_report
+from ..log import print_banner, setup_console
 from ..postfit import Postfit
 from ..runner import Runner
 from .base import base_command, root_path
@@ -36,12 +39,34 @@ n_replica = click.option(
     help="Number of the replica",
 )
 
+log_file = click.option(
+    "-l",
+    "--log_file",
+    type=click.Path(path_type=pathlib.Path),
+    default=None,
+    required=False,
+    help="path to log file",
+)
+
 
 @base_command.command("NS")
 @runcard_path
 @fit_card
-def nested_sampling(runcard_path, fit_card):
-    runner = Runner.from_file(runcard_path, fit_card)
+@log_file
+def nested_sampling(runcard_path, fit_card, log_file):
+
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+
+    if rank == 0:
+        setup_console(log_file)
+        print_banner()
+        log.console.log("Running : Nested Sampling Fit ")
+        runner = Runner.from_file(runcard_path, fit_card)
+    else:
+        runner = None
+
+    runner = comm.bcast(runner, root=0)
     runner.ns()
 
 
@@ -49,7 +74,11 @@ def nested_sampling(runcard_path, fit_card):
 @runcard_path
 @fit_card
 @n_replica
-def monte_carlo_fit(runcard_path, fit_card, n_replica):
+@log_file
+def monte_carlo_fit(runcard_path, fit_card, n_replica, log_file):
+    setup_console(log_file)
+    print_banner()
+    log.console.log("Running : MonteCarlo Fit")
     runner = Runner.from_file(runcard_path, fit_card, n_replica)
     runner.mc()
 

@@ -5,14 +5,21 @@ Fitting the Wilson coefficients with MC
 """
 import copy
 import json
+import time
 
 import numpy as np
 import scipy.optimize as opt
+from rich.style import Style
+from rich.table import Table
+from scipy.optimize import Bounds
 
+from .. import log
 from ..chi2 import compute_chi2
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
+
+_logger = log.logging.getLogger(__name__)
 
 
 class MCOptimizer(Optimizer):
@@ -38,6 +45,8 @@ class MCOptimizer(Optimizer):
         use_quad,
         result_ID,
         replica,
+        use_bounds,
+        maxiter,
     ):
         super().__init__(
             f"{result_path}/{result_ID}", loaded_datasets, coefficients, use_quad
@@ -46,6 +55,8 @@ class MCOptimizer(Optimizer):
         self.coeff_steps = []
         self.replica = replica
         self.epoch = 0
+        self.use_bounds = use_bounds
+        self.maxiter = maxiter
 
     @classmethod
     def from_dict(cls, config):
@@ -70,9 +81,9 @@ class MCOptimizer(Optimizer):
             config["order"],
             config["use_quad"],
             config["use_theory_covmat"],
-            config["theory_path"] if "theory_path" in config else None,
-            config["rot_to_fit_basis"] if "rot_to_fit_basis" in config else None,
-            config["uv_coupligs"] if "uv_coupligs" in config else False,
+            config.get("theory_path", None),
+            config.get("rot_to_fit_basis", None),
+            config.get("uv_coupligs", False),
         )
 
         missing_operators = []
@@ -85,6 +96,16 @@ class MCOptimizer(Optimizer):
             )
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
+        use_bounds = config.get("use_bounds", True)
+        if not use_bounds:
+            log.console.log("Running minimization without initial bounds")
+
+        maxiter = config.get("maxiter", 1e4)
+        if "maxiter" not in config:
+            _logger.warning(
+                "Number of maximum iterations (maxiter) not set in the input card. Using default: 1e4"
+            )
+
         return cls(
             loaded_datasets,
             coefficients,
@@ -92,6 +113,8 @@ class MCOptimizer(Optimizer):
             config["use_quad"],
             config["result_ID"],
             config["replica"],
+            use_bounds,
+            maxiter,
         )
 
     def get_status(self, chi2):
@@ -119,7 +142,7 @@ class MCOptimizer(Optimizer):
                 chi2 function
 
         """
-        self.free_parameters.value = params
+        self.coefficients.set_free_parameters(params)
         self.coefficients.set_constraints()
         current_chi2 = self.chi2_func(True, print_log)
         self.get_status(current_chi2)
@@ -163,22 +186,27 @@ class MCOptimizer(Optimizer):
             coeff.is_free = False
             coeff.value = 0.0
             coefficient_temp.set_constraints()
-            print(f"Chi^2 scan, bounds for {coeff.op_name}: {roots}")
+            log.console.log(f"Chi^2 scan : bounds for {coeff.name}: {roots}")
         return bounds
 
     def run_sampling(self):
         """Run the minimization with Nested Sampling"""
 
-        bounds = np.array(
-            [self.free_parameters.minimum, self.free_parameters.maximum]
-        ).T
+        t1 = time.time()
+        bounds = None
+        if self.use_bounds:
+            bounds = Bounds(self.free_parameters.minimum, self.free_parameters.maximum)
+
         # TODO: other minimization options?
         opt.minimize(
             self.chi2_func_mc,
             self.free_parameters.value,
             method="trust-constr",
             bounds=bounds,
+            options={"maxiter": self.maxiter},
         )
+        t2 = time.time()
+        log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
 
     def save(self):
         """
@@ -193,10 +221,13 @@ class MCOptimizer(Optimizer):
         """
         values = {}
         values["chi2"] = self.chi2_values[-1] / self.npts
-        print("Saving best values: ")
-        for c, value in zip(self.coefficients.op_name, self.coefficients.value):
-            print(f"{c} = {value}")
-            values[c] = value
+        table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
+        table.add_column("Parameter", style="bold red", no_wrap=True)
+        table.add_column("Best value")
+        for par, value in zip(self.coefficients.name, self.coefficients.value):
+            table.add_row(f"{par}", f"{value:.3f}")
+            values[par] = value
+        log.console.print(table)
 
         with open(
             self.results_path

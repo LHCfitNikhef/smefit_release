@@ -4,7 +4,10 @@ import subprocess
 import yaml
 from PyPDF2 import PdfFileReader, PdfFileWriter
 
+from ..log import logging
 from .report import Report
+
+_logger = logging.getLogger(__name__)
 
 
 def run_report(root_path, report_config):
@@ -19,7 +22,7 @@ def run_report(root_path, report_config):
     with open(f"{root_path}/analyze/{report_config}.yaml", encoding="utf-8") as f:
         report_config = yaml.safe_load(f)
 
-    print(f"ANALYSING: {report_config['result_IDs']}")
+    _logger.info(f"Analysing : {report_config['result_IDs']}")
 
     report_name = report_config["name"]
     report_path = report_config["report_path"]

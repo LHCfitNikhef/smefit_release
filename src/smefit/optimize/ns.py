@@ -6,14 +6,18 @@ Fitting the Wilson coefficients with NS
 import json
 import os
 import time
-import warnings
 
 from mpi4py import MPI
 from pymultinest.solve import solve
+from rich.style import Style
+from rich.table import Table
 
+from .. import log
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
+
+_logger = log.logging.getLogger(__name__)
 
 
 class NSOptimizer(Optimizer):
@@ -60,7 +64,7 @@ class NSOptimizer(Optimizer):
         self.efficiency = efficiency
         self.const_efficiency = const_efficiency
         self.tolerance = tolerance
-        self.npar = self.free_parameters.size
+        self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
 
     @classmethod
@@ -86,9 +90,9 @@ class NSOptimizer(Optimizer):
             config["order"],
             config["use_quad"],
             config["use_theory_covmat"],
-            config["theory_path"] if "theory_path" in config else None,
-            config["rot_to_fit_basis"] if "rot_to_fit_basis" in config else None,
-            config["uv_coupligs"] if "uv_coupligs" in config else False,
+            config.get("theory_path", None),
+            config.get("rot_to_fit_basis", None),
+            config.get("uv_coupligs", False),
         )
 
         missing_operators = []
@@ -102,7 +106,7 @@ class NSOptimizer(Optimizer):
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
         if "nlive" not in config:
-            print(
+            _logger.warning(
                 "Number of live points (nlive) not set in the input card. Using default: 500"
             )
             nlive = 500
@@ -110,7 +114,7 @@ class NSOptimizer(Optimizer):
             nlive = config["nlive"]
 
         if "efr" not in config:
-            warnings.warn(
+            _logger.warning(
                 "Sampling efficiency (efr) not set in the input card. Using default: 0.01"
             )
             efr = 0.01
@@ -118,7 +122,7 @@ class NSOptimizer(Optimizer):
             efr = config["efr"]
 
         if "ceff" not in config:
-            warnings.warn(
+            _logger.warning(
                 "Constant efficiency mode (ceff) not set in the input card. Using default: False"
             )
             ceff = False
@@ -126,7 +130,7 @@ class NSOptimizer(Optimizer):
             ceff = config["ceff"]
 
         if "toll" not in config:
-            warnings.warn(
+            _logger.warning(
                 "Evidence tolerance (toll) not set in the input card. Using default: 0.5"
             )
             toll = 0.5
@@ -160,7 +164,7 @@ class NSOptimizer(Optimizer):
                 chi2 function
 
         """
-        self.free_parameters.value = params
+        self.coefficients.set_free_parameters(params)
         self.coefficients.set_constraints()
 
         return self.chi2_func()
@@ -242,18 +246,23 @@ class NSOptimizer(Optimizer):
         )
 
         t2 = time.time()
-
-        print("Time = ", (t2 - t1) / 60.0, " minutes\n")
-        print(f"evidence: {result['logZ']:1f} +- {result['logZerr']:1f} \n")
-        print("parameter values:")
-        for par, col in zip(self.free_parameters, result["samples"].T):
-            print(f"{par.op_name} : {col.mean():3f} +- {col.std():3f}")
-        print(f"Number of samples: {result['samples'].shape[0]}")
-
         comm = MPI.COMM_WORLD
         rank = comm.Get_rank()
 
         if rank == 0:
+            log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
+            log.console.log(f"Number of samples: {result['samples'].shape[0]}")
+
+            table = Table(
+                style=Style(color="white"), title_style="bold cyan", title=None
+            )
+            table.add_column("Parameter", style="bold red", no_wrap=True)
+            table.add_column("Best value")
+            table.add_column("Error")
+            for par, col in zip(self.free_parameters.index, result["samples"].T):
+                table.add_row(f"{par}", f"{col.mean():.3f}", f"{col.std():.3f}")
+            log.console.print(table)
+
             self.save(result)
             self.clean()
 
@@ -269,16 +278,16 @@ class NSOptimizer(Optimizer):
 
         """
         values = {}
-        for c in self.coefficients.op_name:
+        for c in self.coefficients.name:
             values[c] = []
 
         for sample in result["samples"]:
 
-            self.coefficients.free_parameters.value = sample
+            self.coefficients.set_free_parameters(sample)
             self.coefficients.set_constraints()
 
-            for c in self.coefficients.op_name:
-                values[c].append(float(self.coefficients.get_from_name(c).value))
+            for c in self.coefficients.name:
+                values[c].append(self.coefficients[c].value)
 
         with open(self.results_path / "posterior.json", "w", encoding="utf-8") as f:
             json.dump(values, f)

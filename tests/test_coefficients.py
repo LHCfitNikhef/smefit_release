@@ -37,6 +37,13 @@ coeff_dict = {
         "min": -5,
         "max": 1,
     },
+     "c_g": {  # fixed to -0.2 * c_a * c_b
+        "constrain": [
+            {"c_a": [-0.2, 1.0], "c_b": [1.0, 1.0]}
+        ],
+        "min": -5,
+        "max": 1,
+    },
 }
 
 coeff_dict_free = {
@@ -61,7 +68,7 @@ class TestCoefficient:
 
     def test_init(self):
 
-        assert self.c_test.op_name == self.name
+        assert self.c_test.name == self.name
         assert self.c_test.minimum == self.minimum
         assert self.c_test.maximum == self.maximum
         assert self.c_test.value <= self.maximum and self.c_test.value >= self.minimum
@@ -104,30 +111,33 @@ class TestCoefficientManager:
 
     def test_init(self):
 
-        assert self.c_list[0].op_name == "c_a"
-        np.testing.assert_equal(self.c_list.minimum, [-2, -1, -2, -3, -4, -5])
+        assert self.c_list[0].name == "c_a"
+        np.testing.assert_equal(self.c_list.minimum, [-2, -1, -2, -3, -4, -5, -5])
 
     def test_free_parameters(self):
 
         c_list_free = coefficients.CoefficientManager.from_dict(coeff_dict_free)
-        np.testing.assert_equal(self.c_list.free_parameters, c_list_free)
+        np.testing.assert_equal(self.c_list.free_parameters.index, c_list_free.name)
 
     def test_set_constrains(self):
-        c_a = self.c_list.get_from_name("c_a").value
-        c_b = self.c_list.get_from_name("c_b").value
-        c_c = self.c_list.get_from_name("c_c").value
-        c_d = self.c_list.get_from_name("c_d").value
-        c_e = self.c_list.get_from_name("c_e").value
-        c_f = self.c_list.get_from_name("c_f").value
+        c_a = self.c_list["c_a"].value
+        c_b = self.c_list["c_b"].value
+        c_c = self.c_list["c_c"].value
+        c_d = self.c_list["c_d"].value
+        c_e = self.c_list["c_e"].value
+        c_f = self.c_list["c_f"].value
+        c_g = self.c_list["c_g"].value
 
         np.testing.assert_equal(c_c, 1.0)
         np.testing.assert_equal(c_d, 0.0)
         np.testing.assert_equal(c_e, 0.0)
         np.testing.assert_equal(c_f, 0.0)
+        np.testing.assert_equal(c_g, 0.0)
         self.c_list.set_constraints()
-        c_d = self.c_list.get_from_name("c_d").value
-        c_e = self.c_list.get_from_name("c_e").value
-        c_f = self.c_list.get_from_name("c_f").value
+        c_d = self.c_list["c_d"].value
+        c_e = self.c_list["c_e"].value
+        c_f = self.c_list["c_f"].value
+        c_g = self.c_list["c_g"].value
         bound_d = coeff_dict["c_d"]["constrain"]["c_b"] * c_b
         np.testing.assert_equal(c_d, bound_d)
         bound_e = (
@@ -145,3 +155,10 @@ class TestCoefficientManager:
             + coeff_dict["c_f"]["constrain"][1]["c_a"] * c_a
         )
         np.testing.assert_equal(c_f, bound_f)
+        bound_g = (
+            coeff_dict["c_g"]["constrain"][0]["c_a"][0]
+            * np.power(c_a, coeff_dict["c_g"]["constrain"][0]["c_a"][1])
+            * coeff_dict["c_g"]["constrain"][0]["c_b"][0]
+            * np.power(c_b, coeff_dict["c_g"]["constrain"][0]["c_b"][1])
+        )
+        np.testing.assert_equal(c_g, bound_g)

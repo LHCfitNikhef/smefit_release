@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 import pathlib
 import subprocess
-import warnings
 from shutil import copyfile
 
 import yaml
 from mpi4py import MPI
 
-from .optimize.ns import NSOptimizer
+from .log import logging
 from .optimize.mc import MCOptimizer
+from .optimize.ns import NSOptimizer
+
+_logger = logging.getLogger(__name__)
 
 
 class Runner:
@@ -27,14 +29,6 @@ class Runner:
     """
 
     def __init__(self, run_card, runcard_folder=None):
-
-        print(20 * "  ", r" ____  __  __ _____ _____ _ _____ ")
-        print(20 * "  ", r"/ ___||  \/  | ____|  ___(_)_   _|")
-        print(20 * "  ", r"\___ \| |\/| |  _| | |_  | | | |  ")
-        print(20 * "  ", r" ___) | |  | | |___|  _| | | | |  ")
-        print(20 * "  ", r"|____/|_|  |_|_____|_|   |_| |_|  ")
-        print()
-        print(18 * "  ", "A Standard Model Effective Field Theory Fitter")
 
         self.run_card = run_card
         self.runcard_folder = runcard_folder
@@ -57,7 +51,7 @@ class Runner:
 
         subprocess.call(f"mkdir -p {result_folder}", shell=True)
         if res_folder_fit.exists():
-            warnings.warn(f"{res_folder_fit} already found, overwriting old results")
+            _logger.warning(f"{res_folder_fit} already found, overwriting old results")
         subprocess.call(f"mkdir -p {res_folder_fit}", shell=True)
 
         # Copy yaml runcard to results folder or dump it
@@ -107,8 +101,6 @@ class Runner:
         """
         Run a fit with |NS|
         """
-        print("RUNNING: Nested Sampling Fit ")
-
         comm = MPI.COMM_WORLD
         rank = comm.Get_rank()
 
@@ -126,7 +118,6 @@ class Runner:
         """
         Run a fit with MC
         """
-        print("RUNNING: MonteCarlo Fit")
         config = self.run_card
         opt = MCOptimizer.from_dict(config)
         opt.run_sampling()

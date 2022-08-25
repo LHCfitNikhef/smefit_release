@@ -4,9 +4,12 @@ import pandas as pd
 from matplotlib import rc, use
 
 from ..fit_manager import FitManager
+from ..log import logging
 from .coefficients_utils import CoefficientsPlotter, compute_confidence_level
 from .latex_tools import combine_plots, latex_packages, run_pdflatex
 from .summary import SummaryWriter
+
+_logger = logging.getLogger(__name__)
 
 # global mathplotlib settings
 use("PDF")
@@ -165,17 +168,17 @@ class Report:
             bounds_dict[fit.label] = compute_confidence_level(
                 fit.results,
                 coeff_plt.coeff_df,
-                double_solution[fit.name] if fit.name in double_solution else None,
+                double_solution.get(fit.name, None),
             )
 
         if scatter_plot is not None:
-            print(2 * "  ", "Plotting: Central values and Confidence Level bounds")
+            _logger.info("Plotting : Central values and Confidence Level bounds")
             coeff_plt.plot_coeffs(bounds_dict, **scatter_plot)
 
         # when we plot the 95% CL we show 95% CL for null solutions.
         # the error coming from a degenerate solution is not taken into account.
         if confidence_level_bar is not None:
-            print(2 * "  ", "Plotting: Confidence Level error bars")
+            _logger.info("Plotting : Confidence Level error bars")
             bar_cl = confidence_level_bar["confidence_level"]
             confidence_level_bar.pop("confidence_level")
             zero_sol = 0
@@ -189,14 +192,14 @@ class Report:
             )
 
         if posterior_histograms:
-            print(2 * "  ", "Plotting: Posterior histograms")
+            _logger.info("Plotting : Posterior histograms")
             coeff_plt.plot_posteriors(
                 [fit.results for fit in self.fits],
                 labels=[fit.label for fit in self.fits],
                 disjointed_lists=list((*double_solution.values(),)),
             )
         if table:
-            print(2 * "  ", "Writing: Confidence level table")
+            _logger.info("Writing : Confidence level table")
             lines = coeff_plt.write_cl_table(bounds_dict)
 
         combine_plots(self.report, lines, "coefficient_plots", "Coeffs_")
