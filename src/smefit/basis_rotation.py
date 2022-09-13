@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Implement the corrections table basis rotation"""
 import json
+
 import numpy as np
 import pandas as pd
 
@@ -66,11 +67,8 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix_path):
 
     # flatten the tensor (n_dat, n_op_fit, n_op_fit) -> (n_dat, n_op_fit_pairs)
     new_quad_matrix = []
-    # better way rather than the for loop?
- for correction in new_quad_corrections:
-         new_quad_matrix.append(flatten(correction, axis=1))
-        new_quad_matrix.append(flatten(new_quad_corrections[i],axis=1))
-
+    for correction in new_quad_corrections:
+        new_quad_matrix.append(flatten(correction, axis=1))
     new_quad_matrix = np.array(new_quad_matrix)
 
     matrix_new_keys = []
@@ -84,5 +82,5 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix_path):
 
     for i, new_key in enumerate(new_keys):
         quad_dict_fit_basis[new_key] = new_quad_matrix[:, i]
-    
+
     return lin_dict_fit_basis.to_dict("list"), quad_dict_fit_basis
