@@ -67,7 +67,8 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix_path):
     # flatten the tensor (n_dat, n_op_fit, n_op_fit) -> (n_dat, n_op_fit_pairs)
     new_quad_matrix = []
     # better way rather than the for loop?
-    for i in range(new_quad_corrections.shape[0]):
+ for correction in new_quad_corrections:
+         new_quad_matrix.append(flatten(correction, axis=1))
         new_quad_matrix.append(flatten(new_quad_corrections[i],axis=1))
 
     new_quad_matrix = np.array(new_quad_matrix)
