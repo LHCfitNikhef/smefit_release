@@ -108,6 +108,11 @@ class MCOptimizer(Optimizer):
                 "Number of maximum iterations (maxiter) not set in the input card. Using default: 1e4"
             )
 
+        if "single_parameter_fits" not in config:
+            single_parameter_fits = False
+        else:
+            single_parameter_fits = config["single_parameter_fits"]
+
         return cls(
             loaded_datasets,
             coefficients,
@@ -115,7 +120,7 @@ class MCOptimizer(Optimizer):
             config["use_quad"],
             config["result_ID"],
             config["replica"],
-            config["single_parameter_fits"],
+            single_parameter_fits,
             use_bounds,
             maxiter,
         )

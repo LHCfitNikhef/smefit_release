@@ -107,6 +107,11 @@ class NSOptimizer(Optimizer):
             )
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
+        if "single_parameter_fits" not in config:
+            single_parameter_fits = False
+        else:
+            single_parameter_fits = config["single_parameter_fits"]
+
         if "nlive" not in config:
             _logger.warning(
                 "Number of live points (nlive) not set in the input card. Using default: 500"
@@ -145,7 +150,7 @@ class NSOptimizer(Optimizer):
             config["result_path"],
             config["use_quad"],
             config["result_ID"],
-            config["single_parameter_fits"],
+            single_parameter_fits,
             live_points=nlive,
             efficiency=efr,
             const_efficiency=ceff,
