@@ -140,6 +140,21 @@ class Runner:
         Run a fit with MC
         """
         config = self.run_card
-        opt = MCOptimizer.from_dict(config)
-        opt.run_sampling()
-        opt.save()
+
+        # single parameter fits
+        if config["single_parameter_fits"]:
+            for coeff in config["coefficients"].keys():
+                single_coeff_config = dict(config)
+                single_coeff_config["coefficients"] = {}
+                single_coeff_config["coefficients"][coeff] = config["coefficients"][
+                    coeff
+                ]
+                opt = MCOptimizer.from_dict(single_coeff_config)
+                opt.run_sampling()
+                opt.save()
+
+        # global fit
+        else:
+            opt = MCOptimizer.from_dict(config)
+            opt.run_sampling()
+            opt.save()

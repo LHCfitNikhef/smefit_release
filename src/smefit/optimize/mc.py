@@ -45,6 +45,7 @@ class MCOptimizer(Optimizer):
         use_quad,
         result_ID,
         replica,
+        single_parameter_fits,
         use_bounds,
         maxiter,
     ):
@@ -55,6 +56,7 @@ class MCOptimizer(Optimizer):
         self.coeff_steps = []
         self.replica = replica
         self.epoch = 0
+        self.single_parameter_fits = single_parameter_fits
         self.use_bounds = use_bounds
         self.maxiter = maxiter
 
@@ -113,6 +115,7 @@ class MCOptimizer(Optimizer):
             config["use_quad"],
             config["result_ID"],
             config["replica"],
+            config["single_parameter_fits"],
             use_bounds,
             maxiter,
         )
@@ -229,9 +232,21 @@ class MCOptimizer(Optimizer):
             values[par] = value
         log.console.print(table)
 
-        with open(
+        posterior_file = (
             self.results_path
-            / f"replica_{self.replica}/coefficients_rep_{self.replica}.json",
+            / f"replica_{self.replica}/coefficients_rep_{self.replica}.json"
+        )
+
+        # if it s a single parameter fit check if the posterior file is already present and in case it is update it
+        if self.single_parameter_fits:
+            if posterior_file.is_file():
+                with open(posterior_file, encoding="utf-8") as f:
+                    tmp = json.load(f)
+                    values.update(tmp)
+                    values["chi2"] = None
+
+        with open(
+            posterior_file,
             "w",
             encoding="utf-8",
         ) as f:
