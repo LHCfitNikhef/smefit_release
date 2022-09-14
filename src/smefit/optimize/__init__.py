@@ -31,7 +31,7 @@ class Optimizer:
     # TODO: docstring
 
     def __init__(self, results_path, loaded_datasets, coefficients, use_quad):
-        self.results_path = pathlib.Path(results_path)
+        self.results_path = results_path
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.use_quad = use_quad
@@ -45,7 +45,7 @@ class Optimizer:
         return self.coefficients.free_parameters
 
     def generate_chi2_table(self, chi2_dict, chi2_tot):
-        r"""Generate log :math:`\Chi^2` table"""
+        r"""Generate log :math:`\chi^2` table"""
         table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
         table.add_column("Dataset", style="bold green", no_wrap=True)
 
@@ -58,13 +58,13 @@ class Optimizer:
 
     def chi2_func(self, use_replica=False, print_log=True):
         r"""
-        Wrap the math:`\Chi^2` in a function for the optimizer. Pass noise and
-        data info as args. Log the math:`\Chi^2` value and values of the coefficients.
+        Wrap the math:`\chi^2` in a function for the optimizer. Pass noise and
+        data info as args. Log the math:`\chi^2` value and values of the coefficients.
 
         Returns
         -------
             current_chi2 : np.ndarray
-                computed :math:`\Chi^2`
+                computed :math:`\chi^2`
         """
 
         comm = MPI.COMM_WORLD

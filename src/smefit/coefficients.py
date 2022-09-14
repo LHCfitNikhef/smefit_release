@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from collections.abc import Iterable
-
 import numpy as np
 import pandas as pd
 
@@ -147,6 +145,10 @@ class CoefficientManager:
     def maximum(self):
         return self._table.maximum.values
 
+    @property
+    def size(self):
+        return self._table.shape[0]
+
     @classmethod
     def from_dict(cls, coefficient_config):
         """
@@ -180,7 +182,7 @@ class CoefficientManager:
         return cls(np.unique(elements))
 
     def __getitem__(self, idx):
-        # TODO: shall it restur the object list element?
+        # TODO: shall it return the object list element?
         # in that case it has to be updated
         if isinstance(idx, int):
             return self._table.iloc[idx]

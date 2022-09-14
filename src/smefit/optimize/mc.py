@@ -150,7 +150,7 @@ class MCOptimizer(Optimizer):
         return current_chi2
 
     def chi2_scan(self):
-        r"""Individual :math:`\Chi^2` scan"""
+        r"""Individual :math:`\chi^2` scan"""
 
         # set all the coefficients to 0 and fixed
         coefficient_temp = copy.deepcopy(self.coefficients)
