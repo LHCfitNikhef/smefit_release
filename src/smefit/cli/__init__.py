@@ -53,8 +53,18 @@ log_file = click.option(
 @runcard_path
 @fit_card
 @log_file
-def nested_sampling(runcard_path, fit_card, log_file):
+def nested_sampling(runcard_path: pathlib.Path, fit_card: str, log_file: pathlib.Path):
+    """Run a fit with |NS|.
 
+    Parameters
+    ----------
+    runcard_path :
+        path to runcard
+    fit_card :
+        fit runcard name
+    log_file :
+        path to log file
+    """
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
 
@@ -75,7 +85,22 @@ def nested_sampling(runcard_path, fit_card, log_file):
 @fit_card
 @n_replica
 @log_file
-def monte_carlo_fit(runcard_path, fit_card, n_replica, log_file):
+def monte_carlo_fit(
+    runcard_path: pathlib.Path, fit_card: str, n_replica: int, log_file: pathlib.Path
+):
+    """Run a fit with |MC|.
+
+    Parameters
+    ----------
+    runcard_path :
+        path to runcard
+    fit_card :
+        fit runcard name
+    n_replica :
+        replica number
+    log_file :
+        path to log file
+    """
     setup_console(log_file)
     print_banner()
     log.console.log("Running : MonteCarlo Fit")
@@ -86,7 +111,14 @@ def monte_carlo_fit(runcard_path, fit_card, n_replica, log_file):
 @base_command.command("PF")
 @runcard_path
 @fit_card
-@n_replica
+@click.option(
+    "-n",
+    "--n_replica",
+    type=int,
+    default=None,
+    required=True,
+    help="total number of replica to save",
+)
 @click.option(
     "-c",
     "--clean_rep",
@@ -95,15 +127,67 @@ def monte_carlo_fit(runcard_path, fit_card, n_replica, log_file):
     required=False,
     help="remove the replica file",
 )
-def post_fit(runcard_path, fit_card, n_replica, clean_rep):
+def post_fit(
+    runcard_path: pathlib.Path, fit_card: str, n_replica: int, clean_rep: bool
+):
+    """Run postfit selection over |MC| replicas.
+
+    Parameters
+    ----------
+    runcard_path :
+        path to runcard
+    fit_card :
+        fit runcard name
+    n_replica :
+        total number of replica to save
+    clean_rep :
+        if True revove replica folders
+    """
     postfit = Postfit.from_file(runcard_path, fit_card)
     postfit.save(n_replica)
     if clean_rep:
         postfit.clean()
 
 
+@base_command.command("SCAN")
+@runcard_path
+@fit_card
+@click.option(
+    "-n",
+    "--n_replica",
+    type=int,
+    default=0,
+    required=False,
+    help="number of replicas used during the scan, default (0) will use only experiemental data",
+)
+def scan(runcard_path: pathlib.Path, fit_card: str, n_replica: int):
+    r"""Plot idividual :math:`\chi^2` profiles for
+    all the free parameters.
+
+    Parameters
+    ----------
+    runcard_path :
+        path to runcard
+    fit_card :
+        fit runcard name
+    n_replica :
+        number of replica to use
+    """
+    runner = Runner.from_file(runcard_path, fit_card)
+    runner.chi2_scan(n_replica)
+
+
 @base_command.command("R")
 @runcard_path
 @fit_card
-def report(runcard_path, fit_card):
+def report(runcard_path: pathlib.Path, fit_card: str):
+    """Run a fit report.
+
+    Parameters
+    ----------
+    runcard_path :
+        path to runcard
+    fit_card :
+        fit runcard name
+    """
     run_report(runcard_path, fit_card)
