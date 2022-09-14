@@ -136,20 +136,30 @@ class Scanner:
 
         # find the bound for each coefficient
         bounds = {}
+        x0_interval = [-1000, 1000]
         for coeff in self.coefficients:
             if coeff.name not in self.chi2_dict:
                 continue
             coeff.is_free = True
-            roots = opt.fsolve(
-                chi2_func, [-100, 100], xtol=1e-6, maxfev=400, factor=0.1
+            roots = opt.newton(
+                chi2_func,
+                x0_interval,
+                maxiter=400,
             )
+            # test roots are not the same
             try:
                 np.testing.assert_allclose(roots[0] - roots[1], 0, atol=1e-5)
                 raise ValueError(
-                    f"single bound found for {coeff.name}: {roots[0]} in range [-100,100]"
+                    f"single bound found for {coeff.name}: {roots[0]} in range {x0_interval}."
                 )
             except AssertionError:
-                pass
+                # test roots are sorted
+                try:
+                    np.testing.assert_allclose(roots, np.sort(roots))
+                except AssertionError:
+                    raise ValueError(
+                        f"Bound found for {coeff.name}: {roots} are not sorted."
+                    )
 
             # save bounds and update the x ranges
             bounds[coeff.name] = roots.tolist()
