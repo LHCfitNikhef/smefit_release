@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import json
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -43,7 +44,7 @@ def split_solution(full_solution):
     return solution1, solution2
 
 
-def compute_confidence_level(posterior, coeff_df, disjointed_list=None):
+def compute_confidence_level(posterior, coeff_df, outfile, disjointed_list=None):
     """
     Compute central value, 95 % and 68 % confidence levels and store the result in a dictionary
     given a posterior distribution
@@ -64,9 +65,11 @@ def compute_confidence_level(posterior, coeff_df, disjointed_list=None):
     """
 
     disjointed_list = disjointed_list or []
+    names = []
     bounds = {}
     for name, row in coeff_df.iterrows():
         latex_name = row["latex_name"]
+        names.append(name)
         if name not in posterior:
             bounds[latex_name] = {}
         else:
@@ -82,7 +85,22 @@ def compute_confidence_level(posterior, coeff_df, disjointed_list=None):
                 bounds[latex_name] = pd.DataFrame(
                     [get_confidence_values(posterior[name])]
                 ).stack()
-    return pd.DataFrame(bounds)
+
+    df = pd.DataFrame(bounds)
+    res = {}
+
+    for name, latex_name in zip(names, df.columns):
+        res[name] = {}
+        res[name]["texname"] = latex_name
+        info = list(df[latex_name].values)
+        res[name]["central value"] = info[4]
+        res[name]["68CL"] = [info[0], info[1]]
+        res[name]["95CL"] = [info[2], info[3]]
+
+    with open(outfile, "w") as f:
+        json.dump(res, f)
+
+    return df
 
 
 class CoefficientsPlotter:

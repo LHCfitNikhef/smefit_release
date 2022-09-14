@@ -168,6 +168,7 @@ class Report:
             bounds_dict[fit.label] = compute_confidence_level(
                 fit.results,
                 coeff_plt.coeff_df,
+                f'coeff_cl_{fit}.json',
                 double_solution.get(fit.name, None),
             )
 
