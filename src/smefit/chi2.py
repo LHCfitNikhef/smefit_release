@@ -141,10 +141,13 @@ class Scanner:
                 continue
             coeff.is_free = True
             roots = opt.fsolve(chi2_func, [-1000, 1000], xtol=1e-6, maxfev=400)
+
+            # save bounds and update the x ranges
             bounds[coeff.name] = roots.tolist()
+            self.chi2_dict[coeff.name]["x"] = np.linspace(roots[0], roots[1], 100)
+
             coeff.is_free = False
             coeff.value = 0.0
-            self.coefficients.set_constraints()
             _logger.info(f"chi^2 bounds for {coeff.name}: {roots}")
 
         with open(f"{self.result_path}/chi2_bounds.json", "w", encoding="utf-8") as f:
@@ -200,6 +203,9 @@ class Scanner:
                     )
 
             plt.ylabel(r"$\chi^2 - \chi^2_{min}$")
+            plt.hlines(
+                0, tab["x"].min(), tab["x"].max(), ls="dotted", color="black", lw=0.5
+            )
             plt.title(f"{c}")
             plt.tight_layout()
             plt.savefig(f"{self.result_path}/chi2_scan_{c}.pdf")

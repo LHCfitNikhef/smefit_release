@@ -31,7 +31,7 @@ class Optimizer:
     # TODO: docstring
 
     def __init__(self, results_path, loaded_datasets, coefficients, use_quad):
-        self.results_path = results_path
+        self.results_path = pathlib.Path(results_path)
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.use_quad = use_quad
