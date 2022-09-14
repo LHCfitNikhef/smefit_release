@@ -104,15 +104,36 @@ class Runner:
         comm = MPI.COMM_WORLD
         rank = comm.Get_rank()
 
-        if rank == 0:
-            config = self.run_card
-            opt = NSOptimizer.from_dict(config)
-        else:
-            opt = None
+        config = self.run_card
 
-        # Run optimizer
-        opt = comm.bcast(opt, root=0)
-        opt.run_sampling()
+        # single parameter fits
+        if config["single_parameter_fits"]:
+            for coeff in config["coefficients"].keys():
+                single_coeff_config = dict(config)
+                single_coeff_config["coefficients"] = {}
+                single_coeff_config["coefficients"][coeff] = config["coefficients"][
+                    coeff
+                ]
+                if rank == 0:
+                    opt = NSOptimizer.from_dict(single_coeff_config)
+                else:
+                    opt = None
+
+                # Run optimizer
+                opt = comm.bcast(opt, root=0)
+                opt.run_sampling()
+
+        # global fit
+        else:
+
+            if rank == 0:
+                opt = NSOptimizer.from_dict(config)
+            else:
+                opt = None
+
+            # Run optimizer
+            opt = comm.bcast(opt, root=0)
+            opt.run_sampling()
 
     def mc(self):
         """

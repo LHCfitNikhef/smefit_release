@@ -52,6 +52,7 @@ class NSOptimizer(Optimizer):
         result_path,
         use_quad,
         result_ID,
+        single_parameter_fits,
         live_points=500,
         efficiency=0.01,
         const_efficiency=False,
@@ -66,6 +67,7 @@ class NSOptimizer(Optimizer):
         self.tolerance = tolerance
         self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
+        self.single_parameter_fits = single_parameter_fits
 
     @classmethod
     def from_dict(cls, config):
@@ -143,6 +145,7 @@ class NSOptimizer(Optimizer):
             config["result_path"],
             config["use_quad"],
             config["result_ID"],
+            config["single_parameter_fits"],
             live_points=nlive,
             efficiency=efr,
             const_efficiency=ceff,
@@ -289,5 +292,14 @@ class NSOptimizer(Optimizer):
             for c in self.coefficients.name:
                 values[c].append(self.coefficients[c].value)
 
-        with open(self.results_path / "posterior.json", "w", encoding="utf-8") as f:
+        posterior_file = self.results_path / "posterior.json"
+
+        # if it s a single parameter fit check if the posterior file is already present and in case it is update it
+        if self.single_parameter_fits:
+            if posterior_file.is_file():
+                with open(posterior_file, encoding="utf-8") as f:
+                    tmp = json.load(f)
+                    values.update(tmp)
+
+        with open(posterior_file, "w", encoding="utf-8") as f:
             json.dump(values, f)
