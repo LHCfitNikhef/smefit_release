@@ -121,16 +121,20 @@ class Runner:
         opt.run_sampling()
         opt.save()
 
-    def chi2_scan(self, n_replica):
+    def chi2_scan(self, n_replica, compute_bounds):
         r"""Run an individual :math:`\chi^2` scan.
 
         Parameters
         ----------
         n_replica: int
             number of replicas to use.
-            If 0 only the :math:`\chi^2` experiemental dat
+            If 0 only the :math:`\chi^2` experiemental data
             will be computed.
+        compute_bounds: bool
+            if True compute and save the :math:`\chi^2` bounds.
         """
         scan = Scanner(self.run_card, n_replica)
-        scan.run()
+        if compute_bounds:
+            scan.compute_bounds()
+        scan.compute_scan()
         scan.plot_scan()

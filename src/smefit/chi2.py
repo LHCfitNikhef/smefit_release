@@ -3,14 +3,15 @@
 """
 Module for the computation of chi-squared values
 """
+import json
+
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.optimize as opt
 from rich.progress import track
 
-import smefit
-
 from . import compute_theory as pr
-from .coefficients import Coefficient, CoefficientManager
+from .coefficients import CoefficientManager
 from .loader import DataTuple, load_datasets
 from .log import logging
 
@@ -122,7 +123,34 @@ class Scanner:
             )
         return np.array(chi2_list) / self.datasets.Commondata.size
 
-    def run(self):
+    def compute_bounds(self):
+        r"""Compute individual bounds solving.
+
+        ..math::
+            \chi^2`- 2 = 0
+        """
+
+        # chi^2 - 2
+        def chi2_func(xs):
+            return self.regularized_chi2_func(coeff, xs, False) - 2.0
+
+        # find the bound for each coefficient
+        bounds = {}
+        for coeff in self.coefficients:
+            if coeff.name not in self.chi2_dict:
+                continue
+            coeff.is_free = True
+            roots = opt.fsolve(chi2_func, [-1000, 1000], xtol=1e-6, maxfev=400)
+            bounds[coeff.name] = roots.tolist()
+            coeff.is_free = False
+            coeff.value = 0.0
+            self.coefficients.set_constraints()
+            _logger.info(f"chi^2 bounds for {coeff.name}: {roots}")
+
+        with open(f"{self.result_path}/chi2_bounds.json", "w", encoding="utf-8") as f:
+            json.dump(bounds, f)
+
+    def compute_scan(self):
         r"""Compute the individual :math:`\chi^2` scan for each replica and coefficient."""
         # loop on replicas
         for rep in track(
@@ -154,6 +182,7 @@ class Scanner:
                     coeff, self.chi2_dict[coeff.name]["x"], use_replica
                 )
                 coeff.value = 0.0
+                coeff.is_free = False
 
     def plot_scan(self):
         r"""Plot and save the :math:`\chi^2` scan for each coefficient."""

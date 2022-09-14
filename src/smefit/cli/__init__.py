@@ -124,7 +124,6 @@ def monte_carlo_fit(
     "--clean_rep",
     is_flag=True,
     default=False,
-    required=False,
     help="remove the replica file",
 )
 def post_fit(
@@ -160,7 +159,15 @@ def post_fit(
     required=False,
     help="number of replicas used during the scan, default (0) will use only experiemental data",
 )
-def scan(runcard_path: pathlib.Path, fit_card: str, n_replica: int):
+@click.option(
+    "-b",
+    "--bounds",
+    type=bool,
+    is_flag=True,
+    default=False,
+    help="compute also the chi2 bounds",
+)
+def scan(runcard_path: pathlib.Path, fit_card: str, n_replica: int, bounds: bool):
     r"""Plot idividual :math:`\chi^2` profiles for
     all the free parameters.
 
@@ -172,9 +179,11 @@ def scan(runcard_path: pathlib.Path, fit_card: str, n_replica: int):
         fit runcard name
     n_replica :
         number of replica to use
+    bounds :
+        if True compute also the :math:`\chi^2` bounds
     """
     runner = Runner.from_file(runcard_path, fit_card)
-    runner.chi2_scan(n_replica)
+    runner.chi2_scan(n_replica, bounds)
 
 
 @base_command.command("R")
