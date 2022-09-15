@@ -6,10 +6,9 @@ Fitting the Wilson coefficients with MC
 import json
 import time
 
-import scipy.optimize as opt
+import cma
 from rich.style import Style
 from rich.table import Table
-from scipy.optimize import Bounds
 
 from .. import log
 from ..coefficients import CoefficientManager
@@ -150,17 +149,23 @@ class MCOptimizer(Optimizer):
         """Run the minimization with Nested Sampling"""
 
         t1 = time.time()
-        bounds = None
+        bounds = [None, None]
         if self.use_bounds:
-            bounds = Bounds(self.free_parameters.minimum, self.free_parameters.maximum)
+            bounds = [self.free_parameters.minimum, self.free_parameters.maximum]
 
         # TODO: other minimization options?
-        opt.minimize(
+        # opt.minimize(
+        #     self.chi2_func_mc,
+        #     self.free_parameters.value,
+        #     method="trust-constr",
+        #     bounds=bounds,
+        #     options={"maxiter": self.maxiter},
+        # )
+        cma.fmin2(
             self.chi2_func_mc,
             self.free_parameters.value,
-            method="trust-constr",
-            bounds=bounds,
-            options={"maxiter": self.maxiter},
+            sigma0=1.0,
+            options={"bounds": bounds, "verbose": -1, "verb_log": False},
         )
         t2 = time.time()
         log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
@@ -176,6 +181,8 @@ class MCOptimizer(Optimizer):
                 result dictionary
 
         """
+        self.coefficients.set_free_parameters(self.free_parameters.value)
+        self.coefficients.set_constraints()
         values = {}
         values["chi2"] = self.chi2_values[-1] / self.npts
         table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
