@@ -27,7 +27,7 @@ class Postfit:
     def from_file(cls, runcard_folder, run_card_name):
 
         # load file
-        runcard_folder = pathlib.Path(runcard_folder)
+        runcard_folder = runcard_folder
         with open(runcard_folder / f"{run_card_name}.yaml", encoding="utf-8") as f:
             config = yaml.safe_load(f)
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test utils module"""
 import numpy as np
+import pandas as pd
 
 from smefit import coefficients
 
@@ -37,10 +38,8 @@ coeff_dict = {
         "min": -5,
         "max": 1,
     },
-     "c_g": {  # fixed to -0.2 * c_a * c_b
-        "constrain": [
-            {"c_a": [-0.2, 1.0], "c_b": [1.0, 1.0]}
-        ],
+    "c_g": {  # fixed to -0.2 * c_a * c_b
+        "constrain": [{"c_a": [-0.2, 1.0], "c_b": [1.0, 1.0]}],
         "min": -5,
         "max": 1,
     },
@@ -118,6 +117,11 @@ class TestCoefficientManager:
 
         c_list_free = coefficients.CoefficientManager.from_dict(coeff_dict_free)
         np.testing.assert_equal(self.c_list.free_parameters.index, c_list_free.name)
+
+    def test_set_free_parameters(self):
+        temp = pd.Series(np.random.rand(2))
+        self.c_list.set_free_parameters(temp)
+        np.testing.assert_equal(self.c_list.free_parameters.value.values, temp.values)
 
     def test_set_constrains(self):
         c_a = self.c_list["c_a"].value

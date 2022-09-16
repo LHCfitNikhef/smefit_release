@@ -6,6 +6,7 @@ from shutil import copyfile
 import yaml
 from mpi4py import MPI
 
+from .chi2 import Scanner
 from .log import logging
 from .optimize.mc import MCOptimizer
 from .optimize.ns import NSOptimizer
@@ -18,7 +19,7 @@ class Runner:
     Container for all the possible |SMEFiT| run methods.
 
     Init the root path of the package where tables,
-    results, plot config and reports are be stored
+    results, plot config and reports are stored.
 
     Parameters
     ----------
@@ -77,6 +78,8 @@ class Runner:
             path to runcard folder if already present
         run_card_name : srt
             run card name
+        replica: int
+            replica number. Optional used only for MC
 
         Returns
         -------
@@ -85,7 +88,6 @@ class Runner:
         """
         config = {}
         # load file
-        runcard_folder = pathlib.Path(runcard_folder)
         with open(runcard_folder / f"{run_card_name}.yaml", encoding="utf-8") as f:
             config = yaml.safe_load(f)
 
@@ -98,9 +100,7 @@ class Runner:
         return cls(config, runcard_folder)
 
     def ns(self):
-        """
-        Run a fit with |NS|
-        """
+        """Run a fit with |NS|."""
         comm = MPI.COMM_WORLD
         rank = comm.Get_rank()
 
@@ -115,10 +115,26 @@ class Runner:
         opt.run_sampling()
 
     def mc(self):
-        """
-        Run a fit with MC
-        """
+        """Run a fit with |MC|."""
         config = self.run_card
         opt = MCOptimizer.from_dict(config)
         opt.run_sampling()
         opt.save()
+
+    def chi2_scan(self, n_replica, compute_bounds):
+        r"""Run an individual :math:`\chi^2` scan.
+
+        Parameters
+        ----------
+        n_replica: int
+            number of replicas to use.
+            If 0 only the :math:`\chi^2` experiemental data
+            will be computed.
+        compute_bounds: bool
+            if True compute and save the :math:`\chi^2` bounds.
+        """
+        scan = Scanner(self.run_card, n_replica)
+        if compute_bounds:
+            scan.compute_bounds()
+        scan.compute_scan()
+        scan.plot_scan()

@@ -56,7 +56,7 @@ def build_large_covmat(chi2_covmat, n_data, n_data_exp):
     Parameters
     ----------
         chi2_covmat: list
-            :math:`\Chi^2` covariance matrix
+            :math:`\chi^2` covariance matrix
         n_data : int
             total number of datapoints
         n_data_exp: list
