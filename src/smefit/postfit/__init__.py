@@ -34,16 +34,16 @@ class Postfit:
 
         # set result ID to runcard name by default
         result_ID = config.get("result_ID", run_card_name)
-
+        single_parameter_fits = config.get("single_parameter_fits", False)
         # get the chi2_threshold, by default is 3.0
-        if "chi2_threshold" not in config and not config["single_parameter_fits"]:
+        if "chi2_threshold" not in config and not single_parameter_fits:
             _logger.warning("chi2_threshold not set, using default value of 3.0")
         chi2_threshold = config.get("chi2_threshold", 3.0)
 
         return cls(
             config["result_path"],
             result_ID,
-            config["single_parameter_fits"],
+            single_parameter_fits,
             chi2_threshold,
         )
 
