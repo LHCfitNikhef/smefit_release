@@ -3,7 +3,6 @@
 """
 Fitting the Wilson coefficients with NS
 """
-import json
 import os
 import time
 
@@ -59,7 +58,11 @@ class NSOptimizer(Optimizer):
         tolerance=0.5,
     ):
         super().__init__(
-            f"{result_path}/{result_ID}", loaded_datasets, coefficients, use_quad
+            f"{result_path}/{result_ID}",
+            loaded_datasets,
+            coefficients,
+            use_quad,
+            single_parameter_fits,
         )
         self.live_points = live_points
         self.efficiency = efficiency
@@ -67,7 +70,6 @@ class NSOptimizer(Optimizer):
         self.tolerance = tolerance
         self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
-        self.single_parameter_fits = single_parameter_fits
 
     @classmethod
     def from_dict(cls, config):
@@ -107,10 +109,7 @@ class NSOptimizer(Optimizer):
             )
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
-        if "single_parameter_fits" not in config:
-            single_parameter_fits = False
-        else:
-            single_parameter_fits = config["single_parameter_fits"]
+        single_parameter_fits = config.get("single_parameter_fits", False)
 
         if "nlive" not in config:
             _logger.warning(
@@ -298,13 +297,4 @@ class NSOptimizer(Optimizer):
                 values[c].append(self.coefficients[c].value)
 
         posterior_file = self.results_path / "posterior.json"
-
-        # if it s a single parameter fit check if the posterior file is already present and in case it is update it
-        if self.single_parameter_fits:
-            if posterior_file.is_file():
-                with open(posterior_file, encoding="utf-8") as f:
-                    tmp = json.load(f)
-                    values.update(tmp)
-
-        with open(posterior_file, "w", encoding="utf-8") as f:
-            json.dump(values, f)
+        self.dump_posterior(posterior_file, values)

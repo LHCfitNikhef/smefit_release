@@ -22,12 +22,7 @@ runcard_path = click.option(
 
 
 fit_card = click.option(
-    "-f",
-    "--fit_card",
-    type=str,
-    default=None,
-    required=True,
-    help="fit card name",
+    "-f", "--fit_card", type=str, default=None, required=True, help="fit card name",
 )
 
 n_replica = click.option(
@@ -67,7 +62,7 @@ def nested_sampling(runcard_path, fit_card, log_file):
         runner = None
 
     runner = comm.bcast(runner, root=0)
-    runner.ns()
+    runner.run_analysis("NS")
 
 
 @base_command.command("MC")
@@ -80,7 +75,7 @@ def monte_carlo_fit(runcard_path, fit_card, n_replica, log_file):
     print_banner()
     log.console.log("Running : MonteCarlo Fit")
     runner = Runner.from_file(runcard_path, fit_card, n_replica)
-    runner.mc()
+    runner.run_analysis("MC")
 
 
 @base_command.command("PF")

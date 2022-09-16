@@ -74,8 +74,8 @@ class Postfit:
                     _logger.warning(f"Discarding replica: {rep}")
                     continue
 
-            chi2_list.append(res["chi2"])
-            del res["chi2"]
+                chi2_list.append(res["chi2"])
+                del res["chi2"]
             for coeff in res:
                 rep_res.append(res[coeff])
 

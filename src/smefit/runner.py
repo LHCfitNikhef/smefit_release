@@ -28,10 +28,11 @@ class Runner:
             path to runcard folder if already present
     """
 
-    def __init__(self, run_card, runcard_folder=None):
+    def __init__(self, run_card, single_parameter_fits, runcard_folder=None):
 
         self.run_card = run_card
         self.runcard_folder = runcard_folder
+        self.single_parameter_fits = single_parameter_fits
         self.setup_result_folder()
 
     def setup_result_folder(self):
@@ -62,8 +63,7 @@ class Runner:
                 yaml.dump(self.run_card, f, default_flow_style=False)
         else:
             copyfile(
-                self.runcard_folder / f"{run_card_name}.yaml",
-                runcard_copy,
+                self.runcard_folder / f"{run_card_name}.yaml", runcard_copy,
             )
 
     @classmethod
@@ -95,66 +95,58 @@ class Runner:
         if "result_ID" not in config:
             config["result_ID"] = run_card_name
 
-        return cls(config, runcard_folder)
+        single_parameter_fits = config.get("single_parameter_fits", False)
 
-    def ns(self):
+        return cls(config, single_parameter_fits, runcard_folder)
+
+    def ns(self, config):
         """
         Run a fit with |NS|
         """
         comm = MPI.COMM_WORLD
         rank = comm.Get_rank()
 
-        config = self.run_card
-
-        # single parameter fits
-        if config["single_parameter_fits"]:
-            for coeff in config["coefficients"].keys():
-                single_coeff_config = dict(config)
-                single_coeff_config["coefficients"] = {}
-                single_coeff_config["coefficients"][coeff] = config["coefficients"][
-                    coeff
-                ]
-                if rank == 0:
-                    opt = NSOptimizer.from_dict(single_coeff_config)
-                else:
-                    opt = None
-
-                # Run optimizer
-                opt = comm.bcast(opt, root=0)
-                opt.run_sampling()
-
-        # global fit
+        if rank == 0:
+            opt = NSOptimizer.from_dict(config)
         else:
+            opt = None
 
-            if rank == 0:
-                opt = NSOptimizer.from_dict(config)
-            else:
-                opt = None
+        # Run optimizer
+        opt = comm.bcast(opt, root=0)
+        opt.run_sampling()
 
-            # Run optimizer
-            opt = comm.bcast(opt, root=0)
-            opt.run_sampling()
-
-    def mc(self):
+    def mc(self, config):
         """
         Run a fit with MC
         """
+        opt = MCOptimizer.from_dict(config)
+        opt.run_sampling()
+        opt.save()
+
+    def global_analysis(self, optimizer):
+
         config = self.run_card
+        if optimizer == "NS":
+            self.ns(config)
+        elif optimizer == "MC":
+            self.mc(config)
 
-        # single parameter fits
-        if config["single_parameter_fits"]:
-            for coeff in config["coefficients"].keys():
-                single_coeff_config = dict(config)
-                single_coeff_config["coefficients"] = {}
-                single_coeff_config["coefficients"][coeff] = config["coefficients"][
-                    coeff
-                ]
-                opt = MCOptimizer.from_dict(single_coeff_config)
-                opt.run_sampling()
-                opt.save()
+    def single_parameter_analysis(self, optimizer):
 
-        # global fit
+        config = self.run_card
+        for coeff in config["coefficients"].keys():
+            single_coeff_config = dict(config)
+            single_coeff_config["coefficients"] = {}
+            single_coeff_config["coefficients"][coeff] = config["coefficients"][coeff]
+
+            if optimizer == "NS":
+                self.ns(single_coeff_config)
+            elif optimizer == "MC":
+                self.mc(single_coeff_config)
+
+    def run_analysis(self, optimizer):
+
+        if self.single_parameter_fits:
+            self.single_parameter_analysis(optimizer)
         else:
-            opt = MCOptimizer.from_dict(config)
-            opt.run_sampling()
-            opt.save()
+            self.global_analysis(optimizer)

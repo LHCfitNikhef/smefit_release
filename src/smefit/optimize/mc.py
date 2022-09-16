@@ -4,7 +4,6 @@
 Fitting the Wilson coefficients with MC
 """
 import copy
-import json
 import time
 
 import numpy as np
@@ -50,13 +49,16 @@ class MCOptimizer(Optimizer):
         maxiter,
     ):
         super().__init__(
-            f"{result_path}/{result_ID}", loaded_datasets, coefficients, use_quad
+            f"{result_path}/{result_ID}",
+            loaded_datasets,
+            coefficients,
+            use_quad,
+            single_parameter_fits,
         )
         self.chi2_values = []
         self.coeff_steps = []
         self.replica = replica
         self.epoch = 0
-        self.single_parameter_fits = single_parameter_fits
         self.use_bounds = use_bounds
         self.maxiter = maxiter
 
@@ -108,10 +110,7 @@ class MCOptimizer(Optimizer):
                 "Number of maximum iterations (maxiter) not set in the input card. Using default: 1e4"
             )
 
-        if "single_parameter_fits" not in config:
-            single_parameter_fits = False
-        else:
-            single_parameter_fits = config["single_parameter_fits"]
+        single_parameter_fits = config.get("single_parameter_fits", False)
 
         return cls(
             loaded_datasets,
@@ -173,10 +172,7 @@ class MCOptimizer(Optimizer):
                 coeff.value = x
                 coefficient_temp.set_constraints()
                 chi2 = compute_chi2(
-                    self.loaded_datasets,
-                    coefficient_temp.value,
-                    self.use_quad,
-                    False,
+                    self.loaded_datasets, coefficient_temp.value, self.use_quad, False,
                 )
                 roots.append(chi2 / self.npts - 2.0)
             return roots
@@ -228,7 +224,8 @@ class MCOptimizer(Optimizer):
 
         """
         values = {}
-        values["chi2"] = self.chi2_values[-1] / self.npts
+        if not self.single_parameter_fits:
+            values["chi2"] = self.chi2_values[-1] / self.npts
         table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
         table.add_column("Parameter", style="bold red", no_wrap=True)
         table.add_column("Best value")
@@ -242,17 +239,4 @@ class MCOptimizer(Optimizer):
             / f"replica_{self.replica}/coefficients_rep_{self.replica}.json"
         )
 
-        # if it s a single parameter fit check if the posterior file is already present and in case it is update it
-        if self.single_parameter_fits:
-            if posterior_file.is_file():
-                with open(posterior_file, encoding="utf-8") as f:
-                    tmp = json.load(f)
-                    values.update(tmp)
-                    values["chi2"] = None
-
-        with open(
-            posterior_file,
-            "w",
-            encoding="utf-8",
-        ) as f:
-            json.dump(values, f)
+        self.dump_posterior(posterior_file, values)
