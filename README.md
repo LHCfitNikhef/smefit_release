@@ -52,16 +52,14 @@ poetry install
 
 ## Running
 To run the code you can do:
-
 ```bash
 python MODE -f your_runcard_name
 ```
-where mode can be NS, MC, SCAN or PF. We refer to the documenttion for more details and tutorials
+where MODE can be NS, MC, SCAN or PF. We refer to the documenttion for more details and tutorials
 
-### Ruuning in parallel
+### Running in parallel
 To run smefit in parallel openmpi and mpi4py need to be installed inside your python environnement, as detailed above.
 Then you can run:
-
 ```bash
 mpiexec -n number_of_cores python NS -f your_runcard_name
 ```
