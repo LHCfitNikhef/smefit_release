@@ -110,6 +110,8 @@ class Optimizer:
                 with open(posterior_file, encoding="utf-8") as f:
                     tmp = json.load(f)
                     values.update(tmp)
+            else:
+                values["single_parameter_fits"] = True
 
         with open(posterior_file, "w", encoding="utf-8") as f:
             json.dump(values, f)
