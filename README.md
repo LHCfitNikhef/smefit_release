@@ -14,33 +14,56 @@ SMEFiT is a python program for Standard Model Effective Field Theory fits
 ## Installation
 If you want to install from source you can run:
 
-### TODO: update readme
 
 ```bash
 git clone https://github.com/LHCfitNikhef/smefit_release.git
 cd smefit_release
-python setup.py install
+./install.sh -p MULTINEST_INSTALLATION_PATH
+```
+The script will download and compile the MultiNest library, together with the necessary python packages
+to run the code.
+
+## Conda installation
+
+For the conda users, the following installation steps will create a conda environment with a working version
+of SmeFit installed
+
+```bash
+conda create -n <ENV_NAME> python=3.10
+conda install -c conda-forge openmpi=4.1.4=ha1ae619_100
+conda install mpi4py=3.1.3
+conda install compilers
+conda install liblapack libblas
+
+cd <MULTINEST_INSTALLATION_PATH>
+mkdir build/
+cd build/
+export FFLAGS='-w -fallow-argument-mismatch -O2'
+cmake ..  -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
+make
+make install
+
+cd <SMEFIT_INSTALLATION_PATH>
+
+conda install poetry
+poetry install
+
 ```
 
 ## Running
 To run the code you can do:
 
 ```bash
-python -n NS -f your_runcard_name
+python MODE -f your_runcard_name
 ```
+where mode can be NS, MC, SCAN or PF. We refer to the documenttion for more details and tutorials
 
 ### Ruuning in parallel
-To run smefit in parallel you need to install inside your python environnement:
+To run smefit in parallel openmpi and mpi4py need to be installed inside your python environnement, as detailed above.
+Then you can run:
 
 ```bash
-onpenmpi version = 4.0.2
-mpi4py = 3.0.3
-```
-
-then you can run doing:
-
-```bash
-mpiexec -n number_of_cores python -n NS -f your_runcard_name
+mpiexec -n number_of_cores python NS -f your_runcard_name
 ```
 
 ## Documentation
