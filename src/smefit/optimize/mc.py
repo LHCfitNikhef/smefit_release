@@ -83,14 +83,6 @@ class MCOptimizer(Optimizer):
             config.get("uv_coupligs", False),
         )
 
-        missing_operators = []
-        for k in config["coefficients"]:
-            if k not in loaded_datasets.OperatorsNames:
-                missing_operators.append(k)
-        if missing_operators:
-            raise NotImplementedError(
-                f"{missing_operators} not in the theory. Comment it out in setup script and restart."
-            )
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
         use_bounds = config.get("use_bounds", True)

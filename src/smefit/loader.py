@@ -14,11 +14,37 @@ from .log import logging
 
 _logger = logging.getLogger(__name__)
 
+DataTuple = namedtuple(
+    "DataTuple",
+    (
+        "Commondata",
+        "SMTheory",
+        "OperatorsNames",
+        "LinearCorrections",
+        "QuadraticCorrections",
+        "ExpNames",
+        "NdataExp",
+        "InvCovMat",
+        "Replica",
+    ),
+)
+
 
 def check_file(path):
     """Check if path exists"""
     if not path.exists():
         raise FileNotFoundError(f"File {path} does not exist.")
+
+
+def check_missing_oparators(loaded_corrections, coeff_config):
+    """Check if all the coefficient in the reuncard are also present
+    inside the theory tables."""
+    loaded_corrections = set(loaded_corrections)
+    missing_operators = [k for k in coeff_config if k not in loaded_corrections]
+    if missing_operators != []:
+        raise ValueError(
+            f"{missing_operators} not in the theory. Comment it out in setup script and restart."
+        )
 
 
 class Loader:
@@ -352,22 +378,6 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
     return sorted_keys, corr_values
 
 
-DataTuple = namedtuple(
-    "DataTuple",
-    (
-        "Commondata",
-        "SMTheory",
-        "OperatorsNames",
-        "LinearCorrections",
-        "QuadraticCorrections",
-        "ExpNames",
-        "NdataExp",
-        "InvCovMat",
-        "Replica",
-    ),
-)
-
-
 def load_datasets(
     commondata_path,
     datasets,
@@ -440,11 +450,14 @@ def load_datasets(
     n_data_tot = exp_data.size
 
     sorted_keys = None
+    # if uv couplings are present allow for op which are not in the
+    # theory files
     if has_uv_coupligs:
         sorted_keys = np.unique((*operators_to_keep,))
     operators_names, lin_corr_values = construct_corrections_matrix(
         lin_corr_list, n_data_tot, sorted_keys
     )
+    check_missing_oparators(operators_names, operators_to_keep)
 
     if use_quad:
         quad_corrections_names = []
