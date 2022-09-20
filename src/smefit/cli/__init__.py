@@ -22,7 +22,12 @@ runcard_path = click.option(
 
 
 fit_card = click.option(
-    "-f", "--fit_card", type=str, default=None, required=True, help="fit card name",
+    "-f",
+    "--fit_card",
+    type=str,
+    default=None,
+    required=True,
+    help="fit card name",
 )
 
 n_replica = click.option(

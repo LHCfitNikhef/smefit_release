@@ -147,7 +147,6 @@ class MCOptimizer(Optimizer):
 
         return current_chi2
 
-
     def run_sampling(self):
         """Run the minimization with Nested Sampling"""
 

@@ -103,7 +103,7 @@ class NSOptimizer(Optimizer):
 
         single_parameter_fits = config.get("single_parameter_fits", False)
         nlive = config.get("nlive", 500)
-        
+
         if "nlive" not in config:
             _logger.warning(
                 f"Number of live points (nlive) not set in the input card. Using default: {nlive}"

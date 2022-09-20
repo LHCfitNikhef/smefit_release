@@ -64,7 +64,8 @@ class Runner:
                 yaml.dump(self.run_card, f, default_flow_style=False)
         else:
             copyfile(
-                self.runcard_folder / f"{run_card_name}.yaml", runcard_copy,
+                self.runcard_folder / f"{run_card_name}.yaml",
+                runcard_copy,
             )
 
     @classmethod
@@ -101,7 +102,6 @@ class Runner:
 
         return cls(config, single_parameter_fits, runcard_folder)
 
-    
     def ns(self, config):
         """Run a fit with |NS|."""
 
@@ -117,14 +117,12 @@ class Runner:
         opt = comm.bcast(opt, root=0)
         opt.run_sampling()
 
-
     def mc(self, config):
         """Run a fit with |MC|."""
         config = self.run_card
         opt = MCOptimizer.from_dict(config)
         opt.run_sampling()
         opt.save()
-
 
     def global_analysis(self, optimizer):
 

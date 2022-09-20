@@ -86,7 +86,10 @@ class Optimizer:
             print_log = False
 
         chi2_tot = chi2.compute_chi2(
-            self.loaded_datasets, self.coefficients.value, self.use_quad, use_replica,
+            self.loaded_datasets,
+            self.coefficients.value,
+            self.use_quad,
+            use_replica,
         )
 
         if print_log:
@@ -95,7 +98,10 @@ class Optimizer:
                 dataset = get_dataset(self.loaded_datasets, data_name)
                 chi2_dict[data_name] = (
                     chi2.compute_chi2(
-                        dataset, self.coefficients.value, self.use_quad, use_replica,
+                        dataset,
+                        self.coefficients.value,
+                        self.use_quad,
+                        use_replica,
                     )
                     / dataset.NdataExp
                 )
