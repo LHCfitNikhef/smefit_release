@@ -7,6 +7,9 @@
 .. |EFT| replace::
    :abbr:`EFT (Effective Field Theory)`
 
+.. |SM| replace::
+   :abbr:`SM (Standard Model)`
+
 .. |NHO| replace::
    :abbr:`NHO (Not Higher Order corrections, linear)`
 

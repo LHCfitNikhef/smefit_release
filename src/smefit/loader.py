@@ -10,12 +10,41 @@ import yaml
 
 from .basis_rotation import rotate_to_fit_basis
 from .covmat import build_large_covmat, construct_covmat
+from .log import logging
+
+_logger = logging.getLogger(__name__)
+
+DataTuple = namedtuple(
+    "DataTuple",
+    (
+        "Commondata",
+        "SMTheory",
+        "OperatorsNames",
+        "LinearCorrections",
+        "QuadraticCorrections",
+        "ExpNames",
+        "NdataExp",
+        "InvCovMat",
+        "Replica",
+    ),
+)
 
 
 def check_file(path):
     """Check if path exists"""
     if not path.exists():
         raise FileNotFoundError(f"File {path} does not exist.")
+
+
+def check_missing_oparators(loaded_corrections, coeff_config):
+    """Check if all the coefficient in the reuncard are also present
+    inside the theory tables."""
+    loaded_corrections = set(loaded_corrections)
+    missing_operators = [k for k in coeff_config if k not in loaded_corrections]
+    if missing_operators != []:
+        raise ValueError(
+            f"{missing_operators} not in the theory. Comment it out in setup script and restart."
+        )
 
 
 class Loader:
@@ -93,7 +122,7 @@ class Loader:
         data_file = self._data_folder / f"{self.setname}.yaml"
         check_file(data_file)
 
-        print(f"Loaging datset : {self.setname}")
+        _logger.info(f"Loading dataset : {self.setname}")
         with open(data_file, encoding="utf-8") as f:
             data_dict = yaml.safe_load(f)
 
@@ -114,7 +143,7 @@ class Loader:
             name_sys = data_dict["sys_names"]
 
             # express systematics as percentage values of the central values
-            sys_mult = abs(sys_add / central_values * 1e2)
+            sys_mult = sys_add / central_values * 1e2
 
             # Identify add and mult systematics
             # and replace the mult ones with corresponding value computed
@@ -129,7 +158,6 @@ class Loader:
                 * central_values
                 * 1e-2
             )
-
             # Build dataframe with shape (N_data * N_sys) and systematic name as the
             # column headers and construct covmat
 
@@ -350,21 +378,6 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
     return sorted_keys, corr_values
 
 
-DataTuple = namedtuple(
-    "DataTuple",
-    (
-        "Commondata",
-        "SMTheory",
-        "OperatorsNames",
-        "LinearCorrections",
-        "QuadraticCorrections",
-        "ExpNames",
-        "NdataExp",
-        "InvCovMat",
-    ),
-)
-
-
 def load_datasets(
     commondata_path,
     datasets,
@@ -374,6 +387,7 @@ def load_datasets(
     use_theory_covmat,
     theory_path=None,
     rot_to_fit_basis=None,
+    has_uv_coupligs=False,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
@@ -435,9 +449,15 @@ def load_datasets(
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
+    sorted_keys = None
+    # if uv couplings are present allow for op which are not in the
+    # theory files
+    if has_uv_coupligs:
+        sorted_keys = np.unique((*operators_to_keep,))
     operators_names, lin_corr_values = construct_corrections_matrix(
-        lin_corr_list, n_data_tot
+        lin_corr_list, n_data_tot, sorted_keys
     )
+    check_missing_oparators(operators_names, operators_to_keep)
 
     if use_quad:
         quad_corrections_names = []
@@ -456,6 +476,7 @@ def load_datasets(
 
     # Construct unique large cov matrix dropping correlations between different datasets
     covmat = build_large_covmat(chi2_covmat, n_data_tot, n_data_exp)
+    replica = np.random.multivariate_normal(exp_data, covmat)
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
         exp_data,
@@ -466,4 +487,27 @@ def load_datasets(
         np.array(exp_name),
         np.array(n_data_exp),
         np.linalg.inv(covmat),
+        replica,
+    )
+
+
+def get_dataset(datasets, data_name):
+
+    idx = np.where(datasets.ExpNames == data_name)[0][0]
+    ndata = datasets.NdataExp[idx]
+    posix_in = datasets.NdataExp[:idx].sum()
+    posix_out = posix_in + ndata
+
+    return DataTuple(
+        datasets.Commondata[posix_in:posix_out],
+        datasets.SMTheory[posix_in:posix_out],
+        datasets.OperatorsNames,
+        datasets.LinearCorrections[posix_in:posix_out],
+        datasets.QuadraticCorrections[posix_in:posix_out]
+        if datasets.QuadraticCorrections is not None
+        else None,
+        data_name,
+        ndata,
+        datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],
+        datasets.Replica[posix_in:posix_out],
     )

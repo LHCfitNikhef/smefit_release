@@ -3,17 +3,20 @@
 """
 Fitting the Wilson coefficients with NS
 """
-import json
 import os
 import time
-import warnings
 
 from mpi4py import MPI
 from pymultinest.solve import solve
+from rich.style import Style
+from rich.table import Table
 
+from .. import log
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
+
+_logger = log.logging.getLogger(__name__)
 
 
 class NSOptimizer(Optimizer):
@@ -39,6 +42,8 @@ class NSOptimizer(Optimizer):
             evidence tolerance
     """
 
+    print_rate = 5000
+
     def __init__(
         self,
         loaded_datasets,
@@ -46,19 +51,24 @@ class NSOptimizer(Optimizer):
         result_path,
         use_quad,
         result_ID,
+        single_parameter_fits,
         live_points=500,
         efficiency=0.01,
         const_efficiency=False,
         tolerance=0.5,
     ):
         super().__init__(
-            f"{result_path}/{result_ID}", loaded_datasets, coefficients, use_quad
+            f"{result_path}/{result_ID}",
+            loaded_datasets,
+            coefficients,
+            use_quad,
+            single_parameter_fits,
         )
         self.live_points = live_points
         self.efficiency = efficiency
         self.const_efficiency = const_efficiency
         self.tolerance = tolerance
-        self.npar = self.free_parameters.size
+        self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
 
     @classmethod
@@ -84,51 +94,38 @@ class NSOptimizer(Optimizer):
             config["order"],
             config["use_quad"],
             config["use_theory_covmat"],
-            config["theory_path"] if "theory_path" in config else None,
-            config["rot_to_fit_basis"] if "rot_to_fit_basis" in config else None,
+            config.get("theory_path", None),
+            config.get("rot_to_fit_basis", None),
+            config.get("uv_coupligs", False),
         )
 
-        missing_operators = []
-        for k in config["coefficients"]:
-            if k not in loaded_datasets.OperatorsNames:
-                missing_operators.append(k)
-        if missing_operators:
-            raise NotImplementedError(
-                f"{missing_operators} not in the theory. Comment it out in setup script and restart."
-            )
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
+        single_parameter_fits = config.get("single_parameter_fits", False)
+        nlive = config.get("nlive", 500)
+
         if "nlive" not in config:
-            print(
-                "Number of live points (nlive) not set in the input card. Using default: 500"
+            _logger.warning(
+                f"Number of live points (nlive) not set in the input card. Using default: {nlive}"
             )
-            nlive = 500
-        else:
-            nlive = config["nlive"]
 
+        efr = config.get("efr", 0.01)
         if "efr" not in config:
-            warnings.warn(
-                "Sampling efficiency (efr) not set in the input card. Using default: 0.01"
+            _logger.warning(
+                f"Sampling efficiency (efr) not set in the input card. Using default: {efr}"
             )
-            efr = 0.01
-        else:
-            efr = config["efr"]
 
+        ceff = config.get("ceff", False)
         if "ceff" not in config:
-            warnings.warn(
-                "Constant efficiency mode (ceff) not set in the input card. Using default: False"
+            _logger.warning(
+                f"Constant efficiency mode (ceff) not set in the input card. Using default: {ceff}"
             )
-            ceff = False
-        else:
-            ceff = config["ceff"]
 
+        toll = config.get("toll", 0.5)
         if "toll" not in config:
-            warnings.warn(
-                "Evidence tolerance (toll) not set in the input card. Using default: 0.5"
+            _logger.warning(
+                f"Evidence tolerance (toll) not set in the input card. Using default: {toll}"
             )
-            toll = 0.5
-        else:
-            toll = config["toll"]
 
         return cls(
             loaded_datasets,
@@ -136,6 +133,7 @@ class NSOptimizer(Optimizer):
             config["result_path"],
             config["use_quad"],
             config["result_ID"],
+            single_parameter_fits,
             live_points=nlive,
             efficiency=efr,
             const_efficiency=ceff,
@@ -157,7 +155,7 @@ class NSOptimizer(Optimizer):
                 chi2 function
 
         """
-        self.free_parameters.value = params
+        self.coefficients.set_free_parameters(params)
         self.coefficients.set_constraints()
 
         return self.chi2_func()
@@ -239,18 +237,23 @@ class NSOptimizer(Optimizer):
         )
 
         t2 = time.time()
-
-        print("Time = ", (t2 - t1) / 60.0, " minutes\n")
-        print(f"evidence: {result['logZ']:1f} +- {result['logZerr']:1f} \n")
-        print("parameter values:")
-        for par, col in zip(self.free_parameters, result["samples"].T):
-            print(f"{par.op_name} : {col.mean():3f} +- {col.std():3f}")
-        print(f"Number of samples: {result['samples'].shape[0]}")
-
         comm = MPI.COMM_WORLD
         rank = comm.Get_rank()
 
         if rank == 0:
+            log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
+            log.console.log(f"Number of samples: {result['samples'].shape[0]}")
+
+            table = Table(
+                style=Style(color="white"), title_style="bold cyan", title=None
+            )
+            table.add_column("Parameter", style="bold red", no_wrap=True)
+            table.add_column("Best value")
+            table.add_column("Error")
+            for par, col in zip(self.free_parameters.index, result["samples"].T):
+                table.add_row(f"{par}", f"{col.mean():.3f}", f"{col.std():.3f}")
+            log.console.print(table)
+
             self.save(result)
             self.clean()
 
@@ -265,18 +268,17 @@ class NSOptimizer(Optimizer):
                 result dictionary
 
         """
-        # TODO: move to __init__?
         values = {}
-        for c in self.coefficients.op_name:
+        for c in self.coefficients.name:
             values[c] = []
 
         for sample in result["samples"]:
 
-            self.coefficients.free_parameters.value = sample
+            self.coefficients.set_free_parameters(sample)
             self.coefficients.set_constraints()
 
-            for c in self.coefficients.op_name:
-                values[c].append(float(self.coefficients.get_from_name(c).value))
+            for c in self.coefficients.name:
+                values[c].append(self.coefficients[c].value)
 
-        with open(self.results_path / "posterior.json", "w", encoding="utf-8") as f:
-            json.dump(values, f)
+        posterior_file = self.results_path / "posterior.json"
+        self.dump_posterior(posterior_file, values)

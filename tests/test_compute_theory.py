@@ -38,6 +38,8 @@ class TestPredictions:
         ]
     )  # Op1^2, Op1*Op2, Op2^2
     covmat = np.array([[0.01, 0.02], [0.02, 0.03]])
+    replica = np.random.multivariate_normal(exp_data, covmat)
+
     dataset = loader.DataTuple(
         exp_data,
         sm_theory,
@@ -47,6 +49,7 @@ class TestPredictions:
         np.array(["exp1"]),
         np.array([exp_data.size]),
         np.linalg.inv(covmat),
+        replica,
     )
     wilson_coeff = np.array([0.5, 0.6])
 

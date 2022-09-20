@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 """Implement the corrections table basis rotation"""
+import json
+
 import numpy as np
 import pandas as pd
 
 from .compute_theory import flatten
 
 
-def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix):
+def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix_path):
     """
     Rotate to fitting basis
 
@@ -30,6 +32,12 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix):
             theory dictionary with quadratic operator corrections in the fit
             basis, emptry if quadratic corrections are not used
     """
+    f = open(rotation_matrix_path)
+    rot = json.load(f)
+    rotation_matrix = pd.DataFrame(
+        data=rot["matrix"], index=rot["ypars"], columns=rot["xpars"]
+    )
+
     lin_df = pd.DataFrame(lin_dict)
     quad_dict_fit_basis = {}
 
@@ -45,26 +53,34 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix):
     tensor = []
     # loop over table basis pairs
     # and build an (n_op_table, n_dat, n_op_fit, n_op_fit) tensor
+
     for col, values in quad_dict.items():
         o1, o2 = col.split("*")
-        r1 = R[o1]
-        r2 = R[o2]
+        r1 = rotation_matrix[o1]
+        r2 = rotation_matrix[o2]
         r1r2 = np.outer(r1, r2)
         r1r2o1o2 = np.einsum("i,kj->ikj", values, r1r2)
         tensor.append(r1r2o1o2)
-
     # sum over table basis entries
     tensor = np.array(tensor)
     new_quad_corrections = tensor.sum(axis=0)
 
     # flatten the tensor (n_dat, n_op_fit, n_op_fit) -> (n_dat, n_op_fit_pairs)
-    new_quad_matrix = flatten(new_quad_corrections, axis=1)
+    new_quad_matrix = []
+    for correction in new_quad_corrections:
+        new_quad_matrix.append(flatten(correction, axis=1))
+    new_quad_matrix = np.array(new_quad_matrix)
 
-    # build the new quadratic corrections dictionary
-    for i, r1 in enumerate(R.index):
-        for r2 in R.index:
-            new_key = f"{r1}*{r2}"
-            if new_key not in quad_dict_fit_basis:
-                quad_dict_fit_basis[new_key] = new_quad_matrix[:, i]
+    matrix_new_keys = []
+    for r1 in rotation_matrix.index:
+        row = []
+        for r2 in rotation_matrix.index:
+            row.append(f"{r1}*{r2}")
+        matrix_new_keys.append(row)
+
+    new_keys = flatten(np.array(matrix_new_keys))
+
+    for i, new_key in enumerate(new_keys):
+        quad_dict_fit_basis[new_key] = new_quad_matrix[:, i]
 
     return lin_dict_fit_basis.to_dict("list"), quad_dict_fit_basis

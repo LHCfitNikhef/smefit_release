@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import json
 
-from rich.console import Console
+from mpi4py import MPI
 from rich.style import Style
 from rich.table import Table
 
-from .. import chi2
-
-print_rate = 5000
+from .. import chi2, log
+from ..loader import get_dataset
 
 
 class Optimizer:
@@ -27,14 +27,24 @@ class Optimizer:
 
     """
 
+    print_rate = 100
+
     # TODO: docstring
 
-    def __init__(self, results_path, loaded_datasets, coefficients, use_quad):
+    def __init__(
+        self,
+        results_path,
+        loaded_datasets,
+        coefficients,
+        use_quad,
+        single_parameter_fits,
+    ):
         self.results_path = pathlib.Path(results_path)
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.use_quad = use_quad
         self.npts = self.loaded_datasets.Commondata.size
+        self.single_parameter_fits = single_parameter_fits
 
         self.counter = 0
 
@@ -44,37 +54,70 @@ class Optimizer:
         return self.coefficients.free_parameters
 
     def generate_chi2_table(self, chi2_dict, chi2_tot):
+        r"""Generate log :math:`\chi^2` table"""
         table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
         table.add_column("Dataset", style="bold green", no_wrap=True)
+
         table.add_column("Chi^2 /N_dat")
         for name, val in chi2_dict.items():
             table.add_row(str(name), f"{val:.3}")
         table.add_row("Total", f"{(chi2_tot/self.npts):.3}")
+
         return table
 
-    def chi2_func(self):
+    def chi2_func(self, use_replica=False, print_log=True):
         r"""
-        Wrap the math:`\Chi^2` in a function for the optimizer. Pass noise and
-        data info as args. Log the math:`\Chi^2` value and values of the coefficients.
+        Wrap the math:`\chi^2` in a function for the optimizer. Pass noise and
+        data info as args. Log the math:`\chi^2` value and values of the coefficients.
 
         Returns
         -------
             current_chi2 : np.ndarray
-                computed :math:`\Chi^2`
+                computed :math:`\chi^2`
         """
-        self.counter += 1
-        print_log = (self.counter % print_rate) == 0
+
+        comm = MPI.COMM_WORLD
+        rank = comm.Get_rank()
+        if rank == 0:
+            self.counter += 1
+            if print_log:
+                print_log = (self.counter % self.print_rate) == 0
+        else:
+            print_log = False
+
+        chi2_tot = chi2.compute_chi2(
+            self.loaded_datasets,
+            self.coefficients.value,
+            self.use_quad,
+            use_replica,
+        )
 
         if print_log:
-            chi2_tot, chi2_dict = chi2.compute_chi2(
-                self.loaded_datasets, self.coefficients.value, self.use_quad, True
-            )
-            console = Console()
-            console.print(self.generate_chi2_table(chi2_dict, chi2_tot))
-        else:
-            chi2_tot = chi2.compute_chi2(
-                self.loaded_datasets,
-                self.coefficients.value,
-                self.use_quad,
-            )
+            chi2_dict = {}
+            for data_name in self.loaded_datasets.ExpNames:
+                dataset = get_dataset(self.loaded_datasets, data_name)
+                chi2_dict[data_name] = (
+                    chi2.compute_chi2(
+                        dataset,
+                        self.coefficients.value,
+                        self.use_quad,
+                        use_replica,
+                    )
+                    / dataset.NdataExp
+                )
+            log.console.print(self.generate_chi2_table(chi2_dict, chi2_tot))
+
         return chi2_tot
+
+    def dump_posterior(self, posterior_file, values):
+
+        if self.single_parameter_fits:
+            if posterior_file.is_file():
+                with open(posterior_file, encoding="utf-8") as f:
+                    tmp = json.load(f)
+                    values.update(tmp)
+            else:
+                values["single_parameter_fits"] = True
+
+        with open(posterior_file, "w", encoding="utf-8") as f:
+            json.dump(values, f)

@@ -107,12 +107,12 @@ class TestOptimize:
         assert self.test_opt.results_path == commondata_path / "test"
         np.testing.assert_equal(self.test_opt.loaded_datasets.ExpNames, datasets)
         np.testing.assert_equal(
-            self.test_opt.coefficients.op_name, ["Op1", "Op2", "Op3", "Op4"]
+            self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]
         )
 
     def test_free_parameters(self):
         np.testing.assert_equal(
-            self.test_opt.free_parameters.op_name, ["Op1", "Op2", "Op3"]
+            list(self.test_opt.free_parameters.index), ["Op1", "Op2", "Op3"]
         )
 
     def test_chi2_func_ns(self):
