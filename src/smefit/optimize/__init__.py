@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import json
 
 from mpi4py import MPI
 from rich.style import Style
@@ -30,12 +31,20 @@ class Optimizer:
 
     # TODO: docstring
 
-    def __init__(self, results_path, loaded_datasets, coefficients, use_quad):
+    def __init__(
+        self,
+        results_path,
+        loaded_datasets,
+        coefficients,
+        use_quad,
+        single_parameter_fits,
+    ):
         self.results_path = pathlib.Path(results_path)
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.use_quad = use_quad
         self.npts = self.loaded_datasets.Commondata.size
+        self.single_parameter_fits = single_parameter_fits
 
         self.counter = 0
 
@@ -99,3 +108,16 @@ class Optimizer:
             log.console.print(self.generate_chi2_table(chi2_dict, chi2_tot))
 
         return chi2_tot
+
+    def dump_posterior(self, posterior_file, values):
+
+        if self.single_parameter_fits:
+            if posterior_file.is_file():
+                with open(posterior_file, encoding="utf-8") as f:
+                    tmp = json.load(f)
+                    values.update(tmp)
+            else:
+                values["single_parameter_fits"] = True
+
+        with open(posterior_file, "w", encoding="utf-8") as f:
+            json.dump(values, f)

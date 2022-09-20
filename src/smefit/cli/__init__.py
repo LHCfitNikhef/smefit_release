@@ -77,7 +77,7 @@ def nested_sampling(runcard_path: pathlib.Path, fit_card: str, log_file: pathlib
         runner = None
 
     runner = comm.bcast(runner, root=0)
-    runner.ns()
+    runner.run_analysis("NS")
 
 
 @base_command.command("MC")
@@ -105,7 +105,7 @@ def monte_carlo_fit(
     print_banner()
     log.console.log("Running : MonteCarlo Fit")
     runner = Runner.from_file(runcard_path, fit_card, n_replica)
-    runner.mc()
+    runner.run_analysis("MC")
 
 
 @base_command.command("PF")

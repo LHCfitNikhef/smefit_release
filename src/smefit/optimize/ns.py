@@ -3,7 +3,6 @@
 """
 Fitting the Wilson coefficients with NS
 """
-import json
 import os
 import time
 
@@ -52,13 +51,18 @@ class NSOptimizer(Optimizer):
         result_path,
         use_quad,
         result_ID,
+        single_parameter_fits,
         live_points=500,
         efficiency=0.01,
         const_efficiency=False,
         tolerance=0.5,
     ):
         super().__init__(
-            f"{result_path}/{result_ID}", loaded_datasets, coefficients, use_quad
+            f"{result_path}/{result_ID}",
+            loaded_datasets,
+            coefficients,
+            use_quad,
+            single_parameter_fits,
         )
         self.live_points = live_points
         self.efficiency = efficiency
@@ -97,7 +101,9 @@ class NSOptimizer(Optimizer):
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
+        single_parameter_fits = config.get("single_parameter_fits", False)
         nlive = config.get("nlive", 500)
+
         if "nlive" not in config:
             _logger.warning(
                 f"Number of live points (nlive) not set in the input card. Using default: {nlive}"
@@ -127,6 +133,7 @@ class NSOptimizer(Optimizer):
             config["result_path"],
             config["use_quad"],
             config["result_ID"],
+            single_parameter_fits,
             live_points=nlive,
             efficiency=efr,
             const_efficiency=ceff,
@@ -273,5 +280,5 @@ class NSOptimizer(Optimizer):
             for c in self.coefficients.name:
                 values[c].append(self.coefficients[c].value)
 
-        with open(self.results_path / "posterior.json", "w", encoding="utf-8") as f:
-            json.dump(values, f)
+        posterior_file = self.results_path / "posterior.json"
+        self.dump_posterior(posterior_file, values)
