@@ -4,16 +4,15 @@
 Fitting the Wilson coefficients with MC
 """
 import copy
+import json
 import time
 
-import numpy as np
 import scipy.optimize as opt
 from rich.style import Style
 from rich.table import Table
 from scipy.optimize import Bounds
 
 from .. import log
-from ..chi2 import compute_chi2
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
@@ -90,14 +89,6 @@ class MCOptimizer(Optimizer):
             config.get("uv_coupligs", False),
         )
 
-        missing_operators = []
-        for k in config["coefficients"]:
-            if k not in loaded_datasets.OperatorsNames:
-                missing_operators.append(k)
-        if missing_operators:
-            raise NotImplementedError(
-                f"{missing_operators} not in the theory. Comment it out in setup script and restart."
-            )
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
         use_bounds = config.get("use_bounds", True)
@@ -156,42 +147,6 @@ class MCOptimizer(Optimizer):
 
         return current_chi2
 
-    def chi2_scan(self):
-        r"""Individual :math:`\Chi^2` scan"""
-
-        # set all the coefficients to 0 and fixed
-        coefficient_temp = copy.deepcopy(self.coefficients)
-        for coeff in coefficient_temp:
-            coeff.is_free = False
-            coeff.value = 0.0
-
-        # chi2 - 2 == 0
-        def regularized_chi2_func(xs):
-            roots = []
-            for x in xs:
-                coeff.value = x
-                coefficient_temp.set_constraints()
-                chi2 = compute_chi2(
-                    self.loaded_datasets, coefficient_temp.value, self.use_quad, False,
-                )
-                roots.append(chi2 / self.npts - 2.0)
-            return roots
-
-        # fin the bound for each coefficient
-        bounds = []
-        for coeff in coefficient_temp:
-            if coeff not in self.free_parameters:
-                continue
-            coeff.is_free = True
-            roots = opt.fsolve(
-                regularized_chi2_func, [-1000, 1000], xtol=1e-6, maxfev=400
-            )
-            bounds.append(roots)
-            coeff.is_free = False
-            coeff.value = 0.0
-            coefficient_temp.set_constraints()
-            log.console.log(f"Chi^2 scan : bounds for {coeff.name}: {roots}")
-        return bounds
 
     def run_sampling(self):
         """Run the minimization with Nested Sampling"""
