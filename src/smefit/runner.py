@@ -125,6 +125,12 @@ class Runner:
         opt.save()
 
     def global_analysis(self, optimizer):
+        """Run a global fit using the selected optimizer
+        Parameters
+        ----------
+        optimizer: string
+            optimizer to be used (NS or MC)
+        """
 
         config = self.run_card
         if optimizer == "NS":
@@ -133,6 +139,12 @@ class Runner:
             self.mc(config)
 
     def single_parameter_analysis(self, optimizer):
+        """Run a seried of single parameter fits for all the operators specified in the runcard
+        Parameters
+        ----------
+        optimizer: string
+            optimizer to be used (NS or MC)
+        """
 
         config = self.run_card
         for coeff in config["coefficients"].keys():
@@ -146,6 +158,13 @@ class Runner:
                 self.mc(single_coeff_config)
 
     def run_analysis(self, optimizer):
+        """Run either the global analysis or a series of single parameter fits
+        using the selected optimizer.
+        Parameters
+        ----------
+        optimizer: string
+            optimizer to be used (NS or MC)
+        """
 
         if self.single_parameter_fits:
             self.single_parameter_analysis(optimizer)
