@@ -4,6 +4,8 @@ import json
 import pandas as pd
 import yaml
 
+from .coefficients import CoefficientManager
+
 
 class FitManager:
     """
@@ -45,11 +47,7 @@ class FitManager:
 
         # load the configuration file
         self.config = self.load_configuration()
-
-        self.has_posterior = (
-            self.config["has_posterior"] if "has_posterior" in self.config else True
-        )
-
+        self.has_posterior = self.config.get("has_posterior", True)
         self.results = None
 
     def __repr__(self):
@@ -73,7 +71,7 @@ class FitManager:
 
     def load_configuration(self):
         """
-        Load configuration yaml card
+        Load configuration yaml card.
 
         Returns
         -------
@@ -83,6 +81,11 @@ class FitManager:
         with open(f"{self.path}/{self.name}/{self.name}.yaml", encoding="utf-8") as f:
             config = yaml.safe_load(f)
         return config
+
+    @property
+    def coefficients(self):
+        """coefficient manager"""
+        return CoefficientManager.from_dict(self.config["coefficients"])
 
     @property
     def Nrep(self):
