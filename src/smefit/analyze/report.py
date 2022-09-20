@@ -193,7 +193,7 @@ class Report:
             _logger.info("Writing : Confidence level table")
             lines = coeff_plt.write_cl_table(bounds_dict)
 
-        combine_plots(self.report, lines, "coefficient_plots", "Coeffs_")
+        combine_plots(self.report, lines, "coefficient_plots", "coefficients_")
 
     def correlations(self, hide_dofs=None, thr_show=0.1):
         """Plot coefficients correlation matrix.
@@ -201,10 +201,10 @@ class Report:
         Parameters
         ----------
             hide_dofs: list
-                list of operator not to display
+                list of operator not to display.
             thr_show: float, None
-                minimum threshold value to show, if None the full correlation matrix
-                is displayed
+                minimum threshold value to show.
+                If None the full correlation matrix is displayed.
         """
 
         for fit in self.fits:

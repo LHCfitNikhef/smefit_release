@@ -226,7 +226,7 @@ class CoefficientsPlotter:
 
         plt.legend(loc=0, frameon=False, prop={"size": 13})
         plt.tight_layout()
-        plt.savefig(f"{self.report_folder}/Coeffs_Central.pdf", dpi=500)
+        plt.savefig(f"{self.report_folder}/coefficient_central.pdf", dpi=500)
 
     def plot_coeffs_bar(
         self,
@@ -279,7 +279,7 @@ class CoefficientsPlotter:
         plt.xlim(x_min, x_max)
         plt.legend(loc=legend_loc, frameon=False, prop={"size": 13})
         plt.tight_layout()
-        plt.savefig(f"{self.report_folder}/Coeffs_Bar.pdf", dpi=500)
+        plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
 
     def plot_posteriors(self, posteriors, labels, disjointed_lists=None):
         """Plot posteriors histograms.
@@ -343,7 +343,7 @@ class CoefficientsPlotter:
                 lines, labels = axes.get_legend_handles_labels()
         fig.legend(lines, labels, loc="lower right", prop={"size": 20})
         plt.tight_layout()
-        plt.savefig(f"{self.report_folder}/Coeffs_Hist.pdf")
+        plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
 
     def write_cl_table(self, bounds):
         """Coefficients latex table"""

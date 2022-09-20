@@ -22,10 +22,16 @@ def plot_correlations(
     ----------
     posterior_df : pd.DataFrame
         fit results
-    hide_dofs: list, None
-        coefficients to hide
+    latex_names :  pd.DataFrame
+        coefficnet latex name table
+    fig_name : str
+        path to save the plot
+    fit_label: str
+        fit label
     thr_show: float, None
         if given shows only off diagonal entries higher than the threshold
+    hide_dofs: list, None
+        coefficients to hide
     """
     if hide_dofs is not None:
         posterior_df = posterior_df.drop(hide_dofs, axis=1)
