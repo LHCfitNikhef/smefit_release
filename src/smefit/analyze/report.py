@@ -6,6 +6,7 @@ from matplotlib import rc, use
 from ..fit_manager import FitManager
 from ..log import logging
 from .coefficients_utils import CoefficientsPlotter, compute_confidence_level
+from .correlations import plot_correlations
 from .latex_tools import combine_plots, latex_packages, run_pdflatex
 from .summary import SummaryWriter
 
@@ -18,10 +19,9 @@ rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 
 
 class Report:
-    """
-    Class to manage the report.
-    If :math:`Xi^2`, Fisher or Data vs Theory plots are produced it computes the
-    best fit theory predictions
+    r"""Class to manage the report.
+    If :math:`\chi^2`, Fisher or Data vs Theory plots are produced it computes the
+    best fit theory predictions.
 
     Attributes
     ----------
@@ -147,15 +147,6 @@ class Report:
         if hide_dofs is not None:
             free_coeff_config = free_coeff_config.drop(hide_dofs, level=1)
 
-        temp_list = []
-        for fit in self.fits:
-            for c, c_dict in fit.config["coefficients"].items():
-                if "value" in c_dict:
-                    continue
-                if c not in temp_list:
-                    temp_list.append(c)
-        free_coeff_config = free_coeff_config.loc[:, temp_list]
-
         coeff_plt = CoefficientsPlotter(
             self.report,
             free_coeff_config,
@@ -203,3 +194,36 @@ class Report:
             lines = coeff_plt.write_cl_table(bounds_dict)
 
         combine_plots(self.report, lines, "coefficient_plots", "Coeffs_")
+
+    def correlations(self, hide_dofs=None, thr_show=0.1):
+        """Plot coefficients correlation matrix.
+
+        Parameters
+        ----------
+            hide_dofs: list
+                list of operator not to display
+            thr_show: float, None
+                minimum threshold value to show, if None the full correlation matrix
+                is displayed
+        """
+
+        for fit in self.fits:
+            _logger.info(f"Plotting correlations for: {fit.name}")
+            coeff_to_keep = fit.coefficients.free_parameters.index
+            plot_correlations(
+                fit.results[coeff_to_keep],
+                latex_names=self.coeff_info.droplevel(0),
+                fig_name=f"{self.report}/correlations_{fit.name}.pdf",
+                fit_label=fit.label,
+                hide_dofs=hide_dofs,
+                thr_show=thr_show,
+            )
+
+        L = latex_packages()
+        L.append(r"\begin{document}")
+        combine_plots(
+            self.report,
+            L,
+            "correlation_plots",
+            "correlations_",
+        )

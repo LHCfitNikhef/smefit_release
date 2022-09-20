@@ -47,6 +47,9 @@ def run_report(root_path, report_config):
     if "coefficients_plots" in report_config:
         report.coefficients(**report_config["coefficients_plots"])
 
+    if "correlations" in report_config:
+        report.correlations(**report_config["correlations"])
+
     # Combine PDF files together into raw pdf report
     subprocess.call(
         f"gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite \
