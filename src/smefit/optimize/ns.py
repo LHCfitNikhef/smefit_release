@@ -95,47 +95,31 @@ class NSOptimizer(Optimizer):
             config.get("uv_coupligs", False),
         )
 
-        missing_operators = []
-        for k in config["coefficients"]:
-            if k not in loaded_datasets.OperatorsNames:
-                missing_operators.append(k)
-        if missing_operators:
-            raise NotImplementedError(
-                f"{missing_operators} not in the theory. Comment it out in setup script and restart."
-            )
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
+        nlive = config.get("nlive", 500)
         if "nlive" not in config:
             _logger.warning(
-                "Number of live points (nlive) not set in the input card. Using default: 500"
+                f"Number of live points (nlive) not set in the input card. Using default: {nlive}"
             )
-            nlive = 500
-        else:
-            nlive = config["nlive"]
 
+        efr = config.get("efr", 0.01)
         if "efr" not in config:
             _logger.warning(
-                "Sampling efficiency (efr) not set in the input card. Using default: 0.01"
+                f"Sampling efficiency (efr) not set in the input card. Using default: {efr}"
             )
-            efr = 0.01
-        else:
-            efr = config["efr"]
 
+        ceff = config.get("ceff", False)
         if "ceff" not in config:
             _logger.warning(
-                "Constant efficiency mode (ceff) not set in the input card. Using default: False"
+                f"Constant efficiency mode (ceff) not set in the input card. Using default: {ceff}"
             )
-            ceff = False
-        else:
-            ceff = config["ceff"]
 
+        toll = config.get("toll", 0.5)
         if "toll" not in config:
             _logger.warning(
-                "Evidence tolerance (toll) not set in the input card. Using default: 0.5"
+                f"Evidence tolerance (toll) not set in the input card. Using default: {toll}"
             )
-            toll = 0.5
-        else:
-            toll = config["toll"]
 
         return cls(
             loaded_datasets,
