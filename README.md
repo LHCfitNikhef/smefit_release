@@ -45,7 +45,10 @@ cd <SMEFIT_INSTALLATION_PATH>
 
 conda install poetry
 poetry install
+
 ```
+The script will download and compile the MultiNest library, together with the necessary python packages
+to run the code.
 
 ## Running
 The fitting code provide two equivalent fiining stategies.
@@ -74,6 +77,9 @@ mpi4py = 3.1.3 (3.0.3)
 
 with python 3.10 (3.9). Then you can run doing:
 
+### Running in parallel
+To run smefit in parallel openmpi and mpi4py need to be installed inside your python environnement, as detailed above.
+Then you can run:
 ```bash
 mpiexec -n number_of_cores smefit NS -f <your_runcard_name>
 ```

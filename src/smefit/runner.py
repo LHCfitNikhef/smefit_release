@@ -29,10 +29,11 @@ class Runner:
             path to runcard folder if already present
     """
 
-    def __init__(self, run_card, runcard_folder=None):
+    def __init__(self, run_card, single_parameter_fits, runcard_folder=None):
 
         self.run_card = run_card
         self.runcard_folder = runcard_folder
+        self.single_parameter_fits = single_parameter_fits
         self.setup_result_folder()
 
     def setup_result_folder(self):
@@ -97,15 +98,17 @@ class Runner:
         if "result_ID" not in config:
             config["result_ID"] = run_card_name
 
-        return cls(config, runcard_folder)
+        single_parameter_fits = config.get("single_parameter_fits", False)
 
-    def ns(self):
+        return cls(config, single_parameter_fits, runcard_folder)
+
+    def ns(self, config):
         """Run a fit with |NS|."""
+
         comm = MPI.COMM_WORLD
         rank = comm.Get_rank()
 
         if rank == 0:
-            config = self.run_card
             opt = NSOptimizer.from_dict(config)
         else:
             opt = None
@@ -114,12 +117,59 @@ class Runner:
         opt = comm.bcast(opt, root=0)
         opt.run_sampling()
 
-    def mc(self):
+    def mc(self, config):
         """Run a fit with |MC|."""
         config = self.run_card
         opt = MCOptimizer.from_dict(config)
         opt.run_sampling()
         opt.save()
+
+    def global_analysis(self, optimizer):
+        """Run a global fit using the selected optimizer
+        Parameters
+        ----------
+        optimizer: string
+            optimizer to be used (NS or MC)
+        """
+
+        config = self.run_card
+        if optimizer == "NS":
+            self.ns(config)
+        elif optimizer == "MC":
+            self.mc(config)
+
+    def single_parameter_analysis(self, optimizer):
+        """Run a seried of single parameter fits for all the operators specified in the runcard
+        Parameters
+        ----------
+        optimizer: string
+            optimizer to be used (NS or MC)
+        """
+
+        config = self.run_card
+        for coeff in config["coefficients"].keys():
+            single_coeff_config = dict(config)
+            single_coeff_config["coefficients"] = {}
+            single_coeff_config["coefficients"][coeff] = config["coefficients"][coeff]
+
+            if optimizer == "NS":
+                self.ns(single_coeff_config)
+            elif optimizer == "MC":
+                self.mc(single_coeff_config)
+
+    def run_analysis(self, optimizer):
+        """Run either the global analysis or a series of single parameter fits
+        using the selected optimizer.
+        Parameters
+        ----------
+        optimizer: string
+            optimizer to be used (NS or MC)
+        """
+
+        if self.single_parameter_fits:
+            self.single_parameter_analysis(optimizer)
+        else:
+            self.global_analysis(optimizer)
 
     def chi2_scan(self, n_replica, compute_bounds):
         r"""Run an individual :math:`\chi^2` scan.

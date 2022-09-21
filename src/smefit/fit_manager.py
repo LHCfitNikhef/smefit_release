@@ -2,6 +2,7 @@
 import json
 
 import pandas as pd
+import numpy as np
 import yaml
 
 from .coefficients import CoefficientManager
@@ -67,6 +68,24 @@ class FitManager:
             file = "posterior"
         with open(f"{self.path}/{self.name}/{file}.json", encoding="utf-8") as f:
             results = json.load(f)
+
+        # if the posterior is from single parameter fits
+        # then each distribution might have a different number of samples
+
+        if results["single_parameter_fits"]:
+
+            del results["single_parameter_fits"]
+
+            num_samples = []
+            for key in results.keys():
+                num_samples.append(len(results[key]))
+            num_samples_min = min(num_samples)
+
+            for key in results.keys():
+                results[key] = np.random.choice(
+                    results[key], num_samples_min, replace=False
+                )
+
         self.results = pd.DataFrame(results)
 
     def load_configuration(self):
