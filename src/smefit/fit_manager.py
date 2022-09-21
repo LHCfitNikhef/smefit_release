@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import yaml
 
 
@@ -73,8 +73,8 @@ class FitManager:
 
         # if the posterior is from single parameter fits
         # then each distribution might have a different number of samples
-
-        if results["single_parameter_fits"]:
+        is_single_param = results.get("single_parameter_fits", False)
+        if is_single_param:
 
             del results["single_parameter_fits"]
 
