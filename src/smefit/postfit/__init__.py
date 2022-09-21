@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 
 class Postfit:
-    def __init__(self, result_path, result_ID, chi2_threshold):
+    def __init__(self, result_path, result_ID, single_parameter_fits, chi2_threshold):
 
         self.results_folder = pathlib.Path(result_path).absolute() / result_ID
         self.finished_replicas = 0
@@ -20,6 +20,7 @@ class Postfit:
             if "replica_" in str(name):
                 self.finished_replicas += 1
 
+        self.single_parameter_fits = single_parameter_fits
         self.chi2_threshold = chi2_threshold
         self.not_completed = False
 
@@ -33,13 +34,18 @@ class Postfit:
 
         # set result ID to runcard name by default
         result_ID = config.get("result_ID", run_card_name)
-
+        single_parameter_fits = config.get("single_parameter_fits", False)
         # get the chi2_threshold, by default is 3.0
-        if "chi2_threshold" not in config:
+        if "chi2_threshold" not in config and not single_parameter_fits:
             _logger.warning("chi2_threshold not set, using default value of 3.0")
         chi2_threshold = config.get("chi2_threshold", 3.0)
 
-        return cls(config["result_path"], result_ID, chi2_threshold)
+        return cls(
+            config["result_path"],
+            result_ID,
+            single_parameter_fits,
+            chi2_threshold,
+        )
 
     def save(self, nrep):
 
@@ -62,18 +68,21 @@ class Postfit:
             if len(postfit_res) == 0:
                 coeffs = res.keys()
 
-            if res["chi2"] > self.chi2_threshold:
-                _logger.warning(f"Discarding replica: {rep}")
-                continue
+            # if it s a single parameter fit the chi2 check does not happen
+            if not self.single_parameter_fits:
+                if res["chi2"] > self.chi2_threshold:
+                    _logger.warning(f"Discarding replica: {rep}")
+                    continue
 
-            chi2_list.append(res["chi2"])
-            del res["chi2"]
+                chi2_list.append(res["chi2"])
+                del res["chi2"]
             for coeff in res:
                 rep_res.append(res[coeff])
 
             postfit_res.append(rep_res)
 
-        _logger.info(f"Chi2 average : {np.mean(chi2_list)}")
+        if not self.single_parameter_fits:
+            _logger.info(f"Chi2 average : {np.mean(chi2_list)}")
         if len(postfit_res) < nrep:
             _logger.warning(
                 f"Only {len(postfit_res)} replicas pass postfit, please run some more"

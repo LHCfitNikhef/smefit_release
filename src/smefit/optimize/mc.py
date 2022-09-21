@@ -3,6 +3,7 @@
 """
 Fitting the Wilson coefficients with MC
 """
+import copy
 import json
 import time
 
@@ -41,11 +42,16 @@ class MCOptimizer(Optimizer):
         use_quad,
         result_ID,
         replica,
+        single_parameter_fits,
         use_bounds,
         maxiter,
     ):
         super().__init__(
-            f"{result_path}/{result_ID}", loaded_datasets, coefficients, use_quad
+            f"{result_path}/{result_ID}",
+            loaded_datasets,
+            coefficients,
+            use_quad,
+            single_parameter_fits,
         )
         self.chi2_values = []
         self.coeff_steps = []
@@ -94,6 +100,8 @@ class MCOptimizer(Optimizer):
                 "Number of maximum iterations (maxiter) not set in the input card. Using default: 1e4"
             )
 
+        single_parameter_fits = config.get("single_parameter_fits", False)
+
         return cls(
             loaded_datasets,
             coefficients,
@@ -101,6 +109,7 @@ class MCOptimizer(Optimizer):
             config["use_quad"],
             config["result_ID"],
             config["replica"],
+            single_parameter_fits,
             use_bounds,
             maxiter,
         )
@@ -176,7 +185,8 @@ class MCOptimizer(Optimizer):
         self.coefficients.set_free_parameters(self.free_parameters.value)
         self.coefficients.set_constraints()
         values = {}
-        values["chi2"] = self.chi2_values[-1] / self.npts
+        if not self.single_parameter_fits:
+            values["chi2"] = self.chi2_values[-1] / self.npts
         table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
         table.add_column("Parameter", style="bold red", no_wrap=True)
         table.add_column("Best value")
@@ -185,10 +195,9 @@ class MCOptimizer(Optimizer):
             values[par] = value
         log.console.print(table)
 
-        with open(
+        posterior_file = (
             self.results_path
-            / f"replica_{self.replica}/coefficients_rep_{self.replica}.json",
-            "w",
-            encoding="utf-8",
-        ) as f:
-            json.dump(values, f)
+            / f"replica_{self.replica}/coefficients_rep_{self.replica}.json"
+        )
+
+        self.dump_posterior(posterior_file, values)
