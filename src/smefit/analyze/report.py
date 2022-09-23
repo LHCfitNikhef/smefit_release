@@ -222,15 +222,6 @@ class Report:
                 thr_show=thr_show,
             )
 
-        # L = latex_packages()
-        # L.append(r"\begin{document}")
-        # combine_plots(
-        #     self.report,
-        #     L,
-        #     "correlation_plots",
-        #     "correlations_",
-        # )
-
     def pca(
         self,
         table=True,
