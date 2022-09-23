@@ -50,6 +50,9 @@ def run_report(root_path, report_config):
     if "correlations" in report_config:
         report.correlations(**report_config["correlations"])
 
+    if "PCA" in report_config:
+        report.pca(**report_config["PCA"])
+
     # Combine PDF files together into raw pdf report
     subprocess.call(
         f"gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite \

@@ -8,6 +8,7 @@ from ..log import logging
 from .coefficients_utils import CoefficientsPlotter, compute_confidence_level
 from .correlations import plot_correlations
 from .latex_tools import combine_plots, latex_packages, run_pdflatex
+from .pca import PcaCalculator
 from .summary import SummaryWriter
 
 _logger = logging.getLogger(__name__)
@@ -61,6 +62,8 @@ class Report:
         for name, label in zip(report_config["result_IDs"], fit_labels):
             fit = FitManager(result_path, name, label)
             fit.load_results()
+            if "PCA" in report_config:
+                fit.load_datasets()
             self.fits.append(fit)
         self.fits = np.array(self.fits)
 
@@ -219,11 +222,66 @@ class Report:
                 thr_show=thr_show,
             )
 
-        L = latex_packages()
-        L.append(r"\begin{document}")
-        combine_plots(
-            self.report,
-            L,
-            "correlation_plots",
-            "correlations_",
-        )
+        # L = latex_packages()
+        # L.append(r"\begin{document}")
+        # combine_plots(
+        #     self.report,
+        #     L,
+        #     "correlation_plots",
+        #     "correlations_",
+        # )
+
+    def pca(
+        self,
+        table=True,
+        plot=True,
+        thr_show=1e-2,
+        sv_min=1e-4,
+        sv_max=1e5,
+        fit_list=None,
+    ):
+        """Principal Components Analysis runner.
+
+        Parameters
+        ----------
+        table: bool, optional
+            if True writes the PC directions in a latex list
+        plot: bool, optional
+            if True produces a PC heatmap
+        thr_show: float
+            minimum threshold value to show
+        sv_min: float
+            minimum singular value range shown in the top heatmap plot
+        sv_max: float
+            maximum singular value range shown in the top heatmap plot
+        fit_list: list, optional
+            list of fit names for which the PCA is computed.
+            By default all the fits included in the report
+        """
+        if fit_list is not None:
+            fit_list = self.fits[self.fits == fit_list]
+        else:
+            fit_list = self.fits
+        for fit in fit_list:
+            _logger.info(f"Computing PCA for fit {fit.name}")
+            pca_cal = PcaCalculator(
+                fit.datasets,
+                fit.coefficients,
+                self.coeff_info.droplevel(0),
+            )
+            pca_cal.compute()
+
+            if table:
+                run_pdflatex(
+                    self.report,
+                    pca_cal.write(fit.label, thr_show),
+                    f"pca_table_{fit.name}",
+                )
+
+            if plot:
+                pca_cal.plot_heatmap(
+                    fit.label,
+                    f"{self.report}/pca_heatmap_{fit.name}.pdf",
+                    sv_min=sv_min,
+                    sv_max=sv_max,
+                )

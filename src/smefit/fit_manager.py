@@ -6,6 +6,7 @@ import pandas as pd
 import yaml
 
 from .coefficients import CoefficientManager
+from .loader import load_datasets
 
 
 class FitManager:
@@ -50,6 +51,7 @@ class FitManager:
         self.config = self.load_configuration()
         self.has_posterior = self.config.get("has_posterior", True)
         self.results = None
+        self.datasets = None
 
     def __repr__(self):
         return self.name
@@ -100,6 +102,20 @@ class FitManager:
         with open(f"{self.path}/{self.name}/{self.name}.yaml", encoding="utf-8") as f:
             config = yaml.safe_load(f)
         return config
+
+    def load_datasets(self):
+        """Load all datasets"""
+        self.datasets = load_datasets(
+            self.config["data_path"],
+            self.config["datasets"],
+            self.config["coefficients"],
+            self.config["order"],
+            self.config["use_quad"],
+            self.config["use_theory_covmat"],
+            self.config.get("theory_path", None),
+            self.config.get("rot_to_fit_basis", None),
+            self.config.get("uv_coupligs", False),
+        )
 
     @property
     def coefficients(self):
