@@ -29,9 +29,26 @@ namely carrying out extensive global analysis which is the main purpose of |SMEF
     implementation/general
     implementation/NS
 
-    zzz-refs
+    
 
     API <modules/smefit/smefit>
+
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Data and theory tables:
+    :hidden:
+
+    data_theory/data.md
+    data_theory/theory
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Examples and tutorial:
+    :hidden:
+
+    tutorial/example
+
 
 .. toctree::
     :maxdepth: 1
@@ -39,6 +56,9 @@ namely carrying out extensive global analysis which is the main purpose of |SMEF
     :hidden:
 
     development/code_todos
+
+    zzz-refs
+
 
 
 
