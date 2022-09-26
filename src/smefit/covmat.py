@@ -55,7 +55,7 @@ def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
     return np.diag(diagonal) + corr_sys_mat @ corr_sys_mat.T
 
 
-def covmat_from_systematics( stat_errors: list, sys_errors: list):
+def covmat_from_systematics(stat_errors: list, sys_errors: list):
     """Given two lists containing the statistic and systematic errors,
     construct the full covariance matrix.
 
@@ -82,16 +82,16 @@ def covmat_from_systematics( stat_errors: list, sys_errors: list):
     special_corrs = []
     block_diags = []
 
-    for dataset_stat_errors, dataset_sys_errors in zip(
-        stat_errors,
-        sys_errors
-    ):
-        
+    for dataset_stat_errors, dataset_sys_errors in zip(stat_errors, sys_errors):
+
         # separate out the special uncertainties which can be correlated across
         # datasets
         is_intra_dataset_error = dataset_sys_errors.columns.isin(INTRA_DATASET_SYS_NAME)
-        block_diags.append(construct_covmat(
-            dataset_stat_errors, dataset_sys_errors.loc[:, is_intra_dataset_error]))
+        block_diags.append(
+            construct_covmat(
+                dataset_stat_errors, dataset_sys_errors.loc[:, is_intra_dataset_error]
+            )
+        )
         special_corrs.append(dataset_sys_errors.loc[:, ~is_intra_dataset_error])
 
     # concat systematics across datasets

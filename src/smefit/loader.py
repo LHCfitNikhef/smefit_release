@@ -502,9 +502,8 @@ def load_datasets(
     else:
         quad_corr_values = None
 
-
     # Construct unique large cov matrix dropping correlations between different datasets
-    #error_specs = list(zip(sys_error, stat_error))
+    # error_specs = list(zip(sys_error, stat_error))
     covmat = covmat_from_systematics(stat_error, sys_error)
 
     replica = np.random.multivariate_normal(exp_data, covmat)
