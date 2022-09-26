@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import pathlib
 import json
+import pathlib
 
 from mpi4py import MPI
 from rich.style import Style
@@ -27,7 +27,7 @@ class Optimizer:
 
     """
 
-    print_rate = 100
+    print_rate = 500
 
     # TODO: docstring
 
@@ -60,8 +60,8 @@ class Optimizer:
 
         table.add_column("Chi^2 /N_dat")
         for name, val in chi2_dict.items():
-            table.add_row(str(name), f"{val:.3}")
-        table.add_row("Total", f"{(chi2_tot/self.npts):.3}")
+            table.add_row(str(name), f"{val:.5}")
+        table.add_row("Total", f"{(chi2_tot/self.npts):.5}")
 
         return table
 

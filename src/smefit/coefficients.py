@@ -135,7 +135,7 @@ class CoefficientManager:
 
     @property
     def value(self):
-        return self._table.value.values
+        return np.array(self._table.value.values, dtype=float)
 
     @property
     def minimum(self):
