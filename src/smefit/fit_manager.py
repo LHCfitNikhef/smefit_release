@@ -4,8 +4,10 @@ import json
 import numpy as np
 import pandas as pd
 import yaml
+from rich.progress import track
 
 from .coefficients import CoefficientManager
+from .compute_theory import make_predictions
 from .loader import load_datasets
 
 
@@ -88,7 +90,8 @@ class FitManager:
                     results[key], num_samples_min, replace=False
                 )
 
-        self.results = pd.DataFrame(results)
+        # Be sure columns are sorted, otherwise can't compute theory...
+        self.results = pd.DataFrame(results).sort_index(axis=1)
 
     def load_configuration(self):
         """
@@ -118,11 +121,35 @@ class FitManager:
         )
 
     @property
+    def smeft_predictions(self):
+        """Compute |SMEFT| predictions for each replica.
+
+        Returns
+        -------
+        np.ndarray:
+            |SMEFT| predictions for each replica
+        """
+
+        smeft = []
+        for rep in track(
+            range(self.n_replica),
+            description="[green]Computing SMEFT predictions for each replica...",
+        ):
+            smeft.append(
+                make_predictions(
+                    self.datasets,
+                    self.results.iloc[rep, :],
+                    self.config["use_quad"],
+                )
+            )
+        return np.array(smeft)
+
+    @property
     def coefficients(self):
         """coefficient manager"""
         return CoefficientManager.from_dict(self.config["coefficients"])
 
     @property
-    def Nrep(self):
+    def n_replica(self):
         """Number of replicas"""
         return self.results.shape[0]
