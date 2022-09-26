@@ -26,23 +26,19 @@ def impose_constrain(dataset, coefficients):
         list of updated linear corrections
 
     """
-    coefficients = copy.deepcopy(coefficients)
-    free_coeffs = coefficients.free_parameters.index
+    temp_coeffs = copy.deepcopy(coefficients)
+    free_coeffs = temp_coeffs.free_parameters.index
     new_linear_corrections = []
     # loop on the corrections and add them
-    for idx, free_coeff in enumerate(free_coeffs):
-        id_free_op = np.where(dataset.OperatorsNames == free_coeff)[0][0]
+    for idx in range(free_coeffs.shape[0]):
         # update all the free coefficents to 0 except fro 1 and propagate
         params = np.zeros_like(free_coeffs)
         params[idx] = 1.0
-        coefficients.set_free_parameters(params)
-        coefficients.set_constraints()
+        temp_coeffs.set_free_parameters(params)
+        temp_coeffs.set_constraints()
 
         # update linear corrections
-        new_linear_corrections.append(
-            dataset.LinearCorrections.T[id_free_op]
-            + coefficients.value @ dataset.LinearCorrections.T
-        )
+        new_linear_corrections.append(temp_coeffs.value @ dataset.LinearCorrections.T)
     return np.array(new_linear_corrections)
 
 
