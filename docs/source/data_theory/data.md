@@ -9,7 +9,7 @@ Experimental data should be provided in `.yaml` file
 dataset_name: example_dataset
 num_data: 3
 num_sys: 2
-data_central: 
+data_central:
 - data1
 - data2
 - data3
@@ -31,4 +31,3 @@ sys_type:
 - MULT
 - ADD
 ```
-
