@@ -30,9 +30,3 @@ big_covmat = np.asarray(
         [0, 0, 11, 12, 13],
     ]
 )
-
-
-def test_build_large_covmat():
-    np.testing.assert_allclose(
-        covmat.build_large_covmat(covmat_list, 5, [2, 3]), big_covmat
-    )

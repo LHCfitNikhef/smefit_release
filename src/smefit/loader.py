@@ -9,8 +9,7 @@ import pandas as pd
 import yaml
 
 from .basis_rotation import rotate_to_fit_basis
-from .covmat_utils import build_large_covmat, construct_covmat
-from .covmat import dataset_inputs_covmat_from_systematics
+from .covmat import construct_covmat, covmat_from_systematics
 from .log import logging
 
 _logger = logging.getLogger(__name__)
@@ -446,7 +445,6 @@ def load_datasets(
     stat_error = []
     lin_corr_list = []
     quad_corr_list = []
-    chi2_covmat = []
     n_data_exp = []
     exp_name = []
 
@@ -473,7 +471,6 @@ def load_datasets(
         sm_theory.extend(dataset.sm_prediction)
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
         quad_corr_list.append([dataset.n_data, dataset.quad_corrections])
-        chi2_covmat.append(dataset.covmat)
         sys_error.append(dataset.sys_error)
         stat_error.append(dataset.stat_error)
 
@@ -507,10 +504,8 @@ def load_datasets(
 
 
     # Construct unique large cov matrix dropping correlations between different datasets
-    covmat_no_corr = build_large_covmat(chi2_covmat, n_data_tot, n_data_exp)
-    error_specs = list(zip(sys_error, stat_error))
-    covmat = dataset_inputs_covmat_from_systematics(error_specs)
-    import pdb; pdb.set_trace()
+    #error_specs = list(zip(sys_error, stat_error))
+    covmat = covmat_from_systematics(stat_error, sys_error)
 
     replica = np.random.multivariate_normal(exp_data, covmat)
     # Make one large datatuple containing all data, SM theory, corrections, etc.
