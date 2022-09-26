@@ -58,7 +58,7 @@ def dump_to_json(data_dict, dataset):
         data_dict["theory_cov"] = data_dict["theory_cov"].tolist()
         data_dict["LO"] = (data_dict["LO"].T).to_dict("list")
         data_dict["NLO"] = (data_dict["NLO"].T).to_dict("list")
-        json.dump(data_dict, f)
+        json.dump(data_dict, f, indent=" ")
 
 
 if __name__ == "__main__":
