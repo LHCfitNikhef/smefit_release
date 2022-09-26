@@ -32,11 +32,13 @@ conda create -n <ENV_NAME> python=3.10
 conda install -c conda-forge openmpi=4.1.4=ha1ae619_100
 conda install compilers
 conda install liblapack libblas
+conda install cmake
 
 cd <MULTINEST_INSTALLATION_PATH>
 mkdir build/
 cd build/
-export FFLAGS='-w -fallow-argument-mismatch -O2'
+export FCFLAGS="-w -fallow-argument-mismatch -O2"
+export FFLAGS="-w -fallow-argument-mismatch -O2"
 cmake ..  -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
 make
 make install
