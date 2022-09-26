@@ -9,7 +9,8 @@ import pandas as pd
 import yaml
 
 from .basis_rotation import rotate_to_fit_basis
-from .covmat import build_large_covmat, construct_covmat
+from .covmat_utils import build_large_covmat, construct_covmat
+from .covmat import dataset_inputs_covmat_from_systematics
 from .log import logging
 
 _logger = logging.getLogger(__name__)
@@ -98,6 +99,8 @@ class Loader:
         (
             self.dataspec["central_values"],
             self.dataspec["covmat"],
+            self.dataspec["sys_error"],
+            self.dataspec["stat_error"],
         ) = self.load_experimental_data()
         (
             self.dataspec["SM_predictions"],
@@ -175,7 +178,7 @@ class Loader:
         if num_data == 1:
             central_values = np.asarray([central_values])
 
-        return central_values, construct_covmat(stat_error, df)
+        return central_values, construct_covmat(stat_error, df), df, stat_error
 
     def load_theory(
         self,
@@ -291,6 +294,30 @@ class Loader:
                 experimental covariance matrix
         """
         return self.dataspec["covmat"] + self.dataspec["theory_covmat"]
+
+    @property
+    def sys_error(self):
+        """
+        Systematic errors
+
+        Returns
+        -------
+            sys_error: pd.DataFrame
+                systematic errors of the dataset
+        """
+        return self.dataspec["sys_error"]
+
+    @property
+    def stat_error(self):
+        """
+        Statistical errors
+
+        Returns
+        -------
+            stat_error: np.array
+                statistical errors of the dataset
+        """
+        return self.dataspec["stat_error"]
 
     @property
     def sm_prediction(self):
@@ -415,6 +442,8 @@ def load_datasets(
 
     exp_data = []
     sm_theory = []
+    sys_error = []
+    stat_error = []
     lin_corr_list = []
     quad_corr_list = []
     chi2_covmat = []
@@ -445,6 +474,8 @@ def load_datasets(
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
         quad_corr_list.append([dataset.n_data, dataset.quad_corrections])
         chi2_covmat.append(dataset.covmat)
+        sys_error.append(dataset.sys_error)
+        stat_error.append(dataset.stat_error)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
@@ -474,8 +505,13 @@ def load_datasets(
     else:
         quad_corr_values = None
 
+
     # Construct unique large cov matrix dropping correlations between different datasets
-    covmat = build_large_covmat(chi2_covmat, n_data_tot, n_data_exp)
+    covmat_no_corr = build_large_covmat(chi2_covmat, n_data_tot, n_data_exp)
+    error_specs = list(zip(sys_error, stat_error))
+    covmat = dataset_inputs_covmat_from_systematics(error_specs)
+    import pdb; pdb.set_trace()
+
     replica = np.random.multivariate_normal(exp_data, covmat)
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
