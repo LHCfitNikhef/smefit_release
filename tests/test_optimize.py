@@ -1,8 +1,13 @@
+# -*- coding: utf-8 -*-
+import copy
 import pathlib
 
-import tests.test_loader as ld
 import numpy as np
+from scipy import optimize as sciopt
+
 import smefit.optimize as opt
+import tests.test_loader as ld
+from smefit.compute_theory import flatten, make_predictions
 
 commondata_path = pathlib.Path(__file__).parents[0] / "fake_data"
 
@@ -97,6 +102,7 @@ config["use_quad"] = True
 config["use_theory_covmat"] = True
 config["theory_path"] = commondata_path
 config["rot_to_fit_basis"] = None
+config["replica"] = 0
 
 
 class TestOptimize:
@@ -130,3 +136,74 @@ class TestOptimize:
 
     def test_flat_prior(self):
         np.testing.assert_equal(self.test_opt.flat_prior(random_point), prior)
+
+
+class TestOptimize:
+
+    test_opt = opt.mc.MCOptimizer.from_dict(config)
+
+    def test_init(self):
+        assert self.test_opt.results_path == commondata_path / "test"
+        np.testing.assert_equal(self.test_opt.loaded_datasets.ExpNames, datasets)
+        np.testing.assert_equal(
+            self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]
+        )
+
+    def test_free_parameters(self):
+        np.testing.assert_equal(
+            list(self.test_opt.free_parameters.index), ["Op1", "Op2", "Op3"]
+        )
+
+    def test_jacobian(self):
+        # test chi2_mc computing the jacobian
+
+        def jacobian(params):
+
+            self.test_opt.coefficients.set_free_parameters(params)
+            self.test_opt.coefficients.set_constraints()
+
+            data = self.test_opt.loaded_datasets
+            coeff_val = self.test_opt.coefficients.value
+
+            diff = 2 * (
+                data.Replica - make_predictions(data, coeff_val, self.test_opt.use_quad)
+            )
+
+            # temp coefficiens
+            temp_coeff = copy.deepcopy(self.test_opt.coefficients)
+            free_coeffs = temp_coeff.free_parameters.index
+
+            # propagate contrain to linear and quad corrections
+            new_linear_corrections = np.zeros(
+                (data.Replica.shape[0], free_coeffs.shape[0])
+            )
+            new_quad_corrections = np.zeros(
+                (data.Replica.shape[0], free_coeffs.shape[0])
+            )
+
+            for idx in range(free_coeffs.shape[0]):
+                params = np.zeros_like(free_coeffs)
+                params[idx] = 1.0
+                temp_coeff.set_free_parameters(params)
+                temp_coeff.set_constraints()
+
+                # update corrections
+                new_linear_corrections[:, idx] = (
+                    data.LinearCorrections @ temp_coeff.value
+                )
+                if self.test_opt.use_quad:
+                    # derivative of the outher product
+                    quad_coeff_mat = np.outer(temp_coeff.value, coeff_val)
+                    quad_coeff_mat = np.maximum(quad_coeff_mat, quad_coeff_mat.T)
+                    np.fill_diagonal(quad_coeff_mat, 2 * np.diag(quad_coeff_mat))
+                    new_quad_corrections[:, idx] = np.einsum(
+                        "ij,j->i", data.QuadraticCorrections, flatten(quad_coeff_mat)
+                    )
+
+            jac = -new_linear_corrections - new_quad_corrections
+            return np.einsum("i,ij,jk->k", diff, data.InvCovMat, jac)
+
+        test = sciopt.check_grad(
+            self.test_opt.chi2_func_mc, jacobian, np.random.rand(3)
+        )
+        np.testing.assert_allclose(test, 0, atol=6e-6)
