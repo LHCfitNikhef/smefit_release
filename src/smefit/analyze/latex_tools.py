@@ -79,6 +79,21 @@ def move_to_meta(report, filename):
     subprocess.call(f"mv {report}/{filename}.pdf {report}/meta/.", shell=True)
 
 
+def chi2table_header(L, fit_labels):
+    L.append(r"\hline")
+    temp = r" \multicolumn{2}{|c|}{} & SM"
+    for label in fit_labels:
+        temp += f"& {label}"
+    temp += r"\\ \hline"
+    L.append(temp)
+    L.append(
+        r"Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$"
+        + r"& $\chi^ 2/N_{data}$" * len(fit_labels)
+        + r"\\ \hline"
+    )
+    return L
+
+
 def combine_plots(
     report, L, latex_src, pdfname, captions=None, multicols=False, env="figure"
 ):

@@ -90,7 +90,7 @@ class SummaryWriter:
             L.extend(
                 [
                     r"{\bf \underline{Fit%d:}} %s" % (i + 1, fit.label) + "\n",
-                    f"Number of replicas/samples: {fit.Nrep}\n",
+                    f"Number of replicas/samples: {fit.n_replica}\n",
                     f"pQCD order: {fit.config['order']}\n",
                     f"SMEFT order: {eft_order}\n",
                 ]
