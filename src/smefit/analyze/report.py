@@ -8,7 +8,7 @@ from ..log import logging
 from .chi2_utils import Chi2tableCalculator
 from .coefficients_utils import CoefficientsPlotter, compute_confidence_level
 from .correlations import plot_correlations
-from .latex_tools import combine_plots, run_pdflatex
+from .latex_tools import run_pdflatex
 from .pca import PcaCalculator
 from .summary import SummaryWriter
 
@@ -142,7 +142,7 @@ class Report:
 
         if table:
             lines = chi2_cal.write(chi2_dict, chi2_dict_group)
-            run_pdflatex(self.report, lines, "chi2")
+            run_pdflatex(self.report, lines, "chi2_tables")
 
         if plot_experiment:
             _logger.info("Plotting the chi2 for each dataset")
@@ -237,8 +237,7 @@ class Report:
         if table:
             _logger.info("Writing : Confidence level table")
             lines = coeff_plt.write_cl_table(bounds_dict)
-
-        combine_plots(self.report, lines, "coefficient_plots", "coefficients_")
+            run_pdflatex(self.report, lines, "coefficients_table")
 
     def correlations(self, hide_dofs=None, thr_show=0.1):
         """Plot coefficients correlation matrix.
