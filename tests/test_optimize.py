@@ -55,7 +55,7 @@ exp_data_1 = np.array(ld.exp_test_1["data"])
 exp_stat_1 = np.array([0.2, 0.3])
 exp_sys_1 = np.array([[0.01, 0.01], [0.02, 0.02]])
 exp_cov_1 = np.diag(exp_stat_1**2) + exp_sys_1 @ exp_sys_1.T
-tot_cov_1 = exp_cov_1 + np.array(ld.theory_test_1["theory_cov"])
+tot_cov_1 = exp_cov_1  # + np.array(ld.theory_test_1["theory_cov"])
 
 chi2_1 = (
     (exp_data_1 - th_pred_1) @ np.linalg.inv(tot_cov_1) @ (exp_data_1 - th_pred_1).T
@@ -75,7 +75,7 @@ exp_data_2 = np.array(ld.exp_test_2["data"])
 exp_stat_2 = np.array([0.2, 0.3, 0.2, 0.3])
 exp_sys_2 = np.array([[0.03, 0.03], [0.04, 0.04], [0.05, 0.05], [0.06, 0.06]])
 exp_cov2 = np.diag(exp_stat_2**2) + exp_sys_2 @ exp_sys_2.T
-tot_cov_2 = exp_cov2 + np.array(ld.theory_test_2["theory_cov"])
+tot_cov_2 = exp_cov2  # + np.array(ld.theory_test_2["theory_cov"])
 
 # chi2 for dataset2
 chi2_2 = (
@@ -94,7 +94,7 @@ config["result_ID"] = "test"
 config["datasets"] = datasets
 config["order"] = "LO"
 config["use_quad"] = True
-config["use_theory_covmat"] = True
+config["use_theory_covmat"] = False
 config["theory_path"] = commondata_path
 config["rot_to_fit_basis"] = None
 

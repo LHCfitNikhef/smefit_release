@@ -19,21 +19,30 @@ def test_construct_covmat():
 
 
 stat1 = np.ones(3)
-sys1 = np.array([[1,0.5],[1,0.5],[1,0.5]])
+sys1 = np.array([[1, 0.5], [1, 0.5], [1, 0.5]])
 sys1_names = ["CORR", "SPECIAL"]
 
 sys_dataframe1 = pd.DataFrame(data=sys1, columns=sys1_names)
 
 stat2 = np.ones(2)
-sys2 = np.array([[0.5],[0.5]])
+sys2 = np.array([[0.5], [0.5]])
 sys2_names = ["SPECIAL"]
 
 sys_dataframe2 = pd.DataFrame(data=sys2, columns=sys2_names)
 
-tot_cov = [[2.25, 1.25, 1.25, 0.25, 0.25],[1.25, 2.25, 1.25, 0.25, 0.25],[1.25, 1.25, 2.25, 0.25, 0.25],[0.25, 0.25, 0.25, 1.25, 0.25],[0.25, 0.25, 0.25, 0.25, 1.25]]
+tot_cov = [
+    [2.25, 1.25, 1.25, 0.25, 0.25],
+    [1.25, 2.25, 1.25, 0.25, 0.25],
+    [1.25, 1.25, 2.25, 0.25, 0.25],
+    [0.25, 0.25, 0.25, 1.25, 0.25],
+    [0.25, 0.25, 0.25, 0.25, 1.25],
+]
 
 
 def test_covmat_from_systematics():
     np.testing.assert_allclose(
-        covmat.covmat_from_systematics([stat1, stat2], [sys_dataframe1, sys_dataframe2]), tot_cov
+        covmat.covmat_from_systematics(
+            [stat1, stat2], [sys_dataframe1, sys_dataframe2]
+        ),
+        tot_cov,
     )
