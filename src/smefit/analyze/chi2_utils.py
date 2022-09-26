@@ -7,26 +7,44 @@ from .latex_tools import chi2table_header, latex_packages
 
 
 class Chi2tableCalculator:
-    r"""Compute the :math:`\chi^2` for each replica and
-    various plots.
+    r"""Compute the :math:`\chi^2` for each replica and produce:
+
+        * Tables with :math:`\chi^2` for each dataset and datagroup.
+        * Plot of :math:`\chi^2` for each dataset.
+        * Plot of :math:`\chi^2` for each replica
 
     Parameters
     ----------
     data_info: pandas.DataFrame
         datasets information (references and data groups)
+
     """
 
     def __init__(self, data_info):
 
-        # dataset info
         self.data_info = data_info
-
         self.chi2_df_sm = pd.DataFrame()
         self.chi2_df_sm_grouped = pd.DataFrame()
 
     @staticmethod
     def compute(datasets, smeft_predictions):
-        r"""Compute the :math:`\chi^2` for each replica."""
+        r"""Compute the :math:`\chi^2` for each replica and dataset.
+
+        Parameters
+        ----------
+            datasets: smefit.loader.DataTuple
+                loaded datasets
+            smeft_predictions: np.ndarray
+                table with all the predictions for each replica
+
+        Returns
+        -------
+        pd.DataFrame:
+            :math:`\chi^2` for each dataset
+        np.ndarray:
+            :math:`\chi^2/n_{pts}` for each replica
+
+        """
         chi2 = []
         chi2_sm = []
         chi2_rep = []
@@ -88,30 +106,50 @@ class Chi2tableCalculator:
             np.sum(chi2_rep, axis=0) / datasets.Commondata.size,
         )
 
-    def split_table_entries(self, chi2_df):
-        r"""Split the :math:`\chi^2` tables entries,
-        spelling out the :math:`\chi^2` per each group, dataset
-        and normalizing the values.
+    @staticmethod
+    def add_normalized_chi2(chi2_df):
+        r"""Add the normalized :math:`\chi^2` to the table.
+
+        Parameters
+        ----------
+        chi2_df : pd.DataFrame
+            :math:`\chi^2` table for each dataset
 
         Returns
         -------
-        dict
-            '': :math:`\chi^2` table entries
-            'grouped': :math:`\chi^2` table entries per data group
+        pd.DataFrame:
+            :math:`\chi^2` table for each dataset with normalization
         """
         # reduced chi2
         chi2_df["chi2/ndat"] = chi2_df["chi2"] / chi2_df["ndat"]
         chi2_df["chi2_sm/ndat"] = chi2_df["chi2_sm"] / chi2_df["ndat"]
+        return chi2_df
 
-        # set colors
+    @staticmethod
+    def _add_chi2_df_colors(chi2_df):
+        r"""Values higer than one std are labelled with blue.
+        Values lowe  than one std are labelled with red.
+        """
         chi2_upper = chi2_df["chi2"] + chi2_df["chi2_std"]
         chi2_lower = chi2_df["chi2"] - chi2_df["chi2_std"]
-
         chi2_df["color"] = "black"
         chi2_df.loc[chi2_df["chi2_sm"] > chi2_upper, "color"] = "blue"
         chi2_df.loc[chi2_df["chi2_sm"] < chi2_lower, "color"] = "red"
+        return chi2_df
 
-        # merge groups with data names
+    def group_chi2_df(self, chi2_df):
+        r"""Group the :math:`\chi^2` according to the data type.
+
+        Parameters
+        ----------
+        chi2_df : pd.DataFrame
+            :math:`\chi^2` table for each dataset
+
+        Returns
+        -------
+        pd.DataFrame:
+            :math:`\chi^2` table with deviation info
+        """
         chi2_df_grouped = pd.merge(
             self.data_info.reset_index(), chi2_df, left_on="level_1", right_index=True
         ).drop([0, "chi2_std"], axis=1)
@@ -119,66 +157,68 @@ class Chi2tableCalculator:
         chi2_df_grouped.index.name = "data_group"
 
         # add total values
-        chi2_df_grouped = chi2_df_grouped.append(
-            pd.Series(chi2_df_grouped.sum(), name="Total")
-        )
+        chi2_df_grouped.loc["Total"] = chi2_df_grouped.sum()
         chi2_df_grouped["chi2/ndat"] = chi2_df_grouped["chi2"] / chi2_df_grouped["ndat"]
         chi2_df_grouped["chi2_sm/ndat"] = (
             chi2_df_grouped["chi2_sm"] / chi2_df_grouped["ndat"]
         )
+        return chi2_df_grouped
 
-        return chi2_df, chi2_df_grouped
-
-    def split_table_entries_sm(self, chi2_dict, chi2_dict_group):
+    def _split_table_entries_sm(self, chi2_dict, chi2_dict_group):
         """Update the chi2_df dict for all included datasets."""
         labels_to_include = ["ndat", "chi2_sm/ndat"]
         for chi2_df, chi2_df_grouped in zip(
             chi2_dict.values(), chi2_dict_group.values()
         ):
-            self.chi2_df_sm = self.chi2_df_sm.append(chi2_df[labels_to_include])
-            self.chi2_df_sm_grouped = self.chi2_df_sm_grouped.append(
-                chi2_df_grouped[labels_to_include]
+            self.chi2_df_sm = pd.concat(
+                [self.chi2_df_sm, chi2_df[labels_to_include]],
+                axis=0,
             )
+            self.chi2_df_sm_grouped = pd.concat(
+                [self.chi2_df_sm_grouped, chi2_df_grouped[labels_to_include]],
+                axis=0,
+            )
+        # TODO: is this woking with different element in each group?
         self.chi2_df_sm = self.chi2_df_sm[
             ~self.chi2_df_sm.index.duplicated(keep="first")
         ]
         self.chi2_df_sm_grouped = self.chi2_df_sm_grouped.drop_duplicates()
 
     def write(self, chi2_dict, chi2_dict_group):
-        """Write the chi2 latex tables
+        r"""Write the :math:`\chi^2` latex tables.
 
         Parameters
         ----------
-            chi2_dict : dict
-                tables computed with compute() method per fit
-            chi2_dict_group: dict
-                tables computed with compute() method per fit
+        chi2_dict : dict
+            tables computed with compute() method for each fit
+        chi2_dict_group: dict
+            tables obtained with group_chi2_df() method for each fit
 
         Returns
         -------
-            L : list(str)
-                list of the latex commands
+        list(str)
+            list with the latex commands
         """
-        self.split_table_entries_sm(chi2_dict, chi2_dict_group)
+        self._split_table_entries_sm(chi2_dict, chi2_dict_group)
         L = latex_packages()
         L.extend([r"\usepackage{underscore}", r"\begin{document}"])
-        L.extend(self.write_chi2(chi2_dict, chi2_dict_group))
+        L.extend(self.write_chi2_grouped(chi2_dict, chi2_dict_group))
         L.extend(["\n", "\n"])
         L.extend(self.write_chi2_summary(chi2_dict_group))
         return L
 
-    def write_chi2(self, chi2_dict, chi2_dict_group):
-        """
-        Write the chi2 latex tables per each dataset inside each group
+    def write_chi2_grouped(self, chi2_dict, chi2_dict_group):
+        r"""Write the :math:`\chi^2` latex tables for each data group.
 
         Parameters
         ----------
-            chi2_dict : dict
-                Chi2 Table entries per each fit
+        chi2_dict : dict
+            tables computed with compute() method per each fit
+
         Returns
         -------
-            L : list(str)
-                list of the latex commands
+        list(str)
+            list with the latex commands
         """
         L = [
             r"$\chi^2$ table. Blue color text represents a value that is lower than the SM $\chi^2$ \
@@ -205,6 +245,7 @@ class Chi2tableCalculator:
                 )
                 for chi2_df in chi2_dict.values():
                     temp += " & "
+                    chi2_df = self._add_chi2_df_colors(chi2_df)
                     if dataset in chi2_df.index:
                         temp += r"{{\color{{{}}} {:.3f}}}".format(
                             chi2_df.loc[dataset, "color"],
@@ -231,17 +272,17 @@ class Chi2tableCalculator:
         return L
 
     def write_chi2_summary(self, chi2_dict_group):
-        r"""Summary chi2 table for grouped data.
+        r"""Write the summary :math:`\chi^2` table for grouped data.
 
         Parameters
         ----------
         chi2_dict_group : dict
-            :math:`\chi^2` table entries by data group
+            tables obtained with group_chi2_df() method for each fit
 
         Returns
         -------
         list(str)
-           list of the latex commands
+           list with the latex commands
 
         """
         L = [
@@ -294,10 +335,14 @@ class Chi2tableCalculator:
         )
         return L
 
-    def plot_exp(self, chi2_dict, fig_name):
-        """Plots a bar plot of the chi2 values per experiment"""
+    def plot_exp(
+        self,
+        chi2_dict,
+        fig_name,
+        figsize=(10, 15),
+    ):
+        r"""Plots a bar plot of the :math:`\chi^2` values per experiment"""
 
-        plt.figure(figsize=(10, 15))
         chi2_bar = pd.DataFrame()
         chi2_bar[r"${\rm SM}$"] = self.chi2_df_sm["chi2_sm/ndat"]
         for name, chi2_df in chi2_dict.items():
@@ -305,31 +350,35 @@ class Chi2tableCalculator:
         chi2_bar.index = [
             r"\rm{%s}" % name.replace("_", r"\_") for name in chi2_bar.index
         ]
+        chi2_bar.plot(kind="barh", width=0.7, figsize=figsize)
 
-        chi2_bar.plot(kind="barh", width=0.7, figsize=(10, 15))
-
-        plt.plot(
-            np.ones(2), np.linspace(-1, chi2_bar.shape[0] * 10, 2), "k--", alpha=0.7
+        plt.vlines(1, -1, chi2_bar.shape[0] * 10, ls="dashed", color="black", alpha=0.5)
+        x_max = chi2_bar.max().max()
+        plt.vlines(
+            np.arange(2, int(x_max) + 1),
+            -1,
+            chi2_bar.shape[0] * 10,
+            ls="dashed",
+            color="grey",
+            lw=0.5,
         )
         plt.tick_params(axis="x", direction="in", labelsize=15)
         plt.xlabel(r"$\chi^2$", fontsize=20)
-        plt.xlim(0, 4)
+        plt.xlim(0, chi2_bar.max().max() + 0.01)
         plt.legend(loc="upper right", frameon=False, prop={"size": 11})
         plt.tight_layout()
         plt.savefig(fig_name)
 
-    def plot_dist(self, chi2_hist, fig_name):
-        """Plots chi2 distribution."""
-        plt.figure(figsize=(7, 5))
+    def plot_dist(self, chi2_hist, fig_name, figsize=(7, 5)):
+        r"""Plots the :math:`\chi^2` distribution."""
+        plt.figure(figsize=figsize)
         ax = plt.subplot(111)
-        colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 
-        for i, (label, chi2_list) in enumerate(chi2_hist.items()):
+        for (label, chi2_list) in chi2_hist.items():
             ax.hist(
                 chi2_list,
                 bins="fd",
                 density=True,
-                color=colors[i],
                 edgecolor="k",
                 alpha=0.3,
                 label=label,
@@ -338,6 +387,6 @@ class Chi2tableCalculator:
         plt.tick_params(axis="x", direction="in", labelsize=15)
         plt.tick_params(axis="y", direction="in", labelsize=15)
         plt.xlabel(r"\rm $\chi^2$\ distribution", fontsize=20)
-        plt.legend(loc=2, frameon=False, prop={"size": 11})
+        plt.legend(loc="best", frameon=False, prop={"size": 11})
         plt.tight_layout()
         plt.savefig(fig_name)

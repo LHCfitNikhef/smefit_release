@@ -94,20 +94,20 @@ class FitManager:
         self.results = pd.DataFrame(results).sort_index(axis=1)
 
     def load_configuration(self):
-        """
-        Load configuration yaml card.
+        """Load configuration yaml card.
 
         Returns
         -------
-            config: dict
-                configuration card
+        dict
+            configuration card
+
         """
         with open(f"{self.path}/{self.name}/{self.name}.yaml", encoding="utf-8") as f:
             config = yaml.safe_load(f)
         return config
 
     def load_datasets(self):
-        """Load all datasets"""
+        """Load all datasets."""
         self.datasets = load_datasets(
             self.config["data_path"],
             self.config["datasets"],
@@ -133,7 +133,7 @@ class FitManager:
         smeft = []
         for rep in track(
             range(self.n_replica),
-            description="[green]Computing SMEFT predictions for each replica...",
+            description=f"[green]Computing SMEFT predictions for each replica of {self.name}...",
         ):
             smeft.append(
                 make_predictions(

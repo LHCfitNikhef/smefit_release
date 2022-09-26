@@ -136,21 +136,24 @@ class Report:
                 fit.smeft_predictions,
             )
             chi2_replica[fit.label] = chi2_total_rep
-            df, df_group = chi2_cal.split_table_entries(chi2_df)
-            chi2_dict[fit.label] = df
-            chi2_dict_group[fit.label] = df_group
+            chi2_dict[fit.label] = chi2_cal.add_normalized_chi2(chi2_df)
+            chi2_dict_group[fit.label] = chi2_cal.group_chi2_df(chi2_df)
 
         if table:
             lines = chi2_cal.write(chi2_dict, chi2_dict_group)
             run_pdflatex(self.report, lines, "chi2_tables")
 
-        if plot_experiment:
+        if plot_experiment is not None:
             _logger.info("Plotting the chi2 for each dataset")
-            chi2_cal.plot_exp(chi2_dict, f"{self.report}/chi2_bar.pdf")
+            chi2_cal.plot_exp(
+                chi2_dict, f"{self.report}/chi2_bar.pdf", **plot_experiment
+            )
 
-        if plot_distribution:
+        if plot_distribution is not None:
             _logger.info("Plotting the chi2 distribution for each replica")
-            chi2_cal.plot_dist(chi2_replica, f"{self.report}/chi2_histo.pdf")
+            chi2_cal.plot_dist(
+                chi2_replica, f"{self.report}/chi2_histo.pdf", **plot_distribution
+            )
 
     def coefficients(
         self,
