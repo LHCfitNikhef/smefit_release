@@ -115,6 +115,7 @@ class Report:
         scatter_plot=None,
         confidence_level_bar=None,
         posterior_histograms=True,
+        contours_2d=True,
         hide_dofs=None,
         show_only=None,
         logo=True,
@@ -192,9 +193,17 @@ class Report:
                 labels=[fit.label for fit in self.fits],
                 disjointed_lists=list((*double_solution.values(),)),
             )
+
         if table:
             _logger.info("Writing : Confidence level table")
             lines = coeff_plt.write_cl_table(bounds_dict)
+
+        if contours_2d:
+            _logger.info("Plotting : 2D confidence level projections")
+            coeff_plt.plot_contours_2d(
+                [(fit.results, fit.config['use_quad']) for fit in self.fits],
+                labels=[fit.label for fit in self.fits],
+            )
 
         combine_plots(self.report, lines, "coefficient_plots", "coefficients_")
 
