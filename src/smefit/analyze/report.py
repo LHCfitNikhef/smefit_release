@@ -111,7 +111,7 @@ class Report:
         lines = SummaryWriter(self.fits, self.data_info, self.coeff_info).write()
         run_pdflatex(self.report, lines, "summary")
 
-    def chi2(self, table=True, plot_experiment=True, plot_distribution=True):
+    def chi2(self, table=True, plot_experiment=None, plot_distribution=None):
         r"""
         :math:`\chi^2` table and plots runner.
 
@@ -144,13 +144,13 @@ class Report:
             run_pdflatex(self.report, lines, "chi2_tables")
 
         if plot_experiment is not None:
-            _logger.info("Plotting the chi2 for each dataset")
+            _logger.info("Plotting : chi^2 for each dataset")
             chi2_cal.plot_exp(
                 chi2_dict, f"{self.report}/chi2_bar.pdf", **plot_experiment
             )
 
         if plot_distribution is not None:
-            _logger.info("Plotting the chi2 distribution for each replica")
+            _logger.info("Plotting : chi^2 distribution for each replica")
             chi2_cal.plot_dist(
                 chi2_replica, f"{self.report}/chi2_histo.pdf", **plot_distribution
             )

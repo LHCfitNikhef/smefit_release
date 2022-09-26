@@ -180,7 +180,7 @@ class SummaryWriter:
                         if "constrain" in coeff_dict:
                             temp += add_bounded_coeff(coeff_dict, self.coeff_info)
                         elif "value" in coeff_dict:
-                            temp += r" & & = %d " % (coeff_dict["value"])
+                            temp += f" & & = {coeff_dict['value']}"
                         else:
                             temp += r" & \checkmark & "
                             n_fitted[i] += 1

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import subprocess
-from os import listdir
 
 
 def latex_packages():
@@ -55,11 +54,12 @@ def run_pdflatex(report, L, filename):
     L = [l + "\n" for l in L]
 
     latex_src = f"{report}/{filename}.tex"
-    with open(latex_src, "w") as file:
+    with open(latex_src, "w", encoding="utf-8") as file:
         file.writelines(L)
     file.close()
     subprocess.call(
-        f"pdflatex -halt-on-error -output-directory {report}/ {latex_src}", shell=True
+        f"pdflatex -halt-on-error -output-directory {report}/ {latex_src} > {report}/latex.log",
+        shell=True,
     )
     subprocess.call(f"rm {report}/*.log {report}/*.aux {report}/*.out", shell=True)
 
