@@ -6,6 +6,7 @@ from collections import namedtuple
 
 import numpy as np
 import pandas as pd
+import scipy.linalg as la
 import yaml
 
 from .basis_rotation import rotate_to_fit_basis
@@ -285,14 +286,26 @@ class Loader:
     @property
     def covmat(self):
         """
-        Covariance matrix
+        Experimental covariance matrix
 
         Returns
         -------
             covmat: numpy.ndarray
-                experimental covariance matrix
+                experimental covariance matrix of a single dataset
         """
-        return self.dataspec["covmat"] + self.dataspec["theory_covmat"]
+        return self.dataspec["covmat"]
+
+    @property
+    def theory_covmat(self):
+        """
+        Theory covariance matrix
+
+        Returns
+        -------
+            theory covmat: numpy.ndarray
+                theory covariance matrix of a single dataset
+        """
+        return self.dataspec["theory_covmat"]
 
     @property
     def sys_error(self):
@@ -447,6 +460,7 @@ def load_datasets(
     quad_corr_list = []
     n_data_exp = []
     exp_name = []
+    th_cov = []
 
     Loader.commondata_path = pathlib.Path(commondata_path)
     if theory_path is not None:
@@ -473,6 +487,7 @@ def load_datasets(
         quad_corr_list.append([dataset.n_data, dataset.quad_corrections])
         sys_error.append(dataset.sys_error)
         stat_error.append(dataset.stat_error)
+        th_cov.append(dataset.theory_covmat)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
@@ -502,9 +517,12 @@ def load_datasets(
     else:
         quad_corr_values = None
 
-    # Construct unique large cov matrix dropping correlations between different datasets
-    # error_specs = list(zip(sys_error, stat_error))
-    covmat = covmat_from_systematics(stat_error, sys_error)
+    # Construct unique large cov matrix accounting for correlations between different datasets
+    # The theory covariance matrix, when used, will be different from zero.
+    # At the moment it does not account for correlation between different datasets
+
+    theory_covariance = la.block_diag(*th_cov)
+    covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
 
     replica = np.random.multivariate_normal(exp_data, covmat)
     # Make one large datatuple containing all data, SM theory, corrections, etc.
