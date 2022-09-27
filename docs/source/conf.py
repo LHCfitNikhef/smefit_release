@@ -16,6 +16,8 @@
 # sys.path.insert(0, os.path.abspath('.'))
 import pathlib
 
+from recommonmark.transform import AutoStructify
+
 source_dir = pathlib.Path(__file__).parent
 
 # -- Project information -----------------------------------------------------
@@ -45,6 +47,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinxcontrib.bibtex",
     "sphinx.ext.extlinks",
+    "recommonmark",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -58,6 +61,7 @@ templates_path = ["_templates"]
 source_suffix = {
     ".rst": "restructuredtext",
     ".txt": "restructuredtext",
+    ".md": "markdown",
 }
 
 autosectionlabel_prefix_document = True
@@ -142,3 +146,12 @@ def setup(app):
     """Configure Sphinx"""
     app.setup_extension("sphinx.ext.autodoc")
     app.connect("builder-inited", run_apidoc)
+    app.add_config_value(
+        "recommonmark_config",
+        {
+            #'url_resolver': lambda url: github_doc_root + url,
+            "enable_eval_rst": True,
+        },
+        True,
+    )
+    app.add_transform(AutoStructify)

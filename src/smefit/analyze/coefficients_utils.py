@@ -144,7 +144,7 @@ class CoefficientsPlotter:
             )
 
     def plot_coeffs(
-        self, bounds, figsize=(15, 6), y_min=-400, y_max=400, y_log=True, lin_thr=1e-1
+        self, bounds, figsize=(15, 6), x_min=-400, x_max=400, x_log=True, lin_thr=1e-1
     ):
         """
         Plot central value + 95% CL errors
@@ -156,7 +156,7 @@ class CoefficientsPlotter:
                 Note: double solutions are appended under "2"
         """
 
-        plt.figure(figsize)
+        plt.figure(figsize=figsize)
         ax = plt.subplot(111)
 
         # X-axis
@@ -168,15 +168,15 @@ class CoefficientsPlotter:
 
         def plot_error_bars(ax, vals, cnt, i, label=None):
             ax.errorbar(
-                X[cnt] + x_shift[i],
-                y=vals.mid,
-                yerr=[[vals.err95_low], [vals.err95_high]],
+                x=vals.mid,
+                y=X[cnt] + x_shift[i],
+                xerr=[[vals.err95_low], [vals.err95_high]],
                 color=colors(2 * i + 1),
             )
             ax.errorbar(
-                X[cnt] + x_shift[i],
-                y=vals.mid,
-                yerr=[[vals.err68_low], [vals.err68_high]],
+                x=vals.mid,
+                y=X[cnt] + x_shift[i],
+                xerr=[[vals.err68_low], [vals.err68_high]],
                 color=colors(2 * i),
                 fmt=".",
                 label=label,
@@ -205,31 +205,37 @@ class CoefficientsPlotter:
                     pass
 
         self.plot_logo(ax)
-        plt.plot(
-            np.arange(-1, 2 * X.size + 2), np.zeros(2 * X.size + 3), "k--", alpha=0.7
+        ax.vlines(0, -1, X[-1] + 1, ls="dashed", color="black", alpha=0.7)
+        ax.vlines(
+            np.concatenate([-np.logspace(-4, 2, 7), np.logspace(-4, 2, 7)]),
+            -1,
+            X[-1] + 1,
+            ls="dotted",
+            color="grey",
+            lw=0.5,
         )
 
-        if y_log:
-            plt.yscale("symlog", linthresh=lin_thr)
-        plt.ylim(y_min, y_max)
-        plt.ylabel(r"$c_i/\Lambda^2\ ({\rm TeV}^{-2})$", fontsize=25)
+        if x_log:
+            plt.xscale("symlog", linthresh=lin_thr)
+        plt.xlim(x_min, x_max)
+        plt.xlabel(r"$c_i/\Lambda^2\ ({\rm TeV}^{-2})$", fontsize=25)
 
-        plt.xlim(-1, (self.npar) * 2 - 1)
+        plt.ylim(-1, X[-1] + 1)
         plt.tick_params(which="major", direction="in")
-        plt.xticks(X, self.coeff_df["latex_name"], fontsize=15, rotation=45)
+        plt.yticks(X, self.coeff_df["latex_name"], fontsize=15)
 
         plt.legend(loc=0, frameon=False, prop={"size": 13})
         plt.tight_layout()
-        plt.savefig(f"{self.report_folder}/Coeffs_Central.pdf", dpi=500)
+        plt.savefig(f"{self.report_folder}/coefficient_central.pdf", dpi=500)
 
     def plot_coeffs_bar(
         self,
         error,
         figsize=(12, 6),
         plot_cutoff=400,
-        y_log=True,
-        y_min=1e-2,
-        y_max=500,
+        x_log=True,
+        x_min=1e-2,
+        x_max=500,
         legend_loc="best",
     ):
         """
@@ -240,36 +246,43 @@ class CoefficientsPlotter:
             error: dict
                confidence level bounds per fit and coefficient
         """
-
-        plt.figure(figsize)
         df = pd.DataFrame(error)
-        ax = df.plot(kind="bar", rot=0, width=0.6)
+        ax = df.plot(kind="barh", width=0.6, figsize=figsize)
 
         # Hard cutoff
         if plot_cutoff is not None:
-            ax.plot(
-                np.linspace(-1, 2 * self.npar + 1, 2),
-                plot_cutoff * np.ones(2),
-                "k--",
+            ax.vlines(
+                plot_cutoff,
+                -1,
+                2 * self.npar + 1,
+                ls="dashed",
+                color="black",
                 alpha=0.7,
-                lw=2,
             )
+        ax.vlines(
+            np.logspace(-4, 2, 7),
+            -1,
+            2 * self.npar + 1,
+            ls="dotted",
+            color="grey",
+            lw=0.5,
+        )
 
         self.plot_logo(ax)
-        plt.xticks(fontsize=10, rotation=45)
-        plt.tick_params(axis="y", direction="in", labelsize=15)
-        if y_log:
-            plt.yscale("log")
-        plt.ylabel(
+        plt.yticks(fontsize=10)
+        plt.tick_params(axis="x", direction="in", labelsize=15)
+        if x_log:
+            plt.xscale("log")
+        plt.xlabel(
             r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=11
         )
-        plt.ylim(y_min, y_max)
-        plt.legend(loc=legend_loc, frameon=False, prop={"size": 11})
+        plt.xlim(x_min, x_max)
+        plt.legend(loc=legend_loc, frameon=False, prop={"size": 13})
         plt.tight_layout()
-        plt.savefig(f"{self.report_folder}/Coeffs_Bar.pdf", dpi=500)
+        plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
 
     def plot_posteriors(self, posteriors, labels, disjointed_lists=None):
-        """ " Plot posteriors histograms
+        """Plot posteriors histograms.
 
         Parameters
         ----------
@@ -330,7 +343,7 @@ class CoefficientsPlotter:
                 lines, labels = axes.get_legend_handles_labels()
         fig.legend(lines, labels, loc="lower right", prop={"size": 20})
         plt.tight_layout()
-        plt.savefig(f"{self.report_folder}/Coeffs_Hist.pdf")
+        plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
 
     def write_cl_table(self, bounds):
         """Coefficients latex table"""
