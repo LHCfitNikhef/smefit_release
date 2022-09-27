@@ -10,19 +10,19 @@ from .report import Report
 _logger = logging.getLogger(__name__)
 
 
-def run_report(root_path, report_config):
+def run_report(report_card_file):
     """
     Run the analysis given a report card name
 
     Parameters
     ----------
-        report_config : str
+        report_card_file : pathlib:Path
             report configuration dictionary name
     """
-    with open(f"{root_path}/analyze/{report_config}.yaml", encoding="utf-8") as f:
+    with open(report_card_file, encoding="utf-8") as f:
         report_config = yaml.safe_load(f)
 
-    _logger.info(f"Analysing : {report_config['result_IDs']}")
+    _logger.info(f"Analyzing : {report_config['result_IDs']}")
 
     report_name = report_config["name"]
     report_path = report_config["report_path"]

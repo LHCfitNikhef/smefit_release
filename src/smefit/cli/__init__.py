@@ -11,23 +11,9 @@ from ..postfit import Postfit
 from ..runner import Runner
 from .base import base_command, root_path
 
-runcard_path = click.option(
-    "-p",
-    "--runcard_path",
-    type=click.Path(path_type=pathlib.Path),
-    default=root_path / "runcards",
-    required=False,
-    help="path to runcard",
-)
-
-
-fit_card = click.option(
-    "-f",
-    "--fit_card",
-    type=str,
-    default=None,
-    required=True,
-    help="fit card name",
+fit_card = click.argument(
+    "fit_card",
+    type=click.Path(path_type=pathlib.Path, exists=True),
 )
 
 n_replica = click.option(
@@ -50,20 +36,12 @@ log_file = click.option(
 
 
 @base_command.command("NS")
-@runcard_path
 @fit_card
 @log_file
-def nested_sampling(runcard_path: pathlib.Path, fit_card: str, log_file: pathlib.Path):
+def nested_sampling(fit_card: pathlib.Path, log_file: pathlib.Path):
     """Run a fit with |NS|.
 
-    Parameters
-    ----------
-    runcard_path :
-        path to runcard
-    fit_card :
-        fit runcard name
-    log_file :
-        path to log file
+    Usage: smefit NS [OPTIONS] path_to_runcard
     """
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
@@ -72,7 +50,7 @@ def nested_sampling(runcard_path: pathlib.Path, fit_card: str, log_file: pathlib
         setup_console(log_file)
         print_banner()
         log.console.log("Running : Nested Sampling Fit ")
-        runner = Runner.from_file(runcard_path, fit_card)
+        runner = Runner.from_file(fit_card.absolute())
     else:
         runner = None
 
@@ -81,36 +59,26 @@ def nested_sampling(runcard_path: pathlib.Path, fit_card: str, log_file: pathlib
 
 
 @base_command.command("MC")
-@runcard_path
 @fit_card
 @n_replica
 @log_file
-def monte_carlo_fit(
-    runcard_path: pathlib.Path, fit_card: str, n_replica: int, log_file: pathlib.Path
-):
+def monte_carlo_fit(fit_card: pathlib.Path, n_replica: int, log_file: pathlib.Path):
     """Run a fit with |MC|.
 
-    Parameters
-    ----------
-    runcard_path :
-        path to runcard
-    fit_card :
-        fit runcard name
-    n_replica :
-        replica number
-    log_file :
-        path to log file
+    Usage: smefit MC [OPTIONS] path_to_runcard
     """
     setup_console(log_file)
     print_banner()
     log.console.log("Running : MonteCarlo Fit")
-    runner = Runner.from_file(runcard_path, fit_card, n_replica)
+    runner = Runner.from_file(fit_card.absolute(), n_replica)
     runner.run_analysis("MC")
 
 
 @base_command.command("PF")
-@runcard_path
-@fit_card
+@click.argument(
+    "result_folder",
+    type=click.Path(path_type=pathlib.Path, exists=True),
+)
 @click.option(
     "-n",
     "--n_replica",
@@ -126,30 +94,18 @@ def monte_carlo_fit(
     default=False,
     help="remove the replica file",
 )
-def post_fit(
-    runcard_path: pathlib.Path, fit_card: str, n_replica: int, clean_rep: bool
-):
+def post_fit(result_folder: pathlib.Path, n_replica: int, clean_rep: bool):
     """Run postfit selection over |MC| replicas.
 
-    Parameters
-    ----------
-    runcard_path :
-        path to runcard
-    fit_card :
-        fit runcard name
-    n_replica :
-        total number of replica to save
-    clean_rep :
-        if True revove replica folders
+    Usage: smefit PF [OPTIONS] path_to_result_folder
     """
-    postfit = Postfit.from_file(runcard_path, fit_card)
+    postfit = Postfit.from_file(result_folder.absolute())
     postfit.save(n_replica)
     if clean_rep:
         postfit.clean()
 
 
 @base_command.command("SCAN")
-@runcard_path
 @fit_card
 @click.option(
     "-n",
@@ -157,7 +113,7 @@ def post_fit(
     type=int,
     default=0,
     required=False,
-    help="number of replicas used during the scan, default (0) will use only experiemental data",
+    help="number of replicas used during the scan, default (0) will use only experimental data",
 )
 @click.option(
     "-b",
@@ -167,36 +123,23 @@ def post_fit(
     default=False,
     help="compute also the chi2 bounds",
 )
-def scan(runcard_path: pathlib.Path, fit_card: str, n_replica: int, bounds: bool):
-    r"""Plot idividual :math:`\chi^2` profiles for
-    all the free parameters.
+def scan(fit_card: pathlib.Path, n_replica: int, bounds: bool):
+    r"""Plot individual :math:`\chi^2` profiles for all the free parameters.
 
-    Parameters
-    ----------
-    runcard_path :
-        path to runcard
-    fit_card :
-        fit runcard name
-    n_replica :
-        number of replica to use
-    bounds :
-        if True compute also the :math:`\chi^2` bounds
+    Usage: smefit SCAN [OPTIONS] path_to_runcard
     """
-    runner = Runner.from_file(runcard_path, fit_card)
+    runner = Runner.from_file(fit_card.absolute())
     runner.chi2_scan(n_replica, bounds)
 
 
 @base_command.command("R")
-@runcard_path
-@fit_card
-def report(runcard_path: pathlib.Path, fit_card: str):
+@click.argument(
+    "report_card",
+    type=click.Path(path_type=pathlib.Path, exists=True),
+)
+def report(fit_card: pathlib.Path):
     """Run a fit report.
 
-    Parameters
-    ----------
-    runcard_path :
-        path to runcard
-    fit_card :
-        fit runcard name
+    Usage: smefit R path_to_runcard
     """
-    run_report(runcard_path, fit_card)
+    run_report(fit_card.absolute())

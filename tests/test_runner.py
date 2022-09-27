@@ -1,14 +1,15 @@
-import smefit.runner
+# -*- coding: utf-8 -*-
 import pathlib
 import shutil
 
+import smefit.runner
 
 runcard_folder = commondata_path = pathlib.Path(__file__).parents[0]
 
 
 class TestRunner:
 
-    test_runner = smefit.runner.Runner.from_file(runcard_folder, "test_runcard")
+    test_runner = smefit.runner.Runner.from_file(runcard_folder / "test_runcard.yaml")
 
     def test_init(self):
         assert self.test_runner.run_card["datasets"][0] == "test_dataset"
