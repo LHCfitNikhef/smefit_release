@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.patches import Ellipse
-import matplotlib.transforms as transforms
 import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+import matplotlib.transforms as transforms
+import numpy as np
 import pandas as pd
+import scipy.stats
 import seaborn as sns
+from matplotlib.patches import Ellipse
 
 
-def confidence_ellipse(coeff1, coeff2, ax, facecolor="none", **kwargs):
+def confidence_ellipse(
+    coeff1, coeff2, ax, facecolor="none", confidence_level=95, **kwargs
+):
     """
     Draws 95% C.L. ellipse for data points `x` and `y`
 
@@ -50,12 +53,14 @@ def confidence_ellipse(coeff1, coeff2, ax, facecolor="none", **kwargs):
         inclination = np.arccos(cos_th)
     else:
         # pay attention to range of arccos (extend to [0, -\pi] domain)
-        inclination = - np.arccos(cos_th)
+        inclination = -np.arccos(cos_th)
 
     eigval_sort = np.sort(eig_val)
 
-    ell_radius_x = np.sqrt(5.991 * eigval_sort[-1]) # 5.991 selects the 95 % boundary
-    ell_radius_y = np.sqrt(5.991 * eigval_sort[-2])
+    chi2_qnt = scipy.stats.chi2.ppf(confidence_level / 100.0, 2)
+
+    ell_radius_x = np.sqrt(chi2_qnt * eigval_sort[-1])
+    ell_radius_y = np.sqrt(chi2_qnt * eigval_sort[-2])
 
     ellipse = Ellipse(
         (0, 0),
@@ -68,14 +73,18 @@ def confidence_ellipse(coeff1, coeff2, ax, facecolor="none", **kwargs):
     mean_coeff1 = np.median(coeff1)
     mean_coeff2 = np.median(coeff2)
 
-    transf = (transforms.Affine2D().rotate(inclination).translate(mean_coeff1, mean_coeff2))
+    transf = (
+        transforms.Affine2D().rotate(inclination).translate(mean_coeff1, mean_coeff2)
+    )
 
     ellipse.set_transform(transf + ax.transData)
 
     return ax.add_patch(ellipse)
 
 
-def plot_contours(ax, posterior, ax_labels, coeff1, coeff2, kde, clr_idx):
+def plot_contours(
+    ax, posterior, ax_labels, coeff1, coeff2, kde, clr_idx, confidence_level=95
+):
     """
 
     Parameters
@@ -94,6 +103,8 @@ def plot_contours(ax, posterior, ax_labels, coeff1, coeff2, kde, clr_idx):
         Performs kernel density estimate (kde) when quadratics are turned on
     clr_idx: int
         Color index that makes sure each fit gets associated a different color
+    confidence_level: int, optional
+        Confidence level interval, set to 95% by default
 
     Returns
     -------
@@ -109,12 +120,37 @@ def plot_contours(ax, posterior, ax_labels, coeff1, coeff2, kde, clr_idx):
 
     # perform kde for quadratic EFT fit
     if kde:
-        sns.kdeplot(x=x_values, y=y_values, levels=[0.05, 1.0], bw_adjust=1.2, ax=ax, fill=True, alpha=0.3, color=colors[clr_idx])
-        sns.kdeplot(x=x_values, y=y_values, levels=[0.05], bw_adjust=1.2, ax=ax, alpha=1, color=colors[clr_idx])
+        sns.kdeplot(
+            x=x_values,
+            y=y_values,
+            levels=[1 - confidence_level / 100.0, 1.0],
+            bw_adjust=1.2,
+            ax=ax,
+            fill=True,
+            alpha=0.3,
+            color=colors[clr_idx],
+        )
+        sns.kdeplot(
+            x=x_values,
+            y=y_values,
+            levels=[1 - confidence_level / 100.0],
+            bw_adjust=1.2,
+            ax=ax,
+            alpha=1,
+            color=colors[clr_idx],
+        )
 
-        hndls.append((mpatches.Patch(ec=colors[clr_idx], fc=colors[clr_idx], fill=True, alpha=0.3),
-                      mpatches.Patch(ec=colors[clr_idx], fc=colors[clr_idx], fill=False, alpha=1.0)))
-    else: # draw ellipses for linear EFT fit
+        hndls.append(
+            (
+                mpatches.Patch(
+                    ec=colors[clr_idx], fc=colors[clr_idx], fill=True, alpha=0.3
+                ),
+                mpatches.Patch(
+                    ec=colors[clr_idx], fc=colors[clr_idx], fill=False, alpha=1.0
+                ),
+            )
+        )
+    else:  # draw ellipses for linear EFT fit
 
         p1 = confidence_ellipse(
             x_values,
@@ -122,6 +158,7 @@ def plot_contours(ax, posterior, ax_labels, coeff1, coeff2, kde, clr_idx):
             ax,
             alpha=1,
             edgecolor=colors[clr_idx],
+            confidence_level=confidence_level,
         )
 
         p2 = confidence_ellipse(
@@ -131,6 +168,7 @@ def plot_contours(ax, posterior, ax_labels, coeff1, coeff2, kde, clr_idx):
             alpha=0.3,
             facecolor=colors[clr_idx],
             edgecolor=None,
+            confidence_level=confidence_level,
         )
 
         ax.scatter(
@@ -150,4 +188,3 @@ def plot_contours(ax, posterior, ax_labels, coeff1, coeff2, kde, clr_idx):
     hndls.append(ax.scatter(0, 0, c="k", marker="+", s=50, zorder=10))
 
     return hndls
-
