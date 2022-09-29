@@ -26,23 +26,19 @@ def impose_constrain(dataset, coefficients):
         list of updated linear corrections
 
     """
-    coefficients = copy.deepcopy(coefficients)
-    free_coeffs = coefficients.free_parameters.index
+    temp_coeffs = copy.deepcopy(coefficients)
+    free_coeffs = temp_coeffs.free_parameters.index
     new_linear_corrections = []
     # loop on the corrections and add them
-    for idx, free_coeff in enumerate(free_coeffs):
-        id_free_op = np.where(dataset.OperatorsNames == free_coeff)[0][0]
+    for idx in range(free_coeffs.shape[0]):
         # update all the free coefficents to 0 except fro 1 and propagate
         params = np.zeros_like(free_coeffs)
         params[idx] = 1.0
-        coefficients.set_free_parameters(params)
-        coefficients.set_constraints()
+        temp_coeffs.set_free_parameters(params)
+        temp_coeffs.set_constraints()
 
         # update linear corrections
-        new_linear_corrections.append(
-            dataset.LinearCorrections.T[id_free_op]
-            + coefficients.value @ dataset.LinearCorrections.T
-        )
+        new_linear_corrections.append(temp_coeffs.value @ dataset.LinearCorrections.T)
     return np.array(new_linear_corrections)
 
 
@@ -103,8 +99,8 @@ class PcaCalculator:
                 r"\allowdisplaybreaks",
                 r"\renewcommand{\baselinestretch}{1.5}",
                 r"\begin{document}",
-                r"\noindent \underline{\bf{Principal Components Analysis}:} %s \\ \\ \\"
-                % fit_label,
+                r"\noindent \underline{\bf{Principal Components Analysis}:}"
+                + f"{fit_label}\\ \\ \\",
             ]
         )
         # PCA Table, loop on PC
@@ -172,7 +168,7 @@ class PcaCalculator:
         ax.set_yticks(ticks, labels=self.latex_names[self.pc_matrix.index], fontsize=15)
         ax.set_xticks(
             ticks,
-            labels=[r"\rm{%s}" % sv for sv in self.pc_matrix.columns],
+            labels=[f"\\rm {sv}" for sv in self.pc_matrix.columns],
             rotation=90,
             fontsize=15,
         )
@@ -198,6 +194,6 @@ class PcaCalculator:
         ax_sv.set_ylabel(r"${\rm Singular\ Values}$", fontsize=20)
 
         # save
-        ax.set_title(r"\rm PCA:\ {%s}" % fit_label, fontsize=25, y=-0.15)
+        ax.set_title(f"\\rm PCA:\\ {fit_label}", fontsize=25, y=-0.15)
         plt.tight_layout()
         plt.savefig(fig_name)
