@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import itertools
 import pathlib
 
 import matplotlib.pyplot as plt
@@ -6,6 +7,7 @@ import numpy as np
 import pandas as pd
 from matplotlib import cm
 
+from .contours_2d import plot_contours
 from .latex_tools import latex_packages, multicolum_table_header
 
 
@@ -344,6 +346,108 @@ class CoefficientsPlotter:
         fig.legend(lines, labels, loc="lower right", prop={"size": 20})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
+
+    def plot_contours_2d(self, posteriors, labels, confidence_level=95, dofs_show=None):
+        """Plots 2D marginalised projections confidence level contours
+
+        Parameters
+        ----------
+        posteriors : list
+            posterior distributions per fit and coefficient
+        labels : list
+            list of fit names
+        dofs_show: list, optional
+            List of coefficients to include in the cornerplot, set to ``None`` by default, i.e. all fitted coefficients
+            are included.
+        """
+
+        if dofs_show is not None:
+            posteriors = [
+                (posterior[0][dofs_show], posterior[1]) for posterior in posteriors
+            ]
+            coeff = dofs_show
+            n_par = len(dofs_show)
+        else:
+            coeff = self.coeff_df.index
+            n_par = self.npar
+
+        n_cols = n_par - 1
+        n_rows = n_cols
+
+        fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
+
+        grid = plt.GridSpec(n_rows, n_cols, hspace=0.1, wspace=0.1)
+
+        c1_old = coeff[0]
+
+        row_idx = -1
+        col_idx = -1
+        j = 1
+
+        # loop over coefficient pairs
+        for (c1, c2) in itertools.combinations(coeff, 2):
+
+            if c1 != c1_old:
+                row_idx += -1
+                col_idx = -1 - j
+                j += 1
+                c1_old = c1
+
+            ax = fig.add_subplot(grid[row_idx, col_idx])
+
+            # loop over fits
+            for clr_idx, (posterior, kde) in enumerate(posteriors):
+
+                hndls = plot_contours(
+                    ax,
+                    posterior,
+                    coeff1=c1,
+                    coeff2=c2,
+                    ax_labels=[
+                        self.coeff_df["latex_name"][c1],
+                        self.coeff_df["latex_name"][c2],
+                    ],
+                    kde=kde,
+                    clr_idx=clr_idx,
+                    confidence_level=confidence_level,
+                )
+
+                if row_idx != -1:
+                    ax.set(xlabel=None)
+                    ax.tick_params(
+                        axis="x",  # changes apply to the x-axis
+                        which="both",  # both major and minor ticks are affected
+                        labelbottom=False,
+                    )
+                if col_idx != -n_cols:
+                    ax.set(ylabel=None)
+                    ax.tick_params(
+                        axis="y",  # changes apply to the y-axis
+                        which="both",  # both major and minor ticks are affected
+                        labelleft=False,
+                    )
+
+                col_idx -= 1
+
+        ax = fig.add_subplot(grid[0, 1])
+        ax.axis("off")
+        ax.legend(
+            labels=labels + [r"$\mathrm{SM}$"],
+            handles=hndls,
+            loc="upper left",
+            frameon=False,
+            fontsize=24,
+            handlelength=1,
+            borderpad=0.5,
+            handletextpad=1,
+            title_fontsize=24,
+        )
+
+        fig.suptitle(
+            r"$\mathrm{Marginalised}\:95\:\%\:\mathrm{C.L.\:intervals}$", fontsize=24
+        )
+        grid.tight_layout(fig)
+        fig.savefig(f"{self.report_folder}/contours_2d.pdf")
 
     def write_cl_table(self, bounds):
         """Coefficients latex table"""
