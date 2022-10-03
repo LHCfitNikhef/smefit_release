@@ -46,10 +46,12 @@ class MCOptimizer(Optimizer):
         - algorithm: minimizer alogrithm: 'cma', 'dual_annealing', 'trust-constr'.
         - maxiter: number of maximium iterations.
         - restarts: only for cma, number of restarts (< 9).
-        - initial_temp: only for dual_annealing. The initial temperature,
-            use higher values to facilitates a wider search of the energy landscape, allowing dual_annealing to escape local minima that it is trapped in.
+        - initial_temp: only for dual_annealing.
+            The initial temperature, use higher values to facilitates a wider search
+            of the energy landscape, allowing dual_annealing to escape local minima that it is trapped in.
             Default value is 5230. Range is (0.01, 5.e4].
-        - restart_temp_ratio: only for dual_annealing. During the annealing process, temperature is decreasing,
+        - restart_temp_ratio: only for dual_annealing.
+            During the annealing process, temperature is decreasing,
             when it reaches initial_temp * restart_temp_ratio, the reannealing process is triggered.
             Default value of the ratio is 2e-5. Range is (0, 1).
 
@@ -126,7 +128,8 @@ class MCOptimizer(Optimizer):
         )
         if "minimizer" not in config:
             _logger.warning(
-                "Using default minimizer 'trust-constr', with number of maximum iterations (maxiter): 1e4"
+                "Using default minimizer 'trust-constr', \
+                    with number of maximum iterations (maxiter): 1e4"
             )
 
         single_parameter_fits = config.get("single_parameter_fits", False)

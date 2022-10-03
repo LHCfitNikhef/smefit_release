@@ -105,7 +105,7 @@ config["rot_to_fit_basis"] = None
 config["replica"] = 0
 
 
-class TestOptimize:
+class TestOptimize_NS:
 
     test_opt = opt.ns.NSOptimizer.from_dict(config)
 
@@ -138,7 +138,7 @@ class TestOptimize:
         np.testing.assert_equal(self.test_opt.flat_prior(random_point), prior)
 
 
-class TestOptimize:
+class TestOptimize_MC:
 
     test_opt = opt.mc.MCOptimizer.from_dict(config)
 
@@ -206,4 +206,4 @@ class TestOptimize:
         test = sciopt.check_grad(
             self.test_opt.chi2_func_mc, jacobian, np.random.rand(3)
         )
-        np.testing.assert_allclose(test, 0, atol=6e-6)
+        np.testing.assert_allclose(test, 0, atol=5e-5)
