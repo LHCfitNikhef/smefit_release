@@ -244,7 +244,7 @@ class Report:
             lines = coeff_plt.write_cl_table(bounds_dict)
             run_pdflatex(self.report, lines, "coefficients_table")
 
-        if contours_2d["show"]:
+        if contours_2d:
             _logger.info("Plotting : 2D confidence level projections")
             coeff_to_keep = fit.coefficients.free_parameters.index
             coeff_plt.plot_contours_2d(
