@@ -396,9 +396,10 @@ class CoefficientsPlotter:
             ax = fig.add_subplot(grid[row_idx, col_idx])
 
             # loop over fits
+            hndls_all = []
             for clr_idx, (posterior, kde) in enumerate(posteriors):
 
-                hndls = plot_contours(
+                hndls_contours = plot_contours(
                     ax,
                     posterior,
                     coeff1=c1,
@@ -411,6 +412,8 @@ class CoefficientsPlotter:
                     clr_idx=clr_idx,
                     confidence_level=confidence_level,
                 )
+
+                hndls_all.append(hndls_contours)
 
                 if row_idx != -1:
                     ax.set(xlabel=None)
@@ -427,13 +430,17 @@ class CoefficientsPlotter:
                         labelleft=False,
                     )
 
-                col_idx -= 1
+            hndls_sm_point = ax.scatter(0, 0, c="k", marker="+", s=50, zorder=10)
+            hndls_all.append(hndls_sm_point)
+
+            col_idx -= 1
 
         ax = fig.add_subplot(grid[0, 1])
         ax.axis("off")
+
         ax.legend(
             labels=labels + [r"$\mathrm{SM}$"],
-            handles=hndls,
+            handles=hndls_all,
             loc="upper left",
             frameon=False,
             fontsize=24,

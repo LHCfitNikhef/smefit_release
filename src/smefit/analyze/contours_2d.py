@@ -112,7 +112,6 @@ def plot_contours(
         List of Patch objects
     """
 
-    hndls = []
     colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 
     x_values = posterior[coeff2].values
@@ -140,16 +139,15 @@ def plot_contours(
             color=colors[clr_idx],
         )
 
-        hndls.append(
-            (
-                mpatches.Patch(
-                    ec=colors[clr_idx], fc=colors[clr_idx], fill=True, alpha=0.3
-                ),
-                mpatches.Patch(
-                    ec=colors[clr_idx], fc=colors[clr_idx], fill=False, alpha=1.0
-                ),
-            )
+        hndls = (
+            mpatches.Patch(
+                ec=colors[clr_idx], fc=colors[clr_idx], fill=True, alpha=0.3
+            ),
+            mpatches.Patch(
+                ec=colors[clr_idx], fc=colors[clr_idx], fill=False, alpha=1.0
+            ),
         )
+
     else:  # draw ellipses for linear EFT fit
 
         p1 = confidence_ellipse(
@@ -178,13 +176,11 @@ def plot_contours(
             s=3,
         )
 
-        hndls.append((p1, p2))
+        hndls = (p1, p2)
 
     plt.xlabel(ax_labels[1], fontsize=26)
     plt.ylabel(ax_labels[0], fontsize=26)
 
     plt.tick_params(which="both", direction="in", labelsize=22)
-
-    hndls.append(ax.scatter(0, 0, c="k", marker="+", s=50, zorder=10))
 
     return hndls
