@@ -5,9 +5,10 @@ from matplotlib import rc, use
 
 from ..fit_manager import FitManager
 from ..log import logging
+from .chi2_utils import Chi2tableCalculator
 from .coefficients_utils import CoefficientsPlotter, compute_confidence_level
 from .correlations import plot_correlations
-from .latex_tools import combine_plots, latex_packages, run_pdflatex
+from .latex_tools import run_pdflatex
 from .pca import PcaCalculator
 from .summary import SummaryWriter
 
@@ -31,7 +32,7 @@ class Report:
         fits: numpy.ndarray
             array with fits (instances of `smefit.fit_manager.FitManger`) included in the report
         data_info: pandas.DataFrame
-            dataset information (references and data groups)
+            datasets information (references and data groups)
         coeff_info: pandas.DataFrame
             coefficients information (group and latex name)
 
@@ -62,7 +63,7 @@ class Report:
         for name, label in zip(report_config["result_IDs"], fit_labels):
             fit = FitManager(result_path, name, label)
             fit.load_results()
-            if "PCA" in report_config:
+            if "PCA" in report_config or "chi2_plots" in report_config:
                 fit.load_datasets()
             self.fits.append(fit)
         self.fits = np.array(self.fits)
@@ -109,6 +110,50 @@ class Report:
         """
         lines = SummaryWriter(self.fits, self.data_info, self.coeff_info).write()
         run_pdflatex(self.report, lines, "summary")
+
+    def chi2(self, table=True, plot_experiment=None, plot_distribution=None):
+        r"""
+        :math:`\chi^2` table and plots runner.
+
+        Parameters
+        ----------
+        table: bool, optional
+            write the latex :math:`\chi^2` table per dataset
+        plot_experiment: bool, optional
+            plot the :math:`\chi^2` per dataset
+        plot_distribution: bool, optional
+            plot the :math:`\chi^2` distribution per each replica
+        """
+        chi2_cal = Chi2tableCalculator(self.data_info)
+
+        # here we store the info for each fit
+        chi2_dict = {}
+        chi2_dict_group = {}
+        chi2_replica = {}
+        for fit in self.fits:
+            chi2_df, chi2_total_rep = chi2_cal.compute(
+                fit.datasets,
+                fit.smeft_predictions,
+            )
+            chi2_replica[fit.label] = chi2_total_rep
+            chi2_dict[fit.label] = chi2_cal.add_normalized_chi2(chi2_df)
+            chi2_dict_group[fit.label] = chi2_cal.group_chi2_df(chi2_df)
+
+        if table:
+            lines = chi2_cal.write(chi2_dict, chi2_dict_group)
+            run_pdflatex(self.report, lines, "chi2_tables")
+
+        if plot_experiment is not None:
+            _logger.info("Plotting : chi^2 for each dataset")
+            chi2_cal.plot_exp(
+                chi2_dict, f"{self.report}/chi2_bar.pdf", **plot_experiment
+            )
+
+        if plot_distribution is not None:
+            _logger.info("Plotting : chi^2 distribution for each replica")
+            chi2_cal.plot_dist(
+                chi2_replica, f"{self.report}/chi2_histo.pdf", **plot_distribution
+            )
 
     def coefficients(
         self,
@@ -197,6 +242,7 @@ class Report:
         if table:
             _logger.info("Writing : Confidence level table")
             lines = coeff_plt.write_cl_table(bounds_dict)
+            run_pdflatex(self.report, lines, "coefficients_table")
 
         if contours_2d["show"]:
             _logger.info("Plotting : 2D confidence level projections")
@@ -210,8 +256,6 @@ class Report:
                 confidence_level=contours_2d["confidence_level"],
                 dofs_show=contours_2d["dofs_show"],
             )
-
-        combine_plots(self.report, lines, "coefficient_plots", "coefficients_")
 
     def correlations(self, hide_dofs=None, thr_show=0.1):
         """Plot coefficients correlation matrix.

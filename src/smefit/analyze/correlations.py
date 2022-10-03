@@ -71,7 +71,7 @@ def plot_correlations(
             ax.text(
                 i,
                 j,
-                r"%.1f" % cij,
+                f"{cij:.1f}",
                 va="center",
                 ha="center",
                 fontsize=10,
@@ -88,7 +88,7 @@ def plot_correlations(
     ax.tick_params(which="minor", bottom=False)
     ax.grid(visible=True, which="minor", alpha=0.2)
 
-    ax.set_title(r"\rm Correlation:\ {%s}" % fit_label, fontsize=25, y=-0.06)
+    ax.set_title(f"\\rm Correlation:\\ {fit_label}", fontsize=25, y=-0.06)
 
     plt.tight_layout()
     plt.savefig(fig_name)
