@@ -37,6 +37,7 @@ PyPDF2="^1.27.12"
 scipy="^1.8.0"
 click="^8.1.3"
 cma="^3.2.2"
+seaborn="^0.11.2"
 
 # documentation
 Sphinx = { version = "^4.3.2", optional = true }

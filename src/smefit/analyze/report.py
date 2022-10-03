@@ -160,6 +160,7 @@ class Report:
         scatter_plot=None,
         confidence_level_bar=None,
         posterior_histograms=True,
+        contours_2d=None,
         hide_dofs=None,
         show_only=None,
         logo=True,
@@ -237,10 +238,24 @@ class Report:
                 labels=[fit.label for fit in self.fits],
                 disjointed_lists=list((*double_solution.values(),)),
             )
+
         if table:
             _logger.info("Writing : Confidence level table")
             lines = coeff_plt.write_cl_table(bounds_dict)
             run_pdflatex(self.report, lines, "coefficients_table")
+
+        if contours_2d["show"]:
+            _logger.info("Plotting : 2D confidence level projections")
+            coeff_to_keep = fit.coefficients.free_parameters.index
+            coeff_plt.plot_contours_2d(
+                [
+                    (fit.results[coeff_to_keep], fit.config["use_quad"])
+                    for fit in self.fits
+                ],
+                labels=[fit.label for fit in self.fits],
+                confidence_level=contours_2d["confidence_level"],
+                dofs_show=contours_2d["dofs_show"],
+            )
 
     def correlations(self, hide_dofs=None, thr_show=0.1):
         """Plot coefficients correlation matrix.
