@@ -43,7 +43,7 @@ class MCOptimizer(Optimizer):
         minimizer options. The allowed optrions are:
 
         Args:
-        - algorithm: minimizer alogrithm: 'cma', 'dual_annealing', 'trust-constr'.
+        - mc_minimiser: minimizer alogrithm: 'cma', 'dual_annealing', 'trust-constr'.
         - maxiter: number of maximium iterations.
         - restarts: only for cma, number of restarts (< 9).
         - initial_temp: only for dual_annealing.
@@ -88,7 +88,16 @@ class MCOptimizer(Optimizer):
     def from_dict(cls, config):
         """
         Create object from theory dictionary.
-        The default miniizer is trust-constr.
+        The default minimizer is trust-constr.
+
+        The minimizer options have to be specified with:
+
+        ```
+        mc_minimiser: 'cma'
+        maxiter: 100000
+        restarts: 0
+        ```
+
 
         Parameters
         ----------
@@ -120,20 +129,30 @@ class MCOptimizer(Optimizer):
         if not use_bounds:
             log.console.log("Running minimization without initial bounds")
 
-        minimizer_specs = config.get(
-            "minimizer",
-            {
-                "maxiter": 10000,
-            },
-        )
-        if "minimizer" not in config:
-            _logger.warning(
-                "Using default minimizer 'trust-constr', \
-                    with number of maximum iterations (maxiter): 1e4"
+        minimizer_specs = {}
+        minimizer_specs["mc_minimiser"] = config.get("mc_minimiser", "trust-constr")
+
+        if minimizer_specs["mc_minimiser"] == "cma":
+            minimizer_specs["restarts"] = config.get("restarts", 0)
+            if "restarts" not in config:
+                _logger.warning("Using default no restarts")
+        elif minimizer_specs["mc_minimiser"] == "dual_annealineg":
+            minimizer_specs["restart_temp_ratio"] = config.get(
+                "restart_temp_ratio", 2e-5
             )
+            if "restart_temp_ratio" not in config:
+                _logger.warning("Using default restert_temp_ratio: 2e-5")
+            minimizer_specs["initial_temp"] = config.get("initial_temp", 5230)
+            if "initial_temp" not in config:
+                _logger.warning("Using default initial_temp: 5230")
+        elif "mc_minimiser" not in config:
+            _logger.warning("Using default minimizer 'trust-constr'")
+
+        minimizer_specs["maxiter"] = config.get("maxiter", int(1e4))
+        if "maxiter" not in config:
+            _logger.warning("Setting maximum number of iterations (maxiter) to 1e4")
 
         single_parameter_fits = config.get("single_parameter_fits", False)
-
         return cls(
             loaded_datasets,
             coefficients,
@@ -185,7 +204,7 @@ class MCOptimizer(Optimizer):
         t1 = time.time()
 
         maxiter = self.minimizer_specs["maxiter"]
-        algorithm = self.minimizer_specs["algorithm"]
+        algorithm = self.minimizer_specs["mc_minimiser"]
 
         if algorithm == "cma":
             bounds = [None, None]
