@@ -90,7 +90,7 @@ class SummaryWriter:
             L.extend(
                 [
                     r"{\bf \underline{Fit%d:}} %s" % (i + 1, fit.label) + "\n",
-                    f"Number of replicas/samples: {fit.Nrep}\n",
+                    f"Number of replicas/samples: {fit.n_replica}\n",
                     f"pQCD order: {fit.config['order']}\n",
                     f"SMEFT order: {eft_order}\n",
                 ]
@@ -180,7 +180,7 @@ class SummaryWriter:
                         if "constrain" in coeff_dict:
                             temp += add_bounded_coeff(coeff_dict, self.coeff_info)
                         elif "value" in coeff_dict:
-                            temp += r" & & = %d " % (coeff_dict["value"])
+                            temp += f" & & = {coeff_dict['value']}"
                         else:
                             temp += r" & \checkmark & "
                             n_fitted[i] += 1
