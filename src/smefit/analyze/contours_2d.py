@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
-import matplotlib.transforms as transforms
 import numpy as np
 import scipy.stats
 import seaborn as sns
+from matplotlib import patches, transforms
 from matplotlib.patches import Ellipse
 
 
@@ -139,10 +138,8 @@ def plot_contours(
         )
 
         hndls = (
-            mpatches.Patch(
-                ec=colors[clr_idx], fc=colors[clr_idx], fill=True, alpha=0.3
-            ),
-            mpatches.Patch(
+            patches.Patch(ec=colors[clr_idx], fc=colors[clr_idx], fill=True, alpha=0.3),
+            patches.Patch(
                 ec=colors[clr_idx], fc=colors[clr_idx], fill=False, alpha=1.0
             ),
         )
