@@ -137,9 +137,9 @@ def scan(fit_card: pathlib.Path, n_replica: int, bounds: bool):
     "report_card",
     type=click.Path(path_type=pathlib.Path, exists=True),
 )
-def report(fit_card: pathlib.Path):
+def report(report_card: pathlib.Path):
     """Run a fit report.
 
     Usage: smefit R path_to_runcard
     """
-    run_report(fit_card.absolute())
+    run_report(report_card.absolute())
