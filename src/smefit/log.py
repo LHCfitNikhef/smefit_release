@@ -17,7 +17,8 @@ logging.basicConfig(
 def setup_console(logfile):
     global console
     if logfile is not None:
-        log_object = open(logfile, "w", encoding="utf-8")
+        with open(logfile, "w", encoding="utf-8") as f:
+            log_object = f
     else:
         log_object = None
     console = Console(

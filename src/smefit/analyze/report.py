@@ -246,10 +246,12 @@ class Report:
 
         if contours_2d:
             _logger.info("Plotting : 2D confidence level projections")
-            coeff_to_keep = fit.coefficients.free_parameters.index
             coeff_plt.plot_contours_2d(
                 [
-                    (fit.results[coeff_to_keep], fit.config["use_quad"])
+                    (
+                        fit.results[fit.coefficients.free_parameters.index],
+                        fit.config["use_quad"],
+                    )
                     for fit in self.fits
                 ],
                 labels=[fit.label for fit in self.fits],

@@ -3,7 +3,6 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
 import numpy as np
-import pandas as pd
 import scipy.stats
 import seaborn as sns
 from matplotlib.patches import Ellipse
