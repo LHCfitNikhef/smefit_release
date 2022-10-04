@@ -73,8 +73,9 @@ class PcaCalculator:
         free_parameters = self.coefficients.free_parameters.index
 
         new_LinearCorrections = impose_constrain(self.datasets, self.coefficients)
-        X = new_LinearCorrections * np.diag(self.datasets.InvCovMat)
 
+        #TODO: check this definition. It should be the one used in the public atlas note
+        X = new_LinearCorrections @ self.datasets.InvCovMat @ new_LinearCorrections.T
         # Decompose matrix with SVD and identify PCs
         Vt, W, _ = np.linalg.svd(X)
 
