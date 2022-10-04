@@ -6,10 +6,11 @@ from collections import namedtuple
 
 import numpy as np
 import pandas as pd
+import scipy.linalg as la
 import yaml
 
 from .basis_rotation import rotate_to_fit_basis
-from .covmat import build_large_covmat, construct_covmat
+from .covmat import construct_covmat, covmat_from_systematics
 from .log import logging
 
 _logger = logging.getLogger(__name__)
@@ -98,6 +99,8 @@ class Loader:
         (
             self.dataspec["central_values"],
             self.dataspec["covmat"],
+            self.dataspec["sys_error"],
+            self.dataspec["stat_error"],
         ) = self.load_experimental_data()
         (
             self.dataspec["SM_predictions"],
@@ -175,7 +178,7 @@ class Loader:
         if num_data == 1:
             central_values = np.asarray([central_values])
 
-        return central_values, construct_covmat(stat_error, df)
+        return central_values, construct_covmat(stat_error, df), df, stat_error
 
     def load_theory(
         self,
@@ -283,14 +286,50 @@ class Loader:
     @property
     def covmat(self):
         """
-        Covariance matrix
+        Experimental covariance matrix
 
         Returns
         -------
             covmat: numpy.ndarray
-                experimental covariance matrix
+                experimental covariance matrix of a single dataset
         """
-        return self.dataspec["covmat"] + self.dataspec["theory_covmat"]
+        return self.dataspec["covmat"]
+
+    @property
+    def theory_covmat(self):
+        """
+        Theory covariance matrix
+
+        Returns
+        -------
+            theory covmat: numpy.ndarray
+                theory covariance matrix of a single dataset
+        """
+        return self.dataspec["theory_covmat"]
+
+    @property
+    def sys_error(self):
+        """
+        Systematic errors
+
+        Returns
+        -------
+            sys_error: pd.DataFrame
+                systematic errors of the dataset
+        """
+        return self.dataspec["sys_error"]
+
+    @property
+    def stat_error(self):
+        """
+        Statistical errors
+
+        Returns
+        -------
+            stat_error: np.array
+                statistical errors of the dataset
+        """
+        return self.dataspec["stat_error"]
 
     @property
     def sm_prediction(self):
@@ -415,11 +454,13 @@ def load_datasets(
 
     exp_data = []
     sm_theory = []
+    sys_error = []
+    stat_error = []
     lin_corr_list = []
     quad_corr_list = []
-    chi2_covmat = []
     n_data_exp = []
     exp_name = []
+    th_cov = []
 
     Loader.commondata_path = pathlib.Path(commondata_path)
     if theory_path is not None:
@@ -444,7 +485,9 @@ def load_datasets(
         sm_theory.extend(dataset.sm_prediction)
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
         quad_corr_list.append([dataset.n_data, dataset.quad_corrections])
-        chi2_covmat.append(dataset.covmat)
+        sys_error.append(dataset.sys_error)
+        stat_error.append(dataset.stat_error)
+        th_cov.append(dataset.theory_covmat)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
@@ -474,8 +517,13 @@ def load_datasets(
     else:
         quad_corr_values = None
 
-    # Construct unique large cov matrix dropping correlations between different datasets
-    covmat = build_large_covmat(chi2_covmat, n_data_tot, n_data_exp)
+    # Construct unique large cov matrix accounting for correlations between different datasets
+    # The theory covariance matrix, when used, will be different from zero.
+    # At the moment it does not account for correlation between different datasets
+
+    theory_covariance = la.block_diag(*th_cov)
+    covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
+
     replica = np.random.multivariate_normal(exp_data, covmat)
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(

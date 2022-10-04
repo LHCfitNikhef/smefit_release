@@ -1,0 +1,24 @@
+dataset_name: data_test4
+num_data: 3
+num_sys: 2
+data_central:
+- 1.0
+- 2.0
+- 3.0
+statistical_error:
+- 1.0
+- 1.0
+- 1.0
+systematics:
+- - 0.2
+  - 0.2
+  - 0.2
+- - 0.2
+  - 0.2
+  - 0.2
+sys_names:
+- UNCORR
+- SPECIAL
+sys_type:
+- ADD
+- ADD

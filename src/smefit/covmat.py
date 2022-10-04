@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
 
 """
-Module containing computation of covariance matrix
+Module containing computation of covariance matrix.
+Based on
+https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats_utils.py
+https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats.py
+
 """
+
 import numpy as np
 import pandas as pd
+import scipy.linalg as la
+
+INTRA_DATASET_SYS_NAME = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
 
 
 def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
     """
-    This function is taken from: https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats_utils.py
-
     Basic function to construct a covariance matrix (covmat), given the
     statistical error and a dataframe of systematics.
     Errors with name UNCORR or THEORYUNCORR are added in quadrature with
@@ -49,30 +55,50 @@ def construct_covmat(stat_errors: np.array, sys_errors: pd.DataFrame):
     return np.diag(diagonal) + corr_sys_mat @ corr_sys_mat.T
 
 
-def build_large_covmat(chi2_covmat, n_data, n_data_exp):
-    r"""
-    Build large covariance matrix (individual datsets are on diagonal, no cross-correlations)
+def covmat_from_systematics(stat_errors: list, sys_errors: list):
+    """Given two lists containing the statistic and systematic errors,
+    construct the full covariance matrix.
+
+    This is similar to :py:meth:`construct_covmat`
+    except that special corr systematics are concatenated across all datasets
+    before being multiplied by their transpose to give off block-diagonal
+    contributions. The other systematics contribute to the block diagonal in the
+    same way as :py:meth:`construct_covmat`.
 
     Parameters
     ----------
-        chi2_covmat: list
-            :math:`\chi^2` covariance matrix
-        n_data : int
-            total number of datapoints
-        n_data_exp: list
-            list of number of data per experiment
+    stat_errors : list[(stat_errors: np.array)]
+        list of stat_errors for each dataset.
+
+    sys_errors : list[(sys_errors: pd.DataFrame)]
+        list of sys_errors for each dataset.
 
     Returns
     -------
-        covmat_array: np.ndarray
-            total experimental covariance matrix
+    cov_mat : np.array
+        Numpy array which is N_dat x N_dat (where N_dat is the number of data points)
+        containing uncertainty and correlation information.
     """
-    covmat_array = np.zeros((n_data, n_data))
-    cnt = 0
+    special_corrs = []
+    block_diags = []
 
-    for i, n_exp in enumerate(n_data_exp):
-        for j in range(n_exp):
-            for k in range(n_exp):
-                covmat_array[cnt + j, cnt + k] = chi2_covmat[i][j][k]
-        cnt += n_exp
-    return covmat_array
+    for dataset_stat_errors, dataset_sys_errors in zip(stat_errors, sys_errors):
+
+        # separate out the special uncertainties which can be correlated across
+        # datasets
+        is_intra_dataset_error = dataset_sys_errors.columns.isin(INTRA_DATASET_SYS_NAME)
+        block_diags.append(
+            construct_covmat(
+                dataset_stat_errors, dataset_sys_errors.loc[:, is_intra_dataset_error]
+            )
+        )
+        special_corrs.append(dataset_sys_errors.loc[:, ~is_intra_dataset_error])
+
+    # concat systematics across datasets
+    special_sys = pd.concat(special_corrs, axis=0, sort=False)
+    # non-overlapping systematics are set to NaN by concat, fill with 0 instead.
+    special_sys.fillna(0, inplace=True)
+
+    diag = la.block_diag(*block_diags)
+    covmat = diag + special_sys.to_numpy() @ special_sys.to_numpy().T
+    return covmat
