@@ -74,7 +74,7 @@ class PcaCalculator:
 
         new_LinearCorrections = impose_constrain(self.datasets, self.coefficients)
 
-        #TODO: check this definition. It should be the one used in the public atlas note
+        # TODO: check this definition. It should be the one used in the public atlas note
         X = new_LinearCorrections @ self.datasets.InvCovMat @ new_LinearCorrections.T
         # Decompose matrix with SVD and identify PCs
         Vt, W, _ = np.linalg.svd(X)
@@ -101,7 +101,8 @@ class PcaCalculator:
                 r"\renewcommand{\baselinestretch}{1.5}",
                 r"\begin{document}",
                 r"\noindent \underline{\bf{Principal Components Analysis}:}"
-                + f"{fit_label}\\ \\ \\",
+                + fit_label
+                + r"\\ \\ \\",
             ]
         )
         # PCA Table, loop on PC
