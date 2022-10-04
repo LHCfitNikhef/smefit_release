@@ -3,14 +3,13 @@
 """
 Fitting the Wilson coefficients with MC
 """
-import copy
-import json
 import time
 
+import cma
+import numpy as np
 import scipy.optimize as opt
 from rich.style import Style
 from rich.table import Table
-from scipy.optimize import Bounds
 
 from .. import log
 from ..coefficients import CoefficientManager
@@ -22,17 +21,41 @@ _logger = log.logging.getLogger(__name__)
 
 class MCOptimizer(Optimizer):
 
-    """
-    Optimizer specification for MC
+    """Optimizer specification for |MC|.
 
     Parameters
     ----------
-        loaded_datasets : `smefit.loader.DataTuple`,
-            dataset tuple
-        coefficients : `smefit.coefficients.CoefficientManager`
-            instance of `CoefficientManager` with all the relevant coefficients to fit
-        use_quad : bool
-            If True use also |HO| corrections
+    loaded_datasets : `smefit.loader.DataTuple`,
+        dataset tuple
+    coefficients : `smefit.coefficients.CoefficientManager`
+        instance of `CoefficientManager` with all the relevant coefficients to fit
+    use_quad : bool
+        If True use also |HO| corrections
+    result_ID : str
+        result ID
+    replica : int
+        replica number
+    single_parameter_fits : bool
+        True for individual scan fits
+    use_bounds : bool
+        If true start the minimization with the specified values of min and max for each coeffient
+    minimizer_specs : dict
+        minimizer options. The allowed optrions are:
+
+        Args:
+        - mc_minimiser: minimizer alogrithm: 'cma', 'dual_annealing', 'trust-constr'.
+        - maxiter: number of maximium iterations.
+        - restarts: only for cma, number of restarts (< 9).
+        - initial_temp: only for dual_annealing.
+            The initial temperature, use higher values to facilitates a wider search
+            of the energy landscape, allowing dual_annealing to escape local minima that it is trapped in.
+            Default value is 5230. Range is (0.01, 5.e4].
+        - restart_temp_ratio: only for dual_annealing.
+            During the annealing process, temperature is decreasing,
+            when it reaches initial_temp * restart_temp_ratio, the reannealing process is triggered.
+            Default value of the ratio is 2e-5. Range is (0, 1).
+
+        See also `cma.fmin`, `scipy.optimize.minimize`, `scipy.optimize.dual_annealing`.
     """
 
     def __init__(
@@ -45,7 +68,7 @@ class MCOptimizer(Optimizer):
         replica,
         single_parameter_fits,
         use_bounds,
-        maxiter,
+        minimizer_specs,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -59,22 +82,33 @@ class MCOptimizer(Optimizer):
         self.replica = replica
         self.epoch = 0
         self.use_bounds = use_bounds
-        self.maxiter = maxiter
+        self.minimizer_specs = minimizer_specs
 
     @classmethod
     def from_dict(cls, config):
         """
         Create object from theory dictionary.
+        The default minimizer is trust-constr.
+
+        The minimizer options have to be specified with:
+
+        ```
+        mc_minimiser: 'cma'
+        maxiter: 100000
+        restarts: 0
+        ```
+
 
         Parameters
         ----------
-            config : dict
-                configuration dictionary
+        config : dict
+            configuration dictionary
 
         Returns
         -------
-            cls : Optimizer
-                created object
+        Optimizer
+            created object
+
         """
 
         loaded_datasets = load_datasets(
@@ -95,14 +129,30 @@ class MCOptimizer(Optimizer):
         if not use_bounds:
             log.console.log("Running minimization without initial bounds")
 
-        maxiter = config.get("maxiter", 1e4)
-        if "maxiter" not in config:
-            _logger.warning(
-                "Number of maximum iterations (maxiter) not set in the input card. Using default: 1e4"
+        minimizer_specs = {}
+        minimizer_specs["mc_minimiser"] = config.get("mc_minimiser", "trust-constr")
+
+        if minimizer_specs["mc_minimiser"] == "cma":
+            minimizer_specs["restarts"] = config.get("restarts", 0)
+            if "restarts" not in config:
+                _logger.warning("Using default no restarts")
+        elif minimizer_specs["mc_minimiser"] == "dual_annealineg":
+            minimizer_specs["restart_temp_ratio"] = config.get(
+                "restart_temp_ratio", 2e-5
             )
+            if "restart_temp_ratio" not in config:
+                _logger.warning("Using default restert_temp_ratio: 2e-5")
+            minimizer_specs["initial_temp"] = config.get("initial_temp", 5230)
+            if "initial_temp" not in config:
+                _logger.warning("Using default initial_temp: 5230")
+        elif "mc_minimiser" not in config:
+            _logger.warning("Using default minimizer 'trust-constr'")
+
+        minimizer_specs["maxiter"] = config.get("maxiter", int(1e4))
+        if "maxiter" not in config:
+            _logger.warning("Setting maximum number of iterations (maxiter) to 1e4")
 
         single_parameter_fits = config.get("single_parameter_fits", False)
-
         return cls(
             loaded_datasets,
             coefficients,
@@ -112,7 +162,7 @@ class MCOptimizer(Optimizer):
             config["replica"],
             single_parameter_fits,
             use_bounds,
-            maxiter,
+            minimizer_specs,
         )
 
     def get_status(self, chi2):
@@ -132,12 +182,13 @@ class MCOptimizer(Optimizer):
 
         Parameters
         ----------
-            params : np.ndarray
-                noise and data info
+        params : np.ndarray
+            noise and data info
+
         Returns
         -------
-            current_chi2 : np.ndarray
-                chi2 function
+        np.ndarray
+            chi2 value
 
         """
         self.coefficients.set_free_parameters(params)
@@ -148,21 +199,70 @@ class MCOptimizer(Optimizer):
         return current_chi2
 
     def run_sampling(self):
-        """Run the minimization with Nested Sampling"""
+        """Run the minimization with |MC|."""
 
         t1 = time.time()
-        bounds = None
-        if self.use_bounds:
-            bounds = Bounds(self.free_parameters.minimum, self.free_parameters.maximum)
 
-        # TODO: other minimization options?
-        opt.minimize(
-            self.chi2_func_mc,
-            self.free_parameters.value,
-            method="trust-constr",
-            bounds=bounds,
-            options={"maxiter": self.maxiter},
-        )
+        maxiter = self.minimizer_specs["maxiter"]
+        algorithm = self.minimizer_specs["mc_minimiser"]
+
+        if algorithm == "cma":
+            bounds = [None, None]
+            if self.use_bounds:
+                bounds = [self.free_parameters.minimum, self.free_parameters.maximum]
+            cma.fmin(
+                self.chi2_func_mc,
+                self.free_parameters.value,
+                sigma0=0.68,
+                options={
+                    "bounds": bounds,
+                    "verbose": -1,
+                    "verb_log": False,
+                    "ftarget": self.npts,
+                    "tolx": 1e-5,
+                    "maxiter": maxiter,
+                },
+                bipop=self.minimizer_specs["restarts"] > 0,
+                restarts=self.minimizer_specs["restarts"],
+            )
+
+        else:
+            if self.use_bounds:
+                bounds = opt.Bounds(
+                    self.free_parameters.minimum, self.free_parameters.maximum
+                )
+            else:
+                bounds = opt.Bounds(
+                    np.full(self.free_parameters.shape[0], -np.inf),
+                    np.full(self.free_parameters.shape[0], np.inf),
+                )
+
+            if algorithm == "dual_annealing":
+                res = opt.dual_annealing(
+                    self.chi2_func_mc,
+                    bounds,
+                    minimizer_kwargs={
+                        "method": "trust-constr",
+                        "bounds": bounds,
+                        "options": {"maxiter": maxiter},
+                    },
+                    maxiter=maxiter,
+                    x0=self.free_parameters.value,
+                    initial_temp=self.minimizer_specs["initial_temp"],
+                    restart_temp_ratio=self.minimizer_specs["restart_temp_ratio"],
+                )
+            else:
+                res = opt.minimize(
+                    self.chi2_func_mc,
+                    self.free_parameters.value,
+                    method="trust-constr",
+                    bounds=bounds,
+                    options={"maxiter": maxiter, "xtol": 1e-5},
+                )
+            _logger.info(res)
+            if not res["success"]:
+                raise ValueError("Minimization was not successful, exit ...")
+
         t2 = time.time()
         log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
 
@@ -177,6 +277,8 @@ class MCOptimizer(Optimizer):
                 result dictionary
 
         """
+        self.coefficients.set_free_parameters(self.free_parameters.value)
+        self.coefficients.set_constraints()
         values = {}
         if not self.single_parameter_fits:
             values["chi2"] = self.chi2_values[-1] / self.npts

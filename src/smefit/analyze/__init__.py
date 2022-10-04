@@ -44,8 +44,17 @@ def run_report(report_card_file):
     if report_config["summary"]:
         report.summary()
 
+    if "chi2_plots" in report_config:
+        report.chi2(**report_config["chi2_plots"])
+
     if "coefficients_plots" in report_config:
         report.coefficients(**report_config["coefficients_plots"])
+
+    if "correlations" in report_config:
+        report.correlations(**report_config["correlations"])
+
+    if "PCA" in report_config:
+        report.pca(**report_config["PCA"])
 
     # Combine PDF files together into raw pdf report
     subprocess.call(
