@@ -237,11 +237,11 @@ class TestOptimize_NS:
 
 class TestOptimize_MC:
 
-    test_opt = opt.mc.MCOptimizer.from_dict(config)
+    test_opt = opt.mc.MCOptimizer.from_dict(config_no_corr)
 
     def test_init(self):
         assert self.test_opt.results_path == commondata_path / "test"
-        np.testing.assert_equal(self.test_opt.loaded_datasets.ExpNames, datasets)
+        np.testing.assert_equal(self.test_opt.loaded_datasets.ExpNames, datasets_no_corr)
         np.testing.assert_equal(
             self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]
         )
