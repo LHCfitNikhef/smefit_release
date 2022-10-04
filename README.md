@@ -57,13 +57,13 @@ The fitting code provide two equivalent fiining stategies.
 To run the code with `Nested Sampling` you can do:
 
 ```bash
-smefit NS -f <your_runcard_name>
+smefit NS <path_to_runcard>
 ```
 
 To run the code suing the Monte Carlo replica method you can do:
 
 ```bash
-smefit MC -f <your_runcard_name> -n <replica_number>
+smefit MC <path_to_runcard> -n <replica_number>
 ```
 
 An runcard example is provided in `runcards/test_runcard.yaml`.
@@ -83,7 +83,7 @@ with python 3.10 (3.9). Then you can run doing:
 To run smefit in parallel openmpi and mpi4py need to be installed inside your python environnement, as detailed above.
 Then you can run:
 ```bash
-mpiexec -n number_of_cores smefit NS -f <your_runcard_name>
+mpiexec -n number_of_cores smefit NS <path_to_runcard>
 ```
 
 ## Documentation

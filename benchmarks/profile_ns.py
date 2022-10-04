@@ -19,4 +19,4 @@ runner.ns()
 
 
 # # profile mpiexec
-# os.system("mpiexec -n 2 smefit NS -f test_runcard")
+# os.system("mpiexec -n 2 smefit NS runcards/test_runcard")
