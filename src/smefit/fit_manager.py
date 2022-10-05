@@ -115,6 +115,7 @@ class FitManager:
             self.config["order"],
             self.config["use_quad"],
             self.config["use_theory_covmat"],
+            self.config["use_t0"],
             self.config.get("theory_path", None),
             self.config.get("rot_to_fit_basis", None),
             self.config.get("uv_coupligs", False),

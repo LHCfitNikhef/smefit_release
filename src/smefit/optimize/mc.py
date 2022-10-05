@@ -118,6 +118,7 @@ class MCOptimizer(Optimizer):
             config["order"],
             config["use_quad"],
             config["use_theory_covmat"],
+            config["use_t0"],
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_coupligs", False),
