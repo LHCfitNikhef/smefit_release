@@ -21,4 +21,4 @@ sys_names:
 - SPECIAL
 sys_type:
 - ADD
-- ADD
+- MULT
