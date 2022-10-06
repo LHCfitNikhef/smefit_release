@@ -34,3 +34,6 @@
 
 .. |NS| replace::
    :abbr:`NS (Nested Sampling)`
+
+.. |MC| replace::
+   :abbr:`MC (Monte Carlo)`

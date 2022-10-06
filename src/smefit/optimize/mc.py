@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-Fitting the Wilson coefficients with MC
-"""
+"""Fitting the Wilson coefficients with |MC|."""
 import time
 
 import cma
@@ -56,6 +54,7 @@ class MCOptimizer(Optimizer):
             Default value of the ratio is 2e-5. Range is (0, 1).
 
         See also `cma.fmin`, `scipy.optimize.minimize`, `scipy.optimize.dual_annealing`.
+
     """
 
     def __init__(

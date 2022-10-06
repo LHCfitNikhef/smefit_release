@@ -49,31 +49,31 @@ def check_missing_oparators(loaded_corrections, coeff_config):
 
 
 class Loader:
-    """
-    Class to check, load commondata and corresponding theory predictions
+    """Class to check, load commondata and corresponding theory predictions.
 
     Attributes
     ----------
-        commondata_path: pathlib.path
-            path to commondata folder, commondata excluded
-        theory_path: pathlib.Path, optional
-            path to theory folder, theory excluded.
-            Default it assumes to be the same as commondata_path
+    commondata_path: pathlib.path
+        path to commondata folder, commondata excluded
+    theory_path: pathlib.Path, optional
+        path to theory folder, theory excluded.
+        Default it assumes to be the same as commondata_path
 
     Parameters
     ----------
-        setname: str
-            dataset name to load
-        operators_to_keep : list
-            list of operators for which corrections are loaded
-        order: "LO", "NLO"
-            EFT perturbative order
-        use_quad : bool
-            if True loads also |HO| corrections
-        use_theory_covmat: bool
-            if True add the theory covariance matrix to the experimental one
-        rot_to_fit_basis: dict, None
-            matrix rotation to fit basis or None
+    setname: str
+        dataset name to load
+    operators_to_keep : list
+        list of operators for which corrections are loaded
+    order: "LO", "NLO"
+        EFT perturbative order
+    use_quad : bool
+        if True loads also |HO| corrections
+    use_theory_covmat: bool
+    if True add the theory covariance matrix to the experimental one
+    rot_to_fit_basis: dict, None
+        matrix rotation to fit basis or None
+
     """
 
     commondata_path = pathlib.Path()

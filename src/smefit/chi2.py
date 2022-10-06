@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-
-"""
-Module for the computation of chi-squared values
-"""
+"""Module for the computation of chi-squared values."""
 import json
 
 import matplotlib.pyplot as plt
@@ -105,7 +102,7 @@ class Scanner:
 
         Returns:
         --------
-        individual reduced :math:`\chi^2` for each x value.
+            individual reduced :math:`\chi^2` for each x value.
 
         """
         chi2_list = []
