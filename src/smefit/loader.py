@@ -498,7 +498,6 @@ def load_datasets(
         )
         exp_name.append(sset)
         n_data_exp.append(dataset.n_data)
-
         exp_data.extend(dataset.central_values)
         sm_theory.extend(dataset.sm_prediction)
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
@@ -539,13 +538,10 @@ def load_datasets(
     # Construct unique large cov matrix accounting for correlations between different datasets
     # The theory covariance matrix, when used, will be different from zero.
     # At the moment it does not account for correlation between different datasets
-
     theory_covariance = la.block_diag(*th_cov)
     covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
     # replicas always generated using the experimental covmat, no t0
     replica = np.random.multivariate_normal(exp_data, covmat)
-    # if sset == "data_test4":
-    #     import pdb; pdb.set_trace()
     if use_t0:
         fit_covmat = (
             covmat_from_systematics(stat_error, sys_error_t0) + theory_covariance
@@ -553,7 +549,6 @@ def load_datasets(
     else:
         fit_covmat = covmat
 
-    # import pdb; pdb.set_trace()
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
         exp_data,
