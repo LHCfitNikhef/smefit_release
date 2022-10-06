@@ -1,0 +1,26 @@
+smefit.optimize package
+=======================
+
+.. automodule:: smefit.optimize
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+smefit.optimize.mc module
+-------------------------
+
+.. automodule:: smefit.optimize.mc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+smefit.optimize.ns module
+-------------------------
+
+.. automodule:: smefit.optimize.ns
+   :members:
+   :undoc-members:
+   :show-inheritance:

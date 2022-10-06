@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="English" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>smefit.optimize.mc &mdash; SMEFiT 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> SMEFiT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../implementation/general.html">Fitting strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../implementation/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/smefit/smefit.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_theory/data.html">Experimental data format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_theory/theory.html">Theory tables</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tutorial:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/example.html">Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../development/code_todos.html">TODOs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../zzz-refs.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SMEFiT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+          <li><a href="../optimize.html">smefit.optimize</a> &raquo;</li>
+      <li>smefit.optimize.mc</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for smefit.optimize.mc</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;Fitting the Wilson coefficients with |MC|.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">cma</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">opt</span>
+<span class="kn">from</span> <span class="nn">rich.style</span> <span class="kn">import</span> <span class="n">Style</span>
+<span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
+<span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">load_datasets</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Optimizer</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MCOptimizer"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer">[docs]</a><span class="k">class</span> <span class="nc">MCOptimizer</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Optimizer specification for |MC|.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    loaded_datasets : `smefit.loader.DataTuple`,</span>
+<span class="sd">        dataset tuple</span>
+<span class="sd">    coefficients : `smefit.coefficients.CoefficientManager`</span>
+<span class="sd">        instance of `CoefficientManager` with all the relevant coefficients to fit</span>
+<span class="sd">    use_quad : bool</span>
+<span class="sd">        If True use also |HO| corrections</span>
+<span class="sd">    result_ID : str</span>
+<span class="sd">        result ID</span>
+<span class="sd">    replica : int</span>
+<span class="sd">        replica number</span>
+<span class="sd">    single_parameter_fits : bool</span>
+<span class="sd">        True for individual scan fits</span>
+<span class="sd">    use_bounds : bool</span>
+<span class="sd">        If true start the minimization with the specified values of min and max for each coeffient</span>
+<span class="sd">    minimizer_specs : dict</span>
+<span class="sd">        minimizer options. The allowed optrions are:</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">        - mc_minimiser: minimizer alogrithm: &#39;cma&#39;, &#39;dual_annealing&#39;, &#39;trust-constr&#39;.</span>
+<span class="sd">        - maxiter: number of maximium iterations.</span>
+<span class="sd">        - restarts: only for cma, number of restarts (&lt; 9).</span>
+<span class="sd">        - initial_temp: only for dual_annealing.</span>
+<span class="sd">            The initial temperature, use higher values to facilitates a wider search</span>
+<span class="sd">            of the energy landscape, allowing dual_annealing to escape local minima that it is trapped in.</span>
+<span class="sd">            Default value is 5230. Range is (0.01, 5.e4].</span>
+<span class="sd">        - restart_temp_ratio: only for dual_annealing.</span>
+<span class="sd">            During the annealing process, temperature is decreasing,</span>
+<span class="sd">            when it reaches initial_temp * restart_temp_ratio, the reannealing process is triggered.</span>
+<span class="sd">            Default value of the ratio is 2e-5. Range is (0, 1).</span>
+
+<span class="sd">        See also `cma.fmin`, `scipy.optimize.minimize`, `scipy.optimize.dual_annealing`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">loaded_datasets</span><span class="p">,</span>
+        <span class="n">coefficients</span><span class="p">,</span>
+        <span class="n">result_path</span><span class="p">,</span>
+        <span class="n">use_quad</span><span class="p">,</span>
+        <span class="n">result_ID</span><span class="p">,</span>
+        <span class="n">replica</span><span class="p">,</span>
+        <span class="n">single_parameter_fits</span><span class="p">,</span>
+        <span class="n">use_bounds</span><span class="p">,</span>
+        <span class="n">minimizer_specs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">loaded_datasets</span><span class="p">,</span>
+            <span class="n">coefficients</span><span class="p">,</span>
+            <span class="n">use_quad</span><span class="p">,</span>
+            <span class="n">single_parameter_fits</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chi2_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeff_steps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replica</span> <span class="o">=</span> <span class="n">replica</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_bounds</span> <span class="o">=</span> <span class="n">use_bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minimizer_specs</span> <span class="o">=</span> <span class="n">minimizer_specs</span>
+
+<div class="viewcode-block" id="MCOptimizer.from_dict"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create object from theory dictionary.</span>
+<span class="sd">        The default minimizer is trust-constr.</span>
+
+<span class="sd">        The minimizer options have to be specified with:</span>
+
+<span class="sd">        ```</span>
+<span class="sd">        mc_minimiser: &#39;cma&#39;</span>
+<span class="sd">        maxiter: 100000</span>
+<span class="sd">        restarts: 0</span>
+<span class="sd">        ```</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : dict</span>
+<span class="sd">            configuration dictionary</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optimizer</span>
+<span class="sd">            created object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">loaded_datasets</span> <span class="o">=</span> <span class="n">load_datasets</span><span class="p">(</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;data_path&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;datasets&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_theory_covmat&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;theory_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rot_to_fit_basis&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uv_coupligs&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="n">coefficients</span> <span class="o">=</span> <span class="n">CoefficientManager</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">])</span>
+
+        <span class="n">use_bounds</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;use_bounds&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">use_bounds</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;Running minimization without initial bounds&quot;</span><span class="p">)</span>
+
+        <span class="n">minimizer_specs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;mc_minimiser&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mc_minimiser&quot;</span><span class="p">,</span> <span class="s2">&quot;trust-constr&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;mc_minimiser&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cma&quot;</span><span class="p">:</span>
+            <span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;restarts&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;restarts&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;restarts&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Using default no restarts&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;mc_minimiser&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;dual_annealineg&quot;</span><span class="p">:</span>
+            <span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;restart_temp_ratio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;restart_temp_ratio&quot;</span><span class="p">,</span> <span class="mf">2e-5</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;restart_temp_ratio&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Using default restert_temp_ratio: 2e-5&quot;</span><span class="p">)</span>
+            <span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;initial_temp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;initial_temp&quot;</span><span class="p">,</span> <span class="mi">5230</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;initial_temp&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Using default initial_temp: 5230&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;mc_minimiser&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Using default minimizer &#39;trust-constr&#39;&quot;</span><span class="p">)</span>
+
+        <span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;maxiter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;maxiter&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e4</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s2">&quot;maxiter&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Setting maximum number of iterations (maxiter) to 1e4&quot;</span><span class="p">)</span>
+
+        <span class="n">single_parameter_fits</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;single_parameter_fits&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">loaded_datasets</span><span class="p">,</span>
+            <span class="n">coefficients</span><span class="p">,</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;result_path&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;result_ID&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;replica&quot;</span><span class="p">],</span>
+            <span class="n">single_parameter_fits</span><span class="p">,</span>
+            <span class="n">use_bounds</span><span class="p">,</span>
+            <span class="n">minimizer_specs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="MCOptimizer.get_status"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chi2_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">chi2_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">chi2</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">chi2_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coeff_steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="MCOptimizer.chi2_func_mc"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.chi2_func_mc">[docs]</a>    <span class="k">def</span> <span class="nf">chi2_func_mc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">print_log</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wrap the chi2 in a function for the optimizer. Pass noise and</span>
+<span class="sd">        data info as args. Log the chi2 value and values of the coefficients.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        params : np.ndarray</span>
+<span class="sd">            noise and data info</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            chi2 value</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
+        <span class="n">current_chi2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_log</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_status</span><span class="p">(</span><span class="n">current_chi2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">current_chi2</span></div>
+
+<div class="viewcode-block" id="MCOptimizer.run_sampling"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.run_sampling">[docs]</a>    <span class="k">def</span> <span class="nf">run_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run the minimization with |MC|.&quot;&quot;&quot;</span>
+
+        <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="n">maxiter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;maxiter&quot;</span><span class="p">]</span>
+        <span class="n">algorithm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;mc_minimiser&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;cma&quot;</span><span class="p">:</span>
+            <span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_bounds</span><span class="p">:</span>
+                <span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">minimum</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">maximum</span><span class="p">]</span>
+            <span class="n">cma</span><span class="o">.</span><span class="n">fmin</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func_mc</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">sigma0</span><span class="o">=</span><span class="mf">0.68</span><span class="p">,</span>
+                <span class="n">options</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="n">bounds</span><span class="p">,</span>
+                    <span class="s2">&quot;verbose&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="s2">&quot;verb_log&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="s2">&quot;ftarget&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">npts</span><span class="p">,</span>
+                    <span class="s2">&quot;tolx&quot;</span><span class="p">:</span> <span class="mf">1e-5</span><span class="p">,</span>
+                    <span class="s2">&quot;maxiter&quot;</span><span class="p">:</span> <span class="n">maxiter</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="n">bipop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;restarts&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="n">restarts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;restarts&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_bounds</span><span class="p">:</span>
+                <span class="n">bounds</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">Bounds</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">minimum</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">maximum</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bounds</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">Bounds</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">),</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;dual_annealing&quot;</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">dual_annealing</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func_mc</span><span class="p">,</span>
+                    <span class="n">bounds</span><span class="p">,</span>
+                    <span class="n">minimizer_kwargs</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;trust-constr&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="n">bounds</span><span class="p">,</span>
+                        <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;maxiter&quot;</span><span class="p">:</span> <span class="n">maxiter</span><span class="p">},</span>
+                    <span class="p">},</span>
+                    <span class="n">maxiter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">,</span>
+                    <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                    <span class="n">initial_temp</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;initial_temp&quot;</span><span class="p">],</span>
+                    <span class="n">restart_temp_ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">minimizer_specs</span><span class="p">[</span><span class="s2">&quot;restart_temp_ratio&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func_mc</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;trust-constr&quot;</span><span class="p">,</span>
+                    <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
+                    <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;maxiter&quot;</span><span class="p">:</span> <span class="n">maxiter</span><span class="p">,</span> <span class="s2">&quot;xtol&quot;</span><span class="p">:</span> <span class="mf">1e-5</span><span class="p">},</span>
+                <span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Minimization was not successful, exit ...&quot;</span><span class="p">)</span>
+
+        <span class="n">t2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time : </span><span class="si">{</span><span class="p">((</span><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> minutes&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MCOptimizer.save"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save MC replicas to json inside a dictionary:</span>
+<span class="sd">        {coff: replica values}</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            result : dict</span>
+<span class="sd">                result dictionary</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_parameter_fits</span><span class="p">:</span>
+            <span class="n">values</span><span class="p">[</span><span class="s2">&quot;chi2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">npts</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="n">Style</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">),</span> <span class="n">title_style</span><span class="o">=</span><span class="s2">&quot;bold cyan&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Parameter&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold red&quot;</span><span class="p">,</span> <span class="n">no_wrap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Best value&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">par</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">par</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">values</span><span class="p">[</span><span class="n">par</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+
+        <span class="n">posterior_file</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span>
+            <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;replica_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">replica</span><span class="si">}</span><span class="s2">/coefficients_rep_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">replica</span><span class="si">}</span><span class="s2">.json&quot;</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump_posterior</span><span class="p">(</span><span class="n">posterior_file</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, the SMEFiT developers&#39; team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

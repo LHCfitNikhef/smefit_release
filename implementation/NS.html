@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="English" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nested Sampling &mdash; SMEFiT 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="smefit package" href="../modules/smefit/smefit.html" />
+    <link rel="prev" title="Fitting strategies" href="general.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> SMEFiT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="general.html">Fitting strategies</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Nested Sampling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#formalism">Formalism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prior-volume">Prior volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performance">Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/smefit/smefit.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/data.html">Experimental data format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/theory.html">Theory tables</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tutorial:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/example.html">Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development/code_todos.html">TODOs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz-refs.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMEFiT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Nested Sampling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/implementation/NS.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="nested-sampling">
+<h1>Nested Sampling<a class="headerlink" href="#nested-sampling" title="Permalink to this headline"></a></h1>
+<section id="formalism">
+<h2>Formalism<a class="headerlink" href="#formalism" title="Permalink to this headline"></a></h2>
+<p>The starting point of Nested Sampling (<abbr title="Nested Sampling">NS</abbr>) is Bayes' theorem, which allows us to evaluate the
+probability distribution of a set of parameters <span class="math notranslate nohighlight">\(\vec{c}\)</span>
+associated to a model <span class="math notranslate nohighlight">\(\mathcal{M}(\vec{c})\)</span>
+given a set of experimental measurements <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> ,</p>
+<div class="math notranslate nohighlight">
+\[P\left(\vec{c}| \mathcal{D},\mathcal{M} \right) = \frac{P\left(\mathcal{D}|\mathcal{M},\vec{c}  \right) P\left( \vec{c}|\mathcal{M}  \right) }{P(\mathcal{D}|\mathcal{M})} \, .\]</div>
+<p>Here <span class="math notranslate nohighlight">\(P\left(\vec{c}| \mathcal{D},\mathcal{M} \right)\)</span>  represents the posterior
+probability of the model parameters given the assumed model and the observed
+experimental data,
+<span class="math notranslate nohighlight">\(P\left(\mathcal{D}|\mathcal{M},\vec{c}\right) = \mathcal{L}\left(\vec{c} \right)\)</span>  is the likelihood (conditional
+probability) of the experimental measurements
+given the model and a specific choice of parameters,
+and <span class="math notranslate nohighlight">\(P\left( \vec{c}|\mathcal{M}  \right) = \pi \left(  \vec{c} \right)\)</span>
+is the prior distribution for the model parameters.</p>
+<p>The denominator in the equation above, <span class="math notranslate nohighlight">\(P(\mathcal{D}|\mathcal{M}) = \mathcal{Z}\)</span> ,
+is known as the Bayesian evidence and ensures the normalization of the posterior distribution,</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{Z} = \int \mathcal{L}\left(  \vec{c} \right)\pi \left(  \vec{c} \right) d \vec{c} \, ,\]</div>
+<p>where the integration is carried out over the domain of the model parameters <span class="math notranslate nohighlight">\(\vec{c}\)</span> .</p>
+<p>The key ingredient of <abbr title="Nested Sampling">NS</abbr> utilise the ideas underlying
+Bayesian inference to map the <span class="math notranslate nohighlight">\(n\)</span> -dimensional integral over the prior density
+in model parameter space <span class="math notranslate nohighlight">\(\pi(\vec{c} )d\vec{c}\)</span> ,
+where <span class="math notranslate nohighlight">\(n\)</span>  represents the dimensionality of <span class="math notranslate nohighlight">\(\vec{c}\)</span> , into a one-dimensional function
+of the form</p>
+<div class="math notranslate nohighlight">
+\[X(\lambda) = \int_{\{ \vec{c} : \mathcal{L}\left(\vec{c} \right) &gt; \lambda \}}\pi(\vec{c} ) d\vec{c} \,.\]</div>
+<p>In this expression, the prior mass <span class="math notranslate nohighlight">\(X(\lambda)\)</span>  corresponds to the
+(normalized) volume
+of the prior density <span class="math notranslate nohighlight">\(\pi(\vec{c} )d\vec{c}\)</span>  associated with values
+of the model parameters that lead to a likelihood <span class="math notranslate nohighlight">\(\mathcal{L}\left(\vec{c}\right) \)</span>lambda` .
+Note that by construction, the prior mass <span class="math notranslate nohighlight">\(X\)</span>  decreases monotonically
+from the limiting value <span class="math notranslate nohighlight">\(X=1\)</span>  to <span class="math notranslate nohighlight">\(X=0\)</span>  as <span class="math notranslate nohighlight">\(\lambda\)</span>  is increased.
+The integration of <span class="math notranslate nohighlight">\(X(\lambda)\)</span>  extends over the regions in the model parameter space contained
+within the fixed-likelihood contour defined by the condition <span class="math notranslate nohighlight">\(\mathcal{L}\left(\vec{c}\right) =\lambda\)</span>.</p>
+<p>This property allows the evidence to be expressed as,</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{Z} = \int_0^1  \mathcal{L}\left( X\right) dX \, ,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{L}\left( X\right)\)</span>  is defined as the inverse function of <span class="math notranslate nohighlight">\(X(\lambda)\)</span> , which
+always exists provided the likelihood is a continuous and smooth function
+of the model parameters.
+Therefore, the transformation from <span class="math notranslate nohighlight">\(\vec{c}\)</span>
+to X  achieves a mapping of the prior distribution into infinitesimal
+elements, sorted by their associated likelihood <span class="math notranslate nohighlight">\(\mathcal{L}(\vec{c})\)</span> .</p>
+<p>The next step of the NS algorithm is to define a decreasing sequence of values in the prior
+volume, that is now parameterized by the prior mass <span class="math notranslate nohighlight">\(X\)</span> .
+In other words, one slices the prior volume into a large number of
+small regions</p>
+<div class="math notranslate nohighlight">
+\[1 = X_0 &gt; X_1 &gt; \ldots X_{\infty} = 0 \, ,\]</div>
+<p>and then evaluates the likelihood at each of these values, <span class="math notranslate nohighlight">\(\mathcal{L}=\mathcal{L}(X_i)\)</span> .</p>
+<p>This way, all of the <span class="math notranslate nohighlight">\(\mathcal{L}_i\)</span>  values
+can be summed in order to  evaluate the integral
+for the Bayesian evidence.
+Since in general the likelihood <span class="math notranslate nohighlight">\(\mathcal{L}({\boldsymbol c})\)</span>  exhibits a complex dependence
+on the model parameters <span class="math notranslate nohighlight">\(\vec{c}\)</span> , the summation
+above must be evaluated
+numerically using {it e.g.} Monte Carlo integration methods.</p>
+<p>In practice, one draws <span class="math notranslate nohighlight">\(N_{\rm live}\)</span>  points from the parameter prior
+volume <span class="math notranslate nohighlight">\(\pi\left(\vec{c} \right)\)</span> , known as {it live points}, and orders
+the likelihood values from smallest to largest, including the
+starting value of the prior mass at <span class="math notranslate nohighlight">\(X_0=1\)</span>. As samples are drawn from the prior volume,
+the live point with the lowest likelihood <span class="math notranslate nohighlight">\(\mathcal{L}_i\)</span>
+is removed from the set and replaced by another live point drawn from the same prior
+distribution but now under the constraint that its likelihood is larger than
+<span class="math notranslate nohighlight">\(\mathcal{L}_i\)</span>. This sampling process is repeated until the entire hyper-volume
+<span class="math notranslate nohighlight">\(\pi \left( \vec{c} \right)\)</span>  of the prior parameter space has been covered, with ellipsoids of constrained likelihood being assigned to the live-points as the prior volume is scanned. While the end result of the NS procedure is the estimation of the  Bayesian evidence <span class="math notranslate nohighlight">\(\mathcal{Z}\)</span> , as a byproduct one also obtains  a sampling of the posterior distribution associated to the EFT coefficients expressed as</p>
+<div class="math notranslate nohighlight">
+\[\{ \vec{c}^{(k)} \}\, ,\qquad  k=1,\dots,N_{\rm spl}\, ,\]</div>
+<p>with <span class="math notranslate nohighlight">\(N_{\rm spl}\)</span>  indicating the number
+of samples drawn by the final NS iteration.</p>
+<p>One can then compute expectation values and variances of the model
+parameters by evaluating the MC sum over the these posterior samples together
+with their associated weights, in the same
+way as averages are done
+over the <span class="math notranslate nohighlight">\(N_{\rm rep}\)</span> replicas in the MCfit method.</p>
+</section>
+<section id="prior-volume">
+<h2>Prior volume<a class="headerlink" href="#prior-volume" title="Permalink to this headline"></a></h2>
+<p>An important input for NS is the choice of prior volume <span class="math notranslate nohighlight">\(\pi \left( \vec{c} \right)\)</span>
+in the model parameter space.
+In this analysis, we adopt flat priors
+defined by ranges in parameter space for the coefficients <span class="math notranslate nohighlight">\(\vec{c}\)</span> .
+A suitable choice of prior volume where the sampling takes place is important
+to speed up the NS algorithm: a range too wide will make the optimization less
+efficient, while a range too narrow might bias the results by cutting
+specific regions of the parameter space that are relevant.
+Furthermore, using a common range for all parameters should be avoided,
+since the range of intrinsic variation will be rather different for each
+of the EFT coefficients.</p>
+<p>Taking these considerations into account, we adopt here the following strategy.
+First, a single model parameter <span class="math notranslate nohighlight">\(c_i\)</span>  is allowed to vary
+while all others are set to their SM value, <span class="math notranslate nohighlight">\(c_j=0\)</span>  for <span class="math notranslate nohighlight">\(j\ne i\)</span> .
+The <span class="math notranslate nohighlight">\(\chi^2 \left( c_i \right)\)</span>  is then scanned in this
+direction to determine the values <span class="math notranslate nohighlight">\(c_i^{\rm (min)}\)</span>  and  <span class="math notranslate nohighlight">\(c_i^{\rm (max)}\)</span>
+satisfying the condition <span class="math notranslate nohighlight">\(\chi^2/n_{\rm dat}=4\)</span> .
+We then repeat this procedure
+for all parameters and end up with a hyper-volume
+defined by pairs of values <span class="math notranslate nohighlight">\(\left( c_i^{\rm (min)},c_i^{\rm (max)} \right)\)</span>  with
+<span class="math notranslate nohighlight">\(i=1,\ldots, n_{\rm op}\)</span>  which defines our initial prior volume.</p>
+<p>At this point, one performs an initial exploratory NS global analysis using this
+volume to study the posterior probability distribution
+for each EFT coefficient.
+Our final analysis is then obtained by manually adjusting the
+initial sampling ranges until the full posterior distributions are captured for the chosen
+prior volume.
+For parameters that are essentially unconstrained in the global fit,
+such as the four-heavy operators in the case of linear EFT calculations,
+a hard boundary of <span class="math notranslate nohighlight">\(\left( -50 , 50 \right)\)</span>  (for <span class="math notranslate nohighlight">\(\Lambda=1\)</span>  TeV) is imposed.</p>
+</section>
+<section id="performance">
+<h2>Performance<a class="headerlink" href="#performance" title="Permalink to this headline"></a></h2>
+<p>To increase the efficiency of the posterior probability estimation by NS, we enable the
+<em>constant efficiency mode</em> in MultiNest, which adjusts the
+total volume of ellipsoids spanning the live points so that the sampling
+efficiency is close to its associated hyperparameter set by the user.
+With 24 cpu cores,
+we are able to achieve an accurate posterior for the linear EFT fits
+in <span class="math notranslate nohighlight">\(\sim 30\)</span>  minutes using 500 live points, a target efficiency of 0.05, and
+an evidence tolerance of 0.5, which results in <span class="math notranslate nohighlight">\(N_{\rm spl}\simeq 5000\)</span>  posterior samples.
+To ensure the stability of our final results, we chose
+1000 live points and a target efficiency of
+0.005, which yields <span class="math notranslate nohighlight">\(\simeq 1.5\times 10^4\)</span>  samples for the
+linear analysis and <span class="math notranslate nohighlight">\(\simeq 10^4\)</span>  samples for an analysis that includes also the quadratic EFT
+corrections.
+With these settings, our final global analyses containing the simultaneous
+determination of <span class="math notranslate nohighlight">\(n_{\rm op}\simeq 36\)</span>  coefficients
+take <span class="math notranslate nohighlight">\(\sim 3.5\)</span>  hours running in 24 cpu cores, with a similar performance for
+linear and quadratic EFT fits.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="general.html" class="btn btn-neutral float-left" title="Fitting strategies" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../modules/smefit/smefit.html" class="btn btn-neutral float-right" title="smefit package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, the SMEFiT developers&#39; team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

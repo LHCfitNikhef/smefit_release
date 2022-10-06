@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="English" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>smefit.analyze.pca &mdash; SMEFiT 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> SMEFiT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../implementation/general.html">Fitting strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../implementation/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/smefit/smefit.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_theory/data.html">Experimental data format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_theory/theory.html">Theory tables</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples and tutorial:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial/example.html">Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../development/code_todos.html">TODOs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../zzz-refs.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SMEFiT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+          <li><a href="../analyze.html">smefit.analyze</a> &raquo;</li>
+      <li>smefit.analyze.pca</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for smefit.analyze.pca</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span><span class="p">,</span> <span class="n">colors</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
+
+<span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">latex_packages</span>
+
+
+<div class="viewcode-block" id="impose_constrain"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.impose_constrain">[docs]</a><span class="k">def</span> <span class="nf">impose_constrain</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Propagate coefficient constraint into the theory tables.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dataset: smefit.loader.DataTuple</span>
+<span class="sd">        loaded datasets</span>
+<span class="sd">    coefficient: smefit.coefficients.CoefficienManager</span>
+<span class="sd">        coefficient manager</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        list of updated linear corrections</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">temp_coeffs</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">coefficients</span><span class="p">)</span>
+    <span class="n">free_coeffs</span> <span class="o">=</span> <span class="n">temp_coeffs</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">new_linear_corrections</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># loop on the corrections and add them</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">free_coeffs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="c1"># update all the free coefficents to 0 except fro 1 and propagate</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">free_coeffs</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">temp_coeffs</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">temp_coeffs</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
+
+        <span class="c1"># update linear corrections</span>
+        <span class="n">new_linear_corrections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_coeffs</span><span class="o">.</span><span class="n">value</span> <span class="o">@</span> <span class="n">dataset</span><span class="o">.</span><span class="n">LinearCorrections</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">new_linear_corrections</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PcaCalculator"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator">[docs]</a><span class="k">class</span> <span class="nc">PcaCalculator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes and writes PCA table and heat map.</span>
+
+<span class="sd">    Note: matrix being decomposed by SVD are the kappas</span>
+<span class="sd">    divided by the total experimental error.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dataset: smefit.loader.DataTuple</span>
+<span class="sd">        loaded datasets</span>
+<span class="sd">    coefficients:  smefit.coefficients.CoefficienManager</span>
+<span class="sd">        coefficient manager</span>
+<span class="sd">    latex_names: dict</span>
+<span class="sd">        coefficient latex names</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">latex_names</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="n">coefficients</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="n">datasets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">latex_names</span> <span class="o">=</span> <span class="n">latex_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pc_matrix</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SVs</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="PcaCalculator.compute"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute PCA.&quot;&quot;&quot;</span>
+        <span class="n">free_parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">index</span>
+
+        <span class="n">new_LinearCorrections</span> <span class="o">=</span> <span class="n">impose_constrain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
+
+        <span class="c1"># TODO: check this definition. It should be the one used in the public atlas note</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">new_LinearCorrections</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">InvCovMat</span> <span class="o">@</span> <span class="n">new_LinearCorrections</span><span class="o">.</span><span class="n">T</span>
+        <span class="c1"># Decompose matrix with SVD and identify PCs</span>
+        <span class="n">Vt</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="n">pca_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;PC </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pc_matrix</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">Vt</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">free_parameters</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">pca_labels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SVs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">pca_labels</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PcaCalculator.write"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit_label</span><span class="p">,</span> <span class="n">thr_show</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write PCA latex table.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fit_label: str</span>
+<span class="sd">            fit label</span>
+<span class="sd">        thr_show: float</span>
+<span class="sd">            minimal threshold to show in the PCA decomposition</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">latex_packages</span><span class="p">()</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="sa">r</span><span class="s2">&quot;\usepackage</span><span class="si">{underscore}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\allowdisplaybreaks&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\renewcommand{\baselinestretch}</span><span class="si">{1.5}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{document}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\noindent \underline{\bf{Principal Components Analysis}:}&quot;</span>
+                <span class="o">+</span> <span class="n">fit_label</span>
+                <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2"> </span><span class="se">\\</span><span class="s2"> </span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="c1"># PCA Table, loop on PC</span>
+        <span class="k">for</span> <span class="n">sv_name</span><span class="p">,</span> <span class="n">sv_value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SVs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s2">&quot;\noindent {\color</span><span class="si">{red}</span><span class="s2"> {\underline{\bf{</span><span class="si">%s</span><span class="s2">} (</span><span class="si">%0.2e</span><span class="s2">):}}}&quot;</span>
+                <span class="o">%</span> <span class="p">(</span><span class="n">sv_name</span><span class="p">,</span> <span class="n">sv_value</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="c1"># loop on PC entries</span>
+            <span class="n">pc_sorted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pc_matrix</span><span class="p">[</span><span class="n">sv_name</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">coeff</span><span class="p">,</span> <span class="n">aij</span> <span class="ow">in</span> <span class="n">pc_sorted</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">pc_sorted</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">thr_show</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;{{$</span><span class="si">{:+0.3f}</span><span class="s2">$}}{{\rm </span><span class="si">{}</span><span class="s2">}} &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">aij</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latex_names</span><span class="p">[</span><span class="n">coeff</span><span class="p">])</span>
+                <span class="p">)</span>
+            <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; \nonumber </span><span class="se">\\</span><span class="s2"> \nonumber </span><span class="se">\\</span><span class="s2"> &quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">L</span></div>
+
+<div class="viewcode-block" id="PcaCalculator.plot_heatmap"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator.plot_heatmap">[docs]</a>    <span class="k">def</span> <span class="nf">plot_heatmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit_label</span><span class="p">,</span> <span class="n">fig_name</span><span class="p">,</span> <span class="n">sv_min</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span> <span class="n">sv_max</span><span class="o">=</span><span class="mf">1e5</span><span class="p">,</span> <span class="n">thr_show</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Heat Map of PC coefficients.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fit_label: str</span>
+<span class="sd">            fit label</span>
+<span class="sd">        fig_name: str</span>
+<span class="sd">            plot name</span>
+<span class="sd">        sv_min: float</span>
+<span class="sd">            minimum singular value range shown in the top heatmap plot</span>
+<span class="sd">        sv_max: float</span>
+<span class="sd">            maximum singular value range shown in the top heatmap plot</span>
+<span class="sd">        thr_show: float</span>
+<span class="sd">            minimal threshold to show in the PCA decomposition</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pc_norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pc_matrix</span><span class="o">.</span><span class="n">values</span><span class="o">**</span><span class="mi">2</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span> <span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="n">cax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">matshow</span><span class="p">(</span><span class="n">pc_norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
+        <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="n">cax1</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s2">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cax</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax1</span><span class="p">)</span>
+
+        <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;${\rm a}_i^2$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">270</span><span class="p">)</span>
+        <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pc_norm</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">pc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">pc</span> <span class="o">&gt;</span> <span class="n">thr_show</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                        <span class="n">j</span><span class="p">,</span>
+                        <span class="n">i</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pc</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                        <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                        <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+        <span class="c1"># major grid</span>
+        <span class="n">ticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">pc_norm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">ticks</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">latex_names</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pc_matrix</span><span class="o">.</span><span class="n">index</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span>
+            <span class="n">ticks</span><span class="p">,</span>
+            <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">rm </span><span class="si">{</span><span class="n">sv</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">sv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pc_matrix</span><span class="o">.</span><span class="n">columns</span><span class="p">],</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span>
+            <span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="c1"># minor grid</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ticks</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">ticks</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+        <span class="c1"># Bar Plot of Singular Values</span>
+        <span class="n">ax_sv</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s2">&quot;40%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">ax_sv</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ticks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SVs</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
+        <span class="n">ax_sv</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ax_sv</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ticks</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ax_sv</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ax_sv</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+        <span class="n">ax_sv</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">sv_min</span><span class="p">,</span> <span class="n">sv_max</span><span class="p">)</span>
+        <span class="n">ax_sv</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ticks</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax_sv</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;${\rm Singular\ Values}$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+        <span class="c1"># save</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">rm PCA:</span><span class="se">\\</span><span class="s2"> </span><span class="si">{</span><span class="n">fit_label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig_name</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, the SMEFiT developers&#39; team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
