@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import subprocess
+import pathlib
 
 
 def latex_packages():
@@ -36,49 +37,6 @@ def multicolum_table_header(fit_labels, ncolumn=2):
     return L
 
 
-def run_pdflatex(report, L, filename):
-    """
-    Dump to file and run pdflatex
-
-    Parameters
-    ----------
-        report: str
-            report name
-        L : list(str)
-            latex lines
-        filename : str
-            file name
-    """
-
-    L.append(r"\end{document}")
-    L = [l + "\n" for l in L]
-
-    latex_src = f"{report}/{filename}.tex"
-    with open(latex_src, "w", encoding="utf-8") as file:
-        file.writelines(L)
-    file.close()
-    subprocess.call(
-        f"pdflatex -halt-on-error -output-directory {report}/ {latex_src} > {report}/latex.log",
-        shell=True,
-    )
-    subprocess.call(f"rm {report}/*.log {report}/*.aux {report}/*.out", shell=True)
-
-
-def move_to_meta(report, filename):
-    """
-    Move pdf files to meta folder
-
-    Parameters
-    ----------
-        report: str
-            report name
-        filename : str
-            file names to be moved
-    """
-    subprocess.call(f"mkdir -p {report}/meta", shell=True)
-    subprocess.call(f"mv {report}/{filename}.pdf {report}/meta/.", shell=True)
-
-
 def chi2table_header(L, fit_labels):
     L.append(r"\hline")
     temp = r" \multicolumn{2}{|c|}{} & SM"
@@ -92,3 +50,86 @@ def chi2table_header(L, fit_labels):
         + r"\\ \hline"
     )
     return L
+
+
+def dump_to_tex(tex_file, L):
+    """Dump a string to a tex file.
+
+    Parameters
+    ----------
+    tex_file: pathlib.Path
+        path to tex file
+    L : list(str)
+        latex lines
+    """
+    L.append(r"\end{document}")
+    L = [l + "\n" for l in L]
+    with open(tex_file, "w", encoding="utf-8") as file:
+        file.writelines(L)
+
+
+def run_pdflatex(report, L, filename):
+    """Run pdflatex.
+
+    Parameters
+    ----------
+    report: str
+        report path
+    L : list(str)
+        latex lines
+    filename : str
+        file name
+    """
+    subprocess.call(
+        f"pdflatex -halt-on-error -output-directory {report} {filename}.tex > {report}/pdflatex.log",
+        shell=True,
+    )
+    subprocess.call(f"rm {report}/*.log {report}/*.aux {report}/*.out", shell=True)
+
+
+def run_htlatex(report, tex_file):
+    """Run make4ht.
+
+    Parameters
+    ----------
+    report: str
+        report path
+    tex_file: pathlib.Path
+        path to souce file
+    """
+    subprocess.call(
+        f" make4ht -d {report}  {tex_file} -a fatal > {report}/htlatex.log",
+        shell=True,
+    )
+    for ext in [
+        "aux",
+        "xref",
+        "tmp",
+        "4tc",
+        "4ct",
+        "idv",
+        "lg",
+        "dvi",
+        "log",
+        "css",
+        "html",
+    ]:
+        subprocess.call(f"rm {tex_file.stem}.{ext}", shell=True)
+
+
+def compile_tex(report, L, filename):
+    """Compile tex file.
+
+    Parameters
+    ----------
+    report: str
+        report path
+    L : list(str)
+        latex lines
+    filename : str
+        file name
+    """
+    tex_file = pathlib.Path(f"{report}/{filename}.tex")
+    dump_to_tex(tex_file, L)
+    run_pdflatex(report, L, filename)
+    run_htlatex(report, tex_file)

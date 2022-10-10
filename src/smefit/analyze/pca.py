@@ -100,7 +100,7 @@ class PcaCalculator:
                 r"\allowdisplaybreaks",
                 r"\renewcommand{\baselinestretch}{1.5}",
                 r"\begin{document}",
-                r"\noindent \underline{\bf{Principal Components Analysis}:}"
+                r"\noindent \underline{\bf{Principal Components Analysis}:} "
                 + fit_label
                 + r"\\ \\ \\",
             ]
