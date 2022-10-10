@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import subprocess
 import pathlib
+import subprocess
 
 
 def latex_packages():

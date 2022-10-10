@@ -153,7 +153,7 @@ class Chi2tableCalculator:
         chi2_df_grouped = pd.merge(
             self.data_info.reset_index(), chi2_df, left_on="level_1", right_index=True
         ).drop([0, "chi2_std"], axis=1)
-        chi2_df_grouped = chi2_df_grouped.groupby("level_0").sum()
+        chi2_df_grouped = chi2_df_grouped.groupby("level_0").sum(numeric_only=True)
         chi2_df_grouped.index.name = "data_group"
 
         # add total values

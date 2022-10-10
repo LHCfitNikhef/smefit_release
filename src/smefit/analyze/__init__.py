@@ -1,13 +1,22 @@
 # -*- coding: utf-8 -*-
+import pathlib
+import shutil
 import subprocess
 
 import yaml
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from matplotlib import rc, use
 
 from ..log import logging
+from .html_utils import dump_html_index
 from .report import Report
 
 _logger = logging.getLogger(__name__)
+
+
+# global mathplotlib settings
+use("PDF")
+rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
+rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 
 
 def run_report(report_card_file):
@@ -25,17 +34,15 @@ def run_report(report_card_file):
     _logger.info(f"Analyzing : {report_config['result_IDs']}")
 
     report_name = report_config["name"]
-    report_path = report_config["report_path"]
-    dir_path = f"{report_path}/{report_name}"
+    report_path = pathlib.Path(report_config["report_path"]).absolute()
+    report_folder = report_path.joinpath(f"{report_name}")
 
     # Clean output folder if exists
     try:
-        subprocess.call(f"rm -rf {dir_path}", shell=True)
+        shutil.rmtree(report_folder)
     except FileNotFoundError:
         pass
-
-    subprocess.call(f"mkdir -p {report_path}", shell=True)
-    subprocess.call(f"mkdir -p {dir_path}", shell=True)
+    report_folder.mkdir(exist_ok=True, parents=True)
 
     # Initialize ANALYZE class
     report = Report(report_path, report_config["result_path"], report_config)
@@ -56,34 +63,18 @@ def run_report(report_card_file):
     if "PCA" in report_config:
         report.pca(**report_config["PCA"])
 
+    # Move all files to a meta folder
+    meta_path = pathlib.Path(f"{report_folder}/meta").absolute()
+    meta_path.mkdir()
+    subprocess.call(f"rm {report_folder}/*.log", shell=True)
+    subprocess.call(f"mv {report_folder}/*.* {meta_path}", shell=True)
+
     # Combine PDF files together into raw pdf report
     subprocess.call(
         f"gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite \
-                -sOutputFile={dir_path}/report_{report_name}_raw.pdf `ls -rt {dir_path}/*.pdf`",
+                -sOutputFile={report_folder}/report_{report_name}.pdf `ls -rt {meta_path}/*.pdf`",
         shell=True,
     )
-    subprocess.call(f"mkdir -p {dir_path}/meta", shell=True)
-    subprocess.call(f"mv {dir_path}/*.* {dir_path}/meta/.", shell=True)
-    subprocess.call(f"mv {dir_path}/meta/report_*.pdf  {dir_path}/", shell=True)
 
-    # TODO:
-    # 1) add an index,
-    # 2) run latex only a the end
-    # 3) remove rotation
-    # Rotate PDF pages if necessary and create final report
-    with open(f"{dir_path}/report_{report_name}_raw.pdf", "rb") as pdf_in:
-        pdf_reader = PdfFileReader(pdf_in)
-        pdf_writer = PdfFileWriter()
-        for pagenum in range(pdf_reader.numPages):
-            pdfpage = pdf_reader.getPage(pagenum)
-            orientation = pdfpage.get("/Rotate")
-            if orientation == 90:
-                pdfpage.rotateCounterClockwise(90)
-            pdf_writer.addPage(pdfpage)
-        with open(f"{dir_path}/report_{report_name}.pdf", "wb") as pdf_out:
-            pdf_writer.write(pdf_out)
-        pdf_out.close()
-    pdf_in.close()
-
-    # Remove old (raw) PDF file
-    subprocess.call(f"rm {dir_path}/report_{report_name}_raw.pdf", shell=True)
+    # dump html index
+    dump_html_index(report.html_index, report_folder, report_config["title"])

@@ -1,55 +1,54 @@
 # -*- coding: utf-8 -*-
+import pathlib
+
 import numpy as np
 import pandas as pd
-from matplotlib import rc, use
 
 from ..fit_manager import FitManager
 from ..log import logging
 from .chi2_utils import Chi2tableCalculator
 from .coefficients_utils import CoefficientsPlotter, compute_confidence_level
 from .correlations import plot_correlations
-from .latex_tools import run_pdflatex
+from .html_utils import html_link, sub_index
+from .latex_tools import compile_tex
 from .pca import PcaCalculator
 from .summary import SummaryWriter
 
 _logger = logging.getLogger(__name__)
 
-# global mathplotlib settings
-use("PDF")
-rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
-rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
-
 
 class Report:
-    r"""Class to manage the report.
+    r"""Report class manager.
+
     If :math:`\chi^2`, Fisher or Data vs Theory plots are produced it computes the
     best fit theory predictions.
 
     Attributes
     ----------
-        report: str
-            path to report folder
-        fits: numpy.ndarray
-            array with fits (instances of `smefit.fit_manager.FitManger`) included in the report
-        data_info: pandas.DataFrame
-            datasets information (references and data groups)
-        coeff_info: pandas.DataFrame
-            coefficients information (group and latex name)
+    report: str
+        path to report folder
+    fits: numpy.ndarray
+        array with fits (instances of `smefit.fit_manager.FitManger`) included in the report
+    data_info: pandas.DataFrame
+        datasets information (references and data groups)
+    coeff_info: pandas.DataFrame
+        coefficients information (group and latex name)
 
     Parameters
     ----------
-        report_path: pathlib.Path, str
-            path to base folder, where the reports will be stored.
-        result_path: pathlib.Path, str
-            path to base folder, where the results are stored.
-        report_config: dict
-            dictionary with report configuration, see `/run_cards/analyze/report_runcard.yaml`
-            for and example
+    report_path: pathlib.Path, str
+        path to base folder, where the reports will be stored.
+    result_path: pathlib.Path, str
+        path to base folder, where the results are stored.
+    report_config: dict
+        dictionary with report configuration, see `/run_cards/analyze/report_runcard.yaml`
+        for an example
+
     """
 
     def __init__(self, report_path, result_path, report_config):
 
-        self.report = f"{report_path}/{report_config['name']}"
+        self.report = pathlib.Path(f"{report_path}/{report_config['name']}").absolute()
         self.fits = []
         # build the fits labels if needed
         if "fit_labels" not in report_config:
@@ -74,24 +73,25 @@ class Report:
         self.coeff_info = self._load_grouped_info(
             report_config["coeff_info"], "coefficients"
         )
+        self.html_index = ""
 
     def _load_grouped_info(self, raw_dict, key):
-        """
-        Load grouped info of coefficients and datasets
-        Only elements appearing ad lest once in the fit configs are
-        kept
+        """Load grouped info of coefficients and datasets.
+
+        Only elements appearing ad lest once in the fit configs are kept.
 
         Parameters
         ----------
-            raw_dict: dict
-                raw dictionary with relevant information
-            key: "datasets" or "coefficients"
-                key to check
+        raw_dict: dict
+            raw dictionary with relevant information
+        key: "datasets" or "coefficients"
+            key to check
 
         Returns
         _______
-            grouped_config: pandas.DataFrame
-                table with information by group
+        grouped_config: pandas.DataFrame
+            table with information by group
+
         """
         out_dict = {}
         for group, entries in raw_dict.items():
@@ -105,15 +105,13 @@ class Report:
         return pd.DataFrame(out_dict).stack().swaplevel()
 
     def summary(self):
-        """
-        Summary Table runner.
-        """
+        """Summary Table runner."""
         lines = SummaryWriter(self.fits, self.data_info, self.coeff_info).write()
-        run_pdflatex(self.report, lines, "summary")
+        compile_tex(self.report, lines, "summary")
+        self.html_index += html_link("summary.html", "Summary")
 
     def chi2(self, table=True, plot_experiment=None, plot_distribution=None):
-        r"""
-        :math:`\chi^2` table and plots runner.
+        r""":math:`\chi^2` table and plots runner.
 
         Parameters
         ----------
@@ -123,7 +121,9 @@ class Report:
             plot the :math:`\chi^2` per dataset
         plot_distribution: bool, optional
             plot the :math:`\chi^2` distribution per each replica
+
         """
+        index_list = []
         chi2_cal = Chi2tableCalculator(self.data_info)
 
         # here we store the info for each fit
@@ -141,19 +141,24 @@ class Report:
 
         if table:
             lines = chi2_cal.write(chi2_dict, chi2_dict_group)
-            run_pdflatex(self.report, lines, "chi2_tables")
+            compile_tex(self.report, lines, "chi2_tables")
+            index_list.append(("chi2_tables.html", "Tables"))
 
         if plot_experiment is not None:
             _logger.info("Plotting : chi^2 for each dataset")
             chi2_cal.plot_exp(
                 chi2_dict, f"{self.report}/chi2_bar.pdf", **plot_experiment
             )
+            index_list.append(("chi2_bar.pdf", "Bar plot"))
 
         if plot_distribution is not None:
             _logger.info("Plotting : chi^2 distribution for each replica")
             chi2_cal.plot_dist(
                 chi2_replica, f"{self.report}/chi2_histo.pdf", **plot_distribution
             )
+            index_list.append(("chi2_histo.pdf", "Replica distribution"))
+
+        self.html_index += sub_index("Chi2", index_list)
 
     def coefficients(
         self,
@@ -167,29 +172,29 @@ class Report:
         table=True,
         double_solution=None,
     ):
-        """
-        Coefficients plots and table runner.
+        """Coefficients plots and table runner.
 
         Parameters
         ----------
-            hide_dofs: list
-                list of operator not to display
-            show_only: list
-                list of all the operator to display, if None all the free dof are presented
-            logo: bool
-                if True add logo to the plots
-            scatter_plot: None, dict
-                kwarg confidence level bar plot or None
-            confidence_level_bar: None, dict
-                kwarg scatter plot or None
-            posterior_histograms: bool
-                if True plot the posterior distribution for each coefficient
-            table: bool, optional
-                write the latex confidence level table per coefficient
-            double_solution: dict
-                operator with double solution per fit
-        """
+        hide_dofs: list
+            list of operator not to display
+        show_only: list
+            list of all the operator to display, if None all the free dof are presented
+        logo: bool
+            if True add logo to the plots
+        scatter_plot: None, dict
+            kwarg confidence level bar plot or None
+        confidence_level_bar: None, dict
+            kwarg scatter plot or None
+        posterior_histograms: bool
+            if True plot the posterior distribution for each coefficient
+        table: bool, optional
+            write the latex confidence level table per coefficient
+        double_solution: dict
+            operator with double solution per fit
 
+        """
+        index_list = []
         free_coeff_config = self.coeff_info
         if show_only is not None:
             free_coeff_config = free_coeff_config.loc[:, show_only]
@@ -214,6 +219,7 @@ class Report:
         if scatter_plot is not None:
             _logger.info("Plotting : Central values and Confidence Level bounds")
             coeff_plt.plot_coeffs(bounds_dict, **scatter_plot)
+            index_list.append(("coefficient_central.pdf", "CL errorbar plot"))
 
         # when we plot the 95% CL we show 95% CL for null solutions.
         # the error coming from a degenerate solution is not taken into account.
@@ -230,6 +236,7 @@ class Report:
                 },
                 **confidence_level_bar,
             )
+            index_list.append(("coefficient_bar.pdf", "CL bar histogram"))
 
         if posterior_histograms:
             _logger.info("Plotting : Posterior histograms")
@@ -238,11 +245,13 @@ class Report:
                 labels=[fit.label for fit in self.fits],
                 disjointed_lists=list((*double_solution.values(),)),
             )
+            index_list.append(("coefficient_histo.pdf", "Posterior histogram"))
 
         if table:
             _logger.info("Writing : Confidence level table")
             lines = coeff_plt.write_cl_table(bounds_dict)
-            run_pdflatex(self.report, lines, "coefficients_table")
+            compile_tex(self.report, lines, "coefficients_table")
+            index_list.append(("coefficients_table.pdf", "CL table"))
 
         if contours_2d:
             _logger.info("Plotting : 2D confidence level projections")
@@ -258,19 +267,23 @@ class Report:
                 confidence_level=contours_2d["confidence_level"],
                 dofs_show=contours_2d["dofs_show"],
             )
+            index_list.append(("contours_2d.pdf", "2D CL"))
+
+        self.html_index += sub_index("Coefficients", index_list)
 
     def correlations(self, hide_dofs=None, thr_show=0.1):
         """Plot coefficients correlation matrix.
 
         Parameters
         ----------
-            hide_dofs: list
-                list of operator not to display.
-            thr_show: float, None
-                minimum threshold value to show.
-                If None the full correlation matrix is displayed.
-        """
+        hide_dofs: list
+            list of operator not to display.
+        thr_show: float, None
+            minimum threshold value to show.
+            If None the full correlation matrix is displayed.
 
+        """
+        index_list = []
         for fit in self.fits:
             _logger.info(f"Plotting correlations for: {fit.name}")
             coeff_to_keep = fit.coefficients.free_parameters.index
@@ -282,6 +295,8 @@ class Report:
                 hide_dofs=hide_dofs,
                 thr_show=thr_show,
             )
+            index_list.append((f"correlations_{fit.name}.pdf", fit.label))
+        self.html_index += sub_index("Correlations", index_list)
 
     def pca(
         self,
@@ -309,7 +324,9 @@ class Report:
         fit_list: list, optional
             list of fit names for which the PCA is computed.
             By default all the fits included in the report
+
         """
+        index_list = []
         if fit_list is not None:
             fit_list = self.fits[self.fits == fit_list]
         else:
@@ -324,12 +341,12 @@ class Report:
             pca_cal.compute()
 
             if table:
-                run_pdflatex(
+                compile_tex(
                     self.report,
                     pca_cal.write(fit.label, thr_show),
                     f"pca_table_{fit.name}",
                 )
-
+                index_list.append((f"pca_table_{fit.name}.html", f"Table {fit.label}"))
             if plot:
                 pca_cal.plot_heatmap(
                     fit.label,
@@ -337,3 +354,7 @@ class Report:
                     sv_min=sv_min,
                     sv_max=sv_max,
                 )
+                index_list.append(
+                    (f"pca_heatmap_{fit.name}.pdf", f"Heatmap {fit.label}")
+                )
+        self.html_index += sub_index("PCA", index_list)
