@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import pathlib
 import shutil
+from ctypes import alignment
 
 current_path = pathlib.Path(__file__)
 
 
 def html_link(file, label):
-    label = label.replace("\ ", " ")
+    label = label.replace(r"\ ", " ")
     label = label.replace(r"\rm", "")
     return f"<li><a href=meta/{file}>{label}</a></li> \n"
 
@@ -19,11 +20,13 @@ def sub_index(title, index_list):
     return html_index
 
 
-def dump_html_index(html_index, report_path, report_title):
+def dump_html_index(fit_settings, html_index, report_path, report_title):
     """Dump report index to html.
 
     Parameters
     ----------
+    fit_settings: pandas.DataFrame
+        fit settings table
     html_index: str
         index content
     report_path: pathlib.Path
@@ -41,6 +44,9 @@ def dump_html_index(html_index, report_path, report_title):
     text = text.replace(
         '<a class="masthead-logo">report_title</a>',
         f'<a class="masthead-logo">{report_title}</a>',
+    )
+    text = text.replace(
+        "fit_settings", fit_settings.to_html(justify="center", border=0)
     )
     # add index
     text = text.replace("index_elements", html_index)

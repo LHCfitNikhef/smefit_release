@@ -80,3 +80,9 @@ figcaption {
 figure {
     margin: auto;
 }
+
+table {
+  text-align: center;
+  width: 75%;
+  height: 100pt;
+}

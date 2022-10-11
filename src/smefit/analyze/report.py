@@ -74,6 +74,7 @@ class Report:
             report_config["coeff_info"], "coefficients"
         )
         self.html_index = ""
+        self.fit_settings = None
 
     def _load_grouped_info(self, raw_dict, key):
         """Load grouped info of coefficients and datasets.
@@ -106,8 +107,13 @@ class Report:
 
     def summary(self):
         """Summary Table runner."""
-        lines = SummaryWriter(self.fits, self.data_info, self.coeff_info).write()
-        compile_tex(self.report, lines, "summary")
+        summary = SummaryWriter(self.fits, self.data_info, self.coeff_info)
+
+        # save fit settings
+        self.fit_settings = summary.fit_settings()
+
+        # write summary tables
+        compile_tex(self.report, summary.write(), "summary")
         self.html_index += html_link("summary.html", "Summary")
 
     def chi2(self, table=True, plot_experiment=None, plot_distribution=None):
@@ -251,7 +257,7 @@ class Report:
             _logger.info("Writing : Confidence level table")
             lines = coeff_plt.write_cl_table(bounds_dict)
             compile_tex(self.report, lines, "coefficients_table")
-            index_list.append(("coefficients_table.pdf", "CL table"))
+            index_list.append(("coefficients_table.html", "CL table"))
 
         if contours_2d:
             _logger.info("Plotting : 2D confidence level projections")

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 
 from ..coefficients import Coefficient
 from .latex_tools import latex_packages, multicolum_table_header
@@ -66,36 +67,29 @@ class SummaryWriter:
         """
         L = latex_packages()
         L.extend([r"\usepackage{underscore}", r"\begin{document}"])
-
-        L.extend(self.write_fit_settings())
         L.extend(self.write_dataset_table())
         L.extend(self.write_coefficients_table())
         return L
 
-    def write_fit_settings(self):
-        """
-        Write fit settings
+    def fit_settings(self):
+        """Fit settings table.
 
         Returns
         -------
-            L : list(str)
-                list of the latex commands
+        pd.DataFrame:
+            table with the most relevant fit settings
         """
-        L = []
-        for i, fit in enumerate(self.fits):
-            if fit.config["use_quad"]:
-                eft_order = r"$\Lambda^{-4}$"
-            else:
-                eft_order = r"$\Lambda^{-2}$"
-            L.extend(
-                [
-                    r"{\bf \underline{Fit%d:}} %s" % (i + 1, fit.label) + "\n",
-                    f"Number of replicas/samples: {fit.n_replica}\n",
-                    f"pQCD order: {fit.config['order']}\n",
-                    f"SMEFT order: {eft_order}\n",
-                ]
+        summaries = {}
+        for fit in self.fits:
+            summary_dict = {}
+            summary_dict["EFT order"] = (
+                "Qudratic" if fit.config["use_quad"] else "Linear"
             )
-        return L
+            summary_dict["pQCD"] = fit.config["order"]
+            summary_dict["Replicas"] = fit.n_replica
+            label = fit.label.replace(r"\ ", "").replace(r"\rm", "")
+            summaries[label] = summary_dict
+        return pd.DataFrame(summaries)
 
     def write_dataset_table(self):
         """Write the summary tables
@@ -132,7 +126,7 @@ class SummaryWriter:
                 L.append(temp)
             L.append(r"\\ \hline")
 
-        # TODO: add total number of datapoints
+        # TODO: load dataset to print this info ??
         # temp = r"\hline & Total number of data points"
         # for fit in self.fits:
         #     temp += f" & {np.sum(fit.datasets.NdataExp)}"
