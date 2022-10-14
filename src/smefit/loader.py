@@ -539,15 +539,15 @@ def load_datasets(
     # The theory covariance matrix, when used, will be different from zero.
     # At the moment it does not account for correlation between different datasets
     theory_covariance = la.block_diag(*th_cov)
-    covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
+    exp_covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
     # replicas always generated using the experimental covmat, no t0
-    replica = np.random.multivariate_normal(exp_data, covmat)
+    replica = np.random.multivariate_normal(exp_data, exp_covmat)
     if use_t0:
         fit_covmat = (
             covmat_from_systematics(stat_error, sys_error_t0) + theory_covariance
         )
     else:
-        fit_covmat = covmat
+        fit_covmat = exp_covmat
 
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
