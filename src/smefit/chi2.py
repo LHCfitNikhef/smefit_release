@@ -71,7 +71,7 @@ class Scanner:
             run_card["order"],
             run_card["use_quad"],
             run_card["use_theory_covmat"],
-            run_card["use_t0"],
+            False,
             run_card.get("theory_path", None),
             run_card.get("rot_to_fit_basis", None),
             run_card.get("uv_coupligs", False),
