@@ -56,21 +56,6 @@ class SummaryWriter:
         self.coeff_info = coeff_config
         self.nfits = len(self.fits)
 
-    def write(self):
-        """
-        Collect the summary tables
-
-        Returns
-        -------
-            L : list(str)
-                list of the latex commands
-        """
-        L = latex_packages()
-        L.extend([r"\usepackage{underscore}", r"\begin{document}"])
-        L.extend(self.write_dataset_table())
-        L.extend(self.write_coefficients_table())
-        return L
-
     def fit_settings(self):
         """Fit settings table.
 
@@ -99,13 +84,17 @@ class SummaryWriter:
             L : list(str)
                 list of the latex commands
         """
-        L = [
-            r"\begin{table}[H]",
-            r"\footnotesize",
-            r"\centering",
-            r"\begin{tabular}{|c|l|" + "c|" * self.nfits + "}",
-            r"\hline",
-        ]
+        L = latex_packages()
+        L.extend(
+            [
+                r"\usepackage{underscore}",
+                r"\begin{document}" r"\begin{table}[H]",
+                r"\footnotesize",
+                r"\centering",
+                r"\begin{tabular}{|c|l|" + "c|" * self.nfits + "}",
+                r"\hline",
+            ]
+        )
         temp = " Type & Datasets "
         for fit in self.fits:
             temp += f" & {fit.label}"
@@ -145,11 +134,15 @@ class SummaryWriter:
             L : list(str)
                 list of the latex commands
         """
-        L = [
-            r"\begin{table}[H]",
-            r"\centering",
-            r"\begin{tabular}{|c|c|" + "c|c|" * self.nfits + "}",
-        ]
+        L = latex_packages()
+        L.extend(
+            [
+                r"\usepackage{underscore}",
+                r"\begin{document}" r"\begin{table}[H]",
+                r"\centering",
+                r"\begin{tabular}{|c|c|" + "c|c|" * self.nfits + "}",
+            ]
+        )
         L.extend(multicolum_table_header([fit.label for fit in self.fits]))
         L.append(
             r"Class & Coefficients" + r" & Fitted & Fixed " * self.nfits + r" \\ \hline"

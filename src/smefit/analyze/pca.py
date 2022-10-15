@@ -198,4 +198,5 @@ class PcaCalculator:
         # save
         ax.set_title(f"\\rm PCA:\\ {fit_label}", fontsize=25, y=-0.15)
         plt.tight_layout()
-        plt.savefig(fig_name)
+        plt.savefig(f"{fig_name}.pdf")
+        plt.savefig(f"{fig_name}.png")

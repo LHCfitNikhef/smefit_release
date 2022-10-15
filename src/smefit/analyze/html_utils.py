@@ -1,34 +1,70 @@
 # -*- coding: utf-8 -*-
 import pathlib
 import shutil
-from ctypes import alignment
 
 current_path = pathlib.Path(__file__)
 
 
-def html_link(file, label):
+def html_link(file, label, add_meta=True):
     label = label.replace(r"\ ", " ")
     label = label.replace(r"\rm", "")
-    return f"<li><a href=meta/{file}>{label}</a></li> \n"
+    if add_meta:
+        file = f"meta/{file}"
+    return f"<li><a href={file}>{label}</a></li> \n"
 
 
-def sub_index(title, index_list):
-    html_index = f'<nav class="menu-docs-menu"> \n <a>{title}:</a> \n <ul>'
-    for file, label in index_list:
-        html_index += html_link(file, label)
-    html_index += " </ul> </nav>"
-    return html_index
+def container_header(title):
+    return f"""
+        <div class='container'> \n
+        <h2 id='{title}'> {title}</h2> \n
+        <div class="three-fourth column markdown-body"> \n
+    """
 
 
-def dump_html_index(fit_settings, html_index, report_path, report_title):
+def html_figure(fig_name):
+    return f"""
+        <div class="figiterwrapper"> \n
+        <figure> \n
+        <img src="meta/{fig_name}.png"/> \n
+        <figcaption aria-hidden="true"> \n
+        <a href="meta/{fig_name}.png">.png</a> \n
+        <a href="meta/{fig_name}.pdf">.pdf</a> \n
+        </figcaption> \n
+        </figure> \n
+        </div> \n
+    """
+
+
+def write_html_container(title, figs=None, links=None, dataFrame=None):
+
+    text = container_header(title)
+    if dataFrame is not None:
+        text += (
+            "<div class='table'> \n"
+            + dataFrame.to_html(justify="center", border=0)
+            + "</div> \n"
+        )
+
+    if figs is not None:
+        for fig_name in figs:
+            text += html_figure(fig_name)
+
+    if links is not None:
+        for (file, label) in links:
+            text += "</br> \n" + html_link(f"{file}.html", label)
+
+    return text
+
+
+def dump_html_index(html_report, html_index, report_path, report_title):
     """Dump report index to html.
 
     Parameters
     ----------
-    fit_settings: pandas.DataFrame
-        fit settings table
+    html_report: str
+        html report content
     html_index: str
-        index content
+        html index content
     report_path: pathlib.Path
         report path
     report_title: str
@@ -45,9 +81,7 @@ def dump_html_index(fit_settings, html_index, report_path, report_title):
         '<a class="masthead-logo">report_title</a>',
         f'<a class="masthead-logo">{report_title}</a>',
     )
-    text = text.replace(
-        "fit_settings", fit_settings.to_html(justify="center", border=0)
-    )
+    text = text.replace("report_content", html_report)
     # add index
     text = text.replace("index_elements", html_index)
     with open(report_path.joinpath("index.html"), "w", encoding="utf-8") as f:

@@ -9,7 +9,7 @@ from ..log import logging
 from .chi2_utils import Chi2tableCalculator
 from .coefficients_utils import CoefficientsPlotter, compute_confidence_level
 from .correlations import plot_correlations
-from .html_utils import html_link, sub_index
+from .html_utils import html_link, write_html_container
 from .latex_tools import compile_tex
 from .pca import PcaCalculator
 from .summary import SummaryWriter
@@ -74,7 +74,7 @@ class Report:
             report_config["coeff_info"], "coefficients"
         )
         self.html_index = ""
-        self.fit_settings = None
+        self.html_content = ""
 
     def _load_grouped_info(self, raw_dict, key):
         """Load grouped info of coefficients and datasets.
@@ -105,16 +105,28 @@ class Report:
                 out_dict.pop(group)
         return pd.DataFrame(out_dict).stack().swaplevel()
 
+    def append_section(self, title, links=None, figs=None, tables=None):
+        self.html_index += html_link(f"#{title}", title, add_meta=False)
+        self.html_content += write_html_container(
+            title, links=links, figs=figs, dataFrame=tables
+        )
+
     def summary(self):
         """Summary Table runner."""
         summary = SummaryWriter(self.fits, self.data_info, self.coeff_info)
-
-        # save fit settings
-        self.fit_settings = summary.fit_settings()
+        section_title = "Summary"
+        coeff_tab = "coefficient_summary"
+        data_tab = "dataset_summary"
 
         # write summary tables
-        compile_tex(self.report, summary.write(), "summary")
-        self.html_index += html_link("summary.html", "Summary")
+        compile_tex(self.report, summary.write_coefficients_table(), coeff_tab)
+        compile_tex(self.report, summary.write_dataset_table(), data_tab)
+
+        self.append_section(
+            section_title,
+            links=[(data_tab, "Dataset summary"), (coeff_tab, "Coefficient summary")],
+            tables=summary.fit_settings(),
+        )
 
     def chi2(self, table=True, plot_experiment=None, plot_distribution=None):
         r""":math:`\chi^2` table and plots runner.
@@ -129,7 +141,8 @@ class Report:
             plot the :math:`\chi^2` distribution per each replica
 
         """
-        index_list = []
+        links_list = None
+        figs_list = []
         chi2_cal = Chi2tableCalculator(self.data_info)
 
         # here we store the info for each fit
@@ -148,23 +161,21 @@ class Report:
         if table:
             lines = chi2_cal.write(chi2_dict, chi2_dict_group)
             compile_tex(self.report, lines, "chi2_tables")
-            index_list.append(("chi2_tables.html", "Tables"))
+            links_list = [("chi2_tables", "Tables")]
 
         if plot_experiment is not None:
             _logger.info("Plotting : chi^2 for each dataset")
-            chi2_cal.plot_exp(
-                chi2_dict, f"{self.report}/chi2_bar.pdf", **plot_experiment
-            )
-            index_list.append(("chi2_bar.pdf", "Bar plot"))
+            chi2_cal.plot_exp(chi2_dict, f"{self.report}/chi2_bar", **plot_experiment)
+            figs_list.append("chi2_bar")
 
         if plot_distribution is not None:
             _logger.info("Plotting : chi^2 distribution for each replica")
             chi2_cal.plot_dist(
-                chi2_replica, f"{self.report}/chi2_histo.pdf", **plot_distribution
+                chi2_replica, f"{self.report}/chi2_histo", **plot_distribution
             )
-            index_list.append(("chi2_histo.pdf", "Replica distribution"))
+            figs_list.append("chi2_histo")
 
-        self.html_index += sub_index("Chi2", index_list)
+        self.append_section("Chi2", links=links_list, figs=figs_list)
 
     def coefficients(
         self,
@@ -200,7 +211,8 @@ class Report:
             operator with double solution per fit
 
         """
-        index_list = []
+        links_list = None
+        figs_list = []
         free_coeff_config = self.coeff_info
         if show_only is not None:
             free_coeff_config = free_coeff_config.loc[:, show_only]
@@ -225,7 +237,7 @@ class Report:
         if scatter_plot is not None:
             _logger.info("Plotting : Central values and Confidence Level bounds")
             coeff_plt.plot_coeffs(bounds_dict, **scatter_plot)
-            index_list.append(("coefficient_central.pdf", "CL errorbar plot"))
+            figs_list.append("coefficient_central")
 
         # when we plot the 95% CL we show 95% CL for null solutions.
         # the error coming from a degenerate solution is not taken into account.
@@ -242,7 +254,7 @@ class Report:
                 },
                 **confidence_level_bar,
             )
-            index_list.append(("coefficient_bar.pdf", "CL bar histogram"))
+            figs_list.append("coefficient_bar")
 
         if posterior_histograms:
             _logger.info("Plotting : Posterior histograms")
@@ -251,13 +263,13 @@ class Report:
                 labels=[fit.label for fit in self.fits],
                 disjointed_lists=list((*double_solution.values(),)),
             )
-            index_list.append(("coefficient_histo.pdf", "Posterior histogram"))
+            figs_list.append("coefficient_histo")
 
         if table:
             _logger.info("Writing : Confidence level table")
             lines = coeff_plt.write_cl_table(bounds_dict)
             compile_tex(self.report, lines, "coefficients_table")
-            index_list.append(("coefficients_table.html", "CL table"))
+            links_list = [("coefficients_table", "CL table")]
 
         if contours_2d:
             _logger.info("Plotting : 2D confidence level projections")
@@ -273,9 +285,9 @@ class Report:
                 confidence_level=contours_2d["confidence_level"],
                 dofs_show=contours_2d["dofs_show"],
             )
-            index_list.append(("contours_2d.pdf", "2D CL"))
+            figs_list.append("contours_2d")
 
-        self.html_index += sub_index("Coefficients", index_list)
+        self.append_section("Coefficients", links=links_list, figs=figs_list)
 
     def correlations(self, hide_dofs=None, thr_show=0.1):
         """Plot coefficients correlation matrix.
@@ -289,20 +301,21 @@ class Report:
             If None the full correlation matrix is displayed.
 
         """
-        index_list = []
+        figs_list = []
         for fit in self.fits:
             _logger.info(f"Plotting correlations for: {fit.name}")
             coeff_to_keep = fit.coefficients.free_parameters.index
             plot_correlations(
                 fit.results[coeff_to_keep],
                 latex_names=self.coeff_info.droplevel(0),
-                fig_name=f"{self.report}/correlations_{fit.name}.pdf",
+                fig_name=f"{self.report}/correlations_{fit.name}",
                 fit_label=fit.label,
                 hide_dofs=hide_dofs,
                 thr_show=thr_show,
             )
-            index_list.append((f"correlations_{fit.name}.pdf", fit.label))
-        self.html_index += sub_index("Correlations", index_list)
+            figs_list.append(f"correlations_{fit.name}")
+
+        self.append_section("Correlations", figs=figs_list)
 
     def pca(
         self,
@@ -332,7 +345,7 @@ class Report:
             By default all the fits included in the report
 
         """
-        index_list = []
+        figs_list, links_list = None, None
         if fit_list is not None:
             fit_list = self.fits[self.fits == fit_list]
         else:
@@ -352,15 +365,13 @@ class Report:
                     pca_cal.write(fit.label, thr_show),
                     f"pca_table_{fit.name}",
                 )
-                index_list.append((f"pca_table_{fit.name}.html", f"Table {fit.label}"))
+                links_list = [(f"pca_table_{fit.name}.html", f"Table {fit.label}")]
             if plot:
                 pca_cal.plot_heatmap(
                     fit.label,
-                    f"{self.report}/pca_heatmap_{fit.name}.pdf",
+                    f"{self.report}/pca_heatmap_{fit.name}",
                     sv_min=sv_min,
                     sv_max=sv_max,
                 )
-                index_list.append(
-                    (f"pca_heatmap_{fit.name}.pdf", f"Heatmap {fit.label}")
-                )
-        self.html_index += sub_index("PCA", index_list)
+                figs_list = [f"pca_heatmap_{fit.name}"]
+        self.append_section("PCA", figs=figs_list, links=links_list)

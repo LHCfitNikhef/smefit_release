@@ -91,4 +91,5 @@ def plot_correlations(
     ax.set_title(f"\\rm Correlation:\\ {fit_label}", fontsize=25, y=-0.06)
 
     plt.tight_layout()
-    plt.savefig(fig_name)
+    plt.savefig(f"{fig_name}.pdf")
+    plt.savefig(f"{fig_name}.png")

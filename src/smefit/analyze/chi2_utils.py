@@ -367,7 +367,8 @@ class Chi2tableCalculator:
         plt.xlim(0, chi2_bar.max().max() + 0.01)
         plt.legend(loc="upper right", frameon=False, prop={"size": 11})
         plt.tight_layout()
-        plt.savefig(fig_name)
+        plt.savefig(f"{fig_name}.pdf")
+        plt.savefig(f"{fig_name}.png")
 
     def plot_dist(self, chi2_hist, fig_name, figsize=(7, 5)):
         r"""Plots the :math:`\chi^2` distribution."""
@@ -389,4 +390,5 @@ class Chi2tableCalculator:
         plt.xlabel(r"\rm $\chi^2$\ distribution", fontsize=20)
         plt.legend(loc="best", frameon=False, prop={"size": 11})
         plt.tight_layout()
-        plt.savefig(fig_name)
+        plt.savefig(f"{fig_name}.pdf")
+        plt.savefig(f"{fig_name}.png")

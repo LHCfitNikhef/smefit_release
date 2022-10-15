@@ -78,5 +78,5 @@ def run_report(report_card_file):
 
     # dump html index
     dump_html_index(
-        report.fit_settings, report.html_index, report_folder, report_config["title"]
+        report.html_content, report.html_index, report_folder, report_config["title"]
     )

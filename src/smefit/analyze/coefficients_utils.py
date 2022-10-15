@@ -229,6 +229,7 @@ class CoefficientsPlotter:
         plt.legend(loc=0, frameon=False, prop={"size": 13})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_central.pdf", dpi=500)
+        plt.savefig(f"{self.report_folder}/coefficient_central.png")
 
     def plot_coeffs_bar(
         self,
@@ -282,6 +283,7 @@ class CoefficientsPlotter:
         plt.legend(loc=legend_loc, frameon=False, prop={"size": 13})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
+        plt.savefig(f"{self.report_folder}/coefficient_bar.png")
 
     def plot_posteriors(self, posteriors, labels, disjointed_lists=None):
         """Plot posteriors histograms.
@@ -346,6 +348,7 @@ class CoefficientsPlotter:
         fig.legend(lines, labels, loc="lower right", prop={"size": 20})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
+        plt.savefig(f"{self.report_folder}/coefficient_histo.png")
 
     def plot_contours_2d(self, posteriors, labels, confidence_level=95, dofs_show=None):
         """Plots 2D marginalised projections confidence level contours
@@ -455,6 +458,7 @@ class CoefficientsPlotter:
         )
         grid.tight_layout(fig)
         fig.savefig(f"{self.report_folder}/contours_2d.pdf")
+        fig.savefig(f"{self.report_folder}/contours_2d.png")
 
     def write_cl_table(self, bounds):
         """Coefficients latex table"""

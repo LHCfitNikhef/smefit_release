@@ -224,4 +224,5 @@ class Scanner:
             )
             plt.title(f"{c}")
             plt.tight_layout()
+            plt.savefig(f"{self.result_path}/chi2_scan_{c}.png")
             plt.savefig(f"{self.result_path}/chi2_scan_{c}.pdf")
