@@ -31,3 +31,11 @@ sys_type:
 - MULT
 - ADD
 ```
+The sys_name can be CORR, UNCORR to specify whether the systematic considered id correlated or uncorrelated
+within the dataset. In other words, if sys_name=CORR for sys1, then sys1 will be correlated across the datapoints
+of the dataset. Same for UNCORR.
+
+The same logic can be used for CORR and UNCORR theory systemtics within a dataset, using the names THEORYCORR and THEORYUNCORR.
+
+For systematics correlated between different dataset a different name has to be used, which must be
+the same for the corresponding systematic in all the datasets. 

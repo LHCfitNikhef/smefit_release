@@ -14,7 +14,9 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -184,12 +186,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;central_values&quot;</span><span class="p">],</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;covmat&quot;</span><span class="p">],</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;sys_error&quot;</span><span class="p">],</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;stat_error&quot;</span><span class="p">],</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_experimental_data</span><span class="p">()</span>
-        <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;SM_predictions&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;theory_covmat&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;lin_corrections&quot;</span><span class="p">],</span>
@@ -197,6 +193,13 @@
         <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_theory</span><span class="p">(</span>
             <span class="n">operators_to_keep</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">use_quad</span><span class="p">,</span> <span class="n">use_theory_covmat</span><span class="p">,</span> <span class="n">rot_to_fit_basis</span>
         <span class="p">)</span>
+
+        <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;central_values&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;sys_error&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;sys_error_t0&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;stat_error&quot;</span><span class="p">],</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_experimental_data</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Loader.load_experimental_data"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.Loader.load_experimental_data">[docs]</a>    <span class="k">def</span> <span class="nf">load_experimental_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -238,18 +241,18 @@
             <span class="c1"># Identify add and mult systematics</span>
             <span class="c1"># and replace the mult ones with corresponding value computed</span>
             <span class="c1"># from data central value. Required for implementation of t0 prescription</span>
-
             <span class="n">indx_add</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">type_sys</span> <span class="o">==</span> <span class="s2">&quot;ADD&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">indx_mult</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">type_sys</span> <span class="o">==</span> <span class="s2">&quot;MULT&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">sys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_sys</span><span class="p">,</span> <span class="n">num_data</span><span class="p">))</span>
-            <span class="n">sys</span><span class="p">[</span><span class="n">indx_add</span><span class="p">]</span> <span class="o">=</span> <span class="n">sys_add</span><span class="p">[</span><span class="n">indx_add</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">indx_add</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">sys</span><span class="p">[</span><span class="n">indx_mult</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">sys_mult</span><span class="p">[</span><span class="n">indx_mult</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sys</span><span class="p">[</span><span class="n">indx_mult</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-                <span class="o">*</span> <span class="n">central_values</span>
+            <span class="n">sys_t0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_sys</span><span class="p">,</span> <span class="n">num_data</span><span class="p">))</span>
+            <span class="n">sys_t0</span><span class="p">[</span><span class="n">indx_add</span><span class="p">]</span> <span class="o">=</span> <span class="n">sys_add</span><span class="p">[</span><span class="n">indx_add</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sys_t0</span><span class="p">[</span><span class="n">indx_add</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="n">sys_t0</span><span class="p">[</span><span class="n">indx_mult</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">sys_mult</span><span class="p">[</span><span class="n">indx_mult</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sys_t0</span><span class="p">[</span><span class="n">indx_mult</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;SM_predictions&quot;</span><span class="p">]</span>
                 <span class="o">*</span> <span class="mf">1e-2</span>
             <span class="p">)</span>
-            <span class="c1"># Build dataframe with shape (N_data * N_sys) and systematic name as the</span>
-            <span class="c1"># column headers and construct covmat</span>
+
+            <span class="c1"># store also the sys without the t0 prescription</span>
+            <span class="n">sys</span> <span class="o">=</span> <span class="n">sys_add</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">num_sys</span><span class="p">,</span> <span class="n">num_data</span><span class="p">))</span>
 
             <span class="c1"># limit case with 1 sys</span>
             <span class="k">if</span> <span class="n">num_sys</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -258,14 +261,17 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">name_sys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;UNCORR&quot;</span><span class="p">]</span>
             <span class="n">sys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_sys</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_data</span><span class="p">))</span>
+            <span class="n">sys_t0</span> <span class="o">=</span> <span class="n">sys</span>
 
+        <span class="c1"># Build dataframe with shape (N_data * N_sys) and systematic name as the column headers</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">name_sys</span><span class="p">)</span>
-
+        <span class="n">df_t0</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">sys_t0</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">name_sys</span><span class="p">)</span>
         <span class="c1"># limit case 1 data</span>
         <span class="k">if</span> <span class="n">num_data</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">central_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">central_values</span><span class="p">])</span>
 
-        <span class="k">return</span> <span class="n">central_values</span><span class="p">,</span> <span class="n">construct_covmat</span><span class="p">(</span><span class="n">stat_error</span><span class="p">,</span> <span class="n">df</span><span class="p">),</span> <span class="n">df</span><span class="p">,</span> <span class="n">stat_error</span></div>
+        <span class="c1"># here return both exp sys and t0 modified sys</span>
+        <span class="k">return</span> <span class="n">central_values</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">df_t0</span><span class="p">,</span> <span class="n">stat_error</span></div>
 
 <div class="viewcode-block" id="Loader.load_theory"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.Loader.load_theory">[docs]</a>    <span class="k">def</span> <span class="nf">load_theory</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -380,7 +386,7 @@
 <span class="sd">            covmat: numpy.ndarray</span>
 <span class="sd">                experimental covariance matrix of a single dataset</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;covmat&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">construct_covmat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;stat_error&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;sys_error&quot;</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">theory_covmat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -405,6 +411,18 @@
 <span class="sd">                systematic errors of the dataset</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;sys_error&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sys_error_t0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Systematic errors modified according to t0 prescription</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            sys_error_t0: pd.DataFrame</span>
+<span class="sd">                t0 systematic errors of the dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;sys_error_t0&quot;</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">stat_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -511,6 +529,7 @@
     <span class="n">order</span><span class="p">,</span>
     <span class="n">use_quad</span><span class="p">,</span>
     <span class="n">use_theory_covmat</span><span class="p">,</span>
+    <span class="n">use_t0</span><span class="p">,</span>
     <span class="n">theory_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">rot_to_fit_basis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">has_uv_coupligs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -541,6 +560,7 @@
 
     <span class="n">exp_data</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">sm_theory</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sys_error_t0</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">sys_error</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">stat_error</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">lin_corr_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -567,11 +587,11 @@
         <span class="p">)</span>
         <span class="n">exp_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sset</span><span class="p">)</span>
         <span class="n">n_data_exp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">n_data</span><span class="p">)</span>
-
         <span class="n">exp_data</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">central_values</span><span class="p">)</span>
         <span class="n">sm_theory</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">sm_prediction</span><span class="p">)</span>
         <span class="n">lin_corr_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">dataset</span><span class="o">.</span><span class="n">n_data</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">lin_corrections</span><span class="p">])</span>
         <span class="n">quad_corr_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">dataset</span><span class="o">.</span><span class="n">n_data</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">quad_corrections</span><span class="p">])</span>
+        <span class="n">sys_error_t0</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">sys_error_t0</span><span class="p">)</span>
         <span class="n">sys_error</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">sys_error</span><span class="p">)</span>
         <span class="n">stat_error</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">stat_error</span><span class="p">)</span>
         <span class="n">th_cov</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">theory_covmat</span><span class="p">)</span>
@@ -607,11 +627,17 @@
     <span class="c1"># Construct unique large cov matrix accounting for correlations between different datasets</span>
     <span class="c1"># The theory covariance matrix, when used, will be different from zero.</span>
     <span class="c1"># At the moment it does not account for correlation between different datasets</span>
-
     <span class="n">theory_covariance</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">block_diag</span><span class="p">(</span><span class="o">*</span><span class="n">th_cov</span><span class="p">)</span>
-    <span class="n">covmat</span> <span class="o">=</span> <span class="n">covmat_from_systematics</span><span class="p">(</span><span class="n">stat_error</span><span class="p">,</span> <span class="n">sys_error</span><span class="p">)</span> <span class="o">+</span> <span class="n">theory_covariance</span>
+    <span class="n">exp_covmat</span> <span class="o">=</span> <span class="n">covmat_from_systematics</span><span class="p">(</span><span class="n">stat_error</span><span class="p">,</span> <span class="n">sys_error</span><span class="p">)</span> <span class="o">+</span> <span class="n">theory_covariance</span>
+    <span class="c1"># replicas always generated using the experimental covmat, no t0</span>
+    <span class="n">replica</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">exp_data</span><span class="p">,</span> <span class="n">exp_covmat</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">use_t0</span><span class="p">:</span>
+        <span class="n">fit_covmat</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">covmat_from_systematics</span><span class="p">(</span><span class="n">stat_error</span><span class="p">,</span> <span class="n">sys_error_t0</span><span class="p">)</span> <span class="o">+</span> <span class="n">theory_covariance</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fit_covmat</span> <span class="o">=</span> <span class="n">exp_covmat</span>
 
-    <span class="n">replica</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">exp_data</span><span class="p">,</span> <span class="n">covmat</span><span class="p">)</span>
     <span class="c1"># Make one large datatuple containing all data, SM theory, corrections, etc.</span>
     <span class="k">return</span> <span class="n">DataTuple</span><span class="p">(</span>
         <span class="n">exp_data</span><span class="p">,</span>
@@ -621,7 +647,7 @@
         <span class="n">quad_corr_values</span><span class="p">,</span>
         <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">exp_name</span><span class="p">),</span>
         <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n_data_exp</span><span class="p">),</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">covmat</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">fit_covmat</span><span class="p">),</span>
         <span class="n">replica</span><span class="p">,</span>
     <span class="p">)</span></div>
 

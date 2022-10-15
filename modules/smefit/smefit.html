@@ -15,7 +15,9 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -56,15 +58,126 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smefit.basis_rotation">smefit.basis_rotation module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smefit.chi2">smefit.chi2 module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smefit.coefficients">smefit.coefficients module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smefit.compute_theory">smefit.compute_theory module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smefit.covmat">smefit.covmat module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smefit.fit_manager">smefit.fit_manager module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smefit.loader">smefit.loader module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smefit.log">smefit.log module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-smefit.runner">smefit.runner module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.basis_rotation">smefit.basis_rotation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.basis_rotation.rotate_to_fit_basis"><code class="docutils literal notranslate"><span class="pre">rotate_to_fit_basis()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.chi2">smefit.chi2 module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.chi2.Scanner"><code class="docutils literal notranslate"><span class="pre">Scanner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.chi2.Scanner.compute_bounds"><code class="docutils literal notranslate"><span class="pre">Scanner.compute_bounds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.chi2.Scanner.compute_scan"><code class="docutils literal notranslate"><span class="pre">Scanner.compute_scan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.chi2.Scanner.plot_scan"><code class="docutils literal notranslate"><span class="pre">Scanner.plot_scan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.chi2.Scanner.regularized_chi2_func"><code class="docutils literal notranslate"><span class="pre">Scanner.regularized_chi2_func()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.chi2.compute_chi2"><code class="docutils literal notranslate"><span class="pre">compute_chi2()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.coefficients">smefit.coefficients module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.coefficients.Coefficient"><code class="docutils literal notranslate"><span class="pre">Coefficient</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.Coefficient.build_additive_factor_dict"><code class="docutils literal notranslate"><span class="pre">Coefficient.build_additive_factor_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.coefficients.CoefficientManager"><code class="docutils literal notranslate"><span class="pre">CoefficientManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.free_parameters"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.free_parameters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.from_dict"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.maximum"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.maximum</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.minimum"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.minimum</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.name"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.set_constraints"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.set_constraints()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.set_free_parameters"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.set_free_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.size"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.value"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.compute_theory">smefit.compute_theory module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.compute_theory.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.compute_theory.make_predictions"><code class="docutils literal notranslate"><span class="pre">make_predictions()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.covmat">smefit.covmat module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.covmat.construct_covmat"><code class="docutils literal notranslate"><span class="pre">construct_covmat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.covmat.covmat_from_systematics"><code class="docutils literal notranslate"><span class="pre">covmat_from_systematics()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.fit_manager">smefit.fit_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.fit_manager.FitManager"><code class="docutils literal notranslate"><span class="pre">FitManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.path"><code class="docutils literal notranslate"><span class="pre">FitManager.path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.name"><code class="docutils literal notranslate"><span class="pre">FitManager.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.label"><code class="docutils literal notranslate"><span class="pre">FitManager.label</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.config"><code class="docutils literal notranslate"><span class="pre">FitManager.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.has_posterior"><code class="docutils literal notranslate"><span class="pre">FitManager.has_posterior</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.results"><code class="docutils literal notranslate"><span class="pre">FitManager.results</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.coefficients"><code class="docutils literal notranslate"><span class="pre">FitManager.coefficients</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.load_configuration"><code class="docutils literal notranslate"><span class="pre">FitManager.load_configuration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.load_datasets"><code class="docutils literal notranslate"><span class="pre">FitManager.load_datasets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.load_results"><code class="docutils literal notranslate"><span class="pre">FitManager.load_results()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.n_replica"><code class="docutils literal notranslate"><span class="pre">FitManager.n_replica</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.smeft_predictions"><code class="docutils literal notranslate"><span class="pre">FitManager.smeft_predictions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.loader">smefit.loader module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.DataTuple"><code class="docutils literal notranslate"><span class="pre">DataTuple</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.Commondata"><code class="docutils literal notranslate"><span class="pre">DataTuple.Commondata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.ExpNames"><code class="docutils literal notranslate"><span class="pre">DataTuple.ExpNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.InvCovMat"><code class="docutils literal notranslate"><span class="pre">DataTuple.InvCovMat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.LinearCorrections"><code class="docutils literal notranslate"><span class="pre">DataTuple.LinearCorrections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.NdataExp"><code class="docutils literal notranslate"><span class="pre">DataTuple.NdataExp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.OperatorsNames"><code class="docutils literal notranslate"><span class="pre">DataTuple.OperatorsNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.QuadraticCorrections"><code class="docutils literal notranslate"><span class="pre">DataTuple.QuadraticCorrections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.Replica"><code class="docutils literal notranslate"><span class="pre">DataTuple.Replica</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.SMTheory"><code class="docutils literal notranslate"><span class="pre">DataTuple.SMTheory</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.Loader"><code class="docutils literal notranslate"><span class="pre">Loader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.commondata_path"><code class="docutils literal notranslate"><span class="pre">Loader.commondata_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.theory_path"><code class="docutils literal notranslate"><span class="pre">Loader.theory_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.central_values"><code class="docutils literal notranslate"><span class="pre">Loader.central_values</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">Loader.commondata_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.covmat"><code class="docutils literal notranslate"><span class="pre">Loader.covmat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.lin_corrections"><code class="docutils literal notranslate"><span class="pre">Loader.lin_corrections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.load_experimental_data"><code class="docutils literal notranslate"><span class="pre">Loader.load_experimental_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.load_theory"><code class="docutils literal notranslate"><span class="pre">Loader.load_theory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.n_data"><code class="docutils literal notranslate"><span class="pre">Loader.n_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.quad_corrections"><code class="docutils literal notranslate"><span class="pre">Loader.quad_corrections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.sm_prediction"><code class="docutils literal notranslate"><span class="pre">Loader.sm_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.stat_error"><code class="docutils literal notranslate"><span class="pre">Loader.stat_error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.sys_error"><code class="docutils literal notranslate"><span class="pre">Loader.sys_error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.sys_error_t0"><code class="docutils literal notranslate"><span class="pre">Loader.sys_error_t0</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.theory_covmat"><code class="docutils literal notranslate"><span class="pre">Loader.theory_covmat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">Loader.theory_path</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.check_file"><code class="docutils literal notranslate"><span class="pre">check_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.check_missing_oparators"><code class="docutils literal notranslate"><span class="pre">check_missing_oparators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.construct_corrections_matrix"><code class="docutils literal notranslate"><span class="pre">construct_corrections_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.get_dataset"><code class="docutils literal notranslate"><span class="pre">get_dataset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.load_datasets"><code class="docutils literal notranslate"><span class="pre">load_datasets()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.log">smefit.log module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.log.print_banner"><code class="docutils literal notranslate"><span class="pre">print_banner()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.log.setup_console"><code class="docutils literal notranslate"><span class="pre">setup_console()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.runner">smefit.runner module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.runner.Runner"><code class="docutils literal notranslate"><span class="pre">Runner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.chi2_scan"><code class="docutils literal notranslate"><span class="pre">Runner.chi2_scan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.from_file"><code class="docutils literal notranslate"><span class="pre">Runner.from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.global_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.global_analysis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.mc"><code class="docutils literal notranslate"><span class="pre">Runner.mc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.ns"><code class="docutils literal notranslate"><span class="pre">Runner.ns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.run_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.run_analysis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.setup_result_folder"><code class="docutils literal notranslate"><span class="pre">Runner.setup_result_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.single_parameter_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.single_parameter_analysis()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -108,43 +221,160 @@
            <div itemprop="articleBody">
              
   <section id="module-smefit">
-<span id="smefit-package"></span><h1>smefit package<a class="headerlink" href="#module-smefit" title="Permalink to this headline"></a></h1>
+<span id="smefit-package"></span><h1>smefit package<a class="headerlink" href="#module-smefit" title="Permalink to this heading"></a></h1>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="smefit.analyze.html">smefit.analyze package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.run_report"><code class="docutils literal notranslate"><span class="pre">run_report()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.chi2_utils">smefit.analyze.chi2_utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.coefficients_utils">smefit.analyze.coefficients_utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.contours_2d">smefit.analyze.contours_2d module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.correlations">smefit.analyze.correlations module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.latex_tools">smefit.analyze.latex_tools module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.pca">smefit.analyze.pca module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.report">smefit.analyze.report module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.summary">smefit.analyze.summary module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.chi2_utils">smefit.analyze.chi2_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.add_normalized_chi2"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.add_normalized_chi2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.compute"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.compute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.group_chi2_df"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.group_chi2_df()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.plot_dist"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.plot_dist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.plot_exp"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.plot_exp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.write()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write_chi2_grouped"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.write_chi2_grouped()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write_chi2_summary"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.write_chi2_summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.coefficients_utils">smefit.analyze.coefficients_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_coeffs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs_bar"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_coeffs_bar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_contours_2d"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_contours_2d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_logo"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_logo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_posteriors"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_posteriors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.write_cl_table"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.write_cl_table()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.compute_confidence_level"><code class="docutils literal notranslate"><span class="pre">compute_confidence_level()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.get_confidence_values"><code class="docutils literal notranslate"><span class="pre">get_confidence_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.split_solution"><code class="docutils literal notranslate"><span class="pre">split_solution()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.contours_2d">smefit.analyze.contours_2d module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.contours_2d.confidence_ellipse"><code class="docutils literal notranslate"><span class="pre">confidence_ellipse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.contours_2d.plot_contours"><code class="docutils literal notranslate"><span class="pre">plot_contours()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.correlations">smefit.analyze.correlations module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.correlations.plot_correlations"><code class="docutils literal notranslate"><span class="pre">plot_correlations()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.latex_tools">smefit.analyze.latex_tools module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.latex_tools.chi2table_header"><code class="docutils literal notranslate"><span class="pre">chi2table_header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.latex_tools.latex_packages"><code class="docutils literal notranslate"><span class="pre">latex_packages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.latex_tools.move_to_meta"><code class="docutils literal notranslate"><span class="pre">move_to_meta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.latex_tools.multicolum_table_header"><code class="docutils literal notranslate"><span class="pre">multicolum_table_header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.latex_tools.run_pdflatex"><code class="docutils literal notranslate"><span class="pre">run_pdflatex()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.pca">smefit.analyze.pca module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.PcaCalculator"><code class="docutils literal notranslate"><span class="pre">PcaCalculator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.PcaCalculator.compute"><code class="docutils literal notranslate"><span class="pre">PcaCalculator.compute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.PcaCalculator.plot_heatmap"><code class="docutils literal notranslate"><span class="pre">PcaCalculator.plot_heatmap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.PcaCalculator.write"><code class="docutils literal notranslate"><span class="pre">PcaCalculator.write()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.impose_constrain"><code class="docutils literal notranslate"><span class="pre">impose_constrain()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.report">smefit.analyze.report module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report"><code class="docutils literal notranslate"><span class="pre">Report</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.report"><code class="docutils literal notranslate"><span class="pre">Report.report</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.fits"><code class="docutils literal notranslate"><span class="pre">Report.fits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.data_info"><code class="docutils literal notranslate"><span class="pre">Report.data_info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.coeff_info"><code class="docutils literal notranslate"><span class="pre">Report.coeff_info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.chi2"><code class="docutils literal notranslate"><span class="pre">Report.chi2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.coefficients"><code class="docutils literal notranslate"><span class="pre">Report.coefficients()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.correlations"><code class="docutils literal notranslate"><span class="pre">Report.correlations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.pca"><code class="docutils literal notranslate"><span class="pre">Report.pca()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.summary"><code class="docutils literal notranslate"><span class="pre">Report.summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.summary">smefit.analyze.summary module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.SummaryWriter"><code class="docutils literal notranslate"><span class="pre">SummaryWriter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write"><code class="docutils literal notranslate"><span class="pre">SummaryWriter.write()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write_coefficients_table"><code class="docutils literal notranslate"><span class="pre">SummaryWriter.write_coefficients_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write_dataset_table"><code class="docutils literal notranslate"><span class="pre">SummaryWriter.write_dataset_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write_fit_settings"><code class="docutils literal notranslate"><span class="pre">SummaryWriter.write_fit_settings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.add_bounded_coeff"><code class="docutils literal notranslate"><span class="pre">add_bounded_coeff()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="smefit.cli.html">smefit.cli package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="smefit.cli.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.cli.html#module-smefit.cli.base">smefit.cli.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.cli.html#module-smefit.cli.base">smefit.cli.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.cli.html#smefit.cli.base.root_path"><code class="docutils literal notranslate"><span class="pre">root_path</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="smefit.optimize.html">smefit.optimize package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#module-smefit.optimize.mc">smefit.optimize.mc module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#module-smefit.optimize.ns">smefit.optimize.ns module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer"><code class="docutils literal notranslate"><span class="pre">Optimizer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.chi2_func"><code class="docutils literal notranslate"><span class="pre">Optimizer.chi2_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.dump_posterior"><code class="docutils literal notranslate"><span class="pre">Optimizer.dump_posterior()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.free_parameters"><code class="docutils literal notranslate"><span class="pre">Optimizer.free_parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.generate_chi2_table"><code class="docutils literal notranslate"><span class="pre">Optimizer.generate_chi2_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.print_rate"><code class="docutils literal notranslate"><span class="pre">Optimizer.print_rate</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="smefit.postfit.html">smefit.postfit package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#module-smefit.optimize.mc">smefit.optimize.mc module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer"><code class="docutils literal notranslate"><span class="pre">MCOptimizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer.chi2_func_mc"><code class="docutils literal notranslate"><span class="pre">MCOptimizer.chi2_func_mc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer.from_dict"><code class="docutils literal notranslate"><span class="pre">MCOptimizer.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer.get_status"><code class="docutils literal notranslate"><span class="pre">MCOptimizer.get_status()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer.run_sampling"><code class="docutils literal notranslate"><span class="pre">MCOptimizer.run_sampling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer.save"><code class="docutils literal notranslate"><span class="pre">MCOptimizer.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#module-smefit.optimize.ns">smefit.optimize.ns module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer"><code class="docutils literal notranslate"><span class="pre">NSOptimizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.chi2_func_ns"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.chi2_func_ns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.clean"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.clean()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.flat_prior"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.flat_prior()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.from_dict"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.gaussian_loglikelihood"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.gaussian_loglikelihood()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.print_rate"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.print_rate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.run_sampling"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.run_sampling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.save"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="smefit.postfit.html">smefit.postfit package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smefit.postfit.html#smefit.postfit.Postfit"><code class="docutils literal notranslate"><span class="pre">Postfit</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html#smefit.postfit.Postfit.clean"><code class="docutils literal notranslate"><span class="pre">Postfit.clean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html#smefit.postfit.Postfit.from_file"><code class="docutils literal notranslate"><span class="pre">Postfit.from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html#smefit.postfit.Postfit.save"><code class="docutils literal notranslate"><span class="pre">Postfit.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-smefit.basis_rotation">
-<span id="smefit-basis-rotation-module"></span><h2>smefit.basis_rotation module<a class="headerlink" href="#module-smefit.basis_rotation" title="Permalink to this headline"></a></h2>
+<span id="smefit-basis-rotation-module"></span><h2>smefit.basis_rotation module<a class="headerlink" href="#module-smefit.basis_rotation" title="Permalink to this heading"></a></h2>
 <p>Implement the corrections table basis rotation</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.basis_rotation.rotate_to_fit_basis">
@@ -174,7 +404,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 
 </section>
 <section id="module-smefit.chi2">
-<span id="smefit-chi2-module"></span><h2>smefit.chi2 module<a class="headerlink" href="#module-smefit.chi2" title="Permalink to this headline"></a></h2>
+<span id="smefit-chi2-module"></span><h2>smefit.chi2 module<a class="headerlink" href="#module-smefit.chi2" title="Permalink to this heading"></a></h2>
 <p>Module for the computation of chi-squared values.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.chi2.Scanner">
@@ -253,7 +483,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 
 </section>
 <section id="module-smefit.coefficients">
-<span id="smefit-coefficients-module"></span><h2>smefit.coefficients module<a class="headerlink" href="#module-smefit.coefficients" title="Permalink to this headline"></a></h2>
+<span id="smefit-coefficients-module"></span><h2>smefit.coefficients module<a class="headerlink" href="#module-smefit.coefficients" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.coefficients.Coefficient">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.coefficients.</span></span><span class="sig-name descname"><span class="pre">Coefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constrain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#Coefficient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.Coefficient" title="Permalink to this definition"></a></dt>
@@ -369,7 +599,7 @@ coefficient.constrain information:</p>
 
 </section>
 <section id="module-smefit.compute_theory">
-<span id="smefit-compute-theory-module"></span><h2>smefit.compute_theory module<a class="headerlink" href="#module-smefit.compute_theory" title="Permalink to this headline"></a></h2>
+<span id="smefit-compute-theory-module"></span><h2>smefit.compute_theory module<a class="headerlink" href="#module-smefit.compute_theory" title="Permalink to this heading"></a></h2>
 <p>Module for the generation of theory predictions</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.compute_theory.flatten">
@@ -410,14 +640,14 @@ given a set of <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> 
 
 </section>
 <section id="module-smefit.covmat">
-<span id="smefit-covmat-module"></span><h2>smefit.covmat module<a class="headerlink" href="#module-smefit.covmat" title="Permalink to this headline"></a></h2>
+<span id="smefit-covmat-module"></span><h2>smefit.covmat module<a class="headerlink" href="#module-smefit.covmat" title="Permalink to this heading"></a></h2>
 <p>Module containing computation of covariance matrix.
 Based on
 <a class="reference external" href="https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats_utils.py">https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats_utils.py</a>
 <a class="reference external" href="https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats.py">https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats.py</a></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.covmat.construct_covmat">
-<span class="sig-prename descclassname"><span class="pre">smefit.covmat.</span></span><span class="sig-name descname"><span class="pre">construct_covmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stat_errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sys_errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/covmat.html#construct_covmat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.covmat.construct_covmat" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">smefit.covmat.</span></span><span class="sig-name descname"><span class="pre">construct_covmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stat_errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sys_errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/covmat.html#construct_covmat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.covmat.construct_covmat" title="Permalink to this definition"></a></dt>
 <dd><p>Basic function to construct a covariance matrix (covmat), given the
 statistical error and a dataframe of systematics.
 Errors with name UNCORR or THEORYUNCORR are added in quadrature with
@@ -476,7 +706,7 @@ containing uncertainty and correlation information.</p>
 
 </section>
 <section id="module-smefit.fit_manager">
-<span id="smefit-fit-manager-module"></span><h2>smefit.fit_manager module<a class="headerlink" href="#module-smefit.fit_manager" title="Permalink to this headline"></a></h2>
+<span id="smefit-fit-manager-module"></span><h2>smefit.fit_manager module<a class="headerlink" href="#module-smefit.fit_manager" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.fit_manager.FitManager">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.fit_manager.</span></span><span class="sig-name descname"><span class="pre">FitManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/fit_manager.html#FitManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.fit_manager.FitManager" title="Permalink to this definition"></a></dt>
@@ -617,7 +847,7 @@ the results. Results are stored in a class attribute</p>
 
 </section>
 <section id="module-smefit.loader">
-<span id="smefit-loader-module"></span><h2>smefit.loader module<a class="headerlink" href="#module-smefit.loader" title="Permalink to this headline"></a></h2>
+<span id="smefit-loader-module"></span><h2>smefit.loader module<a class="headerlink" href="#module-smefit.loader" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.loader.DataTuple">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">DataTuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Commondata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SMTheory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">OperatorsNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LinearCorrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QuadraticCorrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExpNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NdataExp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">InvCovMat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Replica</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smefit.loader.DataTuple" title="Permalink to this definition"></a></dt>
@@ -877,6 +1107,20 @@ Default it assumes to be the same as commondata_path</p>
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.sys_error_t0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sys_error_t0</span></span><a class="headerlink" href="#smefit.loader.Loader.sys_error_t0" title="Permalink to this definition"></a></dt>
+<dd><p>Systematic errors modified according to t0 prescription</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>sys_error_t0</strong> -- t0 systematic errors of the dataset</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="smefit.loader.Loader.theory_covmat">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">theory_covmat</span></span><a class="headerlink" href="#smefit.loader.Loader.theory_covmat" title="Permalink to this definition"></a></dt>
 <dd><p>Theory covariance matrix</p>
@@ -940,7 +1184,7 @@ with corresponding values.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.loader.load_datasets">
-<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commondata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theory_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_to_fit_basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_uv_coupligs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#load_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.load_datasets" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commondata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theory_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_to_fit_basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_uv_coupligs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#load_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.load_datasets" title="Permalink to this definition"></a></dt>
 <dd><p>Loads experimental data, theory and <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> corrections into a namedtuple</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -961,7 +1205,7 @@ Default it assumes to be the same as commondata_path</p></li>
 
 </section>
 <section id="module-smefit.log">
-<span id="smefit-log-module"></span><h2>smefit.log module<a class="headerlink" href="#module-smefit.log" title="Permalink to this headline"></a></h2>
+<span id="smefit-log-module"></span><h2>smefit.log module<a class="headerlink" href="#module-smefit.log" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.log.print_banner">
 <span class="sig-prename descclassname"><span class="pre">smefit.log.</span></span><span class="sig-name descname"><span class="pre">print_banner</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/log.html#print_banner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.log.print_banner" title="Permalink to this definition"></a></dt>
@@ -974,7 +1218,7 @@ Default it assumes to be the same as commondata_path</p></li>
 
 </section>
 <section id="module-smefit.runner">
-<span id="smefit-runner-module"></span><h2>smefit.runner module<a class="headerlink" href="#module-smefit.runner" title="Permalink to this headline"></a></h2>
+<span id="smefit-runner-module"></span><h2>smefit.runner module<a class="headerlink" href="#module-smefit.runner" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.runner.Runner">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.runner.</span></span><span class="sig-name descname"><span class="pre">Runner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_card</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_parameter_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runcard_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner" title="Permalink to this definition"></a></dt>

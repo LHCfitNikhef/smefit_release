@@ -15,7 +15,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -94,14 +96,14 @@
            <div itemprop="articleBody">
              
   <section id="fitting-strategies">
-<h1>Fitting strategies<a class="headerlink" href="#fitting-strategies" title="Permalink to this headline"></a></h1>
+<h1>Fitting strategies<a class="headerlink" href="#fitting-strategies" title="Permalink to this heading"></a></h1>
 <p>In this section we describe the fitting methodology that is used to map the EFT parameter space.
 <abbr title="Standard Model Effective Field Theory fitter">SMEFiT</abbr> implements one fitting strategies using the MultiNest and <a class="reference internal" href="NS.html"><span class="doc">Nested Sampling</span></a>
 algorithm <span id="id1">[<a class="reference internal" href="../zzz-refs.html#id17" title="F. Feroz, M. P. Hobson, E. Cameron, and A. N. Pettitt. Importance Nested Sampling and the MultiNest Algorithm. 2013. arXiv:1306.2144, doi:10.21105/astro.1306.2144.">FHCP13</a>, <a class="reference internal" href="../zzz-refs.html#id16" title="Farhan Feroz and M.P. Hobson. Multimodal nested sampling: an efficient and robust alternative to MCMC methods for astronomical data analysis. Mon. Not. Roy. Astron. Soc., 384:449, 2008. arXiv:0704.3704, doi:10.1111/j.1365-2966.2007.12353.x.">FH08</a>]</span>, a robust sampling procedure is based on Bayesian inference.</p>
 <p>In the following paragraphs we describe the log-likelihood function and the treatment of uncertainties, which are common
 for the two fitting methodology. We also discuss the case of individual fits where just one EFT operator is take into account.</p>
 <section id="chi-2-definition">
-<h2><span class="math notranslate nohighlight">\(\chi^2\)</span> definition<a class="headerlink" href="#chi-2-definition" title="Permalink to this headline"></a></h2>
+<h2><span class="math notranslate nohighlight">\(\chi^2\)</span> definition<a class="headerlink" href="#chi-2-definition" title="Permalink to this heading"></a></h2>
 <p>The overall fit quality is quantified by the log-likelihood, or <span class="math notranslate nohighlight">\(\chi^2\)</span> function, defined as</p>
 <div class="math notranslate nohighlight">
 \[\chi^2 \left ( {\textbf{c}} \right ) \equiv \frac{1}{n_{\rm dat}}\sum_{i,j=1}^{n_{\rm dat}} \left (\sigma^{(\rm th)}_i \left( {\textbf{c}} \right) -\sigma^{(\rm exp)}_i\right) ({\rm cov}^{-1})_{ij}
@@ -110,7 +112,7 @@ for the two fitting methodology. We also discuss the case of individual fits whe
 and corresponding theoretical predictions for the <cite>i-th</cite> cross-section, respectively.</p>
 </section>
 <section id="uncertainties-treatment">
-<h2>Uncertainties treatment<a class="headerlink" href="#uncertainties-treatment" title="Permalink to this headline"></a></h2>
+<h2>Uncertainties treatment<a class="headerlink" href="#uncertainties-treatment" title="Permalink to this heading"></a></h2>
 <p>The total covariance matrix, <span class="math notranslate nohighlight">\({\rm cov}_{ij}\)</span>, should contain all relevant sources of
 experimental and theoretical uncertainties. Assuming the latter are normally distributed, and that they are uncorrelated
 with the experimental uncertainties, this total covariance matrix can be expressed as
@@ -125,7 +127,7 @@ the resulting <span class="math notranslate nohighlight">\(\chi^2\)</span> value
 on the specific type of processes considered.</p>
 </section>
 <section id="individual-fits">
-<h2>Individual fits<a class="headerlink" href="#individual-fits" title="Permalink to this headline"></a></h2>
+<h2>Individual fits<a class="headerlink" href="#individual-fits" title="Permalink to this heading"></a></h2>
 <p>Individual (one-parameter) fits correspond to varying a single EFT coefficient while keeping
 the rest fixed to their SM values.
 While such fits neglect the correlations between the different coefficients, they provide a useful

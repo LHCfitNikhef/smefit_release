@@ -15,7 +15,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -88,7 +90,7 @@
            <div itemprop="articleBody">
              
   <section id="experimental-data-format">
-<span id="data"></span><h1>Experimental data format<a class="headerlink" href="#experimental-data-format" title="Permalink to this headline"></a></h1>
+<span id="data"></span><h1>Experimental data format<a class="headerlink" href="#experimental-data-format" title="Permalink to this heading"></a></h1>
 <p>Experimental data should be provided in <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> file</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">dataset_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example_dataset</span><span class="w"></span>
 <span class="nt">num_data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"></span>
@@ -116,6 +118,12 @@
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ADD</span><span class="w"></span>
 </pre></div>
 </div>
+<p>The sys_name can be CORR, UNCORR to specify whether the systematic considered id correlated or uncorrelated
+within the dataset. In other words, if sys_name=CORR for sys1, then sys1 will be correlated across the datapoints
+of the dataset. Same for UNCORR.</p>
+<p>The same logic can be used for CORR and UNCORR theory systemtics within a dataset, using the names THEORYCORR and THEORYUNCORR.</p>
+<p>For systematics correlated between different dataset a different name has to be used, which must be
+the same for the corresponding systematic in all the datasets.</p>
 </section>
 
 

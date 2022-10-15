@@ -15,7 +15,9 @@
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -50,6 +52,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="smefit.html">API</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="smefit.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">smefit.analyze package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.analyze.run_report"><code class="docutils literal notranslate"><span class="pre">run_report()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smefit.analyze.chi2_utils">smefit.analyze.chi2_utils module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smefit.analyze.coefficients_utils">smefit.analyze.coefficients_utils module</a></li>
@@ -120,7 +123,7 @@
            <div itemprop="articleBody">
              
   <section id="module-smefit.analyze">
-<span id="smefit-analyze-package"></span><h1>smefit.analyze package<a class="headerlink" href="#module-smefit.analyze" title="Permalink to this headline"></a></h1>
+<span id="smefit-analyze-package"></span><h1>smefit.analyze package<a class="headerlink" href="#module-smefit.analyze" title="Permalink to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.analyze.run_report">
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.</span></span><span class="sig-name descname"><span class="pre">run_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_card_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze.html#run_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.run_report" title="Permalink to this definition"></a></dt>
@@ -133,10 +136,10 @@
 </dd></dl>
 
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-smefit.analyze.chi2_utils">
-<span id="smefit-analyze-chi2-utils-module"></span><h2>smefit.analyze.chi2_utils module<a class="headerlink" href="#module-smefit.analyze.chi2_utils" title="Permalink to this headline"></a></h2>
+<span id="smefit-analyze-chi2-utils-module"></span><h2>smefit.analyze.chi2_utils module<a class="headerlink" href="#module-smefit.analyze.chi2_utils" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.analyze.chi2_utils.Chi2tableCalculator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.chi2_utils.</span></span><span class="sig-name descname"><span class="pre">Chi2tableCalculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/chi2_utils.html#Chi2tableCalculator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.chi2_utils.Chi2tableCalculator" title="Permalink to this definition"></a></dt>
@@ -279,7 +282,7 @@
 
 </section>
 <section id="module-smefit.analyze.coefficients_utils">
-<span id="smefit-analyze-coefficients-utils-module"></span><h2>smefit.analyze.coefficients_utils module<a class="headerlink" href="#module-smefit.analyze.coefficients_utils" title="Permalink to this headline"></a></h2>
+<span id="smefit-analyze-coefficients-utils-module"></span><h2>smefit.analyze.coefficients_utils module<a class="headerlink" href="#module-smefit.analyze.coefficients_utils" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.analyze.coefficients_utils.CoefficientsPlotter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.coefficients_utils.</span></span><span class="sig-name descname"><span class="pre">CoefficientsPlotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">free_coeff_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter" title="Permalink to this definition"></a></dt>
@@ -298,7 +301,7 @@ in disjointed_list for disjointed_list2
 for global and single fit results, respectively.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs">
-<span class="sig-name descname"><span class="pre">plot_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(15,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lin_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter.plot_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(15,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lin_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter.plot_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs" title="Permalink to this definition"></a></dt>
 <dd><p>Plot central value + 95% CL errors</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -399,7 +402,7 @@ Note: double solutions are appended under &quot;2&quot;</p>
 
 </section>
 <section id="module-smefit.analyze.contours_2d">
-<span id="smefit-analyze-contours-2d-module"></span><h2>smefit.analyze.contours_2d module<a class="headerlink" href="#module-smefit.analyze.contours_2d" title="Permalink to this headline"></a></h2>
+<span id="smefit-analyze-contours-2d-module"></span><h2>smefit.analyze.contours_2d module<a class="headerlink" href="#module-smefit.analyze.contours_2d" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.analyze.contours_2d.confidence_ellipse">
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.contours_2d.</span></span><span class="sig-name descname"><span class="pre">confidence_ellipse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeff1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facecolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/contours_2d.html#confidence_ellipse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.contours_2d.confidence_ellipse" title="Permalink to this definition"></a></dt>
@@ -450,7 +453,7 @@ Note: double solutions are appended under &quot;2&quot;</p>
 
 </section>
 <section id="module-smefit.analyze.correlations">
-<span id="smefit-analyze-correlations-module"></span><h2>smefit.analyze.correlations module<a class="headerlink" href="#module-smefit.analyze.correlations" title="Permalink to this headline"></a></h2>
+<span id="smefit-analyze-correlations-module"></span><h2>smefit.analyze.correlations module<a class="headerlink" href="#module-smefit.analyze.correlations" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.analyze.correlations.plot_correlations">
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.correlations.</span></span><span class="sig-name descname"><span class="pre">plot_correlations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posterior_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide_dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/correlations.html#plot_correlations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.correlations.plot_correlations" title="Permalink to this definition"></a></dt>
@@ -472,7 +475,7 @@ between parameters in a heat map</p>
 
 </section>
 <section id="module-smefit.analyze.latex_tools">
-<span id="smefit-analyze-latex-tools-module"></span><h2>smefit.analyze.latex_tools module<a class="headerlink" href="#module-smefit.analyze.latex_tools" title="Permalink to this headline"></a></h2>
+<span id="smefit-analyze-latex-tools-module"></span><h2>smefit.analyze.latex_tools module<a class="headerlink" href="#module-smefit.analyze.latex_tools" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.analyze.latex_tools.chi2table_header">
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.latex_tools.</span></span><span class="sig-name descname"><span class="pre">chi2table_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/latex_tools.html#chi2table_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.latex_tools.chi2table_header" title="Permalink to this definition"></a></dt>
@@ -520,7 +523,7 @@ between parameters in a heat map</p>
 
 </section>
 <section id="module-smefit.analyze.pca">
-<span id="smefit-analyze-pca-module"></span><h2>smefit.analyze.pca module<a class="headerlink" href="#module-smefit.analyze.pca" title="Permalink to this headline"></a></h2>
+<span id="smefit-analyze-pca-module"></span><h2>smefit.analyze.pca module<a class="headerlink" href="#module-smefit.analyze.pca" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.analyze.pca.PcaCalculator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.pca.</span></span><span class="sig-name descname"><span class="pre">PcaCalculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#PcaCalculator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.PcaCalculator" title="Permalink to this definition"></a></dt>
@@ -598,7 +601,7 @@ divided by the total experimental error.</p>
 
 </section>
 <section id="module-smefit.analyze.report">
-<span id="smefit-analyze-report-module"></span><h2>smefit.analyze.report module<a class="headerlink" href="#module-smefit.analyze.report" title="Permalink to this headline"></a></h2>
+<span id="smefit-analyze-report-module"></span><h2>smefit.analyze.report module<a class="headerlink" href="#module-smefit.analyze.report" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.analyze.report.Report">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.report.</span></span><span class="sig-name descname"><span class="pre">Report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/report.html#Report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.report.Report" title="Permalink to this definition"></a></dt>
@@ -739,7 +742,7 @@ By default all the fits included in the report</p></li>
 
 </section>
 <section id="module-smefit.analyze.summary">
-<span id="smefit-analyze-summary-module"></span><h2>smefit.analyze.summary module<a class="headerlink" href="#module-smefit.analyze.summary" title="Permalink to this headline"></a></h2>
+<span id="smefit-analyze-summary-module"></span><h2>smefit.analyze.summary module<a class="headerlink" href="#module-smefit.analyze.summary" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.analyze.summary.SummaryWriter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.summary.</span></span><span class="sig-name descname"><span class="pre">SummaryWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/summary.html#SummaryWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.summary.SummaryWriter" title="Permalink to this definition"></a></dt>

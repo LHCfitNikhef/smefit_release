@@ -15,7 +15,9 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -94,9 +96,9 @@
            <div itemprop="articleBody">
              
   <section id="nested-sampling">
-<h1>Nested Sampling<a class="headerlink" href="#nested-sampling" title="Permalink to this headline"></a></h1>
+<h1>Nested Sampling<a class="headerlink" href="#nested-sampling" title="Permalink to this heading"></a></h1>
 <section id="formalism">
-<h2>Formalism<a class="headerlink" href="#formalism" title="Permalink to this headline"></a></h2>
+<h2>Formalism<a class="headerlink" href="#formalism" title="Permalink to this heading"></a></h2>
 <p>The starting point of Nested Sampling (<abbr title="Nested Sampling">NS</abbr>) is Bayes' theorem, which allows us to evaluate the
 probability distribution of a set of parameters <span class="math notranslate nohighlight">\(\vec{c}\)</span>
 associated to a model <span class="math notranslate nohighlight">\(\mathcal{M}(\vec{c})\)</span>
@@ -174,7 +176,7 @@ way as averages are done
 over the <span class="math notranslate nohighlight">\(N_{\rm rep}\)</span> replicas in the MCfit method.</p>
 </section>
 <section id="prior-volume">
-<h2>Prior volume<a class="headerlink" href="#prior-volume" title="Permalink to this headline"></a></h2>
+<h2>Prior volume<a class="headerlink" href="#prior-volume" title="Permalink to this heading"></a></h2>
 <p>An important input for NS is the choice of prior volume <span class="math notranslate nohighlight">\(\pi \left( \vec{c} \right)\)</span>
 in the model parameter space.
 In this analysis, we adopt flat priors
@@ -207,7 +209,7 @@ such as the four-heavy operators in the case of linear EFT calculations,
 a hard boundary of <span class="math notranslate nohighlight">\(\left( -50 , 50 \right)\)</span>  (for <span class="math notranslate nohighlight">\(\Lambda=1\)</span>  TeV) is imposed.</p>
 </section>
 <section id="performance">
-<h2>Performance<a class="headerlink" href="#performance" title="Permalink to this headline"></a></h2>
+<h2>Performance<a class="headerlink" href="#performance" title="Permalink to this heading"></a></h2>
 <p>To increase the efficiency of the posterior probability estimation by NS, we enable the
 <em>constant efficiency mode</em> in MultiNest, which adjusts the
 total volume of ellipsoids spanning the live points so that the sampling
