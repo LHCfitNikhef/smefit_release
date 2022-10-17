@@ -98,7 +98,22 @@
   <section id="theory-tables">
 <h1>Theory tables<a class="headerlink" href="#theory-tables" title="Permalink to this heading"></a></h1>
 <p>Each experimental dataset is associate with a corresponding theory table which has to be provided by the user.
-The standard format is</p>
+Theory tables are json files containing the following information:</p>
+<ul class="simple">
+<li><p>best standard model predictions for each datapoint: provided as a list <code class="docutils literal notranslate"><span class="pre">[best_sm_prediction_1,</span> <span class="pre">...</span> <span class="pre">,best_sm_prediction_N]</span></code> with <code class="docutils literal notranslate"><span class="pre">N</span></code> being the number of datapoints</p></li>
+<li><p>theory covariance matrix for the specific dataset considered: provided as a <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">x</span> <span class="pre">N</span></code> matrix like <code class="docutils literal notranslate"><span class="pre">[[th_cov_11,</span> <span class="pre">...</span> <span class="pre">,th_cov_1N],</span> <span class="pre">...</span> <span class="pre">,</span> <span class="pre">[th_cov_N1,</span> <span class="pre">...</span> <span class="pre">,th_cov_NN]]</span></code> with <code class="docutils literal notranslate"><span class="pre">N</span></code> being the number of data points</p></li>
+<li><p>LO and NLO predictions with linear and quadratic SMEFT corrections: provided as two independent dictionaries <code class="docutils literal notranslate"><span class="pre">LO:</span> <span class="pre">{}</span></code> and <code class="docutils literal notranslate"><span class="pre">NLO:</span> <span class="pre">{}</span></code> each containing</p>
+<ul>
+<li><p>SM predictions obtained at that specific order <code class="docutils literal notranslate"><span class="pre">SM:</span> <span class="pre">[sm_prediction_1,</span> <span class="pre">...</span> <span class="pre">,</span> <span class="pre">sm_prediction_N]</span></code></p></li>
+<li><p>linear terms for each operator involved in the computation <code class="docutils literal notranslate"><span class="pre">Opi:</span> <span class="pre">[linear_term_Opi_1,</span> <span class="pre">...,</span> <span class="pre">linear_term_Opi_N]</span></code></p></li>
+<li><p>quadratic terms for each couple of operators (when present) <code class="docutils literal notranslate"><span class="pre">Opi*Opj:</span> <span class="pre">[quad_term_Opi*Opj_1,</span> <span class="pre">...,</span> <span class="pre">quad_term_Opi*Opj_N]</span></code></p></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<div><p>The EFT corrections should always be provided in the Warsaw basis. In order to produce a fit with a different basis,
+the corresponding rotation matrix has to be provided externally, see the corresponding section.</p>
+</div></blockquote>
 </section>
 
 
