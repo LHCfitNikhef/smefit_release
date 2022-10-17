@@ -43,11 +43,11 @@ namely carrying out extensive global analysis which is the main purpose of |SMEF
     data_theory/theory
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
     :caption: Examples and tutorial:
     :hidden:
 
-    tutorial/example
+    tutorial/example.md
 
 
 .. toctree::
