@@ -41,6 +41,7 @@ namely carrying out extensive global analysis which is the main purpose of |SMEF
 
     data_theory/data.md
     data_theory/theory
+    data_theory/rotation.md
 
 .. toctree::
     :maxdepth: 2
