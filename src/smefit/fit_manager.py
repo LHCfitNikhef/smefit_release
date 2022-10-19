@@ -142,6 +142,7 @@ class FitManager:
                     self.datasets,
                     self.results.iloc[rep, :],
                     self.config["use_quad"],
+                    self.config.get("use_multiplicative_prescription", True),
                 )
             )
         return np.array(smeft)
