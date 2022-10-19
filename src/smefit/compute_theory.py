@@ -22,7 +22,9 @@ def flatten(quad_mat, axis=0):
     return quad_mat[np.triu_indices(size)]
 
 
-def make_predictions(dataset, coefficients_values, use_quad):
+def make_predictions(
+    dataset, coefficients_values, use_quad, use_multiplicative_prescription
+):
     """
     Generate the corrected theory predictions for dataset
     given a set of |SMEFT| coefficients.
@@ -57,6 +59,9 @@ def make_predictions(dataset, coefficients_values, use_quad):
         summed_corrections += summed_quad_corrections
 
     # Sum of SM theory + SMEFT corrections
-    corrected_theory = dataset.SMTheory + summed_corrections
+    if use_multiplicative_prescription:
+        corrected_theory = dataset.SMTheory * (1.0 + summed_corrections)
+    else:
+        corrected_theory = dataset.SMTheory + summed_corrections
 
     return corrected_theory

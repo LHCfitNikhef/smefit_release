@@ -58,15 +58,34 @@ th_pred_1 = (
     + np.array(ld.theory_test_1["LO"]["Op2*Op3"]) * wilson_coeff[1] * wilson_coeff[2]
 )
 
-# chi2 for dataset1
+# Theory predictions for dataset1 when using mult prescription
+th_pred_1_mult = (
+    np.array(ld.theory_test_1["best_sm"])*(1.+ 
+    + np.array(ld.theory_test_1["LO"]["Op1"]) * wilson_coeff[0]
+    + np.array(ld.theory_test_1["LO"]["Op2"]) * wilson_coeff[1]
+    + np.array(ld.theory_test_1["LO"]["Op3"]) * wilson_coeff[2]
+    + np.array(ld.theory_test_1["LO"]["Op1*Op1"]) * wilson_coeff[0] ** 2
+    + np.array(ld.theory_test_1["LO"]["Op2*Op2"]) * wilson_coeff[1] ** 2
+    + np.array(ld.theory_test_1["LO"]["Op2*Op1"]) * wilson_coeff[1] * wilson_coeff[0]
+    + np.array(ld.theory_test_1["LO"]["Op2*Op3"]) * wilson_coeff[1] * wilson_coeff[2]
+    )
+)
+
+# exp data for dataset1
 exp_data_1 = np.array(ld.exp_test_1["data"])
 exp_stat_1 = np.array([0.2, 0.3])
 exp_sys_1 = np.array([[0.01, 0.01], [0.02, 0.02]])
 exp_cov_1 = np.diag(exp_stat_1**2) + exp_sys_1 @ exp_sys_1.T
 tot_cov_1 = exp_cov_1 + np.array(ld.theory_test_1["theory_cov"])
 
+# chi2 for dataset 1
 chi2_1 = (
     (exp_data_1 - th_pred_1) @ np.linalg.inv(tot_cov_1) @ (exp_data_1 - th_pred_1).T
+)
+
+# chi2 for dataset 1 when using mult prescription
+chi2_1_mult = (
+    (exp_data_1 - th_pred_1_mult) @ np.linalg.inv(tot_cov_1) @ (exp_data_1 - th_pred_1_mult).T
 )
 
 # theory predictions for dataset2
@@ -77,6 +96,17 @@ th_pred_2 = (
     + np.array(ld.theory_test_2["LO"]["Op1*Op1"]) * wilson_coeff[0] ** 2
     + np.array(ld.theory_test_2["LO"]["Op2*Op2"]) * wilson_coeff[1] ** 2
     + np.array(ld.theory_test_2["LO"]["Op2*Op1"]) * wilson_coeff[1] * wilson_coeff[0]
+)
+
+# theory predictions for dataset2 when using mult prescription
+th_pred_2_mult = (
+    np.array(ld.theory_test_2["best_sm"])* (1. +
+    + np.array(ld.theory_test_2["LO"]["Op1"]) * wilson_coeff[0]
+    + np.array(ld.theory_test_2["LO"]["Op2"]) * wilson_coeff[1]
+    + np.array(ld.theory_test_2["LO"]["Op1*Op1"]) * wilson_coeff[0] ** 2
+    + np.array(ld.theory_test_2["LO"]["Op2*Op2"]) * wilson_coeff[1] ** 2
+    + np.array(ld.theory_test_2["LO"]["Op2*Op1"]) * wilson_coeff[1] * wilson_coeff[0]
+    )
 )
 
 exp_data_2 = np.array(ld.exp_test_2["data"])
@@ -90,9 +120,17 @@ chi2_2 = (
     (exp_data_2 - th_pred_2) @ np.linalg.inv(tot_cov_2) @ (exp_data_2 - th_pred_2).T
 )
 
+# chi2 for dataset2 when using mult prescription
+chi2_2_mult = (
+    (exp_data_2 - th_pred_2_mult) @ np.linalg.inv(tot_cov_2) @ (exp_data_2 - th_pred_2_mult).T
+)
+
 # total expected chi2. Since there are no correlations between the two datasets I can sum the
 # two independent contributions
 chi2_tot = chi2_1 + chi2_2
+
+# total expected chi2 when using mult prescription
+chi2_tot_mult = chi2_1_mult + chi2_2_mult
 
 
 datasets_no_corr = ["data_test1", "data_test2"]
@@ -109,6 +147,7 @@ config_no_corr["use_t0"] = False
 config_no_corr["theory_path"] = commondata_path
 config_no_corr["rot_to_fit_basis"] = None
 config_no_corr["replica"] = 0
+
 
 
 ### now consider the case of dataset 3 and dataset 4 having a common systematic named SPECIAL
@@ -203,10 +242,14 @@ config_corr["use_quad"] = True
 config_corr["use_theory_covmat"] = True
 config_corr["theory_path"] = commondata_path
 config_corr["rot_to_fit_basis"] = None
+config_corr["use_multiplicative_prescription"] = False
 
 
 class TestOptimize_NS:
 
+    test_opt_mult = opt.ns.NSOptimizer.from_dict(config_no_corr)
+
+    config_no_corr["use_multiplicative_prescription"] = False
     test_opt = opt.ns.NSOptimizer.from_dict(config_no_corr)
 
     config_corr["use_t0"] = False
@@ -244,6 +287,11 @@ class TestOptimize_NS:
         # test t0 chi2 in case of cross correlations between dataset
         np.testing.assert_allclose(
             self.test_opt_corr_t0.chi2_func_ns(params), chi2_corr_t0, rtol=1e-10
+        )
+
+        # test experimental chi2 when using multiplicative prescription for theory predictions
+        np.testing.assert_allclose(
+            self.test_opt_mult.chi2_func_ns(params), chi2_tot_mult, rtol=1e-10
         )
 
     def test_gaussian_loglikelihood(self):
@@ -296,7 +344,7 @@ class TestOptimize_MC:
             coeff_val = self.test_opt.coefficients.value
 
             diff = 2 * (
-                data.Replica - make_predictions(data, coeff_val, self.test_opt.use_quad)
+                data.Replica - make_predictions(data, coeff_val, self.test_opt.use_quad, use_multiplicative_prescription=False)
             )
 
             # temp coefficiens

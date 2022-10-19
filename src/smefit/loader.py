@@ -190,6 +190,7 @@ class Loader:
         order,
         use_quad,
         use_theory_covmat,
+        use_multiplicative_prescription,
         rotation_matrix=None,
     ):
         """
@@ -226,15 +227,23 @@ class Loader:
         quad_dict = {}
         lin_dict = {}
 
+        # save sm prediction at the chosen perturbative order
+        sm = np.array(raw_th_data[order]["SM"])
+
         # split corrections into a linear and quadratic dict
         for key, value in raw_th_data[order].items():
 
             # quadratic terms
             if "*" in key and use_quad:
                 quad_dict[key] = np.array(value)
+                if use_multiplicative_prescription:
+                    quad_dict[key] = np.divide(quad_dict[key], sm)
+
             # linear terms
             elif "SM" not in key and "*" not in key:
                 lin_dict[key] = np.array(value)
+                if use_multiplicative_prescription:
+                    lin_dict[key] = np.divide(lin_dict[key], sm)
 
         # rotate corrections to fitting basis
         if rotation_matrix is not None:
@@ -260,7 +269,6 @@ class Loader:
         th_cov = np.zeros((best_sm.size, best_sm.size))
         if use_theory_covmat:
             th_cov = raw_th_data["theory_cov"]
-
         return raw_th_data["best_sm"], th_cov, lin_dict_to_keep, quad_dict_to_keep
 
     @property
@@ -444,6 +452,7 @@ def load_datasets(
     theory_path=None,
     rot_to_fit_basis=None,
     has_uv_coupligs=False,
+    use_multiplicative_prescription=True,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple

@@ -38,6 +38,7 @@ class Optimizer:
         coefficients,
         use_quad,
         single_parameter_fits,
+        use_multiplicative_prescription,
     ):
         self.results_path = pathlib.Path(results_path)
         self.loaded_datasets = loaded_datasets
@@ -45,6 +46,7 @@ class Optimizer:
         self.use_quad = use_quad
         self.npts = self.loaded_datasets.Commondata.size
         self.single_parameter_fits = single_parameter_fits
+        self.use_multiplicative_prescription = use_multiplicative_prescription
 
         self.counter = 0
 
@@ -89,6 +91,7 @@ class Optimizer:
             self.loaded_datasets,
             self.coefficients.value,
             self.use_quad,
+            self.use_multiplicative_prescription,
             use_replica,
         )
 
@@ -101,6 +104,7 @@ class Optimizer:
                         dataset,
                         self.coefficients.value,
                         self.use_quad,
+                        self.use_multiplicative_prescription,
                         use_replica,
                     )
                     / dataset.NdataExp

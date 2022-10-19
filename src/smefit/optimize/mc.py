@@ -68,6 +68,7 @@ class MCOptimizer(Optimizer):
         single_parameter_fits,
         use_bounds,
         minimizer_specs,
+        use_multiplicative_prescription,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -75,6 +76,7 @@ class MCOptimizer(Optimizer):
             coefficients,
             use_quad,
             single_parameter_fits,
+            use_multiplicative_prescription,
         )
         self.chi2_values = []
         self.coeff_steps = []
@@ -121,6 +123,7 @@ class MCOptimizer(Optimizer):
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_coupligs", False),
+            config.get("use_multiplicative_prescription", True),
         )
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
@@ -153,6 +156,9 @@ class MCOptimizer(Optimizer):
             _logger.warning("Setting maximum number of iterations (maxiter) to 1e4")
 
         single_parameter_fits = config.get("single_parameter_fits", False)
+        use_multiplicative_prescription = config.get(
+            "use_multiplicative_prescription", True
+        )
         return cls(
             loaded_datasets,
             coefficients,
@@ -163,6 +169,7 @@ class MCOptimizer(Optimizer):
             single_parameter_fits,
             use_bounds,
             minimizer_specs,
+            use_multiplicative_prescription,
         )
 
     def get_status(self, chi2):

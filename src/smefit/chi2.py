@@ -15,7 +15,13 @@ from .log import logging
 _logger = logging.getLogger(__name__)
 
 
-def compute_chi2(dataset, coefficients_values, use_quad, use_replica=False):
+def compute_chi2(
+    dataset,
+    coefficients_values,
+    use_quad,
+    use_multiplicative_prescription,
+    use_replica=False,
+):
     r"""
     Compute the :math:`\chi^2`.
 
@@ -35,7 +41,9 @@ def compute_chi2(dataset, coefficients_values, use_quad, use_replica=False):
     """
 
     # compute theory prediction for each point in the dataset
-    theory_predictions = pr.make_predictions(dataset, coefficients_values, use_quad)
+    theory_predictions = pr.make_predictions(
+        dataset, coefficients_values, use_quad, use_multiplicative_prescription
+    )
 
     # compute experimental central values - theory
     if use_replica:
@@ -75,6 +83,7 @@ class Scanner:
             run_card.get("theory_path", None),
             run_card.get("rot_to_fit_basis", None),
             run_card.get("uv_coupligs", False),
+            run_card.get("use_mutiplicative_prescription", True),
         )
 
         # set all the coefficients to 0
