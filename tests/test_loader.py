@@ -82,6 +82,7 @@ def test_load_datasets():
                 use_quad=use_quad,
                 use_theory_covmat=True,
                 use_t0=False,
+                use_multiplicative_prescription=False,
                 theory_path=commondata_path,
                 rot_to_fit_basis=None,
             )
@@ -156,6 +157,7 @@ def test_operator_correction_sorted():
             use_quad=True,
             use_theory_covmat=True,
             use_t0=False,
+            use_multiplicative_prescription=False,
             theory_path=commondata_path,
             rot_to_fit_basis=None,
         )

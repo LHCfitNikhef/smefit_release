@@ -120,10 +120,10 @@ class MCOptimizer(Optimizer):
             config["use_quad"],
             config["use_theory_covmat"],
             config["use_t0"],
+            config.get("use_multiplicative_prescription", True),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_coupligs", False),
-            config.get("use_multiplicative_prescription", True),
         )
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])

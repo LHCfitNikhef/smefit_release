@@ -455,10 +455,10 @@ def load_datasets(
     use_quad,
     use_theory_covmat,
     use_t0,
+    use_multiplicative_prescription,
     theory_path=None,
     rot_to_fit_basis=None,
     has_uv_coupligs=False,
-    use_multiplicative_prescription=True,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
