@@ -60,14 +60,14 @@ th_pred_1 = (
 
 # Theory predictions for dataset1 when using mult prescription
 th_pred_1_mult = (
-    np.array(ld.theory_test_1["best_sm"])*(1.+ 
-    + np.array(ld.theory_test_1["LO"]["Op1"]) * wilson_coeff[0]
-    + np.array(ld.theory_test_1["LO"]["Op2"]) * wilson_coeff[1]
-    + np.array(ld.theory_test_1["LO"]["Op3"]) * wilson_coeff[2]
-    + np.array(ld.theory_test_1["LO"]["Op1*Op1"]) * wilson_coeff[0] ** 2
-    + np.array(ld.theory_test_1["LO"]["Op2*Op2"]) * wilson_coeff[1] ** 2
-    + np.array(ld.theory_test_1["LO"]["Op2*Op1"]) * wilson_coeff[1] * wilson_coeff[0]
-    + np.array(ld.theory_test_1["LO"]["Op2*Op3"]) * wilson_coeff[1] * wilson_coeff[2]
+    np.array(ld.theory_test_1["best_sm"])*(1.
+    + np.array(ld.theory_test_1["LO"]["Op1"]) * wilson_coeff[0]/ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op2"]) * wilson_coeff[1]/ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op3"]) * wilson_coeff[2]/ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op1*Op1"]) * wilson_coeff[0] ** 2/ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op2*Op2"]) * wilson_coeff[1] ** 2/ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op2*Op1"]) * wilson_coeff[1] * wilson_coeff[0]/ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op2*Op3"]) * wilson_coeff[1] * wilson_coeff[2]/ld.theory_test_1["LO"]["SM"]
     )
 )
 
@@ -100,14 +100,15 @@ th_pred_2 = (
 
 # theory predictions for dataset2 when using mult prescription
 th_pred_2_mult = (
-    np.array(ld.theory_test_2["best_sm"])* (1. +
-    + np.array(ld.theory_test_2["LO"]["Op1"]) * wilson_coeff[0]
-    + np.array(ld.theory_test_2["LO"]["Op2"]) * wilson_coeff[1]
-    + np.array(ld.theory_test_2["LO"]["Op1*Op1"]) * wilson_coeff[0] ** 2
-    + np.array(ld.theory_test_2["LO"]["Op2*Op2"]) * wilson_coeff[1] ** 2
-    + np.array(ld.theory_test_2["LO"]["Op2*Op1"]) * wilson_coeff[1] * wilson_coeff[0]
+    np.array(ld.theory_test_2["best_sm"])* (1.
+    + np.array(ld.theory_test_2["LO"]["Op1"]) * wilson_coeff[0]/ld.theory_test_2["LO"]["SM"]
+    + np.array(ld.theory_test_2["LO"]["Op2"]) * wilson_coeff[1]/ld.theory_test_2["LO"]["SM"]
+    + np.array(ld.theory_test_2["LO"]["Op1*Op1"]) * wilson_coeff[0] ** 2/ld.theory_test_2["LO"]["SM"]
+    + np.array(ld.theory_test_2["LO"]["Op2*Op2"]) * wilson_coeff[1] ** 2/ld.theory_test_2["LO"]["SM"]
+    + np.array(ld.theory_test_2["LO"]["Op2*Op1"]) * wilson_coeff[1] * wilson_coeff[0]/ld.theory_test_2["LO"]["SM"]
     )
 )
+
 
 exp_data_2 = np.array(ld.exp_test_2["data"])
 exp_stat_2 = np.array([0.2, 0.3, 0.2, 0.3])
@@ -344,7 +345,7 @@ class TestOptimize_MC:
             coeff_val = self.test_opt.coefficients.value
 
             diff = 2 * (
-                data.Replica - make_predictions(data, coeff_val, self.test_opt.use_quad, use_multiplicative_prescription=False)
+                data.Replica - make_predictions(data, coeff_val, self.test_opt.use_quad, False)
             )
 
             # temp coefficiens

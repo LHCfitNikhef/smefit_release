@@ -86,6 +86,7 @@ class Loader:
         order,
         use_quad,
         use_theory_covmat,
+        use_multiplicative_prescription,
         rot_to_fit_basis,
     ):
 
@@ -102,7 +103,12 @@ class Loader:
             self.dataspec["lin_corrections"],
             self.dataspec["quad_corrections"],
         ) = self.load_theory(
-            operators_to_keep, order, use_quad, use_theory_covmat, rot_to_fit_basis
+            operators_to_keep,
+            order,
+            use_quad,
+            use_theory_covmat,
+            use_multiplicative_prescription,
+            rot_to_fit_basis,
         )
 
         (
@@ -503,6 +509,7 @@ def load_datasets(
             order,
             use_quad,
             use_theory_covmat,
+            use_multiplicative_prescription,
             rot_to_fit_basis,
         )
         exp_name.append(sset)
