@@ -18,6 +18,7 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -113,8 +114,19 @@ Theory tables are json files containing the following information:</p>
 </ul>
 <blockquote>
 <div><p>The EFT corrections should always be provided in the Warsaw basis. In order to produce a fit with a different basis,
-the corresponding rotation matrix has to be provided externally, see the corresponding section.</p>
+the corresponding rotation matrix has to be provided externally, see <a class="reference internal" href="rotation.html#rotation"><span class="std std-ref">Fits in a different basis</span></a>.</p>
+<p>The above information are used to build the theory predictions for the different observables
+entering the <span class="math notranslate nohighlight">\(\chi^2\)</span>. As default theory predictions are expressed as</p>
 </div></blockquote>
+<div class="math notranslate nohighlight">
+\[\sigma=\sigma_{\rm SM}^{\rm best}\left(1 + \sum_i^{N_{d6}}\frac{{\kappa_i}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}} \frac{c_i}{\Lambda^2} + \sum_{i,j}^{N_{d6}}  \frac{\widetilde{\kappa}_{ij}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}} \frac{c_ic_j}{\Lambda^4}\right)  \, ,\]</div>
+<p>The reason to take the ratios <span class="math notranslate nohighlight">\(\frac{{\kappa_i}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}}\)</span> and <span class="math notranslate nohighlight">\(\frac{\widetilde{\kappa}_{ij}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}}\)</span>
+is to reduce the dependence on the specific set of parton distribution functions used to computed the
+LO and NLO predictions.</p>
+<p>The user can choose to use</p>
+<div class="math notranslate nohighlight">
+\[\sigma=\sigma_{\rm SM}^{\rm best} + \sum_i^{N_{d6}}{\kappa_i}^{\rm LO/NLO} \frac{c_i}{\Lambda^2} + \sum_{i,j}^{N_{d6}} \widetilde{\kappa}_{ij}^{\rm LO/NLO} \frac{c_ic_j}{\Lambda^4}  \, ,\]</div>
+<p>instead by setting in the runcard <code class="docutils literal notranslate"><span class="pre">use_multiplicative_prescription:</span> <span class="pre">False</span></code>.</p>
 </section>
 
 

@@ -14,4 +14,23 @@ Theory tables are json files containing the following information:
   * quadratic terms for each couple of operators (when present) ``Opi*Opj: [quad_term_Opi*Opj_1, ..., quad_term_Opi*Opj_N]``
  
  The EFT corrections should always be provided in the Warsaw basis. In order to produce a fit with a different basis,
- the corresponding rotation matrix has to be provided externally, see the corresponding section.
+ the corresponding rotation matrix has to be provided externally, see :ref:`rotation`.
+
+ The above information are used to build the theory predictions for the different observables 
+ entering the :math:`\chi^2`. As default theory predictions are expressed as
+
+.. math::
+
+   \sigma=\sigma_{\rm SM}^{\rm best}\left(1 + \sum_i^{N_{d6}}\frac{{\kappa_i}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}} \frac{c_i}{\Lambda^2} + \sum_{i,j}^{N_{d6}}  \frac{\widetilde{\kappa}_{ij}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}} \frac{c_ic_j}{\Lambda^4}\right)  \, ,
+
+The reason to take the ratios :math:`\frac{{\kappa_i}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}}` and :math:`\frac{\widetilde{\kappa}_{ij}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}}`
+is to reduce the dependence on the specific set of parton distribution functions used to computed the 
+LO and NLO predictions.
+
+The user can choose to use 
+
+.. math::
+
+   \sigma=\sigma_{\rm SM}^{\rm best} + \sum_i^{N_{d6}}{\kappa_i}^{\rm LO/NLO} \frac{c_i}{\Lambda^2} + \sum_{i,j}^{N_{d6}} \widetilde{\kappa}_{ij}^{\rm LO/NLO} \frac{c_ic_j}{\Lambda^4}  \, ,
+
+instead by setting in the runcard ``use_multiplicative_prescription: False``.
