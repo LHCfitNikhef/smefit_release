@@ -50,6 +50,13 @@ namely carrying out extensive global analysis which is the main purpose of |SMEF
 
     tutorial/example.md
 
+.. toctree::
+    :maxdepth: 1
+    :caption: Reports:
+    :hidden:
+
+    reports/reports.rst
+
 
 .. toctree::
     :maxdepth: 1
