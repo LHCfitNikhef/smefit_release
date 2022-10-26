@@ -80,7 +80,7 @@ class Scanner:
             run_card["use_quad"],
             run_card["use_theory_covmat"],
             False,
-            run_card.get("use_multiplicative_prescription", True),
+            run_card.get("use_multiplicative_prescription", False),
             run_card.get("theory_path", None),
             run_card.get("rot_to_fit_basis", None),
             run_card.get("uv_coupligs", False),
