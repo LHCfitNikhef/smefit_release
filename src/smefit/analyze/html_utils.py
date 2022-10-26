@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pathlib
 import shutil
+import subprocess
 
 current_path = pathlib.Path(__file__)
 
@@ -54,6 +55,26 @@ def write_html_container(title, figs=None, links=None, dataFrame=None):
             text += "</br> \n" + html_link(f"{file}.html", label)
 
     return text
+
+
+def run_htlatex(report_path, tex_file):
+    """Run make4ht.
+
+    Parameters
+    ----------
+    report_path: str
+        report path
+    tex_file: pathlib.Path
+        path to souce file
+    """
+    style_css = current_path.parent.joinpath("assets/style.css")
+    new_style = report_path.joinpath("style.css")
+    shutil.copyfile(style_css, new_style)
+    # title = tex_file.stem.replace("_", " ")
+    subprocess.call(
+        f"pandoc {tex_file} --standalone --mathjax --output {tex_file.with_suffix('.html')} --metadata title=' ' -c {new_style.stem}.css",
+        shell=True,
+    )
 
 
 def dump_html_index(html_report, html_index, report_path, report_title):

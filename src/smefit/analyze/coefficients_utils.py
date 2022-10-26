@@ -532,7 +532,7 @@ class CoefficientsPlotter:
         L.extend(
             [
                 r"\end{tabular}",
-                r"\caption{Coefficient comparison.}",
+                r"\caption{Coefficient comparison}",
                 r"\end{table}",
                 "\n",
                 "\n",

@@ -365,7 +365,7 @@ class Report:
                     pca_cal.write(fit.label, thr_show),
                     f"pca_table_{fit.name}",
                 )
-                links_list = [(f"pca_table_{fit.name}.html", f"Table {fit.label}")]
+                links_list = [(f"pca_table_{fit.name}", f"Table {fit.label}")]
             if plot:
                 pca_cal.plot_heatmap(
                     fit.label,

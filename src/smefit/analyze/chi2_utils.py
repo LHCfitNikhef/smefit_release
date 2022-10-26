@@ -224,14 +224,14 @@ class Chi2tableCalculator:
             r"$\chi^2$ table. Blue color text represents a value that is lower than the SM $\chi^2$ \
             by more than one standard deviation of the $\chi^2$ distribution.\
             Similarly, red color text represents values that are higher than the SM $\chi^2$ by more than one standard deviation.\
-            In parenthesis is the total SM $\chi^2$ for the dataset included in the fit."
+            In parenthesis is the total SM $\chi^2$ for the dataset included in the fit. \\"
         ]
         for group, datasets in self.data_info.groupby(level=0):
             L.extend(
                 [
                     r"\begin{table}[H]",
                     r"\centering",
-                    r"\begin{tabular}{|l|c|c|" + "C{3cm}|" * len(chi2_dict) + "}",
+                    r"\begin{tabular}{|l|c|c|" + "c|" * len(chi2_dict) + "}",
                 ]
             )
             L = chi2table_header(L, chi2_dict.keys())
@@ -247,7 +247,7 @@ class Chi2tableCalculator:
                     temp += " & "
                     chi2_df = self._add_chi2_df_colors(chi2_df)
                     if dataset in chi2_df.index:
-                        temp += r"{{\color{{{}}} {:.3f}}}".format(
+                        temp += r"\textcolor{{{}}}{{{:.3f}}}".format(
                             chi2_df.loc[dataset, "color"],
                             chi2_df.loc[dataset, "chi2/ndat"],
                         )
@@ -288,7 +288,7 @@ class Chi2tableCalculator:
         L = [
             r"\begin{table}[H]",
             r"\centering",
-            r"\begin{tabular}{|l|" + "C{2cm}|c|" * len(chi2_dict_group) + "}",
+            r"\begin{tabular}{|l|" + "c|c|" * len(chi2_dict_group) + "}",
             r"\hline",
         ]
         temp = r""

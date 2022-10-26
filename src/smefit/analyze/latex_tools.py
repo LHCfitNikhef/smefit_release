@@ -2,6 +2,8 @@
 import pathlib
 import subprocess
 
+from .html_utils import run_htlatex
+
 
 def latex_packages():
 
@@ -85,36 +87,6 @@ def run_pdflatex(report, L, filename):
         shell=True,
     )
     subprocess.call(f"rm {report}/*.log {report}/*.aux {report}/*.out", shell=True)
-
-
-def run_htlatex(report, tex_file):
-    """Run make4ht.
-
-    Parameters
-    ----------
-    report: str
-        report path
-    tex_file: pathlib.Path
-        path to souce file
-    """
-    subprocess.call(
-        f" make4ht -d {report}  {tex_file} -a fatal > {report}/htlatex.log",
-        shell=True,
-    )
-    for ext in [
-        "aux",
-        "xref",
-        "tmp",
-        "4tc",
-        "4ct",
-        "idv",
-        "lg",
-        "dvi",
-        "log",
-        "css",
-        "html",
-    ]:
-        subprocess.call(f"rm {tex_file.stem}.{ext}", shell=True)
 
 
 def compile_tex(report, L, filename):

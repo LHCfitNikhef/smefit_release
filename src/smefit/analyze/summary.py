@@ -109,7 +109,7 @@ class SummaryWriter:
                 for fit in self.fits:
                     temp += " & "
                     if dataset in fit.config["datasets"]:
-                        temp += r"\checkmark"
+                        temp += r"✔"
                 if isub != datasets.shape[0] - 1:
                     temp += r"\\ \cline{2-%d}" % (2 + self.nfits)
                 L.append(temp)
@@ -121,9 +121,9 @@ class SummaryWriter:
         #     temp += f" & {np.sum(fit.datasets.NdataExp)}"
         # temp += r" \\ \hline"
         # L.extend(
-        #     [temp, r"\end{tabular}", r"\caption{Dataset comparison.}", r"\end{table}"]
+        #     [temp, r"\end{tabular}", r"\caption{Dataset comparison}", r"\end{table}"]
         # )
-        L.extend([r"\end{tabular}", r"\caption{Dataset comparison.}", r"\end{table}"])
+        L.extend([r"\end{tabular}", r"\caption{Dataset comparison}", r"\end{table}"])
         return L
 
     def write_coefficients_table(self):
@@ -169,7 +169,7 @@ class SummaryWriter:
                         elif "value" in coeff_dict:
                             temp += f" & & = {coeff_dict['value']}"
                         else:
-                            temp += r" & \checkmark & "
+                            temp += r" & ✔ & "
                             n_fitted[i] += 1
                     else:
                         temp += r" & & "
@@ -191,7 +191,7 @@ class SummaryWriter:
             [
                 temp,
                 r"\end{tabular}",
-                r"\caption{Coefficient comparison.}",
+                r"\caption{Coefficient comparison}",
                 r"\end{table}",
             ]
         )

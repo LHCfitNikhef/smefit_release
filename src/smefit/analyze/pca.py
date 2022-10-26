@@ -108,7 +108,7 @@ class PcaCalculator:
         # PCA Table, loop on PC
         for sv_name, sv_value in self.SVs.items():
             L.append(
-                r"\noindent {\color{red} {\underline{\bf{%s} (%0.2e):}}}"
+                r"\noindent \textcolor{red}{\underline{\bf{%s} (%0.2e):}}"
                 % (sv_name, sv_value)
             )
             # loop on PC entries

@@ -66,7 +66,6 @@ def run_report(report_card_file):
     # Move all files to a meta folder
     meta_path = pathlib.Path(f"{report_folder}/meta").absolute()
     meta_path.mkdir()
-    subprocess.call(f"rm {report_folder}/*.log", shell=True)
     subprocess.call(f"mv {report_folder}/*.* {meta_path}", shell=True)
 
     # Combine PDF files together into raw pdf report
