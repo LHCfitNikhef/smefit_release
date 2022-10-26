@@ -88,7 +88,8 @@ class SummaryWriter:
         L.extend(
             [
                 r"\usepackage{underscore}",
-                r"\begin{document}" r"\begin{table}[H]",
+                r"\begin{document}",
+                r"\begin{table}[H]",
                 r"\footnotesize",
                 r"\centering",
                 r"\begin{tabular}{|c|l|" + "c|" * self.nfits + "}",
@@ -138,7 +139,8 @@ class SummaryWriter:
         L.extend(
             [
                 r"\usepackage{underscore}",
-                r"\begin{document}" r"\begin{table}[H]",
+                r"\begin{document}",
+                r"\begin{table}[H]",
                 r"\centering",
                 r"\begin{tabular}{|c|c|" + "c|c|" * self.nfits + "}",
             ]

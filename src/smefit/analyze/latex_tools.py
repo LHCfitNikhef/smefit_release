@@ -70,15 +70,13 @@ def dump_to_tex(tex_file, L):
         file.writelines(L)
 
 
-def run_pdflatex(report, L, filename):
+def run_pdflatex(report, filename):
     """Run pdflatex.
 
     Parameters
     ----------
     report: str
         report path
-    L : list(str)
-        latex lines
     filename : str
         file name
     """
@@ -103,5 +101,5 @@ def compile_tex(report, L, filename):
     """
     tex_file = pathlib.Path(f"{report}/{filename}.tex")
     dump_to_tex(tex_file, L)
-    run_pdflatex(report, L, filename)
+    run_pdflatex(report, filename)
     run_htlatex(report, tex_file)
