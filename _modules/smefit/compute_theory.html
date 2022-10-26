@@ -122,7 +122,9 @@
     <span class="k">return</span> <span class="n">quad_mat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span></div>
 
 
-<div class="viewcode-block" id="make_predictions"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.compute_theory.make_predictions">[docs]</a><span class="k">def</span> <span class="nf">make_predictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">,</span> <span class="n">use_quad</span><span class="p">):</span>
+<div class="viewcode-block" id="make_predictions"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.compute_theory.make_predictions">[docs]</a><span class="k">def</span> <span class="nf">make_predictions</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">,</span> <span class="n">use_quad</span><span class="p">,</span> <span class="n">use_multiplicative_prescription</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate the corrected theory predictions for dataset</span>
 <span class="sd">    given a set of |SMEFT| coefficients.</span>
@@ -157,7 +159,10 @@
         <span class="n">summed_corrections</span> <span class="o">+=</span> <span class="n">summed_quad_corrections</span>
 
     <span class="c1"># Sum of SM theory + SMEFT corrections</span>
-    <span class="n">corrected_theory</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">SMTheory</span> <span class="o">+</span> <span class="n">summed_corrections</span>
+    <span class="k">if</span> <span class="n">use_multiplicative_prescription</span><span class="p">:</span>
+        <span class="n">corrected_theory</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">SMTheory</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">summed_corrections</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">corrected_theory</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">SMTheory</span> <span class="o">+</span> <span class="n">summed_corrections</span>
 
     <span class="k">return</span> <span class="n">corrected_theory</span></div>
 </pre></div>

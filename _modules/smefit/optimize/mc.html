@@ -169,6 +169,7 @@
         <span class="n">single_parameter_fits</span><span class="p">,</span>
         <span class="n">use_bounds</span><span class="p">,</span>
         <span class="n">minimizer_specs</span><span class="p">,</span>
+        <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -176,6 +177,7 @@
             <span class="n">coefficients</span><span class="p">,</span>
             <span class="n">use_quad</span><span class="p">,</span>
             <span class="n">single_parameter_fits</span><span class="p">,</span>
+            <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chi2_values</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coeff_steps</span> <span class="o">=</span> <span class="p">[]</span>
@@ -219,6 +221,7 @@
             <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">],</span>
             <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_theory_covmat&quot;</span><span class="p">],</span>
             <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_t0&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;use_multiplicative_prescription&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
             <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;theory_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
             <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rot_to_fit_basis&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
             <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uv_coupligs&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
@@ -254,6 +257,9 @@
             <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Setting maximum number of iterations (maxiter) to 1e4&quot;</span><span class="p">)</span>
 
         <span class="n">single_parameter_fits</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;single_parameter_fits&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">use_multiplicative_prescription</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;use_multiplicative_prescription&quot;</span><span class="p">,</span> <span class="kc">True</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">loaded_datasets</span><span class="p">,</span>
             <span class="n">coefficients</span><span class="p">,</span>
@@ -264,6 +270,7 @@
             <span class="n">single_parameter_fits</span><span class="p">,</span>
             <span class="n">use_bounds</span><span class="p">,</span>
             <span class="n">minimizer_specs</span><span class="p">,</span>
+            <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="MCOptimizer.get_status"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
