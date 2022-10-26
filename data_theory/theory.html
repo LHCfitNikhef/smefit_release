@@ -22,7 +22,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Fits in a different basis" href="rotation.html" />
+    <link rel="next" title="Construction of the fit covariance matrix" href="covariance.html" />
     <link rel="prev" title="Experimental data format" href="data.html" /> 
 </head>
 
@@ -55,7 +55,14 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="data.html">Experimental data format</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Theory tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rotation.html">Fits in a different basis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="covariance.html">Construction of the fit covariance matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decomposition_cov.html">Decomposition of experimental covariance matrix</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fit and report functionalities:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../fit_report/code_struct.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fit_report/rotation.html">Fits in a different basis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fit_report/report_func.html">Report functions</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples and tutorial:</span></p>
 <ul>
@@ -116,21 +123,19 @@ Theory tables are json files containing the following information:</p>
 </ul>
 </li>
 </ul>
-<blockquote>
-<div><p>The EFT corrections should always be provided in the Warsaw basis. In order to produce a fit with a different basis,
-the corresponding rotation matrix has to be provided externally, see <a class="reference internal" href="rotation.html#rotation"><span class="std std-ref">Fits in a different basis</span></a>.</p>
+<p>The EFT corrections should always be provided in the Warsaw basis. In order to produce a fit with a different basis,
+the corresponding rotation matrix has to be provided externally, see <a class="reference internal" href="../fit_report/rotation.html#rotation"><span class="std std-ref">here</span></a> for more details.</p>
 <p>The above information are used to build the theory predictions for the different observables
 entering the <span class="math notranslate nohighlight">\(\chi^2\)</span>. As default theory predictions are expressed as</p>
-</div></blockquote>
-<div class="math notranslate nohighlight">
-\[\sigma=\sigma_{\rm SM}^{\rm best}\left(1 + \sum_i^{N_{d6}}\frac{{\kappa_i}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}} \frac{c_i}{\Lambda^2} + \sum_{i,j}^{N_{d6}}  \frac{\widetilde{\kappa}_{ij}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}} \frac{c_ic_j}{\Lambda^4}\right)  \, ,\]</div>
-<p>The reason to take the ratios <span class="math notranslate nohighlight">\(\frac{{\kappa_i}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}}\)</span> and <span class="math notranslate nohighlight">\(\frac{\widetilde{\kappa}_{ij}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}}\)</span>
-is to reduce the dependence on the specific set of parton distribution functions used to computed the
-LO and NLO predictions.</p>
-<p>The user can choose to use</p>
 <div class="math notranslate nohighlight">
 \[\sigma=\sigma_{\rm SM}^{\rm best} + \sum_i^{N_{d6}}{\kappa_i}^{\rm LO/NLO} \frac{c_i}{\Lambda^2} + \sum_{i,j}^{N_{d6}} \widetilde{\kappa}_{ij}^{\rm LO/NLO} \frac{c_ic_j}{\Lambda^4}  \, ,\]</div>
-<p>instead by setting in the runcard <code class="docutils literal notranslate"><span class="pre">use_multiplicative_prescription:</span> <span class="pre">False</span></code>.</p>
+<p>The user can also choose to use the relation</p>
+<div class="math notranslate nohighlight">
+\[\sigma=\sigma_{\rm SM}^{\rm best}\left(1 + \sum_i^{N_{d6}}\frac{{\kappa_i}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}} \frac{c_i}{\Lambda^2} + \sum_{i,j}^{N_{d6}}  \frac{\widetilde{\kappa}_{ij}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}} \frac{c_ic_j}{\Lambda^4}\right)  \, ,\]</div>
+<p>instead by setting in the runcard <code class="docutils literal notranslate"><span class="pre">use_multiplicative_prescription:</span> <span class="pre">True</span></code>.
+The reason to take the ratios <span class="math notranslate nohighlight">\(\frac{{\kappa_i}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}}\)</span> and <span class="math notranslate nohighlight">\(\frac{\widetilde{\kappa}_{ij}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}}\)</span>
+is to reduce the dependence on the specific set of parton distribution functions used to computed the
+LO and NLO predictions.</p>
 </section>
 
 
@@ -138,7 +143,7 @@ LO and NLO predictions.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="data.html" class="btn btn-neutral float-left" title="Experimental data format" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="rotation.html" class="btn btn-neutral float-right" title="Fits in a different basis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="covariance.html" class="btn btn-neutral float-right" title="Construction of the fit covariance matrix" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
