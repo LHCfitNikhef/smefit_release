@@ -31,11 +31,12 @@ sys_type:
 - MULT
 - ADD
 ```
-The sys_name can be CORR, UNCORR to specify whether the systematic considered id correlated or uncorrelated
-within the dataset. In other words, if sys_name=CORR for sys1, then sys1 will be correlated across the datapoints
-of the dataset. Same for UNCORR.
+The systematic name can be ``CORR``, ``UNCORR`` to specify whether the systematic considered is correlated or uncorrelated within the dataset.
+In the same way ``THEORYCORR`` and ``THEORYUNCORR`` can be used for correlated and uncorrelated theory systematics within a dataset.
 
-The same logic can be used for CORR and UNCORR theory systemtics within a dataset, using the names THEORYCORR and THEORYUNCORR.
+For uncertainties correlated between different dataset a different name has to be used, which must be
+the same for the corresponding systematic in all the datasets. For the details about the construction of the 
+covariance matrix from the list of statistic and systematic uncertainty see [here](./covariance.html#construction-of-the-covariance-matrix).
 
-For systematics correlated between different dataset a different name has to be used, which must be
-the same for the corresponding systematic in all the datasets. 
+For some dataset only the full covariance matrix might be available. In order to use the dataset within the ``smefit`` code, the user has to decompose it in a set of correlated systematics.
+In [this](./decomposition_cov.html) section we provide guidelines on how to do this.
