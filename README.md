@@ -29,6 +29,7 @@ What you have to run is something similar to this code.
 
 ```bash
 conda create -n <ENV_NAME> python=3.10
+conda activate <ENV_NAME>
 conda install -c conda-forge openmpi=4.1.4=ha1ae619_100
 conda install compilers
 conda install liblapack libblas
