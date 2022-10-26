@@ -105,7 +105,7 @@ class Report:
                 out_dict.pop(group)
         return pd.DataFrame(out_dict).stack().swaplevel()
 
-    def append_section(self, title, links=None, figs=None, tables=None):
+    def _append_section(self, title, links=None, figs=None, tables=None):
         self.html_index += html_link(f"#{title}", title, add_meta=False)
         self.html_content += write_html_container(
             title, links=links, figs=figs, dataFrame=tables
@@ -122,7 +122,7 @@ class Report:
         compile_tex(self.report, summary.write_coefficients_table(), coeff_tab)
         compile_tex(self.report, summary.write_dataset_table(), data_tab)
 
-        self.append_section(
+        self._append_section(
             section_title,
             links=[(data_tab, "Dataset summary"), (coeff_tab, "Coefficient summary")],
             tables=summary.fit_settings(),
@@ -175,7 +175,7 @@ class Report:
             )
             figs_list.append("chi2_histo")
 
-        self.append_section("Chi2", links=links_list, figs=figs_list)
+        self._append_section("Chi2", links=links_list, figs=figs_list)
 
     def coefficients(
         self,
@@ -287,7 +287,7 @@ class Report:
             )
             figs_list.append("contours_2d")
 
-        self.append_section("Coefficients", links=links_list, figs=figs_list)
+        self._append_section("Coefficients", links=links_list, figs=figs_list)
 
     def correlations(self, hide_dofs=None, thr_show=0.1):
         """Plot coefficients correlation matrix.
@@ -315,7 +315,7 @@ class Report:
             )
             figs_list.append(f"correlations_{fit.name}")
 
-        self.append_section("Correlations", figs=figs_list)
+        self._append_section("Correlations", figs=figs_list)
 
     def pca(
         self,
@@ -374,4 +374,4 @@ class Report:
                     sv_max=sv_max,
                 )
                 figs_list = [f"pca_heatmap_{fit.name}"]
-        self.append_section("PCA", figs=figs_list, links=links_list)
+        self._append_section("PCA", figs=figs_list, links=links_list)

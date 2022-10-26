@@ -7,6 +7,23 @@ current_path = pathlib.Path(__file__)
 
 
 def html_link(file, label, add_meta=True):
+    """HTML link relative to report folder.
+
+    Parameters
+    ----------
+    file: str
+        file name
+    label: str
+        label to dispaly
+    add_meta: bool, optional
+        if True add 'meta/' to file name
+
+    Returns
+    -------
+    str:
+        HTML link
+
+    """
     label = label.replace(r"\ ", " ")
     label = label.replace(r"\rm", "")
     if add_meta:
@@ -14,7 +31,7 @@ def html_link(file, label, add_meta=True):
     return f"<li><a href={file}>{label}</a></li> \n"
 
 
-def container_header(title):
+def _container_header(title):
     return f"""
         <div class='container'> \n
         <h2 id='{title}'> {title}</h2> \n
@@ -22,7 +39,7 @@ def container_header(title):
     """
 
 
-def html_figure(fig_name):
+def _html_figure(fig_name):
     return f"""
         <div class="figiterwrapper"> \n
         <figure> \n
@@ -37,28 +54,45 @@ def html_figure(fig_name):
 
 
 def write_html_container(title, figs=None, links=None, dataFrame=None):
+    """Write the content of single report section in HTML.
 
-    text = container_header(title)
+    Parameters
+    ----------
+    title: str
+        section title
+    figs: list, optional
+        list of figures to dispaly
+    links: dict, optional
+        links to tables
+    dataFrame: pd.DataFrame
+        table to display
+
+    Returns
+    -------
+    str:
+        HTML section content
+
+    """
+    text = _container_header(title)
     if dataFrame is not None:
         text += (
             "<div class='table'> \n"
             + dataFrame.to_html(justify="center", border=0)
             + "</div> \n"
         )
-
-    if figs is not None:
-        for fig_name in figs:
-            text += html_figure(fig_name)
-
     if links is not None:
         for (file, label) in links:
             text += "</br> \n" + html_link(f"{file}.html", label)
+
+    if figs is not None:
+        for fig_name in figs:
+            text += _html_figure(fig_name)
 
     return text
 
 
 def run_htlatex(report_path, tex_file):
-    """Run make4ht.
+    """Run pandoc to generate HTML files.
 
     Parameters
     ----------
@@ -66,6 +100,7 @@ def run_htlatex(report_path, tex_file):
         report path
     tex_file: pathlib.Path
         path to souce file
+
     """
     style_css = current_path.parent.joinpath("assets/style.css")
     new_style = report_path.joinpath("style.css")
