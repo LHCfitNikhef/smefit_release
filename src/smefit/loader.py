@@ -86,6 +86,7 @@ class Loader:
         order,
         use_quad,
         use_theory_covmat,
+        use_multiplicative_prescription,
         rot_to_fit_basis,
     ):
 
@@ -97,19 +98,25 @@ class Loader:
 
         self.dataspec = {}
         (
-            self.dataspec["central_values"],
-            self.dataspec["covmat"],
-            self.dataspec["sys_error"],
-            self.dataspec["stat_error"],
-        ) = self.load_experimental_data()
-        (
             self.dataspec["SM_predictions"],
             self.dataspec["theory_covmat"],
             self.dataspec["lin_corrections"],
             self.dataspec["quad_corrections"],
         ) = self.load_theory(
-            operators_to_keep, order, use_quad, use_theory_covmat, rot_to_fit_basis
+            operators_to_keep,
+            order,
+            use_quad,
+            use_theory_covmat,
+            use_multiplicative_prescription,
+            rot_to_fit_basis,
         )
+
+        (
+            self.dataspec["central_values"],
+            self.dataspec["sys_error"],
+            self.dataspec["sys_error_t0"],
+            self.dataspec["stat_error"],
+        ) = self.load_experimental_data()
 
     def load_experimental_data(self):
         """
@@ -151,18 +158,18 @@ class Loader:
             # Identify add and mult systematics
             # and replace the mult ones with corresponding value computed
             # from data central value. Required for implementation of t0 prescription
-
             indx_add = np.where(type_sys == "ADD")[0]
             indx_mult = np.where(type_sys == "MULT")[0]
-            sys = np.zeros((num_sys, num_data))
-            sys[indx_add] = sys_add[indx_add].reshape(sys[indx_add].shape)
-            sys[indx_mult] = (
-                sys_mult[indx_mult].reshape(sys[indx_mult].shape)
-                * central_values
+            sys_t0 = np.zeros((num_sys, num_data))
+            sys_t0[indx_add] = sys_add[indx_add].reshape(sys_t0[indx_add].shape)
+            sys_t0[indx_mult] = (
+                sys_mult[indx_mult].reshape(sys_t0[indx_mult].shape)
+                * self.dataspec["SM_predictions"]
                 * 1e-2
             )
-            # Build dataframe with shape (N_data * N_sys) and systematic name as the
-            # column headers and construct covmat
+
+            # store also the sys without the t0 prescription
+            sys = sys_add.reshape((num_sys, num_data))
 
             # limit case with 1 sys
             if num_sys == 1:
@@ -171,14 +178,17 @@ class Loader:
         else:
             name_sys = ["UNCORR"]
             sys = np.zeros((num_sys + 1, num_data))
+            sys_t0 = sys
 
+        # Build dataframe with shape (N_data * N_sys) and systematic name as the column headers
         df = pd.DataFrame(data=sys.T, columns=name_sys)
-
+        df_t0 = pd.DataFrame(data=sys_t0.T, columns=name_sys)
         # limit case 1 data
         if num_data == 1:
             central_values = np.asarray([central_values])
 
-        return central_values, construct_covmat(stat_error, df), df, stat_error
+        # here return both exp sys and t0 modified sys
+        return central_values, df, df_t0, stat_error
 
     def load_theory(
         self,
@@ -186,6 +196,7 @@ class Loader:
         order,
         use_quad,
         use_theory_covmat,
+        use_multiplicative_prescription,
         rotation_matrix=None,
     ):
         """
@@ -222,15 +233,23 @@ class Loader:
         quad_dict = {}
         lin_dict = {}
 
+        # save sm prediction at the chosen perturbative order
+        sm = np.array(raw_th_data[order]["SM"])
+
         # split corrections into a linear and quadratic dict
         for key, value in raw_th_data[order].items():
 
             # quadratic terms
             if "*" in key and use_quad:
                 quad_dict[key] = np.array(value)
+                if use_multiplicative_prescription:
+                    quad_dict[key] = np.divide(quad_dict[key], sm)
+
             # linear terms
             elif "SM" not in key and "*" not in key:
                 lin_dict[key] = np.array(value)
+                if use_multiplicative_prescription:
+                    lin_dict[key] = np.divide(lin_dict[key], sm)
 
         # rotate corrections to fitting basis
         if rotation_matrix is not None:
@@ -256,7 +275,6 @@ class Loader:
         th_cov = np.zeros((best_sm.size, best_sm.size))
         if use_theory_covmat:
             th_cov = raw_th_data["theory_cov"]
-
         return raw_th_data["best_sm"], th_cov, lin_dict_to_keep, quad_dict_to_keep
 
     @property
@@ -293,7 +311,7 @@ class Loader:
             covmat: numpy.ndarray
                 experimental covariance matrix of a single dataset
         """
-        return self.dataspec["covmat"]
+        return construct_covmat(self.dataspec["stat_error"], self.dataspec["sys_error"])
 
     @property
     def theory_covmat(self):
@@ -318,6 +336,18 @@ class Loader:
                 systematic errors of the dataset
         """
         return self.dataspec["sys_error"]
+
+    @property
+    def sys_error_t0(self):
+        """
+        Systematic errors modified according to t0 prescription
+
+        Returns
+        -------
+            sys_error_t0: pd.DataFrame
+                t0 systematic errors of the dataset
+        """
+        return self.dataspec["sys_error_t0"]
 
     @property
     def stat_error(self):
@@ -424,6 +454,8 @@ def load_datasets(
     order,
     use_quad,
     use_theory_covmat,
+    use_t0,
+    use_multiplicative_prescription,
     theory_path=None,
     rot_to_fit_basis=None,
     has_uv_coupligs=False,
@@ -454,6 +486,7 @@ def load_datasets(
 
     exp_data = []
     sm_theory = []
+    sys_error_t0 = []
     sys_error = []
     stat_error = []
     lin_corr_list = []
@@ -476,15 +509,16 @@ def load_datasets(
             order,
             use_quad,
             use_theory_covmat,
+            use_multiplicative_prescription,
             rot_to_fit_basis,
         )
         exp_name.append(sset)
         n_data_exp.append(dataset.n_data)
-
         exp_data.extend(dataset.central_values)
         sm_theory.extend(dataset.sm_prediction)
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
         quad_corr_list.append([dataset.n_data, dataset.quad_corrections])
+        sys_error_t0.append(dataset.sys_error_t0)
         sys_error.append(dataset.sys_error)
         stat_error.append(dataset.stat_error)
         th_cov.append(dataset.theory_covmat)
@@ -520,11 +554,17 @@ def load_datasets(
     # Construct unique large cov matrix accounting for correlations between different datasets
     # The theory covariance matrix, when used, will be different from zero.
     # At the moment it does not account for correlation between different datasets
-
     theory_covariance = la.block_diag(*th_cov)
-    covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
+    exp_covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
+    # replicas always generated using the experimental covmat, no t0
+    replica = np.random.multivariate_normal(exp_data, exp_covmat)
+    if use_t0:
+        fit_covmat = (
+            covmat_from_systematics(stat_error, sys_error_t0) + theory_covariance
+        )
+    else:
+        fit_covmat = exp_covmat
 
-    replica = np.random.multivariate_normal(exp_data, covmat)
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
         exp_data,
@@ -534,7 +574,7 @@ def load_datasets(
         quad_corr_values,
         np.array(exp_name),
         np.array(n_data_exp),
-        np.linalg.inv(covmat),
+        np.linalg.inv(fit_covmat),
         replica,
     )
 

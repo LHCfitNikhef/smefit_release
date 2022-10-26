@@ -41,13 +41,31 @@ namely carrying out extensive global analysis which is the main purpose of |SMEF
 
     data_theory/data.md
     data_theory/theory
+    data_theory/covariance
+    data_theory/decomposition_cov
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
+    :caption: Fit and report functionalities:
+    :hidden:
+    
+    fit_report/code_struct
+    fit_report/rotation.md
+    fit_report/report_func
+
+.. toctree::
+    :maxdepth: 2
     :caption: Examples and tutorial:
     :hidden:
 
-    tutorial/example
+    tutorial/example.md
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Reports:
+    :hidden:
+
+    reports/reports.rst
 
 
 .. toctree::

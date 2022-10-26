@@ -52,6 +52,7 @@ class NSOptimizer(Optimizer):
         use_quad,
         result_ID,
         single_parameter_fits,
+        use_multiplicative_prescription,
         live_points=500,
         efficiency=0.01,
         const_efficiency=False,
@@ -63,6 +64,7 @@ class NSOptimizer(Optimizer):
             coefficients,
             use_quad,
             single_parameter_fits,
+            use_multiplicative_prescription,
         )
         self.live_points = live_points
         self.efficiency = efficiency
@@ -94,6 +96,8 @@ class NSOptimizer(Optimizer):
             config["order"],
             config["use_quad"],
             config["use_theory_covmat"],
+            config["use_t0"],
+            config.get("use_multiplicative_prescription", True),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_coupligs", False),
@@ -127,6 +131,9 @@ class NSOptimizer(Optimizer):
                 f"Evidence tolerance (toll) not set in the input card. Using default: {toll}"
             )
 
+        use_multiplicative_prescription = config.get(
+            "use_multiplicative_prescription", True
+        )
         return cls(
             loaded_datasets,
             coefficients,
@@ -134,6 +141,7 @@ class NSOptimizer(Optimizer):
             config["use_quad"],
             config["result_ID"],
             single_parameter_fits,
+            use_multiplicative_prescription,
             live_points=nlive,
             efficiency=efr,
             const_efficiency=ceff,

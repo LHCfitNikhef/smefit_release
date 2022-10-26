@@ -1,6 +1,6 @@
 
 <p align="center">
-  <a href="https://lhcfitnikhef.github.io/SMEFT/"><img alt="SMEFiT" src=https://github.com/LHCfitNikhef/SMEFT/blob/master/docs/sphinx/_assets/logo.png/>
+  <a href="https://lhcfitnikhef.github.io/smefit_release/"><img alt="SMEFiT" src=https://github.com/LHCfitNikhef/SMEFT/blob/master/docs/sphinx/_assets/logo.png/>
 </a>
 </p>
 
@@ -29,6 +29,7 @@ What you have to run is something similar to this code.
 
 ```bash
 conda create -n <ENV_NAME> python=3.10
+conda activate <ENV_NAME>
 conda install -c conda-forge openmpi=4.1.4=ha1ae619_100
 conda install compilers
 conda install liblapack libblas

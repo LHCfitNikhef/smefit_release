@@ -66,7 +66,7 @@ class TestPredictions:
             + self.wilson_coeff[1] * self.lin_corr_values[1, 1],
         ]
         np.testing.assert_allclose(
-            compute_theory.make_predictions(self.dataset, self.wilson_coeff, False),
+            compute_theory.make_predictions(self.dataset, self.wilson_coeff, False, False),
             lin_corr,
         )
         quad_corr = np.array(
@@ -87,15 +87,15 @@ class TestPredictions:
         )
         quad_corr += lin_corr
         np.testing.assert_allclose(
-            compute_theory.make_predictions(self.dataset, self.wilson_coeff, True),
+            compute_theory.make_predictions(self.dataset, self.wilson_coeff, True, False),
             quad_corr,
         )
 
     def test_compute_chi2(self):
         diff = self.exp_data - compute_theory.make_predictions(
-            self.dataset, self.wilson_coeff, True
+            self.dataset, self.wilson_coeff, True, False
         )
         np.testing.assert_allclose(
-            chi2.compute_chi2(self.dataset, self.wilson_coeff, True),
+            chi2.compute_chi2(self.dataset, self.wilson_coeff, True, False),
             diff @ np.linalg.inv(self.covmat) @ diff,
         )
