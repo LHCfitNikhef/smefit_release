@@ -101,5 +101,14 @@ And then simply run:
 ```bash
 pytest
 ```
+
+## Reports
+To run reports and procude PDF and HTML output you need to have [pandoc](https://pandoc.org/) and [pdflatex](https://www.math.rug.nl/~trentelman/jacob/pdflatex/pdflatex.html) installed.
+The first one is available in conda the latter can be sourced in:
+
+```bash
+souce /cvmfs/sft.cern.ch/lcg/external/texlive/2020/bin/x86_64-linux/pdflatex
+```
+
 ## Citation policy
 Please cite our DOI when using our code:
