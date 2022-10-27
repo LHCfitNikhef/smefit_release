@@ -110,7 +110,7 @@ class SummaryWriter:
                 for fit in self.fits:
                     temp += " & "
                     if dataset in fit.config["datasets"]:
-                        temp += r"✔"
+                        temp += r"$\checkmark$"
                 if isub != datasets.shape[0] - 1:
                     temp += r"\\ \cline{2-%d}" % (2 + self.nfits)
                 L.append(temp)
@@ -171,7 +171,7 @@ class SummaryWriter:
                         elif "value" in coeff_dict:
                             temp += f" & & = {coeff_dict['value']}"
                         else:
-                            temp += r" & ✔ & "
+                            temp += r" & $\checkmark$ & "
                             n_fitted[i] += 1
                     else:
                         temp += r" & & "
