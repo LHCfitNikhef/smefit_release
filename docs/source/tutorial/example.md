@@ -7,6 +7,9 @@ Tutorial
 In the following we provide detailed instructions on how to use the code in its different 
 running modes and on how to analyse the results.
 
+```eval_rst
+.. _runcard:
+```
 # Runcard specifications
 The basic object required to run the code is a runcard. 
 In this section we document the different parameters which have to be specified here. 
@@ -139,7 +142,9 @@ rot_to_fit_basis: /path/to/rotation/rotation.json
 
 ```
 
-
+```eval_rst
+.. _ns:
+```
 # Running a fit with NS
 To run a fiy using Nested Sampling use the command
 ```yaml
@@ -149,6 +154,9 @@ smefit NS path/to/the/runcard/runcard.yaml
 This will generate a file named ``posterior.json`` in the result folder, 
 containing the posterior distribution of the coefficients specified in the runcard.
 
+```eval_rst
+.. _mc:
+```
 # Running a fit with MC
 The basic command to run a fit using Monte Carlo is  
 ```yaml 
