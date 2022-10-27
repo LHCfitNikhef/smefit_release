@@ -139,7 +139,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.optimize.Optimizer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.optimize.</span></span><span class="sig-name descname"><span class="pre">Optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loaded_datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_parameter_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize.html#Optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.Optimizer" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Common interface for Chi2 profile, NS and McFiT</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -206,12 +206,12 @@ data info as args. Log the math:<cite>chi^2</cite> value and values of the coeff
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>loaded_datasets</strong> (<cite>smefit.loader.DataTuple</cite>,) -- dataset tuple</p></li>
 <li><p><strong>coefficients</strong> (<cite>smefit.coefficients.CoefficientManager</cite>) -- instance of <cite>CoefficientManager</cite> with all the relevant coefficients to fit</p></li>
-<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- If True use also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
-<li><p><strong>result_ID</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- result ID</p></li>
-<li><p><strong>replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) -- replica number</p></li>
-<li><p><strong>single_parameter_fits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- True for individual scan fits</p></li>
-<li><p><strong>use_bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- If true start the minimization with the specified values of min and max for each coeffient</p></li>
-<li><p><strong>minimizer_specs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- <p>minimizer options. The allowed optrions are:</p>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- If True use also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>result_ID</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- result ID</p></li>
+<li><p><strong>replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- replica number</p></li>
+<li><p><strong>single_parameter_fits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- True for individual scan fits</p></li>
+<li><p><strong>use_bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- If true start the minimization with the specified values of min and max for each coeffient</p></li>
+<li><p><strong>minimizer_specs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- <p>minimizer options. The allowed optrions are:</p>
 <p>Args:
 - mc_minimiser: minimizer alogrithm: 'cma', 'dual_annealing', 'trust-constr'.
 - maxiter: number of maximium iterations.
@@ -267,7 +267,7 @@ The default minimizer is trust-constr.</p>
 <span class="pre">`</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- configuration dictionary</p>
+<dd class="field-odd"><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- configuration dictionary</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>created object</p>
@@ -296,7 +296,7 @@ The default minimizer is trust-constr.</p>
 {coff: replica values}</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- result dictionary</p>
+<dd class="field-odd"><p><strong>result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- result dictionary</p>
 </dd>
 </dl>
 </dd></dl>
@@ -317,11 +317,11 @@ The default minimizer is trust-constr.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>loaded_datasets</strong> (<cite>smefit.loader.DataTuple</cite>,) -- dataset tuple</p></li>
 <li><p><strong>coefficients</strong> (<cite>smefit.coefficients.CoefficientManager</cite>) -- instance of <cite>CoefficientManager</cite> with all the relevant coefficients to fit</p></li>
-<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- If True use also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
-<li><p><strong>live_points</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) -- number of <abbr title="Nested Sampling">NS</abbr> live points</p></li>
-<li><p><strong>efficiency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) -- sampling efficiency</p></li>
-<li><p><strong>const_efficiency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- if True use the constant efficiency mode</p></li>
-<li><p><strong>tolerance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) -- evidence tolerance</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- If True use also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>live_points</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- number of <abbr title="Nested Sampling">NS</abbr> live points</p></li>
+<li><p><strong>efficiency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- sampling efficiency</p></li>
+<li><p><strong>const_efficiency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True use the constant efficiency mode</p></li>
+<li><p><strong>tolerance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- evidence tolerance</p></li>
 </ul>
 </dd>
 </dl>
@@ -372,7 +372,7 @@ data info as args. Log the chi2 value and values of the coefficients.</p>
 <dd><p>Create object from theory dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- configuration dictionary</p>
+<dd class="field-odd"><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- configuration dictionary</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>cls</strong> -- created object</p>
@@ -418,7 +418,7 @@ data info as args. Log the chi2 value and values of the coefficients.</p>
 {coff: [replicas values]}</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- result dictionary</p>
+<dd class="field-odd"><p><strong>result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- result dictionary</p>
 </dd>
 </dl>
 </dd></dl>

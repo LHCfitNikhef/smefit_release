@@ -208,7 +208,7 @@
                 <span class="sa">r</span><span class="s2">&quot;\allowdisplaybreaks&quot;</span><span class="p">,</span>
                 <span class="sa">r</span><span class="s2">&quot;\renewcommand{\baselinestretch}</span><span class="si">{1.5}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{document}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="sa">r</span><span class="s2">&quot;\noindent \underline{\bf{Principal Components Analysis}:}&quot;</span>
+                <span class="sa">r</span><span class="s2">&quot;\noindent \underline{\bf{Principal Components Analysis}:} &quot;</span>
                 <span class="o">+</span> <span class="n">fit_label</span>
                 <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2"> </span><span class="se">\\</span><span class="s2"> </span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="p">]</span>
@@ -216,7 +216,7 @@
         <span class="c1"># PCA Table, loop on PC</span>
         <span class="k">for</span> <span class="n">sv_name</span><span class="p">,</span> <span class="n">sv_value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SVs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="sa">r</span><span class="s2">&quot;\noindent {\color</span><span class="si">{red}</span><span class="s2"> {\underline{\bf{</span><span class="si">%s</span><span class="s2">} (</span><span class="si">%0.2e</span><span class="s2">):}}}&quot;</span>
+                <span class="sa">r</span><span class="s2">&quot;\noindent \textcolor</span><span class="si">{red}</span><span class="s2">{\underline{\bf{</span><span class="si">%s</span><span class="s2">} (</span><span class="si">%0.2e</span><span class="s2">):}}&quot;</span>
                 <span class="o">%</span> <span class="p">(</span><span class="n">sv_name</span><span class="p">,</span> <span class="n">sv_value</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="c1"># loop on PC entries</span>
@@ -306,7 +306,8 @@
         <span class="c1"># save</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">rm PCA:</span><span class="se">\\</span><span class="s2"> </span><span class="si">{</span><span class="n">fit_label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig_name</span><span class="p">)</span></div></div>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fig_name</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fig_name</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

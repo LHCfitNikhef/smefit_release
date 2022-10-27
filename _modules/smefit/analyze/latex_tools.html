@@ -107,7 +107,10 @@
              
   <h1>Source code for smefit.analyze.latex_tools</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="kn">from</span> <span class="nn">.html_utils</span> <span class="kn">import</span> <span class="n">run_htlatex</span>
 
 
 <div class="viewcode-block" id="latex_packages"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.latex_packages">[docs]</a><span class="k">def</span> <span class="nf">latex_packages</span><span class="p">():</span>
@@ -144,49 +147,6 @@
     <span class="k">return</span> <span class="n">L</span></div>
 
 
-<div class="viewcode-block" id="run_pdflatex"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.run_pdflatex">[docs]</a><span class="k">def</span> <span class="nf">run_pdflatex</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Dump to file and run pdflatex</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">        report: str</span>
-<span class="sd">            report name</span>
-<span class="sd">        L : list(str)</span>
-<span class="sd">            latex lines</span>
-<span class="sd">        filename : str</span>
-<span class="sd">            file name</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{document}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">L</span><span class="p">]</span>
-
-    <span class="n">latex_src</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.tex&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">latex_src</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="n">file</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
-    <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;pdflatex -halt-on-error -output-directory </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/ </span><span class="si">{</span><span class="n">latex_src</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/latex.log&quot;</span><span class="p">,</span>
-        <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rm </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/*.log </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/*.aux </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/*.out&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="move_to_meta"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.move_to_meta">[docs]</a><span class="k">def</span> <span class="nf">move_to_meta</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Move pdf files to meta folder</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">        report: str</span>
-<span class="sd">            report name</span>
-<span class="sd">        filename : str</span>
-<span class="sd">            file names to be moved</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mkdir -p </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/meta&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mv </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.pdf </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/meta/.&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="chi2table_header"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.chi2table_header">[docs]</a><span class="k">def</span> <span class="nf">chi2table_header</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">fit_labels</span><span class="p">):</span>
     <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\hline&quot;</span><span class="p">)</span>
     <span class="n">temp</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot; \multicolumn</span><span class="si">{2}</span><span class="s2">{|c|}</span><span class="si">{}</span><span class="s2"> &amp; SM&quot;</span>
@@ -200,6 +160,57 @@
         <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2"> \hline&quot;</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">L</span></div>
+
+
+<div class="viewcode-block" id="dump_to_tex"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.dump_to_tex">[docs]</a><span class="k">def</span> <span class="nf">dump_to_tex</span><span class="p">(</span><span class="n">tex_file</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Dump a string to a tex file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tex_file: pathlib.Path</span>
+<span class="sd">        path to tex file</span>
+<span class="sd">    L : list(str)</span>
+<span class="sd">        latex lines</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{document}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">L</span><span class="p">]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tex_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">L</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="run_pdflatex"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.run_pdflatex">[docs]</a><span class="k">def</span> <span class="nf">run_pdflatex</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run pdflatex.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    report: str</span>
+<span class="sd">        report path</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        file name</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;pdflatex -halt-on-error -output-directory </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.tex &gt; </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/pdflatex.log&quot;</span><span class="p">,</span>
+        <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rm </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/*.log </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/*.aux </span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/*.out&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="compile_tex"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.compile_tex">[docs]</a><span class="k">def</span> <span class="nf">compile_tex</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compile tex file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    report: str</span>
+<span class="sd">        report path</span>
+<span class="sd">    L : list(str)</span>
+<span class="sd">        latex lines</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        file name</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tex_file</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">report</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.tex&quot;</span><span class="p">)</span>
+    <span class="n">dump_to_tex</span><span class="p">(</span><span class="n">tex_file</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+    <span class="n">run_pdflatex</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="n">run_htlatex</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">tex_file</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

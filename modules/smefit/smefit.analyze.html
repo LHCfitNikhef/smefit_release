@@ -58,6 +58,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-smefit.analyze.coefficients_utils">smefit.analyze.coefficients_utils module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smefit.analyze.contours_2d">smefit.analyze.contours_2d module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smefit.analyze.correlations">smefit.analyze.correlations module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smefit.analyze.html_utils">smefit.analyze.html_utils module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smefit.analyze.latex_tools">smefit.analyze.latex_tools module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smefit.analyze.pca">smefit.analyze.pca module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smefit.analyze.report">smefit.analyze.report module</a></li>
@@ -161,7 +162,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.analyze.chi2_utils.Chi2tableCalculator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.chi2_utils.</span></span><span class="sig-name descname"><span class="pre">Chi2tableCalculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/chi2_utils.html#Chi2tableCalculator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.chi2_utils.Chi2tableCalculator" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Compute the <span class="math notranslate nohighlight">\(\chi^2\)</span> for each replica and produce:</p>
 <blockquote>
 <div><ul class="simple">
@@ -249,15 +250,15 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>chi2_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- tables computed with compute() method for each fit</p></li>
-<li><p><strong>chi2_dict_group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- tables obtained with group_chi2_df() method for each fit</p></li>
+<li><p><strong>chi2_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- tables computed with compute() method for each fit</p></li>
+<li><p><strong>chi2_dict_group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- tables obtained with group_chi2_df() method for each fit</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>list with the latex commands</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>)</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -268,13 +269,13 @@
 <dd><p>Write the <span class="math notranslate nohighlight">\(\chi^2\)</span> latex tables for each data group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>chi2_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- tables computed with compute() method per each fit</p>
+<dd class="field-odd"><p><strong>chi2_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- tables computed with compute() method per each fit</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>list with the latex commands</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>)</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -285,13 +286,13 @@
 <dd><p>Write the summary <span class="math notranslate nohighlight">\(\chi^2\)</span> table for grouped data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>chi2_dict_group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- tables obtained with group_chi2_df() method for each fit</p>
+<dd class="field-odd"><p><strong>chi2_dict_group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- tables obtained with group_chi2_df() method for each fit</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>list with the latex commands</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>)</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -304,7 +305,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.analyze.coefficients_utils.CoefficientsPlotter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.coefficients_utils.</span></span><span class="sig-name descname"><span class="pre">CoefficientsPlotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">free_coeff_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Plots central values + 95% CL errors, 95% CL bounds,
 probability distributions, residuals,
 residual distribution, and energy reach.</p>
@@ -323,7 +324,7 @@ for global and single fit results, respectively.</p>
 <dd><p>Plot central value + 95% CL errors</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- confidence level bounds per fit and coefficient
+<dd class="field-odd"><p><strong>bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- confidence level bounds per fit and coefficient
 Note: double solutions are appended under &quot;2&quot;</p>
 </dd>
 </dl>
@@ -335,7 +336,7 @@ Note: double solutions are appended under &quot;2&quot;</p>
 <dd><p>Plot error bars at given confidence level</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>error</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- confidence level bounds per fit and coefficient</p>
+<dd class="field-odd"><p><strong>error</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- confidence level bounds per fit and coefficient</p>
 </dd>
 </dl>
 </dd></dl>
@@ -347,9 +348,9 @@ Note: double solutions are appended under &quot;2&quot;</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>posteriors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) -- posterior distributions per fit and coefficient</p></li>
-<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) -- list of fit names</p></li>
-<li><p><strong>dofs_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><em>optional</em>) -- List of coefficients to include in the cornerplot, set to <code class="docutils literal notranslate"><span class="pre">None</span></code> by default, i.e. all fitted coefficients
+<li><p><strong>posteriors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- posterior distributions per fit and coefficient</p></li>
+<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- list of fit names</p></li>
+<li><p><strong>dofs_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) -- List of coefficients to include in the cornerplot, set to <code class="docutils literal notranslate"><span class="pre">None</span></code> by default, i.e. all fitted coefficients
 are included.</p></li>
 </ul>
 </dd>
@@ -368,9 +369,9 @@ are included.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>posteriors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) -- posterior distributions per fit and coefficient</p></li>
-<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) -- list of fit names</p></li>
-<li><p><strong>disjointed_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><em>optional</em>) -- list of coefficients with double solutions per fit</p></li>
+<li><p><strong>posteriors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- posterior distributions per fit and coefficient</p></li>
+<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- list of fit names</p></li>
+<li><p><strong>disjointed_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) -- list of coefficients with double solutions per fit</p></li>
 </ul>
 </dd>
 </dl>
@@ -431,7 +432,7 @@ Note: double solutions are appended under &quot;2&quot;</p>
 <li><p><strong>coeff1</strong> (<em>array_like</em>) -- <code class="docutils literal notranslate"><span class="pre">(N,)</span> <span class="pre">ndarray</span></code> containing <code class="docutils literal notranslate"><span class="pre">N</span></code> posterior samples for the first coefficient</p></li>
 <li><p><strong>coeff2</strong> (<em>array_like</em>) -- <code class="docutils literal notranslate"><span class="pre">(N,)</span> <span class="pre">ndarray</span></code> containing <code class="docutils literal notranslate"><span class="pre">N</span></code> posterior samples for the first coefficient</p></li>
 <li><p><strong>ax</strong> (<em>matplotlib.axes</em>) -- Axes object to plot on</p></li>
-<li><p><strong>facecolor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) -- Color of the ellipse</p></li>
+<li><p><strong>facecolor</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) -- Color of the ellipse</p></li>
 <li><p><strong>**kwargs</strong> -- Additional plotting settings passed to matplotlib.patches.Ellipse</p></li>
 </ul>
 </dd>
@@ -452,19 +453,19 @@ Note: double solutions are appended under &quot;2&quot;</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ax</strong> (<em>matplotlib.axes</em>) -- Axes object to plot on</p></li>
 <li><p><strong>posterior</strong> (<em>pandas.DataFrame</em>) -- Posterior samples per coefficient</p></li>
-<li><p><strong>ax_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) -- Latex names</p></li>
-<li><p><strong>coeff1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Name of first coefficient</p></li>
-<li><p><strong>coeff2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- Name of second coefficient</p></li>
-<li><p><strong>kde</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- Performs kernel density estimate (kde) when quadratics are turned on</p></li>
-<li><p><strong>clr_idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) -- Color index that makes sure each fit gets associated a different color</p></li>
-<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) -- Confidence level interval, set to 95% by default</p></li>
+<li><p><strong>ax_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- Latex names</p></li>
+<li><p><strong>coeff1</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- Name of first coefficient</p></li>
+<li><p><strong>coeff2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- Name of second coefficient</p></li>
+<li><p><strong>kde</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- Performs kernel density estimate (kde) when quadratics are turned on</p></li>
+<li><p><strong>clr_idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- Color index that makes sure each fit gets associated a different color</p></li>
+<li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) -- Confidence level interval, set to 95% by default</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>hndls</strong> -- List of Patch objects</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -482,11 +483,87 @@ between parameters in a heat map</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>posterior_df</strong> (<em>pd.DataFrame</em>) -- fit results</p></li>
 <li><p><strong>latex_names</strong> (<em>pd.DataFrame</em>) -- coefficnet latex name table</p></li>
-<li><p><strong>fig_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- path to save the plot</p></li>
-<li><p><strong>fit_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- fit label</p></li>
-<li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>None</em>) -- if given shows only off diagonal entries higher than the threshold</p></li>
-<li><p><strong>hide_dofs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><em>None</em>) -- coefficients to hide</p></li>
+<li><p><strong>fig_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- path to save the plot</p></li>
+<li><p><strong>fit_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- fit label</p></li>
+<li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>None</em>) -- if given shows only off diagonal entries higher than the threshold</p></li>
+<li><p><strong>hide_dofs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>None</em>) -- coefficients to hide</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-smefit.analyze.html_utils">
+<span id="smefit-analyze-html-utils-module"></span><h2>smefit.analyze.html_utils module<a class="headerlink" href="#module-smefit.analyze.html_utils" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.analyze.html_utils.dump_html_index">
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.html_utils.</span></span><span class="sig-name descname"><span class="pre">dump_html_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html_report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">html_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/html_utils.html#dump_html_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.html_utils.dump_html_index" title="Permalink to this definition"></a></dt>
+<dd><p>Dump report index to html.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>html_report</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- html report content</p></li>
+<li><p><strong>html_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- html index content</p></li>
+<li><p><strong>report_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- report path</p></li>
+<li><p><strong>report_title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- report title</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.analyze.html_utils.html_link">
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.html_utils.</span></span><span class="sig-name descname"><span class="pre">html_link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/html_utils.html#html_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.html_utils.html_link" title="Permalink to this definition"></a></dt>
+<dd><p>HTML link relative to report folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- file name</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- label to dispaly</p></li>
+<li><p><strong>add_meta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) -- if True add 'meta/' to file name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>HTML link</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.analyze.html_utils.run_htlatex">
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.html_utils.</span></span><span class="sig-name descname"><span class="pre">run_htlatex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tex_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/html_utils.html#run_htlatex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.html_utils.run_htlatex" title="Permalink to this definition"></a></dt>
+<dd><p>Run pandoc to generate HTML files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>report_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- report path</p></li>
+<li><p><strong>tex_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- path to souce file</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.analyze.html_utils.write_html_container">
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.html_utils.</span></span><span class="sig-name descname"><span class="pre">write_html_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">links</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataFrame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/html_utils.html#write_html_container"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.html_utils.write_html_container" title="Permalink to this definition"></a></dt>
+<dd><p>Write the content of single report section in HTML.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- section title</p></li>
+<li><p><strong>figs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) -- list of figures to dispaly</p></li>
+<li><p><strong>links</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) -- links to tables</p></li>
+<li><p><strong>dataFrame</strong> (<em>pd.DataFrame</em>) -- table to display</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>HTML section content</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -500,23 +577,38 @@ between parameters in a heat map</p>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="smefit.analyze.latex_tools.latex_packages">
-<span class="sig-prename descclassname"><span class="pre">smefit.analyze.latex_tools.</span></span><span class="sig-name descname"><span class="pre">latex_packages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/latex_tools.html#latex_packages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.latex_tools.latex_packages" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="smefit.analyze.latex_tools.move_to_meta">
-<span class="sig-prename descclassname"><span class="pre">smefit.analyze.latex_tools.</span></span><span class="sig-name descname"><span class="pre">move_to_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/latex_tools.html#move_to_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.latex_tools.move_to_meta" title="Permalink to this definition"></a></dt>
-<dd><p>Move pdf files to meta folder</p>
+<dt class="sig sig-object py" id="smefit.analyze.latex_tools.compile_tex">
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.latex_tools.</span></span><span class="sig-name descname"><span class="pre">compile_tex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/latex_tools.html#compile_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.latex_tools.compile_tex" title="Permalink to this definition"></a></dt>
+<dd><p>Compile tex file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>report</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- report name</p></li>
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- file names to be moved</p></li>
+<li><p><strong>report</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- report path</p></li>
+<li><p><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>)</em>) -- latex lines</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- file name</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.analyze.latex_tools.dump_to_tex">
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.latex_tools.</span></span><span class="sig-name descname"><span class="pre">dump_to_tex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tex_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/latex_tools.html#dump_to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.latex_tools.dump_to_tex" title="Permalink to this definition"></a></dt>
+<dd><p>Dump a string to a tex file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tex_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- path to tex file</p></li>
+<li><p><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>)</em>) -- latex lines</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.analyze.latex_tools.latex_packages">
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.latex_tools.</span></span><span class="sig-name descname"><span class="pre">latex_packages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/latex_tools.html#latex_packages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.latex_tools.latex_packages" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.analyze.latex_tools.multicolum_table_header">
@@ -526,14 +618,13 @@ between parameters in a heat map</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.analyze.latex_tools.run_pdflatex">
-<span class="sig-prename descclassname"><span class="pre">smefit.analyze.latex_tools.</span></span><span class="sig-name descname"><span class="pre">run_pdflatex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/latex_tools.html#run_pdflatex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.latex_tools.run_pdflatex" title="Permalink to this definition"></a></dt>
-<dd><p>Dump to file and run pdflatex</p>
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.latex_tools.</span></span><span class="sig-name descname"><span class="pre">run_pdflatex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/latex_tools.html#run_pdflatex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.latex_tools.run_pdflatex" title="Permalink to this definition"></a></dt>
+<dd><p>Run pdflatex.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>report</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- report name</p></li>
-<li><p><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) -- latex lines</p></li>
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- file name</p></li>
+<li><p><strong>report</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- report path</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- file name</p></li>
 </ul>
 </dd>
 </dl>
@@ -545,7 +636,7 @@ between parameters in a heat map</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.analyze.pca.PcaCalculator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.pca.</span></span><span class="sig-name descname"><span class="pre">PcaCalculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#PcaCalculator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.PcaCalculator" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Computes and writes PCA table and heat map.</p>
 <p>Note: matrix being decomposed by SVD are the kappas
 divided by the total experimental error.</p>
@@ -554,7 +645,7 @@ divided by the total experimental error.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<a class="reference internal" href="smefit.html#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>smefit.loader.DataTuple</em></a>) -- loaded datasets</p></li>
 <li><p><strong>coefficients</strong> (<em>smefit.coefficients.CoefficienManager</em>) -- coefficient manager</p></li>
-<li><p><strong>latex_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- coefficient latex names</p></li>
+<li><p><strong>latex_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- coefficient latex names</p></li>
 </ul>
 </dd>
 </dl>
@@ -571,11 +662,11 @@ divided by the total experimental error.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fit_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- fit label</p></li>
-<li><p><strong>fig_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- plot name</p></li>
-<li><p><strong>sv_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) -- minimum singular value range shown in the top heatmap plot</p></li>
-<li><p><strong>sv_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) -- maximum singular value range shown in the top heatmap plot</p></li>
-<li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) -- minimal threshold to show in the PCA decomposition</p></li>
+<li><p><strong>fit_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- fit label</p></li>
+<li><p><strong>fig_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- plot name</p></li>
+<li><p><strong>sv_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- minimum singular value range shown in the top heatmap plot</p></li>
+<li><p><strong>sv_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- maximum singular value range shown in the top heatmap plot</p></li>
+<li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- minimal threshold to show in the PCA decomposition</p></li>
 </ul>
 </dd>
 </dl>
@@ -588,8 +679,8 @@ divided by the total experimental error.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fit_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- fit label</p></li>
-<li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) -- minimal threshold to show in the PCA decomposition</p></li>
+<li><p><strong>fit_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- fit label</p></li>
+<li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- minimal threshold to show in the PCA decomposition</p></li>
 </ul>
 </dd>
 </dl>
@@ -623,9 +714,9 @@ divided by the total experimental error.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.analyze.report.Report">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.report.</span></span><span class="sig-name descname"><span class="pre">Report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/report.html#Report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.report.Report" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Class to manage the report.
-If <span class="math notranslate nohighlight">\(\chi^2\)</span>, Fisher or Data vs Theory plots are produced it computes the
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Report class manager.</p>
+<p>If <span class="math notranslate nohighlight">\(\chi^2\)</span>, Fisher or Data vs Theory plots are produced it computes the
 best fit theory predictions.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="smefit.analyze.report.Report.report">
@@ -633,7 +724,7 @@ best fit theory predictions.</p>
 <dd><p>path to report folder</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -674,10 +765,10 @@ best fit theory predictions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>report_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- path to base folder, where the reports will be stored.</p></li>
-<li><p><strong>result_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) -- path to base folder, where the results are stored.</p></li>
-<li><p><strong>report_config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- dictionary with report configuration, see <cite>/run_cards/analyze/report_runcard.yaml</cite>
-for and example</p></li>
+<li><p><strong>report_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- path to base folder, where the reports will be stored.</p></li>
+<li><p><strong>result_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- path to base folder, where the results are stored.</p></li>
+<li><p><strong>report_config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- dictionary with report configuration, see <cite>/run_cards/analyze/report_runcard.yaml</cite>
+for an example</p></li>
 </ul>
 </dd>
 </dl>
@@ -688,9 +779,9 @@ for and example</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) -- write the latex <span class="math notranslate nohighlight">\(\chi^2\)</span> table per dataset</p></li>
-<li><p><strong>plot_experiment</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) -- plot the <span class="math notranslate nohighlight">\(\chi^2\)</span> per dataset</p></li>
-<li><p><strong>plot_distribution</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) -- plot the <span class="math notranslate nohighlight">\(\chi^2\)</span> distribution per each replica</p></li>
+<li><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) -- write the latex <span class="math notranslate nohighlight">\(\chi^2\)</span> table per dataset</p></li>
+<li><p><strong>plot_experiment</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) -- plot the <span class="math notranslate nohighlight">\(\chi^2\)</span> per dataset</p></li>
+<li><p><strong>plot_distribution</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) -- plot the <span class="math notranslate nohighlight">\(\chi^2\)</span> distribution per each replica</p></li>
 </ul>
 </dd>
 </dl>
@@ -703,14 +794,14 @@ for and example</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hide_dofs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) -- list of operator not to display</p></li>
-<li><p><strong>show_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) -- list of all the operator to display, if None all the free dof are presented</p></li>
-<li><p><strong>logo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- if True add logo to the plots</p></li>
-<li><p><strong>scatter_plot</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- kwarg confidence level bar plot or None</p></li>
-<li><p><strong>confidence_level_bar</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- kwarg scatter plot or None</p></li>
-<li><p><strong>posterior_histograms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) -- if True plot the posterior distribution for each coefficient</p></li>
-<li><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) -- write the latex confidence level table per coefficient</p></li>
-<li><p><strong>double_solution</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) -- operator with double solution per fit</p></li>
+<li><p><strong>hide_dofs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- list of operator not to display</p></li>
+<li><p><strong>show_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- list of all the operator to display, if None all the free dof are presented</p></li>
+<li><p><strong>logo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True add logo to the plots</p></li>
+<li><p><strong>scatter_plot</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- kwarg confidence level bar plot or None</p></li>
+<li><p><strong>confidence_level_bar</strong> (<em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- kwarg scatter plot or None</p></li>
+<li><p><strong>posterior_histograms</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True plot the posterior distribution for each coefficient</p></li>
+<li><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) -- write the latex confidence level table per coefficient</p></li>
+<li><p><strong>double_solution</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- operator with double solution per fit</p></li>
 </ul>
 </dd>
 </dl>
@@ -723,8 +814,8 @@ for and example</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hide_dofs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a>) -- list of operator not to display.</p></li>
-<li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><em>None</em>) -- minimum threshold value to show.
+<li><p><strong>hide_dofs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- list of operator not to display.</p></li>
+<li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>None</em>) -- minimum threshold value to show.
 If None the full correlation matrix is displayed.</p></li>
 </ul>
 </dd>
@@ -738,12 +829,12 @@ If None the full correlation matrix is displayed.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) -- if True writes the PC directions in a latex list</p></li>
-<li><p><strong>plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) -- if True produces a PC heatmap</p></li>
-<li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) -- minimum threshold value to show</p></li>
-<li><p><strong>sv_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) -- minimum singular value range shown in the top heatmap plot</p></li>
-<li><p><strong>sv_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) -- maximum singular value range shown in the top heatmap plot</p></li>
-<li><p><strong>fit_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><em>optional</em>) -- list of fit names for which the PCA is computed.
+<li><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) -- if True writes the PC directions in a latex list</p></li>
+<li><p><strong>plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) -- if True produces a PC heatmap</p></li>
+<li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- minimum threshold value to show</p></li>
+<li><p><strong>sv_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- minimum singular value range shown in the top heatmap plot</p></li>
+<li><p><strong>sv_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- maximum singular value range shown in the top heatmap plot</p></li>
+<li><p><strong>fit_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) -- list of fit names for which the PCA is computed.
 By default all the fits included in the report</p></li>
 </ul>
 </dd>
@@ -764,7 +855,7 @@ By default all the fits included in the report</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.analyze.summary.SummaryWriter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.summary.</span></span><span class="sig-name descname"><span class="pre">SummaryWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/summary.html#SummaryWriter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.summary.SummaryWriter" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Provides a summary of the fits included in the report: the fit settings,
 fitted parameters (including any parameter constraints), and
 datasets.</p>
@@ -773,15 +864,15 @@ YAML files. The first gives the references used for hyperlinks,
 and the other two organizes the data and parameters into groups
 (top, higgs, etc.).</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.analyze.summary.SummaryWriter.write">
-<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/summary.html#SummaryWriter.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.summary.SummaryWriter.write" title="Permalink to this definition"></a></dt>
-<dd><p>Collect the summary tables</p>
+<dt class="sig sig-object py" id="smefit.analyze.summary.SummaryWriter.fit_settings">
+<span class="sig-name descname"><span class="pre">fit_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/summary.html#SummaryWriter.fit_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.summary.SummaryWriter.fit_settings" title="Permalink to this definition"></a></dt>
+<dd><p>Fit settings table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>L</strong> -- list of the latex commands</p>
+<dd class="field-odd"><p>table with the most relevant fit settings</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>)</p>
+<dd class="field-even"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -795,7 +886,7 @@ and the other two organizes the data and parameters into groups
 <dd class="field-odd"><p><strong>L</strong> -- list of the latex commands</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>)</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -809,21 +900,7 @@ and the other two organizes the data and parameters into groups
 <dd class="field-odd"><p><strong>L</strong> -- list of the latex commands</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="smefit.analyze.summary.SummaryWriter.write_fit_settings">
-<span class="sig-name descname"><span class="pre">write_fit_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/summary.html#SummaryWriter.write_fit_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.summary.SummaryWriter.write_fit_settings" title="Permalink to this definition"></a></dt>
-<dd><p>Write fit settings</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>L</strong> -- list of the latex commands</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>)</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
 </dd></dl>

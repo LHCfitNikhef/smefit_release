@@ -108,6 +108,7 @@
   <h1>Source code for smefit.analyze.summary</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">Coefficient</span>
 <span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">latex_packages</span><span class="p">,</span> <span class="n">multicolum_table_header</span>
@@ -163,47 +164,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span> <span class="o">=</span> <span class="n">coeff_config</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nfits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SummaryWriter.write"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Collect the summary tables</span>
+<div class="viewcode-block" id="SummaryWriter.fit_settings"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.summary.SummaryWriter.fit_settings">[docs]</a>    <span class="k">def</span> <span class="nf">fit_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit settings table.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">            L : list(str)</span>
-<span class="sd">                list of the latex commands</span>
+<span class="sd">        pd.DataFrame:</span>
+<span class="sd">            table with the most relevant fit settings</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">L</span> <span class="o">=</span> <span class="n">latex_packages</span><span class="p">()</span>
-        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="sa">r</span><span class="s2">&quot;\usepackage</span><span class="si">{underscore}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{document}</span><span class="s2">&quot;</span><span class="p">])</span>
-
-        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_fit_settings</span><span class="p">())</span>
-        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_dataset_table</span><span class="p">())</span>
-        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_coefficients_table</span><span class="p">())</span>
-        <span class="k">return</span> <span class="n">L</span></div>
-
-<div class="viewcode-block" id="SummaryWriter.write_fit_settings"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write_fit_settings">[docs]</a>    <span class="k">def</span> <span class="nf">write_fit_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Write fit settings</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">            L : list(str)</span>
-<span class="sd">                list of the latex commands</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">L</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">fit</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">]:</span>
-                <span class="n">eft_order</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$\Lambda^{-4}$&quot;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">eft_order</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$\Lambda^{-2}$&quot;</span>
-            <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
-                <span class="p">[</span>
-                    <span class="sa">r</span><span class="s2">&quot;{\bf \underline{Fit</span><span class="si">%d</span><span class="s2">:}} </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s2">&quot;Number of replicas/samples: </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">n_replica</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s2">&quot;pQCD order: </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s2">&quot;SMEFT order: </span><span class="si">{</span><span class="n">eft_order</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="p">]</span>
+        <span class="n">summaries</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">:</span>
+            <span class="n">summary_dict</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">summary_dict</span><span class="p">[</span><span class="s2">&quot;EFT order&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Qudratic&quot;</span> <span class="k">if</span> <span class="n">fit</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;Linear&quot;</span>
             <span class="p">)</span>
-        <span class="k">return</span> <span class="n">L</span></div>
+            <span class="n">summary_dict</span><span class="p">[</span><span class="s2">&quot;pQCD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">]</span>
+            <span class="n">summary_dict</span><span class="p">[</span><span class="s2">&quot;Replicas&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">n_replica</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\ &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\rm&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">summaries</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">summary_dict</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">summaries</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SummaryWriter.write_dataset_table"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write_dataset_table">[docs]</a>    <span class="k">def</span> <span class="nf">write_dataset_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write the summary tables</span>
@@ -213,13 +192,18 @@
 <span class="sd">            L : list(str)</span>
 <span class="sd">                list of the latex commands</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">L</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{table}</span><span class="s2">[H]&quot;</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s2">&quot;\footnotesize&quot;</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s2">&quot;\centering&quot;</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{tabular}</span><span class="s2">{|c|l|&quot;</span> <span class="o">+</span> <span class="s2">&quot;c|&quot;</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfits</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s2">&quot;\hline&quot;</span><span class="p">,</span>
-        <span class="p">]</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">latex_packages</span><span class="p">()</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="sa">r</span><span class="s2">&quot;\usepackage</span><span class="si">{underscore}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{document}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{table}</span><span class="s2">[H]&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\footnotesize&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\centering&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{tabular}</span><span class="s2">{|c|l|&quot;</span> <span class="o">+</span> <span class="s2">&quot;c|&quot;</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfits</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\hline&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="s2">&quot; Type &amp; Datasets &quot;</span>
         <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">:</span>
             <span class="n">temp</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; &amp; </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -234,21 +218,21 @@
                 <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">:</span>
                     <span class="n">temp</span> <span class="o">+=</span> <span class="s2">&quot; &amp; &quot;</span>
                     <span class="k">if</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">fit</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;datasets&quot;</span><span class="p">]:</span>
-                        <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;\checkmark&quot;</span>
+                        <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;$\checkmark$&quot;</span>
                 <span class="k">if</span> <span class="n">isub</span> <span class="o">!=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2"> \cline{2-</span><span class="si">%d</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfits</span><span class="p">)</span>
                 <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
             <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2"> \hline&quot;</span><span class="p">)</span>
 
-        <span class="c1"># TODO: add total number of datapoints</span>
+        <span class="c1"># TODO: load dataset to print this info ??</span>
         <span class="c1"># temp = r&quot;\hline &amp; Total number of data points&quot;</span>
         <span class="c1"># for fit in self.fits:</span>
         <span class="c1">#     temp += f&quot; &amp; {np.sum(fit.datasets.NdataExp)}&quot;</span>
         <span class="c1"># temp += r&quot; \\ \hline&quot;</span>
         <span class="c1"># L.extend(</span>
-        <span class="c1">#     [temp, r&quot;\end{tabular}&quot;, r&quot;\caption{Dataset comparison.}&quot;, r&quot;\end{table}&quot;]</span>
+        <span class="c1">#     [temp, r&quot;\end{tabular}&quot;, r&quot;\caption{Dataset comparison}&quot;, r&quot;\end{table}&quot;]</span>
         <span class="c1"># )</span>
-        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{tabular}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\caption{Dataset comparison.}&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{table}</span><span class="s2">&quot;</span><span class="p">])</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{tabular}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\caption{Dataset comparison}&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{table}</span><span class="s2">&quot;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">L</span></div>
 
 <div class="viewcode-block" id="SummaryWriter.write_coefficients_table"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write_coefficients_table">[docs]</a>    <span class="k">def</span> <span class="nf">write_coefficients_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -259,11 +243,16 @@
 <span class="sd">            L : list(str)</span>
 <span class="sd">                list of the latex commands</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">L</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{table}</span><span class="s2">[H]&quot;</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s2">&quot;\centering&quot;</span><span class="p">,</span>
-            <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{tabular}</span><span class="s2">{|c|c|&quot;</span> <span class="o">+</span> <span class="s2">&quot;c|c|&quot;</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfits</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span>
-        <span class="p">]</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">latex_packages</span><span class="p">()</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="sa">r</span><span class="s2">&quot;\usepackage</span><span class="si">{underscore}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{document}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{table}</span><span class="s2">[H]&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\centering&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{tabular}</span><span class="s2">{|c|c|&quot;</span> <span class="o">+</span> <span class="s2">&quot;c|c|&quot;</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfits</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
         <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">multicolum_table_header</span><span class="p">([</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">]))</span>
         <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="sa">r</span><span class="s2">&quot;Class &amp; Coefficients&quot;</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; &amp; Fitted &amp; Fixed &quot;</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfits</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; </span><span class="se">\\</span><span class="s2"> \hline&quot;</span>
@@ -290,7 +279,7 @@
                         <span class="k">elif</span> <span class="s2">&quot;value&quot;</span> <span class="ow">in</span> <span class="n">coeff_dict</span><span class="p">:</span>
                             <span class="n">temp</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; &amp; &amp; = </span><span class="si">{</span><span class="n">coeff_dict</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; &amp; \checkmark &amp; &quot;</span>
+                            <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; &amp; $\checkmark$ &amp; &quot;</span>
                             <span class="n">n_fitted</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; &amp; &amp; &quot;</span>
@@ -312,7 +301,7 @@
             <span class="p">[</span>
                 <span class="n">temp</span><span class="p">,</span>
                 <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{tabular}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="sa">r</span><span class="s2">&quot;\caption{Coefficient comparison.}&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\caption{Coefficient comparison}&quot;</span><span class="p">,</span>
                 <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{table}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="p">]</span>
         <span class="p">)</span>

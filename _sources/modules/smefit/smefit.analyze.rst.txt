@@ -41,6 +41,14 @@ smefit.analyze.correlations module
    :undoc-members:
    :show-inheritance:
 
+smefit.analyze.html\_utils module
+---------------------------------
+
+.. automodule:: smefit.analyze.html_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smefit.analyze.latex\_tools module
 ----------------------------------
 

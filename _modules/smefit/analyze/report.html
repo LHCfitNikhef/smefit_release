@@ -107,57 +107,56 @@
              
   <h1>Source code for smefit.analyze.report</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">rc</span><span class="p">,</span> <span class="n">use</span>
 
 <span class="kn">from</span> <span class="nn">..fit_manager</span> <span class="kn">import</span> <span class="n">FitManager</span>
 <span class="kn">from</span> <span class="nn">..log</span> <span class="kn">import</span> <span class="n">logging</span>
 <span class="kn">from</span> <span class="nn">.chi2_utils</span> <span class="kn">import</span> <span class="n">Chi2tableCalculator</span>
 <span class="kn">from</span> <span class="nn">.coefficients_utils</span> <span class="kn">import</span> <span class="n">CoefficientsPlotter</span><span class="p">,</span> <span class="n">compute_confidence_level</span>
 <span class="kn">from</span> <span class="nn">.correlations</span> <span class="kn">import</span> <span class="n">plot_correlations</span>
-<span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">run_pdflatex</span>
+<span class="kn">from</span> <span class="nn">.html_utils</span> <span class="kn">import</span> <span class="n">html_link</span><span class="p">,</span> <span class="n">write_html_container</span>
+<span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">compile_tex</span>
 <span class="kn">from</span> <span class="nn">.pca</span> <span class="kn">import</span> <span class="n">PcaCalculator</span>
 <span class="kn">from</span> <span class="nn">.summary</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<span class="c1"># global mathplotlib settings</span>
-<span class="n">use</span><span class="p">(</span><span class="s2">&quot;PDF&quot;</span><span class="p">)</span>
-<span class="n">rc</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">&quot;family&quot;</span><span class="p">:</span> <span class="s2">&quot;sans-serif&quot;</span><span class="p">,</span> <span class="s2">&quot;sans-serif&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Helvetica&quot;</span><span class="p">]})</span>
-<span class="n">rc</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s2">&quot;usetex&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;latex.preamble&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;\usepackage</span><span class="si">{amssymb}</span><span class="s2">&quot;</span><span class="p">})</span>
-
 
 <div class="viewcode-block" id="Report"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report">[docs]</a><span class="k">class</span> <span class="nc">Report</span><span class="p">:</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Class to manage the report.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Report class manager.</span>
+
 <span class="sd">    If :math:`\chi^2`, Fisher or Data vs Theory plots are produced it computes the</span>
 <span class="sd">    best fit theory predictions.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">        report: str</span>
-<span class="sd">            path to report folder</span>
-<span class="sd">        fits: numpy.ndarray</span>
-<span class="sd">            array with fits (instances of `smefit.fit_manager.FitManger`) included in the report</span>
-<span class="sd">        data_info: pandas.DataFrame</span>
-<span class="sd">            datasets information (references and data groups)</span>
-<span class="sd">        coeff_info: pandas.DataFrame</span>
-<span class="sd">            coefficients information (group and latex name)</span>
+<span class="sd">    report: str</span>
+<span class="sd">        path to report folder</span>
+<span class="sd">    fits: numpy.ndarray</span>
+<span class="sd">        array with fits (instances of `smefit.fit_manager.FitManger`) included in the report</span>
+<span class="sd">    data_info: pandas.DataFrame</span>
+<span class="sd">        datasets information (references and data groups)</span>
+<span class="sd">    coeff_info: pandas.DataFrame</span>
+<span class="sd">        coefficients information (group and latex name)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        report_path: pathlib.Path, str</span>
-<span class="sd">            path to base folder, where the reports will be stored.</span>
-<span class="sd">        result_path: pathlib.Path, str</span>
-<span class="sd">            path to base folder, where the results are stored.</span>
-<span class="sd">        report_config: dict</span>
-<span class="sd">            dictionary with report configuration, see `/run_cards/analyze/report_runcard.yaml`</span>
-<span class="sd">            for and example</span>
+<span class="sd">    report_path: pathlib.Path, str</span>
+<span class="sd">        path to base folder, where the reports will be stored.</span>
+<span class="sd">    result_path: pathlib.Path, str</span>
+<span class="sd">        path to base folder, where the results are stored.</span>
+<span class="sd">    report_config: dict</span>
+<span class="sd">        dictionary with report configuration, see `/run_cards/analyze/report_runcard.yaml`</span>
+<span class="sd">        for an example</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_path</span><span class="p">,</span> <span class="n">result_path</span><span class="p">,</span> <span class="n">report_config</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">report_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">report_config</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">report_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">report_config</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># build the fits labels if needed</span>
         <span class="k">if</span> <span class="s2">&quot;fit_labels&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">report_config</span><span class="p">:</span>
@@ -182,24 +181,26 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_grouped_info</span><span class="p">(</span>
             <span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;coeff_info&quot;</span><span class="p">],</span> <span class="s2">&quot;coefficients&quot;</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_index</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_load_grouped_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_dict</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Load grouped info of coefficients and datasets</span>
-<span class="sd">        Only elements appearing ad lest once in the fit configs are</span>
-<span class="sd">        kept</span>
+        <span class="sd">&quot;&quot;&quot;Load grouped info of coefficients and datasets.</span>
+
+<span class="sd">        Only elements appearing ad lest once in the fit configs are kept.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            raw_dict: dict</span>
-<span class="sd">                raw dictionary with relevant information</span>
-<span class="sd">            key: &quot;datasets&quot; or &quot;coefficients&quot;</span>
-<span class="sd">                key to check</span>
+<span class="sd">        raw_dict: dict</span>
+<span class="sd">            raw dictionary with relevant information</span>
+<span class="sd">        key: &quot;datasets&quot; or &quot;coefficients&quot;</span>
+<span class="sd">            key to check</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        _______</span>
-<span class="sd">            grouped_config: pandas.DataFrame</span>
-<span class="sd">                table with information by group</span>
+<span class="sd">        grouped_config: pandas.DataFrame</span>
+<span class="sd">            table with information by group</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">out_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">group</span><span class="p">,</span> <span class="n">entries</span> <span class="ow">in</span> <span class="n">raw_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -212,16 +213,31 @@
                 <span class="n">out_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out_dict</span><span class="p">)</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span><span class="o">.</span><span class="n">swaplevel</span><span class="p">()</span>
 
+    <span class="k">def</span> <span class="nf">_append_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_index</span> <span class="o">+=</span> <span class="n">html_link</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">add_meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html_content</span> <span class="o">+=</span> <span class="n">write_html_container</span><span class="p">(</span>
+            <span class="n">title</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="n">links</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="n">figs</span><span class="p">,</span> <span class="n">dataFrame</span><span class="o">=</span><span class="n">tables</span>
+        <span class="p">)</span>
+
 <div class="viewcode-block" id="Report.summary"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Summary Table runner.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">SummaryWriter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">()</span>
-        <span class="n">run_pdflatex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="s2">&quot;summary&quot;</span><span class="p">)</span></div>
+        <span class="sd">&quot;&quot;&quot;Summary Table runner.&quot;&quot;&quot;</span>
+        <span class="n">summary</span> <span class="o">=</span> <span class="n">SummaryWriter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="p">)</span>
+        <span class="n">section_title</span> <span class="o">=</span> <span class="s2">&quot;Summary&quot;</span>
+        <span class="n">coeff_tab</span> <span class="o">=</span> <span class="s2">&quot;coefficient_summary&quot;</span>
+        <span class="n">data_tab</span> <span class="o">=</span> <span class="s2">&quot;dataset_summary&quot;</span>
+
+        <span class="c1"># write summary tables</span>
+        <span class="n">compile_tex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">summary</span><span class="o">.</span><span class="n">write_coefficients_table</span><span class="p">(),</span> <span class="n">coeff_tab</span><span class="p">)</span>
+        <span class="n">compile_tex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">summary</span><span class="o">.</span><span class="n">write_dataset_table</span><span class="p">(),</span> <span class="n">data_tab</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_section</span><span class="p">(</span>
+            <span class="n">section_title</span><span class="p">,</span>
+            <span class="n">links</span><span class="o">=</span><span class="p">[(</span><span class="n">data_tab</span><span class="p">,</span> <span class="s2">&quot;Dataset summary&quot;</span><span class="p">),</span> <span class="p">(</span><span class="n">coeff_tab</span><span class="p">,</span> <span class="s2">&quot;Coefficient summary&quot;</span><span class="p">)],</span>
+            <span class="n">tables</span><span class="o">=</span><span class="n">summary</span><span class="o">.</span><span class="n">fit_settings</span><span class="p">(),</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Report.chi2"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.chi2">[docs]</a>    <span class="k">def</span> <span class="nf">chi2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_experiment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :math:`\chi^2` table and plots runner.</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;:math:`\chi^2` table and plots runner.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -231,7 +247,10 @@
 <span class="sd">            plot the :math:`\chi^2` per dataset</span>
 <span class="sd">        plot_distribution: bool, optional</span>
 <span class="sd">            plot the :math:`\chi^2` distribution per each replica</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">links_list</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">figs_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">chi2_cal</span> <span class="o">=</span> <span class="n">Chi2tableCalculator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_info</span><span class="p">)</span>
 
         <span class="c1"># here we store the info for each fit</span>
@@ -249,19 +268,22 @@
 
         <span class="k">if</span> <span class="n">table</span><span class="p">:</span>
             <span class="n">lines</span> <span class="o">=</span> <span class="n">chi2_cal</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">)</span>
-            <span class="n">run_pdflatex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="s2">&quot;chi2_tables&quot;</span><span class="p">)</span>
+            <span class="n">compile_tex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="s2">&quot;chi2_tables&quot;</span><span class="p">)</span>
+            <span class="n">links_list</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;chi2_tables&quot;</span><span class="p">,</span> <span class="s2">&quot;Tables&quot;</span><span class="p">)]</span>
 
         <span class="k">if</span> <span class="n">plot_experiment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting : chi^2 for each dataset&quot;</span><span class="p">)</span>
-            <span class="n">chi2_cal</span><span class="o">.</span><span class="n">plot_exp</span><span class="p">(</span>
-                <span class="n">chi2_dict</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/chi2_bar.pdf&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_experiment</span>
-            <span class="p">)</span>
+            <span class="n">chi2_cal</span><span class="o">.</span><span class="n">plot_exp</span><span class="p">(</span><span class="n">chi2_dict</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/chi2_bar&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_experiment</span><span class="p">)</span>
+            <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;chi2_bar&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">plot_distribution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting : chi^2 distribution for each replica&quot;</span><span class="p">)</span>
             <span class="n">chi2_cal</span><span class="o">.</span><span class="n">plot_dist</span><span class="p">(</span>
-                <span class="n">chi2_replica</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/chi2_histo.pdf&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_distribution</span>
-            <span class="p">)</span></div>
+                <span class="n">chi2_replica</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/chi2_histo&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_distribution</span>
+            <span class="p">)</span>
+            <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;chi2_histo&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_section</span><span class="p">(</span><span class="s2">&quot;Chi2&quot;</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="n">links_list</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="n">figs_list</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Report.coefficients"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">coefficients</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -275,29 +297,30 @@
         <span class="n">table</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">double_solution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Coefficients plots and table runner.</span>
+        <span class="sd">&quot;&quot;&quot;Coefficients plots and table runner.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            hide_dofs: list</span>
-<span class="sd">                list of operator not to display</span>
-<span class="sd">            show_only: list</span>
-<span class="sd">                list of all the operator to display, if None all the free dof are presented</span>
-<span class="sd">            logo: bool</span>
-<span class="sd">                if True add logo to the plots</span>
-<span class="sd">            scatter_plot: None, dict</span>
-<span class="sd">                kwarg confidence level bar plot or None</span>
-<span class="sd">            confidence_level_bar: None, dict</span>
-<span class="sd">                kwarg scatter plot or None</span>
-<span class="sd">            posterior_histograms: bool</span>
-<span class="sd">                if True plot the posterior distribution for each coefficient</span>
-<span class="sd">            table: bool, optional</span>
-<span class="sd">                write the latex confidence level table per coefficient</span>
-<span class="sd">            double_solution: dict</span>
-<span class="sd">                operator with double solution per fit</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        hide_dofs: list</span>
+<span class="sd">            list of operator not to display</span>
+<span class="sd">        show_only: list</span>
+<span class="sd">            list of all the operator to display, if None all the free dof are presented</span>
+<span class="sd">        logo: bool</span>
+<span class="sd">            if True add logo to the plots</span>
+<span class="sd">        scatter_plot: None, dict</span>
+<span class="sd">            kwarg confidence level bar plot or None</span>
+<span class="sd">        confidence_level_bar: None, dict</span>
+<span class="sd">            kwarg scatter plot or None</span>
+<span class="sd">        posterior_histograms: bool</span>
+<span class="sd">            if True plot the posterior distribution for each coefficient</span>
+<span class="sd">        table: bool, optional</span>
+<span class="sd">            write the latex confidence level table per coefficient</span>
+<span class="sd">        double_solution: dict</span>
+<span class="sd">            operator with double solution per fit</span>
 
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">links_list</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">figs_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">free_coeff_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span>
         <span class="k">if</span> <span class="n">show_only</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">free_coeff_config</span> <span class="o">=</span> <span class="n">free_coeff_config</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">show_only</span><span class="p">]</span>
@@ -322,6 +345,7 @@
         <span class="k">if</span> <span class="n">scatter_plot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting : Central values and Confidence Level bounds&quot;</span><span class="p">)</span>
             <span class="n">coeff_plt</span><span class="o">.</span><span class="n">plot_coeffs</span><span class="p">(</span><span class="n">bounds_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">scatter_plot</span><span class="p">)</span>
+            <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;coefficient_central&quot;</span><span class="p">)</span>
 
         <span class="c1"># when we plot the 95% CL we show 95% CL for null solutions.</span>
         <span class="c1"># the error coming from a degenerate solution is not taken into account.</span>
@@ -338,6 +362,7 @@
                 <span class="p">},</span>
                 <span class="o">**</span><span class="n">confidence_level_bar</span><span class="p">,</span>
             <span class="p">)</span>
+            <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;coefficient_bar&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">posterior_histograms</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting : Posterior histograms&quot;</span><span class="p">)</span>
@@ -346,11 +371,13 @@
                 <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">],</span>
                 <span class="n">disjointed_lists</span><span class="o">=</span><span class="nb">list</span><span class="p">((</span><span class="o">*</span><span class="n">double_solution</span><span class="o">.</span><span class="n">values</span><span class="p">(),)),</span>
             <span class="p">)</span>
+            <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;coefficient_histo&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">table</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Writing : Confidence level table&quot;</span><span class="p">)</span>
             <span class="n">lines</span> <span class="o">=</span> <span class="n">coeff_plt</span><span class="o">.</span><span class="n">write_cl_table</span><span class="p">(</span><span class="n">bounds_dict</span><span class="p">)</span>
-            <span class="n">run_pdflatex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="s2">&quot;coefficients_table&quot;</span><span class="p">)</span>
+            <span class="n">compile_tex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="s2">&quot;coefficients_table&quot;</span><span class="p">)</span>
+            <span class="n">links_list</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;coefficients_table&quot;</span><span class="p">,</span> <span class="s2">&quot;CL table&quot;</span><span class="p">)]</span>
 
         <span class="k">if</span> <span class="n">contours_2d</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting : 2D confidence level projections&quot;</span><span class="p">)</span>
@@ -365,31 +392,38 @@
                 <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">],</span>
                 <span class="n">confidence_level</span><span class="o">=</span><span class="n">contours_2d</span><span class="p">[</span><span class="s2">&quot;confidence_level&quot;</span><span class="p">],</span>
                 <span class="n">dofs_show</span><span class="o">=</span><span class="n">contours_2d</span><span class="p">[</span><span class="s2">&quot;dofs_show&quot;</span><span class="p">],</span>
-            <span class="p">)</span></div>
+            <span class="p">)</span>
+            <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;contours_2d&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_section</span><span class="p">(</span><span class="s2">&quot;Coefficients&quot;</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="n">links_list</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="n">figs_list</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Report.correlations"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.correlations">[docs]</a>    <span class="k">def</span> <span class="nf">correlations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hide_dofs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">thr_show</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Plot coefficients correlation matrix.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            hide_dofs: list</span>
-<span class="sd">                list of operator not to display.</span>
-<span class="sd">            thr_show: float, None</span>
-<span class="sd">                minimum threshold value to show.</span>
-<span class="sd">                If None the full correlation matrix is displayed.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        hide_dofs: list</span>
+<span class="sd">            list of operator not to display.</span>
+<span class="sd">        thr_show: float, None</span>
+<span class="sd">            minimum threshold value to show.</span>
+<span class="sd">            If None the full correlation matrix is displayed.</span>
 
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">figs_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotting correlations for: </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">coeff_to_keep</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">index</span>
             <span class="n">plot_correlations</span><span class="p">(</span>
                 <span class="n">fit</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="n">coeff_to_keep</span><span class="p">],</span>
                 <span class="n">latex_names</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="o">.</span><span class="n">droplevel</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-                <span class="n">fig_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/correlations_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">,</span>
+                <span class="n">fig_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/correlations_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="n">fit_label</span><span class="o">=</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="p">,</span>
                 <span class="n">hide_dofs</span><span class="o">=</span><span class="n">hide_dofs</span><span class="p">,</span>
                 <span class="n">thr_show</span><span class="o">=</span><span class="n">thr_show</span><span class="p">,</span>
-            <span class="p">)</span></div>
+            <span class="p">)</span>
+            <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;correlations_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_section</span><span class="p">(</span><span class="s2">&quot;Correlations&quot;</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="n">figs_list</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Report.pca"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.pca">[docs]</a>    <span class="k">def</span> <span class="nf">pca</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -417,7 +451,9 @@
 <span class="sd">        fit_list: list, optional</span>
 <span class="sd">            list of fit names for which the PCA is computed.</span>
 <span class="sd">            By default all the fits included in the report</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">figs_list</span><span class="p">,</span> <span class="n">links_list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">fit_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">fit_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="o">==</span> <span class="n">fit_list</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -432,19 +468,21 @@
             <span class="n">pca_cal</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 
             <span class="k">if</span> <span class="n">table</span><span class="p">:</span>
-                <span class="n">run_pdflatex</span><span class="p">(</span>
+                <span class="n">compile_tex</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span>
                     <span class="n">pca_cal</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">thr_show</span><span class="p">),</span>
                     <span class="sa">f</span><span class="s2">&quot;pca_table_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
-
+                <span class="n">links_list</span> <span class="o">=</span> <span class="p">[(</span><span class="sa">f</span><span class="s2">&quot;pca_table_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Table </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)]</span>
             <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
                 <span class="n">pca_cal</span><span class="o">.</span><span class="n">plot_heatmap</span><span class="p">(</span>
                     <span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/pca_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/pca_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                     <span class="n">sv_min</span><span class="o">=</span><span class="n">sv_min</span><span class="p">,</span>
                     <span class="n">sv_max</span><span class="o">=</span><span class="n">sv_max</span><span class="p">,</span>
-                <span class="p">)</span></div></div>
+                <span class="p">)</span>
+                <span class="n">figs_list</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;pca_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_append_section</span><span class="p">(</span><span class="s2">&quot;PCA&quot;</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="n">figs_list</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="n">links_list</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
