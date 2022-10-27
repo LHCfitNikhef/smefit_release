@@ -55,7 +55,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/data.html">Experimental data format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/theory.html">Theory tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../data_theory/decomposition_cov.html">Decomposition of experimental covariance matrix</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Fit and report functionalities:</span></p>
 <ul>
@@ -121,7 +120,7 @@
 running modes and on how to analyse the results.</p>
 </section>
 <section id="runcard-specifications">
-<h1>Runcard specifications<a class="headerlink" href="#runcard-specifications" title="Permalink to this heading"></a></h1>
+<span id="runcard"></span><h1>Runcard specifications<a class="headerlink" href="#runcard-specifications" title="Permalink to this heading"></a></h1>
 <p>The basic object required to run the code is a runcard.
 In this section we document the different parameters which have to be specified here.
 As example we will refer to the runcard to reproduce <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code>,
@@ -250,7 +249,7 @@ using the option below.</p>
 </section>
 </section>
 <section id="running-a-fit-with-ns">
-<h1>Running a fit with NS<a class="headerlink" href="#running-a-fit-with-ns" title="Permalink to this heading"></a></h1>
+<span id="ns"></span><h1>Running a fit with NS<a class="headerlink" href="#running-a-fit-with-ns" title="Permalink to this heading"></a></h1>
 <p>To run a fiy using Nested Sampling use the command</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit NS path/to/the/runcard/runcard.yaml</span><span class="w"></span>
 </pre></div>
@@ -259,7 +258,7 @@ using the option below.</p>
 containing the posterior distribution of the coefficients specified in the runcard.</p>
 </section>
 <section id="running-a-fit-with-mc">
-<h1>Running a fit with MC<a class="headerlink" href="#running-a-fit-with-mc" title="Permalink to this heading"></a></h1>
+<span id="mc"></span><h1>Running a fit with MC<a class="headerlink" href="#running-a-fit-with-mc" title="Permalink to this heading"></a></h1>
 <p>The basic command to run a fit using Monte Carlo is</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit MC path/to/the/runcard/runcard.yaml -n &lt;replica_number&gt;</span><span class="w"></span>
 </pre></div>

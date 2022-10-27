@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Fits in a different basis" href="rotation.html" />
-    <link rel="prev" title="Decomposition of experimental covariance matrix" href="../data_theory/decomposition_cov.html" /> 
+    <link rel="prev" title="Construction of the fit covariance matrix" href="../data_theory/covariance.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,7 +55,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/data.html">Experimental data format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/theory.html">Theory tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../data_theory/decomposition_cov.html">Decomposition of experimental covariance matrix</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Fit and report functionalities:</span></p>
 <ul class="current">
@@ -99,7 +98,7 @@
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
       <li>Code structure</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/fit_report/code_struct.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/fit_report/code_struct.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -108,14 +107,47 @@
            <div itemprop="articleBody">
              
   <section id="code-structure">
-<h1>Code structure<a class="headerlink" href="#code-structure" title="Permalink to this heading"></a></h1>
+<span id="codestruct"></span><h1>Code structure<a class="headerlink" href="#code-structure" title="Permalink to this heading"></a></h1>
+<p>In the following the provide a quick overview of how the code works.
+We refer to the <a class="reference external" href="./../tutorial/example.html">tutorial</a> for a step by step guide on how to use it.</p>
+<ul>
+<li><p>The information required to set up the analysis are read from an input
+<a class="reference external" href="./../tutorial/example.html#runcard-specifications">runcard</a>.
+The code will load the specified datasets, collecting the full experimental information and the
+Standard Model and EFT corrections to build the corresponding theory predictions.
+In the same input card the operators whose Wilson coefficients should be fitted
+are specified. If some of them do not appear in any of the selected datasets, the code will stop with an error message.</p></li>
+<li><p>Using the loaded information the loglikelihood is build as a function of the Wilson coefficients to fit.
+This is then given as input to an <code class="docutils literal notranslate"><span class="pre">Optimizer</span></code> object, encoding all the specifications of the
+minimizer used in the analysis.
+The provided options are <a class="reference external" href="./../tutorial/example.html#running-a-fit-with-ns">Nested Sampling</a> and
+<a class="reference external" href="./../tutorial/example.html#running-a-fit-with-mc">MonteCarlo</a>, based
+on the external MultiNest library and on an internal implementation respectively.
+In the first case the output is the full posterior distribution for the fitted Wilson coefficients,
+while in the second is the result for a single MC replica.
+To get the full posterior using MC, after producing a sufficient number of replicas
+the code must be run in the PostFit mode, which discards replicas having <code class="docutils literal notranslate"><span class="pre">chi^2</span></code>
+higher than a certain threshold set by the user and produce the final output file.</p></li>
+<li><p>The final output of the fit is a json file having the following structure</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span><span class="w"></span>
+<span class="nt">  O_1 </span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sample_1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sample_2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">...</span><span class="p p-Indicator">],</span><span class="w"></span>
+<span class="nt">  O_2 </span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sample_1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sample_2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">...</span><span class="p p-Indicator">],</span><span class="w"> </span>
+<span class="w">  </span><span class="nv">...</span><span class="w"></span>
+<span class="p p-Indicator">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>where each entry correspond to a list of samples of the Wilson coefficient corresponding to the specified operator.
+The final posterior is therefore provided as a discrete set of samples for each fitted Wilson coefficient.</p>
+</li>
+<li><p>The code can be run in the <a class="reference external" href="./../tutorial/example.html#producing-a-report">Report mode</a> in order to produce a report to visualize the results. The different functionalities currently supported in the report are documented <a class="reference external" href="./report_func.html">here</a></p></li>
+</ul>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../data_theory/decomposition_cov.html" class="btn btn-neutral float-left" title="Decomposition of experimental covariance matrix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../data_theory/covariance.html" class="btn btn-neutral float-left" title="Construction of the fit covariance matrix" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="rotation.html" class="btn btn-neutral float-right" title="Fits in a different basis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
