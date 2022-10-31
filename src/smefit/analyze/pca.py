@@ -7,10 +7,11 @@ import pandas as pd
 from matplotlib import cm, colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+from ..compute_theory import flatten
 from .latex_tools import latex_packages
 
 
-def impose_constrain(dataset, coefficients):
+def impose_constrain(dataset, coefficients, update_quad=False):
     """Propagate coefficient constraint into the theory tables.
 
     Parameters
@@ -19,18 +20,23 @@ def impose_constrain(dataset, coefficients):
         loaded datasets
     coefficient: smefit.coefficients.CoefficienManager
         coefficient manager
+    update_quad: bool, optional
+        if True update also quadratic corrections
 
     Returns
     -------
     np.ndarray
-        list of updated linear corrections
+        array of updated linear corrections (n_free_op, n_dat)
+     np.ndarray, optional
+        array of updated quadratic corrections ((n_free_op * (n_free_op+1))/2, n_dat)
 
     """
     temp_coeffs = copy.deepcopy(coefficients)
     free_coeffs = temp_coeffs.free_parameters.index
     new_linear_corrections = []
-    # loop on the corrections and add them
-    for idx in range(free_coeffs.shape[0]):
+    new_quad_corrections = []
+    # loop on the free op and add the corrections
+    for idx in range(free_coeffs.size):
         # update all the free coefficents to 0 except fro 1 and propagate
         params = np.zeros_like(free_coeffs)
         params[idx] = 1.0
@@ -39,6 +45,22 @@ def impose_constrain(dataset, coefficients):
 
         # update linear corrections
         new_linear_corrections.append(temp_coeffs.value @ dataset.LinearCorrections.T)
+
+        # update quadratic corrections
+        if update_quad:
+            temp_coeffs2 = copy.deepcopy(coefficients)
+            for jdx in range(free_coeffs[idx:].size):
+                params2 = np.zeros_like(free_coeffs)
+                params2[idx + jdx] = 1.0
+                temp_coeffs2.set_free_parameters(params2)
+                temp_coeffs2.set_constraints()
+                coeff_outer_coeff2 = np.outer(temp_coeffs.value, temp_coeffs2.value)
+                new_quad_corrections.append(
+                    flatten(coeff_outer_coeff2) @ dataset.QuadraticCorrections.T
+                )
+
+    if update_quad:
+        return np.array(new_linear_corrections), np.array(new_quad_corrections)
     return np.array(new_linear_corrections)
 
 

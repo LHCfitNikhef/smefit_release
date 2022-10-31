@@ -9,6 +9,7 @@ from ..log import logging
 from .chi2_utils import Chi2tableCalculator
 from .coefficients_utils import CoefficientsPlotter, compute_confidence_level
 from .correlations import plot_correlations
+from .fisher import FisherCalculator
 from .html_utils import html_link, write_html_container
 from .latex_tools import compile_tex
 from .pca import PcaCalculator
@@ -62,7 +63,7 @@ class Report:
         for name, label in zip(report_config["result_IDs"], fit_labels):
             fit = FitManager(result_path, name, label)
             fit.load_results()
-            if "PCA" in report_config or "chi2_plots" in report_config:
+            if any(k in report_config for k in ["chi2_plots", "PCA", "fisher"]):
                 fit.load_datasets()
             self.fits.append(fit)
         self.fits = np.array(self.fits)
@@ -375,3 +376,80 @@ class Report:
                 )
                 figs_list = [f"pca_heatmap_{fit.name}"]
         self._append_section("PCA", figs=figs_list, links=links_list)
+
+    def fisher(
+        self,
+        norm="coeff",
+        summary_only=True,
+        plot="summary",
+        fit_list=None,
+        log=False,
+    ):
+        """Fisher information table and plots runner.
+
+        Summary table and plots are the default
+
+        Parameters
+        ----------
+        norm: "coeff", "dataset"
+            fisher information normalization: per coefficient, or per dataset
+        summary_only: bool, optional
+            if False writes the fine grained fisher tables per dataset and group
+            if True only the summary table with grouped a datsets is written
+        plot: "summary", "full"
+            if full produce the fine grained fisher per dataset
+            otherwise only for grouped datsets
+        fit_list: list, optional
+            list of fit names for which the fisher information is computed.
+            By default all the fits included in the report
+        log: bool, optional
+            if True shows the log of the Fisher informaltion
+
+        """
+        figs_list, links_list = None, None
+        if fit_list is not None:
+            fit_list = self.fits[self.fits == fit_list]
+
+        for fit in fit_list:
+            compute_quad = fit.config["use_quad"]
+            fisher_cal = FisherCalculator(fit.coefficients, fit.datasets, compute_quad)
+            fisher_cal.compute_linear()
+            fisher_cal.nho_fisher = fisher_cal.normalize(
+                fisher_cal.nho_fisher, norm=norm, log=log
+            )
+            fisher_cal.summary_table = fisher_cal.groupby_data(
+                fisher_cal.nho_fisher, self.data_info, norm, log
+            )
+
+            # if necessary compute the quadratic Fisher
+            if compute_quad:
+                fisher_cal.compute_quadratic(fit.results, fit.smeft_predictions)
+                fisher_cal.ho_fisher = fisher_cal.normalize(
+                    fisher_cal.ho_fisher, norm=norm, log=log
+                )
+                fisher_cal.summary_HOtable = fisher_cal.groupby_data(
+                    fisher_cal.ho_fisher, self.data_info, norm, log
+                )
+
+            # Write down the table in latex
+            free_coeff_config = self.coeff_info.loc[
+                :, fit.coefficients.free_parameters.index
+            ]
+            compile_tex(
+                self.report,
+                fisher_cal.write_grouped(
+                    free_coeff_config, self.data_info, summary_only
+                ),
+                f"fisher_{fit.name}",
+            )
+            links_list = [(f"fisher_{fit.name}", f"Table {fit.label}")]
+
+            if plot is not False:
+                fisher_cal.plot(
+                    free_coeff_config,
+                    fit.label,
+                    f"{self.report}/fisher_heatmap_{fit.name}",
+                    plot,
+                )
+                figs_list = [f"fisher_heatmap_{fit.name}"]
+        self._append_section("Fisher", figs=figs_list, links=links_list)

@@ -63,6 +63,9 @@ def run_report(report_card_file):
     if "PCA" in report_config:
         report.pca(**report_config["PCA"])
 
+    if "fisher" in report_config:
+        report.fisher(**report_config["fisher"])
+
     # Move all files to a meta folder
     meta_path = pathlib.Path(f"{report_folder}/meta").absolute()
     meta_path.mkdir()
