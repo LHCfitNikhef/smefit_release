@@ -7,6 +7,47 @@ from smefit.loader import load_datasets
 
 from .test_loader import commondata_path
 
+operators_to_keep = np.array(["Op1", "Op2", "Op3", "Op4"])
+
+dataset = load_datasets(
+    commondata_path,
+    datasets=["data_test5"],
+    operators_to_keep=operators_to_keep,
+    order="NLO",
+    use_quad=True,
+    use_theory_covmat=True,
+    use_t0=False,
+    use_multiplicative_prescription=False,
+    theory_path=commondata_path,
+    rot_to_fit_basis=None,
+)
+c23 = 0.1
+c13 = -0.2
+coefficients = CoefficientManager.from_dict(
+    {
+        "Op1": {
+            "min": -1,
+            "max": 1,
+        },
+        "Op2": {
+            "min": -3,
+            "max": 1,
+        },
+        "Op4": {
+            "min": -3,
+            "max": 1,
+        },
+        "Op3": {  # fixed to 0.1 * Op2 - 0.2 * Op1
+            "constrain": [
+                {"Op2": c23},
+                {"Op1": c13},
+            ],
+            "min": -5,
+            "max": 1,
+        },
+    }
+)
+
 
 def test_make_sym_matrix():
 
@@ -26,47 +67,6 @@ def test_make_sym_matrix():
 
 def test_impose_constrain():
 
-    operators_to_keep = np.array(["Op1", "Op2", "Op3", "Op4"])
-    datasets = ["data_test5"]
-
-    dataset = load_datasets(
-        commondata_path,
-        datasets=datasets,
-        operators_to_keep=operators_to_keep,
-        order="NLO",
-        use_quad=True,
-        use_theory_covmat=True,
-        use_t0=False,
-        use_multiplicative_prescription=False,
-        theory_path=commondata_path,
-        rot_to_fit_basis=None,
-    )
-    c23 = 0.1
-    c13 = -0.2
-    coefficients = CoefficientManager.from_dict(
-        {
-            "Op1": {
-                "min": -1,
-                "max": 1,
-            },
-            "Op2": {
-                "min": -3,
-                "max": 1,
-            },
-            "Op4": {
-                "min": -3,
-                "max": 1,
-            },
-            "Op3": {  # fixed to 0.1 * Op2 - 0.2 * Op1
-                "constrain": [
-                    {"Op2": c23},
-                    {"Op1": c13},
-                ],
-                "min": -5,
-                "max": 1,
-            },
-        }
-    )
     updated_lincorr, updated_quadcorr = pca.impose_constrain(
         dataset, coefficients, update_quad=True
     )
@@ -101,3 +101,19 @@ def test_impose_constrain():
     )
     np.testing.assert_equal(test_updated_quadcorr.shape, (3, 3, 2))
     np.testing.assert_allclose(updated_quadcorr, test_updated_quadcorr, rtol=1e-15)
+
+
+def test_pca_eig():
+
+    """Test the relation of SVD and normal eigenvalue decomposition."""
+    pca_cal = pca.PcaCalculator(dataset, coefficients, latex_names=None)
+    pca_cal.compute()
+
+    new_LinearCorrections = pca.impose_constrain(dataset, coefficients)
+    X = new_LinearCorrections @ dataset.InvCovMat @ new_LinearCorrections.T
+    D, N = np.linalg.eig(X)
+    S = pca_cal.SVs.values
+    V = pca_cal.pc_matrix.values
+
+    np.testing.assert_allclose(S**2, np.sort(D**2)[::-1], atol=1e-17)
+    np.testing.assert_allclose(np.abs(V), np.abs(N), atol=1e-17)

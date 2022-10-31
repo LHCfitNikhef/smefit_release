@@ -12,7 +12,7 @@ from .latex_tools import latex_packages
 
 
 def make_sym_matrix(vals, n_op):
-    """Build a square tensor (vals.shape[0],n_op,n_op), starting from the upper tiangular part.
+    """Build a square tensor (n_op,n_op,vals.shape[0]), starting from the upper tiangular part.
 
     Parameters
     ----------
@@ -109,11 +109,10 @@ def impose_constrain(dataset, coefficients, update_quad=False):
 
 
 class PcaCalculator:
-    """
-    Computes and writes PCA table and heat map.
+    """Computes and writes PCA table and heat map.
 
-    Note: matrix being decomposed by SVD are the kappas
-    divided by the total experimental error.
+    Note: matrix being decomposed by SVD are the
+    linear corrections multiplied by the inverse covariance matrix.
 
     Parameters
     ----------
@@ -139,8 +138,6 @@ class PcaCalculator:
         free_parameters = self.coefficients.free_parameters.index
 
         new_LinearCorrections = impose_constrain(self.datasets, self.coefficients)
-
-        # TODO: check this definition. It should be the one used in the public atlas note
         X = new_LinearCorrections @ self.datasets.InvCovMat @ new_LinearCorrections.T
         # Decompose matrix with SVD and identify PCs
         Vt, W, _ = np.linalg.svd(X)
