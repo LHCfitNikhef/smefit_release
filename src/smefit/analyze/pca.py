@@ -130,15 +130,12 @@ class PcaCalculator:
         # PCA Table, loop on PC
         for sv_name, sv_value in self.SVs.items():
             L.append(
-                r"\noindent \textcolor{red}{\underline{\bf{%s} (%0.2e):}}"
-                % (sv_name, sv_value)
+                f"\\noindent \\textcolor{{red}}{{\\underline{{\\bf{{{sv_name}}} ({sv_value:.2e}):}}}}"
             )
             # loop on PC entries
             pc_sorted = self.pc_matrix[sv_name].sort_values(ascending=False, key=np.abs)
             for coeff, aij in pc_sorted[np.abs(pc_sorted) > thr_show].items():
-                L.append(
-                    r"{{${:+0.3f}$}}{{\rm {}}} ".format(aij, self.latex_names[coeff])
-                )
+                L.append(f"{{${aij:+0.3f}$}}{{\\rm {self.latex_names[coeff]}}} ")
             L.append(r" \nonumber \\ \nonumber \\ ")
         return L
 

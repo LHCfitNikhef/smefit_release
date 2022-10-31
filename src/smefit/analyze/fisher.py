@@ -303,26 +303,22 @@ class FisherCalculator:
             r"\centering",
             r"\begin{tabular}{|c|c|" + "c|" * nho_fisher.shape[0] + "}",
             r"\hline",
-            r" \multicolumn{2}{|c|}{} & \multicolumn{%d}{c|}{Processes} \\ \hline"
-            % nho_fisher.shape[0],
+            f"\\multicolumn{{2}}{{|c|}}{{}} & \\multicolumn{{{nho_fisher.shape[0]}}}{{c|}}{{Processes}} \\\\ \\hline",
         ]
         temp = " Class & Coefficient "
         if data_dict is None:
             for dataset in nho_fisher.index:
-                temp += r"& {\rm %s }" % dataset
+                temp += f"& {{\\rm {dataset} }}"
         else:
             for dataset, link in data_dict.items():
-                temp += r"& \href{{{}}}{{${{\rm {}}}$}} ".format(
-                    link,
-                    dataset.replace("_", r"\_"),
-                )
+                temp += f"& \\href{{{link}}}{{${{\rm {dataset}}}$}}".replace("_", r"\_")
         temp += r"\\ \hline"
         L.append(temp)
 
         # loop on coeffs
         for coeff_group, coeff_dict in coeff_config.groupby(level=0):
             coeff_dict = coeff_dict.droplevel(0)
-            L.append(r"\multirow{%d}{*}{%s}" % (coeff_dict.shape[0], coeff_group))
+            L.append(f"\\multirow{{{coeff_dict.shape[0]}}}{{*}}{{{coeff_group}}}")
             for coeff, latex_name in coeff_dict.items():
                 idx = np.where(coeff == self.free_parameters)[0][0]
                 temp = f" & {latex_name}"
@@ -337,19 +333,19 @@ class FisherCalculator:
                 temp += (
                     r"\\ \hline"
                     if coeff == [*coeff_dict.keys()][-1]
-                    else r"\\ \cline{2-%d} " % (2 + nho_fisher.shape[0])
+                    else f"\\\\ \\cline{{2-{(2 + nho_fisher.shape[0])}}}"
                 )
                 L.append(temp)
 
         caption = (
             "Fisher information"
             if data_group is None
-            else "Fisher information in %s datasets" % data_group
+            else f"Fisher information in {data_group} datasets"
         )
         L.extend(
             [
                 r"\end{tabular}",
-                r"\caption{%s}" % caption,
+                f"\\caption{{{caption}}}",
                 r"\end{table}",
             ]
         )
@@ -398,7 +394,7 @@ class FisherCalculator:
         # clolor map
         cmap_full = cm.get_cmap("Blues")
         cmap = colors.LinearSegmentedColormap.from_list(
-            "trunc({n},{a:.2f},{b:.2f})".format(n=cmap_full.name, a=0, b=0.8),
+            f"trunc({{{cmap_full.name}}},{{0}},{{0.8}})",
             cmap_full(np.linspace(0, 0.8, 100)),
         )
         norm = colors.BoundaryNorm(np.arange(110, step=10), cmap.N)
@@ -406,7 +402,7 @@ class FisherCalculator:
         # thicks
         yticks = np.arange(fisher_df.shape[1])
         xticks = np.arange(fisher_df.shape[0])
-        x_labels = [r"\rm{%s}" % name.replace("_", r"\_") for name in fisher_df.index]
+        x_labels = [f"\\rm{{{name}}}".replace("_", "\\_") for name in fisher_df.index]
 
         def set_ticks(ax):
             ax.set_yticks(yticks, labels=latex_names, fontsize=15)
