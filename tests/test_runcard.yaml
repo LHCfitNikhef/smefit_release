@@ -9,16 +9,12 @@ data_path:  test_data_path
 # path to theory tables, default same as data path (path to operator_res tables)
 theory_path:  test_th_path
 
-
-
 # Datasets to include
 datasets:
 
   - test_dataset
-  
+
 # Coefficients to fit
 coefficients:
 
   Otest: {'min': -0.5, 'max': 1.0}
-  
-

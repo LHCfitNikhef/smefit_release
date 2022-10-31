@@ -14,6 +14,9 @@ from .latex_tools import latex_packages
 def impose_constrain(dataset, coefficients, update_quad=False):
     """Propagate coefficient constraint into the theory tables.
 
+    Note: only linear contraints are allowed in this method.
+    Non linear contrains not always make sense here.
+
     Parameters
     ----------
     dataset: smefit.loader.DataTuple
@@ -27,16 +30,17 @@ def impose_constrain(dataset, coefficients, update_quad=False):
     -------
     np.ndarray
         array of updated linear corrections (n_free_op, n_dat)
-     np.ndarray, optional
+    np.ndarray, optional
         array of updated quadratic corrections ((n_free_op * (n_free_op+1))/2, n_dat)
 
     """
     temp_coeffs = copy.deepcopy(coefficients)
     free_coeffs = temp_coeffs.free_parameters.index
+    n_free_params = free_coeffs.size
     new_linear_corrections = []
     new_quad_corrections = []
     # loop on the free op and add the corrections
-    for idx in range(free_coeffs.size):
+    for idx in range(n_free_params):
         # update all the free coefficents to 0 except fro 1 and propagate
         params = np.zeros_like(free_coeffs)
         params[idx] = 1.0
@@ -46,21 +50,32 @@ def impose_constrain(dataset, coefficients, update_quad=False):
         # update linear corrections
         new_linear_corrections.append(temp_coeffs.value @ dataset.LinearCorrections.T)
 
-        # update quadratic corrections
+        # update quadratic corrections, this will include some double counting in the mixed corrections
         if update_quad:
-            temp_coeffs2 = copy.deepcopy(coefficients)
             for jdx in range(free_coeffs[idx:].size):
-                params2 = np.zeros_like(free_coeffs)
-                params2[idx + jdx] = 1.0
-                temp_coeffs2.set_free_parameters(params2)
-                temp_coeffs2.set_constraints()
-                coeff_outer_coeff2 = np.outer(temp_coeffs.value, temp_coeffs2.value)
+                params = np.zeros_like(free_coeffs)
+                params[idx + jdx] = 1.0
+                params[idx] = 1.0
+                temp_coeffs.set_free_parameters(params)
+                temp_coeffs.set_constraints()
+                coeff_outer_coeff = np.outer(temp_coeffs.value, temp_coeffs.value)
                 new_quad_corrections.append(
-                    flatten(coeff_outer_coeff2) @ dataset.QuadraticCorrections.T
+                    flatten(coeff_outer_coeff) @ dataset.QuadraticCorrections.T
                 )
+                params[idx + jdx] = 0.0
 
     if update_quad:
-        return np.array(new_linear_corrections), np.array(new_quad_corrections)
+        # subrtact the squuared corrections from the mixed ones
+        new_quad_corrections = np.array(new_quad_corrections)
+        cnt = 0
+        for idx in range(n_free_params):
+            sq_corr = new_quad_corrections[cnt]
+            for jdx in range(free_coeffs[idx:].size):
+                if jdx != idx:
+                    new_quad_corrections[idx + jdx] -= sq_corr
+            cnt += n_free_params - idx
+        return np.array(new_linear_corrections), new_quad_corrections
+
     return np.array(new_linear_corrections)
 
 
