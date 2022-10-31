@@ -483,7 +483,7 @@ class CoefficientsPlotter:
 
         for group, coeff_group in self.coeff_info.groupby(level=0):
             coeff_group = coeff_group.droplevel(0)
-            L.append(r"\multirow{%d}{*}{%s}" % (coeff_group.shape[0], group))
+            L.append(f"\\multirow{{{coeff_group.shape[0]}}}{{*}}{{{group}}}")
             # loop on coefficients
             for latex_name in coeff_group.values:
                 temp = f" & {latex_name}"
@@ -523,10 +523,10 @@ class CoefficientsPlotter:
 
                 # append double solution
                 if temp2 != " &" * (3 * nfits + 1):
-                    temp += r" \\ \cline{3-%d}" % (2 + 3 * nfits)
+                    temp += f" \\\\ \\cline{{3-{(2 + 3 * nfits)}}}"
                     temp += temp2
 
-                temp += r" \\ \cline{2-%d}" % (2 + 3 * nfits)
+                temp += f" \\\\ \\cline{{2-{(2 + 3 * nfits)}}}"
                 L.append(temp)
             L.append(r"\hline")
         L.extend(

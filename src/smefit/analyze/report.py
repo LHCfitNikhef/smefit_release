@@ -54,7 +54,7 @@ class Report:
         # build the fits labels if needed
         if "fit_labels" not in report_config:
             fit_labels = [
-                r"${\rm %s}$" % fit.replace("_", r"\ ")
+                f"${{\\rm {fit}}}$".replace("_", r"\ ")
                 for fit in report_config["result_IDs"]
             ]
         else:

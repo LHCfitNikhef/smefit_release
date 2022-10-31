@@ -239,7 +239,7 @@ class Chi2tableCalculator:
             # loop over datasets
             for dataset, link in datasets.droplevel(0).items():
                 temp = (
-                    r"\href{{{}}}{{{}}}".format(link, dataset)
+                    f"\\href{{{link}}}{{{dataset}}}"
                     + f" & {int(self.chi2_df_sm.loc[dataset,'ndat'])}"
                     + f" & {self.chi2_df_sm.loc[dataset,'chi2_sm/ndat'].round(3)}"
                 )
@@ -247,11 +247,8 @@ class Chi2tableCalculator:
                     temp += " & "
                     chi2_df = self._add_chi2_df_colors(chi2_df)
                     if dataset in chi2_df.index:
-                        temp += r"\textcolor{{{}}}{{{:.3f}}}".format(
-                            chi2_df.loc[dataset, "color"],
-                            chi2_df.loc[dataset, "chi2/ndat"],
-                        )
-
+                        temp += f"\\textcolor{{{chi2_df.loc[dataset, 'color']}}}\
+                            {{{chi2_df.loc[dataset, 'chi2/ndat']:.3f}}}"
                 temp += r" \\ \hline"
                 L.append(temp)
 
@@ -265,7 +262,7 @@ class Chi2tableCalculator:
                 [
                     closing_line,
                     r"\end{tabular}",
-                    r"\caption{$\chi^2$ table for %s data}" % group,
+                    f"\\caption{{$\\chi^2$ table for {group} data}}",
                     r"\end{table}",
                 ]
             )
@@ -293,7 +290,7 @@ class Chi2tableCalculator:
         ]
         temp = r""
         for label in chi2_dict_group:
-            temp += r"& \multicolumn{2}{c|}{%s} " % (label)
+            temp += f"& \\multicolumn{{2}}{{c|}}{{{label}}}"
         temp += r"\\ \hline"
         L.append(temp)
         L.append(
@@ -306,11 +303,9 @@ class Chi2tableCalculator:
             temp = f"{group}"
             for chi2_df_grouped in chi2_dict_group.values():
                 if group in chi2_df_grouped.index:
-                    temp += " & %d & %.3f (%.3f)" % (
-                        chi2_df_grouped.loc[group, "ndat"],
-                        chi2_df_grouped.loc[group, "chi2/ndat"],
-                        chi2_df_grouped.loc[group, "chi2_sm/ndat"],
-                    )
+                    temp += f" & {chi2_df_grouped.loc[group, 'ndat']} \
+                        & {chi2_df_grouped.loc[group, 'chi2/ndat']:.3f} \
+                            ({chi2_df_grouped.loc[group, 'chi2_sm/ndat']:.3f})"
                 else:
                     temp += " & & "
             temp += r" \\ \hline"
@@ -318,11 +313,9 @@ class Chi2tableCalculator:
 
         temp = r" \hline Total"
         for chi2_df_grouped in chi2_dict_group.values():
-            temp += " & %d & %.3f (%.3f)" % (
-                chi2_df_grouped.loc["Total", "ndat"],
-                chi2_df_grouped.loc["Total", "chi2/ndat"],
-                chi2_df_grouped.loc["Total", "chi2_sm/ndat"],
-            )
+            temp += f" & {chi2_df_grouped.loc['Total', 'ndat']} \
+                & {chi2_df_grouped.loc['Total', 'chi2/ndat']:.3f} \
+                    ({chi2_df_grouped.loc['Total', 'chi2_sm/ndat']:.3f})"
         temp += r" \\ \hline"
         L.extend(
             [
@@ -348,7 +341,7 @@ class Chi2tableCalculator:
         for name, chi2_df in chi2_dict.items():
             chi2_bar[name] = chi2_df["chi2/ndat"]
         chi2_bar.index = [
-            r"\rm{%s}" % name.replace("_", r"\_") for name in chi2_bar.index
+            f"\\rm{{{name}}}".replace("_", r"\_") for name in chi2_bar.index
         ]
         chi2_bar.plot(kind="barh", width=0.7, figsize=figsize)
 

@@ -72,7 +72,7 @@ class FisherCalculator:
                 self.new_QuadraticCorrections.T, self.free_parameters.size
             )
         else:
-            self.new_LinearCorrection = impose_constrain(
+            self.new_LinearCorrections = impose_constrain(
                 self.datasets, self.coefficients
             )
 
@@ -303,7 +303,8 @@ class FisherCalculator:
             r"\centering",
             r"\begin{tabular}{|c|c|" + "c|" * nho_fisher.shape[0] + "}",
             r"\hline",
-            f"\\multicolumn{{2}}{{|c|}}{{}} & \\multicolumn{{{nho_fisher.shape[0]}}}{{c|}}{{Processes}} \\\\ \\hline",
+            f"\\multicolumn{{2}}{{|c|}}{{}} \
+                & \\multicolumn{{{nho_fisher.shape[0]}}}{{c|}}{{Processes}} \\\\ \\hline",
         ]
         temp = " Class & Coefficient "
         if data_dict is None:

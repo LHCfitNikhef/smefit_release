@@ -104,7 +104,7 @@ class SummaryWriter:
 
         for group, datasets in self.data_info.groupby(level=0):
             datasets = datasets.droplevel(0)
-            L.append(r"\multirow{%d}{*}{%s}" % (datasets.shape[0], group))
+            L.append(f"\\multirow{{{datasets.shape[0]}}}{{*}}{{{group}}}")
             for isub, (dataset, link) in enumerate(datasets.items()):
                 temp = r" & \href{" + link + "}{" + dataset + "} "
                 for fit in self.fits:
@@ -112,7 +112,7 @@ class SummaryWriter:
                     if dataset in fit.config["datasets"]:
                         temp += r"$\checkmark$"
                 if isub != datasets.shape[0] - 1:
-                    temp += r"\\ \cline{2-%d}" % (2 + self.nfits)
+                    temp += f"\\\\ \\cline{{2-{(2 + self.nfits)}}}"
                 L.append(temp)
             L.append(r"\\ \hline")
 
@@ -156,7 +156,7 @@ class SummaryWriter:
         # loop on coeff groups
         for group, coefficients in self.coeff_info.groupby(level=0):
             coefficients = coefficients.droplevel(0)
-            L.append(r"\multirow{%d}{*}{%s}" % (coefficients.shape[0], group))
+            L.append(f"\\multirow{{{coefficients.shape[0]}}}{{*}}{{{group}}}")
 
             # loop on coefficients
             for isub, (coeff, latex_name) in enumerate(coefficients.items()):
@@ -177,7 +177,7 @@ class SummaryWriter:
                         temp += r" & & "
 
                 if isub != coefficients.shape[0] - 1:
-                    temp += r"\\ \cline{2-%d}" % (2 + 2 * self.nfits)
+                    temp += f"\\\\ \\cline{{2-{(2 + 2 * self.nfits)}}}"
                 L.append(temp)
 
             L.append(r"\\ \hline")

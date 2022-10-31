@@ -33,7 +33,7 @@ def multicolum_table_header(fit_labels, ncolumn=2):
     L = [r"\hline"]
     temp = " & "
     for label in fit_labels:
-        temp += r" & \multicolumn{%d}{c|}{%s} " % (ncolumn, label)
+        temp += f" & \\multicolumn{{{ncolumn}}}{{c|}}{{{label}}}"
     temp += r" \\ \hline"
     L.append(temp)
     return L
