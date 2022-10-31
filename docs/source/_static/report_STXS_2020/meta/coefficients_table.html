@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> </title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title"> </h1>
+</header>
+<table>
+<caption>Coefficient comparison</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;" colspan="3">NS</th>
+<th style="text-align: center;" colspan="3">MC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Class</td>
+<td style="text-align: center;">Coefficients</td>
+<td style="text-align: center;">best</td>
+<td style="text-align: center;">68% CL Bounds</td>
+<td style="text-align: center;">95% CL Bounds</td>
+<td style="text-align: center;">best</td>
+<td style="text-align: center;">68% CL Bounds</td>
+<td style="text-align: center;">95% CL Bounds</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;" rowspan="28">STXS</td>
+<td style="text-align: center;"><span class="math inline">\(c_{2q2l}^{[1]}\)</span></td>
+<td style="text-align: center;">0.005</td>
+<td style="text-align: center;">[-0.029,0.039]</td>
+<td style="text-align: center;">[-0.063,0.073]</td>
+<td style="text-align: center;">0.005</td>
+<td style="text-align: center;">[-0.029,0.040]</td>
+<td style="text-align: center;">[-0.065,0.072]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{2q2l}^{[2]}\)</span></td>
+<td style="text-align: center;">-0.201</td>
+<td style="text-align: center;">[-0.561,0.163]</td>
+<td style="text-align: center;">[-0.911,0.503]</td>
+<td style="text-align: center;">-0.185</td>
+<td style="text-align: center;">[-0.543,0.167]</td>
+<td style="text-align: center;">[-0.877,0.553]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{2q2l}^{[3]}\)</span></td>
+<td style="text-align: center;">-0.598</td>
+<td style="text-align: center;">[-1.664,0.454]</td>
+<td style="text-align: center;">[-2.693,1.488]</td>
+<td style="text-align: center;">-0.573</td>
+<td style="text-align: center;">[-1.661,0.518]</td>
+<td style="text-align: center;">[-2.700,1.631]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{2q2l}^{[4]}\)</span></td>
+<td style="text-align: center;">-4.521</td>
+<td style="text-align: center;">[-8.990,0.000]</td>
+<td style="text-align: center;">[-13.370,4.209]</td>
+<td style="text-align: center;">-4.727</td>
+<td style="text-align: center;">[-9.426,-0.172]</td>
+<td style="text-align: center;">[-14.076,4.493]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{4q}^{[1]}\)</span></td>
+<td style="text-align: center;">0.004</td>
+<td style="text-align: center;">[-0.083,0.090]</td>
+<td style="text-align: center;">[-0.167,0.171]</td>
+<td style="text-align: center;">0.003</td>
+<td style="text-align: center;">[-0.082,0.092]</td>
+<td style="text-align: center;">[-0.161,0.163]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{4q}^{[2]}\)</span></td>
+<td style="text-align: center;">4.413</td>
+<td style="text-align: center;">[-3.324,12.149]</td>
+<td style="text-align: center;">[-10.992,19.639]</td>
+<td style="text-align: center;">4.542</td>
+<td style="text-align: center;">[-2.818,12.393]</td>
+<td style="text-align: center;">[-9.907,19.881]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{HG}\)</span></td>
+<td style="text-align: center;">-0.004</td>
+<td style="text-align: center;">[-0.016,0.008]</td>
+<td style="text-align: center;">[-0.027,0.019]</td>
+<td style="text-align: center;">-0.004</td>
+<td style="text-align: center;">[-0.015,0.007]</td>
+<td style="text-align: center;">[-0.028,0.020]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{W}\)</span></td>
+<td style="text-align: center;">0.111</td>
+<td style="text-align: center;">[-0.124,0.349]</td>
+<td style="text-align: center;">[-0.354,0.582]</td>
+<td style="text-align: center;">0.116</td>
+<td style="text-align: center;">[-0.111,0.370]</td>
+<td style="text-align: center;">[-0.371,0.586]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[1]}\)</span></td>
+<td style="text-align: center;">-0.000</td>
+<td style="text-align: center;">[-0.001,0.001]</td>
+<td style="text-align: center;">[-0.002,0.002]</td>
+<td style="text-align: center;">-0.000</td>
+<td style="text-align: center;">[-0.001,0.001]</td>
+<td style="text-align: center;">[-0.002,0.002]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[2]}\)</span></td>
+<td style="text-align: center;">-0.001</td>
+<td style="text-align: center;">[-0.007,0.005]</td>
+<td style="text-align: center;">[-0.013,0.010]</td>
+<td style="text-align: center;">-0.001</td>
+<td style="text-align: center;">[-0.007,0.004]</td>
+<td style="text-align: center;">[-0.012,0.011]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[3]}\)</span></td>
+<td style="text-align: center;">0.001</td>
+<td style="text-align: center;">[-0.006,0.008]</td>
+<td style="text-align: center;">[-0.012,0.014]</td>
+<td style="text-align: center;">0.001</td>
+<td style="text-align: center;">[-0.006,0.008]</td>
+<td style="text-align: center;">[-0.013,0.014]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[4]}\)</span></td>
+<td style="text-align: center;">-0.031</td>
+<td style="text-align: center;">[-0.041,-0.021]</td>
+<td style="text-align: center;">[-0.050,-0.012]</td>
+<td style="text-align: center;">-0.031</td>
+<td style="text-align: center;">[-0.041,-0.021]</td>
+<td style="text-align: center;">[-0.050,-0.012]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[5]}\)</span></td>
+<td style="text-align: center;">0.002</td>
+<td style="text-align: center;">[-0.014,0.019]</td>
+<td style="text-align: center;">[-0.030,0.035]</td>
+<td style="text-align: center;">0.003</td>
+<td style="text-align: center;">[-0.014,0.019]</td>
+<td style="text-align: center;">[-0.028,0.035]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[6]}\)</span></td>
+<td style="text-align: center;">-0.034</td>
+<td style="text-align: center;">[-0.058,-0.009]</td>
+<td style="text-align: center;">[-0.082,0.015]</td>
+<td style="text-align: center;">-0.032</td>
+<td style="text-align: center;">[-0.056,-0.007]</td>
+<td style="text-align: center;">[-0.079,0.014]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[7]}\)</span></td>
+<td style="text-align: center;">0.019</td>
+<td style="text-align: center;">[-0.028,0.067]</td>
+<td style="text-align: center;">[-0.075,0.113]</td>
+<td style="text-align: center;">0.016</td>
+<td style="text-align: center;">[-0.030,0.061]</td>
+<td style="text-align: center;">[-0.079,0.104]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[8]}\)</span></td>
+<td style="text-align: center;">0.035</td>
+<td style="text-align: center;">[-0.074,0.142]</td>
+<td style="text-align: center;">[-0.180,0.245]</td>
+<td style="text-align: center;">0.037</td>
+<td style="text-align: center;">[-0.068,0.144]</td>
+<td style="text-align: center;">[-0.184,0.240]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[9]}\)</span></td>
+<td style="text-align: center;">-0.163</td>
+<td style="text-align: center;">[-0.404,0.078]</td>
+<td style="text-align: center;">[-0.644,0.309]</td>
+<td style="text-align: center;">-0.157</td>
+<td style="text-align: center;">[-0.405,0.088]</td>
+<td style="text-align: center;">[-0.650,0.348]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[10]}\)</span></td>
+<td style="text-align: center;">-0.160</td>
+<td style="text-align: center;">[-0.503,0.183]</td>
+<td style="text-align: center;">[-0.833,0.513]</td>
+<td style="text-align: center;">-0.161</td>
+<td style="text-align: center;">[-0.485,0.173]</td>
+<td style="text-align: center;">[-0.818,0.476]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[11]}\)</span></td>
+<td style="text-align: center;">0.348</td>
+<td style="text-align: center;">[-0.020,0.717]</td>
+<td style="text-align: center;">[-0.388,1.063]</td>
+<td style="text-align: center;">0.357</td>
+<td style="text-align: center;">[-0.025,0.744]</td>
+<td style="text-align: center;">[-0.418,1.083]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[12]}\)</span></td>
+<td style="text-align: center;">-0.563</td>
+<td style="text-align: center;">[-1.207,0.102]</td>
+<td style="text-align: center;">[-1.862,0.729]</td>
+<td style="text-align: center;">-0.565</td>
+<td style="text-align: center;">[-1.204,0.070]</td>
+<td style="text-align: center;">[-1.813,0.621]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[13]}\)</span></td>
+<td style="text-align: center;">1.559</td>
+<td style="text-align: center;">[0.425,2.666]</td>
+<td style="text-align: center;">[-0.695,3.736]</td>
+<td style="text-align: center;">1.627</td>
+<td style="text-align: center;">[0.506,2.798]</td>
+<td style="text-align: center;">[-0.634,3.774]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{HVV,Vff}^{[14]}\)</span></td>
+<td style="text-align: center;">0.519</td>
+<td style="text-align: center;">[-1.638,2.690]</td>
+<td style="text-align: center;">[-3.769,4.748]</td>
+<td style="text-align: center;">0.350</td>
+<td style="text-align: center;">[-1.766,2.665]</td>
+<td style="text-align: center;">[-3.825,4.427]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{bH}\)</span></td>
+<td style="text-align: center;">0.045</td>
+<td style="text-align: center;">[-0.011,0.102]</td>
+<td style="text-align: center;">[-0.065,0.154]</td>
+<td style="text-align: center;">0.048</td>
+<td style="text-align: center;">[-0.006,0.101]</td>
+<td style="text-align: center;">[-0.058,0.151]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{eH}\)</span></td>
+<td style="text-align: center;">1.211</td>
+<td style="text-align: center;">[-0.461,2.877]</td>
+<td style="text-align: center;">[-2.127,4.521]</td>
+<td style="text-align: center;">1.199</td>
+<td style="text-align: center;">[-0.372,2.840]</td>
+<td style="text-align: center;">[-1.765,4.342]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{tG}\)</span></td>
+<td style="text-align: center;">0.189</td>
+<td style="text-align: center;">[-0.226,0.605]</td>
+<td style="text-align: center;">[-0.631,0.987]</td>
+<td style="text-align: center;">0.205</td>
+<td style="text-align: center;">[-0.211,0.645]</td>
+<td style="text-align: center;">[-0.628,1.020]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{tH}\)</span></td>
+<td style="text-align: center;">2.536</td>
+<td style="text-align: center;">[-0.684,5.853]</td>
+<td style="text-align: center;">[-4.061,8.573]</td>
+<td style="text-align: center;">2.793</td>
+<td style="text-align: center;">[-0.483,6.088]</td>
+<td style="text-align: center;">[-3.527,9.599]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(c_{top}^{[1]}\)</span></td>
+<td style="text-align: center;">-0.806</td>
+<td style="text-align: center;">[-1.756,0.144]</td>
+<td style="text-align: center;">[-2.707,1.061]</td>
+<td style="text-align: center;">-0.798</td>
+<td style="text-align: center;">[-1.745,0.125]</td>
+<td style="text-align: center;">[-2.432,1.211]</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(c_{uH,dH,H\Box}\)</span></td>
+<td style="text-align: center;">-0.958</td>
+<td style="text-align: center;">[-2.469,0.547]</td>
+<td style="text-align: center;">[-3.965,1.986]</td>
+<td style="text-align: center;">-0.980</td>
+<td style="text-align: center;">[-2.548,0.521]</td>
+<td style="text-align: center;">[-3.997,2.228]</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
