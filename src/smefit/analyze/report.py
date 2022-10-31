@@ -381,7 +381,7 @@ class Report:
         self,
         norm="coeff",
         summary_only=True,
-        plot="summary",
+        plot=None,
         fit_list=None,
         log=False,
     ):
@@ -396,9 +396,8 @@ class Report:
         summary_only: bool, optional
             if False writes the fine grained fisher tables per dataset and group
             if True only the summary table with grouped a datsets is written
-        plot: "summary", "full"
-            if full produce the fine grained fisher per dataset
-            otherwise only for grouped datsets
+        plot: None, dict
+            plot options
         fit_list: list, optional
             list of fit names for which the fisher information is computed.
             By default all the fits included in the report
@@ -449,7 +448,7 @@ class Report:
                     free_coeff_config,
                     fit.label,
                     f"{self.report}/fisher_heatmap_{fit.name}",
-                    plot,
+                    **plot,
                 )
                 figs_list = [f"fisher_heatmap_{fit.name}"]
         self._append_section("Fisher", figs=figs_list, links=links_list)

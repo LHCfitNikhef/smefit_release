@@ -172,7 +172,7 @@ class FisherCalculator:
         )
 
     @staticmethod
-    def normalize(table, norm, log=False):
+    def normalize(table, norm, log):
         """
         Normalize a Pandas DataFrame
 
@@ -280,7 +280,7 @@ class FisherCalculator:
             quadratic Fisher information table, None if linear only
         coeff_config: dict
             coefficient dictionary per group with latex names
-        data_dict: dict
+        data_dict: dict, optional
             dictionary with datasets and relative links
         data_group: str, optional
             data group name
@@ -360,18 +360,29 @@ class FisherCalculator:
         latex_names,
         fit_label,
         fig_name,
-        plot,
+        summary_only=True,
         figsize=(11, 15),
     ):
         """Plot the heat map of Fisher table.
 
         Parameters
         ----------
+        latex_names : list
+            list of coefficients latex names
+        fit_label: str
+            fit label
+        fig_name: str
+            plot name
         fig_name: str
             figure path
+        summary_only:
+            if True plot the fisher grouped per datsets,
+            else the fine grained dataset per dataset
+        figsize : tuple
+            figure size
 
         """
-        if plot == "summary":
+        if summary_only:
             fisher_df = self.summary_table
             quad_fisher_df = self.summary_HOtable
         else:
