@@ -10,34 +10,6 @@ from .latex_tools import latex_packages
 from .pca import impose_constrain
 
 
-def make_sym_matrix(vals, n_op):
-    """Build a square tensor (vals.shape[0],n_op,n_op), starting from the upper tiangular part.
-
-    Parameters
-    ----------
-        vals : np.ndarray
-            traingular part
-        n_op : int
-            dimension of the final matrix
-
-    Returns
-    -------
-    np.ndarry:
-        square tensor.
-
-        ````
-        make_sym_matrix(array([1,2,3,4,5,6]), 3) -> array([[1,2,3],[0,4,5],[0,0,6]])
-        ````
-    """
-    n_dat = vals.shape[0]
-    m = np.zeros((n_dat, n_op, n_op))
-    xs, ys = np.triu_indices(n_op)
-    for i, l in enumerate(vals):
-        m[i, xs, ys] = l
-        m[i, ys, xs] = l
-    return m
-
-
 class FisherCalculator:
 
     """Computes and writes the Fisher information table, and plots heat map.
@@ -68,9 +40,6 @@ class FisherCalculator:
                 self.new_LinearCorrections,
                 self.new_QuadraticCorrections,
             ) = impose_constrain(self.datasets, self.coefficients, update_quad=True)
-            self.new_QuadraticCorrections = make_sym_matrix(
-                self.new_QuadraticCorrections.T, self.free_parameters.size
-            )
         else:
             self.new_LinearCorrections = impose_constrain(
                 self.datasets, self.coefficients
@@ -109,18 +78,17 @@ class FisherCalculator:
         c2_mean = np.mean(posterior_df**2, axis=0).values
 
         # squared quad corr
-        diag_corr = np.diagonal(self.new_QuadraticCorrections, axis1=1, axis2=2)
+        diag_corr = np.diagonal(self.new_QuadraticCorrections, axis1=0, axis2=1)
         off_diag_corr = self.new_QuadraticCorrections
         diag_index = np.diag_indices(self.free_parameters.size)
-        off_diag_corr[:, diag_index[0], diag_index[1]] = 0
+        off_diag_corr[diag_index[0], diag_index[1], :] = 0
 
         # TODO:
         # 1) test tensor....
-        # 2) test formula, constrain and PCA
         # 3) write docs
 
         # additional tensors
-        tmp = np.einsum("ri,kij->rjk", posterior_df, off_diag_corr, optimize="optimal")
+        tmp = np.einsum("ri,ijk->rjk", posterior_df, off_diag_corr, optimize="optimal")
         A_all = np.mean(tmp, axis=0)  # (n_free_op, n_dat)
         B_all = (
             np.einsum("rj,rjk->jk", posterior_df, tmp, optimize="optimal")

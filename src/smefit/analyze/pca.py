@@ -11,6 +11,34 @@ from ..compute_theory import flatten
 from .latex_tools import latex_packages
 
 
+def make_sym_matrix(vals, n_op):
+    """Build a square tensor (vals.shape[0],n_op,n_op), starting from the upper tiangular part.
+
+    Parameters
+    ----------
+        vals : np.ndarray
+            traingular part
+        n_op : int
+            dimension of the final matrix
+
+    Returns
+    -------
+    np.ndarry:
+        square tensor.
+
+        ````
+        make_sym_matrix(array([1,2,3,4,5,6]), 3) -> array([[1,2,3],[0,4,5],[0,0,6]])
+        ````
+    """
+    n_dat = vals.shape[0]
+    m = np.zeros((n_op, n_op, n_dat))
+    xs, ys = np.triu_indices(n_op)
+    for i, l in enumerate(vals):
+        m[xs, ys, i] = l
+        m[ys, xs, i] = l
+    return m
+
+
 def impose_constrain(dataset, coefficients, update_quad=False):
     """Propagate coefficient constraint into the theory tables.
 
@@ -31,7 +59,7 @@ def impose_constrain(dataset, coefficients, update_quad=False):
     np.ndarray
         array of updated linear corrections (n_free_op, n_dat)
     np.ndarray, optional
-        array of updated quadratic corrections ((n_free_op * (n_free_op+1))/2, n_dat)
+        array of updated quadratic corrections (n_free_op, n_free_op, n_dat)
 
     """
     temp_coeffs = copy.deepcopy(coefficients)
@@ -41,7 +69,7 @@ def impose_constrain(dataset, coefficients, update_quad=False):
     new_quad_corrections = []
     # loop on the free op and add the corrections
     for idx in range(n_free_params):
-        # update all the free coefficents to 0 except fro 1 and propagate
+        # update all the free coefficents to 0 except from 1 and propagate
         params = np.zeros_like(free_coeffs)
         params[idx] = 1.0
         temp_coeffs.set_free_parameters(params)
@@ -62,18 +90,19 @@ def impose_constrain(dataset, coefficients, update_quad=False):
                 new_quad_corrections.append(
                     flatten(coeff_outer_coeff) @ dataset.QuadraticCorrections.T
                 )
-                params[idx + jdx] = 0.0
 
     if update_quad:
         # subrtact the squuared corrections from the mixed ones
-        new_quad_corrections = np.array(new_quad_corrections)
-        cnt = 0
+        new_quad_corrections = make_sym_matrix(
+            np.array(new_quad_corrections).T, n_free_params
+        )
         for idx in range(n_free_params):
-            sq_corr = new_quad_corrections[cnt]
-            for jdx in range(free_coeffs[idx:].size):
+            for jdx in range(n_free_params):
                 if jdx != idx:
-                    new_quad_corrections[idx + jdx] -= sq_corr
-            cnt += n_free_params - idx
+                    new_quad_corrections[idx, jdx, :] -= (
+                        new_quad_corrections[idx, idx, :]
+                        + new_quad_corrections[jdx, jdx, :]
+                    )
         return np.array(new_linear_corrections), new_quad_corrections
 
     return np.array(new_linear_corrections)

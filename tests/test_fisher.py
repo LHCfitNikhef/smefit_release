@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from smefit.analyze import fisher, pca
+from smefit.analyze import pca
 from smefit.coefficients import CoefficientManager
 from smefit.loader import load_datasets
 
@@ -11,21 +11,23 @@ from .test_loader import commondata_path
 def test_make_sym_matrix():
 
     vals = np.array([[1, 2, 3, 4, 5, 6], [7, 8, 9, 10, 11, 12]])
-    mat = fisher.make_sym_matrix(vals, 3)
-    np.testing.assert_equal(mat[0], mat[0].T)
-    np.testing.assert_equal(mat[1], mat[1].T)
-    np.testing.assert_equal(mat[0], np.array([[1, 2, 3], [2, 4, 5], [3, 5, 6]]))
-    np.testing.assert_equal(mat[1], np.array([[7, 8, 9], [8, 10, 11], [9, 11, 12]]))
+    mat = pca.make_sym_matrix(vals, 3)
+    np.testing.assert_equal(mat[:, :, 0], mat[:, :, 0].T)
+    np.testing.assert_equal(mat[:, :, 1], mat[:, :, 1].T)
+    np.testing.assert_equal(mat[:, :, 0], np.array([[1, 2, 3], [2, 4, 5], [3, 5, 6]]))
+    np.testing.assert_equal(
+        mat[:, :, 1], np.array([[7, 8, 9], [8, 10, 11], [9, 11, 12]])
+    )
 
     # test diagonal
-    diag_corr = np.diagonal(mat, axis1=1, axis2=2)
+    diag_corr = np.diagonal(mat, axis1=0, axis2=1)
     np.testing.assert_equal(diag_corr, np.array([[1, 4, 6], [7, 10, 12]]))
 
 
 def test_impose_constrain():
 
-    operators_to_keep = np.array(["Op1", "Op2", "Op3"])
-    datasets = ["data_test1"]
+    operators_to_keep = np.array(["Op1", "Op2", "Op3", "Op4"])
+    datasets = ["data_test5"]
 
     dataset = load_datasets(
         commondata_path,
@@ -51,6 +53,10 @@ def test_impose_constrain():
                 "min": -3,
                 "max": 1,
             },
+            "Op4": {
+                "min": -3,
+                "max": 1,
+            },
             "Op3": {  # fixed to 0.1 * Op2 - 0.2 * Op1
                 "constrain": [
                     {"Op2": c23},
@@ -68,19 +74,30 @@ def test_impose_constrain():
     op1 = dataset.LinearCorrections[:, 0]
     op2 = dataset.LinearCorrections[:, 1]
     op3 = dataset.LinearCorrections[:, 2]
-    test_updated_lincorr = np.array([op1 + c13 * op3, op2 + c23 * op3])
-    np.testing.assert_equal(updated_lincorr.shape, (2, 2))
+    op4 = dataset.LinearCorrections[:, 3]
+    test_updated_lincorr = np.array([op1 + c13 * op3, op2 + c23 * op3, op4])
+    np.testing.assert_equal(updated_lincorr.shape, (3, 2))
     np.testing.assert_equal(updated_lincorr, test_updated_lincorr)
 
     op1op1 = dataset.QuadraticCorrections[:, 0]
     op1op2 = dataset.QuadraticCorrections[:, 1]
     op1op3 = dataset.QuadraticCorrections[:, 2]
-    op2op2 = dataset.QuadraticCorrections[:, 3]
-    op2op3 = dataset.QuadraticCorrections[:, 4]
-    op3op3 = dataset.QuadraticCorrections[:, 5]
+    op1op4 = dataset.QuadraticCorrections[:, 3]
+    op2op2 = dataset.QuadraticCorrections[:, 4]
+    op2op3 = dataset.QuadraticCorrections[:, 5]
+    op2op4 = dataset.QuadraticCorrections[:, 6]
+    op3op3 = dataset.QuadraticCorrections[:, 7]
+    op3op4 = dataset.QuadraticCorrections[:, 8]
+    op4op4 = dataset.QuadraticCorrections[:, 9]
 
     d1 = op1op1 + c13**2 * op3op3 + c13 * op1op3
     d2 = op2op2 + c23**2 * op3op3 + c23 * op2op3
     d12 = op1op2 + c13 * op2op3 + c23 * op1op3
-    np.testing.assert_equal(updated_quadcorr.shape, (2 * 3 / 2, 2))
-    np.testing.assert_allclose(updated_quadcorr, [d1, d12, d2], rtol=1e-15)
+    d14 = op1op4 + c13 * op3op4
+    d24 = op2op4 + c23 * op3op4
+    d4 = op4op4
+    test_updated_quadcorr = pca.make_sym_matrix(
+        np.array([d1, d12, d14, d2, d24, d4]).T, 3
+    )
+    np.testing.assert_equal(test_updated_quadcorr.shape, (3, 3, 2))
+    np.testing.assert_allclose(updated_quadcorr, test_updated_quadcorr, rtol=1e-15)
