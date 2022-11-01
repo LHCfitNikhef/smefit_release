@@ -49,7 +49,7 @@ namely carrying out extensive global analysis which is the main purpose of |SMEF
     :hidden:
 
     reports/report_func
-    reports/running
+    reports/running.md
     reports/links
 
     API <modules/smefit/smefit>
