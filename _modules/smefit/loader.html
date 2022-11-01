@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="English" >
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -138,14 +138,13 @@
 
 
 <div class="viewcode-block" id="check_file"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.check_file">[docs]</a><span class="k">def</span> <span class="nf">check_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check if path exists&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Check if path exists.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="check_missing_oparators"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.check_missing_oparators">[docs]</a><span class="k">def</span> <span class="nf">check_missing_oparators</span><span class="p">(</span><span class="n">loaded_corrections</span><span class="p">,</span> <span class="n">coeff_config</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check if all the coefficient in the reuncard are also present</span>
-<span class="sd">    inside the theory tables.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Check if all the coefficient in the runcard are also present inside the theory tables.&quot;&quot;&quot;</span>
     <span class="n">loaded_corrections</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">loaded_corrections</span><span class="p">)</span>
     <span class="n">missing_operators</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">coeff_config</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">loaded_corrections</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">missing_operators</span> <span class="o">!=</span> <span class="p">[]:</span>
@@ -156,14 +155,6 @@
 
 <div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class to check, load commondata and corresponding theory predictions.</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    commondata_path: pathlib.path</span>
-<span class="sd">        path to commondata folder, commondata excluded</span>
-<span class="sd">    theory_path: pathlib.Path, optional</span>
-<span class="sd">        path to theory folder, theory excluded.</span>
-<span class="sd">        Default it assumes to be the same as commondata_path</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -183,7 +174,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">commondata_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">()</span>
+    <span class="sd">&quot;&quot;&quot;path to commondata folder, commondata excluded&quot;&quot;&quot;</span>
     <span class="n">theory_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">commondata_path</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;path to theory folder, theory excluded. Default it assumes to be the same as commondata_path&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>

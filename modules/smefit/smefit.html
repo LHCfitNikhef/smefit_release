@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="English" >
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
@@ -134,10 +134,8 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.loader.Loader"><code class="docutils literal notranslate"><span class="pre">Loader</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.commondata_path"><code class="docutils literal notranslate"><span class="pre">Loader.commondata_path</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.theory_path"><code class="docutils literal notranslate"><span class="pre">Loader.theory_path</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.central_values"><code class="docutils literal notranslate"><span class="pre">Loader.central_values</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">Loader.commondata_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.commondata_path"><code class="docutils literal notranslate"><span class="pre">Loader.commondata_path</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.covmat"><code class="docutils literal notranslate"><span class="pre">Loader.covmat</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.lin_corrections"><code class="docutils literal notranslate"><span class="pre">Loader.lin_corrections</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.load_experimental_data"><code class="docutils literal notranslate"><span class="pre">Loader.load_experimental_data()</span></code></a></li>
@@ -149,7 +147,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.sys_error"><code class="docutils literal notranslate"><span class="pre">Loader.sys_error</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.sys_error_t0"><code class="docutils literal notranslate"><span class="pre">Loader.sys_error_t0</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.theory_covmat"><code class="docutils literal notranslate"><span class="pre">Loader.theory_covmat</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">Loader.theory_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.theory_path"><code class="docutils literal notranslate"><span class="pre">Loader.theory_path</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.loader.check_file"><code class="docutils literal notranslate"><span class="pre">check_file()</span></code></a></li>
@@ -407,18 +405,18 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lin_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- theory dictionary with linear operator corrections in the table
+<li><p><strong>lin_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – theory dictionary with linear operator corrections in the table
 basis</p></li>
-<li><p><strong>quad_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- theory dictionary with quadratic operator corrections in the table
+<li><p><strong>quad_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – theory dictionary with quadratic operator corrections in the table
 basis, emptry if quadratic corrections are not used</p></li>
-<li><p><strong>rotation_matrix</strong> (<em>pandas.DataFrame</em>) -- rotation matrix from tables basis to fitting basis</p></li>
+<li><p><strong>rotation_matrix</strong> (<em>pandas.DataFrame</em>) – rotation matrix from tables basis to fitting basis</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>lin_dict_fit_basis</strong> (<em>dict</em>) -- theory dictionary with linear operator corrections in the fit
+<li><p><strong>lin_dict_fit_basis</strong> (<em>dict</em>) – theory dictionary with linear operator corrections in the fit
 basis</p></li>
-<li><p><strong>quad_dict_fit_basis</strong> (<em>dict</em>) -- theory dictionary with quadratic operator corrections in the fit
+<li><p><strong>quad_dict_fit_basis</strong> (<em>dict</em>) – theory dictionary with quadratic operator corrections in the fit
 basis, emptry if quadratic corrections are not used</p></li>
 </ul>
 </p>
@@ -438,8 +436,8 @@ basis, emptry if quadratic corrections are not used</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>run_card</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- run card dictionary</p></li>
-<li><p><strong>n_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- number of replica to use</p></li>
+<li><p><strong>run_card</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – run card dictionary</p></li>
+<li><p><strong>n_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of replica to use</p></li>
 </ul>
 </dd>
 </dl>
@@ -472,11 +470,11 @@ basis, emptry if quadratic corrections are not used</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>coeff</strong> (<cite>smefit.coefficient.Coefficient</cite>) -- coefficient to switch on.</p></li>
-<li><p><strong>xs</strong> (<em>numpy.array</em>) -- coeffient values.</p></li>
-<li><p><strong>use_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True compute the <span class="math notranslate nohighlight">\(\chi^2\)</span> on <abbr title="Monte Carlo">MC</abbr> replicas.</p></li>
-<li><p><strong>Returns</strong> -- </p></li>
-<li><p><strong>--------</strong> -- individual reduced <span class="math notranslate nohighlight">\(\chi^2\)</span> for each x value.</p></li>
+<li><p><strong>coeff</strong> (<cite>smefit.coefficient.Coefficient</cite>) – coefficient to switch on.</p></li>
+<li><p><strong>xs</strong> (<em>numpy.array</em>) – coeffient values.</p></li>
+<li><p><strong>use_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True compute the <span class="math notranslate nohighlight">\(\chi^2\)</span> on <abbr title="Monte Carlo">MC</abbr> replicas.</p></li>
+<li><p><strong>Returns</strong> – </p></li>
+<li><p><strong>--------</strong> – individual reduced <span class="math notranslate nohighlight">\(\chi^2\)</span> for each x value.</p></li>
 </ul>
 </dd>
 </dl>
@@ -491,13 +489,13 @@ basis, emptry if quadratic corrections are not used</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<a class="reference internal" href="#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a>) -- dataset tuple</p></li>
-<li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) -- <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
-<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>dataset</strong> (<a class="reference internal" href="#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a>) – dataset tuple</p></li>
+<li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>chi2_total</strong> -- <span class="math notranslate nohighlight">\(\chi^2\)</span> value</p>
+<dd class="field-even"><p><strong>chi2_total</strong> – <span class="math notranslate nohighlight">\(\chi^2\)</span> value</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
@@ -516,11 +514,11 @@ basis, emptry if quadratic corrections are not used</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- name of the operator corresponding to the Wilson coefficient</p></li>
-<li><p><strong>minimum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- minimum value</p></li>
-<li><p><strong>maximum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- maximum value</p></li>
-<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) -- best value. If None set to random between minimum and maximum</p></li>
-<li><p><strong>constrain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- <ul>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – name of the operator corresponding to the Wilson coefficient</p></li>
+<li><p><strong>minimum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – minimum value</p></li>
+<li><p><strong>maximum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – maximum value</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – best value. If None set to random between minimum and maximum</p></li>
+<li><p><strong>constrain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – <ul>
 <li><p>if False, the parameter is free, default option</p></li>
 <li><p>if True, the parameter is fixed to the given value</p></li>
 <li><p>if dict the parameter is fixed to a function of other coefficients</p></li>
@@ -535,10 +533,10 @@ basis, emptry if quadratic corrections are not used</p></li>
 <dd><p>Build the dictionary for each additive factor appearing in the constrain:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>constrain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- dict object with the form {'c1': a1, 'c2': [a2,n2], ...}</p>
+<dd class="field-odd"><p><strong>constrain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – dict object with the form {‘c1’: a1, ‘c2’: [a2,n2], …}</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>factor_dict</strong> -- dict object with the form {'c1': [a1,1], 'c2': [a2,n2], ...}</p>
+<dd class="field-even"><p><strong>factor_dict</strong> – dict object with the form {‘c1’: [a1,1], ‘c2’: [a2,n2], …}</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
@@ -555,7 +553,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 <p>Coefficient objcts manager</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_array</strong> (<em>np.ndarray</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- list of <cite>smefit.coefficients.Coefficient</cite> instances</p>
+<dd class="field-odd"><p><strong>input_array</strong> (<em>np.ndarray</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of <cite>smefit.coefficients.Coefficient</cite> instances</p>
 </dd>
 </dl>
 <dl class="py property">
@@ -570,10 +568,10 @@ basis, emptry if quadratic corrections are not used</p></li>
 <dd><p>Create a coefficientManager from a dictionary</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>coefficient_config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- coefficients configuration dictionary</p>
+<dd class="field-odd"><p><strong>coefficient_config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – coefficients configuration dictionary</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>coefficient_manager</strong> -- instance of the class</p>
+<dd class="field-even"><p><strong>coefficient_manager</strong> – instance of the class</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>smefit.coefficients.CoefficientManager</cite></p>
@@ -633,8 +631,8 @@ and flatten it into an array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>quad_mat</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) -- tensor to flatten</p></li>
-<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- axis along which the triangular part is selected</p></li>
+<li><p><strong>quad_mat</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – tensor to flatten</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – axis along which the triangular part is selected</p></li>
 </ul>
 </dd>
 </dl>
@@ -648,13 +646,13 @@ given a set of <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> 
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<a class="reference internal" href="#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a>) -- dataset tuple</p></li>
-<li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) -- <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
-<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>dataset</strong> (<a class="reference internal" href="#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a>) – dataset tuple</p></li>
+<li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>corrected_theory</strong> -- SM + EFT theory predictions</p>
+<dd class="field-even"><p><strong>corrected_theory</strong> – SM + EFT theory predictions</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
@@ -681,21 +679,21 @@ found by multiplying them by their transpose.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>stat_errors</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) -- a 1-D array of statistical uncertainties</p></li>
-<li><p><strong>sys_errors</strong> (<em>pandas.DataFrame</em>) -- a dataframe with shape (N_data * N_sys) and systematic name as the
+<li><p><strong>stat_errors</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – a 1-D array of statistical uncertainties</p></li>
+<li><p><strong>sys_errors</strong> (<em>pandas.DataFrame</em>) – a dataframe with shape (N_data * N_sys) and systematic name as the
 column headers. The uncertainties should be in the same units as the
 data.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>cov_mat</strong> -- Covariance matrix</p>
+<dd class="field-even"><p><strong>cov_mat</strong> – Covariance matrix</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>This function doesn't contain any logic to ignore certain contributions to
+<p>This function doesn’t contain any logic to ignore certain contributions to
 the covmat, if you wanted to not include a particular systematic/set of
 systematics i.e all uncertainties with MULT errors, then filter those out
 of <code class="docutils literal notranslate"><span class="pre">sys_errors</span></code> before passing that to this function.</p>
@@ -714,12 +712,12 @@ same way as <a class="reference internal" href="#smefit.covmat.construct_covmat"
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>stat_errors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>(</em><em>stat_errors: np.array</em><em>)</em><em>]</em>) -- list of stat_errors for each dataset.</p></li>
-<li><p><strong>sys_errors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>(</em><em>sys_errors: pd.DataFrame</em><em>)</em><em>]</em>) -- list of sys_errors for each dataset.</p></li>
+<li><p><strong>stat_errors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>(</em><em>stat_errors: np.array</em><em>)</em><em>]</em>) – list of stat_errors for each dataset.</p></li>
+<li><p><strong>sys_errors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>(</em><em>sys_errors: pd.DataFrame</em><em>)</em><em>]</em>) – list of sys_errors for each dataset.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>cov_mat</strong> -- Numpy array which is N_dat x N_dat (where N_dat is the number of data points)
+<dd class="field-even"><p><strong>cov_mat</strong> – Numpy array which is N_dat x N_dat (where N_dat is the number of data points)
 containing uncertainty and correlation information.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
@@ -807,9 +805,9 @@ False if only cl bounds are stored (external fits for benchmark)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- path to fit location</p></li>
-<li><p><strong>name</strong> (<em>srt</em>) -- fit name</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) -- fit label if any otherwise guess it from the name</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – path to fit location</p></li>
+<li><p><strong>name</strong> (<em>srt</em>) – fit name</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – fit label if any otherwise guess it from the name</p></li>
 </ul>
 </dd>
 </dl>
@@ -937,39 +935,16 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">Loader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_to_fit_basis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#Loader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.Loader" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class to check, load commondata and corresponding theory predictions.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="smefit.loader.Loader.commondata_path">
-<span class="sig-name descname"><span class="pre">commondata_path</span></span><a class="headerlink" href="#smefit.loader.Loader.commondata_path" title="Permalink to this definition"></a></dt>
-<dd><p>path to commondata folder, commondata excluded</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>pathlib.path</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="smefit.loader.Loader.theory_path">
-<span class="sig-name descname"><span class="pre">theory_path</span></span><a class="headerlink" href="#smefit.loader.Loader.theory_path" title="Permalink to this definition"></a></dt>
-<dd><p>path to theory folder, theory excluded.
-Default it assumes to be the same as commondata_path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a>, optional</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>setname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- dataset name to load</p></li>
-<li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- list of operators for which corrections are loaded</p></li>
-<li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) -- EFT perturbative order</p></li>
-<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True loads also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
-<li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- </p></li>
-<li><p><strong>one</strong> (<em>if True add the theory covariance matrix to the experimental</em>) -- </p></li>
-<li><p><strong>rot_to_fit_basis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>None</em>) -- matrix rotation to fit basis or None</p></li>
+<li><p><strong>setname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – dataset name to load</p></li>
+<li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of operators for which corrections are loaded</p></li>
+<li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) – EFT perturbative order</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True loads also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – </p></li>
+<li><p><strong>one</strong> (<em>if True add the theory covariance matrix to the experimental</em>) – </p></li>
+<li><p><strong>rot_to_fit_basis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>None</em>) – matrix rotation to fit basis or None</p></li>
 </ul>
 </dd>
 </dl>
@@ -979,7 +954,7 @@ Default it assumes to be the same as commondata_path</p>
 <dd><p>Central values</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>central_values</strong> -- experimental central values</p>
+<dd class="field-odd"><p><strong>central_values</strong> – experimental central values</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
@@ -988,9 +963,10 @@ Default it assumes to be the same as commondata_path</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">commondata_path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('.')</span></em><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="smefit.loader.Loader.commondata_path">
+<span class="sig-name descname"><span class="pre">commondata_path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('.')</span></em><a class="headerlink" href="#smefit.loader.Loader.commondata_path" title="Permalink to this definition"></a></dt>
+<dd><p>path to commondata folder, commondata excluded</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="smefit.loader.Loader.covmat">
@@ -998,7 +974,7 @@ Default it assumes to be the same as commondata_path</p>
 <dd><p>Experimental covariance matrix</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>covmat</strong> -- experimental covariance matrix of a single dataset</p>
+<dd class="field-odd"><p><strong>covmat</strong> – experimental covariance matrix of a single dataset</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
@@ -1012,7 +988,7 @@ Default it assumes to be the same as commondata_path</p>
 <dd><p><abbr title="Not Higher Order corrections, linear">NHO</abbr> corrections</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>lin_corrections</strong> -- dictionary with operator names and <abbr title="Not Higher Order corrections, linear">NHO</abbr> correctsions</p>
+<dd class="field-odd"><p><strong>lin_corrections</strong> – dictionary with operator names and <abbr title="Not Higher Order corrections, linear">NHO</abbr> correctsions</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
@@ -1027,8 +1003,8 @@ Default it assumes to be the same as commondata_path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><ul class="simple">
-<li><p><strong>cental_values</strong> (<em>numpy.ndarray</em>) -- experimental central values</p></li>
-<li><p><strong>covmat</strong> (<em>numpy.ndarray</em>) -- experimental covariance matrix</p></li>
+<li><p><strong>cental_values</strong> (<em>numpy.ndarray</em>) – experimental central values</p></li>
+<li><p><strong>covmat</strong> (<em>numpy.ndarray</em>) – experimental covariance matrix</p></li>
 </ul>
 </p>
 </dd>
@@ -1042,18 +1018,18 @@ Default it assumes to be the same as commondata_path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- list of operators to keep</p></li>
-<li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) -- EFT perturbative order</p></li>
-<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True returns also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
-<li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True add the theory covariance matrix to the experimental one</p></li>
-<li><p><strong>rotation_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) -- rotation matrix from tables basis to fitting basis</p></li>
+<li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of operators to keep</p></li>
+<li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) – EFT perturbative order</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True returns also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True add the theory covariance matrix to the experimental one</p></li>
+<li><p><strong>rotation_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – rotation matrix from tables basis to fitting basis</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>sm</strong> (<em>numpy.ndarray</em>) -- <abbr title="Standard Model">SM</abbr> predictions</p></li>
-<li><p><strong>lin_dict</strong> (<em>dict</em>) -- dictionary with <abbr title="Not Higher Order corrections, linear">NHO</abbr> corrections</p></li>
-<li><p><strong>quad_dict</strong> (<em>dict</em>) -- dictionary with <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections, empty if not use_quad</p></li>
+<li><p><strong>sm</strong> (<em>numpy.ndarray</em>) – <abbr title="Standard Model">SM</abbr> predictions</p></li>
+<li><p><strong>lin_dict</strong> (<em>dict</em>) – dictionary with <abbr title="Not Higher Order corrections, linear">NHO</abbr> corrections</p></li>
+<li><p><strong>quad_dict</strong> (<em>dict</em>) – dictionary with <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections, empty if not use_quad</p></li>
 </ul>
 </p>
 </dd>
@@ -1066,7 +1042,7 @@ Default it assumes to be the same as commondata_path</p>
 <dd><p>Number of data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>n_data</strong> -- number of experimental data</p>
+<dd class="field-odd"><p><strong>n_data</strong> – number of experimental data</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
@@ -1080,7 +1056,7 @@ Default it assumes to be the same as commondata_path</p>
 <dd><p><abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>quad_corrections</strong> -- dictionary with operator names and <abbr title="Higher Order corrections, quadratics">HO</abbr> correctsions</p>
+<dd class="field-odd"><p><strong>quad_corrections</strong> – dictionary with operator names and <abbr title="Higher Order corrections, quadratics">HO</abbr> correctsions</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
@@ -1094,7 +1070,7 @@ Default it assumes to be the same as commondata_path</p>
 <dd><p><abbr title="Standard Model">SM</abbr> prediction for the dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>SM_predictions</strong> -- best <abbr title="Standard Model">SM</abbr> prediction</p>
+<dd class="field-odd"><p><strong>SM_predictions</strong> – best <abbr title="Standard Model">SM</abbr> prediction</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
@@ -1108,7 +1084,7 @@ Default it assumes to be the same as commondata_path</p>
 <dd><p>Statistical errors</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>stat_error</strong> -- statistical errors of the dataset</p>
+<dd class="field-odd"><p><strong>stat_error</strong> – statistical errors of the dataset</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>np.array</p>
@@ -1122,7 +1098,7 @@ Default it assumes to be the same as commondata_path</p>
 <dd><p>Systematic errors</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>sys_error</strong> -- systematic errors of the dataset</p>
+<dd class="field-odd"><p><strong>sys_error</strong> – systematic errors of the dataset</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>pd.DataFrame</p>
@@ -1136,7 +1112,7 @@ Default it assumes to be the same as commondata_path</p>
 <dd><p>Systematic errors modified according to t0 prescription</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>sys_error_t0</strong> -- t0 systematic errors of the dataset</p>
+<dd class="field-odd"><p><strong>sys_error_t0</strong> – t0 systematic errors of the dataset</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>pd.DataFrame</p>
@@ -1150,7 +1126,7 @@ Default it assumes to be the same as commondata_path</p>
 <dd><p>Theory covariance matrix</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>theory covmat</strong> -- theory covariance matrix of a single dataset</p>
+<dd class="field-odd"><p><strong>theory covmat</strong> – theory covariance matrix of a single dataset</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
@@ -1159,23 +1135,23 @@ Default it assumes to be the same as commondata_path</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">theory_path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('.')</span></em><a class="headerlink" href="#id1" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="smefit.loader.Loader.theory_path">
+<span class="sig-name descname"><span class="pre">theory_path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('.')</span></em><a class="headerlink" href="#smefit.loader.Loader.theory_path" title="Permalink to this definition"></a></dt>
+<dd><p>path to theory folder, theory excluded. Default it assumes to be the same as commondata_path</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.loader.check_file">
 <span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">check_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#check_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.check_file" title="Permalink to this definition"></a></dt>
-<dd><p>Check if path exists</p>
+<dd><p>Check if path exists.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.loader.check_missing_oparators">
 <span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">check_missing_oparators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loaded_corrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#check_missing_oparators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.check_missing_oparators" title="Permalink to this definition"></a></dt>
-<dd><p>Check if all the coefficient in the reuncard are also present
-inside the theory tables.</p>
+<dd><p>Check if all the coefficient in the runcard are also present inside the theory tables.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1186,15 +1162,15 @@ with corresponding values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>corrections_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>)</em>) -- list containing corrections per experiment</p></li>
-<li><p><strong>n_data_tot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- total number of experimental data points</p></li>
-<li><p><strong>sorted_keys</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) -- list of sorted operator corrections</p></li>
+<li><p><strong>corrections_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>)</em>) – list containing corrections per experiment</p></li>
+<li><p><strong>n_data_tot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – total number of experimental data points</p></li>
+<li><p><strong>sorted_keys</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – list of sorted operator corrections</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>sorted_keys</strong> (<em>np.ndarray</em>) -- unique list of operators for which at least one correction is present</p></li>
-<li><p><strong>corr_values</strong> (<em>np.ndarray</em>) -- matrix with correction values (n_data_tot, sorted_keys.size)</p></li>
+<li><p><strong>sorted_keys</strong> (<em>np.ndarray</em>) – unique list of operators for which at least one correction is present</p></li>
+<li><p><strong>corr_values</strong> (<em>np.ndarray</em>) – matrix with correction values (n_data_tot, sorted_keys.size)</p></li>
 </ul>
 </p>
 </dd>
@@ -1213,15 +1189,15 @@ with corresponding values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>commondata_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- path to commondata folder, commondata excluded</p></li>
-<li><p><strong>datasets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- list of datasets to be loaded</p></li>
-<li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) -- list of operators for which corrections are loaded</p></li>
-<li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) -- EFT perturbative order</p></li>
-<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True loads also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
-<li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True add the theory covariance matrix to the experimental one</p></li>
-<li><p><strong>theory_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><em>optional</em>) -- path to theory folder, theory excluded.
+<li><p><strong>commondata_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – path to commondata folder, commondata excluded</p></li>
+<li><p><strong>datasets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of datasets to be loaded</p></li>
+<li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of operators for which corrections are loaded</p></li>
+<li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) – EFT perturbative order</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True loads also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True add the theory covariance matrix to the experimental one</p></li>
+<li><p><strong>theory_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><em>optional</em>) – path to theory folder, theory excluded.
 Default it assumes to be the same as commondata_path</p></li>
-<li><p><strong>rot_to_fit_basis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) -- matrix rotation to fit basis or None</p></li>
+<li><p><strong>rot_to_fit_basis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – matrix rotation to fit basis or None</p></li>
 </ul>
 </dd>
 </dl>
@@ -1253,9 +1229,9 @@ results, plot config and reports are stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>run_card</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) -- run card dictionary</p></li>
-<li><p><strong>single_parameter_fits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- True for single parameter fits</p></li>
-<li><p><strong>runcard_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><em>None</em>) -- path to runcard if already present</p></li>
+<li><p><strong>run_card</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – run card dictionary</p></li>
+<li><p><strong>single_parameter_fits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True for single parameter fits</p></li>
+<li><p><strong>runcard_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><em>None</em>) – path to runcard if already present</p></li>
 </ul>
 </dd>
 </dl>
@@ -1266,10 +1242,10 @@ results, plot config and reports are stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- number of replicas to use.
+<li><p><strong>n_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of replicas to use.
 If 0 only the <span class="math notranslate nohighlight">\(\chi^2\)</span> experimental data
 will be computed.</p></li>
-<li><p><strong>compute_bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) -- if True compute and save the <span class="math notranslate nohighlight">\(\chi^2\)</span> bounds.</p></li>
+<li><p><strong>compute_bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True compute and save the <span class="math notranslate nohighlight">\(\chi^2\)</span> bounds.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1282,12 +1258,12 @@ will be computed.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>runcard_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- path to runcard</p></li>
-<li><p><strong>replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- replica number. Optional used only for MC</p></li>
+<li><p><strong>runcard_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – path to runcard</p></li>
+<li><p><strong>replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – replica number. Optional used only for MC</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>runner</strong> -- instance of class Runner</p>
+<dd class="field-even"><p><strong>runner</strong> – instance of class Runner</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>smefit.runner.Runner</cite></p>
