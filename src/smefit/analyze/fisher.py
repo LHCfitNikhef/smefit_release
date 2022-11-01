@@ -213,7 +213,7 @@ class FisherCalculator:
                         data_dict.index.get_level_values(1)
                     ]
                 L.extend(
-                    self.write(
+                    self._write(
                         temp_table,
                         temp_HOtable,
                         coeff_config,
@@ -222,7 +222,7 @@ class FisherCalculator:
                     )
                 )
         L.extend(
-            self.write(
+            self._write(
                 self.summary_table,
                 self.summary_HOtable,
                 coeff_config,
@@ -231,7 +231,7 @@ class FisherCalculator:
         L.append(r"\end{landscape}")
         return L
 
-    def write(
+    def _write(
         self, lin_fisher, quad_fisher, coeff_config, data_dict=None, data_group=None
     ):
         """Write Fisher information table in latex.
@@ -289,8 +289,8 @@ class FisherCalculator:
                 temp = f" & {latex_name}"
 
                 # loop on columns
-                for idj, lin_fisher in enumerate(lin_fisher.values):
-                    temp += r" & \textcolor{%s}{%.2f}" % color(lin_fisher[idx])
+                for idj, fisher_col in enumerate(lin_fisher.values):
+                    temp += r" & \textcolor{%s}{%.2f}" % color(fisher_col[idx])
                     if quad_fisher is not None:
                         temp += r"(\textcolor{%s}{%0.2f})" % color(
                             quad_fisher.iloc[idj, idx]
