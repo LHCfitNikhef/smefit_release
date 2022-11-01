@@ -1,0 +1,28 @@
+# Input YAML configurations for SMEFiT code
+
+# absolute path where results are stored
+result_path: ./tests
+
+# path to common data (experimental tables)
+data_path:  ./tests/fake_data
+
+# path to theory tables, default same as data path (path to operator_res tables)
+theory_path:  ./tests/fake_data
+
+use_quad: False
+order: NLO
+use_theory_covmat: True
+
+
+# Datasets to include
+datasets:
+
+  - data_test5
+
+# Coefficients to fit
+coefficients:
+
+  Op1: {"min": -10,"max": 10}
+  Op2: {"min": -10,"max": 10}
+  Op4: {"min": -10,"max": 10}
+  Op3: {"constrain": [{"Op2": 0.2},{"Op1": -0.1},],"min": -5,"max": 1}
