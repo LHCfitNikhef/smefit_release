@@ -9,7 +9,6 @@ BUILDDIR      = build
 
 SMEFITDIR = ../src/smefit
 
-TODOOUTFILE = ./source/development/code_todos.rst
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -34,9 +33,6 @@ clean:
 cleanall: clean clean-todos
 	rm -rf $(SOURCEDIR)/modules
 
-# TODOs
-todos:
-	python generate_code_todos.py "$(SMEFITDIR)" "$(TODOOUTFILE)"
 
 clean-todos:
 	rm "$(TODOOUTFILE)"
