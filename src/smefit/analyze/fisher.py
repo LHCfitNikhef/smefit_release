@@ -74,18 +74,14 @@ class FisherCalculator:
         delta_th = self.datasets.Commondata - np.mean(smeft_predictions, axis=0)
         # c, c**2 mean (n_free_op)
         posterior_df = posterior_df[self.free_parameters]
-        c_mean = np.mean(posterior_df, axis=0).values
-        c2_mean = np.mean(posterior_df**2, axis=0).values
+        c_mean = np.mean(posterior_df.values, axis=0)
+        c2_mean = np.mean(posterior_df.values**2, axis=0)
 
         # squared quad corr
         diag_corr = np.diagonal(self.new_QuadraticCorrections, axis1=0, axis2=1)
         off_diag_corr = self.new_QuadraticCorrections
         diag_index = np.diag_indices(self.free_parameters.size)
         off_diag_corr[diag_index[0], diag_index[1], :] = 0
-
-        # TODO:
-        # 1) test tensor....
-        # 3) write docs
 
         # additional tensors
         tmp = np.einsum("ri,ijk->rjk", posterior_df, off_diag_corr, optimize="optimal")

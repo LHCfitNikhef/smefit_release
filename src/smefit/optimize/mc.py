@@ -157,7 +157,7 @@ class MCOptimizer(Optimizer):
 
         single_parameter_fits = config.get("single_parameter_fits", False)
         use_multiplicative_prescription = config.get(
-            "use_multiplicative_prescription", True
+            "use_multiplicative_prescription", False
         )
         return cls(
             loaded_datasets,

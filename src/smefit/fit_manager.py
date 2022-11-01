@@ -116,7 +116,7 @@ class FitManager:
             self.config["use_quad"],
             self.config["use_theory_covmat"],
             False,  # t0 is not used here because in the report we look at the experimental chi2
-            self.config.get("use_multiplicative_prescription", True),
+            self.config.get("use_multiplicative_prescription", False),
             self.config.get("theory_path", None),
             self.config.get("rot_to_fit_basis", None),
             self.config.get("uv_coupligs", False),
@@ -142,7 +142,7 @@ class FitManager:
                     self.datasets,
                     self.results.iloc[rep, :],
                     self.config["use_quad"],
-                    self.config.get("use_multiplicative_prescription", True),
+                    self.config.get("use_multiplicative_prescription", False),
                 )
             )
         return np.array(smeft)

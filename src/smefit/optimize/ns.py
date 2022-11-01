@@ -97,7 +97,7 @@ class NSOptimizer(Optimizer):
             config["use_quad"],
             config["use_theory_covmat"],
             config["use_t0"],
-            config.get("use_multiplicative_prescription", True),
+            config.get("use_multiplicative_prescription", False),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_coupligs", False),
@@ -132,7 +132,7 @@ class NSOptimizer(Optimizer):
             )
 
         use_multiplicative_prescription = config.get(
-            "use_multiplicative_prescription", True
+            "use_multiplicative_prescription", False
         )
         return cls(
             loaded_datasets,
