@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to run the code &mdash; SMEFiT 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="smefit package" href="../modules/smefit/smefit.html" />
+    <link rel="prev" title="Code structure" href="code_struct.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> SMEFiT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/data.html">Experimental data format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/theory.html">Theory tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/rotation.html">Basis rotation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="code_struct.html">Code structure</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to run the code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#runcard-specifications">Runcard specifications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#input-and-output-path">Input and output path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#theory-specifications">Theory specifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#minimizer-specifications">Minimizer specifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datasets-to-consider-and-coefficients-to-fit">Datasets to consider and coefficients to fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#constrains-between-coefficients">Constrains between coefficients</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fit-in-different-basis">Fit in different basis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-a-fit-with-ns">Running a fit with NS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-a-fit-with-mc">Running a fit with MC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#single-parameter-fits">Single parameter fits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#individual-parameter-scan">Individual parameter scan</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reports:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/smefit/smefit.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_rw.html">SMEFiT RW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_top.html">SMEFiT Top</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit20.html">SMEFiT2.0</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References &amp; API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/smefit/smefit.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz-refs.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMEFiT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>How to run the code</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/fitting_code/running.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="how-to-run-the-code">
+<span id="example"></span><h1>How to run the code<a class="headerlink" href="#how-to-run-the-code" title="Permalink to this heading"></a></h1>
+<p>In the following we provide detailed instructions on how to use the code in its different
+running modes and on how to analyse the results.</p>
+<section id="runcard-specifications">
+<span id="runcard"></span><h2>Runcard specifications<a class="headerlink" href="#runcard-specifications" title="Permalink to this heading"></a></h2>
+<p>The basic object required to run the code is a runcard.
+In this section we document the different parameters which have to be specified here.
+As example we will refer to the runcard to reproduce <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code>,
+available from the repository <a class="reference external" href="https://github.com/LHCfitNikhef/smefit_database">smefit_database</a>
+together with the files containing experimental data and the corresponding theory predictions.
+After cloning the repository, run</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">python update_runcards_path.py -d /path/to/runcard/destination/ runcards/NS_GLOBAL_NLO_NHO.yaml</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This will create in <code class="docutils literal notranslate"><span class="pre">/path/to/runcard/destination/</span></code> a <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code> runcard ready to be used on the local machine of the user, pointing to the experimental data and an theory tables in the repository smefit_database.
+In the folder <code class="docutils literal notranslate"><span class="pre">smefit_database/runcards</span></code> the input runcards for MC and NS fits with both linear (NHO)
+and linear+quadratic corrections (HO) are available.</p>
+<section id="input-and-output-path">
+<h3>Input and output path<a class="headerlink" href="#input-and-output-path" title="Permalink to this heading"></a></h3>
+<p>The path to where the experimental data and the corresponding theory tables are stored
+is automatically set to those contained in <code class="docutils literal notranslate"><span class="pre">smefit_dayabase</span></code> by the script <code class="docutils literal notranslate"><span class="pre">update_runcards_path.py</span></code>.
+The user can change them manually if other set of data are desired.
+The folder where the results will be saved can be set using <code class="docutils literal notranslate"><span class="pre">result_path</span></code>. The file containing
+the posterior of the fitted Wilson coefficient will be saved in <code class="docutils literal notranslate"><span class="pre">resulth_path/result_ID</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">result_ID</span></code> is not provided, it will be automatically set to the name of the runcard (and any already existing result will be overwritten).</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">result_ID</span><span class="p">:</span><span class="w"></span>
+<span class="nt">result_path</span><span class="p">:</span><span class="w"></span>
+<span class="nt">data_path</span><span class="p">:</span><span class="w"></span>
+<span class="nt">theory_path</span><span class="p">:</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="theory-specifications">
+<h3>Theory specifications<a class="headerlink" href="#theory-specifications" title="Permalink to this heading"></a></h3>
+<p>The perturbative order of the QCD theory prediction (LO or NLO) should be specified using <code class="docutils literal notranslate"><span class="pre">order</span></code>.
+<code class="docutils literal notranslate"><span class="pre">use_quad</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">True</span></code> for a fit with quadratic corrections, <code class="docutils literal notranslate"><span class="pre">use_t0</span></code> controls the use
+of the <code class="docutils literal notranslate"><span class="pre">t0</span></code> prescription and <code class="docutils literal notranslate"><span class="pre">use_theory_covmat</span></code> specifies whether or not to use the theory covariance matrix
+which can be specified in the theory files.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO</span><span class="w"></span>
+<span class="nt">use_quad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
+<span class="nt">use_t0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
+<span class="nt">use_theory_covmat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="minimizer-specifications">
+<h3>Minimizer specifications<a class="headerlink" href="#minimizer-specifications" title="Permalink to this heading"></a></h3>
+<p>The different parameters controlling the minimizer used in the analysis are specified here.
+If <code class="docutils literal notranslate"><span class="pre">single_parameter_fits</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the Wilson coefficient specified in the runcard
+will be fit one at time, setting all the other to 0. See <a class="reference external" href="./example.html#single-parameter-fits">here</a> for more details</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">single_parameter_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
+<span class="nt">bounds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Null</span><span class="w"></span>
+
+<span class="c1"># NS settings</span><span class="w"></span>
+<span class="nt">nlive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w"></span>
+<span class="nt">efr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.005</span><span class="w"></span>
+<span class="nt">ceff</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"></span>
+<span class="nt">toll</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w"></span>
+
+<span class="c1">#MC settings</span><span class="w"></span>
+<span class="nt">mc_minimiser</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;cma&#39;</span><span class="w"></span>
+<span class="nt">restarts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7</span><span class="w"></span>
+<span class="nt">maxiter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span><span class="w"></span>
+<span class="nt">chi2_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.0</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="datasets-to-consider-and-coefficients-to-fit">
+<h3>Datasets to consider and coefficients to fit<a class="headerlink" href="#datasets-to-consider-and-coefficients-to-fit" title="Permalink to this heading"></a></h3>
+<p>The datasets and Wilson coefficients to be included in the analysis must be listed under <code class="docutils literal notranslate"><span class="pre">datasets</span></code>
+and <code class="docutils literal notranslate"><span class="pre">coefficients</span></code> respectively.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">datasets</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_8TeV_ljets_Mtt</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_8TeV_dilep_Mtt</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_8TeV_ljets_Ytt</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt2D_8TeV_dilep_MttYtt</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_ljets_2015_Mtt</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_dilep_2015_Mtt</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_ljets_2016_Mtt</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_dilep_2016_Mtt</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_13TeV_ljets_2016_Mtt</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_CMS_tt_AC_8TeV</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_AC_13TeV</span><span class="w"></span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
+
+<span class="c1"># Coefficients to fit</span><span class="w"></span>
+<span class="nt">coefficients</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">  </span><span class="nt">OpQM</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-10</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">10</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">O3pQ3</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-2.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">2.0</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">Opt</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-25.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">15.0</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">OtW</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
+</pre></div>
+</div>
+<p>As exemplified above, the syntax to specify the Wilson coefficient corresponding to the operator
+<code class="docutils literal notranslate"><span class="pre">O1</span></code> is <code class="docutils literal notranslate"><span class="pre">O1</span> <span class="pre">:</span> <span class="pre">{'min':</span> <span class="pre">,</span> <span class="pre">'max':}</span> </code> where <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code> indicate the bounds within which NS
+will perform the sampling.</p>
+</section>
+<section id="constrains-between-coefficients">
+<h3>Constrains between coefficients<a class="headerlink" href="#constrains-between-coefficients" title="Permalink to this heading"></a></h3>
+<p>Some Wilson coefficients are not directly fit, but rather constrained to be linear combinations
+of the other ones. Taking as example some coefficient of the Higgs sector considered in <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code>,
+this can be specified in the runcard in the following way</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">OpWB</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-0.3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">OpD</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">OpqMi</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;constrain&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="s">&#39;OpD&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">0.9248</span><span class="p p-Indicator">},{</span><span class="s">&#39;OpWB&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.8347</span><span class="p p-Indicator">}],</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-30</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">30</span><span class="p p-Indicator">}</span><span class="w"></span>
+<span class="w">  </span><span class="nt">O3pq</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;constrain&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="s">&#39;OpD&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-0.8415</span><span class="p p-Indicator">},{</span><span class="s">&#39;OpWB&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-1.8347</span><span class="p p-Indicator">}],</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>In this example the coefficients <code class="docutils literal notranslate"><span class="pre">CpqMi</span></code> and <code class="docutils literal notranslate"><span class="pre">C3pq</span></code> correspondong to the operators
+<code class="docutils literal notranslate"><span class="pre">OpqMi</span></code> and <code class="docutils literal notranslate"><span class="pre">O3pq</span></code> will be set to</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">CpqMi = 0.9248*CpD + 1.8347*CpWB</span><span class="w"></span>
+<span class="l l-Scalar l-Scalar-Plain">C3pq = -0.8415*CpD -1.8347*CpWB</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="fit-in-different-basis">
+<h3>Fit in different basis<a class="headerlink" href="#fit-in-different-basis" title="Permalink to this heading"></a></h3>
+<p>It is possible to run a fit using a different basis.
+In this case the coefficients specified in the runcard should be the ones to fit, and
+a rotation basis defining the new basis in terms of the Warsaw basis should be given as input. This can be done
+using the option below.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rot_to_fit_basis</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/rotation/rotation.json</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="running-a-fit-with-ns">
+<span id="ns"></span><h2>Running a fit with NS<a class="headerlink" href="#running-a-fit-with-ns" title="Permalink to this heading"></a></h2>
+<p>To run a fiy using Nested Sampling use the command</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit NS path/to/the/runcard/runcard.yaml</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This will generate a file named <code class="docutils literal notranslate"><span class="pre">posterior.json</span></code> in the result folder,
+containing the posterior distribution of the coefficients specified in the runcard.</p>
+</section>
+<section id="running-a-fit-with-mc">
+<span id="mc"></span><h2>Running a fit with MC<a class="headerlink" href="#running-a-fit-with-mc" title="Permalink to this heading"></a></h2>
+<p>The basic command to run a fit using Monte Carlo is</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit MC path/to/the/runcard/runcard.yaml -n &lt;replica_number&gt;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This will produce a file called <code class="docutils literal notranslate"><span class="pre">replica_&lt;replica_number&gt;/coefficients_rep_&lt;replica_number&gt;.json</span></code>
+in the result folder, containing the values of the Wilson coefficients for the replica.
+Once an high enough number of replicas have been produced, the results can be merged into the final posterior
+running PostFit</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit PF path/to/the/result/ -n &lt;number_of_replicas&gt;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">&lt;number_of_replicas&gt;</span></code> specifies the number of replicas to be used to build the posterior.
+Replicas not satisfying the PostFit criteria will be discarded. If the final number of good replicas is lower than
+<code class="docutils literal notranslate"><span class="pre">&lt;number_of_replicas&gt;</span></code> the code will output an error message asking to produce more replicas first.
+The final output is the file <code class="docutils literal notranslate"><span class="pre">posterior.json</span></code> containing the full posterior of the Wilson coefficients.</p>
+</section>
+<section id="single-parameter-fits">
+<h2>Single parameter fits<a class="headerlink" href="#single-parameter-fits" title="Permalink to this heading"></a></h2>
+<p>Given a runcard with a number of Wilson coefficients specified, it is possible to fit each of them in turn,
+keeping all the other ones fix to 0.
+To do this add to the runcard</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">single_parameter_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"></span>
+</pre></div>
+</div>
+<p>and proceed as documented above for a normal fit.
+For both NS and MC, the final output will be the file <code class="docutils literal notranslate"><span class="pre">posterior.json</span></code>
+containing the independent posterior of the fitted Wilson coefficients, obtained by a series os independent single parameter fits.</p>
+</section>
+<section id="individual-parameter-scan">
+<h2>Individual parameter scan<a class="headerlink" href="#individual-parameter-scan" title="Permalink to this heading"></a></h2>
+<p>The code can also be used to produce 1-dimensional scans of the chi2 function.
+The command</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit SCAN /path/to/the/runcard/runcard.yaml</span><span class="w"></span>
+</pre></div>
+</div>
+<p>will produce in the results folder a series of pdf files containing plots for
+1-dimensional scans of the chi2 with respect to each parameter in the runcard.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="code_struct.html" class="btn btn-neutral float-left" title="Code structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../modules/smefit/smefit.html" class="btn btn-neutral float-right" title="smefit package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, the SMEFiT developers&#39; team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMEFiT2.0 &mdash; SMEFiT 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="References" href="../zzz-refs.html" />
+    <link rel="prev" title="SMEFiT VBS" href="smefit_vbs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> SMEFiT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/data.html">Experimental data format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/theory.html">Theory tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/rotation.html">Basis rotation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../fitting_code/code_struct.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fitting_code/running.html">How to run the code</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reports:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/smefit/smefit.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="smefit_rw.html">SMEFiT RW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smefit_top.html">SMEFiT Top</a></li>
+<li class="toctree-l1"><a class="reference internal" href="smefit_vbs.html">SMEFiT VBS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SMEFiT2.0</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#operator-basis">Operator basis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#analysis-code">Analysis code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-fits">Released fits</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References &amp; API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/smefit/smefit.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz-refs.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMEFiT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>SMEFiT2.0</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/previous_releases/smefit20.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="smefit2-0">
+<h1>SMEFiT2.0<a class="headerlink" href="#smefit2-0" title="Permalink to this heading"></a></h1>
+<p>Here we present the results of the SMEFiT global analysis described in the following publication</p>
+<ul class="simple">
+<li><p><em>Combined SMEFT interpretation of Higgs, diboson, and top quark data from the LHC</em>,  J. Ethier, G.Magni, F. Maltoni, L. Mantani, E. R. Nocera, J. Rojo, E. Slade, E. Vryonidou, C. Zhang <span id="id1">[<a class="reference internal" href="../zzz-refs.html#id29" title="Jacob J. Ethier, Giacomo Magni, Fabio Maltoni, Luca Mantani, Emanuele R. Nocera, Juan Rojo, Emma Slade, Eleni Vryonidou, and Cen Zhang. Combined smeft interpretation of higgs, diboson, and top quark data from the lhc. 2021. arXiv:2105.00006.">EMM+21</a>]</span></p></li>
+</ul>
+<p>This work develops  a global interpretation of Higgs, diboson, and top quark production and decay measurements from the LHC in the framework of the SMEFT at dimension six. We constrain simultaneously 36 independent directions in its parameter space, and compare the outcome of the global analysis  with that from individual and two-parameter fits. Our results are obtained by means of state-of-the-art theoretical calculations for the SM and the EFT cross-sections, and account for both linear and quadratic corrections in the EFT expansion. We assess the interplay and complementarity between  the top quark, Higgs, and diboson measurements,  deploy a variety of statistical estimators to quantify the impact of each dataset in the parameter space, and carry out  fits in  BSM-inspired scenarios such as the top-philic model.</p>
+<a class="reference internal image-reference" href="../_images/Coeffs_Central_Baseline.png"><img alt="SMEFIT logo" class="align-center" src="../_images/Coeffs_Central_Baseline.png" style="width: 700px;" /></a>
+<p>In this page you find information about the input and results from this <strong>global EFT analysis:</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#smefit2-0-operator-basis"><span class="std std-ref">Operator basis</span></a></p></li>
+<li><p><a class="reference internal" href="#smefit2-0-analysis-code"><span class="std std-ref">Analysis code</span></a></p></li>
+<li><p><a class="reference internal" href="#smefit2-0-released-fits"><span class="std std-ref">Released fits</span></a></p></li>
+</ul>
+<section id="operator-basis">
+<span id="smefit2-0-operator-basis"></span><h2>Operator basis<a class="headerlink" href="#operator-basis" title="Permalink to this heading"></a></h2>
+<p>The EFT analysis presented in this work is based on the following operator basis, see Sect. 2 in the paper for the explicit definition of the various degrees of freedom and the flavour assumptions adopted.  We categorize these EFT coefficients into four disjoint classes: four-quark (two-light-two-heavy), four-quark (four-heavy), two-fermion, and purely bosonic operators. Note that some of these coefficients are not independent but rather related among them via the EWPOs</p>
+<p>In the table below we list the EFT coefficients considered in this work together with the notation used in the plots and in the output files associated to the analysis results.</p>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">Operator basis</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>EFT Coefficient</p></th>
+<th class="head"><p>Notation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Two-light-two-heavy</p></td>
+<td><p><span class="math notranslate nohighlight">\(c_{Qq}^{1,8},~c_{Qq}^{1,1}~c_{Qq}^{3,8},~c_{Qq}^{3,1},~c_{tq}^{8},~c_{tq}^{1}\)</span>,</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">c81qq</span></code>, <code class="docutils literal notranslate"><span class="pre">c11qq</span></code>, <code class="docutils literal notranslate"><span class="pre">c83qq</span></code>, <code class="docutils literal notranslate"><span class="pre">c13qq</span></code>, <code class="docutils literal notranslate"><span class="pre">c8qt</span></code>, <code class="docutils literal notranslate"><span class="pre">c1qt</span></code>,</p></td>
+</tr>
+<tr class="row-odd"><td><p>Two-light-two-heavy</p></td>
+<td><p><span class="math notranslate nohighlight">\(c_{tu}^{8},~c_{tu}^{1},~c_{Qu}^{8},~c_{Qu}^{1},~c_{td}^{8},~c_{td}^{1},~c_{Qd}^{8},~c_{Qd}^{1}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">c8ut</span></code>, <code class="docutils literal notranslate"><span class="pre">c1ut</span></code>, <code class="docutils literal notranslate"><span class="pre">c8qu</span></code>,  <code class="docutils literal notranslate"><span class="pre">c1qu</span></code>, <code class="docutils literal notranslate"><span class="pre">c8dt</span></code>, <code class="docutils literal notranslate"><span class="pre">c1dt</span></code>,  <code class="docutils literal notranslate"><span class="pre">c8qd</span></code>, <code class="docutils literal notranslate"><span class="pre">c1qd</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Four-heavy</p></td>
+<td><p><span class="math notranslate nohighlight">\(c_{QQ}^1,~c_{QQ}^8,~c_{Qt}^1,~c_{Qt}^8,~c_{tt}^1\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cQQ1</span></code>, <code class="docutils literal notranslate"><span class="pre">cQQ8</span></code>, <code class="docutils literal notranslate"><span class="pre">cQt1</span></code>, <code class="docutils literal notranslate"><span class="pre">cQt8</span></code>, <code class="docutils literal notranslate"><span class="pre">ctt1</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>two-fermion</p></td>
+<td><p><span class="math notranslate nohighlight">\(c_{t\varphi},~c_{tG},~c_{b\varphi},~c_{c\varphi},~c_{\tau\varphi},~c_{tW}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ctp</span></code>, <code class="docutils literal notranslate"><span class="pre">ctG</span></code>, <code class="docutils literal notranslate"><span class="pre">cbp</span></code>, <code class="docutils literal notranslate"><span class="pre">ctZ</span></code>, <code class="docutils literal notranslate"><span class="pre">c3pQ3</span></code>, <code class="docutils literal notranslate"><span class="pre">cpQM</span></code>,</p></td>
+</tr>
+<tr class="row-even"><td><p>two-fermion</p></td>
+<td><p><span class="math notranslate nohighlight">\(c_{\varphi t},~c_{\varphi l_1}^{(1)},~c_{\varphi l_1}^{(3)},~c_{\varphi l_2}^{(1)},~c_{\varphi l_2}^{(3)},~c_{\varphi l_3}^{(1)},\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ctZ</span></code>, <code class="docutils literal notranslate"><span class="pre">c3pQ3</span></code>, <code class="docutils literal notranslate"><span class="pre">cpQM</span></code>,  <code class="docutils literal notranslate"><span class="pre">cpl2</span></code>, <code class="docutils literal notranslate"><span class="pre">c3pl2</span></code>,  <code class="docutils literal notranslate"><span class="pre">cpl3</span></code>,</p></td>
+</tr>
+<tr class="row-odd"><td><p>two-fermion</p></td>
+<td><p><span class="math notranslate nohighlight">\(c_{\varphi l_3}^{(3)},~c_{\varphi e},~c_{\varphi \mu},~c_{\varphi \tau},~c_{\varphi q}^{(3)},~c_{\varphi q}^{(-)},~c_{\varphi u},~c_{\varphi d}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">c3pl3</span></code>, <code class="docutils literal notranslate"><span class="pre">cpe</span></code>,   <code class="docutils literal notranslate"><span class="pre">cpmu</span></code>,  <code class="docutils literal notranslate"><span class="pre">cpta</span></code>, <code class="docutils literal notranslate"><span class="pre">c3pq</span></code>, <code class="docutils literal notranslate"><span class="pre">cpqMi</span></code>, <code class="docutils literal notranslate"><span class="pre">cpui</span></code>, <code class="docutils literal notranslate"><span class="pre">cpdi</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Purely bosonic</p></td>
+<td><p><span class="math notranslate nohighlight">\(c_{\varphi G},~c_{\varphi B},~c_{\varphi W},~c_{\varphi d},~c_{\varphi W B},~c_{\varphi D},c_{WWW}\)</span></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cpG</span></code>, <code class="docutils literal notranslate"><span class="pre">cpB</span></code>, <code class="docutils literal notranslate"><span class="pre">cpW</span></code>, <code class="docutils literal notranslate"><span class="pre">cpd</span></code>, <code class="docutils literal notranslate"><span class="pre">cpWB</span></code>, <code class="docutils literal notranslate"><span class="pre">cpD</span></code>, <code class="docutils literal notranslate"><span class="pre">cWWW</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="analysis-code">
+<span id="smefit2-0-analysis-code"></span><h2>Analysis code<a class="headerlink" href="#analysis-code" title="Permalink to this heading"></a></h2>
+<p>The results collected in the table above have been obtained for the global input dataset and for the baseline theory settings, which in particular include NLO QCD corrections to the EFT cross-sections whenever available. However many users might be interested in evaluating statistical estimators for fits based on different input datasets, different settings of the EFT calculations, or for fits where the parameter space has been restricted as motivated by specific UV-complete models. For example, one may wish to compare with the outcome of the global fit based on LO EFT calculations, or to use the bounds derived in the top-philic scenario.</p>
+<p>The <strong>posterior probability distributions</strong> corresponding to all the fits presented in this work are made available in the <a class="reference external" href="https://github.com/LHCfitNikhef/SMEFiT/">SMEFiT GitHub public repository</a>, together with Python analysis code to process them and produce a range of statistical estimators. For instance, upon choosing a given fit (see <a class="reference internal" href="#smefit2-0-released-fits"><span class="std std-ref">Released fits</span></a>), whose output is constitured by <span class="math notranslate nohighlight">\(N_{\rm spl}\)</span> posterior samples for the <span class="math notranslate nohighlight">\(n_{\rm op}=49\)</span> EFT coefficients considered in this analysis, the analysis code can evaluate  <strong>statistical estimators</strong> such as means, standard deviations, and correlations,</p>
+<div class="math notranslate nohighlight">
+\[\left\langle c_i\right\rangle = \frac{1}{N_{\rm spl}} \sum_{k=1}^{N_{\rm spl}}c_i^{(k)} \, ,\quad i=1,\ldots,n_{\rm op} \, ,\]</div>
+<div class="math notranslate nohighlight">
+\[\sigma_{c_i} = \left( \frac{1}{N_{\rm spl}-1} \sum_{k=1}^{N_{\rm spl}} \left( c_i^{(k)}- \left\langle c_i\right\rangle
+\right)^2  \right)^{1/2} \, ,\quad i=1,\ldots,n_{\rm op} \, ,\]</div>
+<div class="math notranslate nohighlight">
+\[\rho(c_i,c_j) =  \left( \frac{1}{N_{\rm spl}} \sum_{k=1}^{N_{\rm spl}}c_i^{(k)}c_j^{(k)} -
+\left\langle c_i\right\rangle \left\langle c_j\right\rangle \right) \Bigg/ \sigma_{c_i} \sigma_{c_k}
+\, ,\quad i,j=1,\ldots,n_{\rm op} \, .\]</div>
+<p>as well as other estimators such as confidence level intervals and higher moments beyond the parabolic approximation. It then produces a range of plots such as the ones displayed below.</p>
+<a class="reference internal image-reference" href="../_images/Coeffs_Bar_Baseline.png"><img alt="SMEFIT logo" class="align-left" src="../_images/Coeffs_Bar_Baseline.png" style="width: 500px;" /></a>
+<a class="reference internal image-reference" href="../_images/Coeffs_Residuals_Baseline.png"><img alt="SMEFIT logo" class="align-right" src="../_images/Coeffs_Residuals_Baseline.png" style="width: 500px;" /></a>
+<a class="reference internal image-reference" href="../_images/Coeffs_Residuals_Hist_Baseline.png"><img alt="SMEFIT logo" class="align-center" src="../_images/Coeffs_Residuals_Hist_Baseline.png" style="width: 500px;" /></a>
+<a class="reference internal image-reference" href="../_images/Coeffs_Corr_Baseline_quad.png"><img alt="SMEFIT logo" class="align-center" src="../_images/Coeffs_Corr_Baseline_quad.png" style="width: 500px;" /></a>
+</section>
+<section id="released-fits">
+<span id="smefit2-0-released-fits"></span><h2>Released fits<a class="headerlink" href="#released-fits" title="Permalink to this heading"></a></h2>
+<p>The list of fits that are made available with <strong>this release of the SMEFiT global analysis</strong> are summarised
+in the table below.
+For each configuration we provide a runcard and the corresponding posterior distributions stored in <code class="docutils literal notranslate"><span class="pre">json</span></code> format.</p>
+<table class="colwidths-given docutils align-default" id="id3">
+<caption><span class="caption-text">SMEFiT2.0 fits</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Descriptor</p></th>
+<th class="head"><p>Dataset</p></th>
+<th class="head"><p>Theory settings</p></th>
+<th class="head"><p>Methodology</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/LHCfitNikhef/SMEFiT/tree/master/SMEFiT20/NS_GLOBAL_NLO_HO">Baseline (quadratic)</a></p></td>
+<td><p>Global</p></td>
+<td><p>NLO QCD in EFT + <span class="math notranslate nohighlight">\(\mathcal{O}(\Lambda^{-4})\)</span></p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/LHCfitNikhef/SMEFiT/tree/master/SMEFiT20/NS_GLOBAL_NLO_NHO">Baseline (linear)</a></p></td>
+<td><p>Global</p></td>
+<td><p>NLO QCD in EFT + <span class="math notranslate nohighlight">\(\mathcal{O}(\Lambda^{-2})\)</span></p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/LHCfitNikhef/SMEFiT/tree/master/SMEFiT20/NS_GLOBAL_LO_HO">LO EFT (quadratic)</a></p></td>
+<td><p>Global</p></td>
+<td><p>LO QCD in EFT + <span class="math notranslate nohighlight">\(\mathcal{O}(\Lambda^{-4})\)</span></p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/LHCfitNikhef/SMEFiT/tree/master/SMEFiT20/NS_GLOBAL_LO_NHO">LO EFT (linear)</a></p></td>
+<td><p>Global</p></td>
+<td><p>LO QCD in EFT + <span class="math notranslate nohighlight">\(\mathcal{O}(\Lambda^{-2})\)</span></p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/LHCfitNikhef/SMEFiT/tree/master/SMEFiT20/NS_HIGGS_NLO_HO">Higgs-only</a></p></td>
+<td><p>Higgs-only</p></td>
+<td><p>NLO QCD in EFT + <span class="math notranslate nohighlight">\(\mathcal{O}(\Lambda^{-4})\)</span></p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/LHCfitNikhef/SMEFiT/tree/master/SMEFiT20/NS_TOP_NLO_HO">Top-only</a></p></td>
+<td><p>Top-only</p></td>
+<td><p>NLO QCD in EFT + <span class="math notranslate nohighlight">\(\mathcal{O}(\Lambda^{-4})\)</span></p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/LHCfitNikhef/SMEFiT/tree/master/SMEFiT20/NS_noVV_NLO_HO">No Diboson</a></p></td>
+<td><p>Diboson cross-sections removed</p></td>
+<td><p>NLO QCD in EFT + <span class="math notranslate nohighlight">\(\mathcal{O}(\Lambda^{-4})\)</span></p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://github.com/LHCfitNikhef/SMEFiT/tree/master/SMEFiT20/NS_noHighE_NLO_HO">No high-E</a></p></td>
+<td><p>Bins with <span class="math notranslate nohighlight">\(E\ge 1~{\rm TeV}\)</span> removed</p></td>
+<td><p>NLO QCD in EFT + <span class="math notranslate nohighlight">\(\mathcal{O}(\Lambda^{-4})\)</span></p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://github.com/LHCfitNikhef/SMEFiT/tree/master/SMEFiT20/NS_TOPphilic_NLO_HO">Top-philic</a></p></td>
+<td><p>Global</p></td>
+<td><p>NLO QCD in EFT + <span class="math notranslate nohighlight">\(\mathcal{O}(\Lambda^{-4})\)</span></p></td>
+<td><p>Constraints from top-philic scenario</p></td>
+</tr>
+</tbody>
+</table>
+<p>Requests for variants of these fits should be addressed to the <strong>SMEFiT authors</strong>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="smefit_vbs.html" class="btn btn-neutral float-left" title="SMEFiT VBS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../zzz-refs.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, the SMEFiT developers&#39; team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
