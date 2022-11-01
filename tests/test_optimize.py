@@ -3,7 +3,6 @@ import copy
 import pathlib
 
 import numpy as np
-
 from scipy import optimize as sciopt
 
 import smefit.optimize as opt
@@ -59,16 +58,31 @@ th_pred_1 = (
 )
 
 # Theory predictions for dataset1 when using mult prescription
-th_pred_1_mult = (
-    np.array(ld.theory_test_1["best_sm"])*(1.
-    + np.array(ld.theory_test_1["LO"]["Op1"]) * wilson_coeff[0]/ld.theory_test_1["LO"]["SM"]
-    + np.array(ld.theory_test_1["LO"]["Op2"]) * wilson_coeff[1]/ld.theory_test_1["LO"]["SM"]
-    + np.array(ld.theory_test_1["LO"]["Op3"]) * wilson_coeff[2]/ld.theory_test_1["LO"]["SM"]
-    + np.array(ld.theory_test_1["LO"]["Op1*Op1"]) * wilson_coeff[0] ** 2/ld.theory_test_1["LO"]["SM"]
-    + np.array(ld.theory_test_1["LO"]["Op2*Op2"]) * wilson_coeff[1] ** 2/ld.theory_test_1["LO"]["SM"]
-    + np.array(ld.theory_test_1["LO"]["Op2*Op1"]) * wilson_coeff[1] * wilson_coeff[0]/ld.theory_test_1["LO"]["SM"]
-    + np.array(ld.theory_test_1["LO"]["Op2*Op3"]) * wilson_coeff[1] * wilson_coeff[2]/ld.theory_test_1["LO"]["SM"]
-    )
+th_pred_1_mult = np.array(ld.theory_test_1["best_sm"]) * (
+    1.0
+    + np.array(ld.theory_test_1["LO"]["Op1"])
+    * wilson_coeff[0]
+    / ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op2"])
+    * wilson_coeff[1]
+    / ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op3"])
+    * wilson_coeff[2]
+    / ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op1*Op1"])
+    * wilson_coeff[0] ** 2
+    / ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op2*Op2"])
+    * wilson_coeff[1] ** 2
+    / ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op2*Op1"])
+    * wilson_coeff[1]
+    * wilson_coeff[0]
+    / ld.theory_test_1["LO"]["SM"]
+    + np.array(ld.theory_test_1["LO"]["Op2*Op3"])
+    * wilson_coeff[1]
+    * wilson_coeff[2]
+    / ld.theory_test_1["LO"]["SM"]
 )
 
 # exp data for dataset1
@@ -85,7 +99,9 @@ chi2_1 = (
 
 # chi2 for dataset 1 when using mult prescription
 chi2_1_mult = (
-    (exp_data_1 - th_pred_1_mult) @ np.linalg.inv(tot_cov_1) @ (exp_data_1 - th_pred_1_mult).T
+    (exp_data_1 - th_pred_1_mult)
+    @ np.linalg.inv(tot_cov_1)
+    @ (exp_data_1 - th_pred_1_mult).T
 )
 
 # theory predictions for dataset2
@@ -99,14 +115,24 @@ th_pred_2 = (
 )
 
 # theory predictions for dataset2 when using mult prescription
-th_pred_2_mult = (
-    np.array(ld.theory_test_2["best_sm"])* (1.
-    + np.array(ld.theory_test_2["LO"]["Op1"]) * wilson_coeff[0]/ld.theory_test_2["LO"]["SM"]
-    + np.array(ld.theory_test_2["LO"]["Op2"]) * wilson_coeff[1]/ld.theory_test_2["LO"]["SM"]
-    + np.array(ld.theory_test_2["LO"]["Op1*Op1"]) * wilson_coeff[0] ** 2/ld.theory_test_2["LO"]["SM"]
-    + np.array(ld.theory_test_2["LO"]["Op2*Op2"]) * wilson_coeff[1] ** 2/ld.theory_test_2["LO"]["SM"]
-    + np.array(ld.theory_test_2["LO"]["Op2*Op1"]) * wilson_coeff[1] * wilson_coeff[0]/ld.theory_test_2["LO"]["SM"]
-    )
+th_pred_2_mult = np.array(ld.theory_test_2["best_sm"]) * (
+    1.0
+    + np.array(ld.theory_test_2["LO"]["Op1"])
+    * wilson_coeff[0]
+    / ld.theory_test_2["LO"]["SM"]
+    + np.array(ld.theory_test_2["LO"]["Op2"])
+    * wilson_coeff[1]
+    / ld.theory_test_2["LO"]["SM"]
+    + np.array(ld.theory_test_2["LO"]["Op1*Op1"])
+    * wilson_coeff[0] ** 2
+    / ld.theory_test_2["LO"]["SM"]
+    + np.array(ld.theory_test_2["LO"]["Op2*Op2"])
+    * wilson_coeff[1] ** 2
+    / ld.theory_test_2["LO"]["SM"]
+    + np.array(ld.theory_test_2["LO"]["Op2*Op1"])
+    * wilson_coeff[1]
+    * wilson_coeff[0]
+    / ld.theory_test_2["LO"]["SM"]
 )
 
 
@@ -123,7 +149,9 @@ chi2_2 = (
 
 # chi2 for dataset2 when using mult prescription
 chi2_2_mult = (
-    (exp_data_2 - th_pred_2_mult) @ np.linalg.inv(tot_cov_2) @ (exp_data_2 - th_pred_2_mult).T
+    (exp_data_2 - th_pred_2_mult)
+    @ np.linalg.inv(tot_cov_2)
+    @ (exp_data_2 - th_pred_2_mult).T
 )
 
 # total expected chi2. Since there are no correlations between the two datasets I can sum the
@@ -148,7 +176,6 @@ config_no_corr["use_t0"] = False
 config_no_corr["theory_path"] = commondata_path
 config_no_corr["rot_to_fit_basis"] = None
 config_no_corr["replica"] = 0
-
 
 
 ### now consider the case of dataset 3 and dataset 4 having a common systematic named SPECIAL
@@ -248,6 +275,7 @@ config_corr["use_multiplicative_prescription"] = False
 
 class TestOptimize_NS:
 
+    config_no_corr["use_multiplicative_prescription"] = True
     test_opt_mult = opt.ns.NSOptimizer.from_dict(config_no_corr)
 
     config_no_corr["use_multiplicative_prescription"] = False
@@ -345,7 +373,8 @@ class TestOptimize_MC:
             coeff_val = self.test_opt.coefficients.value
 
             diff = 2 * (
-                data.Replica - make_predictions(data, coeff_val, self.test_opt.use_quad, False)
+                data.Replica
+                - make_predictions(data, coeff_val, self.test_opt.use_quad, False)
             )
 
             # temp coefficiens
