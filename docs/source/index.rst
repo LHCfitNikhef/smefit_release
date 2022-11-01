@@ -20,18 +20,9 @@ namely carrying out extensive global analysis which is the main purpose of |SMEF
     :hidden:
 
     theory/SMEFT.rst
-
-.. toctree::
-    :maxdepth: 2
-    :caption: Implementation:
-    :hidden:
-
-    implementation/general
-    implementation/NS
-
-
-
-    API <modules/smefit/smefit>
+    theory/general
+    theory/NS
+    theory/MCFit
 
 
 .. toctree::
@@ -42,46 +33,49 @@ namely carrying out extensive global analysis which is the main purpose of |SMEF
     data_theory/data.md
     data_theory/theory
     data_theory/covariance
+    data_theory/rotation.md
+
+.. toctree::
+    :maxdepth: 3
+    :caption: Fitting code:
+    :hidden:
+
+    fitting_code/code_struct.md
+    fitting_code/running.md
 
 .. toctree::
     :maxdepth: 2
-    :caption: Fit and report functionalities:
-    :hidden:
-    
-    fit_report/code_struct.md
-    fit_report/rotation.md
-    fit_report/report_func
-
-.. toctree::
-    :maxdepth: 2
-    :caption: Examples and tutorial:
-    :hidden:
-
-    tutorial/example.md
-
-.. toctree::
-    :maxdepth: 1
     :caption: Reports:
     :hidden:
 
-    reports/reports.rst
+    reports/report_func
+    reports/running
+    reports/links
 
+    API <modules/smefit/smefit>
 
 .. toctree::
     :maxdepth: 1
-    :caption: Development:
+    :caption: Previous studies:
     :hidden:
 
-    development/code_todos
+    previous_releases/smefit_rw
+    previous_releases/smefit_top
+    previous_releases/smefit_vbs
+    previous_releases/smefit20
 
+.. toctree::
+    :maxdepth: 1
+    :caption: References & API:
+    :hidden:
+
+    API <modules/smefit/smefit>
     zzz-refs
-
-
 
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
+* :doc:`API </modules/smefit/smefit>`
 * :ref:`search`

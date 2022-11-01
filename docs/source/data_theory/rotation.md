@@ -1,9 +1,9 @@
 ```eval_rst
 .. _rotation:
 ```
-# Fits in a different basis
+# Basis rotation
 It is possible to perform a fit in any desired basis.
-The user then needs to specify the rotation matrix between the fitting and the Warsaw basis. 
+The user then needs to specify the rotation matrix between the fitting and the Warsaw basis.
 This has to be specified in a ``.json`` file, whose absolute path has to be placed in the runcard
 ```yaml
 rotation: /path/to/rotatio/matrix/rotation.json
@@ -14,9 +14,9 @@ The file ``rotation.json`` will look like
 {
     name: "example",
     warsaw: [
-        "Ow_1",  
-        "Ow_2",  
-        "Ow_3",   
+        "Ow_1",
+        "Ow_2",
+        "Ow_3",
         "Ow_4",
         ...
     ],
@@ -55,4 +55,4 @@ The file ``rotation.json`` will look like
 ``fit_basis`` : list of the ``n`` operators defining the fitting basis ``Of_i``,
 
 ``matrix`` : the ``n x n`` rotation matrix ``R`` expressing the new basis in terms of the Warsaw one
-``Of_i = R_ij Ow_j``. 
+``Of_i = R_ij Ow_j``.
