@@ -45,8 +45,8 @@ class FisherCalculator:
                 self.datasets, self.coefficients
             )
 
-        self.nho_fisher = None
-        self.ho_fisher = None
+        self.lin_fisher = None
+        self.quad_fisher = None
         self.summary_table = None
         self.summary_HOtable = None
 
@@ -61,7 +61,7 @@ class FisherCalculator:
             fisher_row = np.diag(sigma @ self.datasets.InvCovMat[idxs, idxs] @ sigma.T)
             fisher_tab.append(fisher_row)
             cnt += ndat
-        self.nho_fisher = pd.DataFrame(
+        self.lin_fisher = pd.DataFrame(
             fisher_tab, index=self.datasets.ExpNames, columns=self.free_parameters
         )
 
@@ -133,8 +133,8 @@ class FisherCalculator:
             quad_fisher.append(np.diag(fisher_row))
             cnt += ndat
 
-        self.ho_fisher = pd.DataFrame(
-            quad_fisher + self.nho_fisher.values,
+        self.quad_fisher = pd.DataFrame(
+            quad_fisher + self.lin_fisher.values,
             index=self.datasets.ExpNames,
             columns=self.free_parameters,
         )
@@ -209,11 +209,11 @@ class FisherCalculator:
         # fisher tables per data_group
         if not summary_only:
             for data_group, data_dict in data_groups.groupby(level=0):
-                temp_table = self.nho_fisher.loc[data_dict.index.get_level_values(1)]
+                temp_table = self.lin_fisher.loc[data_dict.index.get_level_values(1)]
                 temp_HOtable = None
 
-                if self.ho_fisher is not None:
-                    temp_HOtable = self.ho_fisher.loc[
+                if self.quad_fisher is not None:
+                    temp_HOtable = self.quad_fisher.loc[
                         data_dict.index.get_level_values(1)
                     ]
                 L.extend(
@@ -236,15 +236,15 @@ class FisherCalculator:
         return L
 
     def write(
-        self, nho_fisher, ho_fisher, coeff_config, data_dict=None, data_group=None
+        self, lin_fisher, quad_fisher, coeff_config, data_dict=None, data_group=None
     ):
         """Write Fisher information table in latex.
 
         Parameters
         ----------
-        nho_fisher: pandas.DataFrame
+        lin_fisher: pandas.DataFrame
             linear Fisher information table
-        ho_fisher: pandas.DataFrame, None
+        quad_fisher: pandas.DataFrame, None
             quadratic Fisher information table, None if linear only
         coeff_config: dict
             coefficient dictionary per group with latex names
@@ -269,14 +269,14 @@ class FisherCalculator:
             r"\begin{table}[H]",
             r"\scriptsize",
             r"\centering",
-            r"\begin{tabular}{|c|c|" + "c|" * nho_fisher.shape[0] + "}",
+            r"\begin{tabular}{|c|c|" + "c|" * lin_fisher.shape[0] + "}",
             r"\hline",
             f"\\multicolumn{{2}}{{|c|}}{{}} \
-                & \\multicolumn{{{nho_fisher.shape[0]}}}{{c|}}{{Processes}} \\\\ \\hline",
+                & \\multicolumn{{{lin_fisher.shape[0]}}}{{c|}}{{Processes}} \\\\ \\hline",
         ]
         temp = " Class & Coefficient "
         if data_dict is None:
-            for dataset in nho_fisher.index:
+            for dataset in lin_fisher.index:
                 temp += f"& {{\\rm {dataset} }}"
         else:
             for dataset, link in data_dict.items():
@@ -293,16 +293,16 @@ class FisherCalculator:
                 temp = f" & {latex_name}"
 
                 # loop on columns
-                for idj, lin_fisher in enumerate(nho_fisher.values):
+                for idj, lin_fisher in enumerate(lin_fisher.values):
                     temp += r" & \textcolor{%s}{%.2f}" % color(lin_fisher[idx])
-                    if ho_fisher is not None:
+                    if quad_fisher is not None:
                         temp += r"(\textcolor{%s}{%0.2f})" % color(
-                            ho_fisher.iloc[idj, idx]
+                            quad_fisher.iloc[idj, idx]
                         )
                 temp += (
                     r"\\ \hline"
                     if coeff == [*coeff_dict.keys()][-1]
-                    else f"\\\\ \\cline{{2-{(2 + nho_fisher.shape[0])}}}"
+                    else f"\\\\ \\cline{{2-{(2 + lin_fisher.shape[0])}}}"
                 )
                 L.append(temp)
 
@@ -351,8 +351,8 @@ class FisherCalculator:
             fisher_df = self.summary_table
             quad_fisher_df = self.summary_HOtable
         else:
-            fisher_df = self.nho_fisher
-            quad_fisher_df = self.ho_fisher
+            fisher_df = self.lin_fisher
+            quad_fisher_df = self.quad_fisher
 
         fig = plt.figure(figsize=figsize)
         if quad_fisher_df is not None:

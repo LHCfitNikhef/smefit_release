@@ -413,21 +413,21 @@ class Report:
             compute_quad = fit.config["use_quad"]
             fisher_cal = FisherCalculator(fit.coefficients, fit.datasets, compute_quad)
             fisher_cal.compute_linear()
-            fisher_cal.nho_fisher = fisher_cal.normalize(
-                fisher_cal.nho_fisher, norm=norm, log=log
+            fisher_cal.lin_fisher = fisher_cal.normalize(
+                fisher_cal.lin_fisher, norm=norm, log=log
             )
             fisher_cal.summary_table = fisher_cal.groupby_data(
-                fisher_cal.nho_fisher, self.data_info, norm, log
+                fisher_cal.lin_fisher, self.data_info, norm, log
             )
 
             # if necessary compute the quadratic Fisher
             if compute_quad:
                 fisher_cal.compute_quadratic(fit.results, fit.smeft_predictions)
-                fisher_cal.ho_fisher = fisher_cal.normalize(
-                    fisher_cal.ho_fisher, norm=norm, log=log
+                fisher_cal.quad_fisher = fisher_cal.normalize(
+                    fisher_cal.quad_fisher, norm=norm, log=log
                 )
                 fisher_cal.summary_HOtable = fisher_cal.groupby_data(
-                    fisher_cal.ho_fisher, self.data_info, norm, log
+                    fisher_cal.quad_fisher, self.data_info, norm, log
                 )
 
             # Write down the table in latex

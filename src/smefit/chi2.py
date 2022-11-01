@@ -31,6 +31,8 @@ def compute_chi2(
         dataset tuple
     coefficients_values : numpy.ndarray
         |EFT| coefficients values
+    use_multiplicative_prescription: bool
+        if True add the |EFT| contribution as a key factor
     use_quad: bool
         if True include also |HO| corrections
 
