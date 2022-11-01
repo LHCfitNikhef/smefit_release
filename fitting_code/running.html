@@ -113,7 +113,7 @@
            <div itemprop="articleBody">
              
   <section id="how-to-run-the-code">
-<span id="example"></span><h1>How to run the code<a class="headerlink" href="#how-to-run-the-code" title="Permalink to this heading"></a></h1>
+<span id="running-fit"></span><h1>How to run the code<a class="headerlink" href="#how-to-run-the-code" title="Permalink to this heading"></a></h1>
 <p>In the following we provide detailed instructions on how to use the code in its different
 running modes and on how to analyse the results.</p>
 <section id="runcard-specifications">
@@ -256,14 +256,14 @@ containing the posterior distribution of the coefficients specified in the runca
 <section id="running-a-fit-with-mc">
 <span id="mc"></span><h2>Running a fit with MC<a class="headerlink" href="#running-a-fit-with-mc" title="Permalink to this heading"></a></h2>
 <p>The basic command to run a fit using Monte Carlo is</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit MC path/to/the/runcard/runcard.yaml -n &lt;replica_number&gt;</span><span class="w"></span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    smefit MC path/to/the/runcard/runcard.yaml -n replica_number
 </pre></div>
 </div>
 <p>This will produce a file called <code class="docutils literal notranslate"><span class="pre">replica_&lt;replica_number&gt;/coefficients_rep_&lt;replica_number&gt;.json</span></code>
 in the result folder, containing the values of the Wilson coefficients for the replica.
 Once an high enough number of replicas have been produced, the results can be merged into the final posterior
 running PostFit</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit PF path/to/the/result/ -n &lt;number_of_replicas&gt;</span><span class="w"></span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    smefit PF path/to/the/result/ -n number_of_replicas
 </pre></div>
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">&lt;number_of_replicas&gt;</span></code> specifies the number of replicas to be used to build the posterior.
@@ -287,7 +287,7 @@ containing the independent posterior of the fitted Wilson coefficients, obtained
 <h2>Individual parameter scan<a class="headerlink" href="#individual-parameter-scan" title="Permalink to this heading"></a></h2>
 <p>The code can also be used to produce 1-dimensional scans of the chi2 function.
 The command</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit SCAN /path/to/the/runcard/runcard.yaml</span><span class="w"></span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    smefit SCAN /path/to/the/runcard/runcard.yaml
 </pre></div>
 </div>
 <p>will produce in the results folder a series of pdf files containing plots for

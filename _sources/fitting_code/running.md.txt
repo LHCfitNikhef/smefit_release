@@ -1,5 +1,5 @@
 ```eval_rst
-.. _example:
+.. _running_fit:
 ```
 # How to run the code
 
@@ -158,16 +158,18 @@ containing the posterior distribution of the coefficients specified in the runca
 ```
 ## Running a fit with MC
 The basic command to run a fit using Monte Carlo is
-```yaml
-smefit MC path/to/the/runcard/runcard.yaml -n <replica_number>
+
+```bash
+    smefit MC path/to/the/runcard/runcard.yaml -n replica_number
 ```
 
 This will produce a file called ``replica_<replica_number>/coefficients_rep_<replica_number>.json``
 in the result folder, containing the values of the Wilson coefficients for the replica.
 Once an high enough number of replicas have been produced, the results can be merged into the final posterior
 running PostFit
-```yaml
-smefit PF path/to/the/result/ -n <number_of_replicas>
+
+```bash
+    smefit PF path/to/the/result/ -n number_of_replicas
 ```
 where ``<number_of_replicas>`` specifies the number of replicas to be used to build the posterior.
 Replicas not satisfying the PostFit criteria will be discarded. If the final number of good replicas is lower than
@@ -191,8 +193,8 @@ containing the independent posterior of the fitted Wilson coefficients, obtained
 The code can also be used to produce 1-dimensional scans of the chi2 function.
 The command
 
-```yaml
-smefit SCAN /path/to/the/runcard/runcard.yaml
+```bash
+    smefit SCAN /path/to/the/runcard/runcard.yaml
 ```
 will produce in the results folder a series of pdf files containing plots for
 1-dimensional scans of the chi2 with respect to each parameter in the runcard.
