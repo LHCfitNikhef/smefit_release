@@ -23,7 +23,7 @@ class MCOptimizer(Optimizer):
 
     Parameters
     ----------
-    loaded_datasets : `smefit.loader.DataTuple`,
+    loaded_datasets : `smefit.loader.DataTuple`
         dataset tuple
     coefficients : `smefit.coefficients.CoefficientManager`
         instance of `CoefficientManager` with all the relevant coefficients to fit
@@ -41,6 +41,7 @@ class MCOptimizer(Optimizer):
         minimizer options. The allowed optrions are:
 
         Args:
+
         - mc_minimiser: minimizer alogrithm: 'cma', 'dual_annealing', 'trust-constr'.
         - maxiter: number of maximium iterations.
         - restarts: only for cma, number of restarts (< 9).

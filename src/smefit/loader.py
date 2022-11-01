@@ -32,14 +32,13 @@ DataTuple = namedtuple(
 
 
 def check_file(path):
-    """Check if path exists"""
+    """Check if path exists."""
     if not path.exists():
         raise FileNotFoundError(f"File {path} does not exist.")
 
 
 def check_missing_oparators(loaded_corrections, coeff_config):
-    """Check if all the coefficient in the reuncard are also present
-    inside the theory tables."""
+    """Check if all the coefficient in the runcard are also present inside the theory tables."""
     loaded_corrections = set(loaded_corrections)
     missing_operators = [k for k in coeff_config if k not in loaded_corrections]
     if missing_operators != []:
@@ -50,14 +49,6 @@ def check_missing_oparators(loaded_corrections, coeff_config):
 
 class Loader:
     """Class to check, load commondata and corresponding theory predictions.
-
-    Attributes
-    ----------
-    commondata_path: pathlib.path
-        path to commondata folder, commondata excluded
-    theory_path: pathlib.Path, optional
-        path to theory folder, theory excluded.
-        Default it assumes to be the same as commondata_path
 
     Parameters
     ----------
@@ -77,7 +68,9 @@ class Loader:
     """
 
     commondata_path = pathlib.Path()
+    """path to commondata folder, commondata excluded"""
     theory_path = pathlib.Path(commondata_path)
+    """path to theory folder, theory excluded. Default it assumes to be the same as commondata_path"""
 
     def __init__(
         self,
