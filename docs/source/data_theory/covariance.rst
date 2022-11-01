@@ -1,12 +1,10 @@
 Construction of the fit covariance matrix
-=====================================
+=========================================
 
 In the following we provide an explicit example of how the covariance matrix is built, 
 given two datasets having both uncorrelated and correlated systematics.
-
 We consider 2 datasets having respectively 2 datapoints with 3 systematic uncertainties, and  
 3 datapoints with 2 systematic uncertainties.
-
 The total statistic uncertainties for the two datasets are denoted as
 
 .. math::
@@ -74,3 +72,4 @@ while from the cross correlated systematic
     \bar{\sigma}_2^{\text{sys},2}\sigma_1^{\text{sys},3} & \bar{\sigma}_2^{\text{sys},2}\sigma_2^{\text{sys},3} & \bar{\sigma}_2^{\text{sys},2}\bar{\sigma}_1^{\text{sys},2} & \left(\bar{\sigma}_2^{\text{sys},2}\right)^2 & \bar{\sigma}_2^{\text{sys},2}\bar{\sigma}_3^{\text{sys},2} \\
     \bar{\sigma}_3^{\text{sys},2}\sigma_1^{\text{sys},3} & \bar{\sigma}_3^{\text{sys},2}\sigma_2^{\text{sys},3} & \bar{\sigma}_3^{\text{sys},2}\bar{\sigma}_1^{\text{sys},2} & \bar{\sigma}_3^{\text{sys},2}\bar{\sigma}_2^{\text{sys},2} & \left(\bar{\sigma}_3^{\text{sys},2}\right)^2
     \end{pmatrix}
+
