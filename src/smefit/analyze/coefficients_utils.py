@@ -146,7 +146,7 @@ class CoefficientsPlotter:
             )
 
     def plot_coeffs(
-        self, bounds, figsize=(15, 6), x_min=-400, x_max=400, x_log=True, lin_thr=1e-1
+        self, bounds, figsize=(10, 15), x_min=-400, x_max=400, x_log=True, lin_thr=1e-1
     ):
         """
         Plot central value + 95% CL errors
@@ -234,7 +234,7 @@ class CoefficientsPlotter:
     def plot_coeffs_bar(
         self,
         error,
-        figsize=(12, 6),
+        figsize=(10, 15),
         plot_cutoff=400,
         x_log=True,
         x_min=1e-2,

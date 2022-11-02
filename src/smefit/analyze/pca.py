@@ -180,7 +180,15 @@ class PcaCalculator:
             L.append(r" \nonumber \\ \nonumber \\ ")
         return L
 
-    def plot_heatmap(self, fit_label, fig_name, sv_min=1e-4, sv_max=1e5, thr_show=0.1):
+    def plot_heatmap(
+        self,
+        fit_label,
+        fig_name,
+        sv_min=1e-4,
+        sv_max=1e5,
+        thr_show=0.1,
+        figsize=(15, 15),
+    ):
         """Heat Map of PC coefficients.
 
         Parameters
@@ -199,7 +207,7 @@ class PcaCalculator:
 
         pc_norm = self.pc_matrix.values**2
 
-        fig = plt.figure(figsize=(15, 15))
+        fig = plt.figure(figsize=figsize)
         ax = fig.add_subplot(111)
 
         cmap = cm.get_cmap("Blues")

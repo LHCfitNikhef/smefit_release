@@ -24,6 +24,9 @@
 .. |NLO| replace::
    :abbr:`NLO (Next-to-Leading Order)`
 
+.. |PCA| replace::
+   :abbr:`PCA (Principal Components Analysis)`
+
 .. Names
 
 .. |MHOU| replace::

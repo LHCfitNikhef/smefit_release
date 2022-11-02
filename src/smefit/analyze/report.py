@@ -321,10 +321,8 @@ class Report:
     def pca(
         self,
         table=True,
-        plot=True,
+        plot=None,
         thr_show=1e-2,
-        sv_min=1e-4,
-        sv_max=1e5,
         fit_list=None,
     ):
         """Principal Components Analysis runner.
@@ -367,12 +365,9 @@ class Report:
                     f"pca_table_{fit.name}",
                 )
                 links_list = [(f"pca_table_{fit.name}", f"Table {fit.label}")]
-            if plot:
+            if plot is not None:
                 pca_cal.plot_heatmap(
-                    fit.label,
-                    f"{self.report}/pca_heatmap_{fit.name}",
-                    sv_min=sv_min,
-                    sv_max=sv_max,
+                    fit.label, f"{self.report}/pca_heatmap_{fit.name}", **plot
                 )
                 figs_list = [f"pca_heatmap_{fit.name}"]
         self._append_section("PCA", figs=figs_list, links=links_list)
