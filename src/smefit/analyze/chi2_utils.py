@@ -35,7 +35,7 @@ class Chi2tableCalculator:
             datasets: smefit.loader.DataTuple
                 loaded datasets
             smeft_predictions: np.ndarray
-                table with all the predictions for each replica
+                array with all the predictions for each replica
 
         Returns
         -------

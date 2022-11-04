@@ -26,9 +26,10 @@ def make_sym_matrix(vals, n_op):
     np.ndarry:
         square tensor.
 
-        ````
-        make_sym_matrix(array([1,2,3,4,5,6]), 3) -> array([[1,2,3],[0,4,5],[0,0,6]])
-        ````
+    Examples
+    --------
+        `make_sym_matrix(array([1,2,3,4,5,6]), 3) -> array([[1,2,3],[0,4,5],[0,0,6]])`
+
     """
     n_dat = vals.shape[0]
     m = np.zeros((n_op, n_op, n_dat))
