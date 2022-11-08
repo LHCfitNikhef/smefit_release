@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Report functions &mdash; SMEFiT 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Produce a report" href="running.html" />
+    <link rel="prev" title="How to run the code" href="../fitting_code/running.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> SMEFiT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/general.html">Fitting assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/MCFit.html">The Monte Carlo replica method</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/data.html">Experimental data format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/theory.html">Theory tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/rotation.html">Basis rotation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../fitting_code/code_struct.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fitting_code/running.html">How to run the code</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reports:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Report functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pca">PCA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fisher-information">Fisher information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coefficient-bounds">Coefficient bounds</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Produce a report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="links.html">Link to reports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules/smefit/smefit.html">API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_rw.html">SMEFiT RW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_top.html">SMEFiT Top</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit20.html">SMEFiT2.0</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References &amp; API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/smefit/smefit.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz-refs.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMEFiT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Report functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/report/tools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="report-functions">
+<h1>Report functions<a class="headerlink" href="#report-functions" title="Permalink to this heading"></a></h1>
+<p>In this section we describe some of the analysis tools that are provided in the report.
+Alognside <span class="math notranslate nohighlight">\(\chi^2\)</span> tables dataset per dataset, correlation plots between the coefficients
+and various histograms to represent the posterior distribution, we include two other main statistical
+estimators.</p>
+<section id="pca">
+<h2>PCA<a class="headerlink" href="#pca" title="Permalink to this heading"></a></h2>
+<p>The Principal Components Analysis (<abbr title="Principal Components Analysis">PCA</abbr>) is the singular values decomposition of the matrix defined as:</p>
+<div class="math notranslate nohighlight">
+\[X_{ij} = \kappa_{i,k} \text{Cov}_{k,l}^{-1} \kappa_{j,l} \quad i,j=\{1,\dots N_{op}\}, \quad l,l=\{1,\dots N_{dat}\}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\kappa_{i,k}\)</span> are the linear <abbr title="Effective Field Theory">EFT</abbr> contibution for each operator and datapoint,
+<span class="math notranslate nohighlight">\(\text{Cov}_{k,l}^{-1}\)</span> is the inverse of the total covariance matrix.
+Then <span class="math notranslate nohighlight">\(X_{ij}\)</span> is decomposed as:</p>
+<div class="math notranslate nohighlight">
+\[X_{ij} = U_{i,k} S_{k} V_{k,j}\]</div>
+<p>where the vector <span class="math notranslate nohighlight">\(S_{k}\)</span> is the vector of the eigenvalues of principal components, which are related
+to the eigenvalues of the eigenvectors <span class="math notranslate nohighlight">\(D_k\)</span> by:</p>
+<div class="math notranslate nohighlight">
+\[S_{k} = \sqrt{D_{k}^2}\]</div>
+<p><span class="math notranslate nohighlight">\(U_{i,k}\)</span> is the unitary matrix that relates the original basis to the principal components
+one. Unlike the eigenvalues <span class="math notranslate nohighlight">\(S_{k}\)</span> are positive definite,
+and therefore this basis highlighs the directions giving higher or lower weights to the <span class="math notranslate nohighlight">\(\chi^2\)</span>,
+and it can be used to determine possible flat directions.</p>
+</section>
+<section id="fisher-information">
+<h2>Fisher information<a class="headerlink" href="#fisher-information" title="Permalink to this heading"></a></h2>
+<p>The Fisher information matrix is defined as  the expectation values of:</p>
+<div class="math notranslate nohighlight">
+\[I_{ij} = - \mathbf{E} \left [ \frac{\partial^2 \ln \mathcal{L}}{ \partial c_{i} \partial c_{j} } \right ]\]</div>
+<p>with <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> is the likelihood function.
+This quantity is related through the Cramer Rao bound to the covarince matrix of the Wilson
+coefficients <span class="math notranslate nohighlight">\(C_{ij}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[C_{ij} \ge I^{-1}_{ij}\]</div>
+<p>thus its diagonal entries provide an esitmate of the best achievable uncertainty on each coefficient given the
+experimental and theoretical inputs. Note that this inequality is between two matrices,
+meaning that <span class="math notranslate nohighlight">\((C - I^{(-1)})_{ij}\)</span> is a positive define matrix.
+The higher the information value the smaller will be the best error bound
+of the coefficient.</p>
+<p>At linear level, in case of a multi Gaussian likelihood, we find <span class="math notranslate nohighlight">\(I_{ij}=X_{ij}\)</span>,
+while when quadratics corrections are included this will
+depends explicily on the best fitted Wilson coefficients.</p>
+<div class="math notranslate nohighlight">
+\[I_{ij} = - \frac{1}{2} \mathbf{E}  \left [ \frac{\partial^2 \sigma_{k}}{\partial c_{i} \partial c_{j}}  \text{Cov}_{k,l}^{-1} \Delta_{l} \right.
+    + \frac{\partial \sigma_{k}}{\partial c_{i} } \text{Cov}_{k,l}^{-1} \frac{\partial \Delta_{l}}{\partial c_{j}}
+    + \frac{\partial \Delta_{k}}{\partial c_{j}}  \text{Cov}_{k,l}^{-1} \frac{\partial \sigma_{l}}{\partial c_{i}}
+    \left. + \Delta_{k}  \text{Cov}_{k,l}^{-1}  \frac{\partial^2 \sigma_{l}}{\partial c_{i} \partial c_{j}} \right]\]</div>
+<p>where we have:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\sigma_{k} &amp;= \sigma_{\text{SM}, k} + \sum_i^{N_{op}} c_i \kappa_{i,k} + \sum_{i, j\ge i}^{N_{op}} c_i c_{j} \tilde{\kappa}_{ij,k} \\
+\Delta_{k} &amp;= (\sigma_{\text{exp}, k} - \sigma_k) \\
+\frac{\partial^2 \sigma_{k}}{\partial c_{i} \partial c_{j}} &amp;= ( \epsilon_{ij} + 2 \delta_{ij} ) \tilde{\kappa}_{ij,k} \\
+\frac{\partial \Delta_{k}}{\partial c_{i}} &amp;= - \frac{\partial \sigma_{k}}{\partial c_{i}} = - \kappa_{i,k} - \sum_{n \neq i }^{N_{op}} c_{n} \tilde{\kappa}_{in,k} - 2 c_i \tilde{\kappa}_{ii,k}\end{split}\]</div>
+<p>Expanding all the definitions a looking at the diagonal term we have:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}I_{ii} = &amp; - 2 ( \tilde{\kappa}_{ii,k} \text{Cov}_{k,l}^{-1}  \mathbf{E} \left[ \Delta_l \right]
+        - \mathbf{E} \left[ \Delta_k \right] \text{Cov}_{k,l}^{-1} \tilde{\kappa}_{ii,l} ) \\
+        &amp; + \kappa_{i,k} \text{Cov}_{k,l}^{-1} A_{i,l} + A_{i,k}  \text{Cov}_{k,l}^{-1} \kappa_{i,l} \\
+        &amp; + 2 ( \mathbf{E} \left[ c_i \right] \kappa_{i,k} \text{Cov}_{k,l}^{-1} \tilde{\kappa}_{ii,l}
+        + \tilde{\kappa}_{ii,k} \text{Cov}_{k,l}^{-1} \mathbf{E} \left[ c_i \right] \kappa_{i,l} ) \\
+        &amp; + 2 ( \tilde{\kappa}_{ii,k} \text{Cov}_{k,l}^{-1} B_{i,l} + B_{i,k} \text{Cov}_{k,l}^{-1} \tilde{\kappa}_{ii,k} ) \\
+        &amp; + 4 \tilde{\kappa}_{ii,k} \text{Cov}_{k,l}^{-1} \tilde{\kappa}_{ii,k} \mathbf{E} \left[ c^2_i \right]
+        + D_{i,kl} \text{Cov}_{k,l}^{-1}\end{split}\]</div>
+</div></blockquote>
+<p>where:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}A_{i,k} &amp;= \mathbf{E} \left[ \sum_{n \neq i }^{N_{op}} c_n \tilde{\kappa}_{in,k} \right] \\
+B_{i,k} &amp;= \mathbf{E} \left[ \sum_{n \neq i }^{N_{op}} c_i c_n \tilde{\kappa}_{in,k} \right] \\
+D_{i,kl} &amp;= \mathbf{E} \left[ \sum_{n \neq i }^{N_{op}} \sum_{m \neq i }^{N_{op}} c_m c_n \tilde{\kappa}_{in,k} \tilde{\kappa}_{im,l} \right] \\\end{split}\]</div>
+</div></blockquote>
+<p>Inside the code <span class="math notranslate nohighlight">\(I_{i,i}\)</span> is computed dataset per dataset and normalized either by coefficient or by dataset.
+In the latter case this indicates how much each dataset contributes in the determination of a given coefficient,
+in the former case it rappresents how much a given dataset is sensitive to each operators.</p>
+<p>Finally the Fisher information matrix can also be understood as a metric in model space.
+If one has two sets of coefficients <span class="math notranslate nohighlight">\(\boldsymbol{c}_a\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol{c}_b\)</span>,
+corresponding to two different points in the EFT parameter space,
+then the local distance between them is defined as:</p>
+<div class="math notranslate nohighlight">
+\[d_{\rm loc}(\boldsymbol{c}_a,\boldsymbol{c}_b) = \left [ \sum_{ij} (\boldsymbol{c}_a-\boldsymbol{c}_b)_i I_{ij}(\boldsymbol{c}_a) (\boldsymbol{c}_a-\boldsymbol{c}_b)_j \right ]^{1/2}\]</div>
+<p>a feature which provides a robust method to quantify how (di)similar
+are two points in this model space.</p>
+</section>
+<section id="coefficient-bounds">
+<h2>Coefficient bounds<a class="headerlink" href="#coefficient-bounds" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p>Describe how the CL tables are produced</p></li>
+<li><p>Describe the 2d plots</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../fitting_code/running.html" class="btn btn-neutral float-left" title="How to run the code" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="running.html" class="btn btn-neutral float-right" title="Produce a report" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, the SMEFiT developers&#39; team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

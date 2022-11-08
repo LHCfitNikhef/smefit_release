@@ -58,6 +58,9 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reports:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../report/tools.html">Report functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../report/running.html">Produce a report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../report/links.html">Link to reports</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules/smefit/smefit.html">API</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
@@ -136,7 +139,7 @@
 <span class="sd">            datasets: smefit.loader.DataTuple</span>
 <span class="sd">                loaded datasets</span>
 <span class="sd">            smeft_predictions: np.ndarray</span>
-<span class="sd">                table with all the predictions for each replica</span>
+<span class="sd">                array with all the predictions for each replica</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -340,7 +343,7 @@
             <span class="c1"># loop over datasets</span>
             <span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">datasets</span><span class="o">.</span><span class="n">droplevel</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="sa">r</span><span class="s2">&quot;\href{{</span><span class="si">{}</span><span class="s2">}}{{</span><span class="si">{}</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">href</span><span class="se">{{</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="se">}}{{</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
                     <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; &amp; </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span><span class="s1">&#39;ndat&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
                     <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; &amp; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span><span class="s1">&#39;chi2_sm/ndat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
@@ -348,11 +351,8 @@
                     <span class="n">temp</span> <span class="o">+=</span> <span class="s2">&quot; &amp; &quot;</span>
                     <span class="n">chi2_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_chi2_df_colors</span><span class="p">(</span><span class="n">chi2_df</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">chi2_df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
-                        <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;\textcolor{{</span><span class="si">{}</span><span class="s2">}}{{</span><span class="si">{:.3f}</span><span class="s2">}}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="n">chi2_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">],</span>
-                            <span class="n">chi2_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span> <span class="s2">&quot;chi2/ndat&quot;</span><span class="p">],</span>
-                        <span class="p">)</span>
-
+                        <span class="n">temp</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">textcolor</span><span class="se">{{</span><span class="si">{</span><span class="n">chi2_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">}}\</span>
+<span class="s2">                            </span><span class="se">{{</span><span class="si">{</span><span class="n">chi2_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span> <span class="s1">&#39;chi2/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="se">}}</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; </span><span class="se">\\</span><span class="s2"> \hline&quot;</span>
                 <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
 
@@ -366,7 +366,7 @@
                 <span class="p">[</span>
                     <span class="n">closing_line</span><span class="p">,</span>
                     <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{tabular}</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="sa">r</span><span class="s2">&quot;\caption{$\chi^2$ table for </span><span class="si">%s</span><span class="s2"> data}&quot;</span> <span class="o">%</span> <span class="n">group</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">caption</span><span class="se">{{</span><span class="s2">$</span><span class="se">\\</span><span class="s2">chi^2$ table for </span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2"> data</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">,</span>
                     <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{table}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="p">]</span>
             <span class="p">)</span>
@@ -394,7 +394,7 @@
         <span class="p">]</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;</span>
         <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">chi2_dict_group</span><span class="p">:</span>
-            <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;&amp; \multicolumn</span><span class="si">{2}</span><span class="s2">{c|}{</span><span class="si">%s</span><span class="s2">} &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">label</span><span class="p">)</span>
+            <span class="n">temp</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&amp; </span><span class="se">\\</span><span class="s2">multicolumn</span><span class="se">{{</span><span class="s2">2</span><span class="se">}}{{</span><span class="s2">c|</span><span class="se">}}{{</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
         <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2"> \hline&quot;</span>
         <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
         <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -407,11 +407,9 @@
             <span class="n">temp</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="k">for</span> <span class="n">chi2_df_grouped</span> <span class="ow">in</span> <span class="n">chi2_dict_group</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
-                    <span class="n">temp</span> <span class="o">+=</span> <span class="s2">&quot; &amp; </span><span class="si">%d</span><span class="s2"> &amp; </span><span class="si">%.3f</span><span class="s2"> (</span><span class="si">%.3f</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                        <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group</span><span class="p">,</span> <span class="s2">&quot;ndat&quot;</span><span class="p">],</span>
-                        <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group</span><span class="p">,</span> <span class="s2">&quot;chi2/ndat&quot;</span><span class="p">],</span>
-                        <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group</span><span class="p">,</span> <span class="s2">&quot;chi2_sm/ndat&quot;</span><span class="p">],</span>
-                    <span class="p">)</span>
+                    <span class="n">temp</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; &amp; </span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group</span><span class="p">,</span> <span class="s1">&#39;ndat&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                        &amp; </span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group</span><span class="p">,</span> <span class="s1">&#39;chi2/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                            (</span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group</span><span class="p">,</span> <span class="s1">&#39;chi2_sm/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">temp</span> <span class="o">+=</span> <span class="s2">&quot; &amp; &amp; &quot;</span>
             <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; </span><span class="se">\\</span><span class="s2"> \hline&quot;</span>
@@ -419,11 +417,9 @@
 
         <span class="n">temp</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot; \hline Total&quot;</span>
         <span class="k">for</span> <span class="n">chi2_df_grouped</span> <span class="ow">in</span> <span class="n">chi2_dict_group</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">temp</span> <span class="o">+=</span> <span class="s2">&quot; &amp; </span><span class="si">%d</span><span class="s2"> &amp; </span><span class="si">%.3f</span><span class="s2"> (</span><span class="si">%.3f</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;Total&quot;</span><span class="p">,</span> <span class="s2">&quot;ndat&quot;</span><span class="p">],</span>
-                <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;Total&quot;</span><span class="p">,</span> <span class="s2">&quot;chi2/ndat&quot;</span><span class="p">],</span>
-                <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;Total&quot;</span><span class="p">,</span> <span class="s2">&quot;chi2_sm/ndat&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
+            <span class="n">temp</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; &amp; </span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="s1">&#39;ndat&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                &amp; </span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="s1">&#39;chi2/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                    (</span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="s1">&#39;chi2_sm/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span>
         <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; </span><span class="se">\\</span><span class="s2"> \hline&quot;</span>
         <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
             <span class="p">[</span>
@@ -449,7 +445,7 @@
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">chi2_df</span> <span class="ow">in</span> <span class="n">chi2_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">chi2_bar</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2/ndat&quot;</span><span class="p">]</span>
         <span class="n">chi2_bar</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="sa">r</span><span class="s2">&quot;\rm{</span><span class="si">%s</span><span class="s2">}&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">chi2_bar</span><span class="o">.</span><span class="n">index</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">rm</span><span class="se">{{</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">chi2_bar</span><span class="o">.</span><span class="n">index</span>
         <span class="p">]</span>
         <span class="n">chi2_bar</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;barh&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
 

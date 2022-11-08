@@ -58,6 +58,9 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reports:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../report/tools.html">Report functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../report/running.html">Produce a report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../report/links.html">Link to reports</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules/smefit/smefit.html">API</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
@@ -162,6 +165,9 @@
 
     <span class="k">if</span> <span class="s2">&quot;PCA&quot;</span> <span class="ow">in</span> <span class="n">report_config</span><span class="p">:</span>
         <span class="n">report</span><span class="o">.</span><span class="n">pca</span><span class="p">(</span><span class="o">**</span><span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;PCA&quot;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="s2">&quot;fisher&quot;</span> <span class="ow">in</span> <span class="n">report_config</span><span class="p">:</span>
+        <span class="n">report</span><span class="o">.</span><span class="n">fisher</span><span class="p">(</span><span class="o">**</span><span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;fisher&quot;</span><span class="p">])</span>
 
     <span class="c1"># Move all files to a meta folder</span>
     <span class="n">meta_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">report_folder</span><span class="si">}</span><span class="s2">/meta&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>

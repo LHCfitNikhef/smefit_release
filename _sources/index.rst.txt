@@ -48,9 +48,9 @@ namely carrying out extensive global analysis which is the main purpose of |SMEF
     :caption: Reports:
     :hidden:
 
-    reports/report_func
-    reports/running.md
-    reports/links
+    report/tools
+    report/running.md
+    report/links
 
     API <modules/smefit/smefit>
 
