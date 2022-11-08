@@ -7,4 +7,6 @@ Below you can find some links to reports used in the most recent studies.
 
 `smefit2.0 quadratic <../_static/report_smefit20_quad/index.html>`_
 
-`STXS 2020 linear <../_static/report_STXS_2020/index.html>`_
+`STXS 2020 linear LHC + LEP <../_static/report_STXS_2020/index.html>`_
+
+`STXS 2020 linear LHC  <../_static/report_STXS_LHC_2020/index.html>`_
