@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[a4paper]{geometry}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{pdflscape}
+\allowdisplaybreaks
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\geometry{verbose, tmargin = 1.5cm, bmargin = 1.5cm, lmargin = 1cm, rmargin = 1cm}
+\usepackage{underscore}
+\begin{document}
+$\chi^2$ table. Blue color text represents a value that is lower than the SM $\chi^2$ \
+            by more than one standard deviation of the $\chi^2$ distribution.\
+            Similarly, red color text represents values that are higher than the SM $\chi^2$ by more than one standard deviation.\
+            In parenthesis is the total SM $\chi^2$ for the dataset included in the fit. \\
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& NS& MC\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1302.3415}{STXS_2020_no_LEP} & 120 & 0.554 & \textcolor{blue}{0.435} & \textcolor{blue}{0.436} \\ \hline
+\hline Total & &  & 0.435 (0.554) & 0.436 (0.554) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for STXS data}
+\end{table}
+
+
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+& \multicolumn{2}{c|}{NS} & \multicolumn{2}{c|}{MC} \\ \hline
+Process  & $N_{\rm data}$ & $\chi^2/N_{\rm data}$ & $N_{\rm data}$ & $\chi^2/N_{\rm data}$\\ \hline
+STXS & 120 & 0.435 (0.554) & 120 & 0.436 (0.554) \\ \hline
+ \hline Total & 120 & 0.435 (0.554) & 120 & 0.436 (0.554) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for grouped data. In parenthesis is the total SM $\chi^2$ for the dataset included in the fit.\
+                    The SM column refers to all the datasets available in the group}
+\end{table}
+\end{document}
