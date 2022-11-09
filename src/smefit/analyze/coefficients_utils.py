@@ -11,16 +11,25 @@ from .contours_2d import plot_contours
 from .latex_tools import latex_packages, multicolum_table_header
 
 
-def get_confidence_values(dist):
+def get_confidence_values(dist, has_posterior=True):
     """
     Get confidence level bounds given the distribution
     """
     cl_vals = {}
-    cl_vals["low68"] = np.nanpercentile(dist, 16)
-    cl_vals["high68"] = np.nanpercentile(dist, 84)
-    cl_vals["low95"] = np.nanpercentile(dist, 2.5)
-    cl_vals["high95"] = np.nanpercentile(dist, 97.5)
-    cl_vals["mid"] = np.mean(dist, axis=0)
+    if has_posterior:
+        cl_vals["low68"] = np.nanpercentile(dist, 16)
+        cl_vals["high68"] = np.nanpercentile(dist, 84)
+        cl_vals["low95"] = np.nanpercentile(dist, 2.5)
+        cl_vals["high95"] = np.nanpercentile(dist, 97.5)
+        cl_vals["mid"] = np.mean(dist, axis=0)
+
+    else:
+        cl_vals["low68"] = dist["68CL"][0]
+        cl_vals["high68"] = dist["68CL"][1]
+        cl_vals["low95"] = dist["95CL"][0]
+        cl_vals["high95"] = dist["95CL"][1]
+        cl_vals["mid"] = dist["bestfit"]
+
     for cl in [68, 95]:
         cl_vals[f"mean_err{cl}"] = (cl_vals[f"high{cl}"] - cl_vals[f"low{cl}"]) / 2.0
         cl_vals[f"err{cl}_low"] = cl_vals["mid"] - cl_vals[f"low{cl}"]
@@ -45,7 +54,7 @@ def split_solution(full_solution):
     return solution1, solution2
 
 
-def compute_confidence_level(posterior, coeff_df, disjointed_list=None):
+def compute_confidence_level(posterior, coeff_df, has_posterior, disjointed_list=None):
     """
     Compute central value, 95 % and 68 % confidence levels and store the result in a dictionary
     given a posterior distribution
@@ -64,7 +73,6 @@ def compute_confidence_level(posterior, coeff_df, disjointed_list=None):
             confidence level bounds per coefficient
             Note: double solutions are appended under "2"
     """
-
     disjointed_list = disjointed_list or []
     bounds = {}
     for name, row in coeff_df.iterrows():
@@ -82,7 +90,7 @@ def compute_confidence_level(posterior, coeff_df, disjointed_list=None):
             # single solution
             else:
                 bounds[latex_name] = pd.DataFrame(
-                    [get_confidence_values(posterior[name])]
+                    [get_confidence_values(posterior[name], has_posterior)]
                 ).stack()
     return pd.DataFrame(bounds)
 

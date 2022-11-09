@@ -232,6 +232,7 @@ class Report:
             bounds_dict[fit.label] = compute_confidence_level(
                 fit.results,
                 coeff_plt.coeff_df,
+                fit.has_posterior,
                 double_solution.get(fit.name, None),
             )
 
