@@ -6,8 +6,11 @@ from matplotlib import cm, colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from rich.progress import track
 
+from ..log import logging
 from .latex_tools import latex_packages
 from .pca import impose_constrain
+
+_logger = logging.getLogger(__name__)
 
 
 class FisherCalculator:
@@ -66,7 +69,15 @@ class FisherCalculator:
         )
 
     def compute_quadratic(self, posterior_df, smeft_predictions):
-        """Compute quadratic Fisher information."""
+        """Compute quadratic Fisher information.
+
+        Parameters
+        ----------
+            posterior_df : pd.DataFrame
+                fit results
+            smeft_predictions: np.ndarray
+                array with all the predictions for each replica
+        """
         quad_fisher = []
 
         # compute some average values over the replicas
@@ -166,6 +177,43 @@ class FisherCalculator:
         if log:
             table = np.log(table[table > 0.0])
         return table.replace(np.nan, 0.0)
+
+    def test_cramer_rao_bound(self, posterior_df):
+        r"""Test Cramer Rao bound, asserting if:
+
+        .. math ::
+            I(c_{i}) - Var(c_{i}) \le 0
+
+        Parameters
+        ----------
+            posterior_df : pd.DataFrame
+                fit results
+
+        """
+        fish_mat = (
+            self.new_LinearCorrections
+            @ self.datasets.InvCovMat
+            @ self.new_LinearCorrections.T
+        )
+        fish_mat = (fish_mat + fish_mat.T) / 2
+
+        posterior_df = posterior_df[self.free_parameters]
+        covariance = posterior_df.cov().values
+        v, u = np.linalg.eig(fish_mat)
+        inv_fish = u @ np.diag(1 / v) @ u.T
+        cr_limit, _ = np.linalg.eig(inv_fish - covariance)
+        cr_limit = pd.Series(cr_limit.real, posterior_df.columns)
+
+        # cr_limit, _ = np.linalg.eig(np.eye(covariance.shape[0]) - fish_mat @ covariance)
+        # cr_limit = pd.Series(cr_limit.real, posterior_df.columns)
+        try:
+            np.testing.assert_array_less(cr_limit, np.zeros_like(cr_limit))
+            _logger.info(f"Cramer Rao bounds are satisfied!")
+        except AssertionError:
+            _logger.warning(
+                "Following coefficients violate Cramer Rao bound:  I(c)^-1 - Var(c) < 0"
+            )
+            _logger.warning(cr_limit[cr_limit > 0])
 
     def groupby_data(self, table, data_groups, norm, log):
         """Merge fisher per data group."""
