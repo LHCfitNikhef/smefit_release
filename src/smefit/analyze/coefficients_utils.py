@@ -460,7 +460,7 @@ class CoefficientsPlotter:
         fig.savefig(f"{self.report_folder}/contours_2d.pdf")
         fig.savefig(f"{self.report_folder}/contours_2d.png")
 
-    def write_cl_table(self, bounds):
+    def write_cl_table(self, bounds, round_val=3):
         """Coefficients latex table"""
         nfits = len(bounds)
         L = latex_packages()
@@ -499,25 +499,15 @@ class CoefficientsPlotter:
                             continue
                         raise KeyError(f"{latex_name} is not found in posterior")
 
-                    temp += (
-                        r" & {:0.3f} & [{:0.3f},{:0.3f}] & [{:0.3f},{:0.3f}] ".format(
-                            cl_vals["mid"],
-                            cl_vals["low68"],
-                            cl_vals["high68"],
-                            cl_vals["low95"],
-                            cl_vals["high95"],
-                        )
-                    )
+                    temp += f" & {np.round(cl_vals['mid'],round_val)} \
+                            & [{np.round(cl_vals['low68'],round_val)},{np.round(cl_vals['high68'],round_val)}] \
+                                & [{np.round(cl_vals['low95'],round_val)},{np.round(cl_vals['high95'],round_val)}]"
                     # double solution
                     try:
                         cl_vals_2 = bound_df[latex_name].dropna()[1]
-                        temp2 += r" & {:0.3f} & [{:0.3f},{:0.3f}] & [{:0.3f},{:0.3f}] ".format(
-                            cl_vals_2["mid"],
-                            cl_vals_2["low68"],
-                            cl_vals_2["high68"],
-                            cl_vals_2["low95"],
-                            cl_vals_2["high95"],
-                        )
+                        temp += f" & {np.round(cl_vals_2['mid'],round_val)} \
+                                & [{np.round(cl_vals_2['low68'],round_val)},{np.round(cl_vals_2['high68'],round_val)}] \
+                                    & [{np.round(cl_vals_2['low95'],round_val)},{np.round(cl_vals_2['high95'],round_val)}]"
                     except KeyError:
                         temp2 += r" & & &"
 
