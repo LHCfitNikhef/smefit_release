@@ -310,8 +310,8 @@
 <span class="sd">            kwarg scatter plot or None</span>
 <span class="sd">        posterior_histograms: bool</span>
 <span class="sd">            if True plot the posterior distribution for each coefficient</span>
-<span class="sd">        table: bool, optional</span>
-<span class="sd">            write the latex confidence level table per coefficient</span>
+<span class="sd">        table: None, dict</span>
+<span class="sd">            kwarg the latex confidence level table per coefficient or None</span>
 <span class="sd">        double_solution: dict</span>
 <span class="sd">            operator with double solution per fit</span>
 
@@ -370,9 +370,9 @@
             <span class="p">)</span>
             <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;coefficient_histo&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">table</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">table</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Writing : Confidence level table&quot;</span><span class="p">)</span>
-            <span class="n">lines</span> <span class="o">=</span> <span class="n">coeff_plt</span><span class="o">.</span><span class="n">write_cl_table</span><span class="p">(</span><span class="n">bounds_dict</span><span class="p">)</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">coeff_plt</span><span class="o">.</span><span class="n">write_cl_table</span><span class="p">(</span><span class="n">bounds_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">table</span><span class="p">)</span>
             <span class="n">compile_tex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">lines</span><span class="p">,</span> <span class="s2">&quot;coefficients_table&quot;</span><span class="p">)</span>
             <span class="n">links_list</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;coefficients_table&quot;</span><span class="p">,</span> <span class="s2">&quot;CL table&quot;</span><span class="p">)]</span>
 
@@ -439,10 +439,6 @@
 <span class="sd">            if True produces a PC heatmap</span>
 <span class="sd">        thr_show: float</span>
 <span class="sd">            minimum threshold value to show</span>
-<span class="sd">        sv_min: float</span>
-<span class="sd">            minimum singular value range shown in the top heatmap plot</span>
-<span class="sd">        sv_max: float</span>
-<span class="sd">            maximum singular value range shown in the top heatmap plot</span>
 <span class="sd">        fit_list: list, optional</span>
 <span class="sd">            list of fit names for which the PCA is computed.</span>
 <span class="sd">            By default all the fits included in the report</span>

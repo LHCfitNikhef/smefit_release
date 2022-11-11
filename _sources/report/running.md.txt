@@ -86,7 +86,8 @@ coefficients_plots:
   posterior_histograms: True
 
   # show a summary table with all the given bounds
-  table: True
+  table:
+    round_val: 3 # round values up to
 
   # display the smefit logo
   logo: True
