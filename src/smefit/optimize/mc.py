@@ -67,6 +67,7 @@ class MCOptimizer(Optimizer):
         result_ID,
         replica,
         single_parameter_fits,
+        pairwise_fits,
         use_bounds,
         minimizer_specs,
         use_multiplicative_prescription,
@@ -77,6 +78,7 @@ class MCOptimizer(Optimizer):
             coefficients,
             use_quad,
             single_parameter_fits,
+            pairwise_fits,
             use_multiplicative_prescription,
         )
         self.chi2_values = []
@@ -157,6 +159,7 @@ class MCOptimizer(Optimizer):
             _logger.warning("Setting maximum number of iterations (maxiter) to 1e4")
 
         single_parameter_fits = config.get("single_parameter_fits", False)
+        pairwise_fits = config.get("pairwise_fits", False)
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
         )
@@ -168,6 +171,7 @@ class MCOptimizer(Optimizer):
             config["result_ID"],
             config["replica"],
             single_parameter_fits,
+            pairwise_fits,
             use_bounds,
             minimizer_specs,
             use_multiplicative_prescription,
