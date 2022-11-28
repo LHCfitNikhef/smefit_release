@@ -65,6 +65,15 @@ class Report:
             fit.load_results()
             if any(k in report_config for k in ["chi2_plots", "PCA", "fisher"]):
                 fit.load_datasets()
+            if "pca_rotation" in fit.config:
+                coeff = {}
+                for i in range(fit.results.shape[1]):
+                    prior_range = {"min": -5, "max": 5}
+                    if 0 < i < 10:
+                        coeff["PC 0{}".format(i)] = prior_range
+                    else:
+                        coeff["PC {}".format(i)] = prior_range
+                fit.config["coefficients"] = coeff
             self.fits.append(fit)
         self.fits = np.array(self.fits)
 

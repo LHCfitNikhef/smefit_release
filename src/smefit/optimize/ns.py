@@ -6,12 +6,14 @@ Fitting the Wilson coefficients with NS
 import os
 import time
 
+import numpy as np
 from mpi4py import MPI
 from pymultinest.solve import solve
 from rich.style import Style
 from rich.table import Table
 
 from .. import log
+from ..analyze.pca import PcaCalculator
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
@@ -53,6 +55,7 @@ class NSOptimizer(Optimizer):
         result_ID,
         single_parameter_fits,
         pairwise_fits,
+        pca_rotation,
         use_multiplicative_prescription,
         live_points=500,
         efficiency=0.01,
@@ -66,6 +69,7 @@ class NSOptimizer(Optimizer):
             use_quad,
             single_parameter_fits,
             pairwise_fits,
+            pca_rotation,
             use_multiplicative_prescription,
         )
         self.live_points = live_points
@@ -107,6 +111,39 @@ class NSOptimizer(Optimizer):
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
+        if config.get("pca_rotation"):
+            pca = PcaCalculator(loaded_datasets, coefficients, None)
+            pca.compute()
+
+            covariances = pca.SVs**2 / (pca.SVs.size - 1)
+            covariances_norm = [cov_i / covariances.sum() for cov_i in covariances]
+            # pc_to_keep = np.array(covariances_norm) > config.get("pca_to_keep")
+            pc_to_keep = np.array(
+                [i < config.get("pca_to_keep") for i in range(pca.SVs.size)]
+            )
+
+            rotated_predictions_lin = (
+                loaded_datasets.LinearCorrections @ pca.pc_matrix.values.T
+            )[:, pc_to_keep]
+            rotated_predictions_quad = None
+            if config["use_quad"]:
+                rotated_predictions_quad = (
+                    loaded_datasets.QuadraticCorrections @ pca.pc_matrix.T
+                )[:, pc_to_keep]
+
+            loaded_datasets = loaded_datasets._replace(
+                LinearCorrections=rotated_predictions_lin,
+                QuadraticCorrections=rotated_predictions_quad,
+            )
+
+            coefficients = CoefficientManager.from_dict(
+                {
+                    "PC {}".format(i): prior_range
+                    for i, prior_range in enumerate(config["coefficients"].values())
+                    if pc_to_keep[i]
+                }
+            )
+
         single_parameter_fits = config.get("single_parameter_fits", False)
         pairwise_fits = config.get("pairwise_fits", False)
         nlive = config.get("nlive", 500)
@@ -145,6 +182,7 @@ class NSOptimizer(Optimizer):
             config["result_ID"],
             single_parameter_fits,
             pairwise_fits,
+            config["pca_rotation"],
             use_multiplicative_prescription,
             live_points=nlive,
             efficiency=efr,

@@ -179,7 +179,10 @@ class CoefficientManager:
                 )
             )
         # make sure elements are sorted by names
-        return cls(np.unique(elements))
+        if name.startswith("PC"):
+            return cls(np.array(elements))
+        else:
+            return cls(np.unique(elements))
 
     def __getitem__(self, idx):
         # TODO: shall it return the object list element?
@@ -215,7 +218,6 @@ class CoefficientManager:
 
             temp = 0.0
             for add_factor_dict in coefficient_fixed.constrain:
-
                 free_dofs = [
                     self._table.at[fixed_name, "value"]
                     for fixed_name in add_factor_dict
