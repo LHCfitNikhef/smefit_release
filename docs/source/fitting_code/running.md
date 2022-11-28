@@ -55,10 +55,13 @@ use_theory_covmat: True
 
 ### Minimizer specifications
 The different parameters controlling the minimizer used in the analysis are specified here.
-If ``single_parameter_fits`` is set to ``True``, the Wilson coefficient specified in the runcard
-will be fit one at time, setting all the other to 0. See [here](./example.html#single-parameter-fits) for more details
+If ``single_parameter_fits`` is set to ``True``, the Wilson coefficient specified in the run-card
+will be fit one at time, setting all the others to 0. See [here](./example.html#single-parameter-fits) for more details.
+If ``pairwise_fits`` is set to ``True``, the minimizer carries out an automated series of pair-wise fits to all possible pairs of
+Wilson coefficients that  are specified in the run-card.
 
 ```yaml
+pairwise_fits: False
 single_parameter_fits: False
 bounds: Null
 
