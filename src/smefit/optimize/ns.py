@@ -5,6 +5,7 @@ Fitting the Wilson coefficients with NS
 """
 import json
 import os
+import pathlib
 import time
 
 import numpy as np
@@ -122,7 +123,9 @@ class NSOptimizer(Optimizer):
                 "matrix": pca.pc_matrix.values.tolist(),
             }
 
-            rot_mat_path = os.path.join(config["result_path"], "pca_rot.json")
+            rot_mat_path = pathlib.Path(
+                config["result_path"], config["result_ID"], "pca_rot.json"
+            )
 
             with open(rot_mat_path, "w") as f:
                 json.dump(rot_dict, f)
