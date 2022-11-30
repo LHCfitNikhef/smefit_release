@@ -3,6 +3,7 @@
 """
 Fitting the Wilson coefficients with NS
 """
+import json
 import os
 import time
 
@@ -22,7 +23,6 @@ _logger = log.logging.getLogger(__name__)
 
 
 class NSOptimizer(Optimizer):
-
     """
     Optimizer specification for |NS|
 
@@ -115,34 +115,64 @@ class NSOptimizer(Optimizer):
             pca = PcaCalculator(loaded_datasets, coefficients, None)
             pca.compute()
 
-            covariances = pca.SVs**2 / (pca.SVs.size - 1)
-            covariances_norm = [cov_i / covariances.sum() for cov_i in covariances]
-            # pc_to_keep = np.array(covariances_norm) > config.get("pca_to_keep")
-            pc_to_keep = np.array(
-                [i < config.get("pca_to_keep") for i in range(pca.SVs.size)]
+            rot_dict = {
+                "name": "PCA_rotation",
+                "xpars": coefficients.name.tolist(),
+                "ypars": ["PC{}".format(i) for i in range(coefficients.size)],
+                "matrix": pca.pc_matrix.values.tolist(),
+            }
+
+            rot_mat_path = os.path.join(config["result_path"], "pca_rot.json")
+
+            with open(rot_mat_path, "w") as f:
+                json.dump(rot_dict, f)
+
+            config["coefficients"] = {
+                "PC{}".format(i): val
+                for i, val in enumerate(config["coefficients"].values())
+            }
+            config["rot_to_fit_basis"] = rot_mat_path
+
+            loaded_datasets = load_datasets(
+                config["data_path"],
+                config["datasets"],
+                config["coefficients"],
+                config["order"],
+                config["use_quad"],
+                config["use_theory_covmat"],
+                config["use_t0"],
+                config.get("use_multiplicative_prescription", False),
+                config.get("theory_path", None),
+                config["rot_to_fit_basis"],
+                config.get("uv_coupligs", False),
             )
 
-            rotated_predictions_lin = (
-                loaded_datasets.LinearCorrections @ pca.pc_matrix.values.T
-            )[:, pc_to_keep]
-            rotated_predictions_quad = None
-            if config["use_quad"]:
-                rotated_predictions_quad = (
-                    loaded_datasets.QuadraticCorrections @ pca.pc_matrix.T
-                )[:, pc_to_keep]
+            coefficients = CoefficientManager.from_dict(config["coefficients"])
 
-            loaded_datasets = loaded_datasets._replace(
-                LinearCorrections=rotated_predictions_lin,
-                QuadraticCorrections=rotated_predictions_quad,
-            )
+            # covariances = pca.SVs**2 / (pca.SVs.size - 1)
+            # covariances_norm = [cov_i / covariances.sum() for cov_i in covariances]
+            # # pc_to_keep = np.array(covariances_norm) > config.get("pca_to_keep")
+            # pc_to_keep = np.array(
+            #     [i < config.get("pca_to_keep") for i in range(pca.SVs.size)]
+            # )
+            #
+            # rotated_predictions_lin = (
+            #     loaded_datasets.LinearCorrections @ pca.pc_matrix.values.T
+            # )[:, pc_to_keep]
+            # rotated_predictions_quad = None
 
-            coefficients = CoefficientManager.from_dict(
-                {
-                    "PC {}".format(i): prior_range
-                    for i, prior_range in enumerate(config["coefficients"].values())
-                    if pc_to_keep[i]
-                }
-            )
+            # loaded_datasets = loaded_datasets._replace(
+            #     LinearCorrections=rotated_predictions_lin,
+            #     QuadraticCorrections=rotated_predictions_quad,
+            # )
+
+            # coefficients = CoefficientManager.from_dict(
+            #     {
+            #         "PC {}".format(i): prior_range
+            #         for i, prior_range in enumerate(config["coefficients"].values())
+            #         if pc_to_keep[i]
+            #     }
+            # )
 
         single_parameter_fits = config.get("single_parameter_fits", False)
         pairwise_fits = config.get("pairwise_fits", False)

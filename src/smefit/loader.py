@@ -27,6 +27,7 @@ DataTuple = namedtuple(
         "NdataExp",
         "InvCovMat",
         "Replica",
+        "Datasets",
     ),
 )
 
@@ -253,7 +254,9 @@ class Loader:
         # TODO: Move inside the rotation? can save some loops in case of rotation, but less clear
         # select corrections to keep
         def is_to_keep(op1, op2=None):
-            if op2 is None:
+            if op1.startswith("PC"):
+                return True
+            elif op2 is None:
                 return op1 in operators_to_keep
             return op1 in operators_to_keep and op2 in operators_to_keep
 
@@ -487,6 +490,7 @@ def load_datasets(
     n_data_exp = []
     exp_name = []
     th_cov = []
+    dataset_list = []
 
     Loader.commondata_path = pathlib.Path(commondata_path)
     if theory_path is not None:
@@ -515,6 +519,7 @@ def load_datasets(
         sys_error.append(dataset.sys_error)
         stat_error.append(dataset.stat_error)
         th_cov.append(dataset.theory_covmat)
+        dataset_list.append(dataset)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
@@ -569,6 +574,7 @@ def load_datasets(
         np.array(n_data_exp),
         np.linalg.inv(fit_covmat),
         replica,
+        dataset_list,
     )
 
 
@@ -591,4 +597,5 @@ def get_dataset(datasets, data_name):
         ndata,
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],
         datasets.Replica[posix_in:posix_out],
+        datasets.Datasets,
     )
