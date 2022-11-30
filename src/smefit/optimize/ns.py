@@ -118,7 +118,7 @@ class NSOptimizer(Optimizer):
             rot_dict = {
                 "name": "PCA_rotation",
                 "xpars": coefficients.name.tolist(),
-                "ypars": ["PC{}".format(i) for i in range(coefficients.size)],
+                "ypars": ["PC{:02d}".format(i) for i in range(coefficients.size)],
                 "matrix": pca.pc_matrix.values.tolist(),
             }
 
@@ -128,7 +128,7 @@ class NSOptimizer(Optimizer):
                 json.dump(rot_dict, f)
 
             config["coefficients"] = {
-                "PC{}".format(i): val
+                "PC{:02d}".format(i): val
                 for i, val in enumerate(config["coefficients"].values())
             }
             config["rot_to_fit_basis"] = rot_mat_path

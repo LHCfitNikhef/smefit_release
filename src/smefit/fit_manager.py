@@ -51,6 +51,11 @@ class FitManager:
 
         # load the configuration file
         self.config = self.load_configuration()
+        # if self.config.get("pca_rotation", False):
+        #     self.config["coefficients"] = {
+        #         "PC{0:02d}".format(i): val
+        #         for i, val in enumerate(self.config["coefficients"].values())
+        #     }
         self.has_posterior = self.config.get("has_posterior", True)
         self.results = None
         self.datasets = None
@@ -108,6 +113,7 @@ class FitManager:
 
     def load_datasets(self):
         """Load all datasets."""
+
         self.datasets = load_datasets(
             self.config["data_path"],
             self.config["datasets"],

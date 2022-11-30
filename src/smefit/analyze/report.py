@@ -63,17 +63,20 @@ class Report:
         for name, label in zip(report_config["result_IDs"], fit_labels):
             fit = FitManager(result_path, name, label)
             fit.load_results()
-            if any(k in report_config for k in ["chi2_plots", "PCA", "fisher"]):
-                fit.load_datasets()
+
             if "pca_rotation" in fit.config:
-                coeff = {}
-                for i in range(fit.results.shape[1]):
-                    prior_range = {"min": -5, "max": 5}
-                    if 0 < i < 10:
-                        coeff["PC 0{}".format(i)] = prior_range
-                    else:
-                        coeff["PC {}".format(i)] = prior_range
-                fit.config["coefficients"] = coeff
+                fit.config["coefficients"] = {
+                    "PC{:02d}".format(i): val
+                    for i, val in enumerate(fit.config["coefficients"].values())
+                }
+                fit.config["rot_to_fit_basis"] = pathlib.Path(
+                    report_config["result_path"], report_config["name"], "pca_rot.json"
+                )
+
+            if any(k in report_config for k in ["chi2_plots", "PCA", "fisher"]):
+
+                fit.load_datasets()
+
             self.fits.append(fit)
         self.fits = np.array(self.fits)
 
