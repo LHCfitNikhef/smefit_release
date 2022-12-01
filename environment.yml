@@ -1,0 +1,14 @@
+name: smefit_installation
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python
+  - pip  
+  - poetry
+  - openmpi=4.1.4=ha1ae619_100
+  - compilers
+  
+
+platforms:
+  - linux-64
