@@ -103,6 +103,27 @@ class Coefficient:
         self.value += coeff_other.value
         return self
 
+    def update_constrain(self, inv_rotation):
+        """Update the constrain when a new basis is chosen.
+        Only linear constrain are supported.
+
+        Parameters
+        ----------
+            inv_rotation: pd.DataFrame
+                rotation matrix from the original basis to the new_basis
+        """
+        new_constrain = []
+
+        # loop on the sum
+        for factor in self.constrain:
+            # olny linar case are supported
+            old_dof = (*factor.keys(),)[0]
+
+            # rotate the contrain
+            new_factor = dict(factor[old_dof][0] * inv_rotation[old_dof])
+            new_constrain.append(self.build_additive_factor_dict(new_factor))
+        self.constrain = new_constrain
+
 
 class CoefficientManager:
     """
@@ -227,3 +248,19 @@ class CoefficientManager:
                 fact_exp = np.array((*add_factor_dict.values(),), dtype=float)
                 temp += np.prod(fact_exp[:, 0] * np.power(free_dofs, fact_exp[:, 1]))
             self._table.at[coefficient_fixed.name, "value"] = temp
+
+    def update_constrain(self, inv_rotation):
+        r"""Update the constraints according to rotation matrix.
+        Only linear constrain are supported.
+
+        Parameters
+        ----------
+            inv_rotation: pd.DataFrame
+                rotation matrix from the original basis to the new_basis
+        """
+        for coefficient_fixed in self._objlist[np.invert(self.is_free)]:
+
+            # skip coefficient fixed to a single value
+            if coefficient_fixed.constrain is None:
+                continue
+            coefficient_fixed.update_constrain(inv_rotation)

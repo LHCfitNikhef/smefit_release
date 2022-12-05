@@ -112,29 +112,44 @@ class NSOptimizer(Optimizer):
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
+        # TODO: move to a separate function
+        # Maybe in PCA mudule ?
+        # TODO: as it is right now you will recompute it each time you call the fit
+        # maybe do you want to compute it just once...
+        import pandas as pd
+
+        # compute the PCA if needed
         if config.get("pca_rotation"):
             pca = PcaCalculator(loaded_datasets, coefficients, None)
             pca.compute()
 
+            # dump the rotation matrix
+            # the roation matrix is composed by two blocks: PCA and an idenety for the constrained dofs
+            fixed_dofs = coefficients.name[~coefficients.is_free]
+            id_df = pd.DataFrame(
+                np.eye(fixed_dofs.size), columns=fixed_dofs, index=fixed_dofs
+            )
+            rotation = pd.concat([pca.pc_matrix, id_df]).replace(np.nan, 0)
+
             rot_dict = {
                 "name": "PCA_rotation",
-                "xpars": coefficients.name.tolist(),
-                "ypars": ["PC{:02d}".format(i) for i in range(coefficients.size)],
-                "matrix": pca.pc_matrix.values.tolist(),
+                "xpars": rotation.index.tolist(),
+                "ypars": rotation.columns.tolist(),
+                "matrix": rotation.values.tolist(),
             }
-
             rot_mat_path = pathlib.Path(
                 config["result_path"], config["result_ID"], "pca_rot.json"
             )
-
             with open(rot_mat_path, "w") as f:
                 json.dump(rot_dict, f)
-
-            config["coefficients"] = {
-                "PC{:02d}".format(i): val
-                for i, val in enumerate(config["coefficients"].values())
-            }
             config["rot_to_fit_basis"] = rot_mat_path
+
+            # update contrain coefficient contraints and reload datasets
+            inv_rot = np.linalg.inv(rotation.values)
+            inv_rot_df = pd.DataFrame(
+                inv_rot, columns=rotation.index, index=rotation.columns
+            )
+            coefficients.update_constrain(inv_rot_df)
 
             loaded_datasets = load_datasets(
                 config["data_path"],
@@ -149,8 +164,6 @@ class NSOptimizer(Optimizer):
                 config["rot_to_fit_basis"],
                 config.get("uv_coupligs", False),
             )
-
-            coefficients = CoefficientManager.from_dict(config["coefficients"])
 
             # covariances = pca.SVs**2 / (pca.SVs.size - 1)
             # covariances_norm = [cov_i / covariances.sum() for cov_i in covariances]
