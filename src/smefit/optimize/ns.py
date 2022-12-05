@@ -65,7 +65,6 @@ class NSOptimizer(Optimizer):
             coefficients,
             use_quad,
             single_parameter_fits,
-            pairwise_fits,
             use_multiplicative_prescription,
         )
         self.live_points = live_points
@@ -74,6 +73,7 @@ class NSOptimizer(Optimizer):
         self.tolerance = tolerance
         self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
+        self.pairwise_fits = pairwise_fits
 
     @classmethod
     def from_dict(cls, config):
@@ -293,8 +293,9 @@ class NSOptimizer(Optimizer):
                 values[c].append(self.coefficients[c].value)
 
         if self.pairwise_fits:
-            posterior_file = self.results_path / "posterior_{}_{}.json".format(
-                self.coefficients.name[0], self.coefficients.name[1]
+            posterior_file = (
+                self.results_path
+                / f"posterior_{self.coefficients.name[0]}_{self.coefficients.name[1]}.json"
             )
         else:
             posterior_file = self.results_path / "posterior.json"
