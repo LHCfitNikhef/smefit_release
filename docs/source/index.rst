@@ -4,6 +4,8 @@
   :align: center
   :alt: SMEFIT logo
 
+Project description
+~~~~~~~~~~~~~~~~~~~
 
 |SMEFiT| is a Python package for global analyses of particle physics data in the framework of the Standard Model Effective Field Theory (|SMEFT|).
 The |SMEFT| represents a powerful model-independent framework to constrain, identify,
@@ -12,6 +14,16 @@ A particularly attractive feature of the |SMEFT| is its capability to systematic
 from the SM between different processes. The full exploitation of the |SMEFT| potential for indirect
 New Physics searches from precision measurements requires combining the information provided by the broadest possible dataset,
 namely carrying out extensive global analysis which is the main purpose of |SMEFiT|.
+
+
+The SMEFiT framework has been used in the following **scientific publications**:
+
+- *A Monte Carlo global analysis of the Standard Model Effective Field Theory: the top quark sector*, N. P. Hartland, F. Maltoni, E. R. Nocera, J. Rojo, E. Slade, E. Vryonidou, C. Zhang :cite:`Hartland:2019bjb`.
+- *Constraining the SMEFT with Bayesian reweighting*, S. van Beek, E. R. Nocera, J. Rojo, and E. Slade :cite:`vanBeek:2019evb`.
+- *SMEFT analysis of vector boson scattering and diboson data from the LHC Run II* , J. Ethier, R. Gomez-Ambrosio, G. Magni, J. Rojo :cite:`Ethier_2021`.
+- *Combined SMEFT interpretation of Higgs, diboson, and top quark data from the LHC*, J. Ethier, G.Magni, F. Maltoni, L. Mantani, E. R. Nocera, J. Rojo, E. Slade, E. Vryonidou, C. Zhang :cite:`ethier2021combined`
+
+Results from these publications, including driver and analysis scripts, are available in the *Previous studies* section.
 
 
 .. toctree::
