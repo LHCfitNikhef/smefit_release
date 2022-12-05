@@ -59,6 +59,7 @@ If ``single_parameter_fits`` is set to ``True``, the Wilson coefficient specifie
 will be fit one at time, setting all the others to 0. See [here](./example.html#single-parameter-fits) for more details.
 If ``pairwise_fits`` is set to ``True``, the minimizer carries out an automated series of pair-wise fits to all possible pairs of
 Wilson coefficients that  are specified in the run-card.
+Pairwise fits are supported only with |NS|.
 
 ```yaml
 pairwise_fits: False
