@@ -90,6 +90,8 @@ class FitManager:
                     results[key], num_samples_min, replace=False
                 )
 
+        # TODO: support pariwise posteriors
+
         # Be sure columns are sorted, otherwise can't compute theory...
         self.results = pd.DataFrame(results).sort_index(axis=1)
 
