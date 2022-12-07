@@ -143,3 +143,14 @@ def report(report_card: pathlib.Path):
     Usage: smefit R path_to_runcard
     """
     run_report(report_card.absolute())
+
+
+@base_command.command("rotate_to_pca")
+@fit_card
+def rotate_to_pca(fit_card: pathlib.Path):
+    """Run a fit report.
+
+    Usage: smefit R path_to_runcard
+    """
+    runner = Runner.from_file(fit_card.absolute())
+    runner.rotate_to_pca()

@@ -7,6 +7,7 @@ from shutil import copyfile
 import yaml
 from mpi4py import MPI
 
+from .analyze.pca import RotateToPca
 from .chi2 import Scanner
 from .log import logging
 from .optimize.mc import MCOptimizer
@@ -128,6 +129,12 @@ class Runner:
         opt = MCOptimizer.from_dict(config)
         opt.run_sampling()
         opt.save()
+
+    def rotate_to_pca(self):
+
+        pca_rot = RotateToPca.from_dict(self.run_card)
+        pca_rot.build_runcard()
+        pca_rot.save()
 
     def global_analysis(self, optimizer):
         """Run a global fit using the selected optimizer

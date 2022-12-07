@@ -1,14 +1,93 @@
 # -*- coding: utf-8 -*-
 import copy
+import json
+import pathlib
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import yaml
 from matplotlib import cm, colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+from ..coefficients import CoefficientManager
 from ..compute_theory import flatten
+from ..loader import load_datasets
 from .latex_tools import latex_packages
+
+
+class RotateToPca:
+    def __init__(self, loaded_datasets, coefficients, config):
+
+        self.loaded_datasets = loaded_datasets
+        self.coefficients = coefficients
+        self.config = config
+
+    @classmethod
+    def from_dict(cls, config):
+
+        loaded_datasets = load_datasets(
+            config["data_path"],
+            config["datasets"],
+            config["coefficients"],
+            config["order"],
+            config["use_quad"],
+            config["use_theory_covmat"],
+            config["use_t0"],
+            config.get("use_multiplicative_prescription", False),
+            config.get("theory_path", None),
+            config.get("rot_to_fit_basis", None),
+            config.get("uv_coupligs", False),
+        )
+
+        coefficients = CoefficientManager.from_dict(config["coefficients"])
+
+        return cls(loaded_datasets, coefficients, config)
+
+    def build_runcard(self):
+
+        pca = PcaCalculator(self.loaded_datasets, self.coefficients, None)
+        pca.compute()
+
+        # dump the rotation matrix
+        # the roation matrix is composed by two blocks: PCA and an idenety for the constrained dofs
+        fixed_dofs = self.coefficients.name[~self.coefficients.is_free]
+        id_df = pd.DataFrame(
+            np.eye(fixed_dofs.size), columns=fixed_dofs, index=fixed_dofs
+        )
+        rotation = pd.concat([pca.pc_matrix, id_df]).replace(np.nan, 0)
+
+        rot_dict = {
+            "name": "PCA_rotation",
+            "xpars": rotation.index.tolist(),
+            "ypars": rotation.columns.tolist(),
+            "matrix": rotation.values.tolist(),
+        }
+        rot_mat_path = pathlib.Path(
+            self.config["result_path"], self.config["result_ID"], "pca_rot.json"
+        )
+
+        with open(rot_mat_path, "w") as f:
+            json.dump(rot_dict, f)
+
+        self.config["rot_to_fit_basis"] = str(rot_mat_path)
+
+        # update contrain coefficient contraints and reload datasets
+        inv_rot = np.linalg.inv(rotation.values)
+        inv_rot_df = pd.DataFrame(
+            inv_rot, columns=rotation.index, index=rotation.columns
+        )
+        self.coefficients.update_constrain(inv_rot_df)
+
+    def save(self):
+        p = pathlib.Path(self.config["result_path"])
+        root_path = pathlib.Path(*p.parts[:-1])
+
+        result_ID = self.config["result_ID"]
+        runcard_copy = root_path / "runcards" / f"{result_ID}_pca.yaml"
+
+        with open(runcard_copy, "w", encoding="utf-8") as f:
+            yaml.dump(self.config, f, default_flow_style=False)
 
 
 def make_sym_matrix(vals, n_op):
