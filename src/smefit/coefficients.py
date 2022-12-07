@@ -112,18 +112,14 @@ class Coefficient:
             inv_rotation: pd.DataFrame
                 rotation matrix from the original basis to the new_basis
         """
-        new_constrain = []
 
-        # loop on the sum
-        for factor in self.constrain:
-            # olny linar case are supported
-            old_dof = (*factor.keys(),)[0]
-
-            # rotate the contrain
-            # TODO: simplimpfy, cast to list
-            new_factor = dict(factor[old_dof][0] * inv_rotation[old_dof])
-            new_constrain.append(self.build_additive_factor_dict(new_factor))
-        self.constrain = new_constrain
+        # loop on the sum and simplify the constrain
+        old_coeffs = [(*factor.keys(),)[0] for factor in self.constrain]
+        old_factors = [(*factor.values(),)[0][0] for factor in self.constrain]
+        rot = inv_rotation[old_coeffs]
+        new_constrain = (rot * old_factors).sum(axis=1)
+        new_constrain = new_constrain[new_constrain != 0]
+        self.constrain = dict(new_constrain)
 
 
 class CoefficientManager:

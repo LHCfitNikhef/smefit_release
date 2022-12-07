@@ -73,11 +73,7 @@ class RotateToPca:
         self.config["rot_to_fit_basis"] = str(rot_mat_path)
 
         # update coefficient contraints
-        inv_rot = np.linalg.inv(rotation.values)
-        inv_rot_df = pd.DataFrame(
-            inv_rot, columns=rotation.index, index=rotation.columns
-        )
-        self.coefficients.update_constrain(inv_rot_df)
+        self.coefficients.update_constrain(rotation.T)
         new_coeff = {}
         for coef_obj in self.coefficients._objlist:
             tmp = {
