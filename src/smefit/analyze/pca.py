@@ -90,6 +90,7 @@ class RotateToPca:
     def save(self):
         p = pathlib.Path(self.config["result_path"])
         root_path = pathlib.Path(*p.parts[:-1])
+        self.config["pca_rotation"] = False
 
         result_ID = self.config["result_ID"]
         runcard_copy = root_path / "runcards" / f"{result_ID}_pca.yaml"

@@ -119,7 +119,7 @@ class Coefficient:
         rot = inv_rotation[old_coeffs]
         new_constrain = (rot * old_factors).sum(axis=1)
         new_constrain = new_constrain[new_constrain != 0]
-        self.constrain = dict(new_constrain)
+        self.constrain = new_constrain.to_dict()
 
 
 class CoefficientManager:
