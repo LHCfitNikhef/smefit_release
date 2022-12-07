@@ -74,18 +74,22 @@ class RotateToPca:
 
         # update coefficient contraints
         self.coefficients.update_constrain(rotation.T)
-        new_coeff = {}
+        new_coeffs = {}
         for coef_obj in self.coefficients._objlist:
-            tmp = {
-                "min": coef_obj.minimum,
-                "max": coef_obj.maximum,
-            }
+            if coef_obj.constrain is None:
+                continue
             if "value" in self.config["coefficients"][coef_obj.name]:
-                tmp["value"] = self.config["coefficients"][coef_obj.name]["value"]
+                tmp = self.config["coefficients"][coef_obj.name]
             if coef_obj.constrain is not None:
-                tmp["constrain"] = coef_obj.constrain
-            new_coeff[coef_obj.name] = tmp
-        self.config["coefficients"] = new_coeff
+                tmp = {
+                    "min": coef_obj.minimum,
+                    "max": coef_obj.maximum,
+                    "constrain": coef_obj.constrain,
+                }
+            new_coeffs[coef_obj.name] = tmp
+        for pc in rotation.columns:
+            new_coeffs[pc] = {"min": -5, "max": 5}
+        self.config["coefficients"] = new_coeffs
 
     def save(self):
         p = pathlib.Path(self.config["result_path"])
