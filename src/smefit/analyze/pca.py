@@ -97,7 +97,7 @@ class RotateToPca:
         self.config["pca_rotation"] = False
 
         result_ID = self.config["result_ID"]
-        runcard_copy = root_path / "runcards" / f"{result_ID}_pca.yaml"
+        runcard_copy = root_path / "runcards" / f"{result_ID}.yaml"
 
         with open(runcard_copy, "w", encoding="utf-8") as f:
             yaml.dump(self.config, f, default_flow_style=False)
