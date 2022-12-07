@@ -120,6 +120,7 @@ class Coefficient:
             old_dof = (*factor.keys(),)[0]
 
             # rotate the contrain
+            # TODO: simplimpfy, cast to list
             new_factor = dict(factor[old_dof][0] * inv_rotation[old_dof])
             new_constrain.append(self.build_additive_factor_dict(new_factor))
         self.constrain = new_constrain
