@@ -79,15 +79,16 @@ class RotateToPca:
             if coef_obj.constrain is None:
                 continue
             if "value" in self.config["coefficients"][coef_obj.name]:
-                tmp = self.config["coefficients"][coef_obj.name]
+                new_coeffs[coef_obj.name] = self.config["coefficients"][coef_obj.name]
             if coef_obj.constrain is not None:
                 tmp = {
                     "min": coef_obj.minimum,
                     "max": coef_obj.maximum,
                     "constrain": coef_obj.constrain,
                 }
-            new_coeffs[coef_obj.name] = tmp
+                new_coeffs[coef_obj.name] = tmp
         for pc in pca.pc_matrix.columns:
+            # TODO: rotate prio volume correctly
             new_coeffs[pc] = {"min": -5, "max": 5}
         self.config["coefficients"] = new_coeffs
 
