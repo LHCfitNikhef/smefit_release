@@ -3,19 +3,15 @@
 """
 Fitting the Wilson coefficients with NS
 """
-import json
 import os
-import pathlib
 import time
 
-import numpy as np
 from mpi4py import MPI
 from pymultinest.solve import solve
 from rich.style import Style
 from rich.table import Table
 
 from .. import log
-from ..analyze.pca import PcaCalculator
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
