@@ -50,7 +50,7 @@ class RotateToPca:
         pca.compute()
 
         # dump the rotation matrix
-        # the roation matrix is composed by two blocks: PCA and an idenety for the constrained dofs
+        # the roation matrix is composed by two blocks: PCA and an identity for the constrained dofs
         fixed_dofs = self.coefficients.name[~self.coefficients.is_free]
         id_df = pd.DataFrame(
             np.eye(fixed_dofs.size), columns=fixed_dofs, index=fixed_dofs
@@ -72,12 +72,24 @@ class RotateToPca:
 
         self.config["rot_to_fit_basis"] = str(rot_mat_path)
 
-        # update contrain coefficient contraints and reload datasets
+        # update coefficient contraints
         inv_rot = np.linalg.inv(rotation.values)
         inv_rot_df = pd.DataFrame(
             inv_rot, columns=rotation.index, index=rotation.columns
         )
         self.coefficients.update_constrain(inv_rot_df)
+        new_coeff = {}
+        for coef_obj in self.coefficients._objlist:
+            tmp = {
+                "min": coef_obj.minimum,
+                "max": coef_obj.maximum,
+            }
+            if "value" in self.config["coefficients"][coef_obj.name]:
+                tmp["value"] = self.config["coefficients"][coef_obj.name]["value"]
+            if coef_obj.constrain is not None:
+                tmp["constrain"] = coef_obj.constrain
+            new_coeff[coef_obj.name] = tmp
+        self.config["coefficients"] = new_coeff
 
     def save(self):
         p = pathlib.Path(self.config["result_path"])
