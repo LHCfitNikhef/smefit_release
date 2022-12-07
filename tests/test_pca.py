@@ -111,9 +111,11 @@ def test_pca_eig():
 
     new_LinearCorrections = pca.impose_constrain(dataset, coefficients)
     X = new_LinearCorrections @ dataset.InvCovMat @ new_LinearCorrections.T
-    D, N = np.linalg.eig(X)
+    X_center = X - X.mean(axis=0)
+    D, N = np.linalg.eig(X_center.T @ X_center)
     S = pca_cal.SVs.values
     V = pca_cal.pc_matrix.values
 
-    np.testing.assert_allclose(S**2, np.sort(D**2)[::-1], atol=1e-17)
-    np.testing.assert_allclose(np.abs(V), np.abs(N), atol=1e-17)
+    np.testing.assert_allclose(S**2, np.sort(D)[::-1], atol=1e-14)
+    # eig should be sorted according to np.argsort(D)
+    np.testing.assert_allclose(np.abs(V), np.abs(N.T), atol=1e-17)
