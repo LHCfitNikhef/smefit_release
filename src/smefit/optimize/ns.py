@@ -56,7 +56,6 @@ class NSOptimizer(Optimizer):
         result_ID,
         single_parameter_fits,
         pairwise_fits,
-        pca_rotation,
         use_multiplicative_prescription,
         live_points=500,
         efficiency=0.01,
@@ -70,7 +69,6 @@ class NSOptimizer(Optimizer):
             use_quad,
             single_parameter_fits,
             pairwise_fits,
-            pca_rotation,
             use_multiplicative_prescription,
         )
         self.live_points = live_points
@@ -150,7 +148,6 @@ class NSOptimizer(Optimizer):
             config["result_ID"],
             single_parameter_fits,
             pairwise_fits,
-            config["pca_rotation"],
             use_multiplicative_prescription,
             live_points=nlive,
             efficiency=efr,

@@ -39,7 +39,6 @@ class Optimizer:
         use_quad,
         single_parameter_fits,
         pairwise_fits,
-        pca_rotation,
         use_multiplicative_prescription,
     ):
         self.results_path = pathlib.Path(results_path)
@@ -49,7 +48,6 @@ class Optimizer:
         self.npts = self.loaded_datasets.Commondata.size
         self.single_parameter_fits = single_parameter_fits
         self.pairwise_fits = pairwise_fits
-        self.pca_rotation = pca_rotation
         self.use_multiplicative_prescription = use_multiplicative_prescription
 
         self.counter = 0
