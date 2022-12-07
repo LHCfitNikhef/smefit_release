@@ -108,7 +108,6 @@ class FitManager:
 
     def load_datasets(self):
         """Load all datasets."""
-
         self.datasets = load_datasets(
             self.config["data_path"],
             self.config["datasets"],
