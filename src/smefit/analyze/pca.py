@@ -87,7 +87,7 @@ class RotateToPca:
                     "constrain": coef_obj.constrain,
                 }
             new_coeffs[coef_obj.name] = tmp
-        for pc in rotation.columns:
+        for pc in pca.pc_matrix.columns:
             new_coeffs[pc] = {"min": -5, "max": 5}
         self.config["coefficients"] = new_coeffs
 
@@ -97,7 +97,7 @@ class RotateToPca:
         self.config["pca_rotation"] = False
 
         result_ID = self.config["result_ID"]
-        runcard_copy = root_path / "runcards" / f"{result_ID}_pca.yaml"
+        runcard_copy = root_path / "runcards" / f"{result_ID}.yaml"
 
         with open(runcard_copy, "w", encoding="utf-8") as f:
             yaml.dump(self.config, f, default_flow_style=False)
