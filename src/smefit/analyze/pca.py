@@ -87,7 +87,7 @@ class RotateToPca:
                     "constrain": coef_obj.constrain,
                 }
             new_coeffs[coef_obj.name] = tmp
-        for pc in rotation.columns:
+        for pc in pca.pc_matrix.columns:
             new_coeffs[pc] = {"min": -5, "max": 5}
         self.config["coefficients"] = new_coeffs
 
