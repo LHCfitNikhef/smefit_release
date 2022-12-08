@@ -23,30 +23,29 @@ dataset = load_datasets(
 )
 c23 = 0.1
 c13 = -0.2
-coefficients = CoefficientManager.from_dict(
-    {
-        "Op1": {
-            "min": -1,
-            "max": 1,
-        },
-        "Op2": {
-            "min": -3,
-            "max": 1,
-        },
-        "Op4": {
-            "min": -3,
-            "max": 1,
-        },
-        "Op3": {  # fixed to 0.1 * Op2 - 0.2 * Op1
-            "constrain": [
-                {"Op2": c23},
-                {"Op1": c13},
-            ],
-            "min": -5,
-            "max": 1,
-        },
-    }
-)
+coeff_dict = {
+    "Op1": {
+        "min": -1,
+        "max": 1,
+    },
+    "Op2": {
+        "min": -3,
+        "max": 1,
+    },
+    "Op4": {
+        "min": -3,
+        "max": 1,
+    },
+    "Op3": {  # fixed to c23 * Op2 + c13 * Op1
+        "constrain": [
+            {"Op1": 0.1},
+            {"Op2": -0.2},
+        ],
+        "min": -5,
+        "max": 1,
+    },
+}
+coefficients = CoefficientManager.from_dict(coeff_dict)
 
 
 def test_make_sym_matrix():
@@ -104,7 +103,6 @@ def test_impose_constrain():
 
 
 def test_pca_eig():
-
     """Test the relation of SVD and normal eigenvalue decomposition."""
     pca_cal = pca.PcaCalculator(dataset, coefficients, latex_names=None)
     pca_cal.compute()
@@ -119,3 +117,28 @@ def test_pca_eig():
     np.testing.assert_allclose(S**2, np.sort(D)[::-1], atol=1e-14)
     # eig should be sorted according to np.argsort(D)
     np.testing.assert_allclose(np.abs(V), np.abs(N.T), atol=1e-17)
+
+
+class TestRotateToPca:
+
+    rot_to_pca = pca.RotateToPca(dataset, coefficients, {"coefficients": coeff_dict})
+    rot_to_pca.compute()
+    rot_to_pca.update_runcard()
+
+    def test_constrain_rotation(self):
+        """Test constrain roation."""
+        new_op1 = np.array([1, 0, 0, 0]) @ self.rot_to_pca.rotation
+        new_op2 = np.array([0, 1, 0, 0]) @ self.rot_to_pca.rotation
+        new_op3 = c13 * new_op1 + c23 * new_op2
+        for pc, val in self.rot_to_pca.config["coefficients"]["Op3"][
+            "constrain"
+        ].items():
+            np.testing.assert_allclose(val, new_op3[pc])
+
+    def test_pca_id(self):
+        """Test that the PCA on the rotated basis is now an identity."""
+        pca_coeffs_dict = self.rot_to_pca.config["coefficients"]
+        pca_coeffs = CoefficientManager.from_dict(pca_coeffs_dict)
+        pca_cal = pca.PcaCalculator(dataset, pca_coeffs, latex_names=None)
+        pca_cal.compute()
+        np.testing.assert_allclose(pca_cal.pc_matrix.values, np.eye(3))

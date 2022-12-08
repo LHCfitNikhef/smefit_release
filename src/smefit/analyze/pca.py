@@ -17,15 +17,34 @@ from .latex_tools import latex_packages
 
 
 class RotateToPca:
+    """Contruct a new fit runcard using PCA.
+
+    Parameters
+    ----------
+        loaded_datasets : smefit.loader.DataTuple
+            loaded datasets
+        coefficients : smefit.coeffiecients.CoefficientManager
+            coeffiecient list
+        config : dict
+            runcard configuration dictionary
+    """
+
     def __init__(self, loaded_datasets, coefficients, config):
 
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.config = config
+        self.rotation = None
 
     @classmethod
     def from_dict(cls, config):
+        """Build the class from a runcard dictionary.
 
+        Parameters
+        ----------
+        config : dict
+            runcard configuration dictionary
+        """
         loaded_datasets = load_datasets(
             config["data_path"],
             config["datasets"],
@@ -44,62 +63,58 @@ class RotateToPca:
 
         return cls(loaded_datasets, coefficients, config)
 
-    def build_runcard(self):
+    def compute(self):
+        """Compute the roation matrix.
+        This is composed by two blocks: PCA and an identity for the constrained dofs.
+        """
 
         pca = PcaCalculator(self.loaded_datasets, self.coefficients, None)
         pca.compute()
-
-        # dump the rotation matrix
-        # the roation matrix is composed by two blocks: PCA and an identity for the constrained dofs
         fixed_dofs = self.coefficients.name[~self.coefficients.is_free]
         id_df = pd.DataFrame(
             np.eye(fixed_dofs.size), columns=fixed_dofs, index=fixed_dofs
         )
-        rotation = pd.concat([pca.pc_matrix, id_df]).replace(np.nan, 0)
+        self.rotation = pd.concat([pca.pc_matrix, id_df]).replace(np.nan, 0)
 
-        rot_dict = {
-            "name": "PCA_rotation",
-            "xpars": rotation.index.tolist(),
-            "ypars": rotation.columns.tolist(),
-            "matrix": rotation.values.tolist(),
-        }
-        rot_mat_path = pathlib.Path(
-            self.config["result_path"], self.config["result_ID"], "pca_rot.json"
-        )
-
-        with open(rot_mat_path, "w") as f:
-            json.dump(rot_dict, f)
-
-        self.config["rot_to_fit_basis"] = str(rot_mat_path)
+    def update_runcard(self):
+        """Update the runcard object."""
 
         # update coefficient contraints
-        self.coefficients.update_constrain(rotation.T)
         new_coeffs = {}
+        self.coefficients.update_constrain(self.rotation.T)
+        pca_min = self.coefficients.minimum @ self.rotation
+        pca_max = self.coefficients.maximum @ self.rotation
+        for pc in self.rotation.columns:
+            new_coeffs[pc] = {"min": pca_min[pc], "max": pca_max[pc]}
+
         for coef_obj in self.coefficients._objlist:
-            if coef_obj.constrain is None:
-                continue
+            # fixed coefficients
             if "value" in self.config["coefficients"][coef_obj.name]:
                 new_coeffs[coef_obj.name] = self.config["coefficients"][coef_obj.name]
-            if coef_obj.constrain is not None:
-                tmp = {
-                    "min": coef_obj.minimum,
-                    "max": coef_obj.maximum,
-                    "constrain": coef_obj.constrain,
-                }
-                new_coeffs[coef_obj.name] = tmp
-        for pc in pca.pc_matrix.columns:
-            # TODO: rotate prio volume correctly
-            new_coeffs[pc] = {"min": -5, "max": 5}
+            # constrained coefficients
+            elif coef_obj.constrain is not None:
+                new_coeffs[coef_obj.name]["constrain"] = coef_obj.constrain
         self.config["coefficients"] = new_coeffs
 
     def save(self):
-        p = pathlib.Path(self.config["result_path"])
-        root_path = pathlib.Path(*p.parts[:-1])
-        self.config["pca_rotation"] = False
-
+        """Dump updated runcard and roation matrix into the reult folder."""
         result_ID = self.config["result_ID"]
-        runcard_copy = root_path / "runcards" / f"{result_ID}.yaml"
+        result_path = pathlib.Path(self.config["result_path"]) / result_ID
 
+        # dump rotation
+        rot_dict = {
+            "name": "PCA_rotation",
+            "xpars": self.rotation.index.tolist(),
+            "ypars": self.rotation.columns.tolist(),
+            "matrix": self.rotation.values.tolist(),
+        }
+        rot_mat_path = result_path / "pca_rot.json"
+        self.config["rot_to_fit_basis"] = str(rot_mat_path)
+        with open(rot_mat_path, "w", encoding="utf-8") as f:
+            json.dump(rot_dict, f)
+
+        # dump runcard
+        runcard_copy = result_path / f"{result_ID}.yaml"
         with open(runcard_copy, "w", encoding="utf-8") as f:
             yaml.dump(self.config, f, default_flow_style=False)
 

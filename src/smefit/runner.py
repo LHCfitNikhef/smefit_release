@@ -134,7 +134,8 @@ class Runner:
 
         _logger.info("Rotate input basis to PCA basis")
         pca_rot = RotateToPca.from_dict(self.run_card)
-        pca_rot.build_runcard()
+        pca_rot.compute()
+        pca_rot.update_runcard()
         pca_rot.save()
 
     def global_analysis(self, optimizer):
