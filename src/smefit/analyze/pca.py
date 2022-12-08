@@ -252,7 +252,7 @@ class PcaCalculator:
         X_centered = X - X.mean(axis=0)
         _, W, Vt = np.linalg.svd(X_centered)
 
-        pca_labels = ["PC{:02d}".format(i) for i in range(W.size)]
+        pca_labels = [f"PC{i:02d}" for i in range(W.size)]
         self.pc_matrix = pd.DataFrame(Vt, index=free_parameters, columns=pca_labels)
         self.SVs = pd.Series(W, index=pca_labels)
 

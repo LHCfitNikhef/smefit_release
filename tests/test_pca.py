@@ -38,8 +38,8 @@ coeff_dict = {
     },
     "Op3": {  # fixed to c23 * Op2 + c13 * Op1
         "constrain": [
-            {"Op1": 0.1},
-            {"Op2": -0.2},
+            {"Op2": 0.1},
+            {"Op1": -0.2},
         ],
         "min": -5,
         "max": 1,

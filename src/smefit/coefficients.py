@@ -197,10 +197,7 @@ class CoefficientManager:
                 )
             )
         # make sure elements are sorted by names
-        if name.startswith("PC"):
-            return cls(np.array(elements))
-        else:
-            return cls(np.unique(elements))
+        return cls(np.unique(elements))
 
     def __getitem__(self, idx):
         # TODO: shall it return the object list element?

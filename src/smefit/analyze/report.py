@@ -64,17 +64,7 @@ class Report:
             fit = FitManager(result_path, name, label)
             fit.load_results()
 
-            if "pca_rotation" in fit.config:
-                fit.config["coefficients"] = {
-                    "PC{:02d}".format(i): val
-                    for i, val in enumerate(fit.config["coefficients"].values())
-                }
-                fit.config["rot_to_fit_basis"] = pathlib.Path(
-                    report_config["result_path"], report_config["name"], "pca_rot.json"
-                )
-
             if any(k in report_config for k in ["chi2_plots", "PCA", "fisher"]):
-
                 fit.load_datasets()
 
             self.fits.append(fit)
