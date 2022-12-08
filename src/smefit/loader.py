@@ -27,7 +27,6 @@ DataTuple = namedtuple(
         "NdataExp",
         "InvCovMat",
         "Replica",
-        "Datasets",
     ),
 )
 
@@ -487,7 +486,6 @@ def load_datasets(
     n_data_exp = []
     exp_name = []
     th_cov = []
-    dataset_list = []
 
     Loader.commondata_path = pathlib.Path(commondata_path)
     if theory_path is not None:
@@ -516,7 +514,6 @@ def load_datasets(
         sys_error.append(dataset.sys_error)
         stat_error.append(dataset.stat_error)
         th_cov.append(dataset.theory_covmat)
-        dataset_list.append(dataset)
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
@@ -571,7 +568,6 @@ def load_datasets(
         np.array(n_data_exp),
         np.linalg.inv(fit_covmat),
         replica,
-        dataset_list,
     )
 
 
@@ -594,5 +590,4 @@ def get_dataset(datasets, data_name):
         ndata,
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],
         datasets.Replica[posix_in:posix_out],
-        datasets.Datasets,
     )
