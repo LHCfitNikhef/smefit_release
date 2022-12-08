@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 37
+Model name : \text{Ne}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lamNef3]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{lamNef3: [0.,0]}]
+cpB : [{lamNef3: [0.,0]}]
+cpW : [{lamNef3: [0.,0]}]
+cpWB : [{lamNef3: [0.,0]}]
+cpd : [{lamNef3: [0.,0]}]
+cpD : [{lamNef3: [0.,0]}]
+cWWW : [{lamNef3: [0.,0]}]
+cpqMi : [{lamNef3: [0.,0]}]
+cpQM : [{lamNef3: [0.,0]}]
+c3pq : [{lamNef3: [0.,0]}]
+c3pQ3 : [{lamNef3: [0.,0]}]
+cpl1 : [{lamNef3: [0.,0]}]
+cpl2 : [{lamNef3: [0.,0]}]
+cpl3 : [{lamNef3: [0.,0]},{lamNef3: [0,1]},{lamNef3: [0.25,2]}]
+c3pl1 : [{lamNef3: [0.,0]}]
+c3pl2 : [{lamNef3: [0.,0]}]
+c3pl3 : [{lamNef3: [0.,0]},{lamNef3: [0,1]},{lamNef3: [-0.25,2]}]
+cpui : [{lamNef3: [0.,0]}]
+cpdi : [{lamNef3: [0.,0]}]
+cpt : [{lamNef3: [0.,0]}]
+cpe : [{lamNef3: [0.,0]}]
+cpmu : [{lamNef3: [0.,0]}]
+cpta : [{lamNef3: [0.,0]}]
+c81qq : [{lamNef3: [0.,0]}]
+c11qq : [{lamNef3: [0.,0]}]
+c83qq : [{lamNef3: [0.,0]}]
+c13qq : [{lamNef3: [0.,0]}]
+c8qt : [{lamNef3: [0.,0]}]
+c1qt : [{lamNef3: [0.,0]}]
+c8ut : [{lamNef3: [0.,0]}]
+c1ut : [{lamNef3: [0.,0]}]
+c8qu : [{lamNef3: [0.,0]}]
+c1qu : [{lamNef3: [0.,0]}]
+c8dt : [{lamNef3: [0.,0]}]
+c1dt : [{lamNef3: [0.,0]}]
+c8qd : [{lamNef3: [0.,0]}]
+c1qd : [{lamNef3: [0.,0]}]
+cQQ1 : [{lamNef3: [0.,0]}]
+cQQ8 : [{lamNef3: [0.,0]}]
+cQt1 : [{lamNef3: [0.,0]}]
+cQt8 : [{lamNef3: [0.,0]}]
+ctt1 : [{lamNef3: [0.,0]}]
+cll : [{lamNef3: [0.,0]}]
+cbp : [{lamNef3: [0.,0]}]
+ctp : [{lamNef3: [0.,0]}]
+ctG : [{lamNef3: [0.,0]}]
+ccp : [{lamNef3: [0.,0]}]
+ctap : [{lamNef3: [0.,0]}]
+ctW : [{lamNef3: [0.,0]}]
+ctZ : [{lamNef3: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
+Export date: Wed 7 Dec 2022 11:49:31

@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 21
+Model name : B
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [gBdf11, gBef11, gBef22, gBef33, gBH, gBqf11, gBqf33, gBuf11, gBuf33]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpB : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpW : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpWB : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpd : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0.5,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,2],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpD : [{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-2.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,2],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cWWW : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpqMi : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,1],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,1],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpQM : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,1],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,1],gBuf11: [1,0],gBuf33: [1,0]}]
+c3pq : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c3pQ3 : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpl1 : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpl2 : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpl3 : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c3pl1 : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c3pl2 : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c3pl3 : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpui : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,1],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,1],gBuf33: [1,0]}]
+cpdi : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,1],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,1],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpt : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,1]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,1]}]
+cpe : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,1],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,0],gBef11: [1,1],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpmu : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,1],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,0],gBef11: [1,0],gBef22: [1,1],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cpta : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,1],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,1],gBH: [1,1],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c81qq : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c11qq : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c83qq : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c13qq : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c8qt : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c1qt : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c8ut : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c1ut : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c8qu : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c1qu : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c8dt : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c1dt : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,1]},{gBdf11: [0,1],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,1],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,1]}]
+c8qd : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+c1qd : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,1],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,1],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,1],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,1],gBuf11: [1,0],gBuf33: [1,0]}]
+cQQ1 : [{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,1],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,2],gBuf11: [1,0],gBuf33: [1,0]}]
+cQQ8 : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cQt1 : [{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,1]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,1],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [-1.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,1],gBuf11: [1,0],gBuf33: [1,1]}]
+cQt8 : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+ctt1 : [{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]},{gBdf11: [0,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,1]},{gBdf11: [-0.5,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,2]}]
+cll : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+cbp : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+ctp : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+ctG : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+ccp : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+ctap : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+ctW : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+ctZ : [{gBdf11: [0.,0],gBef11: [1,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBqf11: [1,0],gBqf33: [1,0],gBuf11: [1,0],gBuf33: [1,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
+Export date: Wed 7 Dec 2022 11:49:31

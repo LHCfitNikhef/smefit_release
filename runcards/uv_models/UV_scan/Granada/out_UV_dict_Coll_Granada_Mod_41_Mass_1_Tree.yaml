@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 41
+Model name : \Sigma
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lamSigmaf3]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{lamSigmaf3: [0.,0]}]
+cpB : [{lamSigmaf3: [0.,0]}]
+cpW : [{lamSigmaf3: [0.,0]}]
+cpWB : [{lamSigmaf3: [0.,0]}]
+cpd : [{lamSigmaf3: [0.,0]}]
+cpD : [{lamSigmaf3: [0.,0]}]
+cWWW : [{lamSigmaf3: [0.,0]}]
+cpqMi : [{lamSigmaf3: [0.,0]}]
+cpQM : [{lamSigmaf3: [0.,0]}]
+c3pq : [{lamSigmaf3: [0.,0]}]
+c3pQ3 : [{lamSigmaf3: [0.,0]}]
+cpl1 : [{lamSigmaf3: [0.,0]}]
+cpl2 : [{lamSigmaf3: [0.,0]}]
+cpl3 : [{lamSigmaf3: [0.,0]},{lamSigmaf3: [0,1]},{lamSigmaf3: [0.1875,2]}]
+c3pl1 : [{lamSigmaf3: [0.,0]}]
+c3pl2 : [{lamSigmaf3: [0.,0]}]
+c3pl3 : [{lamSigmaf3: [0.,0]},{lamSigmaf3: [0,1]},{lamSigmaf3: [0.0625,2]}]
+cpui : [{lamSigmaf3: [0.,0]}]
+cpdi : [{lamSigmaf3: [0.,0]}]
+cpt : [{lamSigmaf3: [0.,0]}]
+cpe : [{lamSigmaf3: [0.,0]}]
+cpmu : [{lamSigmaf3: [0.,0]}]
+cpta : [{lamSigmaf3: [0.,0]}]
+c81qq : [{lamSigmaf3: [0.,0]}]
+c11qq : [{lamSigmaf3: [0.,0]}]
+c83qq : [{lamSigmaf3: [0.,0]}]
+c13qq : [{lamSigmaf3: [0.,0]}]
+c8qt : [{lamSigmaf3: [0.,0]}]
+c1qt : [{lamSigmaf3: [0.,0]}]
+c8ut : [{lamSigmaf3: [0.,0]}]
+c1ut : [{lamSigmaf3: [0.,0]}]
+c8qu : [{lamSigmaf3: [0.,0]}]
+c1qu : [{lamSigmaf3: [0.,0]}]
+c8dt : [{lamSigmaf3: [0.,0]}]
+c1dt : [{lamSigmaf3: [0.,0]}]
+c8qd : [{lamSigmaf3: [0.,0]}]
+c1qd : [{lamSigmaf3: [0.,0]}]
+cQQ1 : [{lamSigmaf3: [0.,0]}]
+cQQ8 : [{lamSigmaf3: [0.,0]}]
+cQt1 : [{lamSigmaf3: [0.,0]}]
+cQt8 : [{lamSigmaf3: [0.,0]}]
+ctt1 : [{lamSigmaf3: [0.,0]}]
+cll : [{lamSigmaf3: [0.,0]}]
+cbp : [{lamSigmaf3: [0.,0]}]
+ctp : [{lamSigmaf3: [0.,0]}]
+ctG : [{lamSigmaf3: [0.,0]}]
+ccp : [{lamSigmaf3: [0.,0]}]
+ctap : [{lamSigmaf3: [0,0]},{lamSigmaf3: [0,1]},{lamSigmaf3: [0.0025559460452279554,2]}]
+ctW : [{lamSigmaf3: [0.,0]}]
+ctZ : [{lamSigmaf3: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
+Export date: Wed 7 Dec 2022 11:49:32

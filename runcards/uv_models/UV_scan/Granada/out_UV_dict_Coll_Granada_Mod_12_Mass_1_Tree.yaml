@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 12
+Model name : \text{$\omega $4}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [yomega4uuf33]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{yomega4uuf33: [0.,0]}]
+cpB : [{yomega4uuf33: [0.,0]}]
+cpW : [{yomega4uuf33: [0.,0]}]
+cpWB : [{yomega4uuf33: [0.,0]}]
+cpd : [{yomega4uuf33: [0.,0]}]
+cpD : [{yomega4uuf33: [0.,0]}]
+cWWW : [{yomega4uuf33: [0.,0]}]
+cpqMi : [{yomega4uuf33: [0.,0]}]
+cpQM : [{yomega4uuf33: [0.,0]}]
+c3pq : [{yomega4uuf33: [0.,0]}]
+c3pQ3 : [{yomega4uuf33: [0.,0]}]
+cpl1 : [{yomega4uuf33: [0.,0]}]
+cpl2 : [{yomega4uuf33: [0.,0]}]
+cpl3 : [{yomega4uuf33: [0.,0]}]
+c3pl1 : [{yomega4uuf33: [0.,0]}]
+c3pl2 : [{yomega4uuf33: [0.,0]}]
+c3pl3 : [{yomega4uuf33: [0.,0]}]
+cpui : [{yomega4uuf33: [0.,0]}]
+cpdi : [{yomega4uuf33: [0.,0]}]
+cpt : [{yomega4uuf33: [0.,0]}]
+cpe : [{yomega4uuf33: [0.,0]}]
+cpmu : [{yomega4uuf33: [0.,0]}]
+cpta : [{yomega4uuf33: [0.,0]}]
+c81qq : [{yomega4uuf33: [0.,0]}]
+c11qq : [{yomega4uuf33: [0.,0]}]
+c83qq : [{yomega4uuf33: [0.,0]}]
+c13qq : [{yomega4uuf33: [0.,0]}]
+c8qt : [{yomega4uuf33: [0.,0]}]
+c1qt : [{yomega4uuf33: [0.,0]}]
+c8ut : [{yomega4uuf33: [0.,0]}]
+c1ut : [{yomega4uuf33: [0.,0]}]
+c8qu : [{yomega4uuf33: [0.,0]}]
+c1qu : [{yomega4uuf33: [0.,0]}]
+c8dt : [{yomega4uuf33: [0.,0]}]
+c1dt : [{yomega4uuf33: [0.,0]}]
+c8qd : [{yomega4uuf33: [0.,0]}]
+c1qd : [{yomega4uuf33: [0.,0]}]
+cQQ1 : [{yomega4uuf33: [0.,0]}]
+cQQ8 : [{yomega4uuf33: [0.,0]}]
+cQt1 : [{yomega4uuf33: [0.,0]}]
+cQt8 : [{yomega4uuf33: [0.,0]}]
+ctt1 : [{yomega4uuf33: [0,0]},{yomega4uuf33: [0,1]},{yomega4uuf33: [1,2]}]
+cll : [{yomega4uuf33: [0.,0]}]
+cbp : [{yomega4uuf33: [0.,0]}]
+ctp : [{yomega4uuf33: [0.,0]}]
+ctG : [{yomega4uuf33: [0.,0]}]
+ccp : [{yomega4uuf33: [0.,0]}]
+ctap : [{yomega4uuf33: [0.,0]}]
+ctW : [{yomega4uuf33: [0.,0]}]
+ctZ : [{yomega4uuf33: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
+Export date: Wed 7 Dec 2022 11:49:30

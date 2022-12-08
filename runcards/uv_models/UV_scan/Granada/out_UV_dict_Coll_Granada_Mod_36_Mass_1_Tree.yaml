@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 36
+Model name : \text{Y5}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [gY5f33]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{gY5f33: [0.,0]}]
+cpB : [{gY5f33: [0.,0]}]
+cpW : [{gY5f33: [0.,0]}]
+cpWB : [{gY5f33: [0.,0]}]
+cpd : [{gY5f33: [0.,0]}]
+cpD : [{gY5f33: [0.,0]}]
+cWWW : [{gY5f33: [0.,0]}]
+cpqMi : [{gY5f33: [0.,0]}]
+cpQM : [{gY5f33: [0.,0]}]
+c3pq : [{gY5f33: [0.,0]}]
+c3pQ3 : [{gY5f33: [0.,0]}]
+cpl1 : [{gY5f33: [0.,0]}]
+cpl2 : [{gY5f33: [0.,0]}]
+cpl3 : [{gY5f33: [0.,0]}]
+c3pl1 : [{gY5f33: [0.,0]}]
+c3pl2 : [{gY5f33: [0.,0]}]
+c3pl3 : [{gY5f33: [0.,0]}]
+cpui : [{gY5f33: [0.,0]}]
+cpdi : [{gY5f33: [0.,0]}]
+cpt : [{gY5f33: [0.,0]}]
+cpe : [{gY5f33: [0.,0]}]
+cpmu : [{gY5f33: [0.,0]}]
+cpta : [{gY5f33: [0.,0]}]
+c81qq : [{gY5f33: [0.,0]}]
+c11qq : [{gY5f33: [0.,0]}]
+c83qq : [{gY5f33: [0.,0]}]
+c13qq : [{gY5f33: [0.,0]}]
+c8qt : [{gY5f33: [0.,0]}]
+c1qt : [{gY5f33: [0.,0]}]
+c8ut : [{gY5f33: [0.,0]}]
+c1ut : [{gY5f33: [0.,0]}]
+c8qu : [{gY5f33: [0.,0]}]
+c1qu : [{gY5f33: [0.,0]}]
+c8dt : [{gY5f33: [0.,0]}]
+c1dt : [{gY5f33: [0.,0]}]
+c8qd : [{gY5f33: [0.,0]}]
+c1qd : [{gY5f33: [0.,0]}]
+cQQ1 : [{gY5f33: [0.,0]}]
+cQQ8 : [{gY5f33: [0.,0]}]
+cQt1 : [{gY5f33: [0,0]},{gY5f33: [0,1]},{gY5f33: [0.6666666666666666,2]}]
+cQt8 : [{gY5f33: [0,0]},{gY5f33: [0,1]},{gY5f33: [1,2]}]
+ctt1 : [{gY5f33: [0.,0]}]
+cll : [{gY5f33: [0.,0]}]
+cbp : [{gY5f33: [0.,0]}]
+ctp : [{gY5f33: [0.,0]}]
+ctG : [{gY5f33: [0.,0]}]
+ccp : [{gY5f33: [0.,0]}]
+ctap : [{gY5f33: [0.,0]}]
+ctW : [{gY5f33: [0.,0]}]
+ctZ : [{gY5f33: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
+Export date: Wed 7 Dec 2022 11:49:31

@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 49
+Model name : \text{T2}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lamT2f3]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{lamT2f3: [0.,0]}]
+cpB : [{lamT2f3: [0.,0]}]
+cpW : [{lamT2f3: [0.,0]}]
+cpWB : [{lamT2f3: [0.,0]}]
+cpd : [{lamT2f3: [0.,0]}]
+cpD : [{lamT2f3: [0.,0]}]
+cWWW : [{lamT2f3: [0.,0]}]
+cpqMi : [{lamT2f3: [0.,0]}]
+cpQM : [{lamT2f3: [0.,0]},{lamT2f3: [0,1]},{lamT2f3: [0.125,2]}]
+c3pq : [{lamT2f3: [0.,0]}]
+c3pQ3 : [{lamT2f3: [0.,0]},{lamT2f3: [0,1]},{lamT2f3: [0.0625,2]}]
+cpl1 : [{lamT2f3: [0.,0]}]
+cpl2 : [{lamT2f3: [0.,0]}]
+cpl3 : [{lamT2f3: [0.,0]}]
+c3pl1 : [{lamT2f3: [0.,0]}]
+c3pl2 : [{lamT2f3: [0.,0]}]
+c3pl3 : [{lamT2f3: [0.,0]}]
+cpui : [{lamT2f3: [0.,0]}]
+cpdi : [{lamT2f3: [0.,0]}]
+cpt : [{lamT2f3: [0.,0]}]
+cpe : [{lamT2f3: [0.,0]}]
+cpmu : [{lamT2f3: [0.,0]}]
+cpta : [{lamT2f3: [0.,0]}]
+c81qq : [{lamT2f3: [0.,0]}]
+c11qq : [{lamT2f3: [0.,0]}]
+c83qq : [{lamT2f3: [0.,0]}]
+c13qq : [{lamT2f3: [0.,0]}]
+c8qt : [{lamT2f3: [0.,0]}]
+c1qt : [{lamT2f3: [0.,0]}]
+c8ut : [{lamT2f3: [0.,0]}]
+c1ut : [{lamT2f3: [0.,0]}]
+c8qu : [{lamT2f3: [0.,0]}]
+c1qu : [{lamT2f3: [0.,0]}]
+c8dt : [{lamT2f3: [0.,0]}]
+c1dt : [{lamT2f3: [0.,0]}]
+c8qd : [{lamT2f3: [0.,0]}]
+c1qd : [{lamT2f3: [0.,0]}]
+cQQ1 : [{lamT2f3: [0.,0]}]
+cQQ8 : [{lamT2f3: [0.,0]}]
+cQt1 : [{lamT2f3: [0.,0]}]
+cQt8 : [{lamT2f3: [0.,0]}]
+ctt1 : [{lamT2f3: [0.,0]}]
+cll : [{lamT2f3: [0.,0]}]
+cbp : [{lamT2f3: [0,0]},{lamT2f3: [0,1]},{lamT2f3: [0.006002165432052166,2]}]
+ctp : [{lamT2f3: [0,0]},{lamT2f3: [0,1]},{lamT2f3: [0.12403517943078135,2]}]
+ctG : [{lamT2f3: [0.,0]}]
+ccp : [{lamT2f3: [0.,0]}]
+ctap : [{lamT2f3: [0.,0]}]
+ctW : [{lamT2f3: [0.,0]}]
+ctZ : [{lamT2f3: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
+Export date: Wed 7 Dec 2022 11:49:32
