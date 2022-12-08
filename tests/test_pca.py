@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import copy
+
 import numpy as np
 
 from smefit.analyze import pca
@@ -121,7 +123,9 @@ def test_pca_eig():
 
 class TestRotateToPca:
 
-    rot_to_pca = pca.RotateToPca(dataset, coefficients, {"coefficients": coeff_dict})
+    rot_to_pca = pca.RotateToPca(
+        dataset, copy.deepcopy(coefficients), {"coefficients": coeff_dict}
+    )
     rot_to_pca.compute()
     rot_to_pca.update_runcard()
 
