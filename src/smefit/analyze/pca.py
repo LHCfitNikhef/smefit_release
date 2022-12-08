@@ -85,7 +85,7 @@ class RotateToPca:
         pca_min = self.coefficients.minimum @ self.rotation
         pca_max = self.coefficients.maximum @ self.rotation
         for pc in self.rotation.columns:
-            new_coeffs[pc] = {"min": pca_min[pc], "max": pca_max[pc]}
+            new_coeffs[pc] = {"min": float(pca_min[pc]), "max": float(pca_max[pc])}
 
         for coef_obj in self.coefficients._objlist:
             # fixed coefficients
