@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 38
+Model name : \text{Ef}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lamEff1]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{lamEff1: [0.,0]}]
+cpB : [{lamEff1: [0.,0]}]
+cpW : [{lamEff1: [0.,0]}]
+cpWB : [{lamEff1: [0.,0]}]
+cpd : [{lamEff1: [0.,0]}]
+cpD : [{lamEff1: [0.,0]}]
+cWWW : [{lamEff1: [0.,0]}]
+cpqMi : [{lamEff1: [0.,0]}]
+cpQM : [{lamEff1: [0.,0]}]
+c3pq : [{lamEff1: [0.,0]}]
+c3pQ3 : [{lamEff1: [0.,0]}]
+cpl1 : [{lamEff1: [0,0]},{lamEff1: [0,1]},{lamEff1: [-0.25,2]}]
+cpl2 : [{lamEff1: [0,0]},{lamEff1: [0,1]},{lamEff1: [-0.25,2]}]
+cpl3 : [{lamEff1: [0,0]},{lamEff1: [0,1]},{lamEff1: [-0.25,2]}]
+c3pl1 : [{lamEff1: [0,0]},{lamEff1: [0,1]},{lamEff1: [-0.25,2]}]
+c3pl2 : [{lamEff1: [0,0]},{lamEff1: [0,1]},{lamEff1: [-0.25,2]}]
+c3pl3 : [{lamEff1: [0,0]},{lamEff1: [0,1]},{lamEff1: [-0.25,2]}]
+cpui : [{lamEff1: [0.,0]}]
+cpdi : [{lamEff1: [0.,0]}]
+cpt : [{lamEff1: [0.,0]}]
+cpe : [{lamEff1: [0.,0]}]
+cpmu : [{lamEff1: [0.,0]}]
+cpta : [{lamEff1: [0.,0]}]
+c81qq : [{lamEff1: [0.,0]}]
+c11qq : [{lamEff1: [0.,0]}]
+c83qq : [{lamEff1: [0.,0]}]
+c13qq : [{lamEff1: [0.,0]}]
+c8qt : [{lamEff1: [0.,0]}]
+c1qt : [{lamEff1: [0.,0]}]
+c8ut : [{lamEff1: [0.,0]}]
+c1ut : [{lamEff1: [0.,0]}]
+c8qu : [{lamEff1: [0.,0]}]
+c1qu : [{lamEff1: [0.,0]}]
+c8dt : [{lamEff1: [0.,0]}]
+c1dt : [{lamEff1: [0.,0]}]
+c8qd : [{lamEff1: [0.,0]}]
+c1qd : [{lamEff1: [0.,0]}]
+cQQ1 : [{lamEff1: [0.,0]}]
+cQQ8 : [{lamEff1: [0.,0]}]
+cQt1 : [{lamEff1: [0.,0]}]
+cQt8 : [{lamEff1: [0.,0]}]
+ctt1 : [{lamEff1: [0.,0]}]
+cll : [{lamEff1: [0.,0]}]
+cbp : [{lamEff1: [0.,0]}]
+ctp : [{lamEff1: [0.,0]}]
+ctG : [{lamEff1: [0.,0]}]
+ccp : [{lamEff1: [0.,0]}]
+ctap : [{lamEff1: [0,0]},{lamEff1: [0,1]},{lamEff1: [0.005111892090455911,2]}]
+ctW : [{lamEff1: [0.,0]}]
+ctZ : [{lamEff1: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+Export date: Thu 8 Dec 2022 11:06:49

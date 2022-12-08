@@ -1,0 +1,69 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 52
+Model name : \text{SpQ17}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lambdaQ]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 1
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{lambdaQ: [0,0]},{lambdaQ: [0,1]},{lambdaQ: [0.0031273946317557436,2]}]
+cpB : [{lambdaQ: [0,0]},{lambdaQ: [0,1]},{lambdaQ: [0.0007216496485713697,2]}]
+cpW : [{lambdaQ: [0.,0]}]
+cpWB : [{lambdaQ: [0.,0]}]
+cpd : [{lambdaQ: [-0.00037413586040355867,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.01573548530975992,2]},{lambdaQ: [0,3]},{lambdaQ: [-0.006332573977646111,4]}]
+cpD : [{lambdaQ: [-0.00011564718672488284,0]},{lambdaQ: [0,1]},{lambdaQ: [0.0010824744728570544,2]}]
+cWWW : [{lambdaQ: [-0.000058750107764083666,0]}]
+cpqMi : [{lambdaQ: [0.00021087484469407817,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.000809620304446912,2]}]
+cpQM : [{lambdaQ: [0.00021087484469407817,0]},{lambdaQ: [0,1]},{lambdaQ: [0.006464773263147772,2]}]
+c3pq : [{lambdaQ: [-0.00023014937581489198,0]},{lambdaQ: [0,1]},{lambdaQ: [0.0008998265105183332,2]}]
+c3pQ3 : [{lambdaQ: [-0.00023014937581489198,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0027373702732790086,2]}]
+cpl1 : [{lambdaQ: [0.00005782359336244142,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0002706186182142636,2]}]
+cpl2 : [{lambdaQ: [0.00005782359336244142,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0002706186182142636,2]}]
+cpl3 : [{lambdaQ: [0.00005782359336244142,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0002706186182142636,2]}]
+c3pl1 : [{lambdaQ: [-0.00023014937581489198,0]},{lambdaQ: [0,1]},{lambdaQ: [0.0008998265105183332,2]}]
+c3pl2 : [{lambdaQ: [-0.00023014937581489198,0]},{lambdaQ: [0,1]},{lambdaQ: [0.0008998265105183332,2]}]
+c3pl3 : [{lambdaQ: [-0.00023014937581489198,0]},{lambdaQ: [0,1]},{lambdaQ: [0.0008998265105183332,2]}]
+cpui : [{lambdaQ: [-0.00007709812448325522,0]},{lambdaQ: [0,1]},{lambdaQ: [0.00036082482428568483,2]}]
+cpdi : [{lambdaQ: [0.00003854906224162761,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.00018041241214284242,2]}]
+cpt : [{lambdaQ: [-0.00007709812448325522,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0023405857409130827,2]}]
+cpe : [{lambdaQ: [0.00011564718672488284,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0005412372364285272,2]}]
+cpmu : [{lambdaQ: [0.00011564718672488284,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0005412372364285272,2]}]
+cpta : [{lambdaQ: [0.00011564718672488284,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0005412372364285272,2]}]
+c81qq : [{lambdaQ: [-0.003706776,0]}]
+c11qq : [{lambdaQ: [-3.2124218534689677e-6,0]}]
+c83qq : [{lambdaQ: [0.,0]}]
+c13qq : [{lambdaQ: [-0.00011507468790744599,0]}]
+c8qt : [{lambdaQ: [-0.007413552,0]},{lambdaQ: [0,1]},{lambdaQ: [0.007297254140763402,2]}]
+c1qt : [{lambdaQ: [-0.000025699374827751742,0]},{lambdaQ: [0,1]},{lambdaQ: [0.00007016038249999428,2]}]
+c8ut : [{lambdaQ: [-0.003706776,0]},{lambdaQ: [0,1]},{lambdaQ: [0.003648627070381701,2]}]
+c1ut : [{lambdaQ: [-0.000051398749655503484,0]},{lambdaQ: [0,1]},{lambdaQ: [0.00014032076499998855,2]}]
+c8qu : [{lambdaQ: [-0.007413552,0]}]
+c1qu : [{lambdaQ: [-0.000025699374827751742,0]}]
+c8dt : [{lambdaQ: [-0.007413552,0]},{lambdaQ: [0,1]},{lambdaQ: [0.007297254140763402,2]}]
+c1dt : [{lambdaQ: [0.000051398749655503484,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.00014032076499998855,2]}]
+c8qd : [{lambdaQ: [-0.007413552,0]},{lambdaQ: [0,1]},{lambdaQ: [-7.300391871784769e-6,2]}]
+c1qd : [{lambdaQ: [0.000012849687413875871,0]},{lambdaQ: [0,1]},{lambdaQ: [-1.2167319786307949e-6,2]}]
+cQQ1 : [{lambdaQ: [0.00007029161489802605,0]}]
+cQQ8 : [{lambdaQ: [-0.008334149503259568,0]}]
+cQt1 : [{lambdaQ: [-0.000025699374827751742,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0030474368607548694,2]}]
+cQt8 : [{lambdaQ: [-0.007413552,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.011408329318765781,2]}]
+ctt1 : [{lambdaQ: [-0.0012869907496555035,0]},{lambdaQ: [0,1]},{lambdaQ: [0.0027130595769211106,2]}]
+cll : [{lambdaQ: [0.,0]}]
+cbp : [{lambdaQ: [-5.5255785108981085e-6,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0007388760122648296,2]},{lambdaQ: [0,3]},{lambdaQ: [-0.0007601831324908114,4]}]
+ctp : [{lambdaQ: [-0.0002283729530006596,0]},{lambdaQ: [0,1]},{lambdaQ: [1.0007506758147986,2]},{lambdaQ: [0,3]},{lambdaQ: [-0.12203918479684717,4]}]
+ctG : [{lambdaQ: [0,0]},{lambdaQ: [0,1]},{lambdaQ: [0.003186880149295011,2]}]
+ccp : [{lambdaQ: [0.,0]}]
+ctap : [{lambdaQ: [-2.352997547703023e-6,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0002349568778542687,2]},{lambdaQ: [0,3]},{lambdaQ: [-0.00032371434828556083,4]}]
+ctW : [{lambdaQ: [0,0]},{lambdaQ: [0,1]},{lambdaQ: [-0.0005128319030698192,2]}]
+ctZ : [{lambdaQ: [0,0]},{lambdaQ: [0,1]},{lambdaQ: [0.00035882718412983463,2]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+One-loop-level matching results: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\\1-loop-matching\Fitmaker\Q17\MatchingResult.dat
+Export date: Tue 20 Sep 2022 12:16:20

@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 42
+Model name : \text{$\Sigma $1}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lamSigma1f1]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{lamSigma1f1: [0.,0]}]
+cpB : [{lamSigma1f1: [0.,0]}]
+cpW : [{lamSigma1f1: [0.,0]}]
+cpWB : [{lamSigma1f1: [0.,0]}]
+cpd : [{lamSigma1f1: [0.,0]}]
+cpD : [{lamSigma1f1: [0.,0]}]
+cWWW : [{lamSigma1f1: [0.,0]}]
+cpqMi : [{lamSigma1f1: [0.,0]}]
+cpQM : [{lamSigma1f1: [0.,0]}]
+c3pq : [{lamSigma1f1: [0.,0]}]
+c3pQ3 : [{lamSigma1f1: [0.,0]}]
+cpl1 : [{lamSigma1f1: [0,0]},{lamSigma1f1: [0,1]},{lamSigma1f1: [-0.1875,2]}]
+cpl2 : [{lamSigma1f1: [0,0]},{lamSigma1f1: [0,1]},{lamSigma1f1: [-0.1875,2]}]
+cpl3 : [{lamSigma1f1: [0,0]},{lamSigma1f1: [0,1]},{lamSigma1f1: [-0.1875,2]}]
+c3pl1 : [{lamSigma1f1: [0,0]},{lamSigma1f1: [0,1]},{lamSigma1f1: [0.0625,2]}]
+c3pl2 : [{lamSigma1f1: [0,0]},{lamSigma1f1: [0,1]},{lamSigma1f1: [0.0625,2]}]
+c3pl3 : [{lamSigma1f1: [0,0]},{lamSigma1f1: [0,1]},{lamSigma1f1: [0.0625,2]}]
+cpui : [{lamSigma1f1: [0.,0]}]
+cpdi : [{lamSigma1f1: [0.,0]}]
+cpt : [{lamSigma1f1: [0.,0]}]
+cpe : [{lamSigma1f1: [0.,0]}]
+cpmu : [{lamSigma1f1: [0.,0]}]
+cpta : [{lamSigma1f1: [0.,0]}]
+c81qq : [{lamSigma1f1: [0.,0]}]
+c11qq : [{lamSigma1f1: [0.,0]}]
+c83qq : [{lamSigma1f1: [0.,0]}]
+c13qq : [{lamSigma1f1: [0.,0]}]
+c8qt : [{lamSigma1f1: [0.,0]}]
+c1qt : [{lamSigma1f1: [0.,0]}]
+c8ut : [{lamSigma1f1: [0.,0]}]
+c1ut : [{lamSigma1f1: [0.,0]}]
+c8qu : [{lamSigma1f1: [0.,0]}]
+c1qu : [{lamSigma1f1: [0.,0]}]
+c8dt : [{lamSigma1f1: [0.,0]}]
+c1dt : [{lamSigma1f1: [0.,0]}]
+c8qd : [{lamSigma1f1: [0.,0]}]
+c1qd : [{lamSigma1f1: [0.,0]}]
+cQQ1 : [{lamSigma1f1: [0.,0]}]
+cQQ8 : [{lamSigma1f1: [0.,0]}]
+cQt1 : [{lamSigma1f1: [0.,0]}]
+cQt8 : [{lamSigma1f1: [0.,0]}]
+ctt1 : [{lamSigma1f1: [0.,0]}]
+cll : [{lamSigma1f1: [0.,0]}]
+cbp : [{lamSigma1f1: [0.,0]}]
+ctp : [{lamSigma1f1: [0.,0]}]
+ctG : [{lamSigma1f1: [0.,0]}]
+ccp : [{lamSigma1f1: [0.,0]}]
+ctap : [{lamSigma1f1: [0,0]},{lamSigma1f1: [0,1]},{lamSigma1f1: [0.0012779730226139777,2]}]
+ctW : [{lamSigma1f1: [0.,0]}]
+ctZ : [{lamSigma1f1: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+Export date: Thu 8 Dec 2022 11:06:49

@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 23
+Model name : W
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [gWH]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{gWH: [0.,0]}]
+cpB : [{gWH: [0.,0]}]
+cpW : [{gWH: [0.,0]}]
+cpWB : [{gWH: [0.,0]}]
+cpd : [{gWH: [0,0]},{gWH: [0,1]},{gWH: [0.375,2]}]
+cpD : [{gWH: [0.,0]}]
+cWWW : [{gWH: [0.,0]}]
+cpqMi : [{gWH: [0.,0]}]
+cpQM : [{gWH: [0.,0]}]
+c3pq : [{gWH: [0.,0]}]
+c3pQ3 : [{gWH: [0.,0]}]
+cpl1 : [{gWH: [0.,0]}]
+cpl2 : [{gWH: [0.,0]}]
+cpl3 : [{gWH: [0.,0]}]
+c3pl1 : [{gWH: [0.,0]}]
+c3pl2 : [{gWH: [0.,0]}]
+c3pl3 : [{gWH: [0.,0]}]
+cpui : [{gWH: [0.,0]}]
+cpdi : [{gWH: [0.,0]}]
+cpt : [{gWH: [0.,0]}]
+cpe : [{gWH: [0.,0]}]
+cpmu : [{gWH: [0.,0]}]
+cpta : [{gWH: [0.,0]}]
+c81qq : [{gWH: [0.,0]}]
+c11qq : [{gWH: [0.,0]}]
+c83qq : [{gWH: [0.,0]}]
+c13qq : [{gWH: [0.,0]}]
+c8qt : [{gWH: [0.,0]}]
+c1qt : [{gWH: [0.,0]}]
+c8ut : [{gWH: [0.,0]}]
+c1ut : [{gWH: [0.,0]}]
+c8qu : [{gWH: [0.,0]}]
+c1qu : [{gWH: [0.,0]}]
+c8dt : [{gWH: [0.,0]}]
+c1dt : [{gWH: [0.,0]}]
+c8qd : [{gWH: [0.,0]}]
+c1qd : [{gWH: [0.,0]}]
+cQQ1 : [{gWH: [0.,0]}]
+cQQ8 : [{gWH: [0.,0]}]
+cQt1 : [{gWH: [0.,0]}]
+cQt8 : [{gWH: [0.,0]}]
+ctt1 : [{gWH: [0.,0]}]
+cll : [{gWH: [0.,0]}]
+cbp : [{gWH: [0,0]},{gWH: [0,1]},{gWH: [-0.006002165432052166,2]}]
+ctp : [{gWH: [0,0]},{gWH: [0,1]},{gWH: [-0.2480703588615627,2]}]
+ctG : [{gWH: [0.,0]}]
+ccp : [{gWH: [0.,0]}]
+ctap : [{gWH: [0,0]},{gWH: [0,1]},{gWH: [-0.0025559460452279554,2]}]
+ctW : [{gWH: [0.,0]}]
+ctZ : [{gWH: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+Export date: Thu 8 Dec 2022 11:06:48

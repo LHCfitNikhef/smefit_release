@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 5
+Model name : \varphi
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [cotBeta, Z6]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpB : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpW : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpWB : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpd : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpD : [{cotBeta: [0.,0],Z6: [1,0]}]
+cWWW : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpqMi : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpQM : [{cotBeta: [0.,0],Z6: [1,0]}]
+c3pq : [{cotBeta: [0.,0],Z6: [1,0]}]
+c3pQ3 : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpl1 : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpl2 : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpl3 : [{cotBeta: [0.,0],Z6: [1,0]}]
+c3pl1 : [{cotBeta: [0.,0],Z6: [1,0]}]
+c3pl2 : [{cotBeta: [0.,0],Z6: [1,0]}]
+c3pl3 : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpui : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpdi : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpt : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpe : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpmu : [{cotBeta: [0.,0],Z6: [1,0]}]
+cpta : [{cotBeta: [0.,0],Z6: [1,0]}]
+c81qq : [{cotBeta: [0.,0],Z6: [1,0]}]
+c11qq : [{cotBeta: [0.,0],Z6: [1,0]}]
+c83qq : [{cotBeta: [0.,0],Z6: [1,0]}]
+c13qq : [{cotBeta: [0.,0],Z6: [1,0]}]
+c8qt : [{cotBeta: [0.,0],Z6: [1,0]}]
+c1qt : [{cotBeta: [0.,0],Z6: [1,0]}]
+c8ut : [{cotBeta: [0.,0],Z6: [1,0]}]
+c1ut : [{cotBeta: [0.,0],Z6: [1,0]}]
+c8qu : [{cotBeta: [0.,0],Z6: [1,0]}]
+c1qu : [{cotBeta: [0.,0],Z6: [1,0]}]
+c8dt : [{cotBeta: [0.,0],Z6: [1,0]}]
+c1dt : [{cotBeta: [0.,0],Z6: [1,0]}]
+c8qd : [{cotBeta: [0,0],Z6: [1,0]},{cotBeta: [0,1],Z6: [1,0]},{cotBeta: [-0.0005764158379795515,2],Z6: [1,0]}]
+c1qd : [{cotBeta: [0,0],Z6: [1,0]},{cotBeta: [0,1],Z6: [1,0]},{cotBeta: [-0.00009606930632992524,2],Z6: [1,0]}]
+cQQ1 : [{cotBeta: [0.,0],Z6: [1,0]}]
+cQQ8 : [{cotBeta: [0.,0],Z6: [1,0]}]
+cQt1 : [{cotBeta: [0,0],Z6: [1,0]},{cotBeta: [0,1],Z6: [1,0]},{cotBeta: [-0.16410374118854537,2],Z6: [1,0]}]
+cQt8 : [{cotBeta: [0,0],Z6: [1,0]},{cotBeta: [0,1],Z6: [1,0]},{cotBeta: [-0.9846224471312722,2],Z6: [1,0]}]
+ctt1 : [{cotBeta: [0.,0],Z6: [1,0]}]
+cll : [{cotBeta: [0.,0],Z6: [1,0]}]
+cbp : [{cotBeta: [0,0],Z6: [1,0]},{cotBeta: [0,0],Z6: [1,1]},{cotBeta: [0,1],Z6: [1,0]},{cotBeta: [0.024008661728208668,1],Z6: [1,1]}]
+ctp : [{cotBeta: [0,0],Z6: [1,0]},{cotBeta: [0,0],Z6: [1,1]},{cotBeta: [0,1],Z6: [1,0]},{cotBeta: [-0.992281435446251,1],Z6: [1,1]}]
+ctG : [{cotBeta: [0.,0],Z6: [1,0]}]
+ccp : [{cotBeta: [0.,0],Z6: [1,0]}]
+ctap : [{cotBeta: [0,0],Z6: [1,0]},{cotBeta: [0,0],Z6: [1,1]},{cotBeta: [0,1],Z6: [1,0]},{cotBeta: [0.010223784180911823,1],Z6: [1,1]}]
+ctW : [{cotBeta: [0.,0],Z6: [1,0]}]
+ctZ : [{cotBeta: [0.,0],Z6: [1,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+Export date: Thu 8 Dec 2022 11:06:48

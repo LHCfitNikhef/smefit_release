@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 39
+Model name : \text{$\Delta $1}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lamDelta1f1]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{lamDelta1f1: [0.,0]}]
+cpB : [{lamDelta1f1: [0.,0]}]
+cpW : [{lamDelta1f1: [0.,0]}]
+cpWB : [{lamDelta1f1: [0.,0]}]
+cpd : [{lamDelta1f1: [0.,0]}]
+cpD : [{lamDelta1f1: [0.,0]}]
+cWWW : [{lamDelta1f1: [0.,0]}]
+cpqMi : [{lamDelta1f1: [0.,0]}]
+cpQM : [{lamDelta1f1: [0.,0]}]
+c3pq : [{lamDelta1f1: [0.,0]}]
+c3pQ3 : [{lamDelta1f1: [0.,0]}]
+cpl1 : [{lamDelta1f1: [0.,0]}]
+cpl2 : [{lamDelta1f1: [0.,0]}]
+cpl3 : [{lamDelta1f1: [0.,0]}]
+c3pl1 : [{lamDelta1f1: [0.,0]}]
+c3pl2 : [{lamDelta1f1: [0.,0]}]
+c3pl3 : [{lamDelta1f1: [0.,0]}]
+cpui : [{lamDelta1f1: [0.,0]}]
+cpdi : [{lamDelta1f1: [0.,0]}]
+cpt : [{lamDelta1f1: [0.,0]}]
+cpe : [{lamDelta1f1: [0,0]},{lamDelta1f1: [0,1]},{lamDelta1f1: [0.5,2]}]
+cpmu : [{lamDelta1f1: [0,0]},{lamDelta1f1: [0,1]},{lamDelta1f1: [0.5,2]}]
+cpta : [{lamDelta1f1: [0,0]},{lamDelta1f1: [0,1]},{lamDelta1f1: [0.5,2]}]
+c81qq : [{lamDelta1f1: [0.,0]}]
+c11qq : [{lamDelta1f1: [0.,0]}]
+c83qq : [{lamDelta1f1: [0.,0]}]
+c13qq : [{lamDelta1f1: [0.,0]}]
+c8qt : [{lamDelta1f1: [0.,0]}]
+c1qt : [{lamDelta1f1: [0.,0]}]
+c8ut : [{lamDelta1f1: [0.,0]}]
+c1ut : [{lamDelta1f1: [0.,0]}]
+c8qu : [{lamDelta1f1: [0.,0]}]
+c1qu : [{lamDelta1f1: [0.,0]}]
+c8dt : [{lamDelta1f1: [0.,0]}]
+c1dt : [{lamDelta1f1: [0.,0]}]
+c8qd : [{lamDelta1f1: [0.,0]}]
+c1qd : [{lamDelta1f1: [0.,0]}]
+cQQ1 : [{lamDelta1f1: [0.,0]}]
+cQQ8 : [{lamDelta1f1: [0.,0]}]
+cQt1 : [{lamDelta1f1: [0.,0]}]
+cQt8 : [{lamDelta1f1: [0.,0]}]
+ctt1 : [{lamDelta1f1: [0.,0]}]
+cll : [{lamDelta1f1: [0.,0]}]
+cbp : [{lamDelta1f1: [0.,0]}]
+ctp : [{lamDelta1f1: [0.,0]}]
+ctG : [{lamDelta1f1: [0.,0]}]
+ccp : [{lamDelta1f1: [0.,0]}]
+ctap : [{lamDelta1f1: [0,0]},{lamDelta1f1: [0,1]},{lamDelta1f1: [0.005111892090455911,2]}]
+ctW : [{lamDelta1f1: [0.,0]}]
+ctZ : [{lamDelta1f1: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+Export date: Thu 8 Dec 2022 11:06:49

@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 24
+Model name : \text{W1}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [gW1H]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{gW1H: [0.,0]}]
+cpB : [{gW1H: [0.,0]}]
+cpW : [{gW1H: [0.,0]}]
+cpWB : [{gW1H: [0.,0]}]
+cpd : [{gW1H: [0,0]},{gW1H: [0,1]},{gW1H: [0.125,2]}]
+cpD : [{gW1H: [0,0]},{gW1H: [0,1]},{gW1H: [-0.25,2]}]
+cWWW : [{gW1H: [0.,0]}]
+cpqMi : [{gW1H: [0.,0]}]
+cpQM : [{gW1H: [0.,0]}]
+c3pq : [{gW1H: [0.,0]}]
+c3pQ3 : [{gW1H: [0.,0]}]
+cpl1 : [{gW1H: [0.,0]}]
+cpl2 : [{gW1H: [0.,0]}]
+cpl3 : [{gW1H: [0.,0]}]
+c3pl1 : [{gW1H: [0.,0]}]
+c3pl2 : [{gW1H: [0.,0]}]
+c3pl3 : [{gW1H: [0.,0]}]
+cpui : [{gW1H: [0.,0]}]
+cpdi : [{gW1H: [0.,0]}]
+cpt : [{gW1H: [0.,0]}]
+cpe : [{gW1H: [0.,0]}]
+cpmu : [{gW1H: [0.,0]}]
+cpta : [{gW1H: [0.,0]}]
+c81qq : [{gW1H: [0.,0]}]
+c11qq : [{gW1H: [0.,0]}]
+c83qq : [{gW1H: [0.,0]}]
+c13qq : [{gW1H: [0.,0]}]
+c8qt : [{gW1H: [0.,0]}]
+c1qt : [{gW1H: [0.,0]}]
+c8ut : [{gW1H: [0.,0]}]
+c1ut : [{gW1H: [0.,0]}]
+c8qu : [{gW1H: [0.,0]}]
+c1qu : [{gW1H: [0.,0]}]
+c8dt : [{gW1H: [0.,0]}]
+c1dt : [{gW1H: [0.,0]}]
+c8qd : [{gW1H: [0.,0]}]
+c1qd : [{gW1H: [0.,0]}]
+cQQ1 : [{gW1H: [0.,0]}]
+cQQ8 : [{gW1H: [0.,0]}]
+cQt1 : [{gW1H: [0.,0]}]
+cQt8 : [{gW1H: [0.,0]}]
+ctt1 : [{gW1H: [0.,0]}]
+cll : [{gW1H: [0.,0]}]
+cbp : [{gW1H: [0,0]},{gW1H: [0,1]},{gW1H: [-0.003001082716026083,2]}]
+ctp : [{gW1H: [0,0]},{gW1H: [0,1]},{gW1H: [-0.12403517943078135,2]}]
+ctG : [{gW1H: [0.,0]}]
+ccp : [{gW1H: [0.,0]}]
+ctap : [{gW1H: [0,0]},{gW1H: [0,1]},{gW1H: [-0.0012779730226139777,2]}]
+ctW : [{gW1H: [0.,0]}]
+ctZ : [{gW1H: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+Export date: Thu 8 Dec 2022 11:06:49

@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 37
+Model name : \text{Ne}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lamNef1]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{lamNef1: [0.,0]}]
+cpB : [{lamNef1: [0.,0]}]
+cpW : [{lamNef1: [0.,0]}]
+cpWB : [{lamNef1: [0.,0]}]
+cpd : [{lamNef1: [0.,0]}]
+cpD : [{lamNef1: [0.,0]}]
+cWWW : [{lamNef1: [0.,0]}]
+cpqMi : [{lamNef1: [0.,0]}]
+cpQM : [{lamNef1: [0.,0]}]
+c3pq : [{lamNef1: [0.,0]}]
+c3pQ3 : [{lamNef1: [0.,0]}]
+cpl1 : [{lamNef1: [0,0]},{lamNef1: [0,1]},{lamNef1: [0.25,2]}]
+cpl2 : [{lamNef1: [0,0]},{lamNef1: [0,1]},{lamNef1: [0.25,2]}]
+cpl3 : [{lamNef1: [0,0]},{lamNef1: [0,1]},{lamNef1: [0.25,2]}]
+c3pl1 : [{lamNef1: [0,0]},{lamNef1: [0,1]},{lamNef1: [-0.25,2]}]
+c3pl2 : [{lamNef1: [0,0]},{lamNef1: [0,1]},{lamNef1: [-0.25,2]}]
+c3pl3 : [{lamNef1: [0,0]},{lamNef1: [0,1]},{lamNef1: [-0.25,2]}]
+cpui : [{lamNef1: [0.,0]}]
+cpdi : [{lamNef1: [0.,0]}]
+cpt : [{lamNef1: [0.,0]}]
+cpe : [{lamNef1: [0.,0]}]
+cpmu : [{lamNef1: [0.,0]}]
+cpta : [{lamNef1: [0.,0]}]
+c81qq : [{lamNef1: [0.,0]}]
+c11qq : [{lamNef1: [0.,0]}]
+c83qq : [{lamNef1: [0.,0]}]
+c13qq : [{lamNef1: [0.,0]}]
+c8qt : [{lamNef1: [0.,0]}]
+c1qt : [{lamNef1: [0.,0]}]
+c8ut : [{lamNef1: [0.,0]}]
+c1ut : [{lamNef1: [0.,0]}]
+c8qu : [{lamNef1: [0.,0]}]
+c1qu : [{lamNef1: [0.,0]}]
+c8dt : [{lamNef1: [0.,0]}]
+c1dt : [{lamNef1: [0.,0]}]
+c8qd : [{lamNef1: [0.,0]}]
+c1qd : [{lamNef1: [0.,0]}]
+cQQ1 : [{lamNef1: [0.,0]}]
+cQQ8 : [{lamNef1: [0.,0]}]
+cQt1 : [{lamNef1: [0.,0]}]
+cQt8 : [{lamNef1: [0.,0]}]
+ctt1 : [{lamNef1: [0.,0]}]
+cll : [{lamNef1: [0.,0]}]
+cbp : [{lamNef1: [0.,0]}]
+ctp : [{lamNef1: [0.,0]}]
+ctG : [{lamNef1: [0.,0]}]
+ccp : [{lamNef1: [0.,0]}]
+ctap : [{lamNef1: [0.,0]}]
+ctW : [{lamNef1: [0.,0]}]
+ctZ : [{lamNef1: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+Export date: Thu 8 Dec 2022 11:06:49
