@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import copy
+import pathlib
+import shutil
 
 import numpy as np
 
@@ -10,6 +12,8 @@ from smefit.loader import load_datasets
 from .test_loader import commondata_path
 
 operators_to_keep = np.array(["Op1", "Op2", "Op3", "Op4"])
+
+here = pathlib.Path(__file__).parent
 
 dataset = load_datasets(
     commondata_path,
@@ -123,11 +127,20 @@ def test_pca_eig():
 
 class TestRotateToPca:
 
+    fake_result_path = here / "fake_results" / "test_fit"
+    fake_result_path.mkdir(exist_ok=True)
     rot_to_pca = pca.RotateToPca(
-        dataset, copy.deepcopy(coefficients), {"coefficients": coeff_dict}
+        dataset,
+        copy.deepcopy(coefficients),
+        {
+            "coefficients": coeff_dict,
+            "result_ID": "test_fit",
+            "result_path": here / "fake_results",
+        },
     )
     rot_to_pca.compute()
     rot_to_pca.update_runcard()
+    rot_to_pca.save()
 
     def test_constrain_rotation(self):
         """Test constrain roation."""
@@ -143,6 +156,21 @@ class TestRotateToPca:
         """Test that the PCA on the rotated basis is now an identity."""
         pca_coeffs_dict = self.rot_to_pca.config["coefficients"]
         pca_coeffs = CoefficientManager.from_dict(pca_coeffs_dict)
-        pca_cal = pca.PcaCalculator(dataset, pca_coeffs, latex_names=None)
+        rotated_datasets = load_datasets(
+            commondata_path,
+            datasets=["data_test5"],
+            operators_to_keep=["PC00", "PC01", "PC02", "Op3"],
+            order="NLO",
+            use_quad=False,
+            use_theory_covmat=True,
+            use_t0=False,
+            use_multiplicative_prescription=False,
+            theory_path=commondata_path,
+            rot_to_fit_basis=self.fake_result_path / "pca_rot.json",
+        )
+        pca_cal = pca.PcaCalculator(rotated_datasets, pca_coeffs, latex_names=None)
         pca_cal.compute()
-        np.testing.assert_allclose(pca_cal.pc_matrix.values, np.eye(3))
+        np.testing.assert_allclose(
+            np.abs(pca_cal.pc_matrix.values), np.eye(3), rtol=2e-2, atol=0.2
+        )
+        shutil.rmtree(self.fake_result_path)
