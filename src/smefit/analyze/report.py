@@ -8,6 +8,7 @@ from ..fit_manager import FitManager
 from ..log import logging
 from .chi2_utils import Chi2tableCalculator
 from .coefficients_utils import CoefficientsPlotter, compute_confidence_level
+from .contours_2d import contour2dPlotter
 from .correlations import plot_correlations
 from .fisher import FisherCalculator
 from .html_utils import html_link, write_html_container
@@ -185,7 +186,6 @@ class Report:
         scatter_plot=None,
         confidence_level_bar=None,
         posterior_histograms=True,
-        contours_2d=None,
         hide_dofs=None,
         show_only=None,
         logo=True,
@@ -282,23 +282,30 @@ class Report:
             compile_tex(self.report, lines, "coefficients_table")
             links_list = [("coefficients_table", "CL table")]
 
-        if contours_2d:
-            _logger.info("Plotting : 2D confidence level projections")
-            coeff_plt.plot_contours_2d(
-                [
-                    (
-                        fit.results[fit.coefficients.free_parameters.index],
-                        fit.config["use_quad"],
-                    )
-                    for fit in self.fits
-                ],
-                labels=[fit.label for fit in self.fits],
-                confidence_level=contours_2d["confidence_level"],
-                dofs_show=contours_2d["dofs_show"],
-            )
-            figs_list.append("contours_2d")
-
         self._append_section("Coefficients", links=links_list, figs=figs_list)
+
+    def contours_2d(self, show_only=None, hide_dofs=None, confidence_level=95):
+        _logger.info("Plotting : 2D confidence level projections")
+
+        free_coeff_config = self.coeff_info
+        if show_only is not None:
+            free_coeff_config = free_coeff_config.loc[:, show_only]
+        if hide_dofs is not None:
+            free_coeff_config = free_coeff_config.drop(hide_dofs, level=1)
+
+        # TODO: the below crashes: is it called > 1 ?
+        coeff_plt = contour2dPlotter(
+            isinstance(self.fits[0], list), self.report, free_coeff_config
+        )
+
+        coeff_plt.plot_contours_2d(
+            [fit.results for fit in self.fits],
+            labels=[fit.label for fit in self.fits],
+            confidence_level=confidence_level,
+            dofs_show=show_only,
+        )
+
+        figs_list = ["contours_2d"]
 
     def correlations(self, hide_dofs=None, thr_show=0.1):
         """Plot coefficients correlation matrix.

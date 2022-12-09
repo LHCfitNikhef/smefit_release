@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+import pathlib
 
 import numpy as np
 import pandas as pd
@@ -68,6 +69,18 @@ class FitManager:
         the results. Results are stored in a class attribute
         """
         file = "results"
+
+        is_pairwise_fit = self.config.get("pairwise_fits", False)
+        if is_pairwise_fit:
+            posteriors = []
+            for file in (pathlib.Path(self.path) / self.name).iterdir():
+                if file.stem.startswith("posterior_"):
+                    with open(file, encoding="utf-8") as f:
+                        result = json.load(f)
+                        posteriors.append(pd.DataFrame(result).sort_index(axis=1))
+            self.results = posteriors
+            return
+
         if self.has_posterior:
             file = "posterior"
         with open(f"{self.path}/{self.name}/{file}.json", encoding="utf-8") as f:
@@ -89,8 +102,6 @@ class FitManager:
                 results[key] = np.random.choice(
                     results[key], num_samples_min, replace=False
                 )
-
-        # TODO: support pariwise posteriors
 
         # Be sure columns are sorted, otherwise can't compute theory...
         self.results = pd.DataFrame(results).sort_index(axis=1)
@@ -157,4 +168,6 @@ class FitManager:
     @property
     def n_replica(self):
         """Number of replicas"""
+        if isinstance(self.results, list):
+            return None
         return self.results.shape[0]

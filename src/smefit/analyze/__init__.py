@@ -57,6 +57,9 @@ def run_report(report_card_file):
     if "coefficients_plots" in report_config:
         report.coefficients(**report_config["coefficients_plots"])
 
+    if "contours_2d" in report_config:
+        report.contours_2d(**report_config["contours_2d"])
+
     if "correlations" in report_config:
         report.correlations(**report_config["correlations"])
 
