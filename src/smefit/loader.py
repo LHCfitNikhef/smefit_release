@@ -244,25 +244,24 @@ class Loader:
                 if use_multiplicative_prescription:
                     lin_dict[key] = np.divide(lin_dict[key], sm)
 
-        # rotate corrections to fitting basis
-        if rotation_matrix is not None:
-            lin_dict, quad_dict = rotate_to_fit_basis(
-                lin_dict, quad_dict, rotation_matrix
-            )
-
-        # TODO: Move inside the rotation? can save some loops in case of rotation, but less clear
         # select corrections to keep
         def is_to_keep(op1, op2=None):
             if op2 is None:
                 return op1 in operators_to_keep
             return op1 in operators_to_keep and op2 in operators_to_keep
 
-        lin_dict_to_keep = {k: val for k, val in lin_dict.items() if is_to_keep(k)}
-        quad_dict_to_keep = {
-            k: val
-            for k, val in quad_dict.items()
-            if is_to_keep(k.split("*")[0], k.split("*")[1])
-        }
+        # rotate corrections to fitting basis
+        if rotation_matrix is not None:
+            lin_dict_to_keep, quad_dict_to_keep = rotate_to_fit_basis(
+                lin_dict, quad_dict, rotation_matrix
+            )
+        else:
+            lin_dict_to_keep = {k: val for k, val in lin_dict.items() if is_to_keep(k)}
+            quad_dict_to_keep = {
+                k: val
+                for k, val in quad_dict.items()
+                if is_to_keep(k.split("*")[0], k.split("*")[1])
+            }
 
         best_sm = np.array(raw_th_data["best_sm"])
         th_cov = np.zeros((best_sm.size, best_sm.size))

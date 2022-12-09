@@ -20,7 +20,6 @@ _logger = log.logging.getLogger(__name__)
 
 
 class NSOptimizer(Optimizer):
-
     """
     Optimizer specification for |NS|
 
