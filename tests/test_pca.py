@@ -144,13 +144,25 @@ class TestRotateToPca:
 
     def test_constrain_rotation(self):
         """Test constrain roation."""
-        new_op1 = np.array([1, 0, 0, 0]) @ self.rot_to_pca.rotation
-        new_op2 = np.array([0, 1, 0, 0]) @ self.rot_to_pca.rotation
+        new_op1 = self.rot_to_pca.rotation.T @ np.array([1, 0, 0, 0])
+        new_op2 = self.rot_to_pca.rotation.T @ np.array([0, 1, 0, 0])
         new_op3 = c13 * new_op1 + c23 * new_op2
-        for pc, val in self.rot_to_pca.config["coefficients"]["Op3"][
-            "constrain"
-        ].items():
-            np.testing.assert_allclose(val, new_op3[pc])
+        for fact in self.rot_to_pca.config["coefficients"]["Op3"]["constrain"]:
+            for pc, val in fact.items():
+                np.testing.assert_allclose(val, new_op3[pc])
+
+    def test_inverse_constrain_rotation(self):
+        pca_coeffs_dict = self.rot_to_pca.config["coefficients"]
+        pcs = [(*factor.keys(),)[0] for factor in pca_coeffs_dict["Op3"]["constrain"]]
+        pc_factors = [
+            (*factor.values(),)[0] for factor in pca_coeffs_dict["Op3"]["constrain"]
+        ]
+        rot = self.rot_to_pca.rotation[pcs]
+        new_constrain = (rot * pc_factors).sum(axis=1)
+        new_constrain = new_constrain[new_constrain != 0]
+        for old_fact in coeff_dict["Op3"]["constrain"]:
+            op = (*old_fact.keys(),)[0]
+            np.testing.assert_allclose(old_fact[op], new_constrain[op])
 
     def test_pca_prior(self):
         """Test the rotation of the prior volume, by doing the inverse."""
@@ -181,6 +193,6 @@ class TestRotateToPca:
         pca_cal = pca.PcaCalculator(rotated_datasets, pca_coeffs, latex_names=None)
         pca_cal.compute()
         np.testing.assert_allclose(
-            np.abs(pca_cal.pc_matrix.values), np.eye(3), rtol=2e-2, atol=0.2
+            np.abs(pca_cal.pc_matrix.values), np.eye(3), atol=0.3
         )
         shutil.rmtree(self.fake_result_path)
