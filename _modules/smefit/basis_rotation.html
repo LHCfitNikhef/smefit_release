@@ -141,8 +141,14 @@
         <span class="n">data</span><span class="o">=</span><span class="n">rot</span><span class="p">[</span><span class="s2">&quot;matrix&quot;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">rot</span><span class="p">[</span><span class="s2">&quot;ypars&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">rot</span><span class="p">[</span><span class="s2">&quot;xpars&quot;</span><span class="p">]</span>
     <span class="p">)</span>
 
-    <span class="n">lin_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lin_dict</span><span class="p">)</span>
-    <span class="n">quad_dict_fit_basis</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># select corrections to keep</span>
+    <span class="k">def</span> <span class="nf">is_to_keep</span><span class="p">(</span><span class="n">op1</span><span class="p">,</span> <span class="n">op2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">op2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">op1</span> <span class="ow">in</span> <span class="n">rotation_matrix</span><span class="o">.</span><span class="n">columns</span>
+        <span class="k">return</span> <span class="n">op1</span> <span class="ow">in</span> <span class="n">rotation_matrix</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="n">op2</span> <span class="ow">in</span> <span class="n">rotation_matrix</span><span class="o">.</span><span class="n">columns</span>
+
+    <span class="n">lin_dict_to_keep</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">lin_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">is_to_keep</span><span class="p">(</span><span class="n">k</span><span class="p">)}</span>
+    <span class="n">lin_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lin_dict_to_keep</span><span class="p">)</span>
 
     <span class="c1"># select the columns corresponding to the</span>
     <span class="c1"># relevant corrections for the operator card basis</span>
@@ -150,14 +156,20 @@
     <span class="n">lin_dict_fit_basis</span> <span class="o">=</span> <span class="n">lin_df</span> <span class="o">@</span> <span class="n">R</span><span class="o">.</span><span class="n">T</span>
 
     <span class="c1"># look at the quadratic corrections?</span>
+    <span class="n">quad_dict_fit_basis</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">quad_dict</span> <span class="o">==</span> <span class="p">{}:</span>
         <span class="k">return</span> <span class="n">lin_dict_fit_basis</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">),</span> <span class="n">quad_dict_fit_basis</span>
 
+    <span class="n">quad_dict_to_keep</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">k</span><span class="p">:</span> <span class="n">val</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">quad_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">is_to_keep</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="p">}</span>
     <span class="n">tensor</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># loop over table basis pairs</span>
     <span class="c1"># and build an (n_op_table, n_dat, n_op_fit, n_op_fit) tensor</span>
 
-    <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">quad_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">quad_dict_to_keep</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">o1</span><span class="p">,</span> <span class="n">o2</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
         <span class="n">r1</span> <span class="o">=</span> <span class="n">rotation_matrix</span><span class="p">[</span><span class="n">o1</span><span class="p">]</span>
         <span class="n">r2</span> <span class="o">=</span> <span class="n">rotation_matrix</span><span class="p">[</span><span class="n">o2</span><span class="p">]</span>

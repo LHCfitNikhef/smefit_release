@@ -819,6 +819,52 @@ linear corrections multiplied by the inverse covariance matrix.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.analyze.pca.RotateToPca">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.pca.</span></span><span class="sig-name descname"><span class="pre">RotateToPca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loaded_datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#RotateToPca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.RotateToPca" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Contruct a new fit runcard using PCA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loaded_datasets</strong> (<a class="reference internal" href="smefit.html#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>smefit.loader.DataTuple</em></a>) – loaded datasets</p></li>
+<li><p><strong>coefficients</strong> (<em>smefit.coeffiecients.CoefficientManager</em>) – coeffiecient list</p></li>
+<li><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – runcard configuration dictionary</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.analyze.pca.RotateToPca.compute">
+<span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#RotateToPca.compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.RotateToPca.compute" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the roation matrix.
+This is composed by two blocks: PCA and an identity for the constrained dofs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.analyze.pca.RotateToPca.from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#RotateToPca.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.RotateToPca.from_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Build the class from a runcard dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – runcard configuration dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.analyze.pca.RotateToPca.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#RotateToPca.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.RotateToPca.save" title="Permalink to this definition"></a></dt>
+<dd><p>Dump updated runcard and roation matrix into the reult folder.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.analyze.pca.RotateToPca.update_runcard">
+<span class="sig-name descname"><span class="pre">update_runcard</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#RotateToPca.update_runcard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.RotateToPca.update_runcard" title="Permalink to this definition"></a></dt>
+<dd><p>Update the runcard object.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.analyze.pca.impose_constrain">
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.pca.</span></span><span class="sig-name descname"><span class="pre">impose_constrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_quad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#impose_constrain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.impose_constrain" title="Permalink to this definition"></a></dt>
@@ -946,7 +992,7 @@ for an example</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.analyze.report.Report.coefficients">
-<span class="sig-name descname"><span class="pre">coefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scatter_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_histograms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contours_2d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide_dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_solution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/report.html#Report.coefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.report.Report.coefficients" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">coefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scatter_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_histograms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contours_2d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide_dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_solution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/report.html#Report.coefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.report.Report.coefficients" title="Permalink to this definition"></a></dt>
 <dd><p>Coefficients plots and table runner.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

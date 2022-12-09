@@ -193,6 +193,8 @@
                     <span class="n">results</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">num_samples_min</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span>
                 <span class="p">)</span>
 
+        <span class="c1"># TODO: support pariwise posteriors</span>
+
         <span class="c1"># Be sure columns are sorted, otherwise can&#39;t compute theory...</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 

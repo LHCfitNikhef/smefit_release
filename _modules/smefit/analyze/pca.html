@@ -104,15 +104,126 @@
   <h1>Source code for smefit.analyze.pca</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span><span class="p">,</span> <span class="n">colors</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
 
+<span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
 <span class="kn">from</span> <span class="nn">..compute_theory</span> <span class="kn">import</span> <span class="n">flatten</span>
+<span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">load_datasets</span>
 <span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">latex_packages</span>
+
+
+<div class="viewcode-block" id="RotateToPca"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca">[docs]</a><span class="k">class</span> <span class="nc">RotateToPca</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Contruct a new fit runcard using PCA.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">        loaded_datasets : smefit.loader.DataTuple</span>
+<span class="sd">            loaded datasets</span>
+<span class="sd">        coefficients : smefit.coeffiecients.CoefficientManager</span>
+<span class="sd">            coeffiecient list</span>
+<span class="sd">        config : dict</span>
+<span class="sd">            runcard configuration dictionary</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loaded_datasets</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span> <span class="o">=</span> <span class="n">loaded_datasets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="n">coefficients</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="RotateToPca.from_dict"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Build the class from a runcard dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : dict</span>
+<span class="sd">            runcard configuration dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loaded_datasets</span> <span class="o">=</span> <span class="n">load_datasets</span><span class="p">(</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;data_path&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;datasets&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_theory_covmat&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_t0&quot;</span><span class="p">],</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;use_multiplicative_prescription&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;theory_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rot_to_fit_basis&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uv_coupligs&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="n">coefficients</span> <span class="o">=</span> <span class="n">CoefficientManager</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">loaded_datasets</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RotateToPca.compute"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the roation matrix.</span>
+<span class="sd">        This is composed by two blocks: PCA and an identity for the constrained dofs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pca</span> <span class="o">=</span> <span class="n">PcaCalculator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">pca</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+        <span class="n">fixed_dofs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">is_free</span><span class="p">]</span>
+        <span class="n">id_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">fixed_dofs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="n">fixed_dofs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">fixed_dofs</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">pca</span><span class="o">.</span><span class="n">pc_matrix</span><span class="p">,</span> <span class="n">id_df</span><span class="p">])</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># sort both index and columns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RotateToPca.update_runcard"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.update_runcard">[docs]</a>    <span class="k">def</span> <span class="nf">update_runcard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the runcard object.&quot;&quot;&quot;</span>
+
+        <span class="c1"># update coefficient contraints</span>
+        <span class="n">new_coeffs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">update_constrain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">pca_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">minimum</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span>
+        <span class="n">pca_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">maximum</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span>
+        <span class="k">for</span> <span class="n">pc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">new_coeffs</span><span class="p">[</span><span class="n">pc</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">pca_min</span><span class="p">[</span><span class="n">pc</span><span class="p">]),</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">pca_max</span><span class="p">[</span><span class="n">pc</span><span class="p">])}</span>
+
+        <span class="k">for</span> <span class="n">coef_obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">_objlist</span><span class="p">:</span>
+            <span class="c1"># fixed coefficients</span>
+            <span class="k">if</span> <span class="s2">&quot;value&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">coef_obj</span><span class="o">.</span><span class="n">name</span><span class="p">]:</span>
+                <span class="n">new_coeffs</span><span class="p">[</span><span class="n">coef_obj</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">coef_obj</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            <span class="c1"># constrained coefficients</span>
+            <span class="k">elif</span> <span class="n">coef_obj</span><span class="o">.</span><span class="n">constrain</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">new_coeffs</span><span class="p">[</span><span class="n">coef_obj</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;constrain&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coef_obj</span><span class="o">.</span><span class="n">constrain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_coeffs</span></div>
+
+<div class="viewcode-block" id="RotateToPca.save"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dump updated runcard and roation matrix into the reult folder.&quot;&quot;&quot;</span>
+        <span class="n">result_ID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;result_ID&quot;</span><span class="p">]</span>
+        <span class="n">result_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;result_path&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">result_ID</span>
+
+        <span class="c1"># dump rotation</span>
+        <span class="n">rot_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;PCA_rotation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;xpars&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="s2">&quot;ypars&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="s2">&quot;matrix&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="n">rot_mat_path</span> <span class="o">=</span> <span class="n">result_path</span> <span class="o">/</span> <span class="s2">&quot;pca_rot.json&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;rot_to_fit_basis&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">rot_mat_path</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">rot_mat_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">rot_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+        <span class="c1"># dump runcard</span>
+        <span class="n">runcard_copy</span> <span class="o">=</span> <span class="n">result_path</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">.yaml&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">runcard_copy</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="make_sym_matrix"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.make_sym_matrix">[docs]</a><span class="k">def</span> <span class="nf">make_sym_matrix</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">n_op</span><span class="p">):</span>
@@ -245,10 +356,11 @@
         <span class="n">new_LinearCorrections</span> <span class="o">=</span> <span class="n">impose_constrain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">new_LinearCorrections</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">InvCovMat</span> <span class="o">@</span> <span class="n">new_LinearCorrections</span><span class="o">.</span><span class="n">T</span>
         <span class="c1"># Decompose matrix with SVD and identify PCs</span>
-        <span class="n">Vt</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">X_centered</span> <span class="o">=</span> <span class="n">X</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">Vt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">X_centered</span><span class="p">)</span>
 
-        <span class="n">pca_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;PC </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pc_matrix</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">Vt</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">free_parameters</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">pca_labels</span><span class="p">)</span>
+        <span class="n">pca_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;PC</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pc_matrix</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">Vt</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">free_parameters</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">pca_labels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SVs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">pca_labels</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PcaCalculator.write"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit_label</span><span class="p">,</span> <span class="n">thr_show</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>

@@ -347,25 +347,24 @@
                 <span class="k">if</span> <span class="n">use_multiplicative_prescription</span><span class="p">:</span>
                     <span class="n">lin_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">lin_dict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">sm</span><span class="p">)</span>
 
-        <span class="c1"># rotate corrections to fitting basis</span>
-        <span class="k">if</span> <span class="n">rotation_matrix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">lin_dict</span><span class="p">,</span> <span class="n">quad_dict</span> <span class="o">=</span> <span class="n">rotate_to_fit_basis</span><span class="p">(</span>
-                <span class="n">lin_dict</span><span class="p">,</span> <span class="n">quad_dict</span><span class="p">,</span> <span class="n">rotation_matrix</span>
-            <span class="p">)</span>
-
-        <span class="c1"># TODO: Move inside the rotation? can save some loops in case of rotation, but less clear</span>
         <span class="c1"># select corrections to keep</span>
         <span class="k">def</span> <span class="nf">is_to_keep</span><span class="p">(</span><span class="n">op1</span><span class="p">,</span> <span class="n">op2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">op2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">op1</span> <span class="ow">in</span> <span class="n">operators_to_keep</span>
             <span class="k">return</span> <span class="n">op1</span> <span class="ow">in</span> <span class="n">operators_to_keep</span> <span class="ow">and</span> <span class="n">op2</span> <span class="ow">in</span> <span class="n">operators_to_keep</span>
 
-        <span class="n">lin_dict_to_keep</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">lin_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">is_to_keep</span><span class="p">(</span><span class="n">k</span><span class="p">)}</span>
-        <span class="n">quad_dict_to_keep</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">k</span><span class="p">:</span> <span class="n">val</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">quad_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">is_to_keep</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="p">}</span>
+        <span class="c1"># rotate corrections to fitting basis</span>
+        <span class="k">if</span> <span class="n">rotation_matrix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lin_dict_to_keep</span><span class="p">,</span> <span class="n">quad_dict_to_keep</span> <span class="o">=</span> <span class="n">rotate_to_fit_basis</span><span class="p">(</span>
+                <span class="n">lin_dict</span><span class="p">,</span> <span class="n">quad_dict</span><span class="p">,</span> <span class="n">rotation_matrix</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lin_dict_to_keep</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">lin_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">is_to_keep</span><span class="p">(</span><span class="n">k</span><span class="p">)}</span>
+            <span class="n">quad_dict_to_keep</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">k</span><span class="p">:</span> <span class="n">val</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">quad_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">is_to_keep</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="p">}</span>
 
         <span class="n">best_sm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">raw_th_data</span><span class="p">[</span><span class="s2">&quot;best_sm&quot;</span><span class="p">])</span>
         <span class="n">th_cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">best_sm</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">best_sm</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>

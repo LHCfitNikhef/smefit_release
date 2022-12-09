@@ -204,7 +204,25 @@
 
     <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeff_other</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span> <span class="n">coeff_other</span><span class="o">.</span><span class="n">value</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<div class="viewcode-block" id="Coefficient.update_constrain"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.coefficients.Coefficient.update_constrain">[docs]</a>    <span class="k">def</span> <span class="nf">update_constrain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inv_rotation</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the constrain when a new basis is chosen.</span>
+<span class="sd">        Only linear constrain are supported.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            inv_rotation: pd.DataFrame</span>
+<span class="sd">                rotation matrix from the original basis to the new_basis</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># loop on the sum and simplify the constrain</span>
+        <span class="n">old_coeffs</span> <span class="o">=</span> <span class="p">[(</span><span class="o">*</span><span class="n">factor</span><span class="o">.</span><span class="n">keys</span><span class="p">(),)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constrain</span><span class="p">]</span>
+        <span class="n">old_factors</span> <span class="o">=</span> <span class="p">[(</span><span class="o">*</span><span class="n">factor</span><span class="o">.</span><span class="n">values</span><span class="p">(),)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constrain</span><span class="p">]</span>
+        <span class="n">rot</span> <span class="o">=</span> <span class="n">inv_rotation</span><span class="p">[</span><span class="n">old_coeffs</span><span class="p">]</span>
+        <span class="n">new_constrain</span> <span class="o">=</span> <span class="p">(</span><span class="n">rot</span> <span class="o">*</span> <span class="n">old_factors</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">new_constrain</span> <span class="o">=</span> <span class="n">new_constrain</span><span class="p">[</span><span class="n">new_constrain</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constrain</span> <span class="o">=</span> <span class="p">[{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">}</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">new_constrain</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span></div></div>
 
 
 <div class="viewcode-block" id="CoefficientManager"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.coefficients.CoefficientManager">[docs]</a><span class="k">class</span> <span class="nc">CoefficientManager</span><span class="p">:</span>
@@ -318,7 +336,6 @@
 
             <span class="n">temp</span> <span class="o">=</span> <span class="mf">0.0</span>
             <span class="k">for</span> <span class="n">add_factor_dict</span> <span class="ow">in</span> <span class="n">coefficient_fixed</span><span class="o">.</span><span class="n">constrain</span><span class="p">:</span>
-
                 <span class="n">free_dofs</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">fixed_name</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span>
                     <span class="k">for</span> <span class="n">fixed_name</span> <span class="ow">in</span> <span class="n">add_factor_dict</span>
@@ -327,7 +344,23 @@
                 <span class="c1"># matrix with multiplicative factors and exponents</span>
                 <span class="n">fact_exp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="o">*</span><span class="n">add_factor_dict</span><span class="o">.</span><span class="n">values</span><span class="p">(),),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
                 <span class="n">temp</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">fact_exp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">free_dofs</span><span class="p">,</span> <span class="n">fact_exp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">coefficient_fixed</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">coefficient_fixed</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span></div>
+
+<div class="viewcode-block" id="CoefficientManager.update_constrain"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.coefficients.CoefficientManager.update_constrain">[docs]</a>    <span class="k">def</span> <span class="nf">update_constrain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inv_rotation</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Update the constraints according to rotation matrix.</span>
+<span class="sd">        Only linear constrain are supported.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            inv_rotation: pd.DataFrame</span>
+<span class="sd">                rotation matrix from the original basis to the new_basis</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">coefficient_fixed</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_objlist</span><span class="p">[</span><span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">is_free</span><span class="p">]:</span>
+
+            <span class="c1"># skip coefficient fixed to a single value</span>
+            <span class="k">if</span> <span class="n">coefficient_fixed</span><span class="o">.</span><span class="n">constrain</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">coefficient_fixed</span><span class="o">.</span><span class="n">update_constrain</span><span class="p">(</span><span class="n">inv_rotation</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

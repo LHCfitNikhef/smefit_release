@@ -92,6 +92,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-smefit.coefficients">smefit.coefficients module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.coefficients.Coefficient"><code class="docutils literal notranslate"><span class="pre">Coefficient</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.Coefficient.build_additive_factor_dict"><code class="docutils literal notranslate"><span class="pre">Coefficient.build_additive_factor_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.Coefficient.update_constrain"><code class="docutils literal notranslate"><span class="pre">Coefficient.update_constrain()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.coefficients.CoefficientManager"><code class="docutils literal notranslate"><span class="pre">CoefficientManager</span></code></a><ul>
@@ -103,6 +104,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.set_constraints"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.set_constraints()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.set_free_parameters"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.set_free_parameters()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.size"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.update_constrain"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.update_constrain()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.value"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.value</span></code></a></li>
 </ul>
 </li>
@@ -185,6 +187,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.global_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.global_analysis()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.mc"><code class="docutils literal notranslate"><span class="pre">Runner.mc()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.ns"><code class="docutils literal notranslate"><span class="pre">Runner.ns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.pairwise_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.pairwise_analysis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.rotate_to_pca"><code class="docutils literal notranslate"><span class="pre">Runner.rotate_to_pca()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.run_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.run_analysis()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.setup_result_folder"><code class="docutils literal notranslate"><span class="pre">Runner.setup_result_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.single_parameter_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.single_parameter_analysis()</span></code></a></li>
@@ -231,6 +235,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-smefit.coefficients">smefit.coefficients module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.coefficients.Coefficient"><code class="docutils literal notranslate"><span class="pre">Coefficient</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.Coefficient.build_additive_factor_dict"><code class="docutils literal notranslate"><span class="pre">Coefficient.build_additive_factor_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.Coefficient.update_constrain"><code class="docutils literal notranslate"><span class="pre">Coefficient.update_constrain()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.coefficients.CoefficientManager"><code class="docutils literal notranslate"><span class="pre">CoefficientManager</span></code></a><ul>
@@ -242,6 +247,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.set_constraints"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.set_constraints()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.set_free_parameters"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.set_free_parameters()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.size"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.update_constrain"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.update_constrain()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.value"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.value</span></code></a></li>
 </ul>
 </li>
@@ -324,6 +330,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.global_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.global_analysis()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.mc"><code class="docutils literal notranslate"><span class="pre">Runner.mc()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.ns"><code class="docutils literal notranslate"><span class="pre">Runner.ns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.pairwise_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.pairwise_analysis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.rotate_to_pca"><code class="docutils literal notranslate"><span class="pre">Runner.rotate_to_pca()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.run_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.run_analysis()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.setup_result_folder"><code class="docutils literal notranslate"><span class="pre">Runner.setup_result_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.single_parameter_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.single_parameter_analysis()</span></code></a></li>
@@ -440,6 +448,13 @@
 <li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.PcaCalculator.compute"><code class="docutils literal notranslate"><span class="pre">PcaCalculator.compute()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.PcaCalculator.plot_heatmap"><code class="docutils literal notranslate"><span class="pre">PcaCalculator.plot_heatmap()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.PcaCalculator.write"><code class="docutils literal notranslate"><span class="pre">PcaCalculator.write()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.RotateToPca"><code class="docutils literal notranslate"><span class="pre">RotateToPca</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.RotateToPca.compute"><code class="docutils literal notranslate"><span class="pre">RotateToPca.compute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.RotateToPca.from_dict"><code class="docutils literal notranslate"><span class="pre">RotateToPca.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.RotateToPca.save"><code class="docutils literal notranslate"><span class="pre">RotateToPca.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.RotateToPca.update_runcard"><code class="docutils literal notranslate"><span class="pre">RotateToPca.update_runcard()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.impose_constrain"><code class="docutils literal notranslate"><span class="pre">impose_constrain()</span></code></a></li>
@@ -684,6 +699,18 @@ basis, emptry if quadratic corrections are not used</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.coefficients.Coefficient.update_constrain">
+<span class="sig-name descname"><span class="pre">update_constrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inv_rotation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#Coefficient.update_constrain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.Coefficient.update_constrain" title="Permalink to this definition"></a></dt>
+<dd><p>Update the constrain when a new basis is chosen.
+Only linear constrain are supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inv_rotation</strong> (<em>pd.DataFrame</em>) – rotation matrix from the original basis to the new_basis</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -751,6 +778,18 @@ coefficient.constrain information:</p>
 <dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.size">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#smefit.coefficients.CoefficientManager.size" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.update_constrain">
+<span class="sig-name descname"><span class="pre">update_constrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inv_rotation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#CoefficientManager.update_constrain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.CoefficientManager.update_constrain" title="Permalink to this definition"></a></dt>
+<dd><p>Update the constraints according to rotation matrix.
+Only linear constrain are supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inv_rotation</strong> (<em>pd.DataFrame</em>) – rotation matrix from the original basis to the new_basis</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.value">
@@ -1361,7 +1400,7 @@ Default it assumes to be the same as commondata_path</p></li>
 <span id="smefit-runner-module"></span><h2>smefit.runner module<a class="headerlink" href="#module-smefit.runner" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.runner.Runner">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.runner.</span></span><span class="sig-name descname"><span class="pre">Runner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_card</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_parameter_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runcard_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.runner.</span></span><span class="sig-name descname"><span class="pre">Runner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_card</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_parameter_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairwise_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runcard_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Container for all the possible <abbr title="Standard Model Effective Field Theory fitter">SMEFiT</abbr> run methods.</p>
 <p>Init the root path of the package where tables,
@@ -1430,6 +1469,19 @@ will be computed.</p></li>
 <span class="sig-name descname"><span class="pre">ns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.ns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.ns" title="Permalink to this definition"></a></dt>
 <dd><p>Run a fit with <abbr title="Nested Sampling">NS</abbr>.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.pairwise_analysis">
+<span class="sig-name descname"><span class="pre">pairwise_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.pairwise_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.pairwise_analysis" title="Permalink to this definition"></a></dt>
+<dd><p>Run a series of pairwise parameter fits for all the operators specified in the runcard
+:param optimizer: optimizer to be used (NS or MC)
+:type optimizer: string</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.rotate_to_pca">
+<span class="sig-name descname"><span class="pre">rotate_to_pca</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.rotate_to_pca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.rotate_to_pca" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.runner.Runner.run_analysis">

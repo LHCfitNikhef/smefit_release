@@ -167,8 +167,10 @@
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;result_IDs&quot;</span><span class="p">],</span> <span class="n">fit_labels</span><span class="p">):</span>
             <span class="n">fit</span> <span class="o">=</span> <span class="n">FitManager</span><span class="p">(</span><span class="n">result_path</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
             <span class="n">fit</span><span class="o">.</span><span class="n">load_results</span><span class="p">()</span>
+
             <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">report_config</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;chi2_plots&quot;</span><span class="p">,</span> <span class="s2">&quot;PCA&quot;</span><span class="p">,</span> <span class="s2">&quot;fisher&quot;</span><span class="p">]):</span>
                 <span class="n">fit</span><span class="o">.</span><span class="n">load_datasets</span><span class="p">()</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
 
@@ -291,7 +293,7 @@
         <span class="n">hide_dofs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">show_only</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">logo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">table</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">double_solution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Coefficients plots and table runner.</span>
@@ -336,7 +338,9 @@
             <span class="n">bounds_dict</span><span class="p">[</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">compute_confidence_level</span><span class="p">(</span>
                 <span class="n">fit</span><span class="o">.</span><span class="n">results</span><span class="p">,</span>
                 <span class="n">coeff_plt</span><span class="o">.</span><span class="n">coeff_df</span><span class="p">,</span>
-                <span class="n">double_solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="n">double_solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">double_solution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">scatter_plot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -363,10 +367,16 @@
 
         <span class="k">if</span> <span class="n">posterior_histograms</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting : Posterior histograms&quot;</span><span class="p">)</span>
+            <span class="n">disjointed_lists</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">double_solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">double_solution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span>
+            <span class="p">]</span>
             <span class="n">coeff_plt</span><span class="o">.</span><span class="n">plot_posteriors</span><span class="p">(</span>
                 <span class="p">[</span><span class="n">fit</span><span class="o">.</span><span class="n">results</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">],</span>
                 <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">],</span>
-                <span class="n">disjointed_lists</span><span class="o">=</span><span class="nb">list</span><span class="p">((</span><span class="o">*</span><span class="n">double_solution</span><span class="o">.</span><span class="n">values</span><span class="p">(),)),</span>
+                <span class="n">disjointed_lists</span><span class="o">=</span><span class="n">disjointed_lists</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;coefficient_histo&quot;</span><span class="p">)</span>
 

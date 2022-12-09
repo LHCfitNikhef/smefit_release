@@ -167,9 +167,13 @@ which can be specified in the theory files.</p>
 <section id="minimizer-specifications">
 <h3>Minimizer specifications<a class="headerlink" href="#minimizer-specifications" title="Permalink to this heading"></a></h3>
 <p>The different parameters controlling the minimizer used in the analysis are specified here.
-If <code class="docutils literal notranslate"><span class="pre">single_parameter_fits</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the Wilson coefficient specified in the runcard
-will be fit one at time, setting all the other to 0. See <a class="reference external" href="./example.html#single-parameter-fits">here</a> for more details</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">single_parameter_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
+If <code class="docutils literal notranslate"><span class="pre">single_parameter_fits</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the Wilson coefficient specified in the run-card
+will be fit one at time, setting all the others to 0. See <a class="reference external" href="./example.html#single-parameter-fits">here</a> for more details.
+If <code class="docutils literal notranslate"><span class="pre">pairwise_fits</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the minimizer carries out an automated series of pair-wise fits to all possible pairs of
+Wilson coefficients that  are specified in the run-card.
+Pairwise fits are supported only with |NS|.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pairwise_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
+<span class="nt">single_parameter_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
 <span class="nt">bounds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Null</span><span class="w"></span>
 
 <span class="c1"># NS settings</span><span class="w"></span>
