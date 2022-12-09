@@ -122,7 +122,7 @@ def test_pca_eig():
 
     np.testing.assert_allclose(S**2, np.sort(D)[::-1], atol=1e-14)
     # eig should be sorted according to np.argsort(D)
-    np.testing.assert_allclose(np.abs(V), np.abs(N.T), atol=1e-17)
+    np.testing.assert_allclose(np.abs(V), np.abs(N), atol=1e-17)
 
 
 class TestRotateToPca:
@@ -152,6 +152,16 @@ class TestRotateToPca:
         ].items():
             np.testing.assert_allclose(val, new_op3[pc])
 
+    def test_pca_prior(self):
+        """Test the rotation of the prior volume, by doing the inverse."""
+        pca_coeffs_dict = self.rot_to_pca.config["coefficients"]
+        pca_coeffs = CoefficientManager.from_dict(pca_coeffs_dict)
+        min_ref = pca_coeffs.minimum @ self.rot_to_pca.rotation.T
+        max_ref = pca_coeffs.maximum @ self.rot_to_pca.rotation.T
+        for op, val in coeff_dict.items():
+            np.testing.assert_allclose(val["min"], min_ref[op])
+            np.testing.assert_allclose(val["max"], max_ref[op])
+
     def test_pca_id(self):
         """Test that the PCA on the rotated basis is now an identity."""
         pca_coeffs_dict = self.rot_to_pca.config["coefficients"]
@@ -161,7 +171,7 @@ class TestRotateToPca:
             datasets=["data_test5"],
             operators_to_keep=["PC00", "PC01", "PC02", "Op3"],
             order="NLO",
-            use_quad=False,
+            use_quad=True,
             use_theory_covmat=True,
             use_t0=False,
             use_multiplicative_prescription=False,

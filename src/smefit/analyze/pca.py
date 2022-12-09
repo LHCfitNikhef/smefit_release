@@ -75,6 +75,9 @@ class RotateToPca:
             np.eye(fixed_dofs.size), columns=fixed_dofs, index=fixed_dofs
         )
         self.rotation = pd.concat([pca.pc_matrix, id_df]).replace(np.nan, 0)
+        # sort both index and columns
+        self.rotation.sort_index(inplace=True)
+        self.rotation = self.rotation.reindex(sorted(self.rotation.columns), axis=1)
 
     def update_runcard(self):
         """Update the runcard object."""
@@ -106,7 +109,7 @@ class RotateToPca:
             "name": "PCA_rotation",
             "xpars": self.rotation.index.tolist(),
             "ypars": self.rotation.columns.tolist(),
-            "matrix": self.rotation.values.tolist(),
+            "matrix": self.rotation.T.values.tolist(),
         }
         rot_mat_path = result_path / "pca_rot.json"
         self.config["rot_to_fit_basis"] = str(rot_mat_path)
@@ -253,7 +256,7 @@ class PcaCalculator:
         _, W, Vt = np.linalg.svd(X_centered)
 
         pca_labels = [f"PC{i:02d}" for i in range(W.size)]
-        self.pc_matrix = pd.DataFrame(Vt, index=free_parameters, columns=pca_labels)
+        self.pc_matrix = pd.DataFrame(Vt.T, index=free_parameters, columns=pca_labels)
         self.SVs = pd.Series(W, index=pca_labels)
 
     def write(self, fit_label, thr_show=1e-2):
