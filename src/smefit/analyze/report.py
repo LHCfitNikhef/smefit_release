@@ -63,8 +63,10 @@ class Report:
         for name, label in zip(report_config["result_IDs"], fit_labels):
             fit = FitManager(result_path, name, label)
             fit.load_results()
+
             if any(k in report_config for k in ["chi2_plots", "PCA", "fisher"]):
                 fit.load_datasets()
+
             self.fits.append(fit)
         self.fits = np.array(self.fits)
 
@@ -187,7 +189,7 @@ class Report:
         hide_dofs=None,
         show_only=None,
         logo=True,
-        table=True,
+        table=None,
         double_solution=None,
     ):
         """Coefficients plots and table runner.
@@ -232,7 +234,9 @@ class Report:
             bounds_dict[fit.label] = compute_confidence_level(
                 fit.results,
                 coeff_plt.coeff_df,
-                double_solution.get(fit.name, None),
+                double_solution.get(fit.name, None)
+                if double_solution is not None
+                else None,
             )
 
         if scatter_plot is not None:
@@ -259,10 +263,16 @@ class Report:
 
         if posterior_histograms:
             _logger.info("Plotting : Posterior histograms")
+            disjointed_lists = [
+                double_solution.get(fit.name, None)
+                if double_solution is not None
+                else []
+                for fit in self.fits
+            ]
             coeff_plt.plot_posteriors(
                 [fit.results for fit in self.fits],
                 labels=[fit.label for fit in self.fits],
-                disjointed_lists=list((*double_solution.values(),)),
+                disjointed_lists=disjointed_lists,
             )
             figs_list.append("coefficient_histo")
 
