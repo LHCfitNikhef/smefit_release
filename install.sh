@@ -27,3 +27,5 @@ cmake ..  -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
 make
 make install
 rm -rf $MULTINEST_INSTALLATION_PATH
+
+echo "Install scussefull!!"

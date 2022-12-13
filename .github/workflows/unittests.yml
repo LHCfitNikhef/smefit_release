@@ -28,6 +28,7 @@ jobs:
           bash -l ./install.sh
       - name: Lint with pylint
         run: |
+          conda activate smefit_installation
           pip install pylint
           # Search for actual errors
           pylint src/smefit -E
@@ -36,6 +37,7 @@ jobs:
       - name: Test with pytest
         run: |
           # add test packages
+          conda activate smefit_installation
           pip install pytest
           pip install pytest-cov
           pip install pytest-env
