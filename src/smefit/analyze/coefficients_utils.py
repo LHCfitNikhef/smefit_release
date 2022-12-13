@@ -141,7 +141,7 @@ class CoefficientsPlotter:
                 self.logo,
                 aspect="auto",
                 transform=ax.transAxes,
-                extent=[0.70, 0.975, 0.80, 0.975],
+                extent=[0.78, 0.999, 0.001, 0.049],
                 zorder=-1,
             )
 
@@ -345,7 +345,7 @@ class CoefficientsPlotter:
         for axes in fig.axes:
             if len(axes.get_legend_handles_labels()[0]) > len(lines):
                 lines, labels = axes.get_legend_handles_labels()
-        fig.legend(lines, labels, loc="lower right", prop={"size": 20})
+        fig.legend(lines, labels, loc="lower right", prop={"size": 30})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
         plt.savefig(f"{self.report_folder}/coefficient_histo.png")

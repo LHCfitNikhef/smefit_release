@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import itertools
 import pathlib
 import subprocess
 from shutil import copyfile
@@ -6,6 +7,7 @@ from shutil import copyfile
 import yaml
 from mpi4py import MPI
 
+from .analyze.pca import RotateToPca
 from .chi2 import Scanner
 from .log import logging
 from .optimize.mc import MCOptimizer
@@ -31,11 +33,14 @@ class Runner:
             path to runcard if already present
     """
 
-    def __init__(self, run_card, single_parameter_fits, runcard_file=None):
+    def __init__(
+        self, run_card, single_parameter_fits, pairwise_fits, runcard_file=None
+    ):
 
         self.run_card = run_card
         self.runcard_file = runcard_file
         self.single_parameter_fits = single_parameter_fits
+        self.pairwise_fits = pairwise_fits
         self.setup_result_folder()
 
     def setup_result_folder(self):
@@ -97,8 +102,11 @@ class Runner:
             config["result_ID"] = runcard_file.stem
 
         single_parameter_fits = config.get("single_parameter_fits", False)
+        pairwise_fits = config.get("pairwise_fits", False)
 
-        return cls(config, single_parameter_fits, runcard_file.absolute())
+        return cls(
+            config, single_parameter_fits, pairwise_fits, runcard_file.absolute()
+        )
 
     def ns(self, config):
         """Run a fit with |NS|."""
@@ -121,6 +129,14 @@ class Runner:
         opt = MCOptimizer.from_dict(config)
         opt.run_sampling()
         opt.save()
+
+    def rotate_to_pca(self):
+
+        _logger.info("Rotate input basis to PCA basis")
+        pca_rot = RotateToPca.from_dict(self.run_card)
+        pca_rot.compute()
+        pca_rot.update_runcard()
+        pca_rot.save()
 
     def global_analysis(self, optimizer):
         """Run a global fit using the selected optimizer
@@ -155,6 +171,27 @@ class Runner:
             elif optimizer == "MC":
                 self.mc(single_coeff_config)
 
+    def pairwise_analysis(self, optimizer):
+        """Run a series of pairwise parameter fits for all the operators specified in the runcard
+        Parameters
+        ----------
+        optimizer: string
+            optimizer to be used (NS or MC)
+        """
+
+        config = self.run_card
+
+        for (c1, c2) in itertools.combinations(config["coefficients"].keys(), 2):
+            pairwise_coeff_config = dict(config)
+            pairwise_coeff_config["coefficients"] = {}
+            pairwise_coeff_config["coefficients"][c1] = config["coefficients"][c1]
+            pairwise_coeff_config["coefficients"][c2] = config["coefficients"][c2]
+
+            if optimizer == "NS":
+                self.ns(pairwise_coeff_config)
+            elif optimizer == "MC":
+                self.mc(pairwise_coeff_config)
+
     def run_analysis(self, optimizer):
         """Run either the global analysis or a series of single parameter fits
         using the selected optimizer.
@@ -166,6 +203,8 @@ class Runner:
 
         if self.single_parameter_fits:
             self.single_parameter_analysis(optimizer)
+        elif self.pairwise_fits:
+            self.pairwise_analysis(optimizer)
         else:
             self.global_analysis(optimizer)
 

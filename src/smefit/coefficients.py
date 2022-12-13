@@ -103,6 +103,24 @@ class Coefficient:
         self.value += coeff_other.value
         return self
 
+    def update_constrain(self, inv_rotation):
+        """Update the constrain when a new basis is chosen.
+        Only linear constrain are supported.
+
+        Parameters
+        ----------
+            inv_rotation: pd.DataFrame
+                rotation matrix from the original basis to the new_basis
+        """
+
+        # loop on the sum and simplify the constrain
+        old_coeffs = [(*factor.keys(),)[0] for factor in self.constrain]
+        old_factors = [(*factor.values(),)[0][0] for factor in self.constrain]
+        rot = inv_rotation[old_coeffs]
+        new_constrain = (rot * old_factors).sum(axis=1)
+        new_constrain = new_constrain[new_constrain != 0]
+        self.constrain = [{k: v} for k, v in new_constrain.items()]
+
 
 class CoefficientManager:
     """
@@ -215,7 +233,6 @@ class CoefficientManager:
 
             temp = 0.0
             for add_factor_dict in coefficient_fixed.constrain:
-
                 free_dofs = [
                     self._table.at[fixed_name, "value"]
                     for fixed_name in add_factor_dict
@@ -225,3 +242,19 @@ class CoefficientManager:
                 fact_exp = np.array((*add_factor_dict.values(),), dtype=float)
                 temp += np.prod(fact_exp[:, 0] * np.power(free_dofs, fact_exp[:, 1]))
             self._table.at[coefficient_fixed.name, "value"] = temp
+
+    def update_constrain(self, inv_rotation):
+        r"""Update the constraints according to rotation matrix.
+        Only linear constrain are supported.
+
+        Parameters
+        ----------
+            inv_rotation: pd.DataFrame
+                rotation matrix from the original basis to the new_basis
+        """
+        for coefficient_fixed in self._objlist[~self.is_free]:
+
+            # skip coefficient fixed to a single value
+            if coefficient_fixed.constrain is None:
+                continue
+            coefficient_fixed.update_constrain(inv_rotation)

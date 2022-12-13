@@ -37,4 +37,4 @@ higher than a certain threshold set by the user and produce the final output fil
   where each entry correspond to a list of samples of the Wilson coefficient corresponding to the specified operator.
   The final posterior is therefore provided as a discrete set of samples for each fitted Wilson coefficient.
 
-* The code can be run in the [Report mode](./../reports/running.html#producing-a-report) in order to produce a report to visualize the results. The different functionalities currently supported in the report are documented [here](./../reports/report_func.html)
+* The code can be run in the [Report mode](./../report/running.html#producing-a-report) in order to produce a report to visualize the results. The different functionalities currently supported in the report are documented [here](./../report/tools.html)
