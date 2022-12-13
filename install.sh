@@ -1,6 +1,6 @@
 #! /bin/bash
+CONDA_ENV='smefit_installation'
 
-usage() { echo "Usage: $0 -p MULTINEST_INSTALLATION_PATH"; exit 1; }
 
 while getopts :p: flag
 do
@@ -10,30 +10,32 @@ do
     esac
 done
 
-if [ -z "${MULTINEST_INSTALLATION_PATH}" ]; then
-    usage
+if [ -z "${MULTINEST_INSTALLATION_PATH}" ];
+then
+    echo "Usage: $0 -p MULTINEST_INSTALLATION_PATH"
+    exit 1
 fi
 
 
-# TODO: try to detect if multinest is already installed and skip
+# select the lockfile
+LOCK_FILE='conda-linux-64.lock'
+if [[ $OSTYPE == 'darwin'* ]];
+then
+  LOCK_FILE='conda-osx-64.lock'
+fi
 
 
-# TODO: check if on MacOS this works
-# get openmipi lib dev
-sudo apt install libopenmpi-dev
+# build the enivironment
+conda create --name $CONDA_ENV --file 'conda_bld/'$LOCK_FILE
+conda activate $CONDA_ENV
+poetry install
 
 # install Multinest
-git clone https://github.com/farhanferoz/MultiNest.git
-cd MultiNest/MultiNest_v3.12_CMake/multinest
-mkdir build && cd $_
-cmake .. -DCMAKE_INSTALL_PREFIX=$MULTINEST_INSTALLATION_PATH
+cd $MULTINEST_INSTALLATION_PATH
+mkdir build/
+cd build/
+export FCFLAGS="-w -fallow-argument-mismatch -O2"
+export FFLAGS="-w -fallow-argument-mismatch -O2"
+cmake ..  -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
 make
-sudo make install
-cd ../../../../
-
-# upgrade pip
-python -m pip install --upgrade pip
-
-# install smefit
-pip install packutil
-pip install .
+make install
