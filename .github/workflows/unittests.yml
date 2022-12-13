@@ -28,20 +28,20 @@ jobs:
           bash -l ./install.sh
       - name: Lint with pylint
         run: |
-          conda activate smefit_installation
-          pip install pylint
+          $CONDA/bin/activate smefit_installation
+          $CONDA/bin/pip install pylint
           # Search for actual errors
-          pylint src/smefit -E
+          $CONDA/bin/pylint src/smefit -E
           # For warnings instead return always zero
-          pylint src/smefit --exit-zero
+          $CONDA/bin/pylint src/smefit --exit-zero
       - name: Test with pytest
         run: |
           # add test packages
-          conda activate smefit_installation
-          pip install pytest
-          pip install pytest-cov
-          pip install pytest-env
-          pytest
+          $CONDA/bin/activate smefit_installation
+          $CONDA/bin/pip install pytest
+          $CONDA/bin/pip install pytest-cov
+          $CONDA/bin/pip install pytest-env
+          $CONDA/bin/pytest
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
