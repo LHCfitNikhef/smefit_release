@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           chmod +x install.sh
-          ./install.sh
+          bash -l ./install.sh
       - name: Lint with pylint
         run: |
           pip install pylint
