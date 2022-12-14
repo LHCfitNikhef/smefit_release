@@ -28,12 +28,12 @@ jobs:
           bash -l ./install.sh
       - name: Lint with pylint
         run: |
-          $CONDA/bin/activate smefit_installation
-          $CONDA/bin/pip install pylint
+          source /usr/share/miniconda/bin/activate /usr/share/miniconda/envs/smefit_installation
+          pip install pylint
           # Search for actual errors
-          $CONDA/bin/pylint src/smefit -E
+          pylint src/smefit -E
           # For warnings instead return always zero
-          $CONDA/bin/pylint src/smefit --exit-zero
+          pylint src/smefit --exit-zero
       - name: Test with pytest
         run: |
           # add test packages
