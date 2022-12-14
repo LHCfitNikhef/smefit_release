@@ -214,7 +214,7 @@ class CoefficientsPlotter:
             X[-1] + 1,
             ls="dotted",
             color="grey",
-            lw=0.5,
+            lw=0.7,
         )
 
         if x_log:
@@ -224,9 +224,9 @@ class CoefficientsPlotter:
 
         plt.ylim(-1, X[-1] + 1)
         plt.tick_params(which="major", direction="in")
-        plt.yticks(X, self.coeff_df["latex_name"], fontsize=15)
+        plt.yticks(X, self.coeff_df["latex_name"], fontsize=18)
 
-        plt.legend(loc=0, frameon=False, prop={"size": 13})
+        plt.legend(loc=0, frameon=False, prop={"size": 15})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_central.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_central.png")
@@ -268,19 +268,19 @@ class CoefficientsPlotter:
             2 * self.npar + 1,
             ls="dotted",
             color="grey",
-            lw=0.5,
+            lw=0.7,
         )
 
         self.plot_logo(ax)
-        plt.yticks(fontsize=10)
-        plt.tick_params(axis="x", direction="in", labelsize=15)
+        plt.yticks(fontsize=15)
+        plt.tick_params(axis="x", direction="in", labelsize=18)
         if x_log:
             plt.xscale("log")
         plt.xlabel(
-            r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=11
+            r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=15
         )
         plt.xlim(x_min, x_max)
-        plt.legend(loc=legend_loc, frameon=False, prop={"size": 13})
+        plt.legend(loc=legend_loc, frameon=False, prop={"size": 15})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_bar.png")
