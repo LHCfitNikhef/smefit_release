@@ -12,18 +12,28 @@
 
 SMEFiT is a python program for Standard Model Effective Field Theory fits
 ## Installation from source
-A the moment the code is not deployed yet, you can install it only from souce.
-The easiest way to install it is by running the script `install.sh`
-afret having activated your enevironment:
+A the moment the code is not deployed yet, you can install it only from source
+using a conda environnement, which is provided.
+To install it you need a [conda](https://docs.conda.io/en/latest/) installation and run:
 
 ```bash
-./install.sh -p MULTINEST_INSTALLATION_PATH
+./install.sh
 ```
 
-This will download and install the [MULtiNest](https://github.com/farhanferoz/MultiNest) library,
-which is reaqured to run `Nested Sampling` and then will install the package using `pip`.
+This will download and install also the [MULtiNest](https://github.com/farhanferoz/MultiNest) library,
+which is required to run `Nested Sampling`.
+The installed package will be available in an environnement called `smefit_installation`, to activate it
+you can do:
+
+```bash
+conda activate smefit_installation
+smefit -h
+```
 
 ## Installation in develpoment mode using conda environemt
+
+
+
 To install the code in develop mode you can use conda and/or poetry.
 What you have to run is something similar to this code.
 
