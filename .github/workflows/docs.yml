@@ -29,12 +29,12 @@ jobs:
           bash -l ./install.sh
       - name: Build docs  🔨
         run: |
-          conda activate smefit_installation
-          $CONDA/bin/pip install sphinx
-          $CONDA/bin/pip install sphinx-rtd-theme
-          $CONDA/bin/pip install sphinxcontrib-bibtex
-          $CONDA/bin/pip install nbsphinx
-          $CONDA/bin/pip install recommonmark
+          source /usr/share/miniconda/bin/activate /usr/share/miniconda/envs/smefit_installation
+          pip install sphinx
+          pip install sphinx-rtd-theme
+          pip install sphinxcontrib-bibtex
+          pip install nbsphinx
+          pip install recommonmark
           cd docs
           mkdir -p source/development
           make html
