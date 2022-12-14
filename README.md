@@ -30,48 +30,15 @@ conda activate smefit_installation
 smefit -h
 ```
 
-## Installation in develpoment mode using conda environemt
-
-
-
-To install the code in develop mode you can use conda and/or poetry.
-What you have to run is something similar to this code.
-
-```bash
-conda create -n <ENV_NAME> python=3.10
-conda activate <ENV_NAME>
-conda install -c conda-forge openmpi=4.1.4=ha1ae619_100
-conda install compilers
-conda install liblapack libblas
-conda install cmake
-
-cd <MULTINEST_INSTALLATION_PATH>
-mkdir build/
-cd build/
-export FCFLAGS="-w -fallow-argument-mismatch -O2"
-export FFLAGS="-w -fallow-argument-mismatch -O2"
-cmake ..  -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
-make
-make install
-
-cd <SMEFIT_INSTALLATION_PATH>
-
-conda install poetry
-poetry install
-
-```
-The script will download and compile the MultiNest library, together with the necessary python packages
-to run the code.
-
 ## Running
-The fitting code provide two equivalent fiining stategies.
+The fitting code provide two equivalent fitting strategies.
 To run the code with `Nested Sampling` you can do:
 
 ```bash
 smefit NS <path_to_runcard>
 ```
 
-To run the code suing the Monte Carlo replica method you can do:
+To run the code suing the `Monte Carlo replica` method you can do:
 
 ```bash
 smefit MC <path_to_runcard> -n <replica_number>
@@ -80,19 +47,9 @@ smefit MC <path_to_runcard> -n <replica_number>
 An runcard example is provided in `runcards/test_runcard.yaml`.
 You can also do `smefit -h` for more help.
 
-### Ruuning in parallel
-To run smefit in parallel you need to install inside your python environnement:
-
-```bash
-openmpi = 4.1.4 (4.0.2)
-mpi4py = 3.1.3 (3.0.3)
-```
-
-with python 3.10 (3.9). Then you can run doing:
-
 ### Running in parallel
-To run smefit in parallel openmpi and mpi4py need to be installed inside your python environnement, as detailed above.
-Then you can run:
+To run smefit with `Nested Sampling` in parallel you can do:
+
 ```bash
 mpiexec -n number_of_cores smefit NS <path_to_runcard>
 ```
@@ -114,7 +71,7 @@ pytest
 ```
 
 ## Reports
-To run reports and procude PDF and HTML output you need to have [pandoc](https://pandoc.org/) and [pdflatex](https://www.math.rug.nl/~trentelman/jacob/pdflatex/pdflatex.html) installed.
+To run reports and produce PDF and HTML output you need to have [pandoc](https://pandoc.org/) and [pdflatex](https://www.math.rug.nl/~trentelman/jacob/pdflatex/pdflatex.html) installed.
 The first one is available in conda the latter can be sourced in:
 
 ```bash
