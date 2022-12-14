@@ -26,9 +26,10 @@ jobs:
       - name: Install package
         run: |
           chmod +x install.sh
-          ./install.sh -p /usr/
+          bash -l ./install.sh
       - name: Build docs  🔨
         run: |
+          source /usr/share/miniconda/bin/activate /usr/share/miniconda/envs/smefit_installation
           pip install sphinx
           pip install sphinx-rtd-theme
           pip install sphinxcontrib-bibtex

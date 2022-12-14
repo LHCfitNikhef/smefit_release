@@ -1,0 +1,13 @@
+name: smefit_installation
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.10.4
+  - pip
+  - poetry
+  - openmpi=4.1.4=h4fe9131_101
+  - compilers
+  - cmake
+  - liblapack
+  - libblas
