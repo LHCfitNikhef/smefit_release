@@ -14,6 +14,7 @@ fi
 conda create --name $CONDA_ENV --file 'conda_bld/'$LOCK_FILE
 eval "$(conda shell.bash hook)"
 conda activate $CONDA_ENV
+poetry update
 poetry install
 
 # install Multinest

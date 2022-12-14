@@ -3,11 +3,11 @@ channels:
   - conda-forge
   - nodefaults
 dependencies:
-  - python=3.10.4
+  - python=3.10.8
   - pip
   - poetry
-  - openmpi=4.1.4=h4fe9131_101
-  - compilers
+  - openmpi=4.1.4
   - cmake
   - liblapack
   - libblas
+  - mpi4py=3.1.4
