@@ -63,9 +63,9 @@ coefficients_plots:
   # scatter plot with central values and error bands
   scatter_plot:
     figsize: [10,15] # figure size
-    x_min: -400 # x min value
-    x_max: 400 # x min value
-    lin_thr: .01 # linear threshold, in ca of x_log
+    x_min: -400 # x min value, you can specify different ranges with {type1: min1 ...}
+    x_max: 400 # x min value, you can specify different ranges with {type1: max1 ...}
+    lin_thr: .01 # linear threshold, in case of x_log, you can specify different ranges wit {type1: min1 ...}
     x_log: True # use symlog scale on x axis ?
 
   # confidence level error band plot
@@ -106,6 +106,7 @@ correlations:
 
   hide_dofs: Null # list of operator not to displayed, default is Null
   thr_show: 0.1 # Min value to show, if Null show the full matrix
+  title: true # if True display the fit label as title
 
 # PCA options
 PCA:
@@ -120,6 +121,7 @@ PCA:
     sv_min: 1.e-4 # min singular value to display (upper plot)
     sv_max: 1.e+5 # max singular value to display (upper plot)
     thr_show: 0.1 # min value of the principal component to display (main plot)
+    title: true # if True display the fit label as title
 
 # chi2 analysis plots and tables options
 chi2_plots:

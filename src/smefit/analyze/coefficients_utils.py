@@ -134,6 +134,16 @@ class CoefficientsPlotter:
                 zorder=-1,
             )
 
+    def get_suplblots(self, figsize):
+        groups = self.coeff_info.groupby(level=0).count()
+        _, axs = plt.subplots(
+            groups.size,
+            1,
+            gridspec_kw={"height_ratios": groups.values},
+            figsize=figsize,
+        )
+        return groups, axs
+
     def plot_coeffs(
         self, bounds, figsize=(10, 15), x_min=-400, x_max=400, x_log=True, lin_thr=1e-1
     ):
@@ -146,14 +156,7 @@ class CoefficientsPlotter:
                 confidence level bounds per fit and coefficient
                 Note: double solutions are appended under "2"
         """
-
-        groups = self.coeff_info.groupby(level=0).count()
-        _, axs = plt.subplots(
-            groups.size,
-            1,
-            gridspec_kw={"height_ratios": groups.values},
-            figsize=figsize,
-        )
+        groups, axs = self.get_suplblots(figsize)
         bas10 = np.concatenate([-np.logspace(-4, 2, 7), np.logspace(-4, 2, 7)])
 
         # Spacing between fit results
@@ -204,8 +207,10 @@ class CoefficientsPlotter:
                     except KeyError:
                         pass
 
+            # y thicks
             ax.set_ylim(-2, Y[-1] + 2)
-            ax.set_yticks(Y, self.coeff_info[g], fontsize=14)
+            ax.set_yticks(Y, self.coeff_info[g], fontsize=13)
+            # x grid
             ax.vlines(0, -2, Y[-1] + 2, ls="dashed", color="black", alpha=0.7)
             if x_log:
                 x_thicks = np.concatenate([bas * np.arange(1, 10) for bas in bas10])
@@ -249,37 +254,37 @@ class CoefficientsPlotter:
                confidence level bounds per fit and coefficient
         """
         df = pd.DataFrame(error)
-        ax = df.plot(kind="barh", width=0.6, figsize=figsize)
+        groups, axs = self.get_suplblots(figsize)
 
-        # Hard cutoff
-        if plot_cutoff is not None:
-            ax.vlines(
-                plot_cutoff,
-                -1,
-                2 * self.npar + 1,
-                ls="dashed",
-                color="black",
-                alpha=0.7,
+        for ax, (g, bars) in zip(axs, df.groupby(level=0)):
+            bars.droplevel(0).plot(
+                kind="barh",
+                width=0.6,
+                ax=ax,
+                legend=None,
+                logx=x_log,
+                xlim=(x_min, x_max),
+                fontsize=13,
             )
-        ax.vlines(
-            np.logspace(-4, 2, 7),
-            -1,
-            2 * self.npar + 1,
-            ls="dotted",
-            color="grey",
-            lw=0.5,
-        )
+            ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
+            ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
 
-        self.plot_logo(ax)
-        plt.yticks(fontsize=10)
-        plt.tick_params(axis="x", direction="in", labelsize=15)
-        if x_log:
-            plt.xscale("log")
-        plt.xlabel(
+            # Hard cutoff
+            if plot_cutoff is not None:
+                ax.vlines(
+                    plot_cutoff,
+                    -2,
+                    3 * groups[g] + 2,
+                    ls="dashed",
+                    color="black",
+                    alpha=0.7,
+                )
+
+        self.plot_logo(axs[-1])
+        axs[-1].set_xlabel(
             r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=11
         )
-        plt.xlim(x_min, x_max)
-        plt.legend(loc=legend_loc, frameon=False, prop={"size": 13})
+        axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_bar.png")
