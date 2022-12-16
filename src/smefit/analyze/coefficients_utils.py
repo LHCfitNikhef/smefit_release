@@ -106,6 +106,12 @@ class CoefficientsPlotter:
 
     Parameters
     ----------
+    report_path: pathlib.Path, str
+        path to base folder, where the reports will be stored.
+    coeff_config : pandas.DataFrame
+        coefficients latex names by gropup type
+    logo : bool
+        if True dispaly the logo on scatter and bar plots
 
     """
 
@@ -124,17 +130,17 @@ class CoefficientsPlotter:
 
         self.npar = self.coeff_info.shape[0]
 
-    def plot_logo(self, ax):
+    def _plot_logo(self, ax):
         if self.logo is not None:
             ax.imshow(
                 self.logo,
                 aspect="auto",
                 transform=ax.transAxes,
-                extent=[0.78, 0.999, 0.001, 0.30],
+                extent=[0.8, 0.999, 0.001, 0.30],
                 zorder=-1,
             )
 
-    def get_suplblots(self, figsize):
+    def _get_suplblots(self, figsize):
         groups = self.coeff_info.groupby(level=0).count()
         _, axs = plt.subplots(
             groups.size,
@@ -156,7 +162,7 @@ class CoefficientsPlotter:
                 confidence level bounds per fit and coefficient
                 Note: double solutions are appended under "2"
         """
-        groups, axs = self.get_suplblots(figsize)
+        groups, axs = self._get_suplblots(figsize)
         bas10 = np.concatenate([-np.logspace(-4, 2, 7), np.logspace(-4, 2, 7)])
 
         # Spacing between fit results
@@ -228,8 +234,8 @@ class CoefficientsPlotter:
             ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
             cnt_plot += npar
 
-        self.plot_logo(axs[-1])
-        axs[-1].set_xlabel(r"$c_i/\Lambda^2\ ({\rm TeV}^{-2})$", fontsize=25)
+        self._plot_logo(axs[-1])
+        axs[-1].set_xlabel(r"$c_i/\Lambda^2\ ({\rm TeV}^{-2})$", fontsize=20)
         axs[0].legend(loc=0, frameon=False, prop={"size": 13})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_central.pdf", dpi=500)
@@ -254,7 +260,7 @@ class CoefficientsPlotter:
                confidence level bounds per fit and coefficient
         """
         df = pd.DataFrame(error)
-        groups, axs = self.get_suplblots(figsize)
+        groups, axs = self._get_suplblots(figsize)
 
         for ax, (g, bars) in zip(axs, df.groupby(level=0)):
             bars.droplevel(0).plot(
@@ -280,9 +286,9 @@ class CoefficientsPlotter:
                     alpha=0.7,
                 )
 
-        self.plot_logo(axs[-1])
+        self._plot_logo(axs[-1])
         axs[-1].set_xlabel(
-            r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=11
+            r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
         )
         axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
         plt.tight_layout()
@@ -303,10 +309,10 @@ class CoefficientsPlotter:
         """
         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
         grid_size = int(np.sqrt(self.npar)) + 1
-        fig = plt.figure(figsize=(grid_size * 4, grid_size * 3))
+        fig = plt.figure(figsize=((grid_size) * 4, (grid_size) * 3))
         # loop on coefficients
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
-            ax = plt.subplot(grid_size, grid_size, idx + 1)
+            ax = plt.subplot(grid_size - 1, grid_size, idx + 1)
             # loop on fits
             for clr_idx, posterior in enumerate(posteriors):
                 if l not in posterior:
@@ -340,7 +346,6 @@ class CoefficientsPlotter:
                     transform=ax.transAxes,
                     fontsize=25,
                 )
-
                 ax.tick_params(which="both", direction="in", labelsize=22.5)
                 ax.tick_params(labelleft=False)
 
@@ -348,7 +353,9 @@ class CoefficientsPlotter:
         for axes in fig.axes:
             if len(axes.get_legend_handles_labels()[0]) > len(lines):
                 lines, labels = axes.get_legend_handles_labels()
-        fig.legend(lines, labels, loc="lower right", prop={"size": 30})
+        fig.legend(
+            lines, labels, loc="lower center", prop={"size": 35}, ncol=len(posteriors)
+        )
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
         plt.savefig(f"{self.report_folder}/coefficient_histo.png")
@@ -494,10 +501,10 @@ class CoefficientsPlotter:
                 # loop on fits
                 for bound_df in bounds.values():
                     try:
-                        cl_vals = bound_df[latex_name].dropna()[0]
+                        cl_vals = bound_df[(group, latex_name)].dropna()[0]
                     except KeyError:
                         # not fitted
-                        if bound_df[latex_name].dropna().empty:
+                        if bound_df[(group, latex_name)].dropna().empty:
                             temp += r" & \textemdash & \textemdash & \textemdash "
                             continue
                         raise KeyError(f"{latex_name} is not found in posterior")
@@ -507,7 +514,7 @@ class CoefficientsPlotter:
                                 & [{np.round(cl_vals['low95'],round_val)},{np.round(cl_vals['high95'],round_val)}]"
                     # double solution
                     try:
-                        cl_vals_2 = bound_df[latex_name].dropna()[1]
+                        cl_vals_2 = bound_df[(group, latex_name)].dropna()[1]
                         temp += f" & {np.round(cl_vals_2['mid'],round_val)} \
                                 & [{np.round(cl_vals_2['low68'],round_val)},{np.round(cl_vals_2['high68'],round_val)}] \
                                     & [{np.round(cl_vals_2['low95'],round_val)},{np.round(cl_vals_2['high95'],round_val)}]"

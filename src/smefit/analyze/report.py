@@ -373,8 +373,9 @@ class Report:
                 )
                 links_list = [(f"pca_table_{fit.name}", f"Table {fit.label}")]
             if plot is not None:
+                title = fit.label if plot.pop("title") else None
                 pca_cal.plot_heatmap(
-                    fit.label, f"{self.report}/pca_heatmap_{fit.name}", **plot
+                    f"{self.report}/pca_heatmap_{fit.name}", title=title, **plot
                 )
                 figs_list = [f"pca_heatmap_{fit.name}"]
         self._append_section("PCA", figs=figs_list, links=links_list)
@@ -445,11 +446,12 @@ class Report:
             )
             links_list = [(f"fisher_{fit.name}", f"Table {fit.label}")]
 
-            if plot is not False:
+            if plot is not None:
+                title = fit.label if plot.pop("title") else None
                 fisher_cal.plot(
                     free_coeff_config,
-                    fit.label,
                     f"{self.report}/fisher_heatmap_{fit.name}",
+                    title=title,
                     **plot,
                 )
                 figs_list = [f"fisher_heatmap_{fit.name}"]

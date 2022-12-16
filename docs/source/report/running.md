@@ -148,6 +148,7 @@ fisher:
   plot:
     summary_only: True # if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset
     figsize: [11, 15] # figure size
+    title: true # if True display the fit label as title
 
 ```
 
