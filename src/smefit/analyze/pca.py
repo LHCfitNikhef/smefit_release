@@ -301,6 +301,7 @@ class PcaCalculator:
         sv_max=1e5,
         thr_show=0.1,
         figsize=(15, 15),
+        title=True,
     ):
         """Heat Map of PC coefficients.
 
@@ -316,6 +317,9 @@ class PcaCalculator:
             maximum singular value range shown in the top heatmap plot
         thr_show: float
             minimal threshold to show in the PCA decomposition
+        title: bool
+            if True display the fit label as title
+
         """
 
         pc_norm = self.pc_matrix.values**2
@@ -377,7 +381,8 @@ class PcaCalculator:
         ax_sv.set_ylabel(r"${\rm Singular\ Values}$", fontsize=20)
 
         # save
-        ax.set_title(f"\\rm PCA:\\ {fit_label}", fontsize=25, y=-0.15)
+        if title:
+            ax.set_title(f"\\rm PCA:\\ {fit_label}", fontsize=25, y=-0.15)
         plt.tight_layout()
         plt.savefig(f"{fig_name}.pdf")
         plt.savefig(f"{fig_name}.png")
