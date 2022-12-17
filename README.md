@@ -26,7 +26,7 @@ The installed package will be available in an environnement called `smefit_insta
 you can do:
 
 ```bash
-conda activate smefit_installation
+conda activate <env_name='smefit_installation'>
 smefit -h
 ```
 
