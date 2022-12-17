@@ -26,7 +26,7 @@ jobs:
       - name: Install package
         run: |
           chmod +x install.sh
-          bash -l ./install.sh
+          bash -l ./install.sh -n smefit_installation
       - name: Build docs  🔨
         run: |
           source /usr/share/miniconda/bin/activate /usr/share/miniconda/envs/smefit_installation

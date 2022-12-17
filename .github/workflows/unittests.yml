@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           chmod +x install.sh
-          bash -l ./install.sh
+          bash -l ./install.sh -n smefit_installation
       - name: Lint with pylint
         run: |
           source /usr/share/miniconda/bin/activate /usr/share/miniconda/envs/smefit_installation
