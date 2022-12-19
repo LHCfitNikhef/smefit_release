@@ -17,7 +17,7 @@ using a conda environnement, which is provided.
 To install it you need a [conda](https://docs.conda.io/en/latest/) installation and run:
 
 ```bash
-./install.sh
+./install.sh -n <env_name='smefit_installation'>
 ```
 
 This will download and install also the [MULtiNest](https://github.com/farhanferoz/MultiNest) library,
@@ -26,7 +26,7 @@ The installed package will be available in an environnement called `smefit_insta
 you can do:
 
 ```bash
-conda activate smefit_installation
+conda activate <env_name='smefit_installation'>
 smefit -h
 ```
 
