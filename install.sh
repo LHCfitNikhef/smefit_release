@@ -81,9 +81,9 @@ make install
 rm -rf $MULTINEST_INSTALLATION_PATH
 
 echo
-echo 'Installation was scussefull !!'
+echo 'Installation was successful !!'
 echo
-echo 'To sart type:'
+echo 'To start type:'
 echo
 echo '    conda activate '$CONDA_ENV
 echo '    smefit -h'
