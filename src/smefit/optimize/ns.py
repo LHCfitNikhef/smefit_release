@@ -20,7 +20,6 @@ _logger = log.logging.getLogger(__name__)
 
 
 class NSOptimizer(Optimizer):
-
     """
     Optimizer specification for |NS|
 
@@ -52,6 +51,7 @@ class NSOptimizer(Optimizer):
         use_quad,
         result_ID,
         single_parameter_fits,
+        pairwise_fits,
         use_multiplicative_prescription,
         live_points=500,
         efficiency=0.01,
@@ -72,6 +72,7 @@ class NSOptimizer(Optimizer):
         self.tolerance = tolerance
         self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
+        self.pairwise_fits = pairwise_fits
 
     @classmethod
     def from_dict(cls, config):
@@ -106,6 +107,7 @@ class NSOptimizer(Optimizer):
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
         single_parameter_fits = config.get("single_parameter_fits", False)
+        pairwise_fits = config.get("pairwise_fits", False)
         nlive = config.get("nlive", 500)
 
         if "nlive" not in config:
@@ -141,6 +143,7 @@ class NSOptimizer(Optimizer):
             config["use_quad"],
             config["result_ID"],
             single_parameter_fits,
+            pairwise_fits,
             use_multiplicative_prescription,
             live_points=nlive,
             efficiency=efr,
@@ -288,5 +291,12 @@ class NSOptimizer(Optimizer):
             for c in self.coefficients.name:
                 values[c].append(self.coefficients[c].value)
 
-        posterior_file = self.results_path / "posterior.json"
+        if self.pairwise_fits:
+            posterior_file = (
+                self.results_path
+                / f"posterior_{self.coefficients.name[0]}_{self.coefficients.name[1]}.json"
+            )
+        else:
+            posterior_file = self.results_path / "posterior.json"
+
         self.dump_posterior(posterior_file, values)

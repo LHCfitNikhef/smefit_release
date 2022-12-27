@@ -149,7 +149,7 @@ class CoefficientsPlotter:
                 self.logo,
                 aspect="auto",
                 transform=ax.transAxes,
-                extent=[0.70, 0.975, 0.80, 0.975],
+                extent=[0.78, 0.999, 0.001, 0.049],
                 zorder=-1,
             )
 
@@ -222,7 +222,7 @@ class CoefficientsPlotter:
             X[-1] + 1,
             ls="dotted",
             color="grey",
-            lw=0.5,
+            lw=0.7,
         )
 
         if x_log:
@@ -232,9 +232,9 @@ class CoefficientsPlotter:
 
         plt.ylim(-1, X[-1] + 1)
         plt.tick_params(which="major", direction="in")
-        plt.yticks(X, self.coeff_df["latex_name"], fontsize=15)
+        plt.yticks(X, self.coeff_df["latex_name"], fontsize=18)
 
-        plt.legend(loc=0, frameon=False, prop={"size": 13})
+        plt.legend(loc=0, frameon=False, prop={"size": 15})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_central.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_central.png")
@@ -276,19 +276,19 @@ class CoefficientsPlotter:
             2 * self.npar + 1,
             ls="dotted",
             color="grey",
-            lw=0.5,
+            lw=0.7,
         )
 
         self.plot_logo(ax)
-        plt.yticks(fontsize=10)
-        plt.tick_params(axis="x", direction="in", labelsize=15)
+        plt.yticks(fontsize=15)
+        plt.tick_params(axis="x", direction="in", labelsize=18)
         if x_log:
             plt.xscale("log")
         plt.xlabel(
-            r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=11
+            r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=15
         )
         plt.xlim(x_min, x_max)
-        plt.legend(loc=legend_loc, frameon=False, prop={"size": 13})
+        plt.legend(loc=legend_loc, frameon=False, prop={"size": 15})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_bar.png")
@@ -353,7 +353,7 @@ class CoefficientsPlotter:
         for axes in fig.axes:
             if len(axes.get_legend_handles_labels()[0]) > len(lines):
                 lines, labels = axes.get_legend_handles_labels()
-        fig.legend(lines, labels, loc="lower right", prop={"size": 20})
+        fig.legend(lines, labels, loc="lower right", prop={"size": 30})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
         plt.savefig(f"{self.report_folder}/coefficient_histo.png")
@@ -468,7 +468,7 @@ class CoefficientsPlotter:
         fig.savefig(f"{self.report_folder}/contours_2d.pdf")
         fig.savefig(f"{self.report_folder}/contours_2d.png")
 
-    def write_cl_table(self, bounds):
+    def write_cl_table(self, bounds, round_val=3):
         """Coefficients latex table"""
         nfits = len(bounds)
         L = latex_packages()
@@ -507,25 +507,15 @@ class CoefficientsPlotter:
                             continue
                         raise KeyError(f"{latex_name} is not found in posterior")
 
-                    temp += (
-                        r" & {:0.3f} & [{:0.3f},{:0.3f}] & [{:0.3f},{:0.3f}] ".format(
-                            cl_vals["mid"],
-                            cl_vals["low68"],
-                            cl_vals["high68"],
-                            cl_vals["low95"],
-                            cl_vals["high95"],
-                        )
-                    )
+                    temp += f" & {np.round(cl_vals['mid'],round_val)} \
+                            & [{np.round(cl_vals['low68'],round_val)},{np.round(cl_vals['high68'],round_val)}] \
+                                & [{np.round(cl_vals['low95'],round_val)},{np.round(cl_vals['high95'],round_val)}]"
                     # double solution
                     try:
                         cl_vals_2 = bound_df[latex_name].dropna()[1]
-                        temp2 += r" & {:0.3f} & [{:0.3f},{:0.3f}] & [{:0.3f},{:0.3f}] ".format(
-                            cl_vals_2["mid"],
-                            cl_vals_2["low68"],
-                            cl_vals_2["high68"],
-                            cl_vals_2["low95"],
-                            cl_vals_2["high95"],
-                        )
+                        temp += f" & {np.round(cl_vals_2['mid'],round_val)} \
+                                & [{np.round(cl_vals_2['low68'],round_val)},{np.round(cl_vals_2['high68'],round_val)}] \
+                                    & [{np.round(cl_vals_2['low95'],round_val)},{np.round(cl_vals_2['high95'],round_val)}]"
                     except KeyError:
                         temp2 += r" & & &"
 
