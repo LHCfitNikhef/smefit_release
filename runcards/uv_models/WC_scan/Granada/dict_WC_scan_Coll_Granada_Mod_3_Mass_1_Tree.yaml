@@ -1,0 +1,86 @@
+# UV dictionary for WC scan. Tree-level matching.
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 3
+Model name : \text{S1}
+# ~~~~~~~~~~~~~~~~~~~~~~
+# WCs to set to zero
+cpG : 0
+cpB : 0
+cpW : 0
+cpWB : 0
+cpd : 0
+cpD : 0
+cWWW : 0
+cpqMi : 0
+cpQM : 0
+c3pq : 0
+c3pQ3 : 0
+cpl1 : 0
+cpl2 : 0
+cpl3 : 0
+c3pl1 : 0
+c3pl2 : 0
+c3pl3 : 0
+cpui : 0
+cpdi : 0
+cpt : 0
+cpe : 0
+cpmu : 0
+cpta : 0
+c81qq : 0
+c11qq : 0
+c83qq : 0
+c13qq : 0
+c8qt : 0
+c1qt : 0
+c8ut : 0
+c1ut : 0
+c8qu : 0
+c1qu : 0
+c8dt : 0
+c1dt : 0
+c8qd : 0
+c1qd : 0
+cQQ1 : 0
+cQQ8 : 0
+cQt1 : 0
+cQt8 : 0
+ctt1 : 0
+cbp : 0
+ctp : 0
+ctG : 0
+ccp : 0
+ctap : 0
+ctW : 0
+ctZ : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# WCs to be fitted
+cll
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Number of L.I. WCs
+1
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Unrelated WCs
+cll
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Linear Relations among WCs
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Positively defined WCs
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Negatively defined WCs
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Multiplicative relations among WCs
+# ~~~~~~~~~~~~~~~~~~~~~~
+# A possible basis of L.I. WCs
+cll
+# ~~~~~~~~~~~~~~~~~~~~~~
+# UV couplings in this model
+u1 = y(S1)(1,1,2)
+u2 = y(S1)(1,2,1)
+# ~~~~~~~~~~~~~~~~~~~~~~
+# UV coupling combinations invariant under sign ambiguities in this model
+invar1 = y(S1)(1,1,2)*y(S1)(1,2,1)
+# ~~~~~~~~~~~~~~~~~~~~~~
+# UV coupling combinations invariant under sign ambiguities, in terms of the WCs
+invar1 = y(S1)(1,1,2)*y(S1)(1,2,1)

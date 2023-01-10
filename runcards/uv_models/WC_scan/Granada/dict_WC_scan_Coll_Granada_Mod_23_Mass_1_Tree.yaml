@@ -1,0 +1,122 @@
+# UV dictionary for WC scan. Tree-level matching.
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 23
+Model name : W
+# ~~~~~~~~~~~~~~~~~~~~~~
+# WCs to set to zero
+cpG : 0
+cpB : 0
+cpW : 0
+cpWB : 0
+cpD : 0
+cWWW : 0
+cpl1 : 0
+cpl2 : 0
+cpl3 : 0
+cpui : 0
+cpdi : 0
+cpt : 0
+cpe : 0
+cpmu : 0
+cpta : 0
+c81qq : 0
+c11qq : 0
+c83qq : 0
+c13qq : 0
+c8qt : 0
+c1qt : 0
+c8ut : 0
+c1ut : 0
+c8qu : 0
+c1qu : 0
+c8dt : 0
+c1dt : 0
+c8qd : 0
+c1qd : 0
+cQt1 : 0
+cQt8 : 0
+ctt1 : 0
+ctG : 0
+ccp : 0
+ctW : 0
+ctZ : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# WCs to be fitted
+cpd
+cpqMi
+cpQM
+c3pq
+c3pQ3
+c3pl1
+c3pl2
+c3pl3
+cQQ1
+cQQ8
+cll
+cbp
+ctp
+ctap
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Number of L.I. WCs
+6
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Unrelated WCs
+c3pl1
+c3pl2
+c3pl3
+cll
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Linear Relations among WCs
+ctap=(89*ctp)/8638.
+cbp=(209*ctp)/8638.
+cQQ8=-12*cQQ1
+cpQM=-c3pQ3
+cpqMi=-c3pq
+cpd=(-36933*ctp)/(17276.*Sqrt(2))
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Positively defined WCs
+cpd >= 0
+cQQ1 >= 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Negatively defined WCs
+cQQ8 <= 0
+cbp <= 0
+ctp <= 0
+ctap <= 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Multiplicative relations among WCs
+relationMultPrinterSelect[{Times[-2.85043, 1.41421, wwCt\[CurlyPhi]], Times[-4, wwC\[CurlyPhi]q3], Times[-4, wwC\[CurlyPhi]Q3], Times[-4, wwC\[CurlyPhi]l31], Times[-4, wwC\[CurlyPhi]l32], Times[-4, wwC\[CurlyPhi]l33], Times[12, wwCQQ1], Times[-4, wwCll]}, {{1, 0, 0, -1, -1, 0, 0, 1}, {0, 0, 1, -0.5, -0.5, 0, -0.5, 0.5}}, {{wwC\[CurlyPhi]q3, Times[-0.25, g[W][q][1, 1, 1], g[W][\[Phi]][1]]}, {wwC\[CurlyPhi]Q3, Times[-0.25, g[W][q][1, 3, 3], g[W][\[Phi]][1]]}, {wwC\[CurlyPhi]l31, Times[-0.25, g[W][L][1, 1, 1], g[W][\[Phi]][1]]}, {wwC\[CurlyPhi]l32, Times[-0.25, g[W][L][1, 2, 2], g[W][\[Phi]][1]]}, {wwC\[CurlyPhi]l33, Times[-0.25, g[W][L][1, 3, 3], g[W][\[Phi]][1]]}, {wwCQQ1, Times[0.0833333, Power[g[W][q][1, 3, 3], 2]]}, {wwCll, Times[-0.25, g[W][L][1, 1, 1], g[W][L][1, 2, 2]]}, {wwCt\[CurlyPhi], Times[-0.350824, 0.707107, Power[g[W][\[Phi]][1], 2]]}}, {wwC\[CurlyPhi]d -> cpd, wwC\[CurlyPhi]qm -> cpqMi, wwC\[CurlyPhi]Qm -> cpQM, wwC\[CurlyPhi]q3 -> c3pq, wwC\[CurlyPhi]Q3 -> c3pQ3, wwC\[CurlyPhi]l31 -> c3pl1, wwC\[CurlyPhi]l32 -> c3pl2, wwC\[CurlyPhi]l33 -> c3pl3, wwCQQ1 -> cQQ1, wwCQQ8 -> cQQ8, wwCll -> cll, wwCb\[CurlyPhi] -> cbp, wwCt\[CurlyPhi] -> ctp, wwC\[Tau]\[CurlyPhi] -> ctap}, Times[-4, wwC\[CurlyPhi]Q3], -1]
+relationMultPrinterSelect[{Times[-2.85043, 1.41421, wwCt\[CurlyPhi]], Times[-4, wwC\[CurlyPhi]q3], Times[-4, wwC\[CurlyPhi]Q3], Times[-4, wwC\[CurlyPhi]l31], Times[-4, wwC\[CurlyPhi]l32], Times[-4, wwC\[CurlyPhi]l33], Times[12, wwCQQ1], Times[-4, wwCll]}, {{1, 0, 0, -1, -1, 0, 0, 1}, {0, 0, 1, -0.5, -0.5, 0, -0.5, 0.5}}, {{wwC\[CurlyPhi]q3, Times[-0.25, g[W][q][1, 1, 1], g[W][\[Phi]][1]]}, {wwC\[CurlyPhi]Q3, Times[-0.25, g[W][q][1, 3, 3], g[W][\[Phi]][1]]}, {wwC\[CurlyPhi]l31, Times[-0.25, g[W][L][1, 1, 1], g[W][\[Phi]][1]]}, {wwC\[CurlyPhi]l32, Times[-0.25, g[W][L][1, 2, 2], g[W][\[Phi]][1]]}, {wwC\[CurlyPhi]l33, Times[-0.25, g[W][L][1, 3, 3], g[W][\[Phi]][1]]}, {wwCQQ1, Times[0.0833333, Power[g[W][q][1, 3, 3], 2]]}, {wwCll, Times[-0.25, g[W][L][1, 1, 1], g[W][L][1, 2, 2]]}, {wwCt\[CurlyPhi], Times[-0.350824, 0.707107, Power[g[W][\[Phi]][1], 2]]}}, {wwC\[CurlyPhi]d -> cpd, wwC\[CurlyPhi]qm -> cpqMi, wwC\[CurlyPhi]Qm -> cpQM, wwC\[CurlyPhi]q3 -> c3pq, wwC\[CurlyPhi]Q3 -> c3pQ3, wwC\[CurlyPhi]l31 -> c3pl1, wwC\[CurlyPhi]l32 -> c3pl2, wwC\[CurlyPhi]l33 -> c3pl3, wwCQQ1 -> cQQ1, wwCQQ8 -> cQQ8, wwCll -> cll, wwCb\[CurlyPhi] -> cbp, wwCt\[CurlyPhi] -> ctp, wwC\[Tau]\[CurlyPhi] -> ctap}, Times[-2.85043, 1.41421, wwCt\[CurlyPhi]], -2]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# A possible basis of L.I. WCs
+-4*c3pq
+-4*c3pl1
+-4*c3pl2
+-4*c3pl3
+12*cQQ1
+-4*cll
+# ~~~~~~~~~~~~~~~~~~~~~~
+# UV couplings in this model
+u1 = g(W)(L)(1,1,1)
+u2 = g(W)(L)(1,2,2)
+u3 = g(W)(L)(1,3,3)
+u4 = g(W)(q)(1,1,1)
+u5 = g(W)(q)(1,3,3)
+u6 = g(W)(\[Phi])(1)
+# ~~~~~~~~~~~~~~~~~~~~~~
+# UV coupling combinations invariant under sign ambiguities in this model
+invar1 = Abs(g(W)(q)(1,3,3))
+invar2 = g(W)(q)(1,1,1)*g(W)(\[Phi])(1)
+invar3 = g(W)(L)(1,1,1)*g(W)(\[Phi])(1)
+invar4 = g(W)(L)(1,2,2)*g(W)(\[Phi])(1)
+invar5 = g(W)(L)(1,3,3)*g(W)(\[Phi])(1)
+invar6 = g(W)(L)(1,1,1)*g(W)(L)(1,2,2)
+# ~~~~~~~~~~~~~~~~~~~~~~
+# UV coupling combinations invariant under sign ambiguities, in terms of the WCs
+invar1 = 2*Sqrt(3)*Sqrt(Abs(cQQ1))
+invar2 = -4*c3pq
+invar3 = -4*c3pl1
+invar4 = -4*c3pl2
+invar5 = -4*c3pl3
+invar6 = -4*cll

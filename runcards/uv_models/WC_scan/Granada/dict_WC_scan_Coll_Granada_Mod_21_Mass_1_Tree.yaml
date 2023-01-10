@@ -1,0 +1,139 @@
+# UV dictionary for WC scan. Tree-level matching.
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 21
+Model name : B
+# ~~~~~~~~~~~~~~~~~~~~~~
+# WCs to set to zero
+cpG : 0
+cpB : 0
+cpW : 0
+cpWB : 0
+cWWW : 0
+c3pq : 0
+c3pQ3 : 0
+cpl1 : 0
+cpl2 : 0
+cpl3 : 0
+c3pl1 : 0
+c3pl2 : 0
+c3pl3 : 0
+c81qq : 0
+c11qq : 0
+c83qq : 0
+c13qq : 0
+c8qt : 0
+c1qt : 0
+c8ut : 0
+c1ut : 0
+c8qu : 0
+c1qu : 0
+c8dt : 0
+c8qd : 0
+cQQ8 : 0
+cQt8 : 0
+cll : 0
+cbp : 0
+ctp : 0
+ctG : 0
+ccp : 0
+ctap : 0
+ctW : 0
+ctZ : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# WCs to be fitted
+cpd
+cpD
+cpqMi
+cpQM
+cpui
+cpdi
+cpt
+cpe
+cpmu
+cpta
+c1dt
+c1qd
+cQQ1
+cQt1
+ctt1
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Number of L.I. WCs
+9
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Unrelated WCs
+cpqMi
+cpQM
+cpui
+cpdi
+cpt
+cpe
+cpmu
+cpta
+c1dt
+c1qd
+cQQ1
+cQt1
+ctt1
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Linear Relations among WCs
+cpD=-4*cpd
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Positively defined WCs
+cpd >= 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Negatively defined WCs
+cpD <= 0
+cQQ1 <= 0
+ctt1 <= 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Multiplicative relations among WCs
+relationMultPrinterSelect[{Times[2, wwC\[CurlyPhi]d], Times[-1, wwC\[CurlyPhi]qm], Times[-1, wwC\[CurlyPhi]Qm], Times[-1, wwC\[CurlyPhi]ui], Times[-1, wwC\[CurlyPhi]di], Times[-1, wwC\[CurlyPhi]t], Times[-1, wwC\[CurlyPhi]e], Times[-1, wwC\[CurlyPhi]\[Mu]], Times[-1, wwC\[CurlyPhi]\[Tau]], Times[-1, wwCtd1], Times[-1, wwCQd1], Times[-1, wwCQQ1], Times[-1, wwCQt1], Times[-2, wwCtt1]}, {{1, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0, 1}, {0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, -1, 1}, {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, -1, 0, 1, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 1, -1}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -2, 1}}, {{wwC\[CurlyPhi]d, Times[0.5, Power[g[B][\[Phi]][1], 2]]}, {wwC\[CurlyPhi]qm, Times[-1, g[B][q][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]Qm, Times[-1, g[B][q][1, 3, 3], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]ui, Times[-1, g[B][u][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]di, Times[-1, g[B][d][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]t, Times[-1, g[B][u][1, 3, 3], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]e, Times[-1, g[B][e][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]\[Mu], Times[-1, g[B][e][1, 2, 2], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]\[Tau], Times[-1, g[B][e][1, 3, 3], g[B][\[Phi]][1]]}, {wwCtd1, Times[-1, g[B][d][1, 1, 1], g[B][u][1, 3, 3]]}, {wwCQd1, Times[-1, g[B][d][1, 1, 1], g[B][q][1, 3, 3]]}, {wwCQQ1, Times[-1, Power[g[B][q][1, 3, 3], 2]]}, {wwCQt1, Times[-1, g[B][q][1, 3, 3], g[B][u][1, 3, 3]]}, {wwCtt1, Times[-0.5, Power[g[B][u][1, 3, 3], 2]]}}, {wwC\[CurlyPhi]d -> cpd, wwC\[CurlyPhi]D -> cpD, wwC\[CurlyPhi]qm -> cpqMi, wwC\[CurlyPhi]Qm -> cpQM, wwC\[CurlyPhi]ui -> cpui, wwC\[CurlyPhi]di -> cpdi, wwC\[CurlyPhi]t -> cpt, wwC\[CurlyPhi]e -> cpe, wwC\[CurlyPhi]\[Mu] -> cpmu, wwC\[CurlyPhi]\[Tau] -> cpta, wwCtd1 -> c1dt, wwCQd1 -> c1qd, wwCQQ1 -> cQQ1, wwCQt1 -> cQt1, wwCtt1 -> ctt1}, Times[-1, wwCQQ1], -1]
+relationMultPrinterSelect[{Times[2, wwC\[CurlyPhi]d], Times[-1, wwC\[CurlyPhi]qm], Times[-1, wwC\[CurlyPhi]Qm], Times[-1, wwC\[CurlyPhi]ui], Times[-1, wwC\[CurlyPhi]di], Times[-1, wwC\[CurlyPhi]t], Times[-1, wwC\[CurlyPhi]e], Times[-1, wwC\[CurlyPhi]\[Mu]], Times[-1, wwC\[CurlyPhi]\[Tau]], Times[-1, wwCtd1], Times[-1, wwCQd1], Times[-1, wwCQQ1], Times[-1, wwCQt1], Times[-2, wwCtt1]}, {{1, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0, 1}, {0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, -1, 1}, {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, -1, 0, 1, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 1, -1}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -2, 1}}, {{wwC\[CurlyPhi]d, Times[0.5, Power[g[B][\[Phi]][1], 2]]}, {wwC\[CurlyPhi]qm, Times[-1, g[B][q][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]Qm, Times[-1, g[B][q][1, 3, 3], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]ui, Times[-1, g[B][u][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]di, Times[-1, g[B][d][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]t, Times[-1, g[B][u][1, 3, 3], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]e, Times[-1, g[B][e][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]\[Mu], Times[-1, g[B][e][1, 2, 2], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]\[Tau], Times[-1, g[B][e][1, 3, 3], g[B][\[Phi]][1]]}, {wwCtd1, Times[-1, g[B][d][1, 1, 1], g[B][u][1, 3, 3]]}, {wwCQd1, Times[-1, g[B][d][1, 1, 1], g[B][q][1, 3, 3]]}, {wwCQQ1, Times[-1, Power[g[B][q][1, 3, 3], 2]]}, {wwCQt1, Times[-1, g[B][q][1, 3, 3], g[B][u][1, 3, 3]]}, {wwCtt1, Times[-0.5, Power[g[B][u][1, 3, 3], 2]]}}, {wwC\[CurlyPhi]d -> cpd, wwC\[CurlyPhi]D -> cpD, wwC\[CurlyPhi]qm -> cpqMi, wwC\[CurlyPhi]Qm -> cpQM, wwC\[CurlyPhi]ui -> cpui, wwC\[CurlyPhi]di -> cpdi, wwC\[CurlyPhi]t -> cpt, wwC\[CurlyPhi]e -> cpe, wwC\[CurlyPhi]\[Mu] -> cpmu, wwC\[CurlyPhi]\[Tau] -> cpta, wwCtd1 -> c1dt, wwCQd1 -> c1qd, wwCQQ1 -> cQQ1, wwCQt1 -> cQt1, wwCtt1 -> ctt1}, Times[-1, wwCtd1], -2]
+relationMultPrinterSelect[{Times[2, wwC\[CurlyPhi]d], Times[-1, wwC\[CurlyPhi]qm], Times[-1, wwC\[CurlyPhi]Qm], Times[-1, wwC\[CurlyPhi]ui], Times[-1, wwC\[CurlyPhi]di], Times[-1, wwC\[CurlyPhi]t], Times[-1, wwC\[CurlyPhi]e], Times[-1, wwC\[CurlyPhi]\[Mu]], Times[-1, wwC\[CurlyPhi]\[Tau]], Times[-1, wwCtd1], Times[-1, wwCQd1], Times[-1, wwCQQ1], Times[-1, wwCQt1], Times[-2, wwCtt1]}, {{1, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0, 1}, {0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, -1, 1}, {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, -1, 0, 1, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 1, -1}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -2, 1}}, {{wwC\[CurlyPhi]d, Times[0.5, Power[g[B][\[Phi]][1], 2]]}, {wwC\[CurlyPhi]qm, Times[-1, g[B][q][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]Qm, Times[-1, g[B][q][1, 3, 3], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]ui, Times[-1, g[B][u][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]di, Times[-1, g[B][d][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]t, Times[-1, g[B][u][1, 3, 3], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]e, Times[-1, g[B][e][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]\[Mu], Times[-1, g[B][e][1, 2, 2], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]\[Tau], Times[-1, g[B][e][1, 3, 3], g[B][\[Phi]][1]]}, {wwCtd1, Times[-1, g[B][d][1, 1, 1], g[B][u][1, 3, 3]]}, {wwCQd1, Times[-1, g[B][d][1, 1, 1], g[B][q][1, 3, 3]]}, {wwCQQ1, Times[-1, Power[g[B][q][1, 3, 3], 2]]}, {wwCQt1, Times[-1, g[B][q][1, 3, 3], g[B][u][1, 3, 3]]}, {wwCtt1, Times[-0.5, Power[g[B][u][1, 3, 3], 2]]}}, {wwC\[CurlyPhi]d -> cpd, wwC\[CurlyPhi]D -> cpD, wwC\[CurlyPhi]qm -> cpqMi, wwC\[CurlyPhi]Qm -> cpQM, wwC\[CurlyPhi]ui -> cpui, wwC\[CurlyPhi]di -> cpdi, wwC\[CurlyPhi]t -> cpt, wwC\[CurlyPhi]e -> cpe, wwC\[CurlyPhi]\[Mu] -> cpmu, wwC\[CurlyPhi]\[Tau] -> cpta, wwCtd1 -> c1dt, wwCQd1 -> c1qd, wwCQQ1 -> cQQ1, wwCQt1 -> cQt1, wwCtt1 -> ctt1}, Times[-1, wwC\[CurlyPhi]di], -3]
+relationMultPrinterSelect[{Times[2, wwC\[CurlyPhi]d], Times[-1, wwC\[CurlyPhi]qm], Times[-1, wwC\[CurlyPhi]Qm], Times[-1, wwC\[CurlyPhi]ui], Times[-1, wwC\[CurlyPhi]di], Times[-1, wwC\[CurlyPhi]t], Times[-1, wwC\[CurlyPhi]e], Times[-1, wwC\[CurlyPhi]\[Mu]], Times[-1, wwC\[CurlyPhi]\[Tau]], Times[-1, wwCtd1], Times[-1, wwCQd1], Times[-1, wwCQQ1], Times[-1, wwCQt1], Times[-2, wwCtt1]}, {{1, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0, 1}, {0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, -1, 1}, {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, -1, 0, 1, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 1, -1}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -2, 1}}, {{wwC\[CurlyPhi]d, Times[0.5, Power[g[B][\[Phi]][1], 2]]}, {wwC\[CurlyPhi]qm, Times[-1, g[B][q][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]Qm, Times[-1, g[B][q][1, 3, 3], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]ui, Times[-1, g[B][u][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]di, Times[-1, g[B][d][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]t, Times[-1, g[B][u][1, 3, 3], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]e, Times[-1, g[B][e][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]\[Mu], Times[-1, g[B][e][1, 2, 2], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]\[Tau], Times[-1, g[B][e][1, 3, 3], g[B][\[Phi]][1]]}, {wwCtd1, Times[-1, g[B][d][1, 1, 1], g[B][u][1, 3, 3]]}, {wwCQd1, Times[-1, g[B][d][1, 1, 1], g[B][q][1, 3, 3]]}, {wwCQQ1, Times[-1, Power[g[B][q][1, 3, 3], 2]]}, {wwCQt1, Times[-1, g[B][q][1, 3, 3], g[B][u][1, 3, 3]]}, {wwCtt1, Times[-0.5, Power[g[B][u][1, 3, 3], 2]]}}, {wwC\[CurlyPhi]d -> cpd, wwC\[CurlyPhi]D -> cpD, wwC\[CurlyPhi]qm -> cpqMi, wwC\[CurlyPhi]Qm -> cpQM, wwC\[CurlyPhi]ui -> cpui, wwC\[CurlyPhi]di -> cpdi, wwC\[CurlyPhi]t -> cpt, wwC\[CurlyPhi]e -> cpe, wwC\[CurlyPhi]\[Mu] -> cpmu, wwC\[CurlyPhi]\[Tau] -> cpta, wwCtd1 -> c1dt, wwCQd1 -> c1qd, wwCQQ1 -> cQQ1, wwCQt1 -> cQt1, wwCtt1 -> ctt1}, Times[-1, wwC\[CurlyPhi]Qm], -4]
+relationMultPrinterSelect[{Times[2, wwC\[CurlyPhi]d], Times[-1, wwC\[CurlyPhi]qm], Times[-1, wwC\[CurlyPhi]Qm], Times[-1, wwC\[CurlyPhi]ui], Times[-1, wwC\[CurlyPhi]di], Times[-1, wwC\[CurlyPhi]t], Times[-1, wwC\[CurlyPhi]e], Times[-1, wwC\[CurlyPhi]\[Mu]], Times[-1, wwC\[CurlyPhi]\[Tau]], Times[-1, wwCtd1], Times[-1, wwCQd1], Times[-1, wwCQQ1], Times[-1, wwCQt1], Times[-2, wwCtt1]}, {{1, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0, 1}, {0, 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 0, -1, 1}, {0, 0, 0, 0, 1, -1, 0, 0, 0, 0, -1, 0, 1, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, 0, 1, -1}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -2, 1}}, {{wwC\[CurlyPhi]d, Times[0.5, Power[g[B][\[Phi]][1], 2]]}, {wwC\[CurlyPhi]qm, Times[-1, g[B][q][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]Qm, Times[-1, g[B][q][1, 3, 3], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]ui, Times[-1, g[B][u][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]di, Times[-1, g[B][d][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]t, Times[-1, g[B][u][1, 3, 3], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]e, Times[-1, g[B][e][1, 1, 1], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]\[Mu], Times[-1, g[B][e][1, 2, 2], g[B][\[Phi]][1]]}, {wwC\[CurlyPhi]\[Tau], Times[-1, g[B][e][1, 3, 3], g[B][\[Phi]][1]]}, {wwCtd1, Times[-1, g[B][d][1, 1, 1], g[B][u][1, 3, 3]]}, {wwCQd1, Times[-1, g[B][d][1, 1, 1], g[B][q][1, 3, 3]]}, {wwCQQ1, Times[-1, Power[g[B][q][1, 3, 3], 2]]}, {wwCQt1, Times[-1, g[B][q][1, 3, 3], g[B][u][1, 3, 3]]}, {wwCtt1, Times[-0.5, Power[g[B][u][1, 3, 3], 2]]}}, {wwC\[CurlyPhi]d -> cpd, wwC\[CurlyPhi]D -> cpD, wwC\[CurlyPhi]qm -> cpqMi, wwC\[CurlyPhi]Qm -> cpQM, wwC\[CurlyPhi]ui -> cpui, wwC\[CurlyPhi]di -> cpdi, wwC\[CurlyPhi]t -> cpt, wwC\[CurlyPhi]e -> cpe, wwC\[CurlyPhi]\[Mu] -> cpmu, wwC\[CurlyPhi]\[Tau] -> cpta, wwCtd1 -> c1dt, wwCQd1 -> c1qd, wwCQQ1 -> cQQ1, wwCQt1 -> cQt1, wwCtt1 -> ctt1}, Times[2, wwC\[CurlyPhi]d], -5]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# A possible basis of L.I. WCs
+-cpqMi
+-cpui
+-cpt
+-cpe
+-cpmu
+-cpta
+-c1qd
+-cQt1
+-2*ctt1
+# ~~~~~~~~~~~~~~~~~~~~~~
+# UV couplings in this model
+u1 = g(B)(d)(1,1,1)
+u2 = g(B)(e)(1,1,1)
+u3 = g(B)(e)(1,2,2)
+u4 = g(B)(e)(1,3,3)
+u5 = g(B)(q)(1,1,1)
+u6 = g(B)(q)(1,3,3)
+u7 = g(B)(u)(1,1,1)
+u8 = g(B)(u)(1,3,3)
+u9 = g(B)(\[Phi])(1)
+# ~~~~~~~~~~~~~~~~~~~~~~
+# UV coupling combinations invariant under sign ambiguities in this model
+invar1 = Abs(g(B)(u)(1,3,3))
+invar2 = (g(B)(u)(1,3,3)*g(B)(\[Phi])(1))/Abs(g(B)(u)(1,3,3))
+invar3 = (g(B)(q)(1,1,1)*g(B)(\[Phi])(1))/Abs(g(B)(\[Phi])(1))
+invar4 = (g(B)(u)(1,1,1)*g(B)(\[Phi])(1))/Abs(g(B)(\[Phi])(1))
+invar5 = (g(B)(e)(1,1,1)*g(B)(\[Phi])(1))/Abs(g(B)(\[Phi])(1))
+invar6 = (g(B)(e)(1,2,2)*g(B)(\[Phi])(1))/Abs(g(B)(\[Phi])(1))
+invar7 = (g(B)(e)(1,3,3)*g(B)(\[Phi])(1))/Abs(g(B)(\[Phi])(1))
+invar8 = (g(B)(q)(1,3,3)*g(B)(u)(1,3,3))/Abs(g(B)(u)(1,3,3))
+invar9 = (g(B)(d)(1,1,1)*g(B)(q)(1,3,3))/Abs(g(B)(q)(1,3,3))
+# ~~~~~~~~~~~~~~~~~~~~~~
+# UV coupling combinations invariant under sign ambiguities, in terms of the WCs
+invar1 = Sqrt(2)*Sqrt(Abs(ctt1))
+invar2 = -(cpt/(Sqrt(2)*Sqrt(Abs(ctt1))))
+invar3 = -((Sqrt(2)*cpqMi)/Abs(cpt/Sqrt(ctt1)))
+invar4 = -((Sqrt(2)*cpui)/Abs(cpt/Sqrt(ctt1)))
+invar5 = -((Sqrt(2)*cpe)/Abs(cpt/Sqrt(ctt1)))
+invar6 = -((Sqrt(2)*cpmu)/Abs(cpt/Sqrt(ctt1)))
+invar7 = -((Sqrt(2)*cpta)/Abs(cpt/Sqrt(ctt1)))
+invar8 = -(cQt1/(Sqrt(2)*Sqrt(Abs(ctt1))))
+invar9 = -((Sqrt(2)*c1qd)/Abs(cQt1/Sqrt(ctt1)))
