@@ -126,11 +126,11 @@ To get the full posterior using MC, after producing a sufficient number of repli
 the code must be run in the PostFit mode, which discards replicas having <code class="docutils literal notranslate"><span class="pre">chi^2</span></code>
 higher than a certain threshold set by the user and produce the final output file.</p></li>
 <li><p>The final output of the fit is a json file having the following structure</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span><span class="w"></span>
-<span class="nt">  O_1 </span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sample_1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sample_2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">...</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="nt">  O_2 </span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sample_1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sample_2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">...</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">  </span><span class="nv">...</span><span class="w"></span>
-<span class="p p-Indicator">}</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+<span class="nt">  O_1 </span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sample_1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sample_2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">...</span><span class="p p-Indicator">],</span>
+<span class="nt">  O_2 </span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sample_1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sample_2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">...</span><span class="p p-Indicator">],</span>
+<span class="w">  </span><span class="nv">...</span>
+<span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>where each entry correspond to a list of samples of the Wilson coefficient corresponding to the specified operator.

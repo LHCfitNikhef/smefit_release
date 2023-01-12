@@ -135,13 +135,13 @@
 
 
 <div class="viewcode-block" id="check_file"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.check_file">[docs]</a><span class="k">def</span> <span class="nf">check_file</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check if path exists.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if path exists.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="check_missing_oparators"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.check_missing_oparators">[docs]</a><span class="k">def</span> <span class="nf">check_missing_oparators</span><span class="p">(</span><span class="n">loaded_corrections</span><span class="p">,</span> <span class="n">coeff_config</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Check if all the coefficient in the runcard are also present inside the theory tables.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if all the coefficient in the runcard are also present inside the theory tables.&quot;&quot;&quot;</span>
     <span class="n">loaded_corrections</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">loaded_corrections</span><span class="p">)</span>
     <span class="n">missing_operators</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">coeff_config</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">loaded_corrections</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">missing_operators</span> <span class="o">!=</span> <span class="p">[]:</span>
@@ -151,7 +151,7 @@
 
 
 <div class="viewcode-block" id="Loader"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.Loader">[docs]</a><span class="k">class</span> <span class="nc">Loader</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class to check, load commondata and corresponding theory predictions.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to check, load commondata and corresponding theory predictions.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -171,9 +171,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">commondata_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">()</span>
-    <span class="sd">&quot;&quot;&quot;path to commondata folder, commondata excluded&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;path to commondata folder, commondata excluded&quot;&quot;&quot;</span>
     <span class="n">theory_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">commondata_path</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;path to theory folder, theory excluded. Default it assumes to be the same as commondata_path&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;path to theory folder, theory excluded. Default it assumes to be the same as commondata_path&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -215,7 +215,7 @@
         <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_experimental_data</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Loader.load_experimental_data"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.Loader.load_experimental_data">[docs]</a>    <span class="k">def</span> <span class="nf">load_experimental_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load experimental data with corresponding uncertainties</span>
 
 <span class="sd">        Returns</span>
@@ -295,7 +295,7 @@
         <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
         <span class="n">rotation_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load theory predictions</span>
 
 <span class="sd">        Parameters</span>
@@ -374,7 +374,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">n_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Number of data</span>
 
 <span class="sd">        Returns</span>
@@ -386,7 +386,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">central_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Central values</span>
 
 <span class="sd">        Returns</span>
@@ -398,7 +398,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">covmat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Experimental covariance matrix</span>
 
 <span class="sd">        Returns</span>
@@ -410,7 +410,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">theory_covmat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Theory covariance matrix</span>
 
 <span class="sd">        Returns</span>
@@ -422,7 +422,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">sys_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Systematic errors</span>
 
 <span class="sd">        Returns</span>
@@ -434,7 +434,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">sys_error_t0</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Systematic errors modified according to t0 prescription</span>
 
 <span class="sd">        Returns</span>
@@ -446,7 +446,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">stat_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Statistical errors</span>
 
 <span class="sd">        Returns</span>
@@ -458,7 +458,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">sm_prediction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        |SM| prediction for the dataset</span>
 
 <span class="sd">        Returns</span>
@@ -470,7 +470,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">lin_corrections</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        |NHO| corrections</span>
 
 <span class="sd">        Returns</span>
@@ -482,7 +482,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">quad_corrections</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        |HO| corrections</span>
 
 <span class="sd">        Returns</span>
@@ -494,7 +494,7 @@
 
 
 <div class="viewcode-block" id="construct_corrections_matrix"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.construct_corrections_matrix">[docs]</a><span class="k">def</span> <span class="nf">construct_corrections_matrix</span><span class="p">(</span><span class="n">corrections_list</span><span class="p">,</span> <span class="n">n_data_tot</span><span class="p">,</span> <span class="n">sorted_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Construct a unique list of correction name,</span>
 <span class="sd">    with corresponding values.</span>
 
@@ -555,7 +555,7 @@
     <span class="n">rot_to_fit_basis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">has_uv_coupligs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads experimental data, theory and |SMEFT| corrections into a namedtuple</span>
 
 <span class="sd">    Parameters</span>

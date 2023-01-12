@@ -115,7 +115,7 @@
 
 
 <div class="viewcode-block" id="FitManager"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.fit_manager.FitManager">[docs]</a><span class="k">class</span> <span class="nc">FitManager</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class to collect all the fit information,</span>
 <span class="sd">    load the results, compute best theory predictions.</span>
 
@@ -165,7 +165,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">comapre_name</span>
 
 <div class="viewcode-block" id="FitManager.load_results"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.fit_manager.FitManager.load_results">[docs]</a>    <span class="k">def</span> <span class="nf">load_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load posterior distribution of a fit.</span>
 <span class="sd">        If the fit is produced by and external source it loads</span>
 <span class="sd">        the results. Results are stored in a class attribute</span>
@@ -199,7 +199,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="FitManager.load_configuration"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.fit_manager.FitManager.load_configuration">[docs]</a>    <span class="k">def</span> <span class="nf">load_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Load configuration yaml card.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load configuration yaml card.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -212,7 +212,7 @@
         <span class="k">return</span> <span class="n">config</span></div>
 
 <div class="viewcode-block" id="FitManager.load_datasets"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.fit_manager.FitManager.load_datasets">[docs]</a>    <span class="k">def</span> <span class="nf">load_datasets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Load all datasets.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load all datasets.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="n">load_datasets</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data_path&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;datasets&quot;</span><span class="p">],</span>
@@ -229,7 +229,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">smeft_predictions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute |SMEFT| predictions for each replica.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute |SMEFT| predictions for each replica.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -254,12 +254,12 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;coefficient manager&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;coefficient manager&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">CoefficientManager</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">n_replica</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Number of replicas&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of replicas&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 </pre></div>
 

@@ -108,46 +108,46 @@
 <p>It is possible to perform a fit in any desired basis.
 The user then needs to specify the rotation matrix between the fitting and the Warsaw basis.
 This has to be specified in a <code class="docutils literal notranslate"><span class="pre">.json</span></code> file, whose absolute path has to be placed in the runcard</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rotation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/rotatio/matrix/rotation.json</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rotation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/rotatio/matrix/rotation.json</span>
 </pre></div>
 </div>
 <p>The file <code class="docutils literal notranslate"><span class="pre">rotation.json</span></code> will look like</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span><span class="w"></span>
-<span class="nt">    name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;example&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="nt">    warsaw</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;Ow_1&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;Ow_2&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;Ow_3&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;Ow_4&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">        </span><span class="nv">...</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="nt">    new_basis</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;Of_1&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;Of_2&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;Of_3&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;Of_4&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">        </span><span class="nv">...</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="nt">    matrix</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">            </span><span class="nv">R_11</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">            </span><span class="nv">R_12</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">            </span><span class="nv">R_13</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">            </span><span class="nv">R_14</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">            </span><span class="nv">...</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">        </span><span class="nv">...</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">            </span><span class="nv">R_n1</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">            </span><span class="nv">R_n2</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">            </span><span class="nv">R_n3</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">            </span><span class="nv">R_n4</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">            </span><span class="nv">...</span><span class="w"></span>
-<span class="w">        </span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">]</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+<span class="nt">    name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;example&quot;</span><span class="p p-Indicator">,</span>
+<span class="nt">    warsaw</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">        </span><span class="s">&quot;Ow_1&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;Ow_2&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;Ow_3&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;Ow_4&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="nv">...</span>
+<span class="w">    </span><span class="p p-Indicator">],</span>
+<span class="nt">    new_basis</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">        </span><span class="s">&quot;Of_1&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;Of_2&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;Of_3&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="s">&quot;Of_4&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">        </span><span class="nv">...</span>
+<span class="w">    </span><span class="p p-Indicator">],</span>
+<span class="nt">    matrix</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">        </span><span class="p p-Indicator">[</span>
+<span class="w">            </span><span class="nv">R_11</span><span class="p p-Indicator">,</span>
+<span class="w">            </span><span class="nv">R_12</span><span class="p p-Indicator">,</span>
+<span class="w">            </span><span class="nv">R_13</span><span class="p p-Indicator">,</span>
+<span class="w">            </span><span class="nv">R_14</span><span class="p p-Indicator">,</span>
+<span class="w">            </span><span class="nv">...</span>
+<span class="w">        </span><span class="p p-Indicator">],</span>
+<span class="w">        </span><span class="nv">...</span>
+<span class="w">        </span><span class="p p-Indicator">[</span>
+<span class="w">            </span><span class="nv">R_n1</span><span class="p p-Indicator">,</span>
+<span class="w">            </span><span class="nv">R_n2</span><span class="p p-Indicator">,</span>
+<span class="w">            </span><span class="nv">R_n3</span><span class="p p-Indicator">,</span>
+<span class="w">            </span><span class="nv">R_n4</span><span class="p p-Indicator">,</span>
+<span class="w">            </span><span class="nv">...</span>
+<span class="w">        </span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="p p-Indicator">]</span>
 
 
-<span class="p p-Indicator">}</span><span class="w"></span>
+<span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">warsaw</span></code> : list of the <code class="docutils literal notranslate"><span class="pre">n</span></code> operators <code class="docutils literal notranslate"><span class="pre">Ow_i</span></code> in the Warsaw basis entering the theory tables,</p>

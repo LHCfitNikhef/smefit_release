@@ -130,7 +130,7 @@ As example we will refer to the runcard to reproduce <code class="docutils liter
 available from the repository <a class="reference external" href="https://github.com/LHCfitNikhef/smefit_database">smefit_database</a>
 together with the files containing experimental data and the corresponding theory predictions.
 After cloning the repository, run</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">python update_runcards_path.py -d /path/to/runcard/destination/ runcards/NS_GLOBAL_NLO_NHO.yaml</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">python update_runcards_path.py -d /path/to/runcard/destination/ runcards/NS_GLOBAL_NLO_NHO.yaml</span>
 </pre></div>
 </div>
 <p>This will create in <code class="docutils literal notranslate"><span class="pre">/path/to/runcard/destination/</span></code> a <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code> runcard ready to be used on the local machine of the user, pointing to the experimental data and an theory tables in the repository smefit_database.
@@ -144,10 +144,10 @@ The user can change them manually if other set of data are desired.
 The folder where the results will be saved can be set using <code class="docutils literal notranslate"><span class="pre">result_path</span></code>. The file containing
 the posterior of the fitted Wilson coefficient will be saved in <code class="docutils literal notranslate"><span class="pre">resulth_path/result_ID</span></code>.
 If <code class="docutils literal notranslate"><span class="pre">result_ID</span></code> is not provided, it will be automatically set to the name of the runcard (and any already existing result will be overwritten).</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">result_ID</span><span class="p">:</span><span class="w"></span>
-<span class="nt">result_path</span><span class="p">:</span><span class="w"></span>
-<span class="nt">data_path</span><span class="p">:</span><span class="w"></span>
-<span class="nt">theory_path</span><span class="p">:</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">result_ID</span><span class="p">:</span>
+<span class="nt">result_path</span><span class="p">:</span>
+<span class="nt">data_path</span><span class="p">:</span>
+<span class="nt">theory_path</span><span class="p">:</span>
 </pre></div>
 </div>
 </section>
@@ -157,10 +157,10 @@ If <code class="docutils literal notranslate"><span class="pre">result_ID</span>
 <code class="docutils literal notranslate"><span class="pre">use_quad</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">True</span></code> for a fit with quadratic corrections, <code class="docutils literal notranslate"><span class="pre">use_t0</span></code> controls the use
 of the <code class="docutils literal notranslate"><span class="pre">t0</span></code> prescription and <code class="docutils literal notranslate"><span class="pre">use_theory_covmat</span></code> specifies whether or not to use the theory covariance matrix
 which can be specified in the theory files.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO</span><span class="w"></span>
-<span class="nt">use_quad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
-<span class="nt">use_t0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
-<span class="nt">use_theory_covmat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO</span>
+<span class="nt">use_quad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">use_t0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">use_theory_covmat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 </pre></div>
 </div>
 </section>
@@ -172,21 +172,21 @@ will be fit one at time, setting all the others to 0. See <a class="reference ex
 If <code class="docutils literal notranslate"><span class="pre">pairwise_fits</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the minimizer carries out an automated series of pair-wise fits to all possible pairs of
 Wilson coefficients that  are specified in the run-card.
 Pairwise fits are supported only with |NS|.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pairwise_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
-<span class="nt">single_parameter_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"></span>
-<span class="nt">bounds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Null</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pairwise_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">single_parameter_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="nt">bounds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Null</span>
 
-<span class="c1"># NS settings</span><span class="w"></span>
-<span class="nt">nlive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span><span class="w"></span>
-<span class="nt">efr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.005</span><span class="w"></span>
-<span class="nt">ceff</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"></span>
-<span class="nt">toll</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span><span class="w"></span>
+<span class="c1"># NS settings</span>
+<span class="nt">nlive</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="nt">efr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.005</span>
+<span class="nt">ceff</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">toll</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
 
-<span class="c1">#MC settings</span><span class="w"></span>
-<span class="nt">mc_minimiser</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;cma&#39;</span><span class="w"></span>
-<span class="nt">restarts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7</span><span class="w"></span>
-<span class="nt">maxiter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span><span class="w"></span>
-<span class="nt">chi2_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.0</span><span class="w"></span>
+<span class="c1">#MC settings</span>
+<span class="nt">mc_minimiser</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;cma&#39;</span>
+<span class="nt">restarts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7</span>
+<span class="nt">maxiter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100000</span>
+<span class="nt">chi2_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.0</span>
 </pre></div>
 </div>
 </section>
@@ -194,31 +194,31 @@ Pairwise fits are supported only with |NS|.</p>
 <h3>Datasets to consider and coefficients to fit<a class="headerlink" href="#datasets-to-consider-and-coefficients-to-fit" title="Permalink to this heading"></a></h3>
 <p>The datasets and Wilson coefficients to be included in the analysis must be listed under <code class="docutils literal notranslate"><span class="pre">datasets</span></code>
 and <code class="docutils literal notranslate"><span class="pre">coefficients</span></code> respectively.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">datasets</span><span class="p">:</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">datasets</span><span class="p">:</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_8TeV_ljets_Mtt</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_8TeV_dilep_Mtt</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_8TeV_ljets_Ytt</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt2D_8TeV_dilep_MttYtt</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_ljets_2015_Mtt</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_dilep_2015_Mtt</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_ljets_2016_Mtt</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_dilep_2016_Mtt</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_13TeV_ljets_2016_Mtt</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_CMS_tt_AC_8TeV</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_AC_13TeV</span><span class="w"></span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_8TeV_ljets_Mtt</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_8TeV_dilep_Mtt</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_8TeV_ljets_Ytt</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt2D_8TeV_dilep_MttYtt</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_ljets_2015_Mtt</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_dilep_2015_Mtt</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_ljets_2016_Mtt</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_dilep_2016_Mtt</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_13TeV_ljets_2016_Mtt</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_CMS_tt_AC_8TeV</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_AC_13TeV</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 
-<span class="c1"># Coefficients to fit</span><span class="w"></span>
-<span class="nt">coefficients</span><span class="p">:</span><span class="w"></span>
+<span class="c1"># Coefficients to fit</span>
+<span class="nt">coefficients</span><span class="p">:</span>
 
-<span class="w">  </span><span class="nt">OpQM</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-10</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">10</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">O3pQ3</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-2.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">2.0</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">Opt</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-25.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">15.0</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">OtW</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
+<span class="w">  </span><span class="nt">OpQM</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-10</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">10</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">O3pQ3</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-2.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">2.0</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">Opt</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-25.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">15.0</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">OtW</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </pre></div>
 </div>
 <p>As exemplified above, the syntax to specify the Wilson coefficient corresponding to the operator
@@ -230,16 +230,16 @@ will perform the sampling.</p>
 <p>Some Wilson coefficients are not directly fit, but rather constrained to be linear combinations
 of the other ones. Taking as example some coefficient of the Higgs sector considered in <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code>,
 this can be specified in the runcard in the following way</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">OpWB</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-0.3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">OpD</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">OpqMi</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;constrain&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="s">&#39;OpD&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">0.9248</span><span class="p p-Indicator">},{</span><span class="s">&#39;OpWB&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.8347</span><span class="p p-Indicator">}],</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-30</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">30</span><span class="p p-Indicator">}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">O3pq</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;constrain&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="s">&#39;OpD&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-0.8415</span><span class="p p-Indicator">},{</span><span class="s">&#39;OpWB&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-1.8347</span><span class="p p-Indicator">}],</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">}</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">OpWB</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-0.3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">0.5</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">OpD</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-1.0</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">OpqMi</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;constrain&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="s">&#39;OpD&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">0.9248</span><span class="p p-Indicator">},{</span><span class="s">&#39;OpWB&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.8347</span><span class="p p-Indicator">}],</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-30</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">30</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">O3pq</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;constrain&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="s">&#39;OpD&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-0.8415</span><span class="p p-Indicator">},{</span><span class="s">&#39;OpWB&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-1.8347</span><span class="p p-Indicator">}],</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1.0</span><span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>In this example the coefficients <code class="docutils literal notranslate"><span class="pre">CpqMi</span></code> and <code class="docutils literal notranslate"><span class="pre">C3pq</span></code> correspondong to the operators
 <code class="docutils literal notranslate"><span class="pre">OpqMi</span></code> and <code class="docutils literal notranslate"><span class="pre">O3pq</span></code> will be set to</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">CpqMi = 0.9248*CpD + 1.8347*CpWB</span><span class="w"></span>
-<span class="l l-Scalar l-Scalar-Plain">C3pq = -0.8415*CpD -1.8347*CpWB</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">CpqMi = 0.9248*CpD + 1.8347*CpWB</span>
+<span class="l l-Scalar l-Scalar-Plain">C3pq = -0.8415*CpD -1.8347*CpWB</span>
 </pre></div>
 </div>
 </section>
@@ -249,7 +249,7 @@ this can be specified in the runcard in the following way</p>
 In this case the coefficients specified in the runcard should be the ones to fit, and
 a rotation basis defining the new basis in terms of the Warsaw basis should be given as input. This can be done
 using the option below.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rot_to_fit_basis</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/rotation/rotation.json</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rot_to_fit_basis</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/rotation/rotation.json</span>
 </pre></div>
 </div>
 </section>
@@ -257,7 +257,7 @@ using the option below.</p>
 <section id="running-a-fit-with-ns">
 <span id="ns"></span><h2>Running a fit with NS<a class="headerlink" href="#running-a-fit-with-ns" title="Permalink to this heading"></a></h2>
 <p>To run a fiy using Nested Sampling use the command</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit NS path/to/the/runcard/runcard.yaml</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit NS path/to/the/runcard/runcard.yaml</span>
 </pre></div>
 </div>
 <p>This will generate a file named <code class="docutils literal notranslate"><span class="pre">posterior.json</span></code> in the result folder,
@@ -266,14 +266,14 @@ containing the posterior distribution of the coefficients specified in the runca
 <section id="running-a-fit-with-mc">
 <span id="mc"></span><h2>Running a fit with MC<a class="headerlink" href="#running-a-fit-with-mc" title="Permalink to this heading"></a></h2>
 <p>The basic command to run a fit using Monte Carlo is</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    smefit MC path/to/the/runcard/runcard.yaml -n replica_number
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>MC<span class="w"> </span>path/to/the/runcard/runcard.yaml<span class="w"> </span>-n<span class="w"> </span>replica_number
 </pre></div>
 </div>
 <p>This will produce a file called <code class="docutils literal notranslate"><span class="pre">replica_&lt;replica_number&gt;/coefficients_rep_&lt;replica_number&gt;.json</span></code>
 in the result folder, containing the values of the Wilson coefficients for the replica.
 Once an high enough number of replicas have been produced, the results can be merged into the final posterior
 running PostFit</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    smefit PF path/to/the/result/ -n number_of_replicas
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>PF<span class="w"> </span>path/to/the/result/<span class="w"> </span>-n<span class="w"> </span>number_of_replicas
 </pre></div>
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">&lt;number_of_replicas&gt;</span></code> specifies the number of replicas to be used to build the posterior.
@@ -286,7 +286,7 @@ The final output is the file <code class="docutils literal notranslate"><span cl
 <p>Given a runcard with a number of Wilson coefficients specified, it is possible to fit each of them in turn,
 keeping all the other ones fix to 0.
 To do this add to the runcard</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">single_parameter_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">single_parameter_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 </pre></div>
 </div>
 <p>and proceed as documented above for a normal fit.
@@ -297,7 +297,7 @@ containing the independent posterior of the fitted Wilson coefficients, obtained
 <h2>Individual parameter scan<a class="headerlink" href="#individual-parameter-scan" title="Permalink to this heading"></a></h2>
 <p>The code can also be used to produce 1-dimensional scans of the chi2 function.
 The command</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>    smefit SCAN /path/to/the/runcard/runcard.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>SCAN<span class="w"> </span>/path/to/the/runcard/runcard.yaml
 </pre></div>
 </div>
 <p>will produce in the results folder a series of pdf files containing plots for

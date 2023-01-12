@@ -124,7 +124,7 @@
 
 
 <div class="viewcode-block" id="NSOptimizer"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer">[docs]</a><span class="k">class</span> <span class="nc">NSOptimizer</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Optimizer specification for |NS|</span>
 
 <span class="sd">    Parameters</span>
@@ -180,7 +180,7 @@
 
 <div class="viewcode-block" id="NSOptimizer.from_dict"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create object from theory dictionary.</span>
 
 <span class="sd">        Parameters</span>
@@ -256,7 +256,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="NSOptimizer.chi2_func_ns"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.chi2_func_ns">[docs]</a>    <span class="k">def</span> <span class="nf">chi2_func_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wrap the chi2 in a function for the optimizer. Pass noise and</span>
 <span class="sd">        data info as args. Log the chi2 value and values of the coefficients.</span>
 
@@ -276,7 +276,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NSOptimizer.gaussian_loglikelihood"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.gaussian_loglikelihood">[docs]</a>    <span class="k">def</span> <span class="nf">gaussian_loglikelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypercube</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Multi gaussian log likelihood function</span>
 
 <span class="sd">        Parameters</span>
@@ -293,7 +293,7 @@
         <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func_ns</span><span class="p">(</span><span class="n">hypercube</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NSOptimizer.flat_prior"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.flat_prior">[docs]</a>    <span class="k">def</span> <span class="nf">flat_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypercube</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the prior function</span>
 
 <span class="sd">        Parameters</span>
@@ -311,14 +311,14 @@
         <span class="k">return</span> <span class="n">hypercube</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">+</span> <span class="n">min_val</span></div>
 
 <div class="viewcode-block" id="NSOptimizer.clean"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove raw |NS| output if you want to keep raw output, don&#39;t call this method&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove raw |NS| output if you want to keep raw output, don&#39;t call this method&quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_path</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">live_points</span><span class="si">}</span><span class="s2">_&quot;</span><span class="p">):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">/</span> <span class="n">f</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="NSOptimizer.run_sampling"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.run_sampling">[docs]</a>    <span class="k">def</span> <span class="nf">run_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Run the minimization with Nested Sampling&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the minimization with Nested Sampling&quot;&quot;&quot;</span>
 
         <span class="c1"># Prefix for results</span>
         <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">live_points</span><span class="si">}</span><span class="s2">_&quot;</span>
@@ -356,7 +356,7 @@
         <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time : </span><span class="si">{</span><span class="p">((</span><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> minutes&quot;</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time : </span><span class="si">{</span><span class="p">((</span><span class="n">t2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">60.0</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> minutes&quot;</span><span class="p">)</span>
             <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of samples: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;samples&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span>
@@ -373,7 +373,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NSOptimizer.save"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save |NS| replicas to json inside a dictionary:</span>
 <span class="sd">        {coff: [replicas values]}</span>
 

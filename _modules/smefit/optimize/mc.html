@@ -123,7 +123,7 @@
 
 <div class="viewcode-block" id="MCOptimizer"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer">[docs]</a><span class="k">class</span> <span class="nc">MCOptimizer</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;Optimizer specification for |MC|.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimizer specification for |MC|.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -192,7 +192,7 @@
 
 <div class="viewcode-block" id="MCOptimizer.from_dict"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create object from theory dictionary.</span>
 <span class="sd">        The default minimizer is trust-constr.</span>
 
@@ -288,7 +288,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="MCOptimizer.chi2_func_mc"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.chi2_func_mc">[docs]</a>    <span class="k">def</span> <span class="nf">chi2_func_mc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">print_log</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wrap the chi2 in a function for the optimizer. Pass noise and</span>
 <span class="sd">        data info as args. Log the chi2 value and values of the coefficients.</span>
 
@@ -311,7 +311,7 @@
         <span class="k">return</span> <span class="n">current_chi2</span></div>
 
 <div class="viewcode-block" id="MCOptimizer.run_sampling"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.run_sampling">[docs]</a>    <span class="k">def</span> <span class="nf">run_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Run the minimization with |MC|.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the minimization with |MC|.&quot;&quot;&quot;</span>
 
         <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
@@ -376,10 +376,10 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Minimization was not successful, exit ...&quot;</span><span class="p">)</span>
 
         <span class="n">t2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time : </span><span class="si">{</span><span class="p">((</span><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span><span class="p">)</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> minutes&quot;</span><span class="p">)</span></div>
+        <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time : </span><span class="si">{</span><span class="p">((</span><span class="n">t2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">60.0</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> minutes&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="MCOptimizer.save"><a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save MC replicas to json inside a dictionary:</span>
 <span class="sd">        {coff: replica values}</span>
 

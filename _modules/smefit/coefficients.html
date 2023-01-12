@@ -108,7 +108,7 @@
 
 
 <div class="viewcode-block" id="Coefficient"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.coefficients.Coefficient">[docs]</a><span class="k">class</span> <span class="nc">Coefficient</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Coefficient object</span>
 
 <span class="sd">    Parameters</span>
@@ -164,7 +164,7 @@
 
 <div class="viewcode-block" id="Coefficient.build_additive_factor_dict"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.coefficients.Coefficient.build_additive_factor_dict">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">build_additive_factor_dict</span><span class="p">(</span><span class="n">constrain</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Build the dictionary for each additive factor appearing in the constrain:</span>
 
 <span class="sd">        .. :math:</span>
@@ -207,7 +207,7 @@
         <span class="k">return</span> <span class="bp">self</span>
 
 <div class="viewcode-block" id="Coefficient.update_constrain"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.coefficients.Coefficient.update_constrain">[docs]</a>    <span class="k">def</span> <span class="nf">update_constrain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inv_rotation</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Update the constrain when a new basis is chosen.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the constrain when a new basis is chosen.</span>
 <span class="sd">        Only linear constrain are supported.</span>
 
 <span class="sd">        Parameters</span>
@@ -226,7 +226,7 @@
 
 
 <div class="viewcode-block" id="CoefficientManager"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.coefficients.CoefficientManager">[docs]</a><span class="k">class</span> <span class="nc">CoefficientManager</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Coefficient objcts manager</span>
 
 <span class="sd">    Parameters</span>
@@ -272,7 +272,7 @@
 
 <div class="viewcode-block" id="CoefficientManager.from_dict"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.coefficients.CoefficientManager.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">coefficient_config</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a coefficientManager from a dictionary</span>
 
 <span class="sd">        Parameters</span>
@@ -311,15 +311,15 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">free_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the table containing only free parameters&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the table containing only free parameters&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">is_free</span><span class="p">]</span>
 
 <div class="viewcode-block" id="CoefficientManager.set_free_parameters"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.coefficients.CoefficientManager.set_free_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_free_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the values of the free parmaters&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the values of the free parmaters&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">is_free</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
 
 <div class="viewcode-block" id="CoefficientManager.set_constraints"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.coefficients.CoefficientManager.set_constraints">[docs]</a>    <span class="k">def</span> <span class="nf">set_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets constraints between coefficients according to the</span>
 <span class="sd">        coefficient.constrain information:</span>
 
@@ -347,7 +347,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_table</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">coefficient_fixed</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span></div>
 
 <div class="viewcode-block" id="CoefficientManager.update_constrain"><a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.coefficients.CoefficientManager.update_constrain">[docs]</a>    <span class="k">def</span> <span class="nf">update_constrain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inv_rotation</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Update the constraints according to rotation matrix.</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Update the constraints according to rotation matrix.</span>
 <span class="sd">        Only linear constrain are supported.</span>
 
 <span class="sd">        Parameters</span>

@@ -111,7 +111,7 @@
 <p>Once the file containing the posterior has been produced, the results can be visualized by running a report,
 which can be used for both analysing a single fit or comparing results from multiple ones.
 The report details have to be specified in a separate runcard, and the report is produced by running</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  smefit R /path/to/report/runcard.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">  </span>smefit<span class="w"> </span>R<span class="w"> </span>/path/to/report/runcard.yaml
 </pre></div>
 </div>
 <p>All the plots and tables will be stored in a folder and are avialabe both in HTML and pdf.</p>
@@ -120,28 +120,28 @@ The report details have to be specified in a separate runcard, and the report is
 <p>Here we describe the various runcard entries that can be set to produce a report.
 The runcard is a <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> file where in the first section we specify the input fits we are trying to compare.
 All the following entries are <strong>required</strong>.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1"># report folder name</span><span class="w"></span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;report_folder_name&quot;</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1"># report folder name</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;report_folder_name&quot;</span>
 
-<span class="w">    </span><span class="c1"># report title</span><span class="w"></span>
-<span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Comparison</span><span class="nv"> </span><span class="s">between</span><span class="nv"> </span><span class="s">fit</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">fit</span><span class="nv"> </span><span class="s">2&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># report title</span>
+<span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Comparison</span><span class="nv"> </span><span class="s">between</span><span class="nv"> </span><span class="s">fit</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">fit</span><span class="nv"> </span><span class="s">2&quot;</span>
 
-<span class="w">    </span><span class="c1"># fit namen</span><span class="w"></span>
-<span class="w">    </span><span class="nt">result_IDs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;fit_1&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;fit_2&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># fit namen</span>
+<span class="w">    </span><span class="nt">result_IDs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">      </span><span class="s">&quot;fit_1&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">      </span><span class="s">&quot;fit_2&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="p p-Indicator">]</span>
 
-<span class="w">    </span><span class="c1"># fit labels displayed in the plots</span><span class="w"></span>
-<span class="w">    </span><span class="nt">fit_labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;smefit</span><span class="nv"> </span><span class="s">fit</span><span class="nv"> </span><span class="s">1&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">      </span><span class="s">&quot;smefit</span><span class="nv"> </span><span class="s">fit</span><span class="nv"> </span><span class="s">2&quot;</span><span class="p p-Indicator">,</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># fit labels displayed in the plots</span>
+<span class="w">    </span><span class="nt">fit_labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">      </span><span class="s">&quot;smefit</span><span class="nv"> </span><span class="s">fit</span><span class="nv"> </span><span class="s">1&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">      </span><span class="s">&quot;smefit</span><span class="nv"> </span><span class="s">fit</span><span class="nv"> </span><span class="s">2&quot;</span><span class="p p-Indicator">,</span>
+<span class="w">    </span><span class="p p-Indicator">]</span>
 
-<span class="w">    </span><span class="c1"># path where the report will be saved</span><span class="w"></span>
-<span class="w">    </span><span class="nt">report_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/report/</span><span class="w"></span>
-<span class="w">    </span><span class="c1"># path where the reults are located</span><span class="w"></span>
-<span class="w">    </span><span class="nt">result_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/results/</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># path where the report will be saved</span>
+<span class="w">    </span><span class="nt">report_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/report/</span>
+<span class="w">    </span><span class="c1"># path where the reults are located</span>
+<span class="w">    </span><span class="nt">result_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">path/to/results/</span>
 </pre></div>
 </div>
 <p>The report will be saved in <code class="docutils literal notranslate"><span class="pre">report_path/name</span></code> and will compare the fits having
@@ -151,98 +151,98 @@ whose results are therefore saved in <code class="docutils literal notranslate">
 include in your report and with which settings.
 All the  entries without a value are <strong>optional</strong>, if not present the correspoding analysis/plot will
 be skipped.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># include sumary tables of ffited coefficient and datasets</span><span class="w"></span>
-<span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># include sumary tables of ffited coefficient and datasets</span>
+<span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 
-<span class="c1"># cofficient plots options</span><span class="w"></span>
-<span class="nt">coefficients_plots</span><span class="p">:</span><span class="w"></span>
+<span class="c1"># cofficient plots options</span>
+<span class="nt">coefficients_plots</span><span class="p">:</span>
 
-<span class="w">  </span><span class="c1"># scatter plot with central values and error bands</span><span class="w"></span>
-<span class="w">  </span><span class="nt">scatter_plot</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span><span class="w"></span>
-<span class="w">    </span><span class="nt">x_min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-400</span><span class="w"> </span><span class="c1"># x min value</span><span class="w"></span>
-<span class="w">    </span><span class="nt">x_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">400</span><span class="w"> </span><span class="c1"># x min value</span><span class="w"></span>
-<span class="w">    </span><span class="nt">lin_thr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.01</span><span class="w"> </span><span class="c1"># linear threshold, in ca of x_log</span><span class="w"></span>
-<span class="w">    </span><span class="nt">x_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># use symlog scale on x axis ?</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># scatter plot with central values and error bands</span>
+<span class="w">  </span><span class="nt">scatter_plot</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span>
+<span class="w">    </span><span class="nt">x_min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-400</span><span class="w"> </span><span class="c1"># x min value</span>
+<span class="w">    </span><span class="nt">x_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">400</span><span class="w"> </span><span class="c1"># x min value</span>
+<span class="w">    </span><span class="nt">lin_thr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.01</span><span class="w"> </span><span class="c1"># linear threshold, in ca of x_log</span>
+<span class="w">    </span><span class="nt">x_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># use symlog scale on x axis ?</span>
 
-<span class="w">  </span><span class="c1"># confidence level error band plot</span><span class="w"></span>
-<span class="w">  </span><span class="nt">confidence_level_bar</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">confidence_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">95</span><span class="w"> </span><span class="c1"># Avalable CL are 95% or 68%</span><span class="w"></span>
-<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span><span class="w"></span>
-<span class="w">    </span><span class="nt">plot_cutoff</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">400</span><span class="w"> </span><span class="c1"># value at which show a cut-off dashed line, defult is Null</span><span class="w"></span>
-<span class="w">    </span><span class="nt">x_min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span><span class="w"> </span><span class="c1"># x min value</span><span class="w"></span>
-<span class="w">    </span><span class="nt">x_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span><span class="w"> </span><span class="c1"># x max value</span><span class="w"></span>
-<span class="w">    </span><span class="nt">x_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># use log scale on x axis ?</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># confidence level error band plot</span>
+<span class="w">  </span><span class="nt">confidence_level_bar</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">confidence_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">95</span><span class="w"> </span><span class="c1"># Avalable CL are 95% or 68%</span>
+<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span>
+<span class="w">    </span><span class="nt">plot_cutoff</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">400</span><span class="w"> </span><span class="c1"># value at which show a cut-off dashed line, defult is Null</span>
+<span class="w">    </span><span class="nt">x_min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span><span class="w"> </span><span class="c1"># x min value</span>
+<span class="w">    </span><span class="nt">x_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span><span class="w"> </span><span class="c1"># x max value</span>
+<span class="w">    </span><span class="nt">x_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># use log scale on x axis ?</span>
 
-<span class="w">  </span><span class="c1"># 2 dimensional contour plot</span><span class="w"></span>
-<span class="w">  </span><span class="nt">contours_2d</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">confidence_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">95</span><span class="w"> </span><span class="c1"># Avalable CL are 95% or 68%</span><span class="w"></span>
-<span class="w">    </span><span class="nt">dofs_show</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Op1&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Op2&quot;</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># list of operator to be displayed (will include all the possible pairs), default is Null</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># 2 dimensional contour plot</span>
+<span class="w">  </span><span class="nt">contours_2d</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">confidence_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">95</span><span class="w"> </span><span class="c1"># Avalable CL are 95% or 68%</span>
+<span class="w">    </span><span class="nt">dofs_show</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Op1&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Op2&quot;</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># list of operator to be displayed (will include all the possible pairs), default is Null</span>
 
-<span class="w">  </span><span class="c1"># show the posterior histograms</span><span class="w"></span>
-<span class="w">  </span><span class="nt">posterior_histograms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># show the posterior histograms</span>
+<span class="w">  </span><span class="nt">posterior_histograms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 
-<span class="w">  </span><span class="c1"># show a summary table with all the given bounds</span><span class="w"></span>
-<span class="w">  </span><span class="nt">table</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">round_val</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"> </span><span class="c1"># round values up to</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># show a summary table with all the given bounds</span>
+<span class="w">  </span><span class="nt">table</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">round_val</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"> </span><span class="c1"># round values up to</span>
 
-<span class="w">  </span><span class="c1"># display the smefit logo</span><span class="w"></span>
-<span class="w">  </span><span class="nt">logo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># display the smefit logo</span>
+<span class="w">  </span><span class="nt">logo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
 
-<span class="w">  </span><span class="nt">show_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Null</span><span class="w"> </span><span class="c1"># list of operator to be displayed, default is all (Null)</span><span class="w"></span>
-<span class="w">  </span><span class="nt">hide_dofs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Null</span><span class="w"> </span><span class="c1"># list of operator not to displayed, default is Null</span><span class="w"></span>
+<span class="w">  </span><span class="nt">show_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Null</span><span class="w"> </span><span class="c1"># list of operator to be displayed, default is all (Null)</span>
+<span class="w">  </span><span class="nt">hide_dofs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Null</span><span class="w"> </span><span class="c1"># list of operator not to displayed, default is Null</span>
 
-<span class="w">  </span><span class="c1"># emptry or list of operator per fit which have degenerated solution</span><span class="w"></span>
-<span class="w">  </span><span class="c1"># (to be used only in qudtatic fits)</span><span class="w"></span>
-<span class="w">  </span><span class="nt">double_solution</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">fit_1</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Opdouble1&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Opdouble2&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">    </span><span class="nt">fit_2</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># emptry or list of operator per fit which have degenerated solution</span>
+<span class="w">  </span><span class="c1"># (to be used only in qudtatic fits)</span>
+<span class="w">  </span><span class="nt">double_solution</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">fit_1</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Opdouble1&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Opdouble2&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">fit_2</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
 
-<span class="c1"># correlation plot options</span><span class="w"></span>
-<span class="nt">correlations</span><span class="p">:</span><span class="w"></span>
+<span class="c1"># correlation plot options</span>
+<span class="nt">correlations</span><span class="p">:</span>
 
-<span class="w">  </span><span class="nt">hide_dofs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Null</span><span class="w"> </span><span class="c1"># list of operator not to displayed, default is Null</span><span class="w"></span>
-<span class="w">  </span><span class="nt">thr_show</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w"> </span><span class="c1"># Min value to show, if Null show the full matrix</span><span class="w"></span>
+<span class="w">  </span><span class="nt">hide_dofs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Null</span><span class="w"> </span><span class="c1"># list of operator not to displayed, default is Null</span>
+<span class="w">  </span><span class="nt">thr_show</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w"> </span><span class="c1"># Min value to show, if Null show the full matrix</span>
 
-<span class="c1"># PCA options</span><span class="w"></span>
-<span class="nt">PCA</span><span class="p">:</span><span class="w"></span>
+<span class="c1"># PCA options</span>
+<span class="nt">PCA</span><span class="p">:</span>
 
-<span class="w">  </span><span class="nt">fit_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;fit_1&quot;</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># list of fit for which PCA is performed, by default all the fits will be included</span><span class="w"></span>
-<span class="w">  </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># display a table with the list of PC decomposition</span><span class="w"></span>
-<span class="w">  </span><span class="nt">thr_show</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-2</span><span class="w"> </span><span class="c1"># min value of the principal component to display</span><span class="w"></span>
+<span class="w">  </span><span class="nt">fit_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;fit_1&quot;</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># list of fit for which PCA is performed, by default all the fits will be included</span>
+<span class="w">  </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># display a table with the list of PC decomposition</span>
+<span class="w">  </span><span class="nt">thr_show</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-2</span><span class="w"> </span><span class="c1"># min value of the principal component to display</span>
 
-<span class="w">  </span><span class="c1"># heatmap plot</span><span class="w"></span>
-<span class="w">  </span><span class="nt">plot</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">15</span><span class="p p-Indicator">,</span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span><span class="w"></span>
-<span class="w">    </span><span class="nt">sv_min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-4</span><span class="w"> </span><span class="c1"># min singular value to display (upper plot)</span><span class="w"></span>
-<span class="w">    </span><span class="nt">sv_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e+5</span><span class="w"> </span><span class="c1"># max singular value to display (upper plot)</span><span class="w"></span>
-<span class="w">    </span><span class="nt">thr_show</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w"> </span><span class="c1"># min value of the principal component to display (main plot)</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># heatmap plot</span>
+<span class="w">  </span><span class="nt">plot</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">15</span><span class="p p-Indicator">,</span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span>
+<span class="w">    </span><span class="nt">sv_min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e-4</span><span class="w"> </span><span class="c1"># min singular value to display (upper plot)</span>
+<span class="w">    </span><span class="nt">sv_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.e+5</span><span class="w"> </span><span class="c1"># max singular value to display (upper plot)</span>
+<span class="w">    </span><span class="nt">thr_show</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.1</span><span class="w"> </span><span class="c1"># min value of the principal component to display (main plot)</span>
 
-<span class="c1"># chi2 analysis plots and tables options</span><span class="w"></span>
-<span class="nt">chi2_plots</span><span class="p">:</span><span class="w"></span>
+<span class="c1"># chi2 analysis plots and tables options</span>
+<span class="nt">chi2_plots</span><span class="p">:</span>
 
-<span class="w">  </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># display chi2 tables per dataset?</span><span class="w"></span>
+<span class="w">  </span><span class="nt">table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># display chi2 tables per dataset?</span>
 
-<span class="w">  </span><span class="c1"># chi2 plot per dataset bar plot</span><span class="w"></span>
-<span class="w">  </span><span class="nt">plot_experiment</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># chi2 plot per dataset bar plot</span>
+<span class="w">  </span><span class="nt">plot_experiment</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span>
 
-<span class="w">  </span><span class="c1"># chi2 distribution per replica histogram</span><span class="w"></span>
-<span class="w">  </span><span class="nt">plot_distribution</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">7</span><span class="p p-Indicator">,</span><span class="nv">5</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># chi2 distribution per replica histogram</span>
+<span class="w">  </span><span class="nt">plot_distribution</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">7</span><span class="p p-Indicator">,</span><span class="nv">5</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span>
 
-<span class="c1"># fisher information options</span><span class="w"></span>
-<span class="nt">fisher</span><span class="p">:</span><span class="w"></span>
+<span class="c1"># fisher information options</span>
+<span class="nt">fisher</span><span class="p">:</span>
 
-<span class="w">  </span><span class="nt">norm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;coeff&quot;</span><span class="w"> </span><span class="c1"># normalize per &quot;coeff&quot; or &quot;data&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">summary_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset</span><span class="w"></span>
-<span class="w">  </span><span class="nt">log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"> </span><span class="c1"># show values in log scale ?</span><span class="w"></span>
-<span class="w">  </span><span class="nt">fit_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;fit_1&quot;</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># list of fit for which fisher is compued, by default all the fits will be included</span><span class="w"></span>
+<span class="w">  </span><span class="nt">norm</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;coeff&quot;</span><span class="w"> </span><span class="c1"># normalize per &quot;coeff&quot; or &quot;data&quot;</span>
+<span class="w">  </span><span class="nt">summary_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset</span>
+<span class="w">  </span><span class="nt">log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"> </span><span class="c1"># show values in log scale ?</span>
+<span class="w">  </span><span class="nt">fit_list</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;fit_1&quot;</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># list of fit for which fisher is compued, by default all the fits will be included</span>
 
-<span class="w">  </span><span class="c1"># heatmap plot</span><span class="w"></span>
-<span class="w">  </span><span class="nt">plot</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">summary_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset</span><span class="w"></span>
-<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">11</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># heatmap plot</span>
+<span class="w">  </span><span class="nt">plot</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">summary_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset</span>
+<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">11</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span>
 </pre></div>
 </div>
 <p>Finally the user has to specify two dictionaries where the informaions about
@@ -251,40 +251,40 @@ Both names of the operators and the datasets are those used in the fit runcard.
 These informations are <strong>required</strong>.</p>
 <p>Wilson coefficients latex names should be added, by group type following
 the syntax:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">coeff_info</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">type1</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">Op1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{\\varphi}^{(1)}$&quot;</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">Op2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{\\varphi}^{(2)}$&quot;</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">    </span><span class="nv">...</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">4H</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">OQQ1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{QQ}^{1}$&quot;</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">OQQ8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{QQ}^{8}$&quot;</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">    </span><span class="nv">...</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">2L2H</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">O81qq</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{qq}^{1,8}$&quot;</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">O11qq</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{qq}^{1,1}$&quot;</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">    </span><span class="nv">...</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">coeff_info</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type1</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">Op1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{\\varphi}^{(1)}$&quot;</span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">Op2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{\\varphi}^{(2)}$&quot;</span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="nv">...</span>
+<span class="w">  </span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">4H</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">OQQ1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{QQ}^{1}$&quot;</span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">OQQ8</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{QQ}^{8}$&quot;</span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="nv">...</span>
+<span class="w">  </span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">2L2H</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">O81qq</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{qq}^{1,8}$&quot;</span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">O11qq</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;$c_{qq}^{1,1}$&quot;</span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="nv">...</span>
+<span class="w">  </span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </pre></div>
 </div>
 <p>Similarly the information corresponding to the experimental data
 should be reported as in the following:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_info</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">group_1</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">dataset_1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//lin/to/public/reference/1</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">dataset_2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//lin/to/public/reference/2</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">    </span><span class="nv">...</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">tt13</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">CMS_tt_13TeV_ljets_2015_Mtt</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//arxiv.org/abs/1610.04191</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">CMS_tt_13TeV_dilep_2015_Mtt</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//arxiv.org/abs/1708.07638</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">CMS_tt_13TeV_ljets_2016_Mtt</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//arxiv.org/abs/1803.08856</span><span class="p p-Indicator">],</span><span class="w"></span>
-<span class="w">    </span><span class="nv">...</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data_info</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">group_1</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">dataset_1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//lin/to/public/reference/1</span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">dataset_2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//lin/to/public/reference/2</span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="nv">...</span>
+<span class="w">  </span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">tt13</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">CMS_tt_13TeV_ljets_2015_Mtt</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//arxiv.org/abs/1610.04191</span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">CMS_tt_13TeV_dilep_2015_Mtt</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//arxiv.org/abs/1708.07638</span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">CMS_tt_13TeV_ljets_2016_Mtt</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">https</span><span class="p p-Indicator">:</span><span class="nv">//arxiv.org/abs/1803.08856</span><span class="p p-Indicator">],</span>
+<span class="w">    </span><span class="nv">...</span>
+<span class="w">  </span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </pre></div>
 </div>
 <p>You can see the smefit databse repo for futher examples about report runcards.</p>

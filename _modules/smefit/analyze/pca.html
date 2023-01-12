@@ -121,7 +121,7 @@
 
 
 <div class="viewcode-block" id="RotateToPca"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca">[docs]</a><span class="k">class</span> <span class="nc">RotateToPca</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Contruct a new fit runcard using PCA.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Contruct a new fit runcard using PCA.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -142,7 +142,7 @@
 
 <div class="viewcode-block" id="RotateToPca.from_dict"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Build the class from a runcard dictionary.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the class from a runcard dictionary.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -168,7 +168,7 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">loaded_datasets</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RotateToPca.compute"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute the roation matrix.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the roation matrix.</span>
 <span class="sd">        This is composed by two blocks: PCA and an identity for the constrained dofs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -184,7 +184,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RotateToPca.update_runcard"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.update_runcard">[docs]</a>    <span class="k">def</span> <span class="nf">update_runcard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Update the runcard object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the runcard object.&quot;&quot;&quot;</span>
 
         <span class="c1"># update coefficient contraints</span>
         <span class="n">new_coeffs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -204,7 +204,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_coeffs</span></div>
 
 <div class="viewcode-block" id="RotateToPca.save"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dump updated runcard and roation matrix into the reult folder.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dump updated runcard and roation matrix into the reult folder.&quot;&quot;&quot;</span>
         <span class="n">result_ID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;result_ID&quot;</span><span class="p">]</span>
         <span class="n">result_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;result_path&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">result_ID</span>
 
@@ -227,7 +227,7 @@
 
 
 <div class="viewcode-block" id="make_sym_matrix"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.make_sym_matrix">[docs]</a><span class="k">def</span> <span class="nf">make_sym_matrix</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">n_op</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Build a square tensor (n_op,n_op,vals.shape[0]), starting from the upper tiangular part.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a square tensor (n_op,n_op,vals.shape[0]), starting from the upper tiangular part.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -256,7 +256,7 @@
 
 
 <div class="viewcode-block" id="impose_constrain"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.impose_constrain">[docs]</a><span class="k">def</span> <span class="nf">impose_constrain</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">update_quad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Propagate coefficient constraint into the theory tables.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Propagate coefficient constraint into the theory tables.</span>
 
 <span class="sd">    Note: only linear contraints are allowed in this method.</span>
 <span class="sd">    Non linear contrains not always make sense here.</span>
@@ -325,7 +325,7 @@
 
 
 <div class="viewcode-block" id="PcaCalculator"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator">[docs]</a><span class="k">class</span> <span class="nc">PcaCalculator</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Computes and writes PCA table and heat map.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes and writes PCA table and heat map.</span>
 
 <span class="sd">    Note: matrix being decomposed by SVD are the</span>
 <span class="sd">    linear corrections multiplied by the inverse covariance matrix.</span>
@@ -350,7 +350,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">SVs</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="PcaCalculator.compute"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator.compute">[docs]</a>    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute PCA.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute PCA.&quot;&quot;&quot;</span>
         <span class="n">free_parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">index</span>
 
         <span class="n">new_LinearCorrections</span> <span class="o">=</span> <span class="n">impose_constrain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
@@ -364,7 +364,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">SVs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">pca_labels</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PcaCalculator.write"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit_label</span><span class="p">,</span> <span class="n">thr_show</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Write PCA latex table.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write PCA latex table.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -406,7 +406,7 @@
         <span class="n">thr_show</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
         <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Heat Map of PC coefficients.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Heat Map of PC coefficients.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
