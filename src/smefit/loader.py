@@ -111,6 +111,11 @@ class Loader:
             self.dataspec["stat_error"],
         ) = self.load_experimental_data()
 
+        if len(self.dataspec["central_values"]) != len(self.dataspec["SM_predictions"]):
+            raise ValueError(
+                f"Number of experimental data points and theory predictions does not match in dataset {self.setname}."
+            )
+
     def load_experimental_data(self):
         """
         Load experimental data with corresponding uncertainties
@@ -413,12 +418,7 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
     """
 
     if sorted_keys is None:
-        tmp = [
-            [
-                *c,
-            ]
-            for _, c in corrections_list
-        ]
+        tmp = [[*c,] for _, c in corrections_list]
         sorted_keys = np.unique([item for sublist in tmp for item in sublist])
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
     cnt = 0
