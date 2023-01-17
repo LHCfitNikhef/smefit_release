@@ -143,9 +143,9 @@ class Scanner:
             \chi^2`- 2 = 0
         """
 
-        # chi^2 - 2
+        # chi^2 - 3.841
         def chi2_func(xs):
-            return self.regularized_chi2_func(coeff, xs, False) - 2.0
+            return self.regularized_chi2_func(coeff, xs, False) - 3.841
 
         # find the bound for each coefficient
         bounds = {}
