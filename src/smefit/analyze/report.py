@@ -216,15 +216,15 @@ class Report:
         """
         links_list = None
         figs_list = []
-        free_coeff_config = self.coeff_info
+        coeff_config = self.coeff_info
         if show_only is not None:
-            free_coeff_config = free_coeff_config.loc[:, show_only]
+            coeff_config = coeff_config.loc[:, show_only]
         if hide_dofs is not None:
-            free_coeff_config = free_coeff_config.drop(hide_dofs, level=1)
+            coeff_config = coeff_config.drop(hide_dofs, level=1)
 
         coeff_plt = CoefficientsPlotter(
             self.report,
-            free_coeff_config,
+            coeff_config,
             logo=logo,
         )
 
@@ -233,7 +233,7 @@ class Report:
         for fit in self.fits:
             bounds_dict[fit.label] = compute_confidence_level(
                 fit.results,
-                coeff_plt.coeff_df,
+                coeff_plt.coeff_info,
                 double_solution.get(fit.name, None)
                 if double_solution is not None
                 else None,
@@ -300,7 +300,7 @@ class Report:
 
         self._append_section("Coefficients", links=links_list, figs=figs_list)
 
-    def correlations(self, hide_dofs=None, thr_show=0.1):
+    def correlations(self, hide_dofs=None, thr_show=0.1, title=True):
         """Plot coefficients correlation matrix.
 
         Parameters
@@ -310,6 +310,8 @@ class Report:
         thr_show: float, None
             minimum threshold value to show.
             If None the full correlation matrix is displayed.
+        title: bool
+            if True display fit label name as title
 
         """
         figs_list = []
@@ -320,7 +322,7 @@ class Report:
                 fit.results[coeff_to_keep],
                 latex_names=self.coeff_info.droplevel(0),
                 fig_name=f"{self.report}/correlations_{fit.name}",
-                fit_label=fit.label,
+                title=fit.label if title else None,
                 hide_dofs=hide_dofs,
                 thr_show=thr_show,
             )
@@ -348,7 +350,6 @@ class Report:
         fit_list: list, optional
             list of fit names for which the PCA is computed.
             By default all the fits included in the report
-
         """
         figs_list, links_list = None, None
         if fit_list is not None:
@@ -372,8 +373,9 @@ class Report:
                 )
                 links_list = [(f"pca_table_{fit.name}", f"Table {fit.label}")]
             if plot is not None:
+                title = fit.label if plot.pop("title") else None
                 pca_cal.plot_heatmap(
-                    fit.label, f"{self.report}/pca_heatmap_{fit.name}", **plot
+                    f"{self.report}/pca_heatmap_{fit.name}", title=title, **plot
                 )
                 figs_list = [f"pca_heatmap_{fit.name}"]
         self._append_section("PCA", figs=figs_list, links=links_list)
@@ -444,11 +446,12 @@ class Report:
             )
             links_list = [(f"fisher_{fit.name}", f"Table {fit.label}")]
 
-            if plot is not False:
+            if plot is not None:
+                title = fit.label if plot.pop("title") else None
                 fisher_cal.plot(
                     free_coeff_config,
-                    fit.label,
                     f"{self.report}/fisher_heatmap_{fit.name}",
+                    title=title,
                     **plot,
                 )
                 figs_list = [f"fisher_heatmap_{fit.name}"]
