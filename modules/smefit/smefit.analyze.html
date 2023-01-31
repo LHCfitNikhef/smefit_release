@@ -334,7 +334,7 @@
 <span id="smefit-analyze-coefficients-utils-module"></span><h2>smefit.analyze.coefficients_utils module<a class="headerlink" href="#module-smefit.analyze.coefficients_utils" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.analyze.coefficients_utils.CoefficientsPlotter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.coefficients_utils.</span></span><span class="sig-name descname"><span class="pre">CoefficientsPlotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">free_coeff_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.coefficients_utils.</span></span><span class="sig-name descname"><span class="pre">CoefficientsPlotter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Plots central values + 95% CL errors, 95% CL bounds,
 probability distributions, residuals,
@@ -348,6 +348,15 @@ probability distributions (i.e. multiple solutions)
 are manually separated by including the coefficient name
 in disjointed_list for disjointed_list2
 for global and single fit results, respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>report_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – path to base folder, where the reports will be stored.</p></li>
+<li><p><strong>coeff_config</strong> (<em>pandas.DataFrame</em>) – coefficients latex names by gropup type</p></li>
+<li><p><strong>logo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True dispaly the logo on scatter and bar plots</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs">
 <span class="sig-name descname"><span class="pre">plot_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lin_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter.plot_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs" title="Permalink to this definition"></a></dt>
@@ -388,11 +397,6 @@ are included.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_logo">
-<span class="sig-name descname"><span class="pre">plot_logo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter.plot_logo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_logo" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_posteriors">
 <span class="sig-name descname"><span class="pre">plot_posteriors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posteriors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disjointed_lists</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter.plot_posteriors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_posteriors" title="Permalink to this definition"></a></dt>
 <dd><p>Plot posteriors histograms.</p>
@@ -417,13 +421,13 @@ are included.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.analyze.coefficients_utils.compute_confidence_level">
-<span class="sig-prename descclassname"><span class="pre">smefit.analyze.coefficients_utils.</span></span><span class="sig-name descname"><span class="pre">compute_confidence_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posterior</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disjointed_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#compute_confidence_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.compute_confidence_level" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.coefficients_utils.</span></span><span class="sig-name descname"><span class="pre">compute_confidence_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posterior</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disjointed_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#compute_confidence_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.compute_confidence_level" title="Permalink to this definition"></a></dt>
 <dd><p>Compute central value, 95 % and 68 % confidence levels and store the result in a dictionary
 given a posterior distribution
 :param posterior: posterior distributions per coefficient
 :type posterior: dict
-:param coeff_df: coefficients list for which the bounds are computed with latex names
-:type coeff_df: pandas.DataFrame
+:param coeff_info: coefficients list for which the bounds are computed with latex names
+:type coeff_info: pandas.Series
 :param disjointed_list: list of coefficients with double solutions
 :type disjointed_list: list, optional</p>
 <dl class="field-list simple">
@@ -505,7 +509,7 @@ Note: double solutions are appended under “2”</p>
 <span id="smefit-analyze-correlations-module"></span><h2>smefit.analyze.correlations module<a class="headerlink" href="#module-smefit.analyze.correlations" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.analyze.correlations.plot_correlations">
-<span class="sig-prename descclassname"><span class="pre">smefit.analyze.correlations.</span></span><span class="sig-name descname"><span class="pre">plot_correlations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posterior_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide_dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/correlations.html#plot_correlations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.correlations.plot_correlations" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.correlations.</span></span><span class="sig-name descname"><span class="pre">plot_correlations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posterior_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide_dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/correlations.html#plot_correlations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.correlations.plot_correlations" title="Permalink to this definition"></a></dt>
 <dd><p>Computes and displays the correlation coefficients
 between parameters in a heat map</p>
 <dl class="field-list simple">
@@ -514,9 +518,9 @@ between parameters in a heat map</p>
 <li><p><strong>posterior_df</strong> (<em>pd.DataFrame</em>) – fit results</p></li>
 <li><p><strong>latex_names</strong> (<em>pd.DataFrame</em>) – coefficnet latex name table</p></li>
 <li><p><strong>fig_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – path to save the plot</p></li>
-<li><p><strong>fit_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – fit label</p></li>
 <li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>None</em>) – if given shows only off diagonal entries higher than the threshold</p></li>
 <li><p><strong>hide_dofs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>None</em>) – coefficients to hide</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>None</em>) – plot title</p></li>
 </ul>
 </dd>
 </dl>
@@ -583,18 +587,17 @@ degrees of freedom are shown in the tables.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.analyze.fisher.FisherCalculator.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latex_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(11,</span> <span class="pre">15)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#FisherCalculator.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.FisherCalculator.plot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latex_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(11,</span> <span class="pre">15)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#FisherCalculator.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.FisherCalculator.plot" title="Permalink to this definition"></a></dt>
 <dd><p>Plot the heat map of Fisher table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>latex_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of coefficients latex names</p></li>
-<li><p><strong>fit_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – fit label</p></li>
-<li><p><strong>fig_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – plot name</p></li>
-<li><p><strong>fig_name</strong> – figure path</p></li>
+<li><p><strong>fig_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – figure path</p></li>
 <li><p><strong>summary_only</strong> – if True plot the fisher grouped per datsets,
 else the fine grained dataset per dataset</p></li>
 <li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a>) – figure size</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>None</em>) – plot title</p></li>
 </ul>
 </dd>
 </dl>
@@ -788,16 +791,16 @@ linear corrections multiplied by the inverse covariance matrix.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.analyze.pca.PcaCalculator.plot_heatmap">
-<span class="sig-name descname"><span class="pre">plot_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fit_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sv_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sv_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(15,</span> <span class="pre">15)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#PcaCalculator.plot_heatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.PcaCalculator.plot_heatmap" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fig_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sv_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sv_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(15,</span> <span class="pre">15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#PcaCalculator.plot_heatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.PcaCalculator.plot_heatmap" title="Permalink to this definition"></a></dt>
 <dd><p>Heat Map of PC coefficients.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fit_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – fit label</p></li>
 <li><p><strong>fig_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – plot name</p></li>
 <li><p><strong>sv_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – minimum singular value range shown in the top heatmap plot</p></li>
 <li><p><strong>sv_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – maximum singular value range shown in the top heatmap plot</p></li>
 <li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – minimal threshold to show in the PCA decomposition</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>None</em>) – plot title</p></li>
 </ul>
 </dd>
 </dl>
@@ -1012,7 +1015,7 @@ for an example</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.analyze.report.Report.correlations">
-<span class="sig-name descname"><span class="pre">correlations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hide_dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/report.html#Report.correlations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.report.Report.correlations" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">correlations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hide_dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/report.html#Report.correlations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.report.Report.correlations" title="Permalink to this definition"></a></dt>
 <dd><p>Plot coefficients correlation matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1020,6 +1023,7 @@ for an example</p></li>
 <li><p><strong>hide_dofs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of operator not to display.</p></li>
 <li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>None</em>) – minimum threshold value to show.
 If None the full correlation matrix is displayed.</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True display fit label name as title</p></li>
 </ul>
 </dd>
 </dl>

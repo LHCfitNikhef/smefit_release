@@ -114,9 +114,9 @@
     <span class="n">posterior_df</span><span class="p">,</span>
     <span class="n">latex_names</span><span class="p">,</span>
     <span class="n">fig_name</span><span class="p">,</span>
-    <span class="n">fit_label</span><span class="p">,</span>
     <span class="n">thr_show</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">hide_dofs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes and displays the correlation coefficients</span>
@@ -130,12 +130,13 @@
 <span class="sd">        coefficnet latex name table</span>
 <span class="sd">    fig_name : str</span>
 <span class="sd">        path to save the plot</span>
-<span class="sd">    fit_label: str</span>
-<span class="sd">        fit label</span>
 <span class="sd">    thr_show: float, None</span>
 <span class="sd">        if given shows only off diagonal entries higher than the threshold</span>
 <span class="sd">    hide_dofs: list, None</span>
 <span class="sd">        coefficients to hide</span>
+<span class="sd">    title: str, None</span>
+<span class="sd">        plot title</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">hide_dofs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">posterior_df</span> <span class="o">=</span> <span class="n">posterior_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">hide_dofs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -192,7 +193,8 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">rm Correlation:</span><span class="se">\\</span><span class="s2"> </span><span class="si">{</span><span class="n">fit_label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.06</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">rm Correlation:</span><span class="se">\\</span><span class="s2"> </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.06</span><span class="p">)</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fig_name</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">)</span>
