@@ -8,6 +8,7 @@ import pandas as pd
 from matplotlib import cm
 from collections.abc import Iterable
 
+
 from .contours_2d import plot_contours
 from .latex_tools import latex_packages, multicolum_table_header
 
