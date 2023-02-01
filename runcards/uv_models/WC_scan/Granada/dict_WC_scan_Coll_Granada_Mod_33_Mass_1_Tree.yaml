@@ -4,68 +4,7 @@ UV Collection : Granada
 UV model : 33
 Model name : \text{$\mathcal{Q}$5}
 # ~~~~~~~~~~~~~~~~~~~~~~
-# WCs to set to zero
-cpG : 0
-cpB : 0
-cpW : 0
-cpWB : 0
-cpd : 0
-cpD : 0
-cWWW : 0
-cpqMi : 0
-cpQM : 0
-c3pq : 0
-c3pQ3 : 0
-cpl1 : 0
-cpl2 : 0
-cpl3 : 0
-c3pl1 : 0
-c3pl2 : 0
-c3pl3 : 0
-cpui : 0
-cpdi : 0
-cpt : 0
-cpe : 0
-cpmu : 0
-cpta : 0
-c81qq : 0
-c11qq : 0
-c83qq : 0
-c13qq : 0
-c8qt : 0
-c1qt : 0
-c8ut : 0
-c1ut : 0
-c8qu : 0
-c1qu : 0
-c8dt : 0
-c1dt : 0
-c8qd : 0
-c1qd : 0
-cQQ1 : 0
-cQQ8 : 0
-ctt1 : 0
-cll : 0
-cbp : 0
-ctp : 0
-ctG : 0
-ccp : 0
-ctap : 0
-ctW : 0
-ctZ : 0
-# ~~~~~~~~~~~~~~~~~~~~~~
-# WCs to be fitted
-cQt1
-cQt8
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Number of L.I. WCs
-1
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Unrelated WCs
- 
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Linear Relations among WCs
-cQt8=-3*cQt1
+# WCs to be fitted : [cQt1]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Positively defined WCs
 cQt1 >= 0
@@ -73,16 +12,64 @@ cQt1 >= 0
 # Negatively defined WCs
 cQt8 <= 0
 # ~~~~~~~~~~~~~~~~~~~~~~
-# Multiplicative relations among WCs
+# Loop level of the results : 0
 # ~~~~~~~~~~~~~~~~~~~~~~
-# A possible basis of L.I. WCs
-(3*cQt1)/2.
+# Setting of the UV mass in TeV:
+m : 1 TeV
 # ~~~~~~~~~~~~~~~~~~~~~~
-# UV couplings in this model
-u1 = g(\[ScriptCapitalQ]5)(uq)(1,3,3)
+# Dependent WCs in SMEFiT basis
 # ~~~~~~~~~~~~~~~~~~~~~~
-# UV coupling combinations invariant under sign ambiguities in this model
-invar1 = Abs(g(\[ScriptCapitalQ]5)(uq)(1,3,3))
+cpG : [{cQt1: [0.,0]}]
+cpB : [{cQt1: [0.,0]}]
+cpW : [{cQt1: [0.,0]}]
+cpWB : [{cQt1: [0.,0]}]
+cpd : [{cQt1: [0.,0]}]
+cpD : [{cQt1: [0.,0]}]
+cWWW : [{cQt1: [0.,0]}]
+cpqMi : [{cQt1: [0.,0]}]
+cpQM : [{cQt1: [0.,0]}]
+c3pq : [{cQt1: [0.,0]}]
+c3pQ3 : [{cQt1: [0.,0]}]
+cpl1 : [{cQt1: [0.,0]}]
+cpl2 : [{cQt1: [0.,0]}]
+cpl3 : [{cQt1: [0.,0]}]
+c3pl1 : [{cQt1: [0.,0]}]
+c3pl2 : [{cQt1: [0.,0]}]
+c3pl3 : [{cQt1: [0.,0]}]
+cpui : [{cQt1: [0.,0]}]
+cpdi : [{cQt1: [0.,0]}]
+cpt : [{cQt1: [0.,0]}]
+cpe : [{cQt1: [0.,0]}]
+cpmu : [{cQt1: [0.,0]}]
+cpta : [{cQt1: [0.,0]}]
+c81qq : [{cQt1: [0.,0]}]
+c11qq : [{cQt1: [0.,0]}]
+c83qq : [{cQt1: [0.,0]}]
+c13qq : [{cQt1: [0.,0]}]
+c8qt : [{cQt1: [0.,0]}]
+c1qt : [{cQt1: [0.,0]}]
+c8ut : [{cQt1: [0.,0]}]
+c1ut : [{cQt1: [0.,0]}]
+c8qu : [{cQt1: [0.,0]}]
+c1qu : [{cQt1: [0.,0]}]
+c8dt : [{cQt1: [0.,0]}]
+c1dt : [{cQt1: [0.,0]}]
+c8qd : [{cQt1: [0.,0]}]
+c1qd : [{cQt1: [0.,0]}]
+cQQ1 : [{cQt1: [0.,0]}]
+cQQ8 : [{cQt1: [0.,0]}]
+ctt1 : [{cQt1: [0.,0]}]
+cll : [{cQt1: [0.,0]}]
+cbp : [{cQt1: [0.,0]}]
+ctp : [{cQt1: [0.,0]}]
+ctG : [{cQt1: [0.,0]}]
+ccp : [{cQt1: [0.,0]}]
+ctap : [{cQt1: [0.,0]}]
+ctW : [{cQt1: [0.,0]}]
+ctZ : [{cQt1: [0.,0]}]
+cQt8 : [{cQt1: [-3.,1]}]
+ 
 # ~~~~~~~~~~~~~~~~~~~~~~
-# UV coupling combinations invariant under sign ambiguities, in terms of the WCs
-invar1 = Sqrt(1.5)*Sqrt(Abs(cQt1))
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
+Export date: Wed 1 Feb 2023 11:13:48

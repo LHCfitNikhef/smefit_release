@@ -4,71 +4,7 @@ UV Collection : Granada
 UV model : 25
 Model name : G
 # ~~~~~~~~~~~~~~~~~~~~~~
-# WCs to set to zero
-cpG : 0
-cpB : 0
-cpW : 0
-cpWB : 0
-cpd : 0
-cpD : 0
-cWWW : 0
-cpqMi : 0
-cpQM : 0
-c3pq : 0
-c3pQ3 : 0
-cpl1 : 0
-cpl2 : 0
-cpl3 : 0
-c3pl1 : 0
-c3pl2 : 0
-c3pl3 : 0
-cpui : 0
-cpdi : 0
-cpt : 0
-cpe : 0
-cpmu : 0
-cpta : 0
-c81qq : 0
-c11qq : 0
-c83qq : 0
-c13qq : 0
-c8qt : 0
-c1qt : 0
-c8ut : 0
-c1ut : 0
-c8qu : 0
-c1qu : 0
-c1dt : 0
-c1qd : 0
-cQQ1 : 0
-cQt1 : 0
-cll : 0
-cbp : 0
-ctp : 0
-ctG : 0
-ccp : 0
-ctap : 0
-ctW : 0
-ctZ : 0
-# ~~~~~~~~~~~~~~~~~~~~~~
-# WCs to be fitted
-c8dt
-c8qd
-cQQ8
-cQt8
-ctt1
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Number of L.I. WCs
-3
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Unrelated WCs
-c8dt
-c8qd
-cQQ8
-cQt8
-ctt1
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Linear Relations among WCs
+# WCs to be fitted : [c8qd, cQt8, ctt1]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Positively defined WCs
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -76,26 +12,61 @@ ctt1
 cQQ8 <= 0
 ctt1 <= 0
 # ~~~~~~~~~~~~~~~~~~~~~~
-# Multiplicative relations among WCs
-cQQ8=Power(cQt8,2)/(6.*ctt1)
-c8dt=(6*c8qd*ctt1)/cQt8
+# Loop level of the results : 0
 # ~~~~~~~~~~~~~~~~~~~~~~
-# A possible basis of L.I. WCs
--c8qd
--cQt8
--6*ctt1
+# Setting of the UV mass in TeV:
+m : 1 TeV
 # ~~~~~~~~~~~~~~~~~~~~~~
-# UV couplings in this model
-u1 = g(G)(d)(1,1,1)
-u2 = g(G)(q)(1,3,3)
-u3 = g(G)(u)(1,3,3)
+# Dependent WCs in SMEFiT basis
 # ~~~~~~~~~~~~~~~~~~~~~~
-# UV coupling combinations invariant under sign ambiguities in this model
-invar1 = Abs(g(G)(u)(1,3,3))
-invar2 = (g(G)(q)(1,3,3)*g(G)(u)(1,3,3))/Abs(g(G)(u)(1,3,3))
-invar3 = (g(G)(d)(1,1,1)*g(G)(q)(1,3,3))/Abs(g(G)(q)(1,3,3))
+cpG : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpB : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpW : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpWB : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpd : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpD : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cWWW : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpqMi : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpQM : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c3pq : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c3pQ3 : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpl1 : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpl2 : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpl3 : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c3pl1 : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c3pl2 : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c3pl3 : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpui : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpdi : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpt : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpe : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpmu : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cpta : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c81qq : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c11qq : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c83qq : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c13qq : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c8qt : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c1qt : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c8ut : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c1ut : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c8qu : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c1qu : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c1dt : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+c1qd : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cQQ1 : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cQt1 : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cll : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cbp : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+ctp : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+ctG : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+ccp : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+ctap : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+ctW : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+ctZ : [{c8qd: [0.,0],cQt8: [1,0],ctt1: [1,0]}]
+cQQ8 : [{c8qd: [0.166666666667, 0.], cQt8: [1.00000000000, 2.], ctt1: [1.00000000000, -1.]}]
+c8dt : [{c8qd: [6.00000000000, 1.], cQt8: [1.00000000000, -1.], ctt1: [1.00000000000, 1.]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
-# UV coupling combinations invariant under sign ambiguities, in terms of the WCs
-invar1 = Sqrt(6)*Sqrt(Abs(ctt1))
-invar2 = -(cQt8/(Sqrt(6)*Sqrt(Abs(ctt1))))
-invar3 = -((Sqrt(6)*c8qd)/Abs(cQt8/Sqrt(ctt1)))
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
+Export date: Wed 1 Feb 2023 11:13:48

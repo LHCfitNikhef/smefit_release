@@ -4,80 +4,7 @@ UV Collection : Granada
 UV model : 21
 Model name : B
 # ~~~~~~~~~~~~~~~~~~~~~~
-# WCs to set to zero
-cpG : 0
-cpB : 0
-cpW : 0
-cpWB : 0
-cWWW : 0
-c3pq : 0
-c3pQ3 : 0
-cpl1 : 0
-cpl2 : 0
-cpl3 : 0
-c3pl1 : 0
-c3pl2 : 0
-c3pl3 : 0
-c81qq : 0
-c11qq : 0
-c83qq : 0
-c13qq : 0
-c8qt : 0
-c1qt : 0
-c8ut : 0
-c1ut : 0
-c8qu : 0
-c1qu : 0
-c8dt : 0
-c8qd : 0
-cQQ8 : 0
-cQt8 : 0
-cll : 0
-cbp : 0
-ctp : 0
-ctG : 0
-ccp : 0
-ctap : 0
-ctW : 0
-ctZ : 0
-# ~~~~~~~~~~~~~~~~~~~~~~
-# WCs to be fitted
-cpd
-cpD
-cpqMi
-cpQM
-cpui
-cpdi
-cpt
-cpe
-cpmu
-cpta
-c1dt
-c1qd
-cQQ1
-cQt1
-ctt1
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Number of L.I. WCs
-9
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Unrelated WCs
-cpqMi
-cpQM
-cpui
-cpdi
-cpt
-cpe
-cpmu
-cpta
-c1dt
-c1qd
-cQQ1
-cQt1
-ctt1
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Linear Relations among WCs
-cpD=-4*cpd
+# WCs to be fitted : [cpqMi, cpui, cpt, cpe, cpmu, cpta, c1qd, cQt1, ctt1]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Positively defined WCs
 cpd >= 0
@@ -87,53 +14,55 @@ cpD <= 0
 cQQ1 <= 0
 ctt1 <= 0
 # ~~~~~~~~~~~~~~~~~~~~~~
-# Multiplicative relations among WCs
-cQQ1=Power(cQt1,2)/(2.*ctt1)
-c1dt=(2*c1qd*ctt1)/cQt1
-cpdi=(c1qd*cpt)/cQt1
-cpQM=(cpt*cQt1)/(2.*ctt1)
-cpd=-0.25*Power(cpt,2)/ctt1
+# Loop level of the results : 0
 # ~~~~~~~~~~~~~~~~~~~~~~
-# A possible basis of L.I. WCs
--cpqMi
--cpui
--cpt
--cpe
--cpmu
--cpta
--c1qd
--cQt1
--2*ctt1
+# Setting of the UV mass in TeV:
+m : 1 TeV
 # ~~~~~~~~~~~~~~~~~~~~~~
-# UV couplings in this model
-u1 = g(B)(d)(1,1,1)
-u2 = g(B)(e)(1,1,1)
-u3 = g(B)(e)(1,2,2)
-u4 = g(B)(e)(1,3,3)
-u5 = g(B)(q)(1,1,1)
-u6 = g(B)(q)(1,3,3)
-u7 = g(B)(u)(1,1,1)
-u8 = g(B)(u)(1,3,3)
-u9 = g(B)(\[Phi])(1)
+# Dependent WCs in SMEFiT basis
 # ~~~~~~~~~~~~~~~~~~~~~~
-# UV coupling combinations invariant under sign ambiguities in this model
-invar1 = Abs(g(B)(u)(1,3,3))
-invar2 = (g(B)(u)(1,3,3)*g(B)(\[Phi])(1))/Abs(g(B)(u)(1,3,3))
-invar3 = (g(B)(q)(1,1,1)*g(B)(\[Phi])(1))/Abs(g(B)(\[Phi])(1))
-invar4 = (g(B)(u)(1,1,1)*g(B)(\[Phi])(1))/Abs(g(B)(\[Phi])(1))
-invar5 = (g(B)(e)(1,1,1)*g(B)(\[Phi])(1))/Abs(g(B)(\[Phi])(1))
-invar6 = (g(B)(e)(1,2,2)*g(B)(\[Phi])(1))/Abs(g(B)(\[Phi])(1))
-invar7 = (g(B)(e)(1,3,3)*g(B)(\[Phi])(1))/Abs(g(B)(\[Phi])(1))
-invar8 = (g(B)(q)(1,3,3)*g(B)(u)(1,3,3))/Abs(g(B)(u)(1,3,3))
-invar9 = (g(B)(d)(1,1,1)*g(B)(q)(1,3,3))/Abs(g(B)(q)(1,3,3))
+cpG : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cpB : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cpW : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cpWB : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cWWW : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c3pq : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c3pQ3 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cpl1 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cpl2 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cpl3 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c3pl1 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c3pl2 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c3pl3 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c81qq : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c11qq : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c83qq : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c13qq : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c8qt : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c1qt : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c8ut : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c1ut : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c8qu : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c1qu : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c8dt : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+c8qd : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cQQ8 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cQt8 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cll : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cbp : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+ctp : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+ctG : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+ccp : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+ctap : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+ctW : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+ctZ : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
+cpD : [{cpqMi: [1., 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 2.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 0.], ctt1: [1.00000000000, -1.]}]
+cQQ1 : [{cpqMi: [0.500000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 0.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 2.], ctt1: [1.00000000000, -1.]}]
+c1dt : [{cpqMi: [2.00000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 0.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 1.], cQt1: [1.00000000000, -1.], ctt1: [1.00000000000, 1.]}]
+cpdi : [{cpqMi: [1.00000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 1.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 1.], cQt1: [1.00000000000, -1.], ctt1: [1.00000000000, 0.]}]
+cpQM : [{cpqMi: [0.500000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 1.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 1.], ctt1: [1.00000000000, -1.]}]
+cpd : [{cpqMi: [-0.250000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 2.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 0.], ctt1: [1.00000000000, -1.]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
-# UV coupling combinations invariant under sign ambiguities, in terms of the WCs
-invar1 = Sqrt(2)*Sqrt(Abs(ctt1))
-invar2 = -(cpt/(Sqrt(2)*Sqrt(Abs(ctt1))))
-invar3 = -((Sqrt(2)*cpqMi)/Abs(cpt/Sqrt(ctt1)))
-invar4 = -((Sqrt(2)*cpui)/Abs(cpt/Sqrt(ctt1)))
-invar5 = -((Sqrt(2)*cpe)/Abs(cpt/Sqrt(ctt1)))
-invar6 = -((Sqrt(2)*cpmu)/Abs(cpt/Sqrt(ctt1)))
-invar7 = -((Sqrt(2)*cpta)/Abs(cpt/Sqrt(ctt1)))
-invar8 = -(cQt1/(Sqrt(2)*Sqrt(Abs(ctt1))))
-invar9 = -((Sqrt(2)*c1qd)/Abs(cQt1/Sqrt(ctt1)))
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
+Export date: Wed 1 Feb 2023 11:13:47
