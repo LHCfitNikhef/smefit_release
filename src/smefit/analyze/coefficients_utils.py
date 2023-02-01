@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib import cm
+from collections.abc import Iterable
 
 from .contours_2d import plot_contours
 from .latex_tools import latex_packages, multicolum_table_header
@@ -54,7 +55,9 @@ def split_solution(full_solution):
     return solution1, solution2
 
 
-def compute_confidence_level(posterior, coeff_df, has_posterior, disjointed_list=None):
+def compute_confidence_level(
+    posterior, coeff_info, has_posterior, disjointed_list=None
+):
     """
     Compute central value, 95 % and 68 % confidence levels and store the result in a dictionary
     given a posterior distribution
@@ -157,6 +160,8 @@ class CoefficientsPlotter:
             gridspec_kw={"height_ratios": groups.values},
             figsize=figsize,
         )
+        if not isinstance(axs, Iterable):
+            axs = np.array([axs])
         return groups, axs
 
     def plot_coeffs(
@@ -351,11 +356,7 @@ class CoefficientsPlotter:
                     label=labels[clr_idx],
                 )
                 ax.text(
-                    0.05,
-                    0.85,
-                    latex_name,
-                    transform=ax.transAxes,
-                    fontsize=25,
+                    0.05, 0.85, latex_name, transform=ax.transAxes, fontsize=25,
                 )
                 ax.tick_params(which="both", direction="in", labelsize=22.5)
                 ax.tick_params(labelleft=False)
