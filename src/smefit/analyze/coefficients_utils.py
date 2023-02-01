@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib import cm
+from collections.abc import Iterable
+
 
 from .contours_2d import plot_contours
 from .latex_tools import latex_packages, multicolum_table_header
@@ -148,6 +150,8 @@ class CoefficientsPlotter:
             gridspec_kw={"height_ratios": groups.values},
             figsize=figsize,
         )
+        if not isinstance(axs, Iterable):
+            axs = np.array([axs])
         return groups, axs
 
     def plot_coeffs(
