@@ -222,6 +222,8 @@ class CoefficientsPlotter:
                 x_thicks = np.concatenate([bas * np.arange(1, 10) for bas in bas10])
                 if isinstance(lin_thr, dict):
                     thr = lin_thr[g]
+                else:
+                    thr = lin_thr
                 x_thicks = x_thicks[np.abs(x_thicks) > thr / 10]
                 ax.set_xscale("symlog", linthresh=thr)
                 ax.set_xticks(x_thicks, minor=True)
