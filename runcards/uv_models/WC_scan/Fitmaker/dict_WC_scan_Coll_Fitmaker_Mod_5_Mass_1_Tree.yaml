@@ -1,0 +1,76 @@
+# UV dictionary for WC scan. Tree-level matching.
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 5
+Model name : \varphi
+# ~~~~~~~~~~~~~~~~~~~~~~
+# WCs to be fitted : [cQt1, ctp]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Positively defined WCs
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Negatively defined WCs
+c8qd <= 0
+c1qd <= 0
+cQt1 <= 0
+cQt8 <= 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Dependent WCs in SMEFiT basis
+# ~~~~~~~~~~~~~~~~~~~~~~
+cpG : [{cQt1: [0.,0],ctp: [1,0]}]
+cpB : [{cQt1: [0.,0],ctp: [1,0]}]
+cpW : [{cQt1: [0.,0],ctp: [1,0]}]
+cpWB : [{cQt1: [0.,0],ctp: [1,0]}]
+cpd : [{cQt1: [0.,0],ctp: [1,0]}]
+cpD : [{cQt1: [0.,0],ctp: [1,0]}]
+cWWW : [{cQt1: [0.,0],ctp: [1,0]}]
+cpqMi : [{cQt1: [0.,0],ctp: [1,0]}]
+cpQM : [{cQt1: [0.,0],ctp: [1,0]}]
+c3pq : [{cQt1: [0.,0],ctp: [1,0]}]
+c3pQ3 : [{cQt1: [0.,0],ctp: [1,0]}]
+cpl1 : [{cQt1: [0.,0],ctp: [1,0]}]
+cpl2 : [{cQt1: [0.,0],ctp: [1,0]}]
+cpl3 : [{cQt1: [0.,0],ctp: [1,0]}]
+c3pl1 : [{cQt1: [0.,0],ctp: [1,0]}]
+c3pl2 : [{cQt1: [0.,0],ctp: [1,0]}]
+c3pl3 : [{cQt1: [0.,0],ctp: [1,0]}]
+cpui : [{cQt1: [0.,0],ctp: [1,0]}]
+cpdi : [{cQt1: [0.,0],ctp: [1,0]}]
+cpt : [{cQt1: [0.,0],ctp: [1,0]}]
+cpe : [{cQt1: [0.,0],ctp: [1,0]}]
+cpmu : [{cQt1: [0.,0],ctp: [1,0]}]
+cpta : [{cQt1: [0.,0],ctp: [1,0]}]
+c81qq : [{cQt1: [0.,0],ctp: [1,0]}]
+c11qq : [{cQt1: [0.,0],ctp: [1,0]}]
+c83qq : [{cQt1: [0.,0],ctp: [1,0]}]
+c13qq : [{cQt1: [0.,0],ctp: [1,0]}]
+c8qt : [{cQt1: [0.,0],ctp: [1,0]}]
+c1qt : [{cQt1: [0.,0],ctp: [1,0]}]
+c8ut : [{cQt1: [0.,0],ctp: [1,0]}]
+c1ut : [{cQt1: [0.,0],ctp: [1,0]}]
+c8qu : [{cQt1: [0.,0],ctp: [1,0]}]
+c1qu : [{cQt1: [0.,0],ctp: [1,0]}]
+c8dt : [{cQt1: [0.,0],ctp: [1,0]}]
+c1dt : [{cQt1: [0.,0],ctp: [1,0]}]
+cQQ1 : [{cQt1: [0.,0],ctp: [1,0]}]
+cQQ8 : [{cQt1: [0.,0],ctp: [1,0]}]
+ctt1 : [{cQt1: [0.,0],ctp: [1,0]}]
+cll : [{cQt1: [0.,0],ctp: [1,0]}]
+ctG : [{cQt1: [0.,0],ctp: [1,0]}]
+ccp : [{cQt1: [0.,0],ctp: [1,0]}]
+ctW : [{cQt1: [0.,0],ctp: [1,0]}]
+ctZ : [{cQt1: [0.,0],ctp: [1,0]}]
+ctap : [{cQt1: [-0.01030331095160917,0],ctp: [1,1]}]
+cbp : [{cQt1: [-0.02419541560546423,0],ctp: [1,1]}]
+cQt8 : [{cQt1: [6.,1],ctp: [1,0]}]
+c1qd : [{cQt1: [0.0005854181363211419,1],ctp: [1,0]}]
+c8qd : [{cQt1: [0.0035125088179268514,1],ctp: [1,0]}]
+ 
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+Export date: Wed 1 Feb 2023 11:22:10

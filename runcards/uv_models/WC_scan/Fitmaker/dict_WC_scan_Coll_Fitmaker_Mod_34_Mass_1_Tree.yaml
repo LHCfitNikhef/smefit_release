@@ -1,0 +1,77 @@
+# UV dictionary for WC scan. Tree-level matching.
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 34
+Model name : X
+# ~~~~~~~~~~~~~~~~~~~~~~
+# WCs to be fitted : [ ]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Positively defined WCs
+ 
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Negatively defined WCs
+ 
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Dependent WCs in SMEFiT basis
+# ~~~~~~~~~~~~~~~~~~~~~~
+cpG : [{cDummy: [0,0]}]
+cpB : [{cDummy: [0,0]}]
+cpW : [{cDummy: [0,0]}]
+cpWB : [{cDummy: [0,0]}]
+cpd : [{cDummy: [0,0]}]
+cpD : [{cDummy: [0,0]}]
+cWWW : [{cDummy: [0,0]}]
+cpqMi : [{cDummy: [0,0]}]
+cpQM : [{cDummy: [0,0]}]
+c3pq : [{cDummy: [0,0]}]
+c3pQ3 : [{cDummy: [0,0]}]
+cpl1 : [{cDummy: [0,0]}]
+cpl2 : [{cDummy: [0,0]}]
+cpl3 : [{cDummy: [0,0]}]
+c3pl1 : [{cDummy: [0,0]}]
+c3pl2 : [{cDummy: [0,0]}]
+c3pl3 : [{cDummy: [0,0]}]
+cpui : [{cDummy: [0,0]}]
+cpdi : [{cDummy: [0,0]}]
+cpt : [{cDummy: [0,0]}]
+cpe : [{cDummy: [0,0]}]
+cpmu : [{cDummy: [0,0]}]
+cpta : [{cDummy: [0,0]}]
+c81qq : [{cDummy: [0,0]}]
+c11qq : [{cDummy: [0,0]}]
+c83qq : [{cDummy: [0,0]}]
+c13qq : [{cDummy: [0,0]}]
+c8qt : [{cDummy: [0,0]}]
+c1qt : [{cDummy: [0,0]}]
+c8ut : [{cDummy: [0,0]}]
+c1ut : [{cDummy: [0,0]}]
+c8qu : [{cDummy: [0,0]}]
+c1qu : [{cDummy: [0,0]}]
+c8dt : [{cDummy: [0,0]}]
+c1dt : [{cDummy: [0,0]}]
+c8qd : [{cDummy: [0,0]}]
+c1qd : [{cDummy: [0,0]}]
+cQQ1 : [{cDummy: [0,0]}]
+cQQ8 : [{cDummy: [0,0]}]
+cQt1 : [{cDummy: [0,0]}]
+cQt8 : [{cDummy: [0,0]}]
+ctt1 : [{cDummy: [0,0]}]
+cll : [{cDummy: [0,0]}]
+cbp : [{cDummy: [0,0]}]
+ctp : [{cDummy: [0,0]}]
+ctG : [{cDummy: [0,0]}]
+ccp : [{cDummy: [0,0]}]
+ctap : [{cDummy: [0,0]}]
+ctW : [{cDummy: [0,0]}]
+ctZ : [{cDummy: [0,0]}]
+ 
+ 
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+Export date: Wed 1 Feb 2023 11:22:12

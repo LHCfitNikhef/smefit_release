@@ -1,0 +1,75 @@
+# UV dictionary for WC scan. Tree-level matching.
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 46
+Model name : \text{Q5}
+# ~~~~~~~~~~~~~~~~~~~~~~
+# WCs to be fitted : [cpdi]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Positively defined WCs
+cbp >= 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Negatively defined WCs
+cpdi <= 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Dependent WCs in SMEFiT basis
+# ~~~~~~~~~~~~~~~~~~~~~~
+cpG : [{cpdi: [0.,0]}]
+cpB : [{cpdi: [0.,0]}]
+cpW : [{cpdi: [0.,0]}]
+cpWB : [{cpdi: [0.,0]}]
+cpd : [{cpdi: [0.,0]}]
+cpD : [{cpdi: [0.,0]}]
+cWWW : [{cpdi: [0.,0]}]
+cpqMi : [{cpdi: [0.,0]}]
+cpQM : [{cpdi: [0.,0]}]
+c3pq : [{cpdi: [0.,0]}]
+c3pQ3 : [{cpdi: [0.,0]}]
+cpl1 : [{cpdi: [0.,0]}]
+cpl2 : [{cpdi: [0.,0]}]
+cpl3 : [{cpdi: [0.,0]}]
+c3pl1 : [{cpdi: [0.,0]}]
+c3pl2 : [{cpdi: [0.,0]}]
+c3pl3 : [{cpdi: [0.,0]}]
+cpui : [{cpdi: [0.,0]}]
+cpt : [{cpdi: [0.,0]}]
+cpe : [{cpdi: [0.,0]}]
+cpmu : [{cpdi: [0.,0]}]
+cpta : [{cpdi: [0.,0]}]
+c81qq : [{cpdi: [0.,0]}]
+c11qq : [{cpdi: [0.,0]}]
+c83qq : [{cpdi: [0.,0]}]
+c13qq : [{cpdi: [0.,0]}]
+c8qt : [{cpdi: [0.,0]}]
+c1qt : [{cpdi: [0.,0]}]
+c8ut : [{cpdi: [0.,0]}]
+c1ut : [{cpdi: [0.,0]}]
+c8qu : [{cpdi: [0.,0]}]
+c1qu : [{cpdi: [0.,0]}]
+c8dt : [{cpdi: [0.,0]}]
+c1dt : [{cpdi: [0.,0]}]
+c8qd : [{cpdi: [0.,0]}]
+c1qd : [{cpdi: [0.,0]}]
+cQQ1 : [{cpdi: [0.,0]}]
+cQQ8 : [{cpdi: [0.,0]}]
+cQt1 : [{cpdi: [0.,0]}]
+cQt8 : [{cpdi: [0.,0]}]
+ctt1 : [{cpdi: [0.,0]}]
+cll : [{cpdi: [0.,0]}]
+ctp : [{cpdi: [0.,0]}]
+ctG : [{cpdi: [0.,0]}]
+ccp : [{cpdi: [0.,0]}]
+ctap : [{cpdi: [0.,0]}]
+ctW : [{cpdi: [0.,0]}]
+ctZ : [{cpdi: [0.,0]}]
+cbp : [{cpdi: [-0.024008661728208668,1]}]
+ 
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+Export date: Wed 1 Feb 2023 11:22:13
