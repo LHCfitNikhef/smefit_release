@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import itertools
 import pathlib
+from collections.abc import Iterable
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib import cm
-from collections.abc import Iterable
-
 
 from .contours_2d import plot_contours
 from .latex_tools import latex_packages, multicolum_table_header
@@ -326,10 +325,13 @@ class CoefficientsPlotter:
         """
         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
         grid_size = int(np.sqrt(self.npar)) + 1
-        fig = plt.figure(figsize=((grid_size) * 4, (grid_size) * 3))
+        fig = plt.figure(figsize=(grid_size * 4, grid_size * 3))
         # loop on coefficients
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
-            ax = plt.subplot(grid_size - 1, grid_size, idx + 1)
+            try:
+                ax = plt.subplot(grid_size - 1, grid_size, idx + 1)
+            except ValueError:
+                ax = plt.subplot(grid_size, grid_size, idx + 1)
             # loop on fits
             for clr_idx, posterior in enumerate(posteriors):
                 if l not in posterior:
@@ -357,7 +359,11 @@ class CoefficientsPlotter:
                     label=labels[clr_idx],
                 )
                 ax.text(
-                    0.05, 0.85, latex_name, transform=ax.transAxes, fontsize=25,
+                    0.05,
+                    0.85,
+                    latex_name,
+                    transform=ax.transAxes,
+                    fontsize=25,
                 )
                 ax.tick_params(which="both", direction="in", labelsize=22.5)
                 ax.tick_params(labelleft=False)
