@@ -10,7 +10,7 @@
   <a href="https://www.codefactor.io/repository/github/lhcfitnikhef/smefit_release"><img src="https://www.codefactor.io/repository/github/lhcfitnikhef/smefit_release/badge" alt="CodeFactor" /></a>
 </p>
 
-SMEFiT is a python program for Standard Model Effective Field Theory fits
+[SMEFiT](https://www.codefactor.io/repository/github/lhcfitnikhef/smefit_release) is a python program for Standard Model Effective Field Theory fits
 ## Installation from source
 A the moment the code is not deployed yet, you can install it only from source
 using a conda environnement, which is provided.
