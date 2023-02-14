@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.optimize package &mdash; SMEFiT 0.1.0 documentation</title>
@@ -12,10 +12,8 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -31,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> SMEFiT
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SMEFiT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -143,7 +145,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="smefit.html">smefit package</a></li>
       <li class="breadcrumb-item active">smefit.optimize package</li>
       <li class="wy-breadcrumbs-aside">
@@ -163,7 +165,7 @@
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Common interface for Chi2 profile, NS and McFiT</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>results_path</strong> (<em>pathlib.path</em>) – </p></li>
 <li><p><strong>loaded_datasets</strong> (<a class="reference internal" href="smefit.html#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a><em>,</em>) – dataset tuple</p></li>
@@ -178,10 +180,10 @@
 <dd><p>Wrap the math:<cite>chi^2</cite> in a function for the optimizer. Pass noise and
 data info as args. Log the math:<cite>chi^2</cite> value and values of the coefficients.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>current_chi2</strong> – computed <span class="math notranslate nohighlight">\(\chi^2\)</span></p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>np.ndarray</p>
 </dd>
 </dl>
@@ -223,7 +225,7 @@ data info as args. Log the math:<cite>chi^2</cite> value and values of the coeff
 <dd><p>Bases: <a class="reference internal" href="#smefit.optimize.Optimizer" title="smefit.optimize.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Optimizer</span></code></a></p>
 <p>Optimizer specification for <abbr title="Monte Carlo">MC</abbr>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>loaded_datasets</strong> (<cite>smefit.loader.DataTuple</cite>) – dataset tuple</p></li>
 <li><p><strong>coefficients</strong> (<cite>smefit.coefficients.CoefficientManager</cite>) – instance of <cite>CoefficientManager</cite> with all the relevant coefficients to fit</p></li>
@@ -264,13 +266,13 @@ Default value of the ratio is 2e-5. Range is (0, 1).</p>
 <dd><p>Wrap the chi2 in a function for the optimizer. Pass noise and
 data info as args. Log the chi2 value and values of the coefficients.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>params</strong> (<em>np.ndarray</em>) – noise and data info</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>chi2 value</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
@@ -288,13 +290,13 @@ The default minimizer is trust-constr.</p>
 <span class="pre">restarts:</span> <span class="pre">0</span>
 <span class="pre">`</span></code></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – configuration dictionary</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>created object</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#smefit.optimize.Optimizer" title="smefit.optimize.Optimizer">Optimizer</a></p>
 </dd>
 </dl>
@@ -317,7 +319,7 @@ The default minimizer is trust-constr.</p>
 <dd><p>Save MC replicas to json inside a dictionary:
 {coff: replica values}</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – result dictionary</p>
 </dd>
 </dl>
@@ -335,7 +337,7 @@ The default minimizer is trust-constr.</p>
 <dd><p>Bases: <a class="reference internal" href="#smefit.optimize.Optimizer" title="smefit.optimize.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Optimizer</span></code></a></p>
 <p>Optimizer specification for <abbr title="Nested Sampling">NS</abbr></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>loaded_datasets</strong> (<cite>smefit.loader.DataTuple</cite>,) – dataset tuple</p></li>
 <li><p><strong>coefficients</strong> (<cite>smefit.coefficients.CoefficientManager</cite>) – instance of <cite>CoefficientManager</cite> with all the relevant coefficients to fit</p></li>
@@ -353,13 +355,13 @@ The default minimizer is trust-constr.</p>
 <dd><p>Wrap the chi2 in a function for the optimizer. Pass noise and
 data info as args. Log the chi2 value and values of the coefficients.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>params</strong> (<em>np.ndarray</em>) – noise and data info</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>current_chi2</strong> – chi2 function</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
@@ -376,13 +378,13 @@ data info as args. Log the chi2 value and values of the coefficients.</p>
 <span class="sig-name descname"><span class="pre">flat_prior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypercube</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.flat_prior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.flat_prior" title="Permalink to this definition"></a></dt>
 <dd><p>Update the prior function</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>hypercube</strong> (<em>np.ndarray</em>) – hypercube prior</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>flat_prior</strong> – updated hypercube prior</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
@@ -393,13 +395,13 @@ data info as args. Log the chi2 value and values of the coefficients.</p>
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.from_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Create object from theory dictionary.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – configuration dictionary</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>cls</strong> – created object</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#smefit.optimize.Optimizer" title="smefit.optimize.Optimizer">Optimizer</a></p>
 </dd>
 </dl>
@@ -410,13 +412,13 @@ data info as args. Log the chi2 value and values of the coefficients.</p>
 <span class="sig-name descname"><span class="pre">gaussian_loglikelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypercube</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.gaussian_loglikelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.gaussian_loglikelihood" title="Permalink to this definition"></a></dt>
 <dd><p>Multi gaussian log likelihood function</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>hypercube</strong> (<em>np.ndarray</em>) – hypercube prior</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>-0.5 * chi2</strong> – multi gaussian log likelihood</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
@@ -439,7 +441,7 @@ data info as args. Log the chi2 value and values of the coefficients.</p>
 <dd><p>Save <abbr title="Nested Sampling">NS</abbr> replicas to json inside a dictionary:
 {coff: [replicas values]}</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – result dictionary</p>
 </dd>
 </dl>

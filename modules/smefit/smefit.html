@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit package &mdash; SMEFiT 0.1.0 documentation</title>
@@ -12,10 +12,8 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -31,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> SMEFiT
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SMEFiT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -357,7 +359,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">smefit package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/modules/smefit/smefit.rst.txt" rel="nofollow"> View page source</a>
@@ -556,7 +558,7 @@
 <span class="sig-prename descclassname"><span class="pre">smefit.basis_rotation.</span></span><span class="sig-name descname"><span class="pre">rotate_to_fit_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lin_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quad_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_matrix_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/basis_rotation.html#rotate_to_fit_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.basis_rotation.rotate_to_fit_basis" title="Permalink to this definition"></a></dt>
 <dd><p>Rotate to fitting basis</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lin_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – theory dictionary with linear operator corrections in the table
 basis</p></li>
@@ -565,7 +567,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 <li><p><strong>rotation_matrix</strong> (<em>pandas.DataFrame</em>) – rotation matrix from tables basis to fitting basis</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>lin_dict_fit_basis</strong> (<em>dict</em>) – theory dictionary with linear operator corrections in the fit
 basis</p></li>
@@ -587,7 +589,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class to compute and plot the idividual <span class="math notranslate nohighlight">\(\chi^2\)</span> scan.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>run_card</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – run card dictionary</p></li>
 <li><p><strong>n_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of replica to use</p></li>
@@ -621,7 +623,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 <span class="sig-name descname"><span class="pre">regularized_chi2_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_replica</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/chi2.html#Scanner.regularized_chi2_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.chi2.Scanner.regularized_chi2_func" title="Permalink to this definition"></a></dt>
 <dd><p>Individual <span class="math notranslate nohighlight">\(\chi^2\)</span> wrappper over series of values.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>coeff</strong> (<cite>smefit.coefficient.Coefficient</cite>) – coefficient to switch on.</p></li>
 <li><p><strong>xs</strong> (<em>numpy.array</em>) – coeffient values.</p></li>
@@ -640,7 +642,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 <span class="sig-prename descclassname"><span class="pre">smefit.chi2.</span></span><span class="sig-name descname"><span class="pre">compute_chi2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_replica</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/chi2.html#compute_chi2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.chi2.compute_chi2" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the <span class="math notranslate nohighlight">\(\chi^2\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<a class="reference internal" href="#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a>) – dataset tuple</p></li>
 <li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
@@ -648,10 +650,10 @@ basis, emptry if quadratic corrections are not used</p></li>
 <li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>chi2_total</strong> – <span class="math notranslate nohighlight">\(\chi^2\)</span> value</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
 </dd>
 </dl>
@@ -666,7 +668,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Coefficient object</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – name of the operator corresponding to the Wilson coefficient</p></li>
 <li><p><strong>minimum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – minimum value</p></li>
@@ -686,13 +688,13 @@ basis, emptry if quadratic corrections are not used</p></li>
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_additive_factor_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constrain</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#Coefficient.build_additive_factor_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.Coefficient.build_additive_factor_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Build the dictionary for each additive factor appearing in the constrain:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>constrain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – dict object with the form {‘c1’: a1, ‘c2’: [a2,n2], …}</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>factor_dict</strong> – dict object with the form {‘c1’: [a1,1], ‘c2’: [a2,n2], …}</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
@@ -704,7 +706,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 <dd><p>Update the constrain when a new basis is chosen.
 Only linear constrain are supported.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>inv_rotation</strong> (<em>pd.DataFrame</em>) – rotation matrix from the original basis to the new_basis</p>
 </dd>
 </dl>
@@ -718,7 +720,7 @@ Only linear constrain are supported.</p>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Coefficient objcts manager</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>input_array</strong> (<em>np.ndarray</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of <cite>smefit.coefficients.Coefficient</cite> instances</p>
 </dd>
 </dl>
@@ -733,13 +735,13 @@ Only linear constrain are supported.</p>
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coefficient_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#CoefficientManager.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.CoefficientManager.from_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Create a coefficientManager from a dictionary</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>coefficient_config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – coefficients configuration dictionary</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>coefficient_manager</strong> – instance of the class</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><cite>smefit.coefficients.CoefficientManager</cite></p>
 </dd>
 </dl>
@@ -784,7 +786,7 @@ coefficient.constrain information:</p>
 <dd><p>Update the constraints according to rotation matrix.
 Only linear constrain are supported.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>inv_rotation</strong> (<em>pd.DataFrame</em>) – rotation matrix from the original basis to the new_basis</p>
 </dd>
 </dl>
@@ -807,7 +809,7 @@ Only linear constrain are supported.</p>
 <dd><p>Delete lower triangular part of a quadratic matrix
 and flatten it into an array</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>quad_mat</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – tensor to flatten</p></li>
 <li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – axis along which the triangular part is selected</p></li>
@@ -822,17 +824,17 @@ and flatten it into an array</p>
 <dd><p>Generate the corrected theory predictions for dataset
 given a set of <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> coefficients.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<a class="reference internal" href="#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a>) – dataset tuple</p></li>
 <li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
 <li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>corrected_theory</strong> – SM + EFT theory predictions</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
@@ -855,7 +857,7 @@ the statistical error to the diagonal of the covmat.
 Other systematics are treated as correlated; their covmat contribution is
 found by multiplying them by their transpose.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>stat_errors</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – a 1-D array of statistical uncertainties</p></li>
 <li><p><strong>sys_errors</strong> (<em>pandas.DataFrame</em>) – a dataframe with shape (N_data * N_sys) and systematic name as the
@@ -863,10 +865,10 @@ column headers. The uncertainties should be in the same units as the
 data.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>cov_mat</strong> – Covariance matrix</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
@@ -888,17 +890,17 @@ before being multiplied by their transpose to give off block-diagonal
 contributions. The other systematics contribute to the block diagonal in the
 same way as <a class="reference internal" href="#smefit.covmat.construct_covmat" title="smefit.covmat.construct_covmat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">construct_covmat()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>stat_errors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>(</em><em>stat_errors: np.array</em><em>)</em><em>]</em>) – list of stat_errors for each dataset.</p></li>
 <li><p><strong>sys_errors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><em>(</em><em>sys_errors: pd.DataFrame</em><em>)</em><em>]</em>) – list of sys_errors for each dataset.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>cov_mat</strong> – Numpy array which is N_dat x N_dat (where N_dat is the number of data points)
 containing uncertainty and correlation information.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
@@ -918,7 +920,7 @@ load the results, compute best theory predictions.</p>
 <span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.path" title="Permalink to this definition"></a></dt>
 <dd><p>path to fit location</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></p>
 </dd>
 </dl>
@@ -929,7 +931,7 @@ load the results, compute best theory predictions.</p>
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.name" title="Permalink to this definition"></a></dt>
 <dd><p>fit name</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>srt</p>
 </dd>
 </dl>
@@ -940,7 +942,7 @@ load the results, compute best theory predictions.</p>
 <span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.label" title="Permalink to this definition"></a></dt>
 <dd><p>fit label if any otherwise guess it from the name</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, optional</p>
 </dd>
 </dl>
@@ -951,7 +953,7 @@ load the results, compute best theory predictions.</p>
 <span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.config" title="Permalink to this definition"></a></dt>
 <dd><p>configuration dictionary</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
@@ -963,7 +965,7 @@ load the results, compute best theory predictions.</p>
 <dd><p>True if the fi contains the full posterrio distribution,
 False if only cl bounds are stored (external fits for benchmark)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
 </dd>
 </dl>
@@ -974,14 +976,14 @@ False if only cl bounds are stored (external fits for benchmark)</p>
 <span class="sig-name descname"><span class="pre">results</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.results" title="Permalink to this definition"></a></dt>
 <dd><p>fit results, they need to be loaded by <cite>load_results</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pandas.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – path to fit location</p></li>
 <li><p><strong>name</strong> (<em>srt</em>) – fit name</p></li>
@@ -1000,10 +1002,10 @@ False if only cl bounds are stored (external fits for benchmark)</p>
 <span class="sig-name descname"><span class="pre">load_configuration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/fit_manager.html#FitManager.load_configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.fit_manager.FitManager.load_configuration" title="Permalink to this definition"></a></dt>
 <dd><p>Load configuration yaml card.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>configuration card</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
@@ -1034,10 +1036,10 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">smeft_predictions</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.smeft_predictions" title="Permalink to this definition"></a></dt>
 <dd><p>Compute <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> predictions for each replica.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><abbr title="Standard Model Effective Field Theory">SMEFT</abbr> predictions for each replica</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>np.ndarray</p>
 </dd>
 </dl>
@@ -1114,7 +1116,7 @@ the results. Results are stored in a class attribute</p>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Class to check, load commondata and corresponding theory predictions.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>setname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – dataset name to load</p></li>
 <li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of operators for which corrections are loaded</p></li>
@@ -1131,10 +1133,10 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">central_values</span></span><a class="headerlink" href="#smefit.loader.Loader.central_values" title="Permalink to this definition"></a></dt>
 <dd><p>Central values</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>central_values</strong> – experimental central values</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
@@ -1151,10 +1153,10 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">covmat</span></span><a class="headerlink" href="#smefit.loader.Loader.covmat" title="Permalink to this definition"></a></dt>
 <dd><p>Experimental covariance matrix</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>covmat</strong> – experimental covariance matrix of a single dataset</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
@@ -1165,10 +1167,10 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lin_corrections</span></span><a class="headerlink" href="#smefit.loader.Loader.lin_corrections" title="Permalink to this definition"></a></dt>
 <dd><p><abbr title="Not Higher Order corrections, linear">NHO</abbr> corrections</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>lin_corrections</strong> – dictionary with operator names and <abbr title="Not Higher Order corrections, linear">NHO</abbr> correctsions</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
@@ -1179,7 +1181,7 @@ the results. Results are stored in a class attribute</p>
 <span class="sig-name descname"><span class="pre">load_experimental_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#Loader.load_experimental_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.Loader.load_experimental_data" title="Permalink to this definition"></a></dt>
 <dd><p>Load experimental data with corresponding uncertainties</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><ul class="simple">
 <li><p><strong>cental_values</strong> (<em>numpy.ndarray</em>) – experimental central values</p></li>
 <li><p><strong>covmat</strong> (<em>numpy.ndarray</em>) – experimental covariance matrix</p></li>
@@ -1194,7 +1196,7 @@ the results. Results are stored in a class attribute</p>
 <span class="sig-name descname"><span class="pre">load_theory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#Loader.load_theory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.Loader.load_theory" title="Permalink to this definition"></a></dt>
 <dd><p>Load theory predictions</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of operators to keep</p></li>
 <li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) – EFT perturbative order</p></li>
@@ -1203,7 +1205,7 @@ the results. Results are stored in a class attribute</p>
 <li><p><strong>rotation_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – rotation matrix from tables basis to fitting basis</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>sm</strong> (<em>numpy.ndarray</em>) – <abbr title="Standard Model">SM</abbr> predictions</p></li>
 <li><p><strong>lin_dict</strong> (<em>dict</em>) – dictionary with <abbr title="Not Higher Order corrections, linear">NHO</abbr> corrections</p></li>
@@ -1219,10 +1221,10 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_data</span></span><a class="headerlink" href="#smefit.loader.Loader.n_data" title="Permalink to this definition"></a></dt>
 <dd><p>Number of data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>n_data</strong> – number of experimental data</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
 </dd>
 </dl>
@@ -1233,10 +1235,10 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">quad_corrections</span></span><a class="headerlink" href="#smefit.loader.Loader.quad_corrections" title="Permalink to this definition"></a></dt>
 <dd><p><abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>quad_corrections</strong> – dictionary with operator names and <abbr title="Higher Order corrections, quadratics">HO</abbr> correctsions</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a></p>
 </dd>
 </dl>
@@ -1247,10 +1249,10 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sm_prediction</span></span><a class="headerlink" href="#smefit.loader.Loader.sm_prediction" title="Permalink to this definition"></a></dt>
 <dd><p><abbr title="Standard Model">SM</abbr> prediction for the dataset</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>SM_predictions</strong> – best <abbr title="Standard Model">SM</abbr> prediction</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
@@ -1261,10 +1263,10 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stat_error</span></span><a class="headerlink" href="#smefit.loader.Loader.stat_error" title="Permalink to this definition"></a></dt>
 <dd><p>Statistical errors</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>stat_error</strong> – statistical errors of the dataset</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>np.array</p>
 </dd>
 </dl>
@@ -1275,10 +1277,10 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sys_error</span></span><a class="headerlink" href="#smefit.loader.Loader.sys_error" title="Permalink to this definition"></a></dt>
 <dd><p>Systematic errors</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sys_error</strong> – systematic errors of the dataset</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -1289,10 +1291,10 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sys_error_t0</span></span><a class="headerlink" href="#smefit.loader.Loader.sys_error_t0" title="Permalink to this definition"></a></dt>
 <dd><p>Systematic errors modified according to t0 prescription</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sys_error_t0</strong> – t0 systematic errors of the dataset</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -1303,10 +1305,10 @@ the results. Results are stored in a class attribute</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">theory_covmat</span></span><a class="headerlink" href="#smefit.loader.Loader.theory_covmat" title="Permalink to this definition"></a></dt>
 <dd><p>Theory covariance matrix</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>theory covmat</strong> – theory covariance matrix of a single dataset</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
@@ -1338,14 +1340,14 @@ the results. Results are stored in a class attribute</p>
 <dd><p>Construct a unique list of correction name,
 with corresponding values.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>corrections_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>)</em>) – list containing corrections per experiment</p></li>
 <li><p><strong>n_data_tot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – total number of experimental data points</p></li>
 <li><p><strong>sorted_keys</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – list of sorted operator corrections</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>sorted_keys</strong> (<em>np.ndarray</em>) – unique list of operators for which at least one correction is present</p></li>
 <li><p><strong>corr_values</strong> (<em>np.ndarray</em>) – matrix with correction values (n_data_tot, sorted_keys.size)</p></li>
@@ -1365,7 +1367,7 @@ with corresponding values.</p>
 <span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commondata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theory_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_to_fit_basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_uv_coupligs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#load_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.load_datasets" title="Permalink to this definition"></a></dt>
 <dd><p>Loads experimental data, theory and <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> corrections into a namedtuple</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>commondata_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – path to commondata folder, commondata excluded</p></li>
 <li><p><strong>datasets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of datasets to be loaded</p></li>
@@ -1405,7 +1407,7 @@ Default it assumes to be the same as commondata_path</p></li>
 <p>Init the root path of the package where tables,
 results, plot config and reports are stored.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>run_card</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – run card dictionary</p></li>
 <li><p><strong>single_parameter_fits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True for single parameter fits</p></li>
@@ -1418,7 +1420,7 @@ results, plot config and reports are stored.</p>
 <span class="sig-name descname"><span class="pre">chi2_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_replica</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_bounds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.chi2_scan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.chi2_scan" title="Permalink to this definition"></a></dt>
 <dd><p>Run an individual <span class="math notranslate nohighlight">\(\chi^2\)</span> scan.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of replicas to use.
 If 0 only the <span class="math notranslate nohighlight">\(\chi^2\)</span> experimental data
@@ -1434,16 +1436,16 @@ will be computed.</p></li>
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runcard_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replica</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.from_file" title="Permalink to this definition"></a></dt>
 <dd><p>Create Runner from a runcard file</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>runcard_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – path to runcard</p></li>
 <li><p><strong>replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – replica number. Optional used only for MC</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>runner</strong> – instance of class Runner</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><cite>smefit.runner.Runner</cite></p>
 </dd>
 </dl>

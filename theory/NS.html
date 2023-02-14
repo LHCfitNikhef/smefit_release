@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nested Sampling &mdash; SMEFiT 0.1.0 documentation</title>
@@ -12,10 +12,8 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -31,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> SMEFiT
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SMEFiT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -98,7 +100,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Nested Sampling</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/theory/NS.rst.txt" rel="nofollow"> View page source</a>
@@ -144,7 +146,8 @@ of the form</p>
 <p>In this expression, the prior mass <span class="math notranslate nohighlight">\(X(\lambda)\)</span>  corresponds to the
 (normalized) volume
 of the prior density <span class="math notranslate nohighlight">\(\pi(\vec{c} )d\vec{c}\)</span>  associated with values
-of the model parameters that lead to a likelihood <span class="math notranslate nohighlight">\(\mathcal{L}\left(\vec{c}\right) \)</span>lambda` .
+of the model parameters that lead to a likelihood <span class="math notranslate nohighlight">\(\mathcal{L}\left(\vec{c}\right) `  greater
+than the parameter :math:\)</span>lambda` .
 Note that by construction, the prior mass <span class="math notranslate nohighlight">\(X\)</span>  decreases monotonically
 from the limiting value <span class="math notranslate nohighlight">\(X=1\)</span>  to <span class="math notranslate nohighlight">\(X=0\)</span>  as <span class="math notranslate nohighlight">\(\lambda\)</span>  is increased.
 The integration of <span class="math notranslate nohighlight">\(X(\lambda)\)</span>  extends over the regions in the model parameter space contained

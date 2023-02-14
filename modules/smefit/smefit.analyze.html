@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.analyze package &mdash; SMEFiT 0.1.0 documentation</title>
@@ -12,10 +12,8 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -31,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> SMEFiT
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SMEFiT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -159,7 +161,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="smefit.html">smefit package</a></li>
       <li class="breadcrumb-item active">smefit.analyze package</li>
       <li class="wy-breadcrumbs-aside">
@@ -178,7 +180,7 @@
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.</span></span><span class="sig-name descname"><span class="pre">run_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_card_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze.html#run_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.run_report" title="Permalink to this definition"></a></dt>
 <dd><p>Run the analysis given a report card name</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>report_card_file</strong> (<em>pathlib:Path</em>) – report configuration dictionary name</p>
 </dd>
 </dl>
@@ -202,7 +204,7 @@
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data_info</strong> (<em>pandas.DataFrame</em>) – datasets information (references and data groups)</p>
 </dd>
 </dl>
@@ -211,13 +213,13 @@
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">add_normalized_chi2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chi2_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/chi2_utils.html#Chi2tableCalculator.add_normalized_chi2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.chi2_utils.Chi2tableCalculator.add_normalized_chi2" title="Permalink to this definition"></a></dt>
 <dd><p>Add the normalized <span class="math notranslate nohighlight">\(\chi^2\)</span> to the table.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>chi2_df</strong> (<em>pd.DataFrame</em>) – <span class="math notranslate nohighlight">\(\chi^2\)</span> table for each dataset</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><span class="math notranslate nohighlight">\(\chi^2\)</span> table for each dataset with normalization</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -228,13 +230,13 @@
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smeft_predictions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/chi2_utils.html#Chi2tableCalculator.compute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.chi2_utils.Chi2tableCalculator.compute" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the <span class="math notranslate nohighlight">\(\chi^2\)</span> for each replica and dataset.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>datasets</strong> (<a class="reference internal" href="smefit.html#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>smefit.loader.DataTuple</em></a>) – loaded datasets</p></li>
 <li><p><strong>smeft_predictions</strong> (<em>np.ndarray</em>) – array with all the predictions for each replica</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>pd.DataFrame</em> – <span class="math notranslate nohighlight">\(\chi^2\)</span> for each dataset</p></li>
 <li><p><em>np.ndarray</em> – <span class="math notranslate nohighlight">\(\chi^2/n_{pts}\)</span> for each replica</p></li>
@@ -249,13 +251,13 @@
 <span class="sig-name descname"><span class="pre">group_chi2_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chi2_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/chi2_utils.html#Chi2tableCalculator.group_chi2_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.chi2_utils.Chi2tableCalculator.group_chi2_df" title="Permalink to this definition"></a></dt>
 <dd><p>Group the <span class="math notranslate nohighlight">\(\chi^2\)</span> according to the data type.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>chi2_df</strong> (<em>pd.DataFrame</em>) – <span class="math notranslate nohighlight">\(\chi^2\)</span> table for each dataset</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><span class="math notranslate nohighlight">\(\chi^2\)</span> table with deviation info</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -278,16 +280,16 @@
 <span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chi2_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2_dict_group</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/chi2_utils.html#Chi2tableCalculator.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.chi2_utils.Chi2tableCalculator.write" title="Permalink to this definition"></a></dt>
 <dd><p>Write the <span class="math notranslate nohighlight">\(\chi^2\)</span> latex tables.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>chi2_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – tables computed with compute() method for each fit</p></li>
 <li><p><strong>chi2_dict_group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – tables obtained with group_chi2_df() method for each fit</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list with the latex commands</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
@@ -298,13 +300,13 @@
 <span class="sig-name descname"><span class="pre">write_chi2_grouped</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chi2_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2_dict_group</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/chi2_utils.html#Chi2tableCalculator.write_chi2_grouped"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.chi2_utils.Chi2tableCalculator.write_chi2_grouped" title="Permalink to this definition"></a></dt>
 <dd><p>Write the <span class="math notranslate nohighlight">\(\chi^2\)</span> latex tables for each data group.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>chi2_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – tables computed with compute() method per each fit</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list with the latex commands</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
@@ -315,13 +317,13 @@
 <span class="sig-name descname"><span class="pre">write_chi2_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chi2_dict_group</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/chi2_utils.html#Chi2tableCalculator.write_chi2_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.chi2_utils.Chi2tableCalculator.write_chi2_summary" title="Permalink to this definition"></a></dt>
 <dd><p>Write the summary <span class="math notranslate nohighlight">\(\chi^2\)</span> table for grouped data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>chi2_dict_group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – tables obtained with group_chi2_df() method for each fit</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list with the latex commands</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
@@ -349,7 +351,7 @@ are manually separated by including the coefficient name
 in disjointed_list for disjointed_list2
 for global and single fit results, respectively.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>report_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – path to base folder, where the reports will be stored.</p></li>
 <li><p><strong>coeff_config</strong> (<em>pandas.DataFrame</em>) – coefficients latex names by gropup type</p></li>
@@ -362,7 +364,7 @@ for global and single fit results, respectively.</p>
 <span class="sig-name descname"><span class="pre">plot_coeffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lin_thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter.plot_coeffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs" title="Permalink to this definition"></a></dt>
 <dd><p>Plot central value + 95% CL errors</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – confidence level bounds per fit and coefficient
 Note: double solutions are appended under “2”</p>
 </dd>
@@ -374,7 +376,7 @@ Note: double solutions are appended under “2”</p>
 <span class="sig-name descname"><span class="pre">plot_coeffs_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter.plot_coeffs_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs_bar" title="Permalink to this definition"></a></dt>
 <dd><p>Plot error bars at given confidence level</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>error</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – confidence level bounds per fit and coefficient</p>
 </dd>
 </dl>
@@ -385,7 +387,7 @@ Note: double solutions are appended under “2”</p>
 <span class="sig-name descname"><span class="pre">plot_contours_2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posteriors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter.plot_contours_2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_contours_2d" title="Permalink to this definition"></a></dt>
 <dd><p>Plots 2D marginalised projections confidence level contours</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>posteriors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – posterior distributions per fit and coefficient</p></li>
 <li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of fit names</p></li>
@@ -401,7 +403,7 @@ are included.</p></li>
 <span class="sig-name descname"><span class="pre">plot_posteriors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posteriors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disjointed_lists</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter.plot_posteriors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_posteriors" title="Permalink to this definition"></a></dt>
 <dd><p>Plot posteriors histograms.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>posteriors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – posterior distributions per fit and coefficient</p></li>
 <li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of fit names</p></li>
@@ -431,11 +433,11 @@ given a posterior distribution
 :param disjointed_list: list of coefficients with double solutions
 :type disjointed_list: list, optional</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>bounds</strong> – confidence level bounds per coefficient
 Note: double solutions are appended under “2”</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>pandas.DataFrame</p>
 </dd>
 </dl>
@@ -461,7 +463,7 @@ Note: double solutions are appended under “2”</p>
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.contours_2d.</span></span><span class="sig-name descname"><span class="pre">confidence_ellipse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeff1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facecolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'none'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/contours_2d.html#confidence_ellipse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.contours_2d.confidence_ellipse" title="Permalink to this definition"></a></dt>
 <dd><p>Draws 95% C.L. ellipse for data points <cite>x</cite> and <cite>y</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>coeff1</strong> (<em>array_like</em>) – <code class="docutils literal notranslate"><span class="pre">(N,)</span> <span class="pre">ndarray</span></code> containing <code class="docutils literal notranslate"><span class="pre">N</span></code> posterior samples for the first coefficient</p></li>
 <li><p><strong>coeff2</strong> (<em>array_like</em>) – <code class="docutils literal notranslate"><span class="pre">(N,)</span> <span class="pre">ndarray</span></code> containing <code class="docutils literal notranslate"><span class="pre">N</span></code> posterior samples for the first coefficient</p></li>
@@ -470,10 +472,10 @@ Note: double solutions are appended under “2”</p>
 <li><p><strong>**kwargs</strong> – Additional plotting settings passed to matplotlib.patches.Ellipse</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Ellipse object</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>matplotlib.patches.Ellipse</p>
 </dd>
 </dl>
@@ -483,7 +485,7 @@ Note: double solutions are appended under “2”</p>
 <dt class="sig sig-object py" id="smefit.analyze.contours_2d.plot_contours">
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.contours_2d.</span></span><span class="sig-name descname"><span class="pre">plot_contours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clr_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/contours_2d.html#plot_contours"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.contours_2d.plot_contours" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ax</strong> (<em>matplotlib.axes</em>) – Axes object to plot on</p></li>
 <li><p><strong>posterior</strong> (<em>pandas.DataFrame</em>) – Posterior samples per coefficient</p></li>
@@ -495,10 +497,10 @@ Note: double solutions are appended under “2”</p>
 <li><p><strong>confidence_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Confidence level interval, set to 95% by default</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>hndls</strong> – List of Patch objects</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a></p>
 </dd>
 </dl>
@@ -513,7 +515,7 @@ Note: double solutions are appended under “2”</p>
 <dd><p>Computes and displays the correlation coefficients
 between parameters in a heat map</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>posterior_df</strong> (<em>pd.DataFrame</em>) – fit results</p></li>
 <li><p><strong>latex_names</strong> (<em>pd.DataFrame</em>) – coefficnet latex name table</p></li>
@@ -539,7 +541,7 @@ while quadratic information requires fit results.
 Parameter constraints are also taken into account. Only fitted
 degrees of freedom are shown in the tables.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>coefficients</strong> (<em>smefit.coefficients.CoefficienManager</em>) – coefficient manager</p></li>
 <li><p><strong>datasets</strong> (<a class="reference internal" href="smefit.html#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>smefit.loader.DataTuple</em></a>) – DataTuple object with all the data information</p></li>
@@ -569,17 +571,17 @@ degrees of freedom are shown in the tables.</p>
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#FisherCalculator.normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.FisherCalculator.normalize" title="Permalink to this definition"></a></dt>
 <dd><p>Normalize a Pandas DataFrame</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>table</strong> (<em>pandas.DataFrame</em>) – table to normalize</p></li>
 <li><p><strong>norm</strong> (<em>&quot;data&quot;</em><em>, </em><em>&quot;coeff&quot;</em>) – if “data” it normalize by columns, if “coeff” by rows</p></li>
 <li><p><strong>log</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – presents the log of the Fisher if True</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>normalized table</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pandas.DataFrame</p>
 </dd>
 </dl>
@@ -590,7 +592,7 @@ degrees of freedom are shown in the tables.</p>
 <span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latex_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(11,</span> <span class="pre">15)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#FisherCalculator.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.FisherCalculator.plot" title="Permalink to this definition"></a></dt>
 <dd><p>Plot the heat map of Fisher table.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>latex_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of coefficients latex names</p></li>
 <li><p><strong>fig_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – figure path</p></li>
@@ -608,17 +610,17 @@ else the fine grained dataset per dataset</p></li>
 <span class="sig-name descname"><span class="pre">write_grouped</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeff_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary_only</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#FisherCalculator.write_grouped"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.FisherCalculator.write_grouped" title="Permalink to this definition"></a></dt>
 <dd><p>Write Fisher information tables in latex, both for grouped data and for summary.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>coeff_config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – coefficient dictionary per group with latex names</p></li>
 <li><p><strong>data_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – dictionary with datasets  per group and relative links</p></li>
 <li><p><strong>summary_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True only the summary Fisher table fro grouped data is written</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of the latex commands</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
@@ -634,7 +636,7 @@ else the fine grained dataset per dataset</p></li>
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.html_utils.</span></span><span class="sig-name descname"><span class="pre">dump_html_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html_report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">html_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/html_utils.html#dump_html_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.html_utils.dump_html_index" title="Permalink to this definition"></a></dt>
 <dd><p>Dump report index to html.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>html_report</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – html report content</p></li>
 <li><p><strong>html_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – html index content</p></li>
@@ -650,17 +652,17 @@ else the fine grained dataset per dataset</p></li>
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.html_utils.</span></span><span class="sig-name descname"><span class="pre">html_link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/html_utils.html#html_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.html_utils.html_link" title="Permalink to this definition"></a></dt>
 <dd><p>HTML link relative to report folder.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – file name</p></li>
 <li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – label to dispaly</p></li>
 <li><p><strong>add_meta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True add ‘meta/’ to file name</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>HTML link</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
 </dd>
 </dl>
@@ -671,7 +673,7 @@ else the fine grained dataset per dataset</p></li>
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.html_utils.</span></span><span class="sig-name descname"><span class="pre">run_htlatex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tex_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/html_utils.html#run_htlatex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.html_utils.run_htlatex" title="Permalink to this definition"></a></dt>
 <dd><p>Run pandoc to generate HTML files.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>report_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – report path</p></li>
 <li><p><strong>tex_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – path to souce file</p></li>
@@ -685,7 +687,7 @@ else the fine grained dataset per dataset</p></li>
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.html_utils.</span></span><span class="sig-name descname"><span class="pre">write_html_container</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">links</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataFrame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/html_utils.html#write_html_container"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.html_utils.write_html_container" title="Permalink to this definition"></a></dt>
 <dd><p>Write the content of single report section in HTML.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – section title</p></li>
 <li><p><strong>figs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – list of figures to dispaly</p></li>
@@ -693,10 +695,10 @@ else the fine grained dataset per dataset</p></li>
 <li><p><strong>dataFrame</strong> (<em>pd.DataFrame</em>) – table to display</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>HTML section content</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
 </dd>
 </dl>
@@ -715,7 +717,7 @@ else the fine grained dataset per dataset</p></li>
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.latex_tools.</span></span><span class="sig-name descname"><span class="pre">compile_tex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/latex_tools.html#compile_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.latex_tools.compile_tex" title="Permalink to this definition"></a></dt>
 <dd><p>Compile tex file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>report</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – report path</p></li>
 <li><p><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>)</em>) – latex lines</p></li>
@@ -730,7 +732,7 @@ else the fine grained dataset per dataset</p></li>
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.latex_tools.</span></span><span class="sig-name descname"><span class="pre">dump_to_tex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tex_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/latex_tools.html#dump_to_tex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.latex_tools.dump_to_tex" title="Permalink to this definition"></a></dt>
 <dd><p>Dump a string to a tex file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tex_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – path to tex file</p></li>
 <li><p><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>)</em>) – latex lines</p></li>
@@ -755,7 +757,7 @@ else the fine grained dataset per dataset</p></li>
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.latex_tools.</span></span><span class="sig-name descname"><span class="pre">run_pdflatex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/latex_tools.html#run_pdflatex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.latex_tools.run_pdflatex" title="Permalink to this definition"></a></dt>
 <dd><p>Run pdflatex.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>report</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – report path</p></li>
 <li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – file name</p></li>
@@ -775,7 +777,7 @@ else the fine grained dataset per dataset</p></li>
 <p>Note: matrix being decomposed by SVD are the
 linear corrections multiplied by the inverse covariance matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<a class="reference internal" href="smefit.html#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>smefit.loader.DataTuple</em></a>) – loaded datasets</p></li>
 <li><p><strong>coefficients</strong> (<em>smefit.coefficients.CoefficienManager</em>) – coefficient manager</p></li>
@@ -794,7 +796,7 @@ linear corrections multiplied by the inverse covariance matrix.</p>
 <span class="sig-name descname"><span class="pre">plot_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fig_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sv_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sv_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(15,</span> <span class="pre">15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#PcaCalculator.plot_heatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.PcaCalculator.plot_heatmap" title="Permalink to this definition"></a></dt>
 <dd><p>Heat Map of PC coefficients.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fig_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – plot name</p></li>
 <li><p><strong>sv_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – minimum singular value range shown in the top heatmap plot</p></li>
@@ -811,7 +813,7 @@ linear corrections multiplied by the inverse covariance matrix.</p>
 <span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fit_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#PcaCalculator.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.PcaCalculator.write" title="Permalink to this definition"></a></dt>
 <dd><p>Write PCA latex table.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fit_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – fit label</p></li>
 <li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – minimal threshold to show in the PCA decomposition</p></li>
@@ -828,7 +830,7 @@ linear corrections multiplied by the inverse covariance matrix.</p>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Contruct a new fit runcard using PCA.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>loaded_datasets</strong> (<a class="reference internal" href="smefit.html#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>smefit.loader.DataTuple</em></a>) – loaded datasets</p></li>
 <li><p><strong>coefficients</strong> (<em>smefit.coeffiecients.CoefficientManager</em>) – coeffiecient list</p></li>
@@ -848,7 +850,7 @@ This is composed by two blocks: PCA and an identity for the constrained dofs.</p
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#RotateToPca.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.RotateToPca.from_dict" title="Permalink to this definition"></a></dt>
 <dd><p>Build the class from a runcard dictionary.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – runcard configuration dictionary</p>
 </dd>
 </dl>
@@ -875,14 +877,14 @@ This is composed by two blocks: PCA and an identity for the constrained dofs.</p
 <p>Note: only linear contraints are allowed in this method.
 Non linear contrains not always make sense here.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<a class="reference internal" href="smefit.html#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>smefit.loader.DataTuple</em></a>) – loaded datasets</p></li>
 <li><p><strong>coefficient</strong> (<em>smefit.coefficients.CoefficienManager</em>) – coefficient manager</p></li>
 <li><p><strong>update_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True update also quadratic corrections</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>np.ndarray</em> – array of updated linear corrections (n_free_op, n_dat)</p></li>
 <li><p><em>np.ndarray, optional</em> – array of updated quadratic corrections (n_free_op, n_free_op, n_dat)</p></li>
@@ -897,16 +899,16 @@ Non linear contrains not always make sense here.</p>
 <span class="sig-prename descclassname"><span class="pre">smefit.analyze.pca.</span></span><span class="sig-name descname"><span class="pre">make_sym_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_op</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/pca.html#make_sym_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.pca.make_sym_matrix" title="Permalink to this definition"></a></dt>
 <dd><p>Build a square tensor (n_op,n_op,vals.shape[0]), starting from the upper tiangular part.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vals</strong> (<em>np.ndarray</em>) – traingular part</p></li>
 <li><p><strong>n_op</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – dimension of the final matrix</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>square tensor.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarry</p>
 </dd>
 </dl>
@@ -929,7 +931,7 @@ best fit theory predictions.</p>
 <span class="sig-name descname"><span class="pre">report</span></span><a class="headerlink" href="#smefit.analyze.report.Report.report" title="Permalink to this definition"></a></dt>
 <dd><p>path to report folder</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
 </dd>
 </dl>
@@ -940,7 +942,7 @@ best fit theory predictions.</p>
 <span class="sig-name descname"><span class="pre">fits</span></span><a class="headerlink" href="#smefit.analyze.report.Report.fits" title="Permalink to this definition"></a></dt>
 <dd><p>array with fits (instances of <cite>smefit.fit_manager.FitManger</cite>) included in the report</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
@@ -951,7 +953,7 @@ best fit theory predictions.</p>
 <span class="sig-name descname"><span class="pre">data_info</span></span><a class="headerlink" href="#smefit.analyze.report.Report.data_info" title="Permalink to this definition"></a></dt>
 <dd><p>datasets information (references and data groups)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pandas.DataFrame</p>
 </dd>
 </dl>
@@ -962,14 +964,14 @@ best fit theory predictions.</p>
 <span class="sig-name descname"><span class="pre">coeff_info</span></span><a class="headerlink" href="#smefit.analyze.report.Report.coeff_info" title="Permalink to this definition"></a></dt>
 <dd><p>coefficients information (group and latex name)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>pandas.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>report_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – path to base folder, where the reports will be stored.</p></li>
 <li><p><strong>result_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – path to base folder, where the results are stored.</p></li>
@@ -983,7 +985,7 @@ for an example</p></li>
 <span class="sig-name descname"><span class="pre">chi2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_experiment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_distribution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/report.html#Report.chi2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.report.Report.chi2" title="Permalink to this definition"></a></dt>
 <dd><p><span class="math notranslate nohighlight">\(\chi^2\)</span> table and plots runner.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – write the latex <span class="math notranslate nohighlight">\(\chi^2\)</span> table per dataset</p></li>
 <li><p><strong>plot_experiment</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – plot the <span class="math notranslate nohighlight">\(\chi^2\)</span> per dataset</p></li>
@@ -998,7 +1000,7 @@ for an example</p></li>
 <span class="sig-name descname"><span class="pre">coefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scatter_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_histograms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contours_2d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hide_dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_solution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/report.html#Report.coefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.report.Report.coefficients" title="Permalink to this definition"></a></dt>
 <dd><p>Coefficients plots and table runner.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hide_dofs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of operator not to display</p></li>
 <li><p><strong>show_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of all the operator to display, if None all the free dof are presented</p></li>
@@ -1018,7 +1020,7 @@ for an example</p></li>
 <span class="sig-name descname"><span class="pre">correlations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hide_dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/report.html#Report.correlations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.report.Report.correlations" title="Permalink to this definition"></a></dt>
 <dd><p>Plot coefficients correlation matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hide_dofs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – list of operator not to display.</p></li>
 <li><p><strong>thr_show</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>None</em>) – minimum threshold value to show.
@@ -1035,7 +1037,7 @@ If None the full correlation matrix is displayed.</p></li>
 <dd><p>Fisher information table and plots runner.</p>
 <p>Summary table and plots are the default</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>norm</strong> (<em>&quot;coeff&quot;</em><em>, </em><em>&quot;dataset&quot;</em>) – fisher information normalization: per coefficient, or per dataset</p></li>
 <li><p><strong>summary_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if False writes the fine grained fisher tables per dataset and group
@@ -1054,7 +1056,7 @@ By default all the fits included in the report</p></li>
 <span class="sig-name descname"><span class="pre">pca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/report.html#Report.pca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.report.Report.pca" title="Permalink to this definition"></a></dt>
 <dd><p>Principal Components Analysis runner.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True writes the PC directions in a latex list</p></li>
 <li><p><strong>plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True produces a PC heatmap</p></li>
@@ -1093,10 +1095,10 @@ and the other two organizes the data and parameters into groups
 <span class="sig-name descname"><span class="pre">fit_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/summary.html#SummaryWriter.fit_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.summary.SummaryWriter.fit_settings" title="Permalink to this definition"></a></dt>
 <dd><p>Fit settings table.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>table with the most relevant fit settings</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -1107,10 +1109,10 @@ and the other two organizes the data and parameters into groups
 <span class="sig-name descname"><span class="pre">write_coefficients_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/summary.html#SummaryWriter.write_coefficients_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.summary.SummaryWriter.write_coefficients_table" title="Permalink to this definition"></a></dt>
 <dd><p>Write the coefficients tables</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>L</strong> – list of the latex commands</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
@@ -1121,10 +1123,10 @@ and the other two organizes the data and parameters into groups
 <span class="sig-name descname"><span class="pre">write_dataset_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/summary.html#SummaryWriter.write_dataset_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.summary.SummaryWriter.write_dataset_table" title="Permalink to this definition"></a></dt>
 <dd><p>Write the summary tables</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>L</strong> – list of the latex commands</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
 </dd>
 </dl>
