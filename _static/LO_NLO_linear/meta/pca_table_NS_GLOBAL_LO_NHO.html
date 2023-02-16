@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title> </title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="style.css" />
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title"> </h1>
+</header>
+<p><u><strong><span>Principal Components Analysis</span>:</strong></u>
+NS  LO linear<br />
+<br />
+<br />
+<span style="color: red"><u><strong><span>PC00</span>
+(5.90e+05):</strong></u></span> <span><span
+class="math inline">\(+0.699\)</span></span><span><span
+class="math inline">\(c_{\varphi G}\)</span></span> <span><span
+class="math inline">\(-0.597\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(+0.334\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(-0.182\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(+0.085\)</span></span><span><span
+class="math inline">\(c_{b \varphi}\)</span></span> <span><span
+class="math inline">\(-0.036\)</span></span><span><span
+class="math inline">\(c_{tW}\)</span></span> <span><span
+class="math inline">\(+0.032\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(+0.028\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(+0.026\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span> <span><span
+class="math inline">\(+0.012\)</span></span><span><span
+class="math inline">\(c_{\tau \varphi}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC01</span>
+(2.07e+05):</strong></u></span> <span><span
+class="math inline">\(+0.709\)</span></span><span><span
+class="math inline">\(c_{\varphi G}\)</span></span> <span><span
+class="math inline">\(+0.594\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(-0.327\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(+0.181\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(+0.036\)</span></span><span><span
+class="math inline">\(c_{tW}\)</span></span> <span><span
+class="math inline">\(+0.033\)</span></span><span><span
+class="math inline">\(c_{b \varphi}\)</span></span> <span><span
+class="math inline">\(-0.032\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(+0.029\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span> <span><span
+class="math inline">\(+0.011\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC02</span>
+(4.25e+03):</strong></u></span> <span><span
+class="math inline">\(+0.879\)</span></span><span><span
+class="math inline">\(c_{\tau \varphi}\)</span></span> <span><span
+class="math inline">\(-0.360\)</span></span><span><span
+class="math inline">\(c_{b \varphi}\)</span></span> <span><span
+class="math inline">\(-0.233\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(-0.136\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(-0.127\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(-0.087\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(+0.030\)</span></span><span><span
+class="math inline">\(c_{\varphi G}\)</span></span> <span><span
+class="math inline">\(-0.017\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(+0.013\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC03</span>
+(2.78e+03):</strong></u></span> <span><span
+class="math inline">\(-0.747\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(-0.433\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(-0.397\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(-0.290\)</span></span><span><span
+class="math inline">\(c_{\tau \varphi}\)</span></span> <span><span
+class="math inline">\(+0.071\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(+0.065\)</span></span><span><span
+class="math inline">\(c_{b \varphi}\)</span></span> <span><span
+class="math inline">\(-0.050\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(-0.023\)</span></span><span><span
+class="math inline">\(c_{tW}\)</span></span> <span><span
+class="math inline">\(+0.021\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC04</span>
+(1.88e+03):</strong></u></span> <span><span
+class="math inline">\(-0.871\)</span></span><span><span
+class="math inline">\(c_{b \varphi}\)</span></span> <span><span
+class="math inline">\(-0.378\)</span></span><span><span
+class="math inline">\(c_{\tau \varphi}\)</span></span> <span><span
+class="math inline">\(-0.290\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(+0.079\)</span></span><span><span
+class="math inline">\(c_{\varphi G}\)</span></span> <span><span
+class="math inline">\(+0.072\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span> <span><span
+class="math inline">\(+0.051\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(-0.016\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(-0.013\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC05</span>
+(2.86e+02):</strong></u></span> <span><span
+class="math inline">\(-0.989\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span> <span><span
+class="math inline">\(-0.067\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(-0.064\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.058\)</span></span><span><span
+class="math inline">\(c_{b \varphi}\)</span></span> <span><span
+class="math inline">\(+0.045\)</span></span><span><span
+class="math inline">\(c_{\varphi G}\)</span></span> <span><span
+class="math inline">\(-0.042\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(-0.035\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(-0.034\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(-0.023\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(-0.022\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.021\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,3}\)</span></span> <span><span
+class="math inline">\(+0.020\)</span></span><span><span
+class="math inline">\(c_{tW}\)</span></span> <span><span
+class="math inline">\(-0.017\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(+0.016\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span> <span><span
+class="math inline">\(-0.015\)</span></span><span><span
+class="math inline">\(c_{\tau \varphi}\)</span></span> <span><span
+class="math inline">\(+0.013\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC06</span>
+(2.18e+02):</strong></u></span> <span><span
+class="math inline">\(-0.950\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,3}\)</span></span> <span><span
+class="math inline">\(+0.300\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{3}\)</span></span> <span><span
+class="math inline">\(+0.082\)</span></span><span><span
+class="math inline">\(c_{tW}\)</span></span> <span><span
+class="math inline">\(+0.023\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span> <span><span
+class="math inline">\(+0.014\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC07</span>
+(1.02e+02):</strong></u></span> <span><span
+class="math inline">\(-0.868\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(-0.372\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(+0.286\)</span></span><span><span
+class="math inline">\(c_{b \varphi}\)</span></span> <span><span
+class="math inline">\(+0.100\)</span></span><span><span
+class="math inline">\(c_{tW}\)</span></span> <span><span
+class="math inline">\(+0.072\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(-0.070\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(-0.065\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(-0.026\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(+0.021\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span> <span><span
+class="math inline">\(+0.013\)</span></span><span><span
+class="math inline">\(c_{\tau \varphi}\)</span></span> <span><span
+class="math inline">\(+0.013\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC08</span>
+(8.28e+01):</strong></u></span> <span><span
+class="math inline">\(-0.989\)</span></span><span><span
+class="math inline">\(c_{tW}\)</span></span> <span><span
+class="math inline">\(-0.088\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(-0.084\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,3}\)</span></span> <span><span
+class="math inline">\(+0.060\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(+0.026\)</span></span><span><span
+class="math inline">\(c_{b \varphi}\)</span></span> <span><span
+class="math inline">\(-0.024\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(-0.019\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span> <span><span
+class="math inline">\(+0.017\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(+0.012\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{3}\)</span></span> <span><span
+class="math inline">\(-0.011\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(+0.011\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC09</span>
+(5.20e+01):</strong></u></span> <span><span
+class="math inline">\(+0.568\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.514\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(+0.405\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(-0.372\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(-0.247\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span> <span><span
+class="math inline">\(+0.163\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(-0.147\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC10</span>
+(2.29e+01):</strong></u></span> <span><span
+class="math inline">\(-0.570\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(+0.455\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(+0.395\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.265\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(+0.244\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(+0.233\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(+0.200\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(-0.171\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(+0.140\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.126\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(-0.090\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span> <span><span
+class="math inline">\(-0.080\)</span></span><span><span
+class="math inline">\(c_{b \varphi}\)</span></span> <span><span
+class="math inline">\(-0.060\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span> <span><span
+class="math inline">\(+0.049\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(-0.038\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(+0.024\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.018\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{3}\)</span></span> <span><span
+class="math inline">\(+0.018\)</span></span><span><span
+class="math inline">\(c_{tW}\)</span></span> <span><span
+class="math inline">\(-0.012\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC11</span>
+(2.14e+01):</strong></u></span> <span><span
+class="math inline">\(-0.615\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(-0.427\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(-0.366\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.252\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(-0.246\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(+0.219\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(-0.213\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(-0.197\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(-0.129\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.115\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(-0.071\)</span></span><span><span
+class="math inline">\(c_{b \varphi}\)</span></span> <span><span
+class="math inline">\(+0.064\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span> <span><span
+class="math inline">\(+0.063\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span> <span><span
+class="math inline">\(+0.056\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(+0.038\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(-0.026\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.021\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span> <span><span
+class="math inline">\(+0.016\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{3}\)</span></span> <span><span
+class="math inline">\(-0.014\)</span></span><span><span
+class="math inline">\(c_{tW}\)</span></span> <span><span
+class="math inline">\(+0.013\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC12</span>
+(4.19e+00):</strong></u></span> <span><span
+class="math inline">\(+0.950\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{3}\)</span></span> <span><span
+class="math inline">\(+0.299\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,3}\)</span></span> <span><span
+class="math inline">\(+0.064\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(-0.028\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(-0.024\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(+0.024\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(-0.018\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span> <span><span
+class="math inline">\(-0.016\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(+0.014\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.014\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.013\)</span></span><span><span
+class="math inline">\(c_{tW}\)</span></span> <span><span
+class="math inline">\(-0.011\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC13</span>
+(2.76e+00):</strong></u></span> <span><span
+class="math inline">\(+0.836\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(-0.390\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(-0.286\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(-0.151\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(-0.130\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(+0.112\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(-0.070\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{3}\)</span></span> <span><span
+class="math inline">\(+0.055\)</span></span><span><span
+class="math inline">\(c_{WWW}\)</span></span> <span><span
+class="math inline">\(-0.047\)</span></span><span><span
+class="math inline">\(c_{b \varphi}\)</span></span> <span><span
+class="math inline">\(+0.044\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(-0.028\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span> <span><span
+class="math inline">\(+0.027\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span> <span><span
+class="math inline">\(-0.022\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,3}\)</span></span> <span><span
+class="math inline">\(-0.016\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.016\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(-0.016\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC14</span>
+(1.83e+00):</strong></u></span> <span><span
+class="math inline">\(+0.741\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(-0.483\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(+0.287\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(+0.221\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(-0.178\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(+0.156\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span> <span><span
+class="math inline">\(+0.127\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.068\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(-0.051\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span> <span><span
+class="math inline">\(+0.047\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(-0.047\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.034\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(+0.026\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{3}\)</span></span> <span><span
+class="math inline">\(+0.017\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(+0.016\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(-0.016\)</span></span><span><span
+class="math inline">\(c_{WWW}\)</span></span> <span><span
+class="math inline">\(-0.016\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(+0.015\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(+0.011\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,3}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC15</span>
+(6.57e-01):</strong></u></span> <span><span
+class="math inline">\(-0.835\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(+0.402\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span> <span><span
+class="math inline">\(+0.258\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span> <span><span
+class="math inline">\(+0.131\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(-0.108\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(-0.105\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(+0.088\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(+0.072\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(-0.064\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(+0.057\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.051\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(+0.050\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(-0.048\)</span></span><span><span
+class="math inline">\(c_{WWW}\)</span></span> <span><span
+class="math inline">\(+0.048\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(+0.044\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.041\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.016\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span> <span><span
+class="math inline">\(+0.014\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(+0.011\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC16</span>
+(6.30e-01):</strong></u></span> <span><span
+class="math inline">\(-0.679\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span> <span><span
+class="math inline">\(-0.356\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(+0.318\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(-0.267\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(+0.236\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(+0.223\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span> <span><span
+class="math inline">\(-0.202\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.195\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(-0.181\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(-0.106\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.084\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.049\)</span></span><span><span
+class="math inline">\(c_{WWW}\)</span></span> <span><span
+class="math inline">\(-0.028\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(+0.022\)</span></span><span><span
+class="math inline">\(c_{c \varphi}\)</span></span> <span><span
+class="math inline">\(+0.019\)</span></span><span><span
+class="math inline">\(c_{tG}\)</span></span> <span><span
+class="math inline">\(-0.016\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{3}\)</span></span> <span><span
+class="math inline">\(+0.012\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC17</span>
+(3.77e-01):</strong></u></span> <span><span
+class="math inline">\(-0.729\)</span></span><span><span
+class="math inline">\(c_{WWW}\)</span></span> <span><span
+class="math inline">\(+0.377\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span> <span><span
+class="math inline">\(-0.297\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(+0.293\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.231\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(+0.181\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(-0.153\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.139\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(-0.120\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(-0.073\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.045\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span> <span><span
+class="math inline">\(+0.025\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(-0.012\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(+0.012\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC18</span>
+(3.68e-01):</strong></u></span> <span><span
+class="math inline">\(+0.678\)</span></span><span><span
+class="math inline">\(c_{WWW}\)</span></span> <span><span
+class="math inline">\(+0.472\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span> <span><span
+class="math inline">\(+0.308\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.291\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(-0.208\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(+0.168\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(-0.152\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.124\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(-0.112\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(-0.087\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.061\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span> <span><span
+class="math inline">\(-0.047\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(-0.044\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(+0.023\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(+0.023\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC19</span>
+(1.94e-01):</strong></u></span> <span><span
+class="math inline">\(-0.882\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span> <span><span
+class="math inline">\(-0.444\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(-0.116\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span> <span><span
+class="math inline">\(-0.073\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(+0.049\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(-0.037\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(+0.033\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span> <span><span
+class="math inline">\(-0.026\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.020\)</span></span><span><span
+class="math inline">\(c_{WWW}\)</span></span> <span><span
+class="math inline">\(-0.015\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(+0.014\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(-0.012\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(-0.011\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC20</span>
+(6.12e-02):</strong></u></span> <span><span
+class="math inline">\(-0.737\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.423\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.362\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(+0.216\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,1}\)</span></span> <span><span
+class="math inline">\(+0.177\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.143\)</span></span><span><span
+class="math inline">\(c_{ut}^{1}\)</span></span> <span><span
+class="math inline">\(-0.129\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(+0.112\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span> <span><span
+class="math inline">\(+0.072\)</span></span><span><span
+class="math inline">\(c_{dt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.063\)</span></span><span><span
+class="math inline">\(c_{qd}^{1}\)</span></span> <span><span
+class="math inline">\(+0.059\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(+0.048\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.036\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.036\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(+0.034\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(-0.025\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(+0.018\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(-0.013\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(+0.012\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC21</span>
+(2.60e-02):</strong></u></span> <span><span
+class="math inline">\(-0.571\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(-0.536\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.380\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(+0.362\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(+0.198\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(+0.197\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(+0.150\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(+0.062\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(-0.058\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.044\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.022\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(+0.018\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.018\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(-0.015\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.012\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC22</span>
+(2.35e-02):</strong></u></span> <span><span
+class="math inline">\(-0.674\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.479\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(-0.354\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(-0.271\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(+0.216\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(-0.211\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.082\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.072\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.070\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(+0.066\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(-0.035\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(+0.030\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.024\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.024\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span> <span><span
+class="math inline">\(+0.019\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span> <span><span
+class="math inline">\(-0.015\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(-0.014\)</span></span><span><span
+class="math inline">\(c_{WWW}\)</span></span> <span><span
+class="math inline">\(+0.011\)</span></span><span><span
+class="math inline">\(c_{qd}^{1}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC23</span>
+(7.57e-03):</strong></u></span> <span><span
+class="math inline">\(+0.566\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(-0.533\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(+0.413\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.404\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(+0.232\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.083\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(+0.036\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(+0.025\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC24</span>
+(3.54e-03):</strong></u></span> <span><span
+class="math inline">\(-0.482\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(-0.462\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.401\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.344\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,1}\)</span></span> <span><span
+class="math inline">\(-0.296\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span> <span><span
+class="math inline">\(+0.239\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.213\)</span></span><span><span
+class="math inline">\(c_{ut}^{1}\)</span></span> <span><span
+class="math inline">\(-0.173\)</span></span><span><span
+class="math inline">\(c_{qd}^{1}\)</span></span> <span><span
+class="math inline">\(+0.129\)</span></span><span><span
+class="math inline">\(c_{dt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.111\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(-0.104\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(+0.080\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.075\)</span></span><span><span
+class="math inline">\(c_{Qt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.038\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(+0.025\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(-0.019\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(-0.017\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.013\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(+0.013\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.013\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC25</span>
+(2.61e-03):</strong></u></span> <span><span
+class="math inline">\(-0.707\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.615\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(+0.177\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(+0.168\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(-0.130\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(-0.110\)</span></span><span><span
+class="math inline">\(c_{qu}^{8}\)</span></span> <span><span
+class="math inline">\(-0.095\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.090\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(-0.059\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(-0.055\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.050\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.042\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,1}\)</span></span> <span><span
+class="math inline">\(-0.037\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(-0.035\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span> <span><span
+class="math inline">\(+0.026\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.026\)</span></span><span><span
+class="math inline">\(c_{ut}^{1}\)</span></span> <span><span
+class="math inline">\(-0.021\)</span></span><span><span
+class="math inline">\(c_{qd}^{1}\)</span></span> <span><span
+class="math inline">\(+0.016\)</span></span><span><span
+class="math inline">\(c_{dt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.012\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(-0.011\)</span></span><span><span
+class="math inline">\(c_{qq}^{8,3}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC26</span>
+(2.10e-03):</strong></u></span> <span><span
+class="math inline">\(-0.930\)</span></span><span><span
+class="math inline">\(c_{tZ}\)</span></span> <span><span
+class="math inline">\(+0.229\)</span></span><span><span
+class="math inline">\(c_{\varphi t}\)</span></span> <span><span
+class="math inline">\(+0.182\)</span></span><span><span
+class="math inline">\(c_{\varphi Q}^{(-)}\)</span></span> <span><span
+class="math inline">\(-0.155\)</span></span><span><span
+class="math inline">\(c_{dt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.121\)</span></span><span><span
+class="math inline">\(c_{qd}^{8}\)</span></span> <span><span
+class="math inline">\(-0.041\)</span></span><span><span
+class="math inline">\(c_{\varphi B}\)</span></span> <span><span
+class="math inline">\(-0.034\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(-0.033\)</span></span><span><span
+class="math inline">\(c_{qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.032\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.030\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,8}\)</span></span> <span><span
+class="math inline">\(+0.030\)</span></span><span><span
+class="math inline">\(c_{t \varphi}\)</span></span> <span><span
+class="math inline">\(-0.029\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.025\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,1}\)</span></span> <span><span
+class="math inline">\(-0.024\)</span></span><span><span
+class="math inline">\(c_{\varphi D}\)</span></span> <span><span
+class="math inline">\(+0.022\)</span></span><span><span
+class="math inline">\(c_{ut}^{8}\)</span></span> <span><span
+class="math inline">\(-0.020\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span> <span><span
+class="math inline">\(+0.016\)</span></span><span><span
+class="math inline">\(c_{\varphi \Box}\)</span></span> <span><span
+class="math inline">\(+0.015\)</span></span><span><span
+class="math inline">\(c_{ut}^{1}\)</span></span> <span><span
+class="math inline">\(+0.014\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.012\)</span></span><span><span
+class="math inline">\(c_{qd}^{1}\)</span></span> <span><span
+class="math inline">\(-0.011\)</span></span><span><span
+class="math inline">\(c_{\varphi W}\)</span></span> <span><span
+class="math inline">\(+0.011\)</span></span><span><span
+class="math inline">\(c_{\varphi WB}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC27</span>
+(1.06e-10):</strong></u></span> <span><span
+class="math inline">\(+0.912\)</span></span><span><span
+class="math inline">\(c_{qq}^{1,1}\)</span></span> <span><span
+class="math inline">\(+0.255\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.215\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(+0.135\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.116\)</span></span><span><span
+class="math inline">\(c_{ut}^{1}\)</span></span> <span><span
+class="math inline">\(+0.087\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span> <span><span
+class="math inline">\(+0.084\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.067\)</span></span><span><span
+class="math inline">\(c_{dt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.051\)</span></span><span><span
+class="math inline">\(c_{qd}^{1}\)</span></span> <span><span
+class="math inline">\(+0.044\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(+0.028\)</span></span><span><span
+class="math inline">\(c_{Qt}^{1}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC28</span>
+(5.27e-11):</strong></u></span> <span><span
+class="math inline">\(+0.986\)</span></span><span><span
+class="math inline">\(c_{dt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.107\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.097\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(-0.049\)</span></span><span><span
+class="math inline">\(c_{ut}^{1}\)</span></span> <span><span
+class="math inline">\(+0.040\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span> <span><span
+class="math inline">\(+0.033\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.031\)</span></span><span><span
+class="math inline">\(c_{qd}^{1}\)</span></span> <span><span
+class="math inline">\(+0.020\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.013\)</span></span><span><span
+class="math inline">\(c_{Qt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.011\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC29</span>
+(5.27e-11):</strong></u></span> <span><span
+class="math inline">\(-0.843\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.297\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.297\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(+0.189\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.184\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span> <span><span
+class="math inline">\(-0.143\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(-0.136\)</span></span><span><span
+class="math inline">\(c_{ut}^{1}\)</span></span> <span><span
+class="math inline">\(+0.052\)</span></span><span><span
+class="math inline">\(c_{Qt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.040\)</span></span><span><span
+class="math inline">\(c_{qd}^{1}\)</span></span> <span><span
+class="math inline">\(-0.028\)</span></span><span><span
+class="math inline">\(c_{dt}^{1}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC30</span>
+(5.27e-11):</strong></u></span> <span><span
+class="math inline">\(-0.969\)</span></span><span><span
+class="math inline">\(c_{qd}^{1}\)</span></span> <span><span
+class="math inline">\(+0.193\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span> <span><span
+class="math inline">\(+0.132\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.050\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(-0.040\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.037\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.022\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(+0.010\)</span></span><span><span
+class="math inline">\(c_{dt}^{1}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC31</span>
+(5.27e-11):</strong></u></span> <span><span
+class="math inline">\(+0.892\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span> <span><span
+class="math inline">\(-0.282\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(+0.235\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.187\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.137\)</span></span><span><span
+class="math inline">\(c_{qd}^{1}\)</span></span> <span><span
+class="math inline">\(+0.094\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(-0.063\)</span></span><span><span
+class="math inline">\(c_{ut}^{1}\)</span></span> <span><span
+class="math inline">\(-0.044\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.040\)</span></span><span><span
+class="math inline">\(c_{Qt}^{1}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC32</span>
+(5.27e-11):</strong></u></span> <span><span
+class="math inline">\(+0.923\)</span></span><span><span
+class="math inline">\(c_{ut}^{1}\)</span></span> <span><span
+class="math inline">\(+0.273\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.159\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(+0.141\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span> <span><span
+class="math inline">\(+0.107\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(+0.100\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.059\)</span></span><span><span
+class="math inline">\(c_{Qt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.043\)</span></span><span><span
+class="math inline">\(c_{qd}^{1}\)</span></span> <span><span
+class="math inline">\(-0.026\)</span></span><span><span
+class="math inline">\(c_{qt}^{1}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC33</span>
+(5.27e-11):</strong></u></span> <span><span
+class="math inline">\(+0.799\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(+0.383\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(-0.281\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(-0.253\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.206\)</span></span><span><span
+class="math inline">\(c_{ut}^{1}\)</span></span> <span><span
+class="math inline">\(-0.166\)</span></span><span><span
+class="math inline">\(c_{Qt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.050\)</span></span><span><span
+class="math inline">\(c_{qu}^{1}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC34</span>
+(5.27e-11):</strong></u></span> <span><span
+class="math inline">\(-0.847\)</span></span><span><span
+class="math inline">\(c_{Qt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.326\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span> <span><span
+class="math inline">\(+0.313\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(+0.206\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.188\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span><br />
+<br />
+<span style="color: red"><u><strong><span>PC35</span>
+(5.27e-11):</strong></u></span> <span><span
+class="math inline">\(-0.564\)</span></span><span><span
+class="math inline">\(c_{Qt}^{8}\)</span></span> <span><span
+class="math inline">\(+0.515\)</span></span><span><span
+class="math inline">\(c_{QQ}^{8}\)</span></span> <span><span
+class="math inline">\(+0.490\)</span></span><span><span
+class="math inline">\(c_{Qt}^{1}\)</span></span> <span><span
+class="math inline">\(+0.351\)</span></span><span><span
+class="math inline">\(c_{tt}^{1}\)</span></span> <span><span
+class="math inline">\(-0.232\)</span></span><span><span
+class="math inline">\(c_{QQ}^{1}\)</span></span><br />
+<br />
+</p>
+</body>
+</html>

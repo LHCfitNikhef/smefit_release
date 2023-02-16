@@ -1,0 +1,549 @@
+\documentclass{article}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[a4paper]{geometry}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{pdflscape}
+\allowdisplaybreaks
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\geometry{verbose, tmargin = 1.5cm, bmargin = 1.5cm, lmargin = 1cm, rmargin = 1cm}
+\usepackage{underscore}
+\allowdisplaybreaks
+\renewcommand{\baselinestretch}{1.5}
+\begin{document}
+\noindent \underline{\bf{Principal Components Analysis}:} \rm NS\ \ LO\ quadratic\\ \\ \\
+\noindent \textcolor{red}{\underline{\bf{PC00} (5.90e+05):}}
+{$+0.699$}{\rm $c_{\varphi G}$} 
+{$-0.597$}{\rm $c_{\varphi B}$} 
+{$+0.334$}{\rm $c_{\varphi WB}$} 
+{$-0.182$}{\rm $c_{\varphi W}$} 
+{$+0.085$}{\rm $c_{b \varphi}$} 
+{$-0.036$}{\rm $c_{tW}$} 
+{$+0.032$}{\rm $c_{tZ}$} 
+{$+0.028$}{\rm $c_{c \varphi}$} 
+{$+0.026$}{\rm $c_{tG}$} 
+{$+0.012$}{\rm $c_{\tau \varphi}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC01} (2.07e+05):}}
+{$+0.709$}{\rm $c_{\varphi G}$} 
+{$+0.594$}{\rm $c_{\varphi B}$} 
+{$-0.327$}{\rm $c_{\varphi WB}$} 
+{$+0.181$}{\rm $c_{\varphi W}$} 
+{$+0.036$}{\rm $c_{tW}$} 
+{$+0.033$}{\rm $c_{b \varphi}$} 
+{$-0.032$}{\rm $c_{tZ}$} 
+{$+0.029$}{\rm $c_{tG}$} 
+{$+0.011$}{\rm $c_{c \varphi}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC02} (4.25e+03):}}
+{$+0.879$}{\rm $c_{\tau \varphi}$} 
+{$-0.360$}{\rm $c_{b \varphi}$} 
+{$-0.233$}{\rm $c_{\varphi WB}$} 
+{$-0.136$}{\rm $c_{\varphi D}$} 
+{$-0.127$}{\rm $c_{\varphi B}$} 
+{$-0.087$}{\rm $c_{c \varphi}$} 
+{$+0.030$}{\rm $c_{\varphi G}$} 
+{$-0.017$}{\rm $c_{\varphi W}$} 
+{$+0.013$}{\rm $c_{tG}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC03} (2.78e+03):}}
+{$-0.747$}{\rm $c_{\varphi WB}$} 
+{$-0.433$}{\rm $c_{\varphi D}$} 
+{$-0.397$}{\rm $c_{\varphi B}$} 
+{$-0.290$}{\rm $c_{\tau \varphi}$} 
+{$+0.071$}{\rm $c_{c \varphi}$} 
+{$+0.065$}{\rm $c_{b \varphi}$} 
+{$-0.050$}{\rm $c_{\varphi W}$} 
+{$-0.023$}{\rm $c_{tW}$} 
+{$+0.021$}{\rm $c_{tZ}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC04} (1.88e+03):}}
+{$-0.871$}{\rm $c_{b \varphi}$} 
+{$-0.378$}{\rm $c_{\tau \varphi}$} 
+{$-0.290$}{\rm $c_{c \varphi}$} 
+{$+0.079$}{\rm $c_{\varphi G}$} 
+{$+0.072$}{\rm $c_{tG}$} 
+{$+0.051$}{\rm $c_{\varphi WB}$} 
+{$-0.016$}{\rm $c_{\varphi B}$} 
+{$-0.013$}{\rm $c_{\varphi W}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC05} (2.86e+02):}}
+{$-0.989$}{\rm $c_{tG}$} 
+{$-0.067$}{\rm $c_{qq}^{1,8}$} 
+{$-0.064$}{\rm $c_{qt}^{8}$} 
+{$-0.058$}{\rm $c_{b \varphi}$} 
+{$+0.045$}{\rm $c_{\varphi G}$} 
+{$-0.042$}{\rm $c_{c \varphi}$} 
+{$-0.035$}{\rm $c_{qu}^{8}$} 
+{$-0.034$}{\rm $c_{ut}^{8}$} 
+{$-0.023$}{\rm $c_{qd}^{8}$} 
+{$-0.022$}{\rm $c_{dt}^{8}$} 
+{$-0.021$}{\rm $c_{qq}^{1,3}$} 
+{$+0.020$}{\rm $c_{tW}$} 
+{$-0.017$}{\rm $c_{\varphi \Box}$} 
+{$+0.016$}{\rm $c_{t \varphi}$} 
+{$-0.015$}{\rm $c_{\tau \varphi}$} 
+{$+0.013$}{\rm $c_{\varphi Q}^{(-)}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC06} (2.18e+02):}}
+{$-0.950$}{\rm $c_{qq}^{1,3}$} 
+{$+0.300$}{\rm $c_{\varphi Q}^{3}$} 
+{$+0.082$}{\rm $c_{tW}$} 
+{$+0.023$}{\rm $c_{tG}$} 
+{$+0.014$}{\rm $c_{c \varphi}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC07} (1.02e+02):}}
+{$-0.868$}{\rm $c_{c \varphi}$} 
+{$-0.372$}{\rm $c_{\varphi W}$} 
+{$+0.286$}{\rm $c_{b \varphi}$} 
+{$+0.100$}{\rm $c_{tW}$} 
+{$+0.072$}{\rm $c_{\varphi B}$} 
+{$-0.070$}{\rm $c_{\varphi \Box}$} 
+{$-0.065$}{\rm $c_{\varphi WB}$} 
+{$-0.026$}{\rm $c_{\varphi D}$} 
+{$+0.021$}{\rm $c_{tG}$} 
+{$+0.013$}{\rm $c_{\tau \varphi}$} 
+{$+0.013$}{\rm $c_{t \varphi}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC08} (8.28e+01):}}
+{$-0.989$}{\rm $c_{tW}$} 
+{$-0.088$}{\rm $c_{c \varphi}$} 
+{$-0.084$}{\rm $c_{qq}^{1,3}$} 
+{$+0.060$}{\rm $c_{\varphi B}$} 
+{$+0.026$}{\rm $c_{b \varphi}$} 
+{$-0.024$}{\rm $c_{\varphi W}$} 
+{$-0.019$}{\rm $c_{tG}$} 
+{$+0.017$}{\rm $c_{qq}^{1,8}$} 
+{$+0.012$}{\rm $c_{\varphi Q}^{3}$} 
+{$-0.011$}{\rm $c_{\varphi WB}$} 
+{$+0.011$}{\rm $c_{ut}^{8}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC09} (5.20e+01):}}
+{$+0.568$}{\rm $c_{qt}^{8}$} 
+{$-0.514$}{\rm $c_{qq}^{1,8}$} 
+{$+0.405$}{\rm $c_{qu}^{8}$} 
+{$-0.372$}{\rm $c_{ut}^{8}$} 
+{$-0.247$}{\rm $c_{qq}^{8,3}$} 
+{$+0.163$}{\rm $c_{qd}^{8}$} 
+{$-0.147$}{\rm $c_{dt}^{8}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC10} (2.29e+01):}}
+{$-0.570$}{\rm $c_{\varphi W}$} 
+{$+0.455$}{\rm $c_{qq}^{1,8}$} 
+{$+0.395$}{\rm $c_{qt}^{8}$} 
+{$+0.265$}{\rm $c_{ut}^{8}$} 
+{$+0.244$}{\rm $c_{c \varphi}$} 
+{$+0.233$}{\rm $c_{qu}^{8}$} 
+{$+0.200$}{\rm $c_{\varphi B}$} 
+{$-0.171$}{\rm $c_{\varphi D}$} 
+{$+0.140$}{\rm $c_{dt}^{8}$} 
+{$+0.126$}{\rm $c_{qd}^{8}$} 
+{$-0.090$}{\rm $c_{tG}$} 
+{$-0.080$}{\rm $c_{b \varphi}$} 
+{$-0.060$}{\rm $c_{qq}^{8,3}$} 
+{$+0.049$}{\rm $c_{\varphi WB}$} 
+{$-0.038$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$+0.024$}{\rm $c_{\varphi t}$} 
+{$-0.018$}{\rm $c_{\varphi Q}^{3}$} 
+{$+0.018$}{\rm $c_{tW}$} 
+{$-0.012$}{\rm $c_{t \varphi}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC11} (2.14e+01):}}
+{$-0.615$}{\rm $c_{\varphi W}$} 
+{$-0.427$}{\rm $c_{qq}^{1,8}$} 
+{$-0.366$}{\rm $c_{qt}^{8}$} 
+{$+0.252$}{\rm $c_{c \varphi}$} 
+{$-0.246$}{\rm $c_{ut}^{8}$} 
+{$+0.219$}{\rm $c_{\varphi B}$} 
+{$-0.213$}{\rm $c_{qu}^{8}$} 
+{$-0.197$}{\rm $c_{\varphi D}$} 
+{$-0.129$}{\rm $c_{dt}^{8}$} 
+{$-0.115$}{\rm $c_{qd}^{8}$} 
+{$-0.071$}{\rm $c_{b \varphi}$} 
+{$+0.064$}{\rm $c_{qq}^{8,3}$} 
+{$+0.063$}{\rm $c_{tG}$} 
+{$+0.056$}{\rm $c_{\varphi WB}$} 
+{$+0.038$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$-0.026$}{\rm $c_{\varphi t}$} 
+{$-0.021$}{\rm $c_{t \varphi}$} 
+{$+0.016$}{\rm $c_{\varphi Q}^{3}$} 
+{$-0.014$}{\rm $c_{tW}$} 
+{$+0.013$}{\rm $c_{\varphi \Box}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC12} (4.19e+00):}}
+{$+0.950$}{\rm $c_{\varphi Q}^{3}$} 
+{$+0.299$}{\rm $c_{qq}^{1,3}$} 
+{$+0.064$}{\rm $c_{\varphi D}$} 
+{$-0.028$}{\rm $c_{\varphi WB}$} 
+{$-0.024$}{\rm $c_{\varphi W}$} 
+{$+0.024$}{\rm $c_{qq}^{1,8}$} 
+{$-0.018$}{\rm $c_{qq}^{8,3}$} 
+{$-0.016$}{\rm $c_{\varphi \Box}$} 
+{$+0.014$}{\rm $c_{qt}^{8}$} 
+{$+0.014$}{\rm $c_{\varphi t}$} 
+{$-0.013$}{\rm $c_{tW}$} 
+{$-0.011$}{\rm $c_{\varphi Q}^{(-)}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC13} (2.76e+00):}}
+{$+0.836$}{\rm $c_{\varphi D}$} 
+{$-0.390$}{\rm $c_{\varphi WB}$} 
+{$-0.286$}{\rm $c_{\varphi W}$} 
+{$-0.151$}{\rm $c_{\varphi \Box}$} 
+{$-0.130$}{\rm $c_{\varphi B}$} 
+{$+0.112$}{\rm $c_{c \varphi}$} 
+{$-0.070$}{\rm $c_{\varphi Q}^{3}$} 
+{$+0.055$}{\rm $c_{WWW}$} 
+{$-0.047$}{\rm $c_{b \varphi}$} 
+{$+0.044$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$-0.028$}{\rm $c_{t \varphi}$} 
+{$+0.027$}{\rm $c_{qq}^{8,3}$} 
+{$-0.022$}{\rm $c_{qq}^{1,3}$} 
+{$-0.016$}{\rm $c_{\varphi t}$} 
+{$-0.016$}{\rm $c_{tZ}$} 
+{$-0.016$}{\rm $c_{qq}^{1,8}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC14} (1.83e+00):}}
+{$+0.741$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$-0.483$}{\rm $c_{\varphi t}$} 
+{$+0.287$}{\rm $c_{ut}^{8}$} 
+{$+0.221$}{\rm $c_{qu}^{8}$} 
+{$-0.178$}{\rm $c_{qq}^{1,8}$} 
+{$+0.156$}{\rm $c_{qq}^{8,3}$} 
+{$+0.127$}{\rm $c_{dt}^{8}$} 
+{$+0.068$}{\rm $c_{qd}^{8}$} 
+{$-0.051$}{\rm $c_{t \varphi}$} 
+{$+0.047$}{\rm $c_{\varphi \Box}$} 
+{$-0.047$}{\rm $c_{qt}^{8}$} 
+{$-0.034$}{\rm $c_{\varphi D}$} 
+{$+0.026$}{\rm $c_{\varphi Q}^{3}$} 
+{$+0.017$}{\rm $c_{\varphi WB}$} 
+{$+0.016$}{\rm $c_{tZ}$} 
+{$-0.016$}{\rm $c_{WWW}$} 
+{$-0.016$}{\rm $c_{c \varphi}$} 
+{$+0.015$}{\rm $c_{\varphi W}$} 
+{$+0.011$}{\rm $c_{qq}^{1,3}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC15} (6.57e-01):}}
+{$-0.835$}{\rm $c_{\varphi \Box}$} 
+{$+0.402$}{\rm $c_{t \varphi}$} 
+{$+0.258$}{\rm $c_{qq}^{8,3}$} 
+{$+0.131$}{\rm $c_{qu}^{8}$} 
+{$-0.108$}{\rm $c_{\varphi D}$} 
+{$-0.105$}{\rm $c_{qq}^{1,8}$} 
+{$+0.088$}{\rm $c_{qd}^{8}$} 
+{$+0.072$}{\rm $c_{ut}^{8}$} 
+{$-0.064$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$+0.057$}{\rm $c_{dt}^{8}$} 
+{$+0.051$}{\rm $c_{c \varphi}$} 
+{$+0.050$}{\rm $c_{\varphi W}$} 
+{$-0.048$}{\rm $c_{WWW}$} 
+{$+0.048$}{\rm $c_{\varphi WB}$} 
+{$+0.044$}{\rm $c_{\varphi t}$} 
+{$-0.041$}{\rm $c_{qt}^{8}$} 
+{$+0.016$}{\rm $c_{tG}$} 
+{$+0.014$}{\rm $c_{\varphi B}$} 
+{$+0.011$}{\rm $c_{tt}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC16} (6.30e-01):}}
+{$-0.679$}{\rm $c_{qq}^{8,3}$} 
+{$-0.356$}{\rm $c_{qu}^{8}$} 
+{$+0.318$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$-0.267$}{\rm $c_{\varphi \Box}$} 
+{$+0.236$}{\rm $c_{qq}^{1,8}$} 
+{$+0.223$}{\rm $c_{t \varphi}$} 
+{$-0.202$}{\rm $c_{\varphi t}$} 
+{$-0.195$}{\rm $c_{qd}^{8}$} 
+{$-0.181$}{\rm $c_{ut}^{8}$} 
+{$-0.106$}{\rm $c_{dt}^{8}$} 
+{$+0.084$}{\rm $c_{qt}^{8}$} 
+{$+0.049$}{\rm $c_{WWW}$} 
+{$-0.028$}{\rm $c_{\varphi D}$} 
+{$+0.022$}{\rm $c_{c \varphi}$} 
+{$+0.019$}{\rm $c_{tG}$} 
+{$-0.016$}{\rm $c_{\varphi Q}^{3}$} 
+{$+0.012$}{\rm $c_{\varphi WB}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC17} (3.77e-01):}}
+{$-0.729$}{\rm $c_{WWW}$} 
+{$+0.377$}{\rm $c_{qq}^{8,3}$} 
+{$-0.297$}{\rm $c_{ut}^{8}$} 
+{$+0.293$}{\rm $c_{qt}^{8}$} 
+{$-0.231$}{\rm $c_{qu}^{8}$} 
+{$+0.181$}{\rm $c_{qq}^{1,8}$} 
+{$-0.153$}{\rm $c_{dt}^{8}$} 
+{$+0.139$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$-0.120$}{\rm $c_{qd}^{8}$} 
+{$-0.073$}{\rm $c_{\varphi t}$} 
+{$-0.045$}{\rm $c_{t \varphi}$} 
+{$+0.025$}{\rm $c_{\varphi D}$} 
+{$-0.012$}{\rm $c_{\varphi WB}$} 
+{$+0.012$}{\rm $c_{tt}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC18} (3.68e-01):}}
+{$+0.678$}{\rm $c_{WWW}$} 
+{$+0.472$}{\rm $c_{qq}^{8,3}$} 
+{$+0.308$}{\rm $c_{qt}^{8}$} 
+{$-0.291$}{\rm $c_{ut}^{8}$} 
+{$-0.208$}{\rm $c_{qu}^{8}$} 
+{$+0.168$}{\rm $c_{qq}^{1,8}$} 
+{$-0.152$}{\rm $c_{dt}^{8}$} 
+{$+0.124$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$-0.112$}{\rm $c_{qd}^{8}$} 
+{$-0.087$}{\rm $c_{\varphi t}$} 
+{$-0.061$}{\rm $c_{t \varphi}$} 
+{$-0.047$}{\rm $c_{\varphi D}$} 
+{$-0.044$}{\rm $c_{\varphi \Box}$} 
+{$+0.023$}{\rm $c_{\varphi WB}$} 
+{$+0.023$}{\rm $c_{\varphi W}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC19} (1.94e-01):}}
+{$-0.882$}{\rm $c_{t \varphi}$} 
+{$-0.444$}{\rm $c_{\varphi \Box}$} 
+{$-0.116$}{\rm $c_{qq}^{8,3}$} 
+{$-0.073$}{\rm $c_{\varphi D}$} 
+{$+0.049$}{\rm $c_{\varphi W}$} 
+{$-0.037$}{\rm $c_{tZ}$} 
+{$+0.033$}{\rm $c_{\varphi WB}$} 
+{$-0.026$}{\rm $c_{qt}^{8}$} 
+{$-0.020$}{\rm $c_{WWW}$} 
+{$-0.015$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$+0.014$}{\rm $c_{ut}^{8}$} 
+{$-0.012$}{\rm $c_{qu}^{8}$} 
+{$-0.011$}{\rm $c_{qd}^{8}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC20} (6.12e-02):}}
+{$-0.737$}{\rm $c_{tt}^{1}$} 
+{$-0.423$}{\rm $c_{Qt}^{8}$} 
+{$-0.362$}{\rm $c_{QQ}^{1}$} 
+{$+0.216$}{\rm $c_{qq}^{1,1}$} 
+{$+0.177$}{\rm $c_{qt}^{1}$} 
+{$+0.143$}{\rm $c_{ut}^{1}$} 
+{$-0.129$}{\rm $c_{QQ}^{8}$} 
+{$+0.112$}{\rm $c_{qu}^{1}$} 
+{$+0.072$}{\rm $c_{dt}^{1}$} 
+{$+0.063$}{\rm $c_{qd}^{1}$} 
+{$+0.059$}{\rm $c_{qd}^{8}$} 
+{$+0.048$}{\rm $c_{dt}^{8}$} 
+{$+0.036$}{\rm $c_{\varphi t}$} 
+{$-0.036$}{\rm $c_{ut}^{8}$} 
+{$+0.034$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$-0.025$}{\rm $c_{qu}^{8}$} 
+{$+0.018$}{\rm $c_{tZ}$} 
+{$-0.013$}{\rm $c_{\varphi \Box}$} 
+{$+0.012$}{\rm $c_{qq}^{8,3}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC21} (2.60e-02):}}
+{$-0.571$}{\rm $c_{qd}^{8}$} 
+{$-0.536$}{\rm $c_{dt}^{8}$} 
+{$+0.380$}{\rm $c_{qu}^{8}$} 
+{$+0.362$}{\rm $c_{\varphi t}$} 
+{$+0.198$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$+0.197$}{\rm $c_{ut}^{8}$} 
+{$+0.150$}{\rm $c_{tZ}$} 
+{$+0.062$}{\rm $c_{qq}^{1,8}$} 
+{$-0.058$}{\rm $c_{qt}^{8}$} 
+{$-0.044$}{\rm $c_{tt}^{1}$} 
+{$-0.022$}{\rm $c_{QQ}^{1}$} 
+{$+0.018$}{\rm $c_{qt}^{1}$} 
+{$-0.018$}{\rm $c_{\varphi \Box}$} 
+{$-0.015$}{\rm $c_{Qt}^{8}$} 
+{$+0.012$}{\rm $c_{qu}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC22} (2.35e-02):}}
+{$-0.674$}{\rm $c_{\varphi t}$} 
+{$-0.479$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$-0.354$}{\rm $c_{qd}^{8}$} 
+{$-0.271$}{\rm $c_{tZ}$} 
+{$+0.216$}{\rm $c_{ut}^{8}$} 
+{$-0.211$}{\rm $c_{dt}^{8}$} 
+{$+0.082$}{\rm $c_{qt}^{8}$} 
+{$-0.072$}{\rm $c_{tt}^{1}$} 
+{$-0.070$}{\rm $c_{qq}^{1,8}$} 
+{$+0.066$}{\rm $c_{qu}^{8}$} 
+{$-0.035$}{\rm $c_{QQ}^{1}$} 
+{$+0.030$}{\rm $c_{qt}^{1}$} 
+{$-0.024$}{\rm $c_{Qt}^{8}$} 
+{$+0.024$}{\rm $c_{t \varphi}$} 
+{$+0.019$}{\rm $c_{qu}^{1}$} 
+{$-0.015$}{\rm $c_{\varphi B}$} 
+{$-0.014$}{\rm $c_{WWW}$} 
+{$+0.011$}{\rm $c_{qd}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC23} (7.57e-03):}}
+{$+0.566$}{\rm $c_{ut}^{8}$} 
+{$-0.533$}{\rm $c_{qu}^{8}$} 
+{$+0.413$}{\rm $c_{qt}^{8}$} 
+{$-0.404$}{\rm $c_{qq}^{1,8}$} 
+{$+0.232$}{\rm $c_{\varphi t}$} 
+{$-0.083$}{\rm $c_{qd}^{8}$} 
+{$+0.036$}{\rm $c_{tZ}$} 
+{$+0.025$}{\rm $c_{\varphi Q}^{(-)}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC24} (3.54e-03):}}
+{$-0.482$}{\rm $c_{QQ}^{8}$} 
+{$-0.462$}{\rm $c_{qt}^{1}$} 
+{$-0.401$}{\rm $c_{Qt}^{8}$} 
+{$+0.344$}{\rm $c_{qq}^{1,1}$} 
+{$-0.296$}{\rm $c_{qu}^{1}$} 
+{$+0.239$}{\rm $c_{tt}^{1}$} 
+{$+0.213$}{\rm $c_{ut}^{1}$} 
+{$-0.173$}{\rm $c_{qd}^{1}$} 
+{$+0.129$}{\rm $c_{dt}^{1}$} 
+{$+0.111$}{\rm $c_{QQ}^{1}$} 
+{$-0.104$}{\rm $c_{qd}^{8}$} 
+{$+0.080$}{\rm $c_{dt}^{8}$} 
+{$-0.075$}{\rm $c_{Qt}^{1}$} 
+{$+0.038$}{\rm $c_{tZ}$} 
+{$+0.025$}{\rm $c_{qu}^{8}$} 
+{$-0.019$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$-0.017$}{\rm $c_{\varphi t}$} 
+{$-0.013$}{\rm $c_{ut}^{8}$} 
+{$+0.013$}{\rm $c_{qt}^{8}$} 
+{$-0.013$}{\rm $c_{qq}^{1,8}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC25} (2.61e-03):}}
+{$-0.707$}{\rm $c_{dt}^{8}$} 
+{$+0.615$}{\rm $c_{qd}^{8}$} 
+{$+0.177$}{\rm $c_{tZ}$} 
+{$+0.168$}{\rm $c_{ut}^{8}$} 
+{$-0.130$}{\rm $c_{\varphi t}$} 
+{$-0.110$}{\rm $c_{qu}^{8}$} 
+{$-0.095$}{\rm $c_{qt}^{8}$} 
+{$+0.090$}{\rm $c_{qq}^{1,8}$} 
+{$-0.059$}{\rm $c_{QQ}^{8}$} 
+{$-0.055$}{\rm $c_{qt}^{1}$} 
+{$-0.050$}{\rm $c_{Qt}^{8}$} 
+{$+0.042$}{\rm $c_{qq}^{1,1}$} 
+{$-0.037$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$-0.035$}{\rm $c_{qu}^{1}$} 
+{$+0.026$}{\rm $c_{tt}^{1}$} 
+{$+0.026$}{\rm $c_{ut}^{1}$} 
+{$-0.021$}{\rm $c_{qd}^{1}$} 
+{$+0.016$}{\rm $c_{dt}^{1}$} 
+{$+0.012$}{\rm $c_{QQ}^{1}$} 
+{$-0.011$}{\rm $c_{qq}^{8,3}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC26} (2.10e-03):}}
+{$-0.930$}{\rm $c_{tZ}$} 
+{$+0.229$}{\rm $c_{\varphi t}$} 
+{$+0.182$}{\rm $c_{\varphi Q}^{(-)}$} 
+{$-0.155$}{\rm $c_{dt}^{8}$} 
+{$+0.121$}{\rm $c_{qd}^{8}$} 
+{$-0.041$}{\rm $c_{\varphi B}$} 
+{$-0.034$}{\rm $c_{QQ}^{8}$} 
+{$-0.033$}{\rm $c_{qt}^{8}$} 
+{$-0.032$}{\rm $c_{qt}^{1}$} 
+{$+0.030$}{\rm $c_{qq}^{1,8}$} 
+{$+0.030$}{\rm $c_{t \varphi}$} 
+{$-0.029$}{\rm $c_{Qt}^{8}$} 
+{$+0.025$}{\rm $c_{qq}^{1,1}$} 
+{$-0.024$}{\rm $c_{\varphi D}$} 
+{$+0.022$}{\rm $c_{ut}^{8}$} 
+{$-0.020$}{\rm $c_{qu}^{1}$} 
+{$+0.016$}{\rm $c_{\varphi \Box}$} 
+{$+0.015$}{\rm $c_{ut}^{1}$} 
+{$+0.014$}{\rm $c_{tt}^{1}$} 
+{$-0.012$}{\rm $c_{qd}^{1}$} 
+{$-0.011$}{\rm $c_{\varphi W}$} 
+{$+0.011$}{\rm $c_{\varphi WB}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC27} (1.06e-10):}}
+{$+0.912$}{\rm $c_{qq}^{1,1}$} 
+{$+0.255$}{\rm $c_{Qt}^{8}$} 
+{$+0.215$}{\rm $c_{QQ}^{8}$} 
+{$+0.135$}{\rm $c_{qt}^{1}$} 
+{$-0.116$}{\rm $c_{ut}^{1}$} 
+{$+0.087$}{\rm $c_{qu}^{1}$} 
+{$+0.084$}{\rm $c_{tt}^{1}$} 
+{$-0.067$}{\rm $c_{dt}^{1}$} 
+{$+0.051$}{\rm $c_{qd}^{1}$} 
+{$+0.044$}{\rm $c_{QQ}^{1}$} 
+{$+0.028$}{\rm $c_{Qt}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC28} (5.27e-11):}}
+{$+0.986$}{\rm $c_{dt}^{1}$} 
+{$+0.107$}{\rm $c_{Qt}^{8}$} 
+{$+0.097$}{\rm $c_{QQ}^{8}$} 
+{$-0.049$}{\rm $c_{ut}^{1}$} 
+{$+0.040$}{\rm $c_{qu}^{1}$} 
+{$+0.033$}{\rm $c_{qt}^{1}$} 
+{$+0.031$}{\rm $c_{qd}^{1}$} 
+{$+0.020$}{\rm $c_{tt}^{1}$} 
+{$+0.013$}{\rm $c_{Qt}^{1}$} 
+{$+0.011$}{\rm $c_{QQ}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC29} (5.27e-11):}}
+{$-0.843$}{\rm $c_{qt}^{1}$} 
+{$-0.297$}{\rm $c_{tt}^{1}$} 
+{$+0.297$}{\rm $c_{QQ}^{8}$} 
+{$+0.189$}{\rm $c_{Qt}^{8}$} 
+{$+0.184$}{\rm $c_{qu}^{1}$} 
+{$-0.143$}{\rm $c_{QQ}^{1}$} 
+{$-0.136$}{\rm $c_{ut}^{1}$} 
+{$+0.052$}{\rm $c_{Qt}^{1}$} 
+{$-0.040$}{\rm $c_{qd}^{1}$} 
+{$-0.028$}{\rm $c_{dt}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC30} (5.27e-11):}}
+{$-0.969$}{\rm $c_{qd}^{1}$} 
+{$+0.193$}{\rm $c_{qu}^{1}$} 
+{$+0.132$}{\rm $c_{qt}^{1}$} 
+{$+0.050$}{\rm $c_{QQ}^{8}$} 
+{$-0.040$}{\rm $c_{tt}^{1}$} 
+{$+0.037$}{\rm $c_{Qt}^{8}$} 
+{$-0.022$}{\rm $c_{QQ}^{1}$} 
+{$+0.010$}{\rm $c_{dt}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC31} (5.27e-11):}}
+{$+0.892$}{\rm $c_{qu}^{1}$} 
+{$-0.282$}{\rm $c_{QQ}^{8}$} 
+{$+0.235$}{\rm $c_{tt}^{1}$} 
+{$-0.187$}{\rm $c_{Qt}^{8}$} 
+{$+0.137$}{\rm $c_{qd}^{1}$} 
+{$+0.094$}{\rm $c_{QQ}^{1}$} 
+{$-0.063$}{\rm $c_{ut}^{1}$} 
+{$-0.044$}{\rm $c_{qt}^{1}$} 
+{$-0.040$}{\rm $c_{Qt}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC32} (5.27e-11):}}
+{$+0.923$}{\rm $c_{ut}^{1}$} 
+{$+0.273$}{\rm $c_{Qt}^{8}$} 
+{$-0.159$}{\rm $c_{QQ}^{1}$} 
+{$+0.141$}{\rm $c_{qu}^{1}$} 
+{$+0.107$}{\rm $c_{QQ}^{8}$} 
+{$+0.100$}{\rm $c_{tt}^{1}$} 
+{$+0.059$}{\rm $c_{Qt}^{1}$} 
+{$+0.043$}{\rm $c_{qd}^{1}$} 
+{$-0.026$}{\rm $c_{qt}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC33} (5.27e-11):}}
+{$+0.799$}{\rm $c_{QQ}^{1}$} 
+{$+0.383$}{\rm $c_{QQ}^{8}$} 
+{$-0.281$}{\rm $c_{Qt}^{8}$} 
+{$-0.253$}{\rm $c_{tt}^{1}$} 
+{$+0.206$}{\rm $c_{ut}^{1}$} 
+{$-0.166$}{\rm $c_{Qt}^{1}$} 
+{$+0.050$}{\rm $c_{qu}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC34} (5.27e-11):}}
+{$-0.847$}{\rm $c_{Qt}^{1}$} 
+{$-0.326$}{\rm $c_{QQ}^{1}$} 
+{$+0.313$}{\rm $c_{QQ}^{8}$} 
+{$+0.206$}{\rm $c_{tt}^{1}$} 
+{$-0.188$}{\rm $c_{Qt}^{8}$} 
+ \nonumber \\ \nonumber \\ 
+\noindent \textcolor{red}{\underline{\bf{PC35} (5.27e-11):}}
+{$-0.564$}{\rm $c_{Qt}^{8}$} 
+{$+0.515$}{\rm $c_{QQ}^{8}$} 
+{$+0.490$}{\rm $c_{Qt}^{1}$} 
+{$+0.351$}{\rm $c_{tt}^{1}$} 
+{$-0.232$}{\rm $c_{QQ}^{1}$} 
+ \nonumber \\ \nonumber \\ 
+\end{document}
