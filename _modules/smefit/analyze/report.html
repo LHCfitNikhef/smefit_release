@@ -63,7 +63,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../report/tools.html">Report functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../report/running.html">Produce a report</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../report/links.html">Link to reports</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../modules/smefit/smefit.html">API</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
 <ul>
@@ -106,6 +105,7 @@
   <h1>Source code for smefit.analyze.report</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -449,7 +449,7 @@
 <span class="sd">            list of fit names for which the PCA is computed.</span>
 <span class="sd">            By default all the fits included in the report</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">figs_list</span><span class="p">,</span> <span class="n">links_list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">figs_list</span><span class="p">,</span> <span class="n">links_list</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">fit_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">fit_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="o">==</span> <span class="n">fit_list</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -467,13 +467,14 @@
                     <span class="n">pca_cal</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="n">thr_show</span><span class="p">),</span>
                     <span class="sa">f</span><span class="s2">&quot;pca_table_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
-                <span class="n">links_list</span> <span class="o">=</span> <span class="p">[(</span><span class="sa">f</span><span class="s2">&quot;pca_table_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Table </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)]</span>
+                <span class="n">links_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="sa">f</span><span class="s2">&quot;pca_table_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Table </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">plot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">title</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="n">plot</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">fit_plot</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="n">fit_plot</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
                 <span class="n">pca_cal</span><span class="o">.</span><span class="n">plot_heatmap</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/pca_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="o">**</span><span class="n">plot</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/pca_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_plot</span>
                 <span class="p">)</span>
-                <span class="n">figs_list</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;pca_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+                <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pca_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_append_section</span><span class="p">(</span><span class="s2">&quot;PCA&quot;</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="n">figs_list</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="n">links_list</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Report.fisher"><a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.fisher">[docs]</a>    <span class="k">def</span> <span class="nf">fisher</span><span class="p">(</span>
@@ -499,9 +500,11 @@
 <span class="sd">            if True shows the log of the Fisher informaltion</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">figs_list</span><span class="p">,</span> <span class="n">links_list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="n">figs_list</span><span class="p">,</span> <span class="n">links_list</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">fit_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">fit_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="o">==</span> <span class="n">fit_list</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fit_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span>
 
         <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="n">fit_list</span><span class="p">:</span>
             <span class="n">compute_quad</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">]</span>
@@ -535,17 +538,18 @@
                 <span class="p">),</span>
                 <span class="sa">f</span><span class="s2">&quot;fisher_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">links_list</span> <span class="o">=</span> <span class="p">[(</span><span class="sa">f</span><span class="s2">&quot;fisher_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Table </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)]</span>
+            <span class="n">links_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="sa">f</span><span class="s2">&quot;fisher_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Table </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
 
             <span class="k">if</span> <span class="n">plot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">title</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="n">plot</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">fit_plot</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="n">fit_plot</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
                 <span class="n">fisher_cal</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
                     <span class="n">free_coeff_config</span><span class="p">,</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/fisher_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                     <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
-                    <span class="o">**</span><span class="n">plot</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">fit_plot</span><span class="p">,</span>
                 <span class="p">)</span>
-                <span class="n">figs_list</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;fisher_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+                <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;fisher_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_append_section</span><span class="p">(</span><span class="s2">&quot;Fisher&quot;</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="n">figs_list</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="n">links_list</span><span class="p">)</span></div></div>
 </pre></div>
 
