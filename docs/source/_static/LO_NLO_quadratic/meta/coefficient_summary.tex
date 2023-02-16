@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[a4paper]{geometry}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{pdflscape}
+\allowdisplaybreaks
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\geometry{verbose, tmargin = 1.5cm, bmargin = 1.5cm, lmargin = 1cm, rmargin = 1cm}
+\usepackage{underscore}
+\begin{document}
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+ &  & \multicolumn{2}{c|}{\rm NS \ NLO\ quadratic} & \multicolumn{2}{c|}{\rm NS\ \ LO\ quadratic} \\ \hline
+Class & Coefficients & Fitted & Fixed  & Fitted & Fixed  \\ \hline
+\multirow{24}{*}{2FB}
+ & $c_{t \varphi}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{tG}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{b \varphi}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{c \varphi}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{\tau \varphi}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{tW}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{tZ}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{\varphi l_1}$ & & = $-$\ 0.250\ $c_{\varphi D}$ & & = $-$\ 0.250\ $c_{\varphi D}$\\ \cline{2-6}
+ & $c_{\varphi l_1}^{3}$ & & = $-$\ 0.842\ $c_{\varphi D}$$-$\ 1.835\ $c_{\varphi WB}$ & & = $-$\ 0.842\ $c_{\varphi D}$$-$\ 1.835\ $c_{\varphi WB}$\\ \cline{2-6}
+ & $c_{\varphi l_2}$ & & = $-$\ 0.250\ $c_{\varphi D}$ & & = $-$\ 0.250\ $c_{\varphi D}$\\ \cline{2-6}
+ & $c_{\varphi l_2}^{3}$ & & = $-$\ 0.842\ $c_{\varphi D}$$-$\ 1.835\ $c_{\varphi WB}$ & & = $-$\ 0.842\ $c_{\varphi D}$$-$\ 1.835\ $c_{\varphi WB}$\\ \cline{2-6}
+ & $c_{\varphi l_3}$ & & = $-$\ 0.250\ $c_{\varphi D}$ & & = $-$\ 0.250\ $c_{\varphi D}$\\ \cline{2-6}
+ & $c_{\varphi l_3}^{3}$ & & = $-$\ 0.842\ $c_{\varphi D}$$-$\ 1.835\ $c_{\varphi WB}$ & & = $-$\ 0.842\ $c_{\varphi D}$$-$\ 1.835\ $c_{\varphi WB}$\\ \cline{2-6}
+ & $c_{\varphi e}$ & & = $-$\ 0.500\ $c_{\varphi D}$ & & = $-$\ 0.500\ $c_{\varphi D}$\\ \cline{2-6}
+ & $c_{\varphi \mu}$ & & = $-$\ 0.500\ $c_{\varphi D}$ & & = $-$\ 0.500\ $c_{\varphi D}$\\ \cline{2-6}
+ & $c_{\varphi \tau}$ & & = $-$\ 0.500\ $c_{\varphi D}$ & & = $-$\ 0.500\ $c_{\varphi D}$\\ \cline{2-6}
+ & $c_{\varphi q}^{3}$ & & = $-$\ 0.842\ $c_{\varphi D}$$-$\ 1.835\ $c_{\varphi WB}$ & & = $-$\ 0.842\ $c_{\varphi D}$$-$\ 1.835\ $c_{\varphi WB}$\\ \cline{2-6}
+ & $c_{\varphi Q}^{3}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{\varphi q}^{(-)}$ & & = +\ 0.925\ $c_{\varphi D}$+\ 1.835\ $c_{\varphi WB}$ & & = +\ 0.925\ $c_{\varphi D}$+\ 1.835\ $c_{\varphi WB}$\\ \cline{2-6}
+ & $c_{\varphi Q}^{(-)}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{\varphi u}$ & & = +\ 0.333\ $c_{\varphi D}$ & & = +\ 0.333\ $c_{\varphi D}$\\ \cline{2-6}
+ & $c_{\varphi d}$ & & = $-$\ 0.167\ $c_{\varphi D}$ & & = $-$\ 0.167\ $c_{\varphi D}$\\ \cline{2-6}
+ & $c_{\varphi t}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{ll}$ & & = +\ 0.0 & & = +\ 0.0
+\\ \hline
+\multirow{14}{*}{2Q2q}
+ & $c_{qq}^{1,8}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{qq}^{1,1}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{qq}^{8,3}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{qq}^{1,3}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{qt}^{8}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{qt}^{1}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{ut}^{8}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{ut}^{1}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{qu}^{8}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{qu}^{1}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{dt}^{8}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{dt}^{1}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{qd}^{8}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{qd}^{1}$ & $\checkmark$ &  & $\checkmark$ & 
+\\ \hline
+\multirow{5}{*}{4Q}
+ & $c_{QQ}^{1}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{QQ}^{8}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{Qt}^{1}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{Qt}^{8}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{tt}^{1}$ & $\checkmark$ &  & $\checkmark$ & 
+\\ \hline
+\multirow{7}{*}{B}
+ & $c_{\varphi G}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{\varphi B}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{\varphi W}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{\varphi WB}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{\varphi \Box}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{\varphi D}$ & $\checkmark$ &  & $\checkmark$ & \\ \cline{2-6}
+ & $c_{WWW}$ & $\checkmark$ &  & $\checkmark$ & 
+\\ \hline
+\hline & Number fitted coefficients & 36 &  & 36 &  \\ \hline
+\end{tabular}
+\caption{Coefficient comparison}
+\end{table}
+\end{document}

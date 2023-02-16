@@ -261,7 +261,7 @@ class Report:
         if posterior_histograms:
             _logger.info("Plotting : Posterior histograms")
             disjointed_lists = [
-                double_solution.get(fit.name, None)
+                double_solution.get(fit.name, [])
                 if double_solution is not None
                 else []
                 for fit in self.fits

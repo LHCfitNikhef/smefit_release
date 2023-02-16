@@ -1,0 +1,278 @@
+\documentclass{article}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[a4paper]{geometry}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{pdflscape}
+\allowdisplaybreaks
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\geometry{verbose, tmargin = 1.5cm, bmargin = 1.5cm, lmargin = 1cm, rmargin = 1cm}
+\usepackage{underscore}
+\begin{document}
+$\chi^2$ table. Blue color text represents a value that is lower than the SM $\chi^2$ \
+            by more than one standard deviation of the $\chi^2$ distribution.\
+            Similarly, red color text represents values that are higher than the SM $\chi^2$ by more than one standard deviation.\
+            In parenthesis is the total SM $\chi^2$ for the dataset included in the fit. \\
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1705.10141}{CMS_ttbb_13TeV} & 1 & 4.959 & \textcolor{red}                            {6.653} & \textcolor{red}                            {6.939} \\ \hline
+\href{https://arxiv.org/abs/1909.05306}{CMS_ttbb_13TeV_2016} & 1 & 1.754 & \textcolor{red}                            {3.086} & \textcolor{red}                            {3.328} \\ \hline
+\href{https://arxiv.org/abs/1811.12113}{ATLAS_ttbb_13TeV_2016} & 1 & 0.906 & \textcolor{blue}                            {0.561} & \textcolor{blue}                            {0.585} \\ \hline
+\href{https://arxiv.org/abs/1710.10614}{CMS_tttt_13TeV} & 1 & 0.055 & \textcolor{black}                            {0.082} & \textcolor{black}                            {0.083} \\ \hline
+\href{https://arxiv.org/abs/1908.06463}{CMS_tttt_13TeV_run2} & 1 & 0.051 & \textcolor{red}                            {1.992} & \textcolor{red}                            {2.012} \\ \hline
+\href{https://arxiv.org/abs/2007.14858}{ATLAS_tttt_13TeV_run2} & 1 & 2.352 & \textcolor{blue}                            {0.316} & \textcolor{blue}                            {0.310} \\ \hline
+\hline Total & &  & 2.115 (1.679) & 2.209 (1.679) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for 4H data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1709.05327}{ATLAS_CMS_tt_AC_8TeV} & 6 & 0.861 & \textcolor{black}                            {0.857} & \textcolor{black}                            {0.823} \\ \hline
+\href{https://cds.cern.ch/record/2682109}{ATLAS_tt_AC_13TeV} & 5 & 0.275 & \textcolor{black}                            {0.255} & \textcolor{black}                            {0.277} \\ \hline
+\hline Total & &  & 0.583 (0.595) & 0.575 (0.595) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for AC data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1909.02845}{ATLAS_ggF_ZZ_13TeV} & 6 & 0.958 & \textcolor{blue}                            {0.807} & \textcolor{blue}                            {0.726} \\ \hline
+\href{https://inspirehep.net/literature/1725274}{CMS_ggF_aa_13TeV} & 6 & 1.049 & \textcolor{black}                            {0.988} & \textcolor{blue}                            {0.940} \\ \hline
+\href{https://inspirehep.net/literature/1743896}{ATLAS_H_13TeV_2015_pTH} & 9 & 1.11 & \textcolor{black}                            {1.101} & \textcolor{black}                            {1.069} \\ \hline
+\href{https://arxiv.org/abs/1812.06504}{CMS_H_13TeV_2015_pTH} & 9 & 0.8 & \textcolor{black}                            {0.781} & \textcolor{blue}                            {0.736} \\ \hline
+\href{https://arxiv.org/abs/1903.04618}{ATLAS_WH_Hbb_13TeV} & 2 & 0.1 & \textcolor{black}                            {0.193} & \textcolor{black}                            {0.116} \\ \hline
+\href{https://arxiv.org/abs/1903.04618}{ATLAS_ZH_Hbb_13TeV} & 3 & 0.496 & \textcolor{blue}                            {0.305} & \textcolor{black}                            {0.312} \\ \hline
+\hline Total & &  & 0.829 (0.883) & 0.783 (0.883) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for Hdiff data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1606.02266}{ATLAS_CMS_SSinc_RunI} & 22 & 0.859 & \textcolor{black}                            {0.877} & \textcolor{red}                            {0.971} \\ \hline
+\hline Total & &  & 0.877 (0.859) & 0.971 (0.859) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for HrunI data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1909.02845}{ATLAS_SSinc_RunII} & 16 & 0.542 & \textcolor{black}                            {0.534} & \textcolor{black}                            {0.521} \\ \hline
+\href{https://arxiv.org/abs/1809.10733}{CMS_SSinc_RunII} & 24 & 0.771 & \textcolor{black}                            {0.724} & \textcolor{black}                            {0.766} \\ \hline
+\hline Total & &  & 0.648 (0.679) & 0.668 (0.679) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for HrunII data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1302.3415}{LEP_eeWW_182GeV} & 10 & 1.38 & \textcolor{black}                            {1.379} & \textcolor{black}                            {1.379} \\ \hline
+\href{https://arxiv.org/abs/1302.3415}{LEP_eeWW_189GeV} & 10 & 0.885 & \textcolor{black}                            {0.886} & \textcolor{black}                            {0.885} \\ \hline
+\href{https://arxiv.org/abs/1302.3415}{LEP_eeWW_198GeV} & 10 & 1.609 & \textcolor{black}                            {1.609} & \textcolor{black}                            {1.609} \\ \hline
+\href{https://arxiv.org/abs/1302.3415}{LEP_eeWW_206GeV} & 10 & 1.085 & \textcolor{black}                            {1.082} & \textcolor{black}                            {1.084} \\ \hline
+\hline Total & &  & 1.239 (1.240) & 1.239 (1.240) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for LEP data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1905.04242}{ATLAS_WW_13TeV_2016_memu} & 13 & 1.651 & \textcolor{black}                            {1.673} & \textcolor{black}                            {1.710} \\ \hline
+\href{https://arxiv.org/abs/1902.05759}{ATLAS_WZ_13TeV_2016_mTWZ} & 6 & 0.861 & \textcolor{black}                            {0.816} & \textcolor{black}                            {0.853} \\ \hline
+\href{https://arxiv.org/abs/1901.03428}{CMS_WZ_13TeV_2016_pTZ} & 11 & 1.423 & \textcolor{black}                            {1.391} & \textcolor{black}                            {1.417} \\ \hline
+\hline Total & &  & 1.398 (1.410) & 1.431 (1.410) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for VV data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1612.02577}{ATLAS_WhelF_8TeV} & 3 & 1.967 & \textcolor{blue}                            {1.368} & \textcolor{blue}                            {1.337} \\ \hline
+\href{https://arxiv.org/abs/1605.09047}{CMS_WhelF_8TeV} & 3 & 0.296 & \textcolor{black}                            {0.591} & \textcolor{black}                            {0.614} \\ \hline
+\hline Total & &  & 0.979 (1.131) & 0.975 (1.131) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for WhelF data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1610.00678}{CMS_t_tch_13TeV_inc} & 2 & 0.345 & \textcolor{black}                            {0.352} & \textcolor{blue}                            {0.302} \\ \hline
+\href{https://cds.cern.ch/record/2151074}{CMS_t_tch_13TeV_diff_Yt} & 4 & 0.476 & \textcolor{black}                            {0.487} & \textcolor{black}                            {0.484} \\ \hline
+\href{https://arxiv.org/abs/1907.08330}{CMS_t_tch_13TeV_2016_diff_Yt} & 5 & 0.58 & \textcolor{black}                            {0.580} & \textcolor{black}                            {0.576} \\ \hline
+\href{https://arxiv.org/abs/1609.03920}{ATLAS_t_tch_13TeV} & 2 & 0.011 & \textcolor{black}                            {0.018} & \textcolor{black}                            {0.019} \\ \hline
+\hline Total & &  & 0.430 (0.424) & 0.420 (0.424) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for t13 data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1403.7366}{CMS_t_tch_8TeV_inc} & 2 & 0.293 & \textcolor{blue}                            {0.174} & \textcolor{blue}                            {0.160} \\ \hline
+\href{https://cds.cern.ch/record/1956681}{CMS_t_tch_8TeV_diff_Yt} & 6 & 0.11 & \textcolor{black}                            {0.146} & \textcolor{black}                            {0.200} \\ \hline
+\href{https://arxiv.org/abs/1603.02555}{CMS_t_sch_8TeV} & 1 & 1.265 & \textcolor{black}                            {1.171} & \textcolor{blue}                            {0.903} \\ \hline
+\href{https://arxiv.org/abs/1702.02859}{ATLAS_t_tch_8TeV} & 4 & 0.89 & \textcolor{black}                            {0.707} & \textcolor{black}                            {0.644} \\ \hline
+\href{https://arxiv.org/abs/1511.05980}{ATLAS_t_sch_8TeV} & 1 & 0.085 & \textcolor{black}                            {0.209} & \textcolor{black}                            {1.092} \\ \hline
+\hline Total & &  & 0.388 (0.440) & 0.435 (0.440) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for t8 data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1510.03752}{ATLAS_tW_8TeV_inc} & 1 & 0.026 & \textcolor{black}                            {0.033} & \textcolor{black}                            {0.011} \\ \hline
+\href{https://arxiv.org/abs/2007.01554}{ATLAS_tW_slep_8TeV_inc} & 1 & 0.134 & \textcolor{black}                            {0.103} & \textcolor{black}                            {0.147} \\ \hline
+\href{https://arxiv.org/abs/1401.2942}{CMS_tW_8TeV_inc} & 1 & 0.0 & \textcolor{black}                            {0.004} & \textcolor{black}                            {0.000} \\ \hline
+\href{https://arxiv.org/abs/1612.07231}{ATLAS_tW_13TeV_inc} & 1 & 0.549 & \textcolor{black}                            {0.492} & \textcolor{black}                            {0.570} \\ \hline
+\href{https://arxiv.org/abs/1805.07399}{CMS_tW_13TeV_inc} & 1 & 3.855 & \textcolor{black}                            {4.489} & \textcolor{black}                            {3.663} \\ \hline
+\hline Total & &  & 1.024 (0.913) & 0.878 (0.913) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for tW data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1712.02825}{ATLAS_tZ_13TeV_inc} & 1 & 0.0 & \textcolor{black}                            {0.003} & \textcolor{black}                            {0.036} \\ \hline
+\href{https://arxiv.org/abs/2002.07546}{ATLAS_tZ_13TeV_run2_inc} & 1 & 0.048 & \textcolor{black}                            {0.007} & \textcolor{black}                            {0.052} \\ \hline
+\href{https://arxiv.org/abs/1712.02825}{CMS_tZ_13TeV_inc} & 1 & 0.678 & \textcolor{black}                            {0.662} & \textcolor{black}                            {0.635} \\ \hline
+\href{https://arxiv.org/abs/1812.05900}{CMS_tZ_13TeV_2016_inc} & 1 & 1.23 & \textcolor{black}                            {1.178} & \textcolor{black}                            {1.086} \\ \hline
+\hline Total & &  & 0.463 (0.489) & 0.452 (0.489) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for tZ data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1610.04191}{CMS_tt_13TeV_ljets_2015_Mtt} & 8 & 0.939 & \textcolor{black}                            {0.963} & \textcolor{blue}                            {0.819} \\ \hline
+\href{https://arxiv.org/abs/1708.07638}{CMS_tt_13TeV_dilep_2015_Mtt} & 6 & 1.299 & \textcolor{red}                            {1.522} & \textcolor{black}                            {1.267} \\ \hline
+\href{https://arxiv.org/abs/1803.08856}{CMS_tt_13TeV_ljets_2016_Mtt} & 10 & 1.992 & \textcolor{red}                            {2.212} & \textcolor{blue}                            {1.739} \\ \hline
+\href{https://arxiv.org/abs/1811.06625}{CMS_tt_13TeV_dilep_2016_Mtt} & 7 & 2.282 & \textcolor{black}                            {2.515} & \textcolor{black}                            {2.224} \\ \hline
+\href{https://arxiv.org/abs/1908.07305}{ATLAS_tt_13TeV_ljets_2016_Mtt} & 7 & 0.986 & \textcolor{black}                            {1.034} & \textcolor{red}                            {1.219} \\ \hline
+\hline Total & &  & 1.679 (1.529) & 1.464 (1.529) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for tt13 data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1511.04716}{ATLAS_tt_8TeV_ljets_Mtt} & 7 & 2.953 & \textcolor{blue}                            {2.720} & \textcolor{black}                            {2.903} \\ \hline
+\href{https://arxiv.org/abs/1607.07281}{ATLAS_tt_8TeV_dilep_Mtt} & 6 & 0.086 & \textcolor{black}                            {0.121} & \textcolor{blue}                            {0.050} \\ \hline
+\href{https://arxiv.org/abs/1505.04480}{CMS_tt_8TeV_ljets_Ytt} & 10 & 0.906 & \textcolor{red}                            {1.047} & \textcolor{black}                            {0.926} \\ \hline
+\href{https://arxiv.org/abs/1703.01630}{CMS_tt2D_8TeV_dilep_MttYtt} & 16 & 1.628 & \textcolor{blue}                            {1.113} & \textcolor{black}                            {1.465} \\ \hline
+\hline Total & &  & 1.232 (1.443) & 1.367 (1.443) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for tt8 data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1509.05276}{ATLAS_ttW_8TeV} & 1 & 1.334 & \textcolor{black}                            {1.213} & \textcolor{blue}                            {0.552} \\ \hline
+\href{https://arxiv.org/abs/1609.01599}{ATLAS_ttW_13TeV} & 1 & 0.828 & \textcolor{black}                            {0.812} & \textcolor{blue}                            {0.729} \\ \hline
+\href{https://arxiv.org/abs/1901.03584}{ATLAS_ttW_13TeV_2016} & 1 & 0.225 & \textcolor{black}                            {0.003} & \textcolor{blue}                            {0.059} \\ \hline
+\href{https://arxiv.org/abs/1510.01131}{CMS_ttW_8TeV} & 1 & 1.781 & \textcolor{black}                            {1.645} & \textcolor{blue}                            {0.963} \\ \hline
+\href{https://arxiv.org/abs/1711.02547}{CMS_ttW_13TeV} & 1 & 0.028 & \textcolor{black}                            {0.169} & \textcolor{black}                            {0.030} \\ \hline
+\hline Total & &  & 0.768 (0.839) & 0.467 (0.839) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for ttW data}
+\end{table}
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ \multicolumn{2}{|c|}{} & SM& \rm NS \ NLO\ quadratic& \rm NS\ \ LO\ quadratic\\ \hline
+Process & $N_{\rm data}$ & $\chi^ 2/N_{\rm data}$& $\chi^ 2/N_{data}$& $\chi^ 2/N_{data}$\\ \hline
+\href{https://arxiv.org/abs/1509.05276}{ATLAS_ttZ_8TeV} & 1 & 1.314 & \textcolor{black}                            {1.325} & \textcolor{black}                            {1.362} \\ \hline
+\href{https://arxiv.org/abs/1609.01599}{ATLAS_ttZ_13TeV} & 1 & 0.007 & \textcolor{black}                            {0.060} & \textcolor{black}                            {0.060} \\ \hline
+\href{https://arxiv.org/abs/1901.03584}{ATLAS_ttZ_13TeV_2016} & 1 & 0.001 & \textcolor{black}                            {0.123} & \textcolor{black}                            {0.125} \\ \hline
+\href{https://arxiv.org/abs/1510.01131}{CMS_ttZ_8TeV} & 1 & 0.042 & \textcolor{black}                            {0.040} & \textcolor{black}                            {0.034} \\ \hline
+\href{https://arxiv.org/abs/1711.02547}{CMS_ttZ_13TeV} & 1 & 1.011 & \textcolor{black}                            {0.434} & \textcolor{black}                            {0.430} \\ \hline
+\href{https://arxiv.org/abs/1907.11270}{CMS_ttZ_13TeV_pTZ} & 4 & 0.732 & \textcolor{black}                            {0.825} & \textcolor{black}                            {0.705} \\ \hline
+\hline Total & &  & 0.587 (0.589) & 0.537 (0.589) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for ttZ data}
+\end{table}
+
+
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+& \multicolumn{2}{c|}{\rm NS \ NLO\ quadratic}& \multicolumn{2}{c|}{\rm NS\ \ LO\ quadratic}\\ \hline
+Process  & $N_{\rm data}$ & $\chi^2/N_{\rm data}$ & $N_{\rm data}$ & $\chi^2/N_{\rm data}$\\ \hline
+tt8 & 39.0                         & 1.232                             (1.443) & 39.0                         & 1.367                             (1.443) \\ \hline
+tt13 & 38.0                         & 1.679                             (1.529) & 38.0                         & 1.464                             (1.529) \\ \hline
+WhelF & 6.0                         & 0.979                             (1.131) & 6.0                         & 0.975                             (1.131) \\ \hline
+AC & 11.0                         & 0.583                             (0.595) & 11.0                         & 0.575                             (0.595) \\ \hline
+4H & 6.0                         & 2.115                             (1.679) & 6.0                         & 2.209                             (1.679) \\ \hline
+ttZ & 9.0                         & 0.587                             (0.589) & 9.0                         & 0.537                             (0.589) \\ \hline
+ttW & 5.0                         & 0.768                             (0.839) & 5.0                         & 0.467                             (0.839) \\ \hline
+t8 & 14.0                         & 0.388                             (0.440) & 14.0                         & 0.435                             (0.440) \\ \hline
+t13 & 13.0                         & 0.430                             (0.424) & 13.0                         & 0.420                             (0.424) \\ \hline
+tW & 5.0                         & 1.024                             (0.913) & 5.0                         & 0.878                             (0.913) \\ \hline
+tZ & 4.0                         & 0.463                             (0.489) & 4.0                         & 0.452                             (0.489) \\ \hline
+HrunI & 22.0                         & 0.877                             (0.859) & 22.0                         & 0.971                             (0.859) \\ \hline
+HrunII & 40.0                         & 0.648                             (0.679) & 40.0                         & 0.668                             (0.679) \\ \hline
+Hdiff & 35.0                         & 0.829                             (0.883) & 35.0                         & 0.783                             (0.883) \\ \hline
+VV & 30.0                         & 1.398                             (1.410) & 30.0                         & 1.431                             (1.410) \\ \hline
+LEP & 40.0                         & 1.239                             (1.240) & 40.0                         & 1.239                             (1.240) \\ \hline
+ \hline Total & 317.0                 & 1.040                     (1.055) & 317.0                 & 1.033                     (1.055) \\ \hline
+\end{tabular}
+\caption{$\chi^2$ table for grouped data. In parenthesis is the total SM $\chi^2$ for the dataset included in the fit.\
+                    The SM column refers to all the datasets available in the group}
+\end{table}
+\end{document}
