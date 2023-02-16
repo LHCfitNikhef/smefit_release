@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import copy
 
 import numpy as np
 import pandas as pd
@@ -343,7 +344,7 @@ class Report:
             list of fit names for which the PCA is computed.
             By default all the fits included in the report
         """
-        figs_list, links_list = None, None
+        figs_list, links_list = [], []
         if fit_list is not None:
             fit_list = self.fits[self.fits == fit_list]
         else:
@@ -361,13 +362,14 @@ class Report:
                     pca_cal.write(fit.label, thr_show),
                     f"pca_table_{fit.name}",
                 )
-                links_list = [(f"pca_table_{fit.name}", f"Table {fit.label}")]
+                links_list.append((f"pca_table_{fit.name}", f"Table {fit.label}"))
             if plot is not None:
-                title = fit.label if plot.pop("title") else None
+                fit_plot = copy.deepcopy(plot)
+                title = fit.label if fit_plot.pop("title") else None
                 pca_cal.plot_heatmap(
-                    f"{self.report}/pca_heatmap_{fit.name}", title=title, **plot
+                    f"{self.report}/pca_heatmap_{fit.name}", title=title, **fit_plot
                 )
-                figs_list = [f"pca_heatmap_{fit.name}"]
+                figs_list.append(f"pca_heatmap_{fit.name}")
         self._append_section("PCA", figs=figs_list, links=links_list)
 
     def fisher(
@@ -393,9 +395,11 @@ class Report:
             if True shows the log of the Fisher informaltion
 
         """
-        figs_list, links_list = None, None
+        figs_list, links_list = [], []
         if fit_list is not None:
             fit_list = self.fits[self.fits == fit_list]
+        else:
+            fit_list = self.fits
 
         for fit in fit_list:
             compute_quad = fit.config["use_quad"]
@@ -429,15 +433,16 @@ class Report:
                 ),
                 f"fisher_{fit.name}",
             )
-            links_list = [(f"fisher_{fit.name}", f"Table {fit.label}")]
+            links_list.append((f"fisher_{fit.name}", f"Table {fit.label}"))
 
             if plot is not None:
-                title = fit.label if plot.pop("title") else None
+                fit_plot = copy.deepcopy(plot)
+                title = fit.label if fit_plot.pop("title") else None
                 fisher_cal.plot(
                     free_coeff_config,
                     f"{self.report}/fisher_heatmap_{fit.name}",
                     title=title,
-                    **plot,
+                    **fit_plot,
                 )
-                figs_list = [f"fisher_heatmap_{fit.name}"]
+                figs_list.append(f"fisher_heatmap_{fit.name}")
         self._append_section("Fisher", figs=figs_list, links=links_list)

@@ -79,4 +79,17 @@ souce /cvmfs/sft.cern.ch/lcg/external/texlive/2020/bin/x86_64-linux/pdflatex
 ```
 
 ## Citation policy
-Please cite our DOI when using our code:
+Please cite our paper when using the code:
+
+```
+@article{Giani:2023gfq,
+    author = "Giani, Tommaso and Magni, Giacomo and Rojo, Juan",
+    title = "{SMEFiT: a flexible toolbox for global interpretations of particle physics data with effective field theories}",
+    eprint = "2302.06660",
+    archivePrefix = "arXiv",
+    primaryClass = "hep-ph",
+    reportNumber = "Nikhef-2022-023",
+    month = "2",
+    year = "2023"
+}
+```
