@@ -366,9 +366,9 @@
         <span class="k">if</span> <span class="n">posterior_histograms</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting : Posterior histograms&quot;</span><span class="p">)</span>
             <span class="n">disjointed_lists</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">double_solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="n">double_solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">double_solution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-                <span class="k">else</span> <span class="p">[]</span>
+                <span class="k">else</span> <span class="kc">None</span>
                 <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span>
             <span class="p">]</span>
             <span class="n">coeff_plt</span><span class="o">.</span><span class="n">plot_posteriors</span><span class="p">(</span>
