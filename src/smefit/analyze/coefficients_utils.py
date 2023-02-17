@@ -534,7 +534,7 @@ class CoefficientsPlotter:
                     # double solution
                     try:
                         cl_vals_2 = bound_df[(group, latex_name)].dropna()[1]
-                        temp += f" & {np.round(cl_vals_2['mid'],round_val)} \
+                        temp2 += f" & {np.round(cl_vals_2['mid'],round_val)} \
                                 & [{np.round(cl_vals_2['low68'],round_val)},{np.round(cl_vals_2['high68'],round_val)}] \
                                     & [{np.round(cl_vals_2['low95'],round_val)},{np.round(cl_vals_2['high95'],round_val)}]"
                     except KeyError:

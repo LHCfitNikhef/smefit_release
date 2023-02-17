@@ -261,9 +261,9 @@ class Report:
         if posterior_histograms:
             _logger.info("Plotting : Posterior histograms")
             disjointed_lists = [
-                double_solution.get(fit.name, [])
+                double_solution.get(fit.name, None)
                 if double_solution is not None
-                else []
+                else None
                 for fit in self.fits
             ]
             coeff_plt.plot_posteriors(
