@@ -81,6 +81,13 @@ When using the code please cite:
 
 .. toctree::
     :maxdepth: 1
+    :caption: Collaboration:
+    :hidden:
+
+    people/people.rst
+
+.. toctree::
+    :maxdepth: 1
     :caption: References & API:
     :hidden:
 
