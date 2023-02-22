@@ -9,7 +9,8 @@ from ..analyze import run_report
 from ..log import print_banner, setup_console
 from ..postfit import Postfit
 from ..runner import Runner
-from .base import base_command, root_path
+from .base import base_command
+from ..check_theory import check_stadard_model
 
 fit_card = click.argument(
     "fit_card",
@@ -161,3 +162,25 @@ def report(report_card: pathlib.Path):
     Usage: smefit R path_to_runcard
     """
     run_report(report_card.absolute())
+
+
+theory_path = click.argument(
+    "theory_path", nargs=-1, type=click.Path(exists=True, path_type=pathlib.Path)
+)
+
+
+@base_command.command("check_sm")
+@theory_path
+@click.option(
+    "-t",
+    "--threshold",
+    type=float,
+    default=0.2,
+    help="threshold limit for NLO / SM best",
+)
+def check_sm_tables(theory_path: pathlib.Path, threshold: float):
+    """Check the |SM| tables."""
+    # TODO: add a config file to manage path properly and
+    # remove them from runcards
+    data_path = theory_path[0].parent / "../commondata"
+    check_stadard_model(data_path, theory_path, threshold)

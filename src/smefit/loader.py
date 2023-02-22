@@ -188,6 +188,30 @@ class Loader:
         # here return both exp sys and t0 modified sys
         return central_values, df, df_t0, stat_error
 
+    def load_raw_theory(self):
+        """
+        Load raw theory predictions.
+
+        Parameters
+        ----------
+            operators_to_keep: list
+                list of operators to keep
+            order: "LO", "NLO"
+                EFT perturbative order
+            use_quad: bool
+                if True returns also |HO| corrections
+            use_theory_covmat: bool
+                if True add the theory covariance matrix to the experimental one
+            rotation_matrix: numpy.ndarray
+                rotation matrix from tables basis to fitting basis
+        """
+        theory_file = self._theory_folder / f"{self.setname}.json"
+        check_file(theory_file)
+        # load theory predictions
+        with open(theory_file, encoding="utf-8") as f:
+            raw_th_data = json.load(f)
+        return raw_th_data
+
     def load_theory(
         self,
         operators_to_keep,
@@ -222,11 +246,7 @@ class Loader:
             quad_dict: dict
                 dictionary with |HO| corrections, empty if not use_quad
         """
-        theory_file = self._theory_folder / f"{self.setname}.json"
-        check_file(theory_file)
-        # load theory predictions
-        with open(theory_file, encoding="utf-8") as f:
-            raw_th_data = json.load(f)
+        raw_th_data = self.load_raw_theory()
 
         quad_dict = {}
         lin_dict = {}
@@ -418,7 +438,12 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
     """
 
     if sorted_keys is None:
-        tmp = [[*c,] for _, c in corrections_list]
+        tmp = [
+            [
+                *c,
+            ]
+            for _, c in corrections_list
+        ]
         sorted_keys = np.unique([item for sublist in tmp for item in sublist])
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
     cnt = 0
