@@ -319,8 +319,8 @@ class FisherCalculator:
     def plot(
         self,
         latex_names,
-        fit_label,
         fig_name,
+        title=None,
         summary_only=True,
         figsize=(11, 15),
     ):
@@ -330,10 +330,6 @@ class FisherCalculator:
         ----------
         latex_names : list
             list of coefficients latex names
-        fit_label: str
-            fit label
-        fig_name: str
-            plot name
         fig_name: str
             figure path
         summary_only:
@@ -341,7 +337,8 @@ class FisherCalculator:
             else the fine grained dataset per dataset
         figsize : tuple
             figure size
-
+        title: str, None
+            plot title
         """
         if summary_only:
             fisher_df = self.summary_table
@@ -419,8 +416,8 @@ class FisherCalculator:
             labelpad=30,
             rotation=270,
         )
-        # colour_bar.ax.tick_params(labelsize=15)
-        plt.suptitle(f"\\rm Fisher\\ information:\\ {fit_label}", fontsize=25)
+        if title is not None:
+            plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25)
         plt.tight_layout()
         plt.savefig(f"{fig_name}.pdf")
         plt.savefig(f"{fig_name}.png")

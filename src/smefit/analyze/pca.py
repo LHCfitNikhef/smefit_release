@@ -1,14 +1,125 @@
 # -*- coding: utf-8 -*-
 import copy
+import json
+import pathlib
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import yaml
 from matplotlib import cm, colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+from ..coefficients import CoefficientManager
 from ..compute_theory import flatten
+from ..loader import load_datasets
 from .latex_tools import latex_packages
+
+
+class RotateToPca:
+    """Contruct a new fit runcard using PCA.
+
+    Parameters
+    ----------
+        loaded_datasets : smefit.loader.DataTuple
+            loaded datasets
+        coefficients : smefit.coeffiecients.CoefficientManager
+            coeffiecient list
+        config : dict
+            runcard configuration dictionary
+    """
+
+    def __init__(self, loaded_datasets, coefficients, config):
+
+        self.loaded_datasets = loaded_datasets
+        self.coefficients = coefficients
+        self.config = config
+        self.rotation = None
+
+    @classmethod
+    def from_dict(cls, config):
+        """Build the class from a runcard dictionary.
+
+        Parameters
+        ----------
+        config : dict
+            runcard configuration dictionary
+        """
+        loaded_datasets = load_datasets(
+            config["data_path"],
+            config["datasets"],
+            config["coefficients"],
+            config["order"],
+            config["use_quad"],
+            config["use_theory_covmat"],
+            config["use_t0"],
+            config.get("use_multiplicative_prescription", False),
+            config.get("theory_path", None),
+            config.get("rot_to_fit_basis", None),
+            config.get("uv_coupligs", False),
+        )
+
+        coefficients = CoefficientManager.from_dict(config["coefficients"])
+
+        return cls(loaded_datasets, coefficients, config)
+
+    def compute(self):
+        """Compute the roation matrix.
+        This is composed by two blocks: PCA and an identity for the constrained dofs.
+        """
+
+        pca = PcaCalculator(self.loaded_datasets, self.coefficients, None)
+        pca.compute()
+        fixed_dofs = self.coefficients.name[~self.coefficients.is_free]
+        id_df = pd.DataFrame(
+            np.eye(fixed_dofs.size), columns=fixed_dofs, index=fixed_dofs
+        )
+        self.rotation = pd.concat([pca.pc_matrix, id_df]).replace(np.nan, 0)
+        # sort both index and columns
+        self.rotation.sort_index(inplace=True)
+        self.rotation = self.rotation.reindex(sorted(self.rotation.columns), axis=1)
+
+    def update_runcard(self):
+        """Update the runcard object."""
+
+        # update coefficient contraints
+        new_coeffs = {}
+        self.coefficients.update_constrain(self.rotation.T)
+        pca_min = self.coefficients.minimum @ self.rotation
+        pca_max = self.coefficients.maximum @ self.rotation
+        for pc in self.rotation.columns:
+            new_coeffs[pc] = {"min": float(pca_min[pc]), "max": float(pca_max[pc])}
+
+        for coef_obj in self.coefficients._objlist:
+            # fixed coefficients
+            if "value" in self.config["coefficients"][coef_obj.name]:
+                new_coeffs[coef_obj.name] = self.config["coefficients"][coef_obj.name]
+            # constrained coefficients
+            elif coef_obj.constrain is not None:
+                new_coeffs[coef_obj.name]["constrain"] = coef_obj.constrain
+        self.config["coefficients"] = new_coeffs
+
+    def save(self):
+        """Dump updated runcard and roation matrix into the reult folder."""
+        result_ID = self.config["result_ID"]
+        result_path = pathlib.Path(self.config["result_path"]) / result_ID
+
+        # dump rotation
+        rot_dict = {
+            "name": "PCA_rotation",
+            "xpars": self.rotation.index.tolist(),
+            "ypars": self.rotation.columns.tolist(),
+            "matrix": self.rotation.T.values.tolist(),
+        }
+        rot_mat_path = result_path / "pca_rot.json"
+        self.config["rot_to_fit_basis"] = str(rot_mat_path)
+        with open(rot_mat_path, "w", encoding="utf-8") as f:
+            json.dump(rot_dict, f)
+
+        # dump runcard
+        runcard_copy = result_path / f"{result_ID}.yaml"
+        with open(runcard_copy, "w", encoding="utf-8") as f:
+            yaml.dump(self.config, f, default_flow_style=False)
 
 
 def make_sym_matrix(vals, n_op):
@@ -141,10 +252,11 @@ class PcaCalculator:
         new_LinearCorrections = impose_constrain(self.datasets, self.coefficients)
         X = new_LinearCorrections @ self.datasets.InvCovMat @ new_LinearCorrections.T
         # Decompose matrix with SVD and identify PCs
-        Vt, W, _ = np.linalg.svd(X)
+        X_centered = X - X.mean(axis=0)
+        _, W, Vt = np.linalg.svd(X_centered)
 
-        pca_labels = [f"PC {i+1}" for i in range(W.size)]
-        self.pc_matrix = pd.DataFrame(Vt, index=free_parameters, columns=pca_labels)
+        pca_labels = [f"PC{i:02d}" for i in range(W.size)]
+        self.pc_matrix = pd.DataFrame(Vt.T, index=free_parameters, columns=pca_labels)
         self.SVs = pd.Series(W, index=pca_labels)
 
     def write(self, fit_label, thr_show=1e-2):
@@ -183,19 +295,17 @@ class PcaCalculator:
 
     def plot_heatmap(
         self,
-        fit_label,
         fig_name,
         sv_min=1e-4,
         sv_max=1e5,
         thr_show=0.1,
         figsize=(15, 15),
+        title=None,
     ):
         """Heat Map of PC coefficients.
 
         Parameters
         ----------
-        fit_label: str
-            fit label
         fig_name: str
             plot name
         sv_min: float
@@ -204,6 +314,9 @@ class PcaCalculator:
             maximum singular value range shown in the top heatmap plot
         thr_show: float
             minimal threshold to show in the PCA decomposition
+        title: str, None
+            plot title
+
         """
 
         pc_norm = self.pc_matrix.values**2
@@ -265,7 +378,8 @@ class PcaCalculator:
         ax_sv.set_ylabel(r"${\rm Singular\ Values}$", fontsize=20)
 
         # save
-        ax.set_title(f"\\rm PCA:\\ {fit_label}", fontsize=25, y=-0.15)
+        if title is not None:
+            ax.set_title(f"\\rm PCA:\\ {title}", fontsize=25, y=-0.15)
         plt.tight_layout()
         plt.savefig(f"{fig_name}.pdf")
         plt.savefig(f"{fig_name}.png")

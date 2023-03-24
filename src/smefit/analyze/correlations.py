@@ -10,9 +10,9 @@ def plot_correlations(
     posterior_df,
     latex_names,
     fig_name,
-    fit_label,
     thr_show=None,
     hide_dofs=None,
+    title=None,
 ):
     """
     Computes and displays the correlation coefficients
@@ -26,12 +26,13 @@ def plot_correlations(
         coefficnet latex name table
     fig_name : str
         path to save the plot
-    fit_label: str
-        fit label
     thr_show: float, None
         if given shows only off diagonal entries higher than the threshold
     hide_dofs: list, None
         coefficients to hide
+    title: str, None
+        plot title
+
     """
     if hide_dofs is not None:
         posterior_df = posterior_df.drop(hide_dofs, axis=1)
@@ -88,7 +89,8 @@ def plot_correlations(
     ax.tick_params(which="minor", bottom=False)
     ax.grid(visible=True, which="minor", alpha=0.2)
 
-    ax.set_title(f"\\rm Correlation:\\ {fit_label}", fontsize=25, y=-0.06)
+    if title is not None:
+        ax.set_title(f"\\rm Correlation:\\ {title}", fontsize=25, y=-0.06)
 
     plt.tight_layout()
     plt.savefig(f"{fig_name}.pdf")

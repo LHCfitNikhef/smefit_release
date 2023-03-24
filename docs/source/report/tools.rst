@@ -16,21 +16,26 @@ The Principal Components Analysis (|PCA|) is the singular values decomposition o
 
 where :math:`\kappa_{i,k}` are the linear |EFT| contibution for each operator and datapoint,
 :math:`\text{Cov}_{k,l}^{-1}` is the inverse of the total covariance matrix.
+
 Then :math:`X_{ij}` is decomposed as:
 
 .. math ::
-    X_{ij} = U_{i,k} S_{k} V_{k,j}
+    X_{ij}^{(center)} &=  X_{ij} - \frac{1}{N_{op}} \sum_{k=0}^{N_{op}} X_{kj} \\
+    X_{ij}^{(center)} &= U_{i,k} S_{k} V^{T}_{k,j}
 
-where the vector :math:`S_{k}` is the vector of the eigenvalues of principal components, which are related
-to the eigenvalues of the eigenvectors :math:`D_k` by:
+where the vector :math:`S_{k}` is the vector of the eigenvalues squared of :math:`X_{ij}^{(center)}`.
 
 .. math ::
-    S_{k} = \sqrt{D_{k}^2}
+    S_{k} &= \sqrt{D_{k}^2} \\
+    X_{ij}^{(center)} &= N_{i,k} D_{k} N_{kj}^T
 
-:math:`U_{i,k}` is the unitary matrix that relates the original basis to the principal components
-one. Unlike the eigenvalues :math:`S_{k}` are positive definite,
+
+:math:`V_{i,k}` is the unitary matrix that relates the original basis to the principal components
+one. Unlike the eigenvalues, :math:`S_{k}` are positive definite,
 and therefore this basis highlighs the directions giving higher or lower weights to the :math:`\chi^2`,
 and it can be used to determine possible flat directions.
+Note that in order to compute a non biased PCA you need to center the data, see for instance
+`this example <https://stats.stackexchange.com/questions/22329/how-does-centering-the-data-get-rid-of-the-intercept-in-regression-and-pca>`_.
 
 
 Fisher information

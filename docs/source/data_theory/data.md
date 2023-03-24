@@ -3,7 +3,8 @@
 ```
 
 # Experimental data format
-Experimental data should be provided in `.yaml` file
+Experimental data should be provided in `.yaml` file.
+In the case in which the dataset is made by multiple data points with several systematic uncertanties the sintax is the following
 
 ```yaml
 dataset_name: example_dataset
@@ -30,6 +31,26 @@ sys_names:
 sys_type:
 - MULT
 - ADD
+```
+
+while if the dataset is made by a single data point
+
+```yaml
+dataset_name: example_dataset
+num_data: 1
+num_sys: 2
+data_central: data1
+statistical_error: stat1
+systematics:
+- sys1
+- sys2
+sys_names:
+- CORR
+- UNCORR
+sys_type:
+- MULT
+- MULT
+
 ```
 The systematic name can be ``CORR``, ``UNCORR`` to specify whether the systematic considered is correlated or uncorrelated within the dataset.
 In the same way ``THEORYCORR`` and ``THEORYUNCORR`` can be used for correlated and uncorrelated theory systematics within a dataset.

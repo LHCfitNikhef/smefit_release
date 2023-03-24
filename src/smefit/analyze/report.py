@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import copy
 
 import numpy as np
 import pandas as pd
@@ -63,8 +64,10 @@ class Report:
         for name, label in zip(report_config["result_IDs"], fit_labels):
             fit = FitManager(result_path, name, label)
             fit.load_results()
+
             if any(k in report_config for k in ["chi2_plots", "PCA", "fisher"]):
                 fit.load_datasets()
+
             self.fits.append(fit)
         self.fits = np.array(self.fits)
 
@@ -152,8 +155,7 @@ class Report:
         chi2_replica = {}
         for fit in self.fits:
             chi2_df, chi2_total_rep = chi2_cal.compute(
-                fit.datasets,
-                fit.smeft_predictions,
+                fit.datasets, fit.smeft_predictions,
             )
             chi2_replica[fit.label] = chi2_total_rep
             chi2_dict[fit.label] = chi2_cal.add_normalized_chi2(chi2_df)
@@ -187,7 +189,7 @@ class Report:
         hide_dofs=None,
         show_only=None,
         logo=True,
-        table=True,
+        table=None,
         double_solution=None,
     ):
         """Coefficients plots and table runner.
@@ -214,25 +216,24 @@ class Report:
         """
         links_list = None
         figs_list = []
-        free_coeff_config = self.coeff_info
+        coeff_config = self.coeff_info
         if show_only is not None:
-            free_coeff_config = free_coeff_config.loc[:, show_only]
+            coeff_config = coeff_config.loc[:, show_only]
         if hide_dofs is not None:
-            free_coeff_config = free_coeff_config.drop(hide_dofs, level=1)
+            coeff_config = coeff_config.drop(hide_dofs, level=1)
 
-        coeff_plt = CoefficientsPlotter(
-            self.report,
-            free_coeff_config,
-            logo=logo,
-        )
+        coeff_plt = CoefficientsPlotter(self.report, coeff_config, logo=logo,)
 
         # compute confidence level bounds
         bounds_dict = {}
         for fit in self.fits:
             bounds_dict[fit.label] = compute_confidence_level(
                 fit.results,
-                coeff_plt.coeff_df,
-                double_solution.get(fit.name, None),
+                coeff_plt.coeff_info,
+                fit.has_posterior,
+                double_solution.get(fit.name, None)
+                if double_solution is not None
+                else None,
             )
 
         if scatter_plot is not None:
@@ -259,10 +260,16 @@ class Report:
 
         if posterior_histograms:
             _logger.info("Plotting : Posterior histograms")
+            disjointed_lists = [
+                double_solution.get(fit.name, None)
+                if double_solution is not None
+                else None
+                for fit in self.fits
+            ]
             coeff_plt.plot_posteriors(
                 [fit.results for fit in self.fits],
                 labels=[fit.label for fit in self.fits],
-                disjointed_lists=list((*double_solution.values(),)),
+                disjointed_lists=disjointed_lists,
             )
             figs_list.append("coefficient_histo")
 
@@ -290,7 +297,7 @@ class Report:
 
         self._append_section("Coefficients", links=links_list, figs=figs_list)
 
-    def correlations(self, hide_dofs=None, thr_show=0.1):
+    def correlations(self, hide_dofs=None, thr_show=0.1, title=True):
         """Plot coefficients correlation matrix.
 
         Parameters
@@ -300,6 +307,8 @@ class Report:
         thr_show: float, None
             minimum threshold value to show.
             If None the full correlation matrix is displayed.
+        title: bool
+            if True display fit label name as title
 
         """
         figs_list = []
@@ -310,7 +319,7 @@ class Report:
                 fit.results[coeff_to_keep],
                 latex_names=self.coeff_info.droplevel(0),
                 fig_name=f"{self.report}/correlations_{fit.name}",
-                fit_label=fit.label,
+                title=fit.label if title else None,
                 hide_dofs=hide_dofs,
                 thr_show=thr_show,
             )
@@ -319,11 +328,7 @@ class Report:
         self._append_section("Correlations", figs=figs_list)
 
     def pca(
-        self,
-        table=True,
-        plot=None,
-        thr_show=1e-2,
-        fit_list=None,
+        self, table=True, plot=None, thr_show=1e-2, fit_list=None,
     ):
         """Principal Components Analysis runner.
 
@@ -338,9 +343,8 @@ class Report:
         fit_list: list, optional
             list of fit names for which the PCA is computed.
             By default all the fits included in the report
-
         """
-        figs_list, links_list = None, None
+        figs_list, links_list = [], []
         if fit_list is not None:
             fit_list = self.fits[self.fits == fit_list]
         else:
@@ -348,9 +352,7 @@ class Report:
         for fit in fit_list:
             _logger.info(f"Computing PCA for fit {fit.name}")
             pca_cal = PcaCalculator(
-                fit.datasets,
-                fit.coefficients,
-                self.coeff_info.droplevel(0),
+                fit.datasets, fit.coefficients, self.coeff_info.droplevel(0),
             )
             pca_cal.compute()
 
@@ -360,21 +362,18 @@ class Report:
                     pca_cal.write(fit.label, thr_show),
                     f"pca_table_{fit.name}",
                 )
-                links_list = [(f"pca_table_{fit.name}", f"Table {fit.label}")]
+                links_list.append((f"pca_table_{fit.name}", f"Table {fit.label}"))
             if plot is not None:
+                fit_plot = copy.deepcopy(plot)
+                title = fit.label if fit_plot.pop("title") else None
                 pca_cal.plot_heatmap(
-                    fit.label, f"{self.report}/pca_heatmap_{fit.name}", **plot
+                    f"{self.report}/pca_heatmap_{fit.name}", title=title, **fit_plot
                 )
-                figs_list = [f"pca_heatmap_{fit.name}"]
+                figs_list.append(f"pca_heatmap_{fit.name}")
         self._append_section("PCA", figs=figs_list, links=links_list)
 
     def fisher(
-        self,
-        norm="coeff",
-        summary_only=True,
-        plot=None,
-        fit_list=None,
-        log=False,
+        self, norm="coeff", summary_only=True, plot=None, fit_list=None, log=False,
     ):
         """Fisher information table and plots runner.
 
@@ -396,9 +395,11 @@ class Report:
             if True shows the log of the Fisher informaltion
 
         """
-        figs_list, links_list = None, None
+        figs_list, links_list = [], []
         if fit_list is not None:
             fit_list = self.fits[self.fits == fit_list]
+        else:
+            fit_list = self.fits
 
         for fit in fit_list:
             compute_quad = fit.config["use_quad"]
@@ -432,14 +433,16 @@ class Report:
                 ),
                 f"fisher_{fit.name}",
             )
-            links_list = [(f"fisher_{fit.name}", f"Table {fit.label}")]
+            links_list.append((f"fisher_{fit.name}", f"Table {fit.label}"))
 
-            if plot is not False:
+            if plot is not None:
+                fit_plot = copy.deepcopy(plot)
+                title = fit.label if fit_plot.pop("title") else None
                 fisher_cal.plot(
                     free_coeff_config,
-                    fit.label,
                     f"{self.report}/fisher_heatmap_{fit.name}",
-                    **plot,
+                    title=title,
+                    **fit_plot,
                 )
-                figs_list = [f"fisher_heatmap_{fit.name}"]
+                figs_list.append(f"fisher_heatmap_{fit.name}")
         self._append_section("Fisher", figs=figs_list, links=links_list)

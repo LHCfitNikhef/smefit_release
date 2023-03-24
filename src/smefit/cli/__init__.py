@@ -34,11 +34,22 @@ log_file = click.option(
     help="path to log file",
 )
 
+rotate_to_pca = click.option(
+    "--rotate_to_pca",
+    type=bool,
+    is_flag=True,
+    default=False,
+    help="Run the fit in the PCA basis",
+)
+
 
 @base_command.command("NS")
 @fit_card
 @log_file
-def nested_sampling(fit_card: pathlib.Path, log_file: pathlib.Path):
+@rotate_to_pca
+def nested_sampling(
+    fit_card: pathlib.Path, log_file: pathlib.Path, rotate_to_pca: bool
+):
     """Run a fit with |NS|.
 
     Usage: smefit NS [OPTIONS] path_to_runcard
@@ -49,8 +60,10 @@ def nested_sampling(fit_card: pathlib.Path, log_file: pathlib.Path):
     if rank == 0:
         setup_console(log_file)
         print_banner()
-        log.console.log("Running : Nested Sampling Fit ")
         runner = Runner.from_file(fit_card.absolute())
+        if rotate_to_pca:
+            runner.rotate_to_pca()
+        log.console.log("Running : Nested Sampling Fit ")
     else:
         runner = None
 
@@ -62,15 +75,20 @@ def nested_sampling(fit_card: pathlib.Path, log_file: pathlib.Path):
 @fit_card
 @n_replica
 @log_file
-def monte_carlo_fit(fit_card: pathlib.Path, n_replica: int, log_file: pathlib.Path):
+@rotate_to_pca
+def monte_carlo_fit(
+    fit_card: pathlib.Path, n_replica: int, log_file: pathlib.Path, rotate_to_pca: bool
+):
     """Run a fit with |MC|.
 
     Usage: smefit MC [OPTIONS] path_to_runcard
     """
     setup_console(log_file)
     print_banner()
-    log.console.log("Running : MonteCarlo Fit")
     runner = Runner.from_file(fit_card.absolute(), n_replica)
+    if rotate_to_pca:
+        runner.rotate_to_pca()
+    log.console.log("Running : MonteCarlo Fit")
     runner.run_analysis("MC")
 
 

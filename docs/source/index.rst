@@ -26,6 +26,10 @@ The SMEFiT framework has been used in the following **scientific publications**:
 Results from these publications, including driver and analysis scripts, are available in the *Previous studies* section.
 
 
+When using the code please cite:
+
+- *SMEFiT: a flexible toolbox for global interpretations of particle physics data with effective field theories*, T. Giani, G. Magni and J. Rojo, :cite:`Giani:2023gfq`
+
 .. toctree::
     :caption: Theory:
     :maxdepth: 1
@@ -64,7 +68,6 @@ Results from these publications, including driver and analysis scripts, are avai
     report/running.md
     report/links
 
-    API <modules/smefit/smefit>
 
 .. toctree::
     :maxdepth: 1
@@ -75,6 +78,13 @@ Results from these publications, including driver and analysis scripts, are avai
     previous_releases/smefit_top
     previous_releases/smefit_vbs
     previous_releases/smefit20
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Collaboration:
+    :hidden:
+
+    people/people.rst
 
 .. toctree::
     :maxdepth: 1

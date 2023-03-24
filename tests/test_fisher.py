@@ -24,6 +24,7 @@ class Scanner2D(Scanner):
                     self.datasets,
                     self.coefficients.value,
                     self.use_quad,
+                    self.use_multiplicative_prescription,
                     False,
                 )
                 summed_corrections = np.einsum(
@@ -37,11 +38,11 @@ class Scanner2D(Scanner):
                     "i,ij,j->", diff, self.datasets.InvCovMat, diff
                 )
 
-        return 0.5 * chi2_list
+        return 2 * chi2_list
 
 
 def test_fisher():
-    """Test fisher information usign the definition and evalueating the derivative."""
+    """Test fisher information using the definition and evaluating the derivative."""
 
     c23 = 0.1
     c13 = -0.2
@@ -90,6 +91,7 @@ def test_fisher():
             "order": "NLO",
             "use_theory_covmat": True,
             "theory_path": commondata_path,
+            "use_multiplicative_prescription": False,
         }
         chi2 = Scanner2D(run_card, n_rep)
         xs = np.linspace(0, x_max, n_rep)
@@ -116,7 +118,7 @@ def test_fisher():
                 chi2.coefficients["Op1"], chi2.coefficients["Op2"]
             )
 
-            # here the hessian is a flat matris so w e can just take the central value among the replicas
+            # here the hessian is a flat matrix so we can just take the central value among the replicas
             np.testing.assert_allclose(
                 fisher_cal.lin_fisher.values[0],
                 np.diag(fisher_test[:, :, int(n_rep / 2), int(n_rep / 2)]),
