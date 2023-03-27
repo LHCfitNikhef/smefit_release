@@ -4,71 +4,165 @@ UV Collection : Fitmaker
 UV model : 2
 Model name : S
 # ~~~~~~~~~~~~~~~~~~~~~~
-# WCs to be fitted : [cpd]
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Positively defined WCs
-cpd >= 0
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Negatively defined WCs
-# ~~~~~~~~~~~~~~~~~~~~~~
 # Loop level of the results : 0
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Setting of the UV mass in TeV:
 m : 1 TeV
 # ~~~~~~~~~~~~~~~~~~~~~~
-# Dependent WCs in SMEFiT basis
+# Free coefficients
 # ~~~~~~~~~~~~~~~~~~~~~~
-cpG : [{cpd: [0.,0]}]
-cpB : [{cpd: [0.,0]}]
-cpW : [{cpd: [0.,0]}]
-cpWB : [{cpd: [0.,0]}]
-cpD : [{cpd: [0.,0]}]
-cWWW : [{cpd: [0.,0]}]
-cpqMi : [{cpd: [0.,0]}]
-cpQM : [{cpd: [0.,0]}]
-c3pq : [{cpd: [0.,0]}]
-c3pQ3 : [{cpd: [0.,0]}]
-cpl1 : [{cpd: [0.,0]}]
-cpl2 : [{cpd: [0.,0]}]
-cpl3 : [{cpd: [0.,0]}]
-c3pl1 : [{cpd: [0.,0]}]
-c3pl2 : [{cpd: [0.,0]}]
-c3pl3 : [{cpd: [0.,0]}]
-cpui : [{cpd: [0.,0]}]
-cpdi : [{cpd: [0.,0]}]
-cpt : [{cpd: [0.,0]}]
-cpe : [{cpd: [0.,0]}]
-cpmu : [{cpd: [0.,0]}]
-cpta : [{cpd: [0.,0]}]
-c81qq : [{cpd: [0.,0]}]
-c11qq : [{cpd: [0.,0]}]
-c83qq : [{cpd: [0.,0]}]
-c13qq : [{cpd: [0.,0]}]
-c8qt : [{cpd: [0.,0]}]
-c1qt : [{cpd: [0.,0]}]
-c8ut : [{cpd: [0.,0]}]
-c1ut : [{cpd: [0.,0]}]
-c8qu : [{cpd: [0.,0]}]
-c1qu : [{cpd: [0.,0]}]
-c8dt : [{cpd: [0.,0]}]
-c1dt : [{cpd: [0.,0]}]
-c8qd : [{cpd: [0.,0]}]
-c1qd : [{cpd: [0.,0]}]
-cQQ1 : [{cpd: [0.,0]}]
-cQQ8 : [{cpd: [0.,0]}]
-cQt1 : [{cpd: [0.,0]}]
-cQt8 : [{cpd: [0.,0]}]
-ctt1 : [{cpd: [0.,0]}]
-cll : [{cpd: [0.,0]}]
-cbp : [{cpd: [0.,0]}]
-ctp : [{cpd: [0.,0]}]
-ctG : [{cpd: [0.,0]}]
-ccp : [{cpd: [0.,0]}]
-ctap : [{cpd: [0.,0]}]
-ctW : [{cpd: [0.,0]}]
-ctZ : [{cpd: [0.,0]}]
- 
+cpd: {min: 0.0, max: 100.0}
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Constrained coefficients
+# ~~~~~~~~~~~~~~~~~~~~~~
+cpG:
+	 constrain: true
+	 value: 0.0
+cpB:
+	 constrain: true
+	 value: 0.0
+cpW:
+	 constrain: true
+	 value: 0.0
+cpWB:
+	 constrain: true
+	 value: 0.0
+cpD:
+	 constrain: true
+	 value: 0.0
+cWWW:
+	 constrain: true
+	 value: 0.0
+cpqMi:
+	 constrain: true
+	 value: 0.0
+cpQM:
+	 constrain: true
+	 value: 0.0
+c3pq:
+	 constrain: true
+	 value: 0.0
+c3pQ3:
+	 constrain: true
+	 value: 0.0
+cpl1:
+	 constrain: true
+	 value: 0.0
+cpl2:
+	 constrain: true
+	 value: 0.0
+cpl3:
+	 constrain: true
+	 value: 0.0
+c3pl1:
+	 constrain: true
+	 value: 0.0
+c3pl2:
+	 constrain: true
+	 value: 0.0
+c3pl3:
+	 constrain: true
+	 value: 0.0
+cpui:
+	 constrain: true
+	 value: 0.0
+cpdi:
+	 constrain: true
+	 value: 0.0
+cpt:
+	 constrain: true
+	 value: 0.0
+cpe:
+	 constrain: true
+	 value: 0.0
+cpmu:
+	 constrain: true
+	 value: 0.0
+cpta:
+	 constrain: true
+	 value: 0.0
+c81qq:
+	 constrain: true
+	 value: 0.0
+c11qq:
+	 constrain: true
+	 value: 0.0
+c83qq:
+	 constrain: true
+	 value: 0.0
+c13qq:
+	 constrain: true
+	 value: 0.0
+c8qt:
+	 constrain: true
+	 value: 0.0
+c1qt:
+	 constrain: true
+	 value: 0.0
+c8ut:
+	 constrain: true
+	 value: 0.0
+c1ut:
+	 constrain: true
+	 value: 0.0
+c8qu:
+	 constrain: true
+	 value: 0.0
+c1qu:
+	 constrain: true
+	 value: 0.0
+c8dt:
+	 constrain: true
+	 value: 0.0
+c1dt:
+	 constrain: true
+	 value: 0.0
+c8qd:
+	 constrain: true
+	 value: 0.0
+c1qd:
+	 constrain: true
+	 value: 0.0
+cQQ1:
+	 constrain: true
+	 value: 0.0
+cQQ8:
+	 constrain: true
+	 value: 0.0
+cQt1:
+	 constrain: true
+	 value: 0.0
+cQt8:
+	 constrain: true
+	 value: 0.0
+ctt1:
+	 constrain: true
+	 value: 0.0
+cll:
+	 constrain: true
+	 value: 0.0
+cbp:
+	 constrain: true
+	 value: 0.0
+ctp:
+	 constrain: true
+	 value: 0.0
+ctG:
+	 constrain: true
+	 value: 0.0
+ccp:
+	 constrain: true
+	 value: 0.0
+ctap:
+	 constrain: true
+	 value: 0.0
+ctW:
+	 constrain: true
+	 value: 0.0
+ctZ:
+	 constrain: true
+	 value: 0.0
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
-Export date: Wed 1 Feb 2023 11:22:10
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
+# Export date: Mon 27 Mar 2023 13:06:32
