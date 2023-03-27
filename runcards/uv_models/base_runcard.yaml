@@ -1,12 +1,13 @@
 result_path: "/data/theorie/gmagni/smefit_release/results"
-data_path: "/data/theorie/gmagni/smefit_release/commondata"
-theory_path: "/data/theorie/gmagni/smefit_release/theory"
+data_path: "/data/theorie/gmagni/smefit_database/commondata"
+theory_path: "/data/theorie/gmagni/smefit_database/theory"
 order: "NLO"
 use_quad: False
 use_theory_covmat: True
 uv_coupligs: True
 nlive: 500
-maxiter: 1e5
+maxiter: 10000
+use_t0: true
 datasets: [
     "ATLAS_tt_8TeV_ljets_Mtt",
     "ATLAS_tt_8TeV_dilep_Mtt",
