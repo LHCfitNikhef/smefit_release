@@ -65,8 +65,20 @@ def parse_UV_coeffs(model_dict: dict) -> dict:
 
 
 def parse_WC_coeffs(model_dict: dict) -> dict:
-    # TODO: here we have to do the same as in parse UV couplings
-    pass
+    coeff_dict = {}
+    # add uv couplings
+    for coeff, spec_dict in model_dict.items():
+        if coeff.startswith("c"):
+            # remove coeffs which are 0
+            if "constrain" in spec_dict and spec_dict["constrain"]:
+                if spec_dict["value"] == 0:
+                    continue
+            if "min" not in spec_dict:
+                spec_dict["min"] = -MAX_VALUE
+            if "max" not in spec_dict:
+                spec_dict["max"] = MAX_VALUE
+            coeff_dict[f"O{coeff[1:]}"] = spec_dict
+    return coeff_dict
 
 
 def dump_runcard(
@@ -81,7 +93,7 @@ def dump_runcard(
     if is_uv:
         file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_1_Tree.yaml"
     else:
-        file_path = f"WC_scan/{collection}/dict_WC_scan_Coll_{collection}_Mod_{idx_model}_Tree_Mass_1.yaml"
+        file_path = f"WC_scan/{collection}/dict_WC_scan_Coll_{collection}_Mod_{idx_model}_Mass_1_Tree.yaml"
 
     with open(here / file_path, "r") as f:
         model_dict = yaml.safe_load(f)
