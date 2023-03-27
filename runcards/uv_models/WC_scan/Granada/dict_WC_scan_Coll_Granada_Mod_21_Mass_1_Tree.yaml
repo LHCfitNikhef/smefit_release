@@ -4,65 +4,143 @@ UV Collection : Granada
 UV model : 21
 Model name : B
 # ~~~~~~~~~~~~~~~~~~~~~~
-# WCs to be fitted : [cpqMi, cpui, cpt, cpe, cpmu, cpta, c1qd, cQt1, ctt1]
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Positively defined WCs
-cpd >= 0
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Negatively defined WCs
-cpD <= 0
-cQQ1 <= 0
-ctt1 <= 0
-# ~~~~~~~~~~~~~~~~~~~~~~
 # Loop level of the results : 0
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Setting of the UV mass in TeV:
 m : 1 TeV
 # ~~~~~~~~~~~~~~~~~~~~~~
-# Dependent WCs in SMEFiT basis
+# Free coefficients
 # ~~~~~~~~~~~~~~~~~~~~~~
-cpG : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cpB : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cpW : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cpWB : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cWWW : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c3pq : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c3pQ3 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cpl1 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cpl2 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cpl3 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c3pl1 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c3pl2 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c3pl3 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c81qq : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c11qq : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c83qq : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c13qq : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c8qt : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c1qt : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c8ut : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c1ut : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c8qu : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c1qu : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c8dt : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-c8qd : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cQQ8 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cQt8 : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cll : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cbp : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-ctp : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-ctG : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-ccp : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-ctap : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-ctW : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-ctZ : [{cpqMi: [0.,0],cpui: [1,0],cpt: [1,0],cpe: [1,0],cpmu: [1,0],cpta: [1,0],c1qd: [1,0],cQt1: [1,0],ctt1: [1,0]}]
-cpD : [{cpqMi: [1., 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 2.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 0.], ctt1: [1.00000000000, -1.]}]
-cQQ1 : [{cpqMi: [0.500000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 0.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 2.], ctt1: [1.00000000000, -1.]}]
-c1dt : [{cpqMi: [2.00000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 0.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 1.], cQt1: [1.00000000000, -1.], ctt1: [1.00000000000, 1.]}]
-cpdi : [{cpqMi: [1.00000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 1.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 1.], cQt1: [1.00000000000, -1.], ctt1: [1.00000000000, 0.]}]
-cpQM : [{cpqMi: [0.500000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 1.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 1.], ctt1: [1.00000000000, -1.]}]
-cpd : [{cpqMi: [-0.250000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 2.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 0.], ctt1: [1.00000000000, -1.]}]
+cpqMi: {min: -100.0, max: 100.0}
+cpui: {min: -100.0, max: 100.0}
+cpt: {min: -100.0, max: 100.0}
+cpe: {min: -100.0, max: 100.0}
+cpmu: {min: -100.0, max: 100.0}
+cpta: {min: -100.0, max: 100.0}
+c1qd: {min: -100.0, max: 100.0}
+cQt1: {min: -100.0, max: 100.0}
+ctt1: {min: -100.0, max: 0.0}
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Constrained coefficients
+# ~~~~~~~~~~~~~~~~~~~~~~
+cpD:
+	 constrain: [{cpqMi: [1., 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 2.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 0.], ctt1: [1.00000000000, -1.]}]
+cQQ1:
+	 constrain: [{cpqMi: [0.500000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 0.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 2.], ctt1: [1.00000000000, -1.]}]
+c1dt:
+	 constrain: [{cpqMi: [2.00000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 0.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 1.], cQt1: [1.00000000000, -1.], ctt1: [1.00000000000, 1.]}]
+cpdi:
+	 constrain: [{cpqMi: [1.00000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 1.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 1.], cQt1: [1.00000000000, -1.], ctt1: [1.00000000000, 0.]}]
+cpQM:
+	 constrain: [{cpqMi: [0.500000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 1.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 1.], ctt1: [1.00000000000, -1.]}]
+cpd:
+	 constrain: [{cpqMi: [-0.250000000000, 0.], cpui: [1.00000000000, 0.], cpt: [1.00000000000, 2.], cpe: [1.00000000000, 0.], cpmu: [1.00000000000, 0.], cpta: [1.00000000000, 0.], c1qd: [1.00000000000, 0.], cQt1: [1.00000000000, 0.], ctt1: [1.00000000000, -1.]}]
+cpG:
+	 constrain: true
+	 value: 0.0
+cpB:
+	 constrain: true
+	 value: 0.0
+cpW:
+	 constrain: true
+	 value: 0.0
+cpWB:
+	 constrain: true
+	 value: 0.0
+cWWW:
+	 constrain: true
+	 value: 0.0
+c3pq:
+	 constrain: true
+	 value: 0.0
+c3pQ3:
+	 constrain: true
+	 value: 0.0
+cpl1:
+	 constrain: true
+	 value: 0.0
+cpl2:
+	 constrain: true
+	 value: 0.0
+cpl3:
+	 constrain: true
+	 value: 0.0
+c3pl1:
+	 constrain: true
+	 value: 0.0
+c3pl2:
+	 constrain: true
+	 value: 0.0
+c3pl3:
+	 constrain: true
+	 value: 0.0
+c81qq:
+	 constrain: true
+	 value: 0.0
+c11qq:
+	 constrain: true
+	 value: 0.0
+c83qq:
+	 constrain: true
+	 value: 0.0
+c13qq:
+	 constrain: true
+	 value: 0.0
+c8qt:
+	 constrain: true
+	 value: 0.0
+c1qt:
+	 constrain: true
+	 value: 0.0
+c8ut:
+	 constrain: true
+	 value: 0.0
+c1ut:
+	 constrain: true
+	 value: 0.0
+c8qu:
+	 constrain: true
+	 value: 0.0
+c1qu:
+	 constrain: true
+	 value: 0.0
+c8dt:
+	 constrain: true
+	 value: 0.0
+c8qd:
+	 constrain: true
+	 value: 0.0
+cQQ8:
+	 constrain: true
+	 value: 0.0
+cQt8:
+	 constrain: true
+	 value: 0.0
+cll:
+	 constrain: true
+	 value: 0.0
+cbp:
+	 constrain: true
+	 value: 0.0
+ctp:
+	 constrain: true
+	 value: 0.0
+ctG:
+	 constrain: true
+	 value: 0.0
+ccp:
+	 constrain: true
+	 value: 0.0
+ctap:
+	 constrain: true
+	 value: 0.0
+ctW:
+	 constrain: true
+	 value: 0.0
+ctZ:
+	 constrain: true
+	 value: 0.0
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
-Export date: Wed 1 Feb 2023 11:13:47
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
+# Export date: Mon 27 Mar 2023 13:06:29

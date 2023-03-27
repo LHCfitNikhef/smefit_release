@@ -4,72 +4,164 @@ UV Collection : Granada
 UV model : 44
 Model name : \text{Df}
 # ~~~~~~~~~~~~~~~~~~~~~~
-# WCs to be fitted : [c3pQ3]
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Positively defined WCs
-cbp >= 0
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Negatively defined WCs
-c3pQ3 <= 0
-# ~~~~~~~~~~~~~~~~~~~~~~
 # Loop level of the results : 0
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Setting of the UV mass in TeV:
 m : 1 TeV
 # ~~~~~~~~~~~~~~~~~~~~~~
-# Dependent WCs in SMEFiT basis
+# Free coefficients
 # ~~~~~~~~~~~~~~~~~~~~~~
-cpG : [{c3pQ3: [0.,0]}]
-cpB : [{c3pQ3: [0.,0]}]
-cpW : [{c3pQ3: [0.,0]}]
-cpWB : [{c3pQ3: [0.,0]}]
-cpd : [{c3pQ3: [0.,0]}]
-cpD : [{c3pQ3: [0.,0]}]
-cWWW : [{c3pQ3: [0.,0]}]
-cpqMi : [{c3pQ3: [0.,0]}]
-cpQM : [{c3pQ3: [0.,0]}]
-c3pq : [{c3pQ3: [0.,0]}]
-cpl1 : [{c3pQ3: [0.,0]}]
-cpl2 : [{c3pQ3: [0.,0]}]
-cpl3 : [{c3pQ3: [0.,0]}]
-c3pl1 : [{c3pQ3: [0.,0]}]
-c3pl2 : [{c3pQ3: [0.,0]}]
-c3pl3 : [{c3pQ3: [0.,0]}]
-cpui : [{c3pQ3: [0.,0]}]
-cpdi : [{c3pQ3: [0.,0]}]
-cpt : [{c3pQ3: [0.,0]}]
-cpe : [{c3pQ3: [0.,0]}]
-cpmu : [{c3pQ3: [0.,0]}]
-cpta : [{c3pQ3: [0.,0]}]
-c81qq : [{c3pQ3: [0.,0]}]
-c11qq : [{c3pQ3: [0.,0]}]
-c83qq : [{c3pQ3: [0.,0]}]
-c13qq : [{c3pQ3: [0.,0]}]
-c8qt : [{c3pQ3: [0.,0]}]
-c1qt : [{c3pQ3: [0.,0]}]
-c8ut : [{c3pQ3: [0.,0]}]
-c1ut : [{c3pQ3: [0.,0]}]
-c8qu : [{c3pQ3: [0.,0]}]
-c1qu : [{c3pQ3: [0.,0]}]
-c8dt : [{c3pQ3: [0.,0]}]
-c1dt : [{c3pQ3: [0.,0]}]
-c8qd : [{c3pQ3: [0.,0]}]
-c1qd : [{c3pQ3: [0.,0]}]
-cQQ1 : [{c3pQ3: [0.,0]}]
-cQQ8 : [{c3pQ3: [0.,0]}]
-cQt1 : [{c3pQ3: [0.,0]}]
-cQt8 : [{c3pQ3: [0.,0]}]
-ctt1 : [{c3pQ3: [0.,0]}]
-cll : [{c3pQ3: [0.,0]}]
-ctp : [{c3pQ3: [0.,0]}]
-ctG : [{c3pQ3: [0.,0]}]
-ccp : [{c3pQ3: [0.,0]}]
-ctap : [{c3pQ3: [0.,0]}]
-ctW : [{c3pQ3: [0.,0]}]
-ctZ : [{c3pQ3: [0.,0]}]
-cbp : [{c3pQ3: [-0.048017323456417335,1]}]
- 
+c3pQ3: {min: -100.0, max: 0.0}
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Constrained coefficients
+# ~~~~~~~~~~~~~~~~~~~~~~
+cbp:
+	 constrain: [{c3pQ3: [-0.048017323456417335,1]}]
+cpG:
+	 constrain: true
+	 value: 0.0
+cpB:
+	 constrain: true
+	 value: 0.0
+cpW:
+	 constrain: true
+	 value: 0.0
+cpWB:
+	 constrain: true
+	 value: 0.0
+cpd:
+	 constrain: true
+	 value: 0.0
+cpD:
+	 constrain: true
+	 value: 0.0
+cWWW:
+	 constrain: true
+	 value: 0.0
+cpqMi:
+	 constrain: true
+	 value: 0.0
+cpQM:
+	 constrain: true
+	 value: 0.0
+c3pq:
+	 constrain: true
+	 value: 0.0
+cpl1:
+	 constrain: true
+	 value: 0.0
+cpl2:
+	 constrain: true
+	 value: 0.0
+cpl3:
+	 constrain: true
+	 value: 0.0
+c3pl1:
+	 constrain: true
+	 value: 0.0
+c3pl2:
+	 constrain: true
+	 value: 0.0
+c3pl3:
+	 constrain: true
+	 value: 0.0
+cpui:
+	 constrain: true
+	 value: 0.0
+cpdi:
+	 constrain: true
+	 value: 0.0
+cpt:
+	 constrain: true
+	 value: 0.0
+cpe:
+	 constrain: true
+	 value: 0.0
+cpmu:
+	 constrain: true
+	 value: 0.0
+cpta:
+	 constrain: true
+	 value: 0.0
+c81qq:
+	 constrain: true
+	 value: 0.0
+c11qq:
+	 constrain: true
+	 value: 0.0
+c83qq:
+	 constrain: true
+	 value: 0.0
+c13qq:
+	 constrain: true
+	 value: 0.0
+c8qt:
+	 constrain: true
+	 value: 0.0
+c1qt:
+	 constrain: true
+	 value: 0.0
+c8ut:
+	 constrain: true
+	 value: 0.0
+c1ut:
+	 constrain: true
+	 value: 0.0
+c8qu:
+	 constrain: true
+	 value: 0.0
+c1qu:
+	 constrain: true
+	 value: 0.0
+c8dt:
+	 constrain: true
+	 value: 0.0
+c1dt:
+	 constrain: true
+	 value: 0.0
+c8qd:
+	 constrain: true
+	 value: 0.0
+c1qd:
+	 constrain: true
+	 value: 0.0
+cQQ1:
+	 constrain: true
+	 value: 0.0
+cQQ8:
+	 constrain: true
+	 value: 0.0
+cQt1:
+	 constrain: true
+	 value: 0.0
+cQt8:
+	 constrain: true
+	 value: 0.0
+ctt1:
+	 constrain: true
+	 value: 0.0
+cll:
+	 constrain: true
+	 value: 0.0
+ctp:
+	 constrain: true
+	 value: 0.0
+ctG:
+	 constrain: true
+	 value: 0.0
+ccp:
+	 constrain: true
+	 value: 0.0
+ctap:
+	 constrain: true
+	 value: 0.0
+ctW:
+	 constrain: true
+	 value: 0.0
+ctZ:
+	 constrain: true
+	 value: 0.0
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
-Export date: Wed 1 Feb 2023 11:13:49
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
+# Export date: Mon 27 Mar 2023 13:06:31
