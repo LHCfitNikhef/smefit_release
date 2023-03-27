@@ -16,147 +16,147 @@ cbp: {min: 0.0, max: 100.0}
 # Constrained coefficients
 # ~~~~~~~~~~~~~~~~~~~~~~
 ctp:
-	 constrain: [{cbp: [82.66028708133972,1]}]
+  constrain: [{cbp: [82.66028708133972,1]}]
 c3pQ3:
-	 constrain: [{cbp: [20.825817184659297,1]}]
+  constrain: [{cbp: [20.825817184659297,1]}]
 c3pq:
-	 constrain: [{cbp: [20.825817184659297,1]}]
+  constrain: [{cbp: [20.825817184659297,1]}]
 cpQM:
-	 constrain: [{cbp: [-83.3032687386372,1]}]
+  constrain: [{cbp: [-83.3032687386372,1]}]
 cpqMi:
-	 constrain: [{cbp: [-83.3032687386372,1]}]
+  constrain: [{cbp: [-83.3032687386372,1]}]
 cpG:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpB:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpW:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpWB:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpd:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpD:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cWWW:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpl1:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpl2:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpl3:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c3pl1:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c3pl2:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c3pl3:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpui:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpdi:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpt:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpe:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpmu:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cpta:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c81qq:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c11qq:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c83qq:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c13qq:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c8qt:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c1qt:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c8ut:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c1ut:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c8qu:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c1qu:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c8dt:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c1dt:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c8qd:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 c1qd:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cQQ1:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cQQ8:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cQt1:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cQt8:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 ctt1:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 cll:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 ctG:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 ccp:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 ctap:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 ctW:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 ctZ:
-	 constrain: true
-	 value: 0.0
+  constrain: true
+  value: 0.0
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
 # Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
