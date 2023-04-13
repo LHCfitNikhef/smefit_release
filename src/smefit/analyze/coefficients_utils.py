@@ -337,7 +337,7 @@ class CoefficientsPlotter:
                 if l not in posterior:
                     continue
                 solution = posterior[l]
-                if disjointed_lists is None:
+                if disjointed_lists[clr_idx] is None:
                     pass
                 elif l in disjointed_lists[clr_idx]:
                     solution, solution2 = split_solution(posterior[l])

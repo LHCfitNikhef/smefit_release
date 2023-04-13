@@ -71,7 +71,7 @@ def parse_WC_coeffs(model_dict: dict) -> dict:
         if coeff.startswith("c"):
             # remove coeffs which are 0
             if "constrain" in spec_dict and spec_dict["constrain"]:
-                if spec_dict["value"] == 0:
+                if "value" in spec_dict and spec_dict["value"] == 0:
                     continue
             if "min" not in spec_dict:
                 spec_dict["min"] = -MAX_VALUE
