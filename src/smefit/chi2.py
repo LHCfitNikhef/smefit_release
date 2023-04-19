@@ -88,7 +88,7 @@ class Scanner:
             self.use_multiplicative_prescription,
             run_card.get("theory_path", None),
             run_card.get("rot_to_fit_basis", None),
-            run_card.get("uv_coupligs", False),
+            run_card.get("uv_couplings", False),
         )
 
         # set all the coefficients to 0
