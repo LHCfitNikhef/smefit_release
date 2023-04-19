@@ -4,7 +4,7 @@ theory_path: "/data/theorie/gmagni/smefit_database/theory"
 order: "NLO"
 use_quad: False
 use_theory_covmat: True
-uv_coupligs: True
+uv_couplings: True
 nlive: 500
 maxiter: 10000
 use_t0: true
