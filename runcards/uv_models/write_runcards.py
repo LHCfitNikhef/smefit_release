@@ -109,7 +109,7 @@ def dump_runcard(
     runcard["Model name"] = model_dict["Model name"]
     runcard["UV Collection"] = model_dict["UV Collection"]
     runcard["UV model"] = model_dict["UV model"]
-    runcard["uv_coupligs"] = is_uv
+    runcard["uv_couplings"] = is_uv
 
     if is_uv:
         coeff_dict = parse_UV_coeffs(model_dict)
