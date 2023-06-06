@@ -169,7 +169,8 @@ def plot_contours(
             np.mean(x_values, axis=0),
             np.mean(y_values, axis=0),
             c=colors[clr_idx],
-            s=3,
+            s=50,
+            marker="o",
         )
 
         hndls = (p1, p2)

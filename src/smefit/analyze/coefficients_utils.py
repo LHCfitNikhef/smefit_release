@@ -404,11 +404,10 @@ class CoefficientsPlotter:
             coeff = self.coeff_info.index.levels[1]
             n_par = self.npar
 
-        n_cols = n_par - 1
+        n_cols = n_par - 1 if n_par != 2 else 2
         n_rows = n_cols
 
         fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
-
         grid = plt.GridSpec(n_rows, n_cols, hspace=0.1, wspace=0.1)
 
         c1_old = coeff[0]
@@ -455,7 +454,7 @@ class CoefficientsPlotter:
                         which="both",  # both major and minor ticks are affected
                         labelbottom=False,
                     )
-                if col_idx != -n_cols:
+                if (n_par > 2 and col_idx != -n_cols) or (n_par == 2 and col_idx != -1):
                     ax.set(ylabel=None)
                     ax.tick_params(
                         axis="y",  # changes apply to the y-axis
@@ -468,7 +467,7 @@ class CoefficientsPlotter:
 
             col_idx -= 1
 
-        ax = fig.add_subplot(grid[0, 1])
+        ax = fig.add_subplot(grid[0, -1])
         ax.axis("off")
 
         ax.legend(
@@ -484,7 +483,7 @@ class CoefficientsPlotter:
         )
 
         fig.suptitle(
-            r"$\mathrm{Marginalised}\:95\:\%\:\mathrm{C.L.\:intervals}$", fontsize=24
+            r"$\mathrm{Marginalised}\:95\:\%\:\mathrm{C.L.\:intervals}$", fontsize=18
         )
         grid.tight_layout(fig)
         fig.savefig(f"{self.report_folder}/contours_2d.pdf")
