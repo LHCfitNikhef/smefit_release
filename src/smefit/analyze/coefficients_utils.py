@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib import cm
+import seaborn as sns
 
-from .contours_2d import plot_contours
+from .contours_2d import plot_contours, confidence_ellipse
 from .latex_tools import latex_packages, multicolum_table_header
 
 
@@ -430,6 +431,33 @@ class CoefficientsPlotter:
             # loop over fits
             hndls_all = []
             for clr_idx, (posterior, kde) in enumerate(posteriors):
+                if isinstance(confidence_level, list):
+                    colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+                    # plot the first one dashed
+                    if kde:
+                        sns.kdeplot(
+                            x=posterior[c2].values,
+                            y=posterior[c1].values,
+                            levels=[1 - confidence_level[0] / 100.0, 1.0],
+                            bw_adjust=1.2,
+                            ax=ax,
+                            linestyle="dashed",
+                            linewidth=2,
+                            color=colors[clr_idx],
+                        )
+                    else:
+                        confidence_ellipse(
+                            posterior[c2].values,
+                            posterior[c1].values,
+                            ax,
+                            edgecolor=colors[clr_idx],
+                            confidence_level=confidence_level[0],
+                            linestyle="dashed",
+                            linewidth=2,
+                        )
+                    cl = confidence_level[1]
+                else: 
+                    cl = confidence_level
 
                 hndls_contours = plot_contours(
                     ax,
@@ -442,7 +470,7 @@ class CoefficientsPlotter:
                     ],
                     kde=kde,
                     clr_idx=clr_idx,
-                    confidence_level=confidence_level,
+                    confidence_level=cl,
                 )
 
                 hndls_all.append(hndls_contours)
