@@ -116,5 +116,10 @@ are two points in this model space.
 Coefficient bounds
 ------------------
 
- * Describe how the CL tables are produced
- * Describe the 2d plots
+Confidence level intervals are reported at the 68% and 95% level by taking suitable percentiles from the posterior samples
+in case of Nested Sampling, or best fit parameters in case of the Monte Carlo replica method.
+
+The code has the additional feature to provide two-dimensional confidence level contours at either the 68% or 95% level.
+Since the EFT parameters are Gaussianly distributed in case of only linear EFT corrections, their confidence level contours
+are described by ellipses, while quadratic EFT corrections introduce non Gaussian effects. In the latter case, we perform
+a Kernel Density Estimate on the set of posterior samples to properly account for this.
