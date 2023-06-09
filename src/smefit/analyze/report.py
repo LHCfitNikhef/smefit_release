@@ -292,6 +292,7 @@ class Report:
                 labels=[fit.label for fit in self.fits],
                 confidence_level=contours_2d["confidence_level"],
                 dofs_show=contours_2d["dofs_show"],
+                double_solution=double_solution,
             )
             figs_list.append("contours_2d")
 
