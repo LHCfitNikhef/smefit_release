@@ -276,16 +276,16 @@ config_corr["use_multiplicative_prescription"] = False
 class TestOptimize_NS:
 
     config_no_corr["use_multiplicative_prescription"] = True
-    test_opt_mult = opt.ns.NSOptimizer.from_dict(config_no_corr)
+    test_opt_mult = opt.dynesty.DynestyOptimizer.from_dict(config_no_corr)
 
     config_no_corr["use_multiplicative_prescription"] = False
-    test_opt = opt.ns.NSOptimizer.from_dict(config_no_corr)
+    test_opt = opt.dynesty.DynestyOptimizer.from_dict(config_no_corr)
 
     config_corr["use_t0"] = False
-    test_opt_corr = opt.ns.NSOptimizer.from_dict(config_corr)
+    test_opt_corr = opt.dynesty.DynestyOptimizer.from_dict(config_corr)
 
     config_corr["use_t0"] = True
-    test_opt_corr_t0 = opt.ns.NSOptimizer.from_dict(config_corr)
+    test_opt_corr_t0 = opt.dynesty.DynestyOptimizer.from_dict(config_corr)
 
     def test_init(self):
         assert self.test_opt.results_path == commondata_path / "test"
