@@ -71,6 +71,24 @@ def nested_sampling(
     runner.run_analysis("NS")
 
 
+@base_command.command("DY")
+@fit_card
+@log_file
+@rotate_to_pca
+def dynesty(fit_card: pathlib.Path, log_file: pathlib.Path, rotate_to_pca: bool):
+    """Run a fit with Dynesty.
+
+    Usage: smefit DY [OPTIONS] path_to_runcard
+    """
+    setup_console(log_file)
+    print_banner()
+    runner = Runner.from_file(fit_card.absolute())
+    if rotate_to_pca:
+        runner.rotate_to_pca()
+    log.console.log("Running : Dynesty Nested sampling Fit")
+    runner.run_analysis("DY")
+
+
 @base_command.command("MC")
 @fit_card
 @n_replica

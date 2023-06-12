@@ -12,6 +12,7 @@ from .chi2 import Scanner
 from .log import logging
 from .optimize.mc import MCOptimizer
 from .optimize.ns import NSOptimizer
+from .optimize.dynesty import DynestyOptimizer
 
 _logger = logging.getLogger(__name__)
 
@@ -123,6 +124,10 @@ class Runner:
         opt = comm.bcast(opt, root=0)
         opt.run_sampling()
 
+    def dynesty(self, config):
+        opt = DynestyOptimizer.from_dict(config)
+        opt.run_sampling()
+
     def mc(self, config):
         """Run a fit with |MC|."""
         config = self.run_card
@@ -149,6 +154,8 @@ class Runner:
         config = self.run_card
         if optimizer == "NS":
             self.ns(config)
+        elif optimizer == "DY":
+            self.dynesty(config)
         elif optimizer == "MC":
             self.mc(config)
 

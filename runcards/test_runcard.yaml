@@ -4,10 +4,10 @@
 result_path: /data/theorie/gmagni/smefit_release/results
 
 # path to common data
-data_path:  /data/theorie/gmagni/smefit_release/commondata
+data_path:  /data/theorie/gmagni/smefit_database/commondata
 
 # path to theory tables, default same as data path
-theory_path:  /data/theorie/gmagni/smefit_release/theory
+theory_path:  /data/theorie/gmagni/smefit_database/theory
 
 # pQCD order (LO or NLO)
 order: NLO
@@ -21,10 +21,10 @@ use_quad: False
 bounds: Null
 
 # NS settings
-nlive: 50
-efr: 0.05
-ceff: True
-toll: 0.5
+nlive: 100
+npools: 16
+
+use_t0: True
 
 # Datasets to include
 datasets:
