@@ -397,9 +397,12 @@ class CoefficientsPlotter:
 
         n_cols = n_par - 1 if n_par != 2 else 2
         n_rows = n_cols
-
-        fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
-        grid = plt.GridSpec(n_rows, n_cols, hspace=0.1, wspace=0.1)
+        if n_par>2:
+            fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
+            grid = plt.GridSpec(n_rows, n_cols, hspace=0.1, wspace=0.1)
+        else: 
+            fig = plt.figure()
+            grid = plt.GridSpec(1, 2, hspace=0.1, wspace=0.1)
 
         c1_old = coeff[0]
 
@@ -415,8 +418,10 @@ class CoefficientsPlotter:
                 col_idx = -1 - j
                 j += 1
                 c1_old = c1
-
-            ax = fig.add_subplot(grid[row_idx, col_idx])
+            if n_par>2:
+                ax = fig.add_subplot(grid[row_idx, col_idx])
+            else:
+                ax = fig.add_subplot(grid[0,0])
 
             # loop over fits
             hndls_all = []
@@ -490,13 +495,19 @@ class CoefficientsPlotter:
                 if isinstance(confidence_level, list):
                     hndls_all.append(mlines.Line2D([], [], linestyle='--' ,linewidth=2,alpha=1,color= colors[clr_idx]))
                     hndls_all.append(mlines.Line2D([], [],linestyle='-',linewidth=2, alpha=1, color=colors[clr_idx]))
-                    labels.insert(1+3*fit_number,str(confidence_level[0])+"\% C.L.")
-                    labels.insert(2+3*fit_number,str(confidence_level[1])+"\% C.L.")
+                    hndls_all.append(mlines.Line2D([], [], color=colors[clr_idx], marker='o', linestyle='None', markersize=8, label='Best fit'))
+                    labels.insert(1+4*fit_number,str(confidence_level[0])+"\% C.L.")
+                    labels.insert(2+4*fit_number,str(confidence_level[1])+"\% C.L.")
+                    labels.insert(3+4*fit_number,"Best fit")
                     #labels already contain all fit name, so for each fit we need to insert C.L. contours at right pos
             hndls_sm_point = ax.scatter(0, 0, c="k", marker="+", s=50, zorder=10)
             hndls_all.append(hndls_sm_point)
 
             col_idx -= 1
+            ax.locator_params(axis='x',nbins=5)
+            ax.locator_params(axis='y',nbins=6)
+            ax.minorticks_on()
+            ax.grid(linestyle='dotted', linewidth=0.5)
 
         ax = fig.add_subplot(grid[0, -1])
         ax.axis("off")
