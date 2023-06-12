@@ -4,9 +4,9 @@
 Fitting the Wilson coefficients with NS
 """
 import time
-from dynesty.pool import Pool
-from dynesty import NestedSampler
 
+from dynesty import NestedSampler
+from dynesty.pool import Pool
 from rich.style import Style
 from rich.table import Table
 
