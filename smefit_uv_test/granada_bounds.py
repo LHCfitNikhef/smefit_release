@@ -25,7 +25,7 @@ uv_param_dict = {'kS': r"$\kappa_{\mathcal{S}}$",
                  'kXi1': r"$\kappa_{\Xi1}$",
                  'yomega1qqf33': r"$\left(y_{\omega_1}^{qq}\right)_{33}$",
                  'yomega4uuf33': r"$\left(y_{\omega_4}^{uu}\right)_{33}$",
-                 'yZetaqqf33': r"$\left(y_{\Zeta}^{qq}\right)_{33}$",
+                 'yZetaqqf33': r"$\left(y_{\zeta}^{qq}\right)_{33}$",
                  'yOmega1qqf33': r"$\left(y_{\Omega_1}^{qq}\right)_{33}$",
                  'yOmega4f33': r"$\left(y_{\Omega_4}\right)_{33}$",
                  'yUpsf33': r"$\left(y_{\Upsilon}\right)_{33}$",
@@ -110,4 +110,45 @@ subprocess.run(["pdflatex", "-interaction=batchmode", "table.tex"])
 subprocess.run(["rm", "table.aux", "table.log"])
 # Rename the output file
 
-print("PDF file saved as 'output.pdf'.")
+plot_nr = 1
+n_rows = 5
+n_cols = 3
+fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
+for mod_nr in range(21):
+    print(mod_nr)
+
+    # path to posterior with model number
+    posterior_path_mod = Path(posterior_path.format(mod_nr, 'LO', 'NHO'))
+    if posterior_path_mod.exists():
+        # Open the JSON file and load its contents
+        with open(posterior_path_mod) as f:
+            posterior = json.load(f)
+
+        for key, samples in posterior.items():
+            print(key)
+            if key.startswith("O"):
+                continue
+            else:
+                ax = plt.subplot(n_rows, n_cols, plot_nr)
+                plot_nr += 1
+
+                ax.hist(samples, bins='fd', density=True,
+                            edgecolor="black",
+                            alpha=0.4)
+
+                ax.set_ylim(0, ax.get_ylim()[1] + ax.get_ylim()[1] * 0.2)
+
+                x_pos = ax.get_xlim()[0] + 0.05 * (ax.get_xlim()[1] - ax.get_xlim()[0])
+                y_pos = 0.95 * ax.get_ylim()[1]
+
+
+                ax.tick_params(which="both", direction="in", labelsize=22.5)
+                ax.tick_params(labelleft=False)
+
+                ax.text(x_pos, y_pos, f"{uv_param_dict[key]}", fontsize=15, ha='left', va='top')
+
+
+fig.savefig('./granada_posteriors.pdf')
+
+subprocess.call("gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=scalar_models_granada.pdf table.pdf granada_posteriors.pdf", shell=True)
+
