@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import importlib
 import json
 import pathlib
 import subprocess
@@ -14,6 +15,11 @@ here = pathlib.Path(__file__).parent
 base_path = pathlib.Path(f"{here.parent}/runcards/uv_models/UV_scan/Granada/")
 sys.path = [str(base_path)] + sys.path
 
+
+mod_list = []
+for p in base_path.iterdir():
+    if p.suffix == "py":
+        mod_list.append(importlib.import_module(f"{p.stem}"))
 
 use("PDF")
 rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
