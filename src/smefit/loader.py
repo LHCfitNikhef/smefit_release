@@ -431,7 +431,6 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
                 op1, op2 = key.split("*")
                 if op2 < op1:
                     key = f"{op2}*{op1}"
-
             idx = np.where(sorted_keys == key)[0][0]
             corr_values[cnt : cnt + n_dat, idx] = values
         cnt += n_dat
