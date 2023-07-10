@@ -8,6 +8,7 @@ from collections import defaultdict
 from pathlib import Path
 from latex_dicts import mod_dict
 from latex_dicts import uv_param_dict
+from latex_dicts import inv_param_dict
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -16,6 +17,10 @@ from matplotlib import rc, use
 here = pathlib.Path(__file__).parent
 base_path = pathlib.Path(f"{here.parent}/runcards/uv_models/UV_scan/Granada/")
 sys.path = [str(base_path)] + sys.path
+
+# result dir
+result_dir = here / "results"
+Path.mkdir(result_dir, parents=True, exist_ok=True)
 
 mod_list = []
 for p in base_path.iterdir():
@@ -43,7 +48,7 @@ for model in mod_list:
             model.inspect_model(model.MODEL_SPECS, model.build_uv_posterior, invariants, model.check_constrain)
 
 # Specify the path to the JSON file
-posterior_path = f"{here.parent}/results/Granada_UV_{{}}_{{}}_{{}}_NS/posterior.json"
+posterior_path = f"{here.parent}/results/Granada_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
 
 def nested_dict(num_levels):
     if num_levels == 1:
@@ -68,7 +73,7 @@ def compute_bounds(mod_nrs):
                         posterior = json.load(f)
 
                     for key, samples in posterior.items():
-                        if key.startswith("O"):
+                        if not key.startswith("inv"):
                             continue
                         else:
                             table_dict[mod_nr][key][pQCD][EFT] = [
@@ -89,7 +94,7 @@ def dict_to_latex_table(nested_dict, mod_dict, uv_param_dict, label, caption):
     table += "\\renewcommand{\\arraystretch}{1.4}"
     table += "\\begin{tabular}{|c|c|c|c|c|c|}\n"
     table += "\\hline\n"
-    table += "Model & UV coupling & LO \\mathcal{O}\\left(\\Lambda^{-2}\\right) &LO \\mathcal{O}\\left(\\Lambda^{-4}\\right) & NLO \\mathcal{O}\\left(\\Lambda^{-2}\\right) & NLO \\mathcal{O}\\left(\\Lambda^{-4}\\right) \\\\\n"
+    table += "Model & UV invariants & LO \\mathcal{O}\\left(\\Lambda^{-2}\\right) &LO \\mathcal{O}\\left(\\Lambda^{-4}\\right) & NLO \\mathcal{O}\\left(\\Lambda^{-2}\\right) & NLO \\mathcal{O}\\left(\\Lambda^{-4}\\right) \\\\\n"
     table += "\\hline\n"
 
     for model_nr, params in nested_dict.items():
@@ -102,10 +107,10 @@ def dict_to_latex_table(nested_dict, mod_dict, uv_param_dict, label, caption):
 
             if model_row:
 
-                table += f"{mod_dict[model_nr]} & {uv_param_dict[parameter]} & {LO_NHO} & {LO_HO} & {NLO_NHO} & {NLO_HO} \\\\\n"
+                table += f"{mod_dict[model_nr]} & {inv_param_dict[model_nr][parameter]} & {LO_NHO} & {LO_HO} & {NLO_NHO} & {NLO_HO} \\\\\n"
                 model_row = False
             else:
-                table += f" & {uv_param_dict[parameter]} & {LO_NHO} & {LO_HO} & {NLO_NHO} & {NLO_HO}  \\\\\n"
+                table += f" & {inv_param_dict[model_nr][parameter]} & {LO_NHO} & {LO_HO} & {NLO_NHO} & {NLO_HO}  \\\\\n"
 
     table += "\\hline\n"
     table += "\\end{tabular}\n"
@@ -122,17 +127,17 @@ vboson_mdl_nrs = range(21, 37)
 vfermion_mdl_nrs = range(37, 50)
 
 
-# scalar_dict, n_scalars = compute_bounds(scalar_mdl_nrs)
+scalar_dict, n_scalars = compute_bounds(scalar_mdl_nrs)
 # vector_boson_dict, n_vbosons = compute_bounds(vboson_mdl_nrs)
 # vector_fermion_dict, n_vfermions = compute_bounds(vfermion_mdl_nrs)
 #
-# latex_table_scalar = dict_to_latex_table(
-#     scalar_dict,
-#     mod_dict,
-#     uv_param_dict,
-#     "cl-heavy-scalar",
-#     "95\\% CL intervals of the heavy scalar fields UV couplings.",
-# )
+latex_table_scalar = dict_to_latex_table(
+    scalar_dict,
+    mod_dict,
+    uv_param_dict,
+    "cl-heavy-scalar",
+    "95\\% CL intervals of the heavy scalar fields UV couplings.",
+)
 # latex_table_vboson = dict_to_latex_table(
 #     vector_boson_dict,
 #     mod_dict,
@@ -149,16 +154,17 @@ vfermion_mdl_nrs = range(37, 50)
 # )
 
 # Save LaTeX code to a .tex file
-# with open("table_scalar.tex", "w") as file:
-#     file.write(latex_table_scalar)
+with open(result_dir / "table_scalar.tex", "w") as file:
+    file.write(latex_table_scalar)
 # with open("table_vboson.tex", "w") as file:
 #     file.write(latex_table_vboson)
 # with open("table_vfermion.tex", "w") as file:
 #     file.write(latex_table_vfermion)
 
 # Compile LaTeX code to PDF
-# subprocess.run(["pdflatex", "-interaction=batchmode", "table_scalar.tex"])
-# subprocess.run(["rm", "table_scalar.aux", "table_scalar.log"])
+
+subprocess.run(["pdflatex", "-interaction=batchmode", "-output-directory",  str(result_dir), str(result_dir/ "table_scalar.tex")])
+subprocess.run(["rm", str(result_dir / "table_scalar.aux"), str(result_dir / "table_scalar.log")])
 # subprocess.run(["pdflatex", "-interaction=batchmode", "table_vboson.tex"])
 # subprocess.run(["rm", "table_vboson.aux", "table_vboson.log"])
 # subprocess.run(["pdflatex", "-interaction=batchmode", "table_vfermion.tex"])
@@ -177,8 +183,7 @@ def plot_uv_posterior(n_params, mod_nrs, EFT, name):
 
     for mod_nr in mod_nrs:
         print(mod_nr)
-        if mod_nr == 3:
-            continue
+
         # path to posterior with model number
         posterior_path_mod_lo = Path(posterior_path.format(mod_nr, "LO", EFT))
         posterior_path_mod_nlo = Path(posterior_path.format(mod_nr, "NLO", EFT))
@@ -194,7 +199,7 @@ def plot_uv_posterior(n_params, mod_nrs, EFT, name):
                     posterior_lo.items(), posterior_nlo.items()
             ):
                 print(key)
-                if key.startswith("O"):
+                if not key.startswith("inv"):
                     continue
                 else:
                     ax = plt.subplot(n_rows, n_cols, plot_nr)
@@ -229,15 +234,16 @@ def plot_uv_posterior(n_params, mod_nrs, EFT, name):
                     ax.text(
                         x_pos,
                         y_pos,
-                        f"{uv_param_dict[key]}",
+                        inv_param_dict[mod_nr][key],
                         fontsize=20,
                         ha="left",
                         va="top",
                     )
 
-    fig.legend(["LO " + EFT, "NLO " + EFT], loc="lower center", fontsize=25, ncol=2)
+    order_EFT = -2 if EFT == 'NHO' else -4
+    fig.legend([ f"$\mathrm{{LO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$", f"$\mathrm{{NLO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$"], loc="lower center", fontsize=25, ncol=2)
 
-    fig.savefig("./granada_posteriors_{}_{}.pdf".format(EFT, name))
+    fig.savefig(result_dir / "granada_posteriors_inv_{}_{}.pdf".format(EFT, name))
 
 
 # plot_uv_posterior(n_vbosons, vboson_mdl_nrs, "NHO", "vbosons")
@@ -247,22 +253,22 @@ def plot_uv_posterior(n_params, mod_nrs, EFT, name):
 # plot_uv_posterior(n_scalars, scalar_mdl_nrs, "NHO", "scalars")
 plot_uv_posterior(n_scalars, scalar_mdl_nrs, "HO", "scalars")
 
-subprocess.run(
-    [
-        "gs",
-        "-dBATCH",
-        "-dNOPAUSE",
-        "-q",
-        "-sDEVICE=pdfwrite",
-        "-sOutputFile=models_granada.pdf",
-        "table_scalar.pdf",
-        "granada_posteriors_NHO_scalars.pdf",
-        "granada_posteriors_HO_scalars.pdf",
-        "table_vboson.pdf",
-        "granada_posteriors_NHO_vbosons.pdf",
-        "granada_posteriors_HO_vbosons.pdf",
-        "table_vfermion.pdf",
-        "granada_posteriors_NHO_vfermions.pdf",
-        "granada_posteriors_HO_vfermions.pdf",
-    ]
-)
+# subprocess.run(
+#     [
+#         "gs",
+#         "-dBATCH",
+#         "-dNOPAUSE",
+#         "-q",
+#         "-sDEVICE=pdfwrite",
+#         "-sOutputFile=models_granada.pdf",
+#         "table_scalar.pdf",
+#         "granada_posteriors_NHO_scalars.pdf",
+#         "granada_posteriors_HO_scalars.pdf",
+#         "table_vboson.pdf",
+#         "granada_posteriors_NHO_vbosons.pdf",
+#         "granada_posteriors_HO_vbosons.pdf",
+#         "table_vfermion.pdf",
+#         "granada_posteriors_NHO_vfermions.pdf",
+#         "granada_posteriors_HO_vfermions.pdf",
+#     ]
+# )

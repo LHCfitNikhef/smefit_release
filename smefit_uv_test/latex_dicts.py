@@ -84,3 +84,16 @@ uv_param_dict = {
     "lamT1f3": r"$\left(\lambda_{T_1}\right)_3$",
     "lamT2f3": r"$\left(\lambda_{T_2}\right)_3$",
 }
+
+inv_param_dict = {2: {'inv1': r"$\left|\kappa_{\mathcal{S}}\right|$"},
+                  3: {'inv1': r"$\left(y_{\mathcal{S}_1}\right)_{12} \left(y_{\mathcal{S}_1}\right)_{21}$"},
+                  5: {'inv1': r"$\left|\lambda_{\varphi}\right|$", 'inv2': r"$\mathrm{sgn}(\lambda_{\varphi})\left(y_{\varphi}^u\right)_{33}$"},
+                  6: {'inv1': r"$\left|\kappa_{\Xi}\right|$"},
+                  7: {'inv1': r"$\left|\kappa_{\Xi1}\right|$"},
+                  10: {'inv1': r"$\left|\left(y_{\omega_1}^{qq}\right)_{33}\right|$"},
+                  12: {'inv1': r"$\left|\left(y_{\omega_4}^{uu}\right)_{33}\right|$"},
+                  15: {'inv1': r"$\left|\left(y_{\zeta}^{qq}\right)_{33}\right|$"},
+                  16: {'inv1': r"$\left|\left(y_{\Omega_1}^{qq}\right)_{33}\right|$"},
+                  18: {'inv1': r"$\left|\left(y_{\Omega_4}\right)_{33}\right|$"},
+                  19: {'inv1': r"$\left|\left(y_{\Upsilon}\right)_{33}\right|$"},
+                  20: {'inv1': r"$\left|\left(y_{\Phi}^{qu}\right)_{33}\right|$"}}
