@@ -1,0 +1,146 @@
+# UV dictionary for WC scan. Tree-level matching.
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : MultiParticleCollection
+UV model : Q1_Q7_W1
+Model name : Q1_Q7_W1
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Free coefficients
+# ~~~~~~~~~~~~~~~~~~~~~~
+cbp: {min: -100.0, max: 0.0}
+cll: {min: -100.0, max: 100.0}
+cQQ1: {min: 0.0, max: 100.0}
+ctp: {min: -100.0, max: 100.0}
+c3pl1: {min: -100.0, max: 100.0}
+c3pl2: {min: -100.0, max: 100.0}
+c3pl3: {min: -100.0, max: 100.0}
+c3pq: {min: -100.0, max: 100.0}
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Constrained coefficients
+# ~~~~~~~~~~~~~~~~~~~~~~
+ctap:
+	 constrain: [{cbp: [0.0102238, 1.], cll: [1.00000000000, -1.], cQQ1: [1.00000000000, 0.], ctp: [1.00000000000, 0.], c3pl1: [1.00000000000, 1.], c3pl2: [1.00000000000, 1.], c3pl3: [1.00000000000, 0.], c3pq: [1.00000000000, 0.], cpt: [1.00000000000, 0.]}]
+cQQ8:
+	 constrain: [{cbp: [-12., 0.], cll: [1.00000000000, 0.], cQQ1: [1.00000000000, 1.], ctp: [1.00000000000, 0.], c3pl1: [1.00000000000, 0.], c3pl2: [1.00000000000, 0.], c3pl3: [1.00000000000, 0.], c3pq: [1.00000000000, 0.], cpt: [1.00000000000, 0.]}]
+cpQM:
+	 constrain: [{cbp: [0. + 1.73205 J, 0.], cll: [1.00000000000, -0.5], cQQ1: [1.00000000000, 0.5], ctp: [1.00000000000, 0.], c3pl1: [1.00000000000, 0.5], c3pl2: [1.00000000000, 0.5], c3pl3: [1.00000000000, 0.], c3pq: [1.00000000000, 0.], cpt: [1.00000000000, 0.]}]
+cpqMi:
+	 constrain: [{cbp: [-1., 0.], cll: [1.00000000000, 0.], cQQ1: [1.00000000000, 0.], ctp: [1.00000000000, 0.], c3pl1: [1.00000000000, 0.], c3pl2: [1.00000000000, 0.], c3pl3: [1.00000000000, 0.], c3pq: [1.00000000000, 1.], cpt: [1.00000000000, 0.]}]
+cpd:
+	 constrain: [{cbp: [1.5, 1.], cll: [1.00000000000, -1.], cQQ1: [1.00000000000, 0.], ctp: [1.00000000000, 0.], c3pl1: [1.00000000000, 1.], c3pl2: [1.00000000000, 1.], c3pl3: [1.00000000000, 0.], c3pq: [1.00000000000, 0.], cpt: [1.00000000000, 0.]}]
+cbp:
+	 constrain: [{cbp: [0.0240086617282, 0.], cll: [1.00000000000, -1.], cQQ1: [1.00000000000, 0.], ctp: [1.00000000000, 0.], c3pl1: [1.00000000000, 1.], c3pl2: [1.00000000000, 1.], c3pl3: [1.00000000000, 0.], c3pq: [1.00000000000, 0.], cpt: [1.00000000000, 0.]}]
+c13qq:
+	 constrain: [{cbp: [-0.866025403784 J, 0.], cll: [1.00000000000, 0.5], cQQ1: [1.00000000000, 0.5], ctp: [1.00000000000, 0.], c3pl1: [1.00000000000, -0.5], c3pl2: [1.00000000000, -0.5], c3pl3: [1.00000000000, 0.], c3pq: [1.00000000000, 1.], cpt: [1.00000000000, 0.]}]
+c3pQ3:
+	 constrain: [{cbp: [-1.73205080757 J, 0.], cll: [1.00000000000, -0.5], cQQ1: [1.00000000000, 0.5], ctp: [1.00000000000, 0.], c3pl1: [1.00000000000, 0.5], c3pl2: [1.00000000000, 0.5], c3pl3: [1.00000000000, 0.], c3pq: [1.00000000000, 0.], cpt: [1.00000000000, 0.]}]
+cpG:
+	 constrain: true
+	 value: 0.0
+cpB:
+	 constrain: true
+	 value: 0.0
+cpW:
+	 constrain: true
+	 value: 0.0
+cpWB:
+	 constrain: true
+	 value: 0.0
+cpD:
+	 constrain: true
+	 value: 0.0
+cWWW:
+	 constrain: true
+	 value: 0.0
+cpl1:
+	 constrain: true
+	 value: 0.0
+cpl2:
+	 constrain: true
+	 value: 0.0
+cpl3:
+	 constrain: true
+	 value: 0.0
+cpui:
+	 constrain: true
+	 value: 0.0
+cpdi:
+	 constrain: true
+	 value: 0.0
+cpe:
+	 constrain: true
+	 value: 0.0
+cpmu:
+	 constrain: true
+	 value: 0.0
+cpta:
+	 constrain: true
+	 value: 0.0
+c81qq:
+	 constrain: true
+	 value: 0.0
+c11qq:
+	 constrain: true
+	 value: 0.0
+c83qq:
+	 constrain: true
+	 value: 0.0
+c8qt:
+	 constrain: true
+	 value: 0.0
+c1qt:
+	 constrain: true
+	 value: 0.0
+c8ut:
+	 constrain: true
+	 value: 0.0
+c1ut:
+	 constrain: true
+	 value: 0.0
+c8qu:
+	 constrain: true
+	 value: 0.0
+c1qu:
+	 constrain: true
+	 value: 0.0
+c8dt:
+	 constrain: true
+	 value: 0.0
+c1dt:
+	 constrain: true
+	 value: 0.0
+c8qd:
+	 constrain: true
+	 value: 0.0
+c1qd:
+	 constrain: true
+	 value: 0.0
+cQt1:
+	 constrain: true
+	 value: 0.0
+cQt8:
+	 constrain: true
+	 value: 0.0
+ctt1:
+	 constrain: true
+	 value: 0.0
+ctG:
+	 constrain: true
+	 value: 0.0
+ccp:
+	 constrain: true
+	 value: 0.0
+ctW:
+	 constrain: true
+	 value: 0.0
+ctZ:
+	 constrain: true
+	 value: 0.0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+# Tree-level results address: /home/alejo/Downloads/MMEFT2SMEFiT-main//sample_results/MatchingResult_multiparticle_treelevel.dat
+# Export date: Thu 13 Jul 2023 14:57:44
