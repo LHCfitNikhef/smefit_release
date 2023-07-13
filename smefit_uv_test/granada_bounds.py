@@ -50,6 +50,7 @@ for model in mod_list:
 # Specify the path to the JSON file
 posterior_path = f"{here.parent}/results/Granada_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
 
+
 def nested_dict(num_levels):
     if num_levels == 1:
         return defaultdict(dict)
@@ -92,24 +93,24 @@ def compute_bounds(mod_nrs):
 
 
 def dict_to_latex_table(nested_dict, mod_dict, uv_param_dict, label, caption):
-    table = "\\documentclass{article}\\n"
-    table += "\\usepackage[a4paper]{geometry}\\n"
-    table += "\\begin{document}\n"
-    table += "\\begin{table}\n"
+    # table = "\\documentclass{article}\\n"
+    # table += "\\usepackage[a4paper]{geometry}\\n"
+    # table += "\\begin{document}\n"
+    table = "\\begin{table}\n"
     table += "\\begin{center}\n"
     table += "\\renewcommand{\\arraystretch}{1.4}"
     table += "\\begin{tabular}{|c|c|c|c|c|c|}\n"
     table += "\\hline\n"
-    table += "Model & UV invariants & LO \\mathcal{O}\\left(\\Lambda^{-2}\\right) &LO \\mathcal{O}\\left(\\Lambda^{-4}\\right) & NLO \\mathcal{O}\\left(\\Lambda^{-2}\\right) & NLO \\mathcal{O}\\left(\\Lambda^{-4}\\right) \\\\\n"
+    table += "Model & UV invariants & LO $\\mathcal{O}\\left(\\Lambda^{-2}\\right)$ &LO $\\mathcal{O}\\left(\\Lambda^{-4}\\right)$ & NLO $\\mathcal{O}\\left(\\Lambda^{-2}\\right)$ & NLO $\\mathcal{O}\\left(\\Lambda^{-4}\\right)$ \\\\\n"
     table += "\\hline\n"
 
     for model_nr, params in nested_dict.items():
         model_row = True
         for parameter, param_dict in params.items():
-            LO_NHO = [round(x, 2) for x in param_dict["LO"]["NHO"]]
-            LO_HO = [round(x, 2) for x in param_dict["LO"]["HO"]]
-            NLO_NHO = [round(x, 2) for x in param_dict["NLO"]["NHO"]]
-            NLO_HO = [round(x, 2) for x in param_dict["NLO"]["HO"]]
+            LO_NHO = [np.round(x, 3) for x in param_dict["LO"]["NHO"]]
+            LO_HO = [np.round(x, 3) for x in param_dict["LO"]["HO"]]
+            NLO_NHO = [np.round(x, 3) for x in param_dict["NLO"]["NHO"]]
+            NLO_HO = [np.round(x, 3) for x in param_dict["NLO"]["HO"]]
 
             if model_row:
 
@@ -120,10 +121,10 @@ def dict_to_latex_table(nested_dict, mod_dict, uv_param_dict, label, caption):
 
     table += "\\hline\n"
     table += "\\end{tabular}\n"
-    table += f"\\caption{{{caption}}}\\n"
+    table += f"\\caption{{{caption}}}\n"
     table += "\\end{center}\n"
     table += "\\end{table}\n"
-    table += "\\end{document}\n"
+    # table += "\\end{document}\n"
 
     return table
 
@@ -131,7 +132,6 @@ def dict_to_latex_table(nested_dict, mod_dict, uv_param_dict, label, caption):
 scalar_mdl_nrs = range(21)
 vboson_mdl_nrs = range(21, 37)
 vfermion_mdl_nrs = range(37, 50)
-
 
 scalar_dict, n_scalars = compute_bounds(scalar_mdl_nrs)
 vector_boson_dict, n_vbosons = compute_bounds(vboson_mdl_nrs)
@@ -167,23 +167,23 @@ with open(result_dir / "table_vboson.tex", "w") as file:
 with open(result_dir / "table_vfermion.tex", "w") as file:
     file.write(latex_table_vfermion)
 
+
 # Compile LaTeX code to PDF
 
-subprocess.run(["pdflatex", "-interaction=batchmode", "-output-directory",  str(result_dir), str(result_dir/ "table_scalar.tex")])
-subprocess.run(["rm", str(result_dir / "table_scalar.aux"), str(result_dir / "table_scalar.log")])
-subprocess.run(["pdflatex", "-interaction=batchmode", "-output-directory",  str(result_dir), str(result_dir/ "table_vboson.tex")])
-subprocess.run(["rm", str(result_dir / "table_vboson.aux"), str(result_dir / "table_vboson.log")])
-subprocess.run(["pdflatex", "-interaction=batchmode", "-output-directory",  str(result_dir), str(result_dir/ "table_vfermion.tex")])
-subprocess.run(["rm", str(result_dir / "table_vfermion.aux"), str(result_dir / "table_vfermion.log")])
+# subprocess.run(["pdflatex", "-interaction=batchmode", "-output-directory",  str(result_dir), str(result_dir/ "table_scalar.tex")])
+# subprocess.run(["rm", str(result_dir / "table_scalar.aux"), str(result_dir / "table_scalar.log")])
+# subprocess.run(["pdflatex", "-interaction=batchmode", "-output-directory",  str(result_dir), str(result_dir/ "table_vboson.tex")])
+# subprocess.run(["rm", str(result_dir / "table_vboson.aux"), str(result_dir / "table_vboson.log")])
+# subprocess.run(["pdflatex", "-interaction=batchmode", "-output-directory",  str(result_dir), str(result_dir/ "table_vfermion.tex")])
+# subprocess.run(["rm", str(result_dir / "table_vfermion.aux"), str(result_dir / "table_vfermion.log")])
 
 
-
-def plot_uv_posterior(n_params, mod_nrs, EFT, name):
+def plot_uv_posterior(n_params, mod_nrs, EFT, name, pQCD=None):
     plot_nr = 1
 
     # Calculate number of rows and columns
-    n_rows = int(np.ceil(np.sqrt(n_params)))
-    n_cols = int(np.ceil(n_params / n_rows))
+    n_cols = int(np.ceil(np.sqrt(n_params)))
+    n_rows = int(np.ceil(n_params / n_cols))
 
     fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
 
@@ -191,20 +191,24 @@ def plot_uv_posterior(n_params, mod_nrs, EFT, name):
         print(mod_nr)
 
         # path to posterior with model number
-        posterior_path_mod_lo = Path(posterior_path.format(mod_nr, "LO", EFT))
-        posterior_path_mod_nlo = Path(posterior_path.format(mod_nr, "NLO", EFT))
-        if posterior_path_mod_lo.exists():
+        if pQCD is None:
+            posterior_path_mod_1 = Path(posterior_path.format(mod_nr, "LO", EFT))
+            posterior_path_mod_2 = Path(posterior_path.format(mod_nr, "NLO", EFT))
+        else:
+            posterior_path_mod_1 = Path(posterior_path.format(mod_nr, pQCD, "NHO"))
+            posterior_path_mod_2 = Path(posterior_path.format(mod_nr, pQCD, "HO"))
+
+        if posterior_path_mod_1.exists():
             # Open the JSON file and load its contents
-            with open(posterior_path_mod_lo) as f:
-                posterior_lo = json.load(f)
+            with open(posterior_path_mod_1) as f:
+                posterior_1 = json.load(f)
 
-            with open(posterior_path_mod_nlo) as f:
-                posterior_nlo = json.load(f)
+            with open(posterior_path_mod_2) as f:
+                posterior_2 = json.load(f)
 
-            for (key, samples_lo), (_, samples_nlo) in zip(
-                    posterior_lo.items(), posterior_nlo.items()
+            for (key, samples_1), (_, samples_2) in zip(
+                    posterior_1.items(), posterior_2.items()
             ):
-                print(key)
                 if not key.startswith("inv"):
                     continue
                 else:
@@ -212,16 +216,16 @@ def plot_uv_posterior(n_params, mod_nrs, EFT, name):
                     plot_nr += 1
 
                     ax.hist(
-                        samples_lo,
-                        bins="auto",
+                        samples_1,
+                        bins="fd",
                         density=True,
                         edgecolor="black",
                         alpha=0.4,
                     )
 
                     ax.hist(
-                        samples_nlo,
-                        bins="auto",
+                        samples_2,
+                        bins="fd",
                         density=True,
                         edgecolor="black",
                         alpha=0.4,
@@ -246,10 +250,19 @@ def plot_uv_posterior(n_params, mod_nrs, EFT, name):
                         va="top",
                     )
 
-    order_EFT = -2 if EFT == 'NHO' else -4
-    fig.legend([ f"$\mathrm{{LO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$", f"$\mathrm{{NLO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$"], loc="lower center", fontsize=25, ncol=2)
+    if pQCD is None:
+        order_EFT = -2 if EFT == 'NHO' else -4
+        fig.legend([f"$\mathrm{{LO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$",
+                    f"$\mathrm{{NLO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$"], loc="upper center",
+                   prop={"size": 35}, ncol=2)
+        fig.savefig(result_dir / "granada_posteriors_LO_vs_NLO_{}_{}.pdf".format(EFT, name))
+    else:
+        fig.legend([f"$\mathrm{{{pQCD}}}\;\mathcal{{O}}\\left(\Lambda^{{-2}}\\right)$",
+                    f"$\mathrm{{{pQCD}}}\;\mathcal{{O}}\\left(\Lambda^{{-4}}\\right)$"], loc="upper center", ncol=2,
+                   prop={"size": 35})
+        fig.savefig(result_dir / "granada_posteriors_HO_vs_NHO_{}_{}.pdf".format(pQCD, name))
 
-    fig.savefig(result_dir / "granada_posteriors_inv_{}_{}.pdf".format(EFT, name))
+    plt.tight_layout()
 
 
 plot_uv_posterior(n_vbosons, vboson_mdl_nrs, "NHO", "vbosons")
@@ -258,25 +271,42 @@ plot_uv_posterior(n_vfermions, vfermion_mdl_nrs, "NHO", "vfermions")
 plot_uv_posterior(n_vfermions, vfermion_mdl_nrs, "HO", "vfermions")
 plot_uv_posterior(n_scalars, scalar_mdl_nrs, "NHO", "scalars")
 plot_uv_posterior(n_scalars, scalar_mdl_nrs, "HO", "scalars")
+#
+plot_uv_posterior(n_vbosons, vboson_mdl_nrs, "NHO", "vbosons", pQCD="LO")
+plot_uv_posterior(n_vbosons, vboson_mdl_nrs, "HO", "vbosons", pQCD="NLO")
+plot_uv_posterior(n_vfermions, vfermion_mdl_nrs, "NHO", "vfermions", pQCD="LO")
+plot_uv_posterior(n_vfermions, vfermion_mdl_nrs, "HO", "vfermions", pQCD="NLO")
+plot_uv_posterior(n_scalars, scalar_mdl_nrs, "NHO", "scalars", pQCD="LO")
+plot_uv_posterior(n_scalars, scalar_mdl_nrs, "HO", "scalars", pQCD="NLO")
 
-command = [
-        "gs",
-        "-dBATCH",
-        "-dNOPAUSE",
-        "-q",
-        "-sDEVICE=pdfwrite",
-        "-sOutputFile=models_granada.pdf",
-        "table_scalar.pdf",
-        "granada_posteriors_inv_NHO_scalars.pdf",
-        "granada_posteriors_inv_HO_scalars.pdf",
-        "table_vboson.pdf",
-        "granada_posteriors_inv_NHO_vbosons.pdf",
-        "granada_posteriors_inv_HO_vbosons.pdf",
-        "table_vfermion.pdf",
-        "granada_posteriors_inv_NHO_vfermions.pdf",
-        "granada_posteriors_inv_HO_vfermions.pdf",
-    ]
-subprocess.run(
-    command, cwd=str(result_dir)
-)
+for file in result_dir.iterdir():
+    if file.suffix == ".pdf":
+        subprocess.run(["pdfcrop", str(file), str(file)])
 
+# uncomment to merge all pdf files
+# merge_pdf = [
+#         "gs",
+#         "-dBATCH",
+#         "-dNOPAUSE",
+#         "-q",
+#         "-sDEVICE=pdfwrite",
+#         "-sOutputFile=models_granada.pdf",
+#         "table_scalar.pdf",
+#         "granada_posteriors_LO_vs_NLO_NHO_scalars.pdf",
+#         "granada_posteriors_LO_vs_NLO_HO_scalars.pdf",
+#         "granada_posteriors_HO_vs_NHO_LO_scalars.pdf",
+#         "granada_posteriors_HO_vs_NHO_NLO_scalars.pdf",
+#         "table_vboson.pdf",
+#         "granada_posteriors_LO_vs_NLO_NHO_vbosons.pdf",
+#         "granada_posteriors_LO_vs_NLO_HO_vbosons.pdf",
+#         "granada_posteriors_HO_vs_NHO_LO_vbosons.pdf",
+#         "granada_posteriors_HO_vs_NHO_NLO_vbosons.pdf",
+#         "table_vfermion.pdf",
+#         "granada_posteriors_LO_vs_NLO_NHO_vfermions.pdf",
+#         "granada_posteriors_LO_vs_NLO_HO_vfermions.pdf",
+#         "granada_posteriors_HO_vs_NHO_LO_vfermions.pdf",
+#         "granada_posteriors_HO_vs_NHO_NLO_vfermions.pdf"
+#     ]
+# subprocess.run(
+#     merge_pdf, cwd=str(result_dir)
+# )
