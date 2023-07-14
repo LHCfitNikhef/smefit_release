@@ -13,14 +13,15 @@
 [SMEFiT](https://lhcfitnikhef.github.io/smefit_release/index.html) is a python program for Standard Model Effective Field Theory fits
 ## Installation
 
-To install smefit you can do
+To install smefit you can do:
+
 ```bash
 pip install smefit
 ```
 
-Note this installation do not allows you to run in parallel mode.
+Note this installation does not allow you to run in parallel mode.
 To do that you can install from source using the provided conda environment
-or if you have an MPI compiler available just adding:
+or if you have an MPI compiler available just add:
 
 ```bash
 pip install mpi4py
