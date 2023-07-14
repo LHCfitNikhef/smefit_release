@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 
 """
-Fitting the Wilson coefficients with NS
+Fitting the Wilson coefficients with |NS|
 """
-import os
 import time
 
-from mpi4py import MPI
 import ultranest
-from ultranest import stepsampler
-
+from mpi4py import MPI
 from rich.style import Style
 from rich.table import Table
+from ultranest import stepsampler
 
 from .. import log
 from ..coefficients import CoefficientManager
@@ -45,6 +43,8 @@ class USOptimizer(Optimizer):
         frac_remain: float
             integrate until this fraction of the integral is left in the remainder.
             Set to a higher number (0.5) if you know the posterior is simple.
+        store_raw: bool
+            if True store the result to eventually resume the job
     """
 
     print_rate = 5000
@@ -64,6 +64,7 @@ class USOptimizer(Optimizer):
         target_evidence_unc=0.5,
         target_post_unc=0.5,
         frac_remain=0.01,
+        store_raw=False,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -81,6 +82,7 @@ class USOptimizer(Optimizer):
         self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
         self.pairwise_fits = pairwise_fits
+        self.store_raw = store_raw
 
     @classmethod
     def from_dict(cls, config):
@@ -124,28 +126,30 @@ class USOptimizer(Optimizer):
             )
 
         lepsilon = config.get("lepsilon", 0.05)
-        if "efr" not in config:
+        if "lepsilon" not in config:
             _logger.warning(
                 f"Sampling tollerance (Lepsilon) not set in the input card. Using default: {lepsilon}"
             )
 
         target_evidence_unc = config.get("target_evidence_unc", 0.5)
-        if "toll" not in config:
+        if "target_evidence_unc" not in config:
             _logger.warning(
                 f"Target Evidence uncertanty (target_evidence_unc) not set in the input card. Using default: {target_evidence_unc}"
             )
 
         target_post_unc = config.get("target_post_unc", 0.5)
-        if "toll" not in config:
+        if "target_post_unc" not in config:
             _logger.warning(
                 f"Target Posterior uncertanty (target_post_unc) not set in the input card. Using default: {target_post_unc}"
             )
-        
+
         frac_remain = config.get("frac_remain", 0.01)
-        if "toll" not in config:
+        if "frac_remain" not in config:
             _logger.warning(
                 f"Remaining fraction (frac_remain) not set in the input card. Using default: {frac_remain}"
             )
+
+        store_raw = config.get("store_raw", False)
 
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
@@ -163,7 +167,8 @@ class USOptimizer(Optimizer):
             lepsilon=lepsilon,
             target_evidence_unc=target_evidence_unc,
             target_post_unc=target_post_unc,
-            frac_remain=frac_remain
+            frac_remain=frac_remain,
+            store_raw=store_raw,
         )
 
     def chi2_func_ns(self, params):
@@ -221,41 +226,33 @@ class USOptimizer(Optimizer):
         max_val = self.free_parameters.maximum.values
         return hypercube * (max_val - min_val) + min_val
 
-    def clean(self):
-        """Remove raw |NS| output if you want to keep raw output, don't call this method"""
-
-        folders = [
-            "chains", "info", "results", "extra", "plots"
-        ]
-        for folder in folders:
-            for f in os.listdir(self.results_path / folder):
-                os.remove(self.results_path / folder / f)
-            os.rmdir(self.results_path / folder)
-
-
     def run_sampling(self):
         """Run the minimization with Ultra nest."""
+
+        log_dir = None
+        if self.store_raw:
+            log_dir = self.results_path
 
         t1 = time.time()
         sampler = ultranest.ReactiveNestedSampler(
             self.free_parameters.index.tolist(),
             self.gaussian_loglikelihood,
             self.flat_prior,
-            log_dir=self.results_path,
+            log_dir=log_dir,
             resume=True,
         )
         if self.npar > 10:
             # set up step sampler. Here, we use a differential evolution slice sampler:
             sampler.stepsampler = stepsampler.SliceSampler(
                 nsteps=100,
-                generate_direction = stepsampler.generate_region_oriented_direction,
+                generate_direction=stepsampler.generate_region_oriented_direction,
             )
         result = sampler.run(
             min_num_live_points=self.live_points,
             dlogz=self.target_evidence_unc,
             frac_remain=self.frac_remain,
             dKL=self.target_post_unc,
-            Lepsilon=self.lepsilon, 
+            Lepsilon=self.lepsilon,
             update_interval_volume_fraction=0.8 if self.npar > 20 else 0.2,
             max_num_improvement_loops=0,
         )
@@ -279,7 +276,6 @@ class USOptimizer(Optimizer):
             log.console.print(table)
 
             self.save(result)
-            self.clean()
 
     def save(self, result):
         """
