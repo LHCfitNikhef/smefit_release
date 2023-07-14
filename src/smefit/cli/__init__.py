@@ -70,23 +70,32 @@ def nested_sampling(
     runner = comm.bcast(runner, root=0)
     runner.run_analysis("NS")
 
-
-@base_command.command("DY")
+@base_command.command("US")
 @fit_card
 @log_file
 @rotate_to_pca
-def dynesty(fit_card: pathlib.Path, log_file: pathlib.Path, rotate_to_pca: bool):
-    """Run a fit with Dynesty.
+def ultra_nest_sampling(
+    fit_card: pathlib.Path, log_file: pathlib.Path, rotate_to_pca: bool
+):
+    """Run a fit with Ultra Nest.
 
-    Usage: smefit DY [OPTIONS] path_to_runcard
+    Usage: smefit US [OPTIONS] path_to_runcard
     """
-    setup_console(log_file)
-    print_banner()
-    runner = Runner.from_file(fit_card.absolute())
-    if rotate_to_pca:
-        runner.rotate_to_pca()
-    log.console.log("Running : Dynesty Nested sampling Fit")
-    runner.run_analysis("DY")
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+
+    if rank == 0:
+        setup_console(log_file)
+        print_banner()
+        runner = Runner.from_file(fit_card.absolute())
+        if rotate_to_pca:
+            runner.rotate_to_pca()
+        log.console.log("Running : Nested Sampling Fit ")
+    else:
+        runner = None
+
+    runner = comm.bcast(runner, root=0)
+    runner.run_analysis("US")
 
 
 @base_command.command("MC")

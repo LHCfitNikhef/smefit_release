@@ -3,10 +3,13 @@
 """
 Fitting the Wilson coefficients with NS
 """
+import os
 import time
 
-from dynesty import NestedSampler
-from dynesty.pool import Pool
+from mpi4py import MPI
+import ultranest
+from ultranest import stepsampler
+
 from rich.style import Style
 from rich.table import Table
 
@@ -18,9 +21,9 @@ from . import Optimizer
 _logger = log.logging.getLogger(__name__)
 
 
-class DynestyOptimizer(Optimizer):
+class USOptimizer(Optimizer):
     """
-    Optimizer specification for Dynesty.
+    Optimizer specification for Ultra nest
 
     Parameters
     ----------
@@ -30,14 +33,18 @@ class DynestyOptimizer(Optimizer):
             instance of `CoefficientManager` with all the relevant coefficients to fit
         use_quad : bool
             If True use also |HO| corrections
-        nlive : int
+        live_points : int
             number of |NS| live points
-        efficiency : float
-            sampling efficiency
-        const_efficiency: bool
-            if True use the constant efficiency mode
-        tolerance: float
-            evidence tolerance
+        lepsilon : float
+            sampling tollerance. Terminate when live point likelihoods are all the same, within Lepsilon tolerance.
+            Increase this when your likelihood function is inaccurate,
+        target_evidence_unc: float
+            target evidence uncertainty.
+        target_post_unc: float
+            target posterior uncertainty.
+        frac_remain: float
+            integrate until this fraction of the integral is left in the remainder.
+            Set to a higher number (0.5) if you know the posterior is simple.
     """
 
     print_rate = 5000
@@ -52,8 +59,11 @@ class DynestyOptimizer(Optimizer):
         single_parameter_fits,
         pairwise_fits,
         use_multiplicative_prescription,
-        nlive=500,
-        n_pools=10,
+        live_points=500,
+        lepsilon=0.001,
+        target_evidence_unc=0.5,
+        target_post_unc=0.5,
+        frac_remain=0.01,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -63,8 +73,11 @@ class DynestyOptimizer(Optimizer):
             single_parameter_fits,
             use_multiplicative_prescription,
         )
-        self.nlive = nlive
-        self.n_pools = n_pools
+        self.live_points = live_points
+        self.lepsilon = lepsilon
+        self.target_evidence_unc = target_evidence_unc
+        self.target_post_unc = target_post_unc
+        self.frac_remain = frac_remain
         self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
         self.pairwise_fits = pairwise_fits
@@ -103,17 +116,35 @@ class DynestyOptimizer(Optimizer):
 
         single_parameter_fits = config.get("single_parameter_fits", False)
         pairwise_fits = config.get("pairwise_fits", False)
-
         nlive = config.get("nlive", 500)
+
         if "nlive" not in config:
             _logger.warning(
                 f"Number of live points (nlive) not set in the input card. Using default: {nlive}"
             )
 
-        npools = config.get("npools", 8)
-        if "npools" not in config:
+        lepsilon = config.get("lepsilon", 0.05)
+        if "efr" not in config:
             _logger.warning(
-                f"Number of prallel pools not set in the input card. Using default: {npools}"
+                f"Sampling tollerance (Lepsilon) not set in the input card. Using default: {lepsilon}"
+            )
+
+        target_evidence_unc = config.get("target_evidence_unc", 0.5)
+        if "toll" not in config:
+            _logger.warning(
+                f"Target Evidence uncertanty (target_evidence_unc) not set in the input card. Using default: {target_evidence_unc}"
+            )
+
+        target_post_unc = config.get("target_post_unc", 0.5)
+        if "toll" not in config:
+            _logger.warning(
+                f"Target Posterior uncertanty (target_post_unc) not set in the input card. Using default: {target_post_unc}"
+            )
+        
+        frac_remain = config.get("frac_remain", 0.01)
+        if "toll" not in config:
+            _logger.warning(
+                f"Remaining fraction (frac_remain) not set in the input card. Using default: {frac_remain}"
             )
 
         use_multiplicative_prescription = config.get(
@@ -128,8 +159,11 @@ class DynestyOptimizer(Optimizer):
             single_parameter_fits,
             pairwise_fits,
             use_multiplicative_prescription,
-            nlive=nlive,
-            n_pools=npools,
+            live_points=nlive,
+            lepsilon=lepsilon,
+            target_evidence_unc=target_evidence_unc,
+            target_post_unc=target_post_unc,
+            frac_remain=frac_remain
         )
 
     def chi2_func_ns(self, params):
@@ -183,40 +217,69 @@ class DynestyOptimizer(Optimizer):
             flat_prior : np.ndarray
                 updated hypercube prior
         """
-        min_val = self.free_parameters.minimum
-        max_val = self.free_parameters.maximum
+        min_val = self.free_parameters.minimum.values
+        max_val = self.free_parameters.maximum.values
         return hypercube * (max_val - min_val) + min_val
 
+    def clean(self):
+        """Remove raw |NS| output if you want to keep raw output, don't call this method"""
+
+        folders = [
+            "chains", "info", "results", "extra", "plots"
+        ]
+        for folder in folders:
+            for f in os.listdir(self.results_path / folder):
+                os.remove(self.results_path / folder / f)
+            os.rmdir(self.results_path / folder)
+
+
     def run_sampling(self):
-        """Run the minimization with Dynesty Nested Sampling."""
+        """Run the minimization with Ultra nest."""
 
         t1 = time.time()
-        with Pool(
-            self.n_pools,
-            loglike=self.gaussian_loglikelihood,
-            prior_transform=self.flat_prior,
-        ) as pool:
-            sampler = NestedSampler(
-                pool.loglike,
-                pool.prior_transform,
-                self.npar,
-                nlive=self.nlive,
-                pool=pool,
+        sampler = ultranest.ReactiveNestedSampler(
+            self.free_parameters.index.tolist(),
+            self.gaussian_loglikelihood,
+            self.flat_prior,
+            log_dir=self.results_path,
+            resume=True,
+        )
+        if self.npar > 10:
+            # set up step sampler. Here, we use a differential evolution slice sampler:
+            sampler.stepsampler = stepsampler.SliceSampler(
+                nsteps=100,
+                generate_direction = stepsampler.generate_region_oriented_direction,
             )
-            sampler.run_nested()
-            results = sampler.results
-        t2 = time.time()
+        result = sampler.run(
+            min_num_live_points=self.live_points,
+            dlogz=self.target_evidence_unc,
+            frac_remain=self.frac_remain,
+            dKL=self.target_post_unc,
+            Lepsilon=self.lepsilon, 
+            update_interval_volume_fraction=0.8 if self.npar > 20 else 0.2,
+            max_num_improvement_loops=0,
+        )
 
-        log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
-        log.console.log(f"Number of samples: {results['samples'].shape[0]}")
-        table = Table(style=Style(color="white"), title_style="bold cyan", title=None)
-        table.add_column("Parameter", style="bold red", no_wrap=True)
-        table.add_column("Best value")
-        table.add_column("Error")
-        for par, col in zip(self.free_parameters.index, results["samples"].T):
-            table.add_row(f"{par}", f"{col.mean():.3f}", f"{col.std():.3f}")
-        log.console.print(table)
-        self.save(results)
+        t2 = time.time()
+        comm = MPI.COMM_WORLD
+        rank = comm.Get_rank()
+
+        if rank == 0:
+            log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
+            log.console.log(f"Number of samples: {result['samples'].shape[0]}")
+
+            table = Table(
+                style=Style(color="white"), title_style="bold cyan", title=None
+            )
+            table.add_column("Parameter", style="bold red", no_wrap=True)
+            table.add_column("Best value")
+            table.add_column("Error")
+            for par, col in zip(self.free_parameters.index, result["samples"].T):
+                table.add_row(f"{par}", f"{col.mean():.3f}", f"{col.std():.3f}")
+            log.console.print(table)
+
+            self.save(result)
+            self.clean()
 
     def save(self, result):
         """

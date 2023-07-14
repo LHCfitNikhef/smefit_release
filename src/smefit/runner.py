@@ -12,7 +12,7 @@ from .chi2 import Scanner
 from .log import logging
 from .optimize.mc import MCOptimizer
 from .optimize.ns import NSOptimizer
-from .optimize.dynesty import DynestyOptimizer
+from .optimize.ultranest import USOptimizer
 
 _logger = logging.getLogger(__name__)
 
@@ -124,8 +124,19 @@ class Runner:
         opt = comm.bcast(opt, root=0)
         opt.run_sampling()
 
-    def dynesty(self, config):
-        opt = DynestyOptimizer.from_dict(config)
+    def ultranest(self, config):
+        """Run a fit with Ultra Nest."""
+
+        comm = MPI.COMM_WORLD
+        rank = comm.Get_rank()
+
+        if rank == 0:
+            opt = USOptimizer.from_dict(config)
+        else:
+            opt = None
+
+        # Run optimizer
+        opt = comm.bcast(opt, root=0)
         opt.run_sampling()
 
     def mc(self, config):
@@ -154,8 +165,8 @@ class Runner:
         config = self.run_card
         if optimizer == "NS":
             self.ns(config)
-        elif optimizer == "DY":
-            self.dynesty(config)
+        elif optimizer == "US":
+            self.ultranest(config)
         elif optimizer == "MC":
             self.mc(config)
 
