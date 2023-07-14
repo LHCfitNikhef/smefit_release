@@ -176,12 +176,13 @@ class Runner:
             single_coeff_config["coefficients"][coeff] = config["coefficients"][coeff]
 
             if optimizer == "NS":
-                self.ns(single_coeff_config)
+                self.ultranest(single_coeff_config)
             elif optimizer == "MC":
                 self.mc(single_coeff_config)
 
     def pairwise_analysis(self, optimizer):
-        """Run a series of pairwise parameter fits for all the operators specified in the runcard
+        """Run a series of pairwise parameter fits for all the operators specified in the runcard.
+
         Parameters
         ----------
         optimizer: string
@@ -197,7 +198,7 @@ class Runner:
             pairwise_coeff_config["coefficients"][c2] = config["coefficients"][c2]
 
             if optimizer == "NS":
-                self.ns(pairwise_coeff_config)
+                self.ultranest(pairwise_coeff_config)
             elif optimizer == "MC":
                 self.mc(pairwise_coeff_config)
 
