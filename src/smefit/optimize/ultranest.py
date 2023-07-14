@@ -6,7 +6,6 @@ Fitting the Wilson coefficients with |NS|
 import time
 
 import ultranest
-from mpi4py import MPI
 from rich.style import Style
 from rich.table import Table
 from ultranest import stepsampler
@@ -15,6 +14,13 @@ from .. import log
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
+
+try:
+    from mpi4py import MPI
+
+    run_parallel = True
+except ModuleNotFoundError:
+    run_parallel = False
 
 _logger = log.logging.getLogger(__name__)
 
@@ -258,8 +264,10 @@ class USOptimizer(Optimizer):
         )
 
         t2 = time.time()
-        comm = MPI.COMM_WORLD
-        rank = comm.Get_rank()
+        rank = 0
+        if run_parallel:
+            comm = MPI.COMM_WORLD
+            rank = comm.Get_rank()
 
         if rank == 0:
             log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")

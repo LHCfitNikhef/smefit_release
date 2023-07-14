@@ -11,17 +11,28 @@
 </p>
 
 [SMEFiT](https://lhcfitnikhef.github.io/smefit_release/index.html) is a python program for Standard Model Effective Field Theory fits
-## Installation from source
-A the moment the code is not deployed yet, you can install it only from source
-using a conda environnement, which is provided.
+## Installation
+
+To install smefit you can do
+```bash
+pip install smefit
+```
+
+Note this installation do not allows you to run in parallel mode.
+To do that you can install from source using the provided conda environment
+or if you have an MPI compiler available just adding:
+
+```bash
+pip install mpi4py
+```
+
+## Installation from source using conda
+You can install smefit from source using a conda environnement.
 To install it you need a [conda](https://docs.conda.io/en/latest/) installation and run:
 
 ```bash
 ./install.sh -n <env_name='smefit_installation'>
 ```
-
-This will download and install also the [MULtiNest](https://github.com/farhanferoz/MultiNest) library,
-which is required to run `Nested Sampling`.
 The installed package will be available in an environnement called `smefit_installation`, to activate it
 you can do:
 
@@ -48,6 +59,7 @@ An runcard example is provided in `runcards/test_runcard.yaml`.
 You can also do `smefit -h` for more help.
 
 ### Running in parallel
+
 To run smefit with `Nested Sampling` in parallel you can do:
 
 ```bash
