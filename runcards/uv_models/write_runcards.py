@@ -36,7 +36,6 @@ def parse_UV_coeffs(model_dict: dict) -> dict:
 
         # drop (fix to zero) WC with zero coefficient
         if len(rel) == 1:
-
             # new syntax
             if any(val[0] == 0 for val in rel[0].values()):
                 continue
