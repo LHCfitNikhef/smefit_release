@@ -22,6 +22,7 @@ def parse_UV_coeffs(model_dict: dict) -> dict:
     coeff_dict = {}
     free_dofs = []
 
+
     # add uv couplings
     for c in model_dict["UV couplings"]:
         free_dofs.append(c)
@@ -33,13 +34,25 @@ def parse_UV_coeffs(model_dict: dict) -> dict:
         if not coeff.startswith("c"):
             continue
 
+        # drop (fix to zero) WC with zero coefficient
         if len(rel) == 1:
-            # drop coeff fixed to a value
-            value = rel[0][free_dofs[0]][0]
-            if value != 0:
-                coeff_dict[f"O{coeff[1:]}"] = {"value": value}
+
+            # new syntax
+            if any(val[0] == 0 for val in rel[0].values()):
                 continue
-            continue
+
+        # if len(rel) == 1:
+        #
+        #     # drop coeff fixed to a value
+        #
+        #     value = rel[0][free_dofs[0]][0]
+        #     if value != 0:
+        #         coeff_dict[f"O{coeff[1:]}"] = {"value": value,
+        #                                        "constrain": True,
+        #                                        "min": -MAX_VALUE,
+        #                                        "max": MAX_VALUE,}
+        #         continue
+        #     continue
 
         new_constrain = []
         for sum_element in rel:
@@ -118,6 +131,7 @@ def dump_runcard(
     else:
         coeff_dict = parse_WC_coeffs(model_dict)
         flag = "WC"
+
     runcard["coefficients"] = coeff_dict
     with open(
         f"{here.parent}/{collection}_{flag}_{idx_model}_{pto}_{eft_order}_{fitting_mode}.yaml",
@@ -132,7 +146,7 @@ if __name__ == "__main__":
         prog="SMEFiT_runcards",
         description="Write SMEFIT runcards for WC/UV models",
     )
-    parser.add_argument("-i", "--model_idx", help="Model ID", type=int, required=True)
+    parser.add_argument("-i", "--model_idx", help="Model ID", required=True)
     parser.add_argument(
         "-e", "--eft_order", help="EFT order: HO, NHO", type=str, required=True
     )
@@ -165,3 +179,4 @@ if __name__ == "__main__":
         args.mode,
         args.is_uv,
     )
+
