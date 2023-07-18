@@ -37,7 +37,7 @@ def parse_UV_coeffs(model_dict: dict) -> dict:
             # drop coeff fixed to a value
             value = rel[0][free_dofs[0]][0]
             if value != 0:
-                coeff_dict[f"O{coeff[1:]}"] = {"value": value}
+                coeff_dict[f"O{coeff[1:]}"] = {"constrain": True, "value": value}
                 continue
             continue
 
