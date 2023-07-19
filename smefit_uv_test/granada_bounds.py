@@ -316,7 +316,7 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
                     f"$\mathrm{{NLO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$"], loc="upper center", ncol=2,
                    prop={"size": 25 * (n_cols * 4) / 20}, bbox_to_anchor=(0.5, 1.0), frameon=False)
 
-        plt.tight_layout(rect=[0, 0.05, 1, 0.95])  # make room for the legend
+        plt.tight_layout(rect=[0, 0.05 * (5./n_rows), 1, 1 - 0.05 * (5./n_rows)])  # make room for the legend
 
         if name is not None:
             fig.savefig(result_dir / "{}_posteriors_LO_vs_NLO_{}_{}.pdf".format(collection, EFT, name))
@@ -327,7 +327,7 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
                     f"$\mathrm{{{pQCD}}}\;\mathcal{{O}}\\left(\Lambda^{{-4}}\\right)$"], ncol=2,
                    prop={"size": 25 * (n_cols * 4) / 20}, bbox_to_anchor=(0.5, 1.0), loc='upper center', frameon=False)
 
-        plt.tight_layout(rect=[0, 0.05, 1, 0.95]) # make room for the legend
+        plt.tight_layout(rect=[0, 0.05 * (5./n_rows), 1, 1 - 0.05 * (5./n_rows)]) # make room for the legend
 
         if name is not None:
             fig.savefig(result_dir / "{}_posteriors_HO_vs_NHO_{}_{}.pdf".format(collection, pQCD, name))
@@ -340,19 +340,19 @@ plot_uv_posterior(n_mp, "MP", mp_mdl_idx, EFT="HO")
 plot_uv_posterior(n_mp, "MP",mp_mdl_idx, pQCD="LO")
 plot_uv_posterior(n_mp, "MP", mp_mdl_idx, pQCD="NLO")
 
-# plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="NHO", name="vbosons")
-# plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="HO", name="vbosons")
-# plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, EFT="NHO", name="vfermions")
-# plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, EFT="HO", name="vfermions")
-# plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, EFT="NHO", name="scalars")
-# plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, EFT="HO", name="scalars")
-#
-# plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="LO")
-# plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="NLO")
-# plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="LO")
-# plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="NLO")
-# plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs,name="scalars", pQCD="LO")
-# plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, name="scalars", pQCD="NLO")
+plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="NHO", name="vbosons")
+plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="HO", name="vbosons")
+plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, EFT="NHO", name="vfermions")
+plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, EFT="HO", name="vfermions")
+plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, EFT="NHO", name="scalars")
+plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, EFT="HO", name="scalars")
+
+plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="LO")
+plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="NLO")
+plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="LO")
+plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="NLO")
+plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs,name="scalars", pQCD="LO")
+plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, name="scalars", pQCD="NLO")
 #
 for file in result_dir.iterdir():
     if file.suffix == ".pdf":
