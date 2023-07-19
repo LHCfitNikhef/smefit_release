@@ -11,6 +11,7 @@ from matplotlib.gridspec import GridSpec
 from latex_dicts import inv_param_dict
 from latex_dicts import uv_param_dict
 import matplotlib.patches as mpatches
+import arviz as az
 
 #use("PDF")
 rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"], 'size': 17})
@@ -38,7 +39,7 @@ df_uv_params_lin = df_lin[uv_params]
 df_uv_params_quad = df_quad[uv_params]
 
 tot_samples = min(df_lin.shape[0], df_quad.shape[0])
-samples = random.sample(range(tot_samples), 10)
+samples = random.sample(range(tot_samples), 1000)
 
 
 def cornerplot(dfs, tex_dict, path, labels):
@@ -68,14 +69,34 @@ def cornerplot(dfs, tex_dict, path, labels):
 
         ax = fig.add_subplot(grid[row_idx, col_idx])
 
+        xmin_all = []
+        xmax_all = []
+        ymin_all = []
+        ymax_all = []
         for i, df in enumerate(dfs):
-            #ax.scatter(df[inv2].iloc[samples], df[inv1].iloc[samples], s=1)
-            sns.kdeplot(x=df[inv2].iloc[samples], y=df[inv1].iloc[samples], levels=[0.05, 1.0], bw_adjust=1.8, ax=ax,
+            # ax.scatter(df[inv2].iloc[samples], df[inv1].iloc[samples], s=1, color=colors[i])
+            sns.kdeplot(x=df[inv2], y=df[inv1], levels=[0.05, 1.0], bw_adjust=1.7, ax=ax,
                        fill=True, alpha=0.4)
 
-            sns.kdeplot(x=df[inv2].iloc[samples], y=df[inv1].iloc[samples], levels=[0.05], bw_adjust=1.8, ax=ax, alpha=1)
+            sns.kdeplot(x=df[inv2], y=df[inv1], levels=[0.05], bw_adjust=1.7, ax=ax, alpha=1)
             hndls.append((mpatches.Patch(ec=colors[i], fc=colors[i], fill=True, alpha=0.4),
                           mpatches.Patch(ec=colors[i], fc=colors[i], fill=False, alpha=1.0)))
+
+            xmin, xmax = az.hdi(df[inv2].values, hdi_prob=.95)
+            ymin, ymax = az.hdi(df[inv1].values, hdi_prob=.95)
+            ymin_all.append(ymin)
+            ymax_all.append(ymax)
+            xmin_all.append(xmin)
+            xmax_all.append(xmax)
+
+        deltax = 0.8 * (max(xmax_all) - min(xmin_all))
+        deltay = 0.8 * (max(ymax_all) - min(ymin_all))
+        # ax.axvline(min(xmin_all) - deltax, color='k')
+        # ax.axvline(max(xmax_all) + deltax, color='k')
+        # ax.axhline(min(ymin_all) - deltay, color='k')
+        # ax.axhline(max(ymax_all) + deltay, color='k')
+        ax.set_xlim(max(-1000, min(xmin_all) - deltax), min(1000, max(xmax_all) + deltax))
+        ax.set_ylim((max(-1000, min(ymin_all) - deltay), min(1000, max(ymax_all) + deltay)))
 
         ax.set_xlabel(tex_dict[inv2], fontsize = 20 * (n_cols * 4) / 20)
         ax.set_ylabel(tex_dict[inv1], fontsize = 20 * (n_cols * 4) / 20)
@@ -97,21 +118,12 @@ def cornerplot(dfs, tex_dict, path, labels):
                 labelleft=False)
 
         col_idx -= 1
-        #plt.tight_layout(rect=[0, 0, 1, 1])
-    #
-    # legend = ax.legend(
-    #     labels=labels, handles=hndls,
-    #     bbox_to_anchor=(1, 1),
-    #     loc='upper left', frameon=False, fontsize=24,
-    #     handlelength=1,
-    #     borderpad=0.5,
-    #     handletextpad=1,
-    #     title_fontsize=24)
+
 
     fig.legend(labels=labels, handles=hndls,
                prop={"size": 25 * (n_cols * 4) / 20}, bbox_to_anchor=(0.5, 1 - .5/n_rows), loc='upper center', frameon=False)
 
-    #bbox = legend.get_window_extent(fig.canvas.get_renderer()).transformed(fig.transFigure.inverted())
+
     grid.tight_layout(fig, rect=[0, 0.05 * (5. / n_rows), 1, 1 - 0.05 * (5. / n_rows)])
 
     fig.savefig('{}.pdf'.format(path))
@@ -125,5 +137,5 @@ labels = [r"$m_{Q_1}=m_{Q_7}=m_{\mathcal{W}_1}=1.0\:\mathrm{TeV}$",
 # cornerplot(dfs_inv, inv_param_dict["Q1_Q7_W1"],
 #           '/data/theorie/jthoeve/smefit_release/smefit_uv_test/marg_inv_plots/inv_multiparticle_nd_marg', labels)
 
-cornerplot(dfs_uv_params, uv_param_dict, '/data/theorie/jthoeve/smefit_release/smefit_uv_test/marg_inv_plots/uv_multiparticle_nd_marg_v2',
+cornerplot(dfs_uv_params, uv_param_dict, '/data/theorie/jthoeve/smefit_release/smefit_uv_test/marg_inv_plots/uv_multiparticle_nd_marg_final',
            labels)
