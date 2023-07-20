@@ -5,7 +5,7 @@ from matplotlib import rc, use
 import pandas as pd
 
 use("PDF")
-rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"], 'size': 15})
+rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"], 'size': 20})
 rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 
 # Data for the comparison
@@ -57,14 +57,15 @@ bar_width = total_width / 5
 x = np.arange(0, 6 * bar_width * len(categories), 6 * bar_width)
 
 
-fig, ax = plt.subplots(figsize=(10,8))
+fig, ax = plt.subplots(figsize=(14,8))
 
 # Plot the bars
-plt.bar(x - 2 * bar_width , fitmaker_bounds, bar_width, align='center', label=r'$\rm{Fitmaker}$')
-plt.bar(x - bar_width , smefit_bounds_lo_nho, bar_width, align='center', label=r'$\rm{SMEFiT@LO}, \mathcal{O}\left(\Lambda^{-2}\right)$')
-plt.bar(x, smefit_bounds_lo_ho, bar_width, align='center', label=r'$\rm{SMEFiT@LO, \mathcal{O}\left(\Lambda^{-4}\right)}$')
-plt.bar(x + bar_width, smefit_bounds_nlo_nho, bar_width, align='center', label=r'$\rm{SMEFiT@NLO}, \mathcal{O}\left(\Lambda^{-2}\right)$')
-plt.bar(x + 2 * bar_width, smefit_bounds_nlo_ho, bar_width, align='center', label=r'$\rm{SMEFiT@NLO, \mathcal{O}\left(\Lambda^{-4}\right)}$')
+
+plt.bar(x - 2 * bar_width , smefit_bounds_lo_nho, bar_width, align='center', label=r'$\rm{LO}, \mathcal{O}\left(\Lambda^{-2}\right)$')
+plt.bar(x - bar_width, smefit_bounds_lo_ho, bar_width, align='center', label=r'$\rm{LO, \mathcal{O}\left(\Lambda^{-4}\right)}$')
+plt.bar(x, smefit_bounds_nlo_nho, bar_width, align='center', label=r'$\rm{NLO}, \mathcal{O}\left(\Lambda^{-2}\right)$')
+plt.bar(x + bar_width, smefit_bounds_nlo_ho, bar_width, align='center', label=r'$\rm{NLO, \mathcal{O}\left(\Lambda^{-4}\right)}$')
+plt.bar(x + 2 * bar_width , fitmaker_bounds, bar_width, align='center', label=r'$\rm{Fitmaker}$')
 
 # Set labels and title
 
@@ -74,7 +75,7 @@ plt.ylabel(r'$|g_{\mathrm{UV}}|$')
 plt.xticks(x, categories)
 
 # Add a legend
-plt.legend(frameon=False)
+plt.legend(frameon=False, ncol=3)
 
 # Show the plot
 plt.savefig('uv_smefit_vs_fitmaker_all.pdf')
