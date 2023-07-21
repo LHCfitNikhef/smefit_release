@@ -5,6 +5,7 @@ UV model : Q1_Q7_W1
 Model name : Q1_Q7_W1
 # ~~~~~~~~~~~~~~~~~~~~~~
 UV couplings : [gWtiH, gWLf11, gWLf22, gWLf33, gWqf11, gWqf33, lamQ1uf3, lamQ7f33]
+UV masses : [MQ1, MQ7, MWti]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Loop level of the results : 0
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -55,14 +56,14 @@ cQt1 : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],g
 cQt8 : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctt1 : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 cll : [{gWtiH: [-0.25,0],gWLf11: [1,1],gWLf22: [1,1],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
-cbp : [{gWtiH: [-0.006002165432052166,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
+cbp : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctp : [{gWtiH: [0.4961407177231255,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,2]},{gWtiH: [0.4961407177231255,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,2],lamQ7f33: [1,0]},{gWtiH: [-0.2480703588615627,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctG : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ccp : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
-ctap : [{gWtiH: [-0.0025559460452279554,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
+ctap : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctW : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctZ : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-# Tree-level results address: /home/alejo/Downloads/MMEFT2SMEFiT-main//sample_results/MatchingResult_multiparticle_treelevel.dat
-# Export date: Thu 13 Jul 2023 14:57:36
+# Tree-level results address: C:\Users\a95826ar.DS\Documents\GitHub\MMEFT2SMEFiT\/sample_results/MatchingResult_multiparticle_treelevel.dat
+# Export date: Fri 21 Jul 2023 17:03:40

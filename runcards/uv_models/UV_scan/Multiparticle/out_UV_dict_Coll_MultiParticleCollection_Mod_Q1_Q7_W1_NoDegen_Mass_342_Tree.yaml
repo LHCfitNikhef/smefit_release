@@ -56,14 +56,14 @@ cQt1 : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],g
 cQt8 : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctt1 : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 cll : [{gWtiH: [-0.04,0],gWLf11: [1,1],gWLf22: [1,1],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
-cbp : [{gWtiH: [-0.0009603464691283466,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
+cbp : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctp : [{gWtiH: [0.02450077618385805,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,2]},{gWtiH: [0.0551267464136806,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,2],lamQ7f33: [1,0]},{gWtiH: [-0.03969125741785003,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctG : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ccp : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
-ctap : [{gWtiH: [-0.00040895136723647296,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
+ctap : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctW : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctZ : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf11: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-# Tree-level results address: /home/alejo/Downloads/MMEFT2SMEFiT-main//sample_results/MatchingResult_multiparticle_treelevel.dat
-# Export date: Wed 19 Jul 2023 07:51:32
+# Tree-level results address: C:\Users\a95826ar.DS\Documents\GitHub\MMEFT2SMEFiT\/sample_results/MatchingResult_multiparticle_treelevel.dat
+# Export date: Fri 21 Jul 2023 17:01:37
