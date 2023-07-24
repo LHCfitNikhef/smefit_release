@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import rc, use
 
-collection = "1L"
+collection = "MP"
 
 here = pathlib.Path(__file__).parent
 base_path = pathlib.Path(f"{here.parent}/runcards/uv_models/UV_scan/{collection}/")
@@ -48,7 +48,10 @@ for model in mod_list:
             for k, attr in model.__dict__.items():
                 if k.startswith('inv'):
                     invariants.append(attr)
-            model.inspect_model(model.MODEL_SPECS, invariants)
+            try:
+                model.inspect_model(model.MODEL_SPECS, invariants)
+            except TypeError:
+                model.inspect_model(model.MODEL_SPECS, model.build_uv_posterior, invariants, model.check_constrain)
 
 # Specify the path to the JSON file
 posterior_path = f"{here.parent}/results/{{}}_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
@@ -129,8 +132,8 @@ oneloop_mdl_idx = [5]
 # scalar_dict, n_scalars = compute_bounds("Granada", scalar_mdl_nrs)
 # vector_boson_dict, n_vbosons = compute_bounds("Granada", vboson_mdl_nrs)
 # vector_fermion_dict, n_vfermions = compute_bounds("Granada", vfermion_mdl_nrs)
-# mp_dict, n_mp = compute_bounds("MP", mp_mdl_idx)
-oneloop_dict, n_scalars_1L = compute_bounds(collection, oneloop_mdl_idx)
+mp_dict, n_mp = compute_bounds("MP", mp_mdl_idx)
+#oneloop_dict, n_scalars_1L = compute_bounds(collection, oneloop_mdl_idx)
 
 # latex_table_scalar = dict_to_latex_table(
 #     scalar_dict,
@@ -153,20 +156,20 @@ oneloop_dict, n_scalars_1L = compute_bounds(collection, oneloop_mdl_idx)
 #     "cl-heavy-vfermion",
 #     "95\\% CL intervals of the heavy vector fermion fields UV couplings.",
 # )
-# latex_table_mp = dict_to_latex_table(
-#     mp_dict,
-#     mod_dict,
-#     uv_param_dict,
-#     "cl-mp-model",
-#     "95\\% CL intervals of the UV couplings that enter in the multiparticle model.",
-# )
-latex_table_1l = dict_to_latex_table(
-    oneloop_dict,
+latex_table_mp = dict_to_latex_table(
+    mp_dict,
     mod_dict,
     uv_param_dict,
-    "cl-1l-model",
-    "95\\% CL intervals of the UV couplings in \\varphi at one-loop.",
+    "cl-mp-model",
+    "95\\% CL intervals of the UV couplings that enter in the multiparticle model.",
 )
+# latex_table_1l = dict_to_latex_table(
+#     oneloop_dict,
+#     mod_dict,
+#     uv_param_dict,
+#     "cl-1l-model",
+#     "95\\% CL intervals of the UV couplings in \\varphi at one-loop.",
+# )
 
 #Save LaTeX code to a .tex file
 # with open(result_dir / "table_scalar.tex", "w") as file:
@@ -175,10 +178,10 @@ latex_table_1l = dict_to_latex_table(
 #     file.write(latex_table_vboson)
 # with open(result_dir / "table_vfermion.tex", "w") as file:
 #     file.write(latex_table_vfermion)
-# with open(result_dir / "table_mp.tex", "w") as file:
-#     file.write(latex_table_mp)
-with open(result_dir / "table_1l.tex", "w") as file:
-    file.write(latex_table_1l)
+with open(result_dir / "table_mp.tex", "w") as file:
+    file.write(latex_table_mp)
+# with open(result_dir / "table_1l.tex", "w") as file:
+#     file.write(latex_table_1l)
 
 
 def find_xrange(samples):
@@ -214,33 +217,6 @@ def find_xrange(samples):
     return min(x_low), max(x_high)
 
 
-    # min_low = min(low_1, low_2)
-    #
-    #
-    #
-    #
-    # # if n_1[max_index_1] > n_2[max_index_2]:
-    # #     x_low = bins_1[index_min_1]
-    # #     x_high = bins_1[index_max_1]
-    # # else:
-    # #     x_low = bins_2[index_min_2]
-    # #     x_high = bins_2[index_max_2]
-    # #
-    # # if min_low > 0:
-    # #     x_low = -0.1 * x_high
-    #
-    #
-    # x_high_2 = bins_2[index_max_2]
-    #
-    # if min_low < 0:
-    #     x_low_1 = bins_1[index_min_1]
-    #     x_low_2 = bins_2[index_min_2]
-    # else:
-    #     x_low_1 = - 0.1 * x_high_1
-    #     x_low_2 = - 0.1 * x_high_2
-    #
-    # x_low = min(x_low_1, x_low_2)
-    # x_high = max(x_high_1, x_high_2)
 
 def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=None):
     plot_nr = 1
@@ -249,6 +225,7 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
     n_cols = max(int(np.ceil(np.sqrt(n_params))), 4)
     if n_params < n_cols:
         n_cols = n_params
+
     n_rows = int(np.ceil(n_params / n_cols))
 
     fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
@@ -350,10 +327,10 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
             fig.savefig(result_dir / "{}_posteriors_HO_vs_NHO_{}.pdf".format(collection, pQCD))
 
 
-# plot_uv_posterior(n_mp, "MP", mp_mdl_idx, EFT="NHO")
-# plot_uv_posterior(n_mp, "MP", mp_mdl_idx, EFT="HO")
-# plot_uv_posterior(n_mp, "MP",mp_mdl_idx, pQCD="LO")
-# plot_uv_posterior(n_mp, "MP", mp_mdl_idx, pQCD="NLO")
+plot_uv_posterior(n_mp, "MP", mp_mdl_idx, EFT="NHO")
+plot_uv_posterior(n_mp, "MP", mp_mdl_idx, EFT="HO")
+plot_uv_posterior(n_mp, "MP",mp_mdl_idx, pQCD="LO")
+plot_uv_posterior(n_mp, "MP", mp_mdl_idx, pQCD="NLO")
 #
 # plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="NHO", name="vbosons")
 # plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="HO", name="vbosons")
@@ -369,10 +346,10 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
 # plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs,name="scalars", pQCD="LO")
 # plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, name="scalars", pQCD="NLO")
 
-plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, EFT="NHO", name="scalars")
-plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, EFT="HO", name="scalars")
-plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, pQCD="LO", name="scalars")
-plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, pQCD="NLO", name="scalars")
+# plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, EFT="NHO", name="scalars")
+# plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, EFT="HO", name="scalars")
+# plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, pQCD="LO", name="scalars")
+# plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, pQCD="NLO", name="scalars")
 
 
 for file in result_dir.iterdir():
