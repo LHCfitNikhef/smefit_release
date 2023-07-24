@@ -31,7 +31,7 @@ c3pl2 : [{lamQ1uf3: [0.,0]}]
 c3pl3 : [{lamQ1uf3: [0.,0]}]
 cpui : [{lamQ1uf3: [0.,0]}]
 cpdi : [{lamQ1uf3: [0.,0]}]
-cpt : [{lamQ1uf3: [0.,0]},{lamQ1uf3: [0,1]},{lamQ1uf3: [-0.5,2]}]
+cpt : [{lamQ1uf3: [-0.5,2]}]
 cpe : [{lamQ1uf3: [0.,0]}]
 cpmu : [{lamQ1uf3: [0.,0]}]
 cpta : [{lamQ1uf3: [0.,0]}]
@@ -56,7 +56,7 @@ cQt8 : [{lamQ1uf3: [0.,0]}]
 ctt1 : [{lamQ1uf3: [0.,0]}]
 cll : [{lamQ1uf3: [0.,0]}]
 cbp : [{lamQ1uf3: [0.,0]}]
-ctp : [{lamQ1uf3: [0,0]},{lamQ1uf3: [0,1]},{lamQ1uf3: [0.4961407177231255,2]}]
+ctp : [{lamQ1uf3: [0.4961407177231255,2]}]
 ctG : [{lamQ1uf3: [0.,0]}]
 ccp : [{lamQ1uf3: [0.,0]}]
 ctap : [{lamQ1uf3: [0.,0]}]
@@ -64,5 +64,5 @@ ctW : [{lamQ1uf3: [0.,0]}]
 ctZ : [{lamQ1uf3: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
-Export date: Wed 7 Dec 2022 11:49:32
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_YukaTop_Upto48.wxf
+Export date: Mon 24 Jul 2023 09:14:32

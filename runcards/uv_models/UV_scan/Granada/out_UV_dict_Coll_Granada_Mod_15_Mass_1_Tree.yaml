@@ -49,8 +49,8 @@ c8dt : [{yZetaqqf33: [0.,0]}]
 c1dt : [{yZetaqqf33: [0.,0]}]
 c8qd : [{yZetaqqf33: [0.,0]}]
 c1qd : [{yZetaqqf33: [0.,0]}]
-cQQ1 : [{yZetaqqf33: [0,0]},{yZetaqqf33: [0,1]},{yZetaqqf33: [3.3333333333333335,2]}]
-cQQ8 : [{yZetaqqf33: [0,0]},{yZetaqqf33: [0,1]},{yZetaqqf33: [-4.,2]}]
+cQQ1 : [{yZetaqqf33: [3.3333333333333335,2]}]
+cQQ8 : [{yZetaqqf33: [-4.,2]}]
 cQt1 : [{yZetaqqf33: [0.,0]}]
 cQt8 : [{yZetaqqf33: [0.,0]}]
 ctt1 : [{yZetaqqf33: [0.,0]}]
@@ -64,5 +64,5 @@ ctW : [{yZetaqqf33: [0.,0]}]
 ctZ : [{yZetaqqf33: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
-Export date: Wed 7 Dec 2022 11:49:30
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_YukaTop_Upto48.wxf
+Export date: Mon 24 Jul 2023 09:14:30

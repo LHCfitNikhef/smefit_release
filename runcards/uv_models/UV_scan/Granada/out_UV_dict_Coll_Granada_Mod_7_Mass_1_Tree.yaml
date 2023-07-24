@@ -16,8 +16,8 @@ cpG : [{kXi1: [0.,0]}]
 cpB : [{kXi1: [0.,0]}]
 cpW : [{kXi1: [0.,0]}]
 cpWB : [{kXi1: [0.,0]}]
-cpd : [{kXi1: [0.,0]},{kXi1: [0,1]},{kXi1: [-2.,2]}]
-cpD : [{kXi1: [0,0]},{kXi1: [0,1]},{kXi1: [4.,2]}]
+cpd : [{kXi1: [-2.,2]}]
+cpD : [{kXi1: [4.,2]}]
 cWWW : [{kXi1: [0.,0]}]
 cpqMi : [{kXi1: [0.,0]}]
 cpQM : [{kXi1: [0.,0]}]
@@ -55,14 +55,14 @@ cQt1 : [{kXi1: [0.,0]}]
 cQt8 : [{kXi1: [0.,0]}]
 ctt1 : [{kXi1: [0.,0]}]
 cll : [{kXi1: [0.,0]}]
-cbp : [{kXi1: [0,0]},{kXi1: [0,1]},{kXi1: [0.048017323456417335,2]}]
-ctp : [{kXi1: [0,0]},{kXi1: [0,1]},{kXi1: [1.984562870892502,2]}]
+cbp : [{kXi1: [0.,0]}]
+ctp : [{kXi1: [1.984562870892502,2]}]
 ctG : [{kXi1: [0.,0]}]
 ccp : [{kXi1: [0.,0]}]
-ctap : [{kXi1: [0,0]},{kXi1: [0,1]},{kXi1: [0.020447568361823647,2]}]
+ctap : [{kXi1: [0.,0]}]
 ctW : [{kXi1: [0.,0]}]
 ctZ : [{kXi1: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
-Export date: Wed 7 Dec 2022 11:49:30
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_YukaTop_Upto48.wxf
+Export date: Mon 24 Jul 2023 09:14:29
