@@ -20,9 +20,9 @@ cpd : [{lamUf3: [0.,0]}]
 cpD : [{lamUf3: [0.,0]}]
 cWWW : [{lamUf3: [0.,0]}]
 cpqMi : [{lamUf3: [0.,0]}]
-cpQM : [{lamUf3: [0.,0]},{lamUf3: [0,1]},{lamUf3: [0.5,2]}]
+cpQM : [{lamUf3: [0.5,2]}]
 c3pq : [{lamUf3: [0.,0]}]
-c3pQ3 : [{lamUf3: [0.,0]},{lamUf3: [0,1]},{lamUf3: [-0.25,2]}]
+c3pQ3 : [{lamUf3: [-0.25,2]}]
 cpl1 : [{lamUf3: [0.,0]}]
 cpl2 : [{lamUf3: [0.,0]}]
 cpl3 : [{lamUf3: [0.,0]}]
@@ -56,7 +56,7 @@ cQt8 : [{lamUf3: [0.,0]}]
 ctt1 : [{lamUf3: [0.,0]}]
 cll : [{lamUf3: [0.,0]}]
 cbp : [{lamUf3: [0.,0]}]
-ctp : [{lamUf3: [0,0]},{lamUf3: [0,1]},{lamUf3: [0.4961407177231255,2]}]
+ctp : [{lamUf3: [0.4961407177231255,2]}]
 ctG : [{lamUf3: [0.,0]}]
 ccp : [{lamUf3: [0.,0]}]
 ctap : [{lamUf3: [0.,0]}]
@@ -64,5 +64,5 @@ ctW : [{lamUf3: [0.,0]}]
 ctZ : [{lamUf3: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
-Export date: Wed 7 Dec 2022 11:49:32
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_YukaTop_Upto48.wxf
+Export date: Mon 24 Jul 2023 09:14:32

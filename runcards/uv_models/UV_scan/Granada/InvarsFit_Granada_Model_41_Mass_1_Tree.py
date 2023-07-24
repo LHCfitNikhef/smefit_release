@@ -1,22 +1,26 @@
-# -*- coding: utf-8 -*-
 import numpy as np
+
 from utils import inspect_model
 
-MODEL_SPECS = dict(id=41, collection="Granada", mass=1, pto="NLO", eft="NHO")  # in TeV
+
+MODEL_SPECS = dict(
+	 id=41,
+	 collection= "Granada",
+	 mass=1 # in TeV
+	 pto="NLO",
+	 eft="NHO"
+)
 
 
 def inv1(results):
-    lamSigmaf3 = results.lamSigmaf3
-    return np.abs(lamSigmaf3)
-
+	lamSigmaf3 = results.lamSigmaf3
+	return np.abs(lamSigmaf3)
 
 def build_uv_posterior(results):
-    results["lamSigmaf3"] = (-4 * np.emath.sqrt(results.Opl3)) / np.emath.sqrt(3)
-    return results
-
+	results["lamSigmaf3"] = (-4*np.emath.sqrt(results.Opl3))/np.emath.sqrt(3)
+	return results
 
 def check_constrain(wc, uv):
-    pass
-
+	pass
 
 inspect_model(MODEL_SPECS, build_uv_posterior, [inv1], check_constrain)

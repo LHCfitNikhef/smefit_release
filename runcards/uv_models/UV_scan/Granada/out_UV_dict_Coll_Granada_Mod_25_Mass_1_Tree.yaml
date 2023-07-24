@@ -45,15 +45,15 @@ c8ut : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
 c1ut : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
 c8qu : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
 c1qu : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
-c8dt : [{gGdf11: [0,0],gGqf33: [1,0],gGuf33: [1,0]},{gGdf11: [0,0],gGqf33: [1,0],gGuf33: [1,1]},{gGdf11: [0,1],gGqf33: [1,0],gGuf33: [1,0]},{gGdf11: [-1.,1],gGqf33: [1,0],gGuf33: [1,1]}]
+c8dt : [{gGdf11: [-1.,1],gGqf33: [1,0],gGuf33: [1,1]}]
 c1dt : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
-c8qd : [{gGdf11: [0,0],gGqf33: [1,0],gGuf33: [1,0]},{gGdf11: [0,0],gGqf33: [1,1],gGuf33: [1,0]},{gGdf11: [0,1],gGqf33: [1,0],gGuf33: [1,0]},{gGdf11: [-1.,1],gGqf33: [1,1],gGuf33: [1,0]}]
+c8qd : [{gGdf11: [-1.,1],gGqf33: [1,1],gGuf33: [1,0]}]
 c1qd : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
 cQQ1 : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
-cQQ8 : [{gGdf11: [0,0],gGqf33: [1,0],gGuf33: [1,0]},{gGdf11: [0,0],gGqf33: [1,1],gGuf33: [1,0]},{gGdf11: [-1.,0],gGqf33: [1,2],gGuf33: [1,0]}]
+cQQ8 : [{gGdf11: [-1.,0],gGqf33: [1,2],gGuf33: [1,0]}]
 cQt1 : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
-cQt8 : [{gGdf11: [0,0],gGqf33: [1,0],gGuf33: [1,0]},{gGdf11: [0,0],gGqf33: [1,0],gGuf33: [1,1]},{gGdf11: [0,0],gGqf33: [1,1],gGuf33: [1,0]},{gGdf11: [-1.,0],gGqf33: [1,1],gGuf33: [1,1]}]
-ctt1 : [{gGdf11: [0,0],gGqf33: [1,0],gGuf33: [1,0]},{gGdf11: [0,0],gGqf33: [1,0],gGuf33: [1,1]},{gGdf11: [-0.16666666666666666,0],gGqf33: [1,0],gGuf33: [1,2]}]
+cQt8 : [{gGdf11: [-1.,0],gGqf33: [1,1],gGuf33: [1,1]}]
+ctt1 : [{gGdf11: [-0.16666666666666666,0],gGqf33: [1,0],gGuf33: [1,2]}]
 cll : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
 cbp : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
 ctp : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
@@ -64,5 +64,5 @@ ctW : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
 ctZ : [{gGdf11: [0.,0],gGqf33: [1,0],gGuf33: [1,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_Yukas_Upto48.wxf
-Export date: Wed 7 Dec 2022 11:49:31
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_Local_New_YukaTop_Upto48.wxf
+Export date: Mon 24 Jul 2023 09:14:31
