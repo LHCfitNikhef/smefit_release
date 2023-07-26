@@ -1,15 +1,7 @@
 import numpy as np
-
 from utils import inspect_model
 
-
-MODEL_SPECS = dict(
-	 id= "Varphi_massbound",
-	 collection= "1LoopMatching",
-	 mass=1, # This is a test version in which we don't fix the mass but fit it.
-	 pto="NLO",
-	 eft="NHO"
-)
+MODEL_SPECS = dict(id= "Varphi_massbound", collection= "1LoopMatching", mass=1, pto="NLO", eft="NHO") # This is a test version in which we don't fix the mass but fit it.
 
 def inv1(results):
 	lamvarphi = results.lamvarphi
