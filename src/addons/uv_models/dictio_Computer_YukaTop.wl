@@ -238,14 +238,14 @@ massAllocator[Q7];
 massAllocator[T1];
 massAllocator[T2];];
 readNameWCs[x_]:=Piecewise[{{"wwCQq18",x=="O81qq"},{"wwCQq11",x=="O11qq"},{"wwCQq38",x=="O83qq"},{"wwCQq31",x=="O13qq"},{"wwCtq8",x=="O8qt"},{"wwCtq1",x=="O1qt"},{"wwCtu8",x=="O8ut"},{"wwCtu1",x=="O1ut"},{"wwCQu8",x=="O8qu"},{"wwCQu1",x=="O1qu"},{"wwCtd8",x=="O8dt"},{"wwCtd1",x=="O1dt"},{"wwCQd8",x=="O8qd"},{"wwCQd1",x=="O1qd"},{"wwCQQ1",x=="OQQ1"},{"wwCQQ8",x=="OQQ8"},{"wwCQt1",x=="OQt1"},{"wwCQt8",x=="OQt8"},{"wwCtt1",x=="Ott1"},{"wwCll",x=="Oll"},{"wwCb\[CurlyPhi]",x=="Obp"},{"wwCt\[CurlyPhi]",x=="Otp"},{"wwCtG",x=="OtG"},{"wwCc\[CurlyPhi]",x=="Ocp"},{"wwC\[Tau]\[CurlyPhi]",x=="Otap"},{"wwCtW",x=="OtW"},{"wwCtZ",x=="OtZ"},{"wwC\[CurlyPhi]Q3",x=="O3pQ3"},{"wwC\[CurlyPhi]Qm",x=="OpQM"},{"wwC\[CurlyPhi]t",x=="Opt"},{"wwC\[CurlyPhi]l11",x=="Opl1"},{"wwC\[CurlyPhi]l31",x=="O3pl1"},{"wwC\[CurlyPhi]l12",x=="Opl2"},{"wwC\[CurlyPhi]l32",x=="O3pl2"},{"wwC\[CurlyPhi]l13",x=="Opl3"},{"wwC\[CurlyPhi]l33",x=="O3pl3"},{"wwC\[CurlyPhi]e",x=="Ope"},{"wwC\[CurlyPhi]\[Mu]",x=="Opmu"},{"wwC\[CurlyPhi]\[Tau]",x=="Opta"},{"wwC\[CurlyPhi]q3",x=="O3pq"},{"wwC\[CurlyPhi]qm",x=="OpqMi"},{"wwC\[CurlyPhi]ui",x=="Opui"},{"wwC\[CurlyPhi]di",x=="Opdi"},{"wwC\[CurlyPhi]G",x=="OpG"},{"wwC\[CurlyPhi]B",x=="OpB"},{"wwC\[CurlyPhi]W",x=="OpW"},{"wwC\[CurlyPhi]d",x=="Opd"},{"wwC\[CurlyPhi]WB",x=="OpWB"},{"wwC\[CurlyPhi]D",x=="OpD"},{"wwCWWW",x=="OWWW"}}];
-mSM[\[Tau]]=0(*Rationalize[0.00178]*);
+mSM[\[Tau]]=0;
 mSM[\[Mu]]=0;
 mSM[e]=0;
 mSM[W]=Rationalize[0.080379];
 mSM[Z]=Rationalize[0.0911876];
 mSM[h]=Rationalize[0.12525];
 mSM[t]=Rationalize[0.17276];
-mSM[b]=0(*Rationalize[0.00418]*);
+mSM[b]=0;
 mSM[c]=0;
 mSM[u]=0;
 mSM[d]=0;
@@ -279,6 +279,7 @@ fAux6:=-If[n[L1]>0&&n[\[CurlyPhi]]>0,Sum[Conjugate[\[Delta][L1,\[CurlyPhi]][t,s]
 yHat[f_][i_,j_]:=(Sqrt[Z\[Phi]]y[f][i,j]-\[Mu]Hat[\[Phi]]^2fAux1[f][i,j])/(1-\[Mu]Hat[\[Phi]]^2fAux2[f][i,j]);
 \[Lambda]Hat[\[Phi]]:=(Z\[Phi]^2\[Lambda]\[Phi]-fAux4)/(1+fAux3);
 \[Mu]Hat[\[Phi]]:=Sqrt[(fAux5*Subscript[\[Mu], \[Phi]]^2)/(1-fAux6*Subscript[\[Mu], \[Phi]]^2)];
+(*//// General expressions for all the WCs after tree-level matching. ////*)
 Subscript[wC, y][e][i_,j_]:=(-\[Mu]Hat[\[Phi]]^2If[n[L1]>0&&n[\[CurlyPhi]]>0,Sum[\[Delta][L1,\[CurlyPhi]][s,r]Conjugate[\[Gamma][L1][s]]y[\[CurlyPhi]][e][r,i,j]/(M[\[CurlyPhi]][r]^2M[L1][s]^2),{r,1,n[\[CurlyPhi]]},{s,1,n[L1]}],0]-\[Mu]Hat[\[Phi]]^2yHat[e][i,j]If[n[L1]>0&&n[\[CurlyPhi]]>0,Sum[Conjugate[\[Delta][L1,\[CurlyPhi]][t,s]]\[Gamma][L1][t]\[Delta][L1,\[CurlyPhi]][r,s]Conjugate[\[Gamma][L1][r]]/(2M[L1][r]^2M[\[CurlyPhi]][s]^2M[L1][t]^2),{r,1,n[L1]},{s,1,n[\[CurlyPhi]]},{t,1,n[L1]}],0])*(Z\[Phi])^(-1/2);
 Subscript[wC, y][d][i_,j_]:=(-\[Mu]Hat[\[Phi]]^2If[n[L1]>0&&n[\[CurlyPhi]]>0,Sum[\[Delta][L1,\[CurlyPhi]][s,r]Conjugate[\[Gamma][L1][s]]y[\[CurlyPhi]][d][r,i,j]/(M[\[CurlyPhi]][r]^2M[L1][s]^2),{r,1,n[\[CurlyPhi]]},{s,1,n[L1]}],0]-\[Mu]Hat[\[Phi]]^2yHat[d][i,j]If[n[L1]>0&&n[\[CurlyPhi]]>0,Sum[Conjugate[\[Delta][L1,\[CurlyPhi]][t,s]]\[Gamma][L1][t]\[Delta][L1,\[CurlyPhi]][r,s]Conjugate[\[Gamma][L1][r]]/(2M[L1][r]^2M[\[CurlyPhi]][s]^2M[L1][t]^2),{r,1,n[L1]},{s,1,n[\[CurlyPhi]]},{t,1,n[L1]}],0])*(Z\[Phi])^(-1/2);
 Subscript[wC, y][u][i_,j_]:=(-\[Mu]Hat[\[Phi]]^2If[n[L1]>0&&n[\[CurlyPhi]]>0,Sum[\[Delta][L1,\[CurlyPhi]][s,r]Conjugate[\[Gamma][L1][s]]Conjugate[y[\[CurlyPhi]][u][r,i,j]]/(M[\[CurlyPhi]][r]^2M[L1][s]^2),{r,1,n[\[CurlyPhi]]},{s,1,n[L1]}],0]-\[Mu]Hat[\[Phi]]^2If[n[L1]>0&&n[\[CurlyPhi]]>0,yHat[u][i,j]Sum[Conjugate[\[Delta][L1,\[CurlyPhi]][t,s]]\[Gamma][L1][t]\[Delta][L1,\[CurlyPhi]][r,s]Conjugate[\[Gamma][L1][r]]/(2M[L1][r]^2M[\[CurlyPhi]][s]^2M[L1][t]^2),{r,1,n[L1]},{s,1,n[\[CurlyPhi]]},{t,1,n[L1]}],0])*(Z\[Phi])^(-1/2);
@@ -362,99 +363,99 @@ Subscript[wC, \[Phi]ud][i_,j_]:=(Sum[Conjugate[\[Lambda][Q1][u][r,i]]\[Lambda][Q
 n[S]=0;
 listM[S]={0}; (*In TeV*)
 n[S1]=0;
-listM[S1]={0.0};
+listM[S1]={0};
 n[S2]=0;
-listM[S2]={0.0};
+listM[S2]={0};
 n[\[CurlyPhi]]=0;
-listM[\[CurlyPhi]]={0.0};
+listM[\[CurlyPhi]]={0};
 n[\[CapitalXi]]=0;
-listM[\[CapitalXi]]={0.0};
+listM[\[CapitalXi]]={0};
 n[\[CapitalXi]1]=0;
-listM[\[CapitalXi]1]={0.0};
+listM[\[CapitalXi]1]={0};
 n[\[CapitalTheta]1]=0;
-listM[\[CapitalTheta]1]={0.0};
+listM[\[CapitalTheta]1]={0};
 n[\[CapitalTheta]3]=0;
-listM[\[CapitalTheta]3]={0.0};
+listM[\[CapitalTheta]3]={0};
 n[\[Omega]1]=0;
-listM[\[Omega]1]={0.0};
+listM[\[Omega]1]={0};
 n[\[Omega]2]=0;
-listM[\[Omega]2]={0.0};
+listM[\[Omega]2]={0};
 n[\[Omega]4]=0;
-listM[\[Omega]4]={0.0};
+listM[\[Omega]4]={0};
 n[\[CapitalPi]1]=0;
-listM[\[CapitalPi]1]={0.0};
+listM[\[CapitalPi]1]={0};
 n[\[CapitalPi]7]=0;
-listM[\[CapitalPi]7]={0.0};
+listM[\[CapitalPi]7]={0};
 n[\[Zeta]]=0;
-listM[\[Zeta]]={0.0};
+listM[\[Zeta]]={0};
 n[\[CapitalOmega]1]=0;
-listM[\[CapitalOmega]1]={0.0};
+listM[\[CapitalOmega]1]={0};
 n[\[CapitalOmega]2]=0;
-listM[\[CapitalOmega]2]={0.0};
+listM[\[CapitalOmega]2]={0};
 n[\[CapitalOmega]4]=0;
-listM[\[CapitalOmega]4]={0.0};
+listM[\[CapitalOmega]4]={0};
 n[\[CapitalUpsilon]]=0;
 listM[\[CapitalUpsilon]]={0};
 n[\[CapitalPhi]]=0;
-listM[\[CapitalPhi]]={0.0};
+listM[\[CapitalPhi]]={0};
 n[B]=0;
-listM[B]={0.0};
+listM[B]={0};
 n[B1]=0;
-listM[B1]={0.0};
+listM[B1]={0};
 n[W]=0;
-listM[W]={0.0};
+listM[W]={0};
 n[W1]=0;
 listM[W1]={0};
 n[G]=0;
 listM[G]={0};
 n[G1]=0;
-listM[G1]={0.0};
+listM[G1]={0};
 n[H]=0;
-listM[H]={0.0};
+listM[H]={0};
 n[L1]=0;
-listM[L1]={0.0};
+listM[L1]={0};
 n[L3]=0;
-listM[L3]={0.0};
+listM[L3]={0};
 n[\[ScriptCapitalU]2]=0;
-listM[\[ScriptCapitalU]2]={0.0};
+listM[\[ScriptCapitalU]2]={0};
 n[\[ScriptCapitalU]5]=0;
 listM[\[ScriptCapitalU]5]={0};
 n[\[ScriptCapitalQ]1]=0;
-listM[\[ScriptCapitalQ]1]={0.0};
+listM[\[ScriptCapitalQ]1]={0};
 n[\[ScriptCapitalQ]5]=0;
-listM[\[ScriptCapitalQ]5]={0.0};
+listM[\[ScriptCapitalQ]5]={0};
 n[X]=0;
-listM[X]={0.0};
+listM[X]={0};
 n[Y1]=0;
-listM[Y1]={0.0};
+listM[Y1]={0};
 n[Y5]=0;
-listM[Y5]={0.0};
+listM[Y5]={0};
 n[Ne]=0;
-listM[Ne]={0.0};
+listM[Ne]={0};
 n[Ef]=0;
-listM[Ef]={0.0};
+listM[Ef]={0};
 n[\[CapitalDelta]1]=0;
-listM[\[CapitalDelta]1]={0.0};
+listM[\[CapitalDelta]1]={0};
 n[\[CapitalDelta]3]=0;
-listM[\[CapitalDelta]3]={0.0};
+listM[\[CapitalDelta]3]={0};
 n[\[CapitalSigma]]=0;
-listM[\[CapitalSigma]]={0.0};
+listM[\[CapitalSigma]]={0};
 n[\[CapitalSigma]1]=0;
-listM[\[CapitalSigma]1]={0.0};
+listM[\[CapitalSigma]1]={0};
 n[U]=0;
 listM[U]={0};
 n[Df]=0;
-listM[Df]={0.0};
+listM[Df]={0};
 n[Q1]=0;
 listM[Q1]={0};
 n[Q5]=0;
-listM[Q5]={0.0};
+listM[Q5]={0};
 n[Q7]=0;
-listM[Q7]={0.0};
+listM[Q7]={0};
 n[T1]=0;
-listM[T1]={0.0};
+listM[T1]={0};
 n[T2]=0;
-listM[T2]={0.0};
+listM[T2]={0};
 (*Made to match explicitly the assumptions and operators in 2105.00006.
 It allows corrections to bottom, charm and tau Yukawas.*)
 toVanishLeptonsLL[Fl2]=Block[{assoc,allowed},assoc=Flatten[Table[{i,j,k,l},{i,1,3},{j,1,3},{k,1,3},{l,1,3}],3];
@@ -495,10 +496,21 @@ toVanishLRLR[Fl2]=Block[{assoc,allowed},assoc=Flatten[Table[{i,j,k,l},{i,1,3},{j
 allowed=Select[assoc,False];
 (*Print[Length[allowed]];*)
 Select[assoc,FreeQ[allowed,#]&]];
-assumOpe[Fl2,Subscript[wwC, \[Phi]q3]]:={Subscript[wC, \[Phi]q3][1,1]==Subscript[wC, \[Phi]q3][2,2],Subscript[wC, \[Phi]q3][1,2]==0,Subscript[wC, \[Phi]q3][2,1]==0,Subscript[wC, \[Phi]q3][1,3]==0,Subscript[wC, \[Phi]q3][3,1]==0,Subscript[wC, \[Phi]q3][2,3]==0,Subscript[wC, \[Phi]q3][3,2]==0};
-assumOpe[Fl2,Subscript[wwC, \[Phi]q1]]:={Subscript[wC, \[Phi]q1][1,1]==Subscript[wC, \[Phi]q1][2,2],Subscript[wC, \[Phi]q1][1,2]==0,Subscript[wC, \[Phi]q1][2,1]==0,Subscript[wC, \[Phi]q1][1,3]==0,Subscript[wC, \[Phi]q1][3,1]==0,Subscript[wC, \[Phi]q1][2,3]==0,Subscript[wC, \[Phi]q1][3,2]==0};
-assumOpe[Fl2,Subscript[wwC, \[Phi]u]]:={Subscript[wC, \[Phi]u][1,1]==Subscript[wC, \[Phi]u][2,2],Subscript[wC, \[Phi]u][1,2]==0,Subscript[wC, \[Phi]u][2,1]==0,Subscript[wC, \[Phi]u][1,3]==0,Subscript[wC, \[Phi]u][3,1]==0,Subscript[wC, \[Phi]u][2,3]==0,Subscript[wC, \[Phi]u][3,2]==0};
-assumOpe[Fl2,Subscript[wwC, \[Phi]d]]:={Subscript[wC, \[Phi]d][1,1]==Subscript[wC, \[Phi]d][2,2]==Subscript[wC, \[Phi]d][3,3],Subscript[wC, \[Phi]d][1,2]==0,Subscript[wC, \[Phi]d][2,1]==0,Subscript[wC, \[Phi]d][1,3]==0,Subscript[wC, \[Phi]d][3,1]==0,Subscript[wC, \[Phi]d][2,3]==0,Subscript[wC, \[Phi]d][3,2]==0};
+assumOpe[Fl2,Subscript[wwC, \[Phi]q3]]:={Subscript[wC, \[Phi]q3][1,1]==Subscript[wC, \[Phi]q3][2,2],
+									Subscript[wC, \[Phi]q3][1,2]==0,Subscript[wC, \[Phi]q3][2,1]==0,
+									Subscript[wC, \[Phi]q3][1,3]==0,Subscript[wC, \[Phi]q3][3,1]==0,
+									Subscript[wC, \[Phi]q3][2,3]==0,Subscript[wC, \[Phi]q3][3,2]==0};
+assumOpe[Fl2,Subscript[wwC, \[Phi]q1]]:={Subscript[wC, \[Phi]q1][1,1]==Subscript[wC, \[Phi]q1][2,2],
+									Subscript[wC, \[Phi]q1][1,2]==0,Subscript[wC, \[Phi]q1][2,1]==0,
+									Subscript[wC, \[Phi]q1][1,3]==0,Subscript[wC, \[Phi]q1][3,1]==0,
+									Subscript[wC, \[Phi]q1][2,3]==0,Subscript[wC, \[Phi]q1][3,2]==0};
+assumOpe[Fl2,Subscript[wwC, \[Phi]u]]:={Subscript[wC, \[Phi]u][1,1]==Subscript[wC, \[Phi]u][2,2],
+								   Subscript[wC, \[Phi]u][1,2]==0,Subscript[wC, \[Phi]u][2,1]==0,
+								   Subscript[wC, \[Phi]u][1,3]==0,Subscript[wC, \[Phi]u][3,1]==0,
+								   Subscript[wC, \[Phi]u][2,3]==0,Subscript[wC, \[Phi]u][3,2]==0};
+assumOpe[Fl2,Subscript[wwC, \[Phi]d]]:={Subscript[wC, \[Phi]d][1,1]==Subscript[wC, \[Phi]d][2,2]==Subscript[wC, \[Phi]d][3,3],
+									Subscript[wC, \[Phi]d][1,2]==0,Subscript[wC, \[Phi]d][2,1]==0,Subscript[wC, \[Phi]d][1,3]==0,
+									Subscript[wC, \[Phi]d][3,1]==0,Subscript[wC, \[Phi]d][2,3]==0,Subscript[wC, \[Phi]d][3,2]==0};
 assumOpe[Fl2,Subscript[wwC, \[Phi]e]]:={Subscript[wC, \[Phi]e][1,2]==0,Subscript[wC, \[Phi]e][2,1]==0,Subscript[wC, \[Phi]e][1,3]==0,Subscript[wC, \[Phi]e][3,1]==0,Subscript[wC, \[Phi]e][2,3]==0,Subscript[wC, \[Phi]e][3,2]==0};
 assumOpe[Fl2,Subscript[wwC, \[Phi]L1]]:={Subscript[wC, \[Phi]L1][1,2]==0,Subscript[wC, \[Phi]L1][2,1]==0,Subscript[wC, \[Phi]L1][1,3]==0,Subscript[wC, \[Phi]L1][3,1]==0,Subscript[wC, \[Phi]L1][2,3]==0,Subscript[wC, \[Phi]L1][3,2]==0};
 assumOpe[Fl2,Subscript[wwC, \[Phi]L3]]:={Subscript[wC, \[Phi]L3][1,2]==0,Subscript[wC, \[Phi]L3][2,1]==0,Subscript[wC, \[Phi]L3][1,3]==0,Subscript[wC, \[Phi]L3][3,1]==0,Subscript[wC, \[Phi]L3][2,3]==0,Subscript[wC, \[Phi]L3][3,2]==0};
@@ -515,10 +527,10 @@ assumOpe[Fl2,Subscript[wwC, lq1]]:=Join[Table[Subscript[wC, lq1][i,i,1,1]==Subsc
 assumOpe[Fl2,Subscript[wwC, lq3]]:=Join[Table[Subscript[wC, lq3][i,i,1,1]==Subscript[wC, lq3][i,i,2,2],{i,1,3}],Table[Subscript[wC, lq3][toVanishQuarkLeptonsLL[Fl2][[i,1]],toVanishQuarkLeptonsLL[Fl2][[i,2]],toVanishQuarkLeptonsLL[Fl2][[i,3]],toVanishQuarkLeptonsLL[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkLeptonsLL[Fl2]]}]];
 assumOpe[Fl2,Subscript[wwC, dd]]:=Join[{Subscript[wC, dd][1,1,1,1]==Subscript[wC, dd][2,2,2,2],Subscript[wC, dd][3,3,3,3]==Subscript[wC, dd][2,2,2,2],2*Subscript[wC, dd][1,1,1,1]==Subscript[wC, dd][1,1,2,2]+Subscript[wC, dd][1,2,2,1],Subscript[wC, dd][1,1,2,2]==Subscript[wC, dd][1,1,3,3],Subscript[wC, dd][1,1,3,3]==Subscript[wC, dd][2,2,3,3],Subscript[wC, dd][1,2,2,1]==Subscript[wC, dd][1,3,3,1],Subscript[wC, dd][1,2,2,1]==Subscript[wC, dd][2,3,3,2]},Table[Subscript[wC, dd][toVanishQuarkDownsRR[Fl2][[i,1]],toVanishQuarkDownsRR[Fl2][[i,2]],toVanishQuarkDownsRR[Fl2][[i,3]],toVanishQuarkDownsRR[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkDownsRR[Fl2]]}]];
 assumOpe[Fl2,Subscript[wwC, uu]]:=Join[{Subscript[wC, uu][1,1,1,1]==Subscript[wC, uu][2,2,2,2],2*Subscript[wC, uu][1,1,1,1]==Subscript[wC, uu][1,1,2,2]+Subscript[wC, uu][1,2,2,1],Subscript[wC, uu][1,1,3,3]==Subscript[wC, uu][2,2,3,3],Subscript[wC, uu][1,3,3,1]==Subscript[wC, uu][2,3,3,2]},Table[Subscript[wC, uu][toVanishQuarkUpsRR[Fl2][[i,1]],toVanishQuarkUpsRR[Fl2][[i,2]],toVanishQuarkUpsRR[Fl2][[i,3]],toVanishQuarkUpsRR[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkUpsRR[Fl2]]}]]
-assumOpe[Fl2,Subscript[wwC, ud1]]:=Join[{Subscript[wC, ud1][1,1,1,1]==Subscript[wC, ud1][2,2,2,2],Subscript[wC, ud1][1,1,1,1]==Subscript[wC, ud8][1,1,2,2],Subscript[wC, ud1][1,1,3,3]==Subscript[wC, ud1][1,1,1,1],Subscript[wC, ud1][2,2,1,1]==Subscript[wC, ud1][1,1,1,1],Subscript[wC, ud1][2,2,3,3]==Subscript[wC, ud1][1,1,1,1],Subscript[wC, ud1][2,2,2,2]==Subscript[wC, ud1][1,1,1,1],Subscript[wC, ud1][3,3,1,1]==Subscript[wC, ud1][3,3,2,2],Subscript[wC, ud1][3,3,1,1]==Subscript[wC, ud1][3,3,3,3]},Table[Subscript[wC, ud1][toVanishQuarkUpDownRR[Fl2][[i,1]],toVanishQuarkUpDownRR[Fl2][[i,2]],toVanishQuarkUpDownRR[Fl2][[i,3]],toVanishQuarkUpDownRR[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkUpDownRR[Fl2]]}]]
+assumOpe[Fl2,Subscript[wwC, ud1]]:=Join[{Subscript[wC, ud1][1,1,1,1]==Subscript[wC, ud1][2,2,2,2],Subscript[wC, ud1][1,1,1,1]==Subscript[wC, ud1][1,1,2,2],Subscript[wC, ud1][1,1,3,3]==Subscript[wC, ud1][1,1,1,1],Subscript[wC, ud1][2,2,1,1]==Subscript[wC, ud1][1,1,1,1],Subscript[wC, ud1][2,2,3,3]==Subscript[wC, ud1][1,1,1,1],Subscript[wC, ud1][2,2,2,2]==Subscript[wC, ud1][1,1,1,1],Subscript[wC, ud1][3,3,1,1]==Subscript[wC, ud1][3,3,2,2],Subscript[wC, ud1][3,3,1,1]==Subscript[wC, ud1][3,3,3,3]},Table[Subscript[wC, ud1][toVanishQuarkUpDownRR[Fl2][[i,1]],toVanishQuarkUpDownRR[Fl2][[i,2]],toVanishQuarkUpDownRR[Fl2][[i,3]],toVanishQuarkUpDownRR[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkUpDownRR[Fl2]]}]]
 assumOpe[Fl2,Subscript[wwC, ud8]]:=Join[{Subscript[wC, ud8][1,1,1,1]==Subscript[wC, ud8][2,2,2,2],Subscript[wC, ud8][1,1,1,1]==Subscript[wC, ud8][1,1,2,2],Subscript[wC, ud8][1,1,3,3]==Subscript[wC, ud8][1,1,1,1],Subscript[wC, ud8][2,2,1,1]==Subscript[wC, ud8][1,1,1,1],Subscript[wC, ud8][2,2,3,3]==Subscript[wC, ud8][1,1,1,1],Subscript[wC, ud8][2,2,2,2]==Subscript[wC, ud8][1,1,1,1],Subscript[wC, ud8][3,3,1,1]==Subscript[wC, ud8][3,3,2,2],Subscript[wC, ud8][3,3,1,1]==Subscript[wC, ud8][3,3,3,3]},Table[Subscript[wC, ud8][toVanishQuarkUpDownRR[Fl2][[i,1]],toVanishQuarkUpDownRR[Fl2][[i,2]],toVanishQuarkUpDownRR[Fl2][[i,3]],toVanishQuarkUpDownRR[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkUpDownRR[Fl2]]}]]
 assumOpe[Fl2,Subscript[wwC, eu]]:=Join[{Subscript[wC, eu][1,1,1,1]==Subscript[wC, eu][1,1,2,2],Subscript[wC, eu][2,2,1,1]==Subscript[wC, eu][2,2,2,2],Subscript[wC, eu][3,3,1,1]==Subscript[wC, eu][3,3,2,2]},Table[Subscript[wC, eu][toVanishQuarkLeptonRR[Fl2][[i,1]],toVanishQuarkLeptonRR[Fl2][[i,2]],toVanishQuarkLeptonRR[Fl2][[i,3]],toVanishQuarkLeptonRR[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkLeptonRR[Fl2]]}]];
-assumOpe[Fl2,Subscript[wwC, ed]]:=Join[{Subscript[wC, ed][1,1,1,1]==Subscript[wC, ed][1,1,2,2],Subscript[wC, ed][1,1,1,1]==Subscript[wC, ed][1,1,3,3],Subscript[wC, ed][2,2,1,1]==Subscript[wC, ed][2,2,2,2],Subscript[wC, ed][2,2,1,1]==Subscript[wC, ed][2,2,3,3],Subscript[wC, ed][3,3,3,3]==Subscript[wC, ed][3,3,2,2],Subscript[wC, eu][3,3,1,1]==Subscript[wC, eu][3,3,2,2]},Table[Subscript[wC, ed][toVanishQuarkLeptonRR[Fl2][[i,1]],toVanishQuarkLeptonRR[Fl2][[i,2]],toVanishQuarkLeptonRR[Fl2][[i,3]],toVanishQuarkLeptonRR[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkLeptonRR[Fl2]]}]];
+assumOpe[Fl2,Subscript[wwC, ed]]:=Join[{Subscript[wC, ed][1,1,1,1]==Subscript[wC, ed][1,1,2,2],Subscript[wC, ed][1,1,1,1]==Subscript[wC, ed][1,1,3,3],Subscript[wC, ed][2,2,1,1]==Subscript[wC, ed][2,2,2,2],Subscript[wC, ed][2,2,1,1]==Subscript[wC, ed][2,2,3,3],Subscript[wC, ed][3,3,3,3]==Subscript[wC, ed][3,3,2,2],Subscript[wC, ed][3,3,1,1]==Subscript[wC, ed][3,3,2,2]},Table[Subscript[wC, ed][toVanishQuarkLeptonRR[Fl2][[i,1]],toVanishQuarkLeptonRR[Fl2][[i,2]],toVanishQuarkLeptonRR[Fl2][[i,3]],toVanishQuarkLeptonRR[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkLeptonRR[Fl2]]}]];
 assumOpe[Fl2,Subscript[wwC, lu]]:=Join[{Subscript[wC, lu][1,1,1,1]==Subscript[wC, lu][1,1,2,2],Subscript[wC, lu][2,2,1,1]==Subscript[wC, lu][2,2,2,2],Subscript[wC, lu][3,3,1,1]==Subscript[wC, lu][3,3,2,2]},Table[Subscript[wC, lu][toVanishQuarkLeptonLLRR[Fl2][[i,1]],toVanishQuarkLeptonLLRR[Fl2][[i,2]],toVanishQuarkLeptonLLRR[Fl2][[i,3]],toVanishQuarkLeptonLLRR[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkLeptonLLRR[Fl2]]}]];
 assumOpe[Fl2,Subscript[wwC, ld]]:=Join[{Subscript[wC, ld][1,1,1,1]==Subscript[wC, ld][1,1,2,2],Subscript[wC, ld][1,1,1,1]==Subscript[wC, ld][1,1,3,3],Subscript[wC, ld][2,2,1,1]==Subscript[wC, ld][2,2,2,2],Subscript[wC, ld][2,2,1,1]==Subscript[wC, ld][2,2,3,3],Subscript[wC, ld][3,3,1,1]==Subscript[wC, ld][3,3,2,2],Subscript[wC, ld][3,3,1,1]==Subscript[wC, ld][3,3,3,3]},Table[Subscript[wC, ld][toVanishQuarkLeptonLLRR[Fl2][[i,1]],toVanishQuarkLeptonLLRR[Fl2][[i,2]],toVanishQuarkLeptonLLRR[Fl2][[i,3]],toVanishQuarkLeptonLLRR[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkLeptonLLRR[Fl2]]}]];
 assumOpe[Fl2,Subscript[wwC, qe]]:=Join[{Subscript[wC, qe][1,1,1,1]==Subscript[wC, qe][2,2,1,1],Subscript[wC, qe][1,1,2,2]==Subscript[wC, qe][2,2,2,2],Subscript[wC, qe][1,1,3,3]==Subscript[wC, qe][2,2,3,3]},Table[Subscript[wC, qe][toVanishQuarkLeptonLLRR[Fl2][[i,1]],toVanishQuarkLeptonLLRR[Fl2][[i,2]],toVanishQuarkLeptonLLRR[Fl2][[i,3]],toVanishQuarkLeptonLLRR[Fl2][[i,4]]]==0,{i,1,Length[toVanishQuarkLeptonLLRR[Fl2]]}]];
@@ -550,9 +562,9 @@ allSol={{}};];
 (*//////Condition 2///////*)
 If[Length[preCond2]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond2/.allSol]],True]]>0,
 (*Print[allSol];*)
-auxTab2=Table[DeleteCases[DeleteDuplicates[preCond2/.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
+auxTab2=Table[DeleteCases[DeleteDuplicates[preCond2//.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
 (*Print[auxTab2];*)
-auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond2/.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
+auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond2//.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
 (*Print[auxTab1];*)
 (*Print[allSol];*)
 For[indPreSol1=1,indPreSol1<=Length[allSol],indPreSol1++,
@@ -565,11 +577,11 @@ allSol=DeleteCases[DeleteDuplicates[Flatten[allSol,1]],{}];];
 (*Print["Ctrl1"];*)
 (*Print[allSol];*)
 (*///////Condition 7////////*)
-If[Length[preCond7]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond7/.allSol]],True]]>0,
+If[Length[preCond7]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond7//.allSol]],True]]>0,
 (*Print[allSol];*)
-auxTab2=Table[DeleteCases[DeleteDuplicates[preCond7/.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
+auxTab2=Table[DeleteCases[DeleteDuplicates[preCond7//.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
 (*Print[auxTab2];*)
-auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond7/.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
+auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond7//.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
 (*Print[auxTab1];*)
 (*Print[allSol];*)
 For[indPreSol1=1,indPreSol1<=Length[allSol],indPreSol1++,
@@ -577,35 +589,21 @@ If[auxTab1[[indPreSol1]]!={{}},If[ToString[auxTab1[[indPreSol1]]]==ToString[{{"A
 allSol[[indPreSol1]]=Piecewise[{{{allSol[[indPreSol1]]},ListQ[allSol[[indPreSol1]]]}},{{allSol[[indPreSol1]]}}];,
 allSol[[indPreSol1]]=Table[Join[Piecewise[{{allSol[[indPreSol1]],ListQ[allSol[[indPreSol1]]]}},{allSol[[indPreSol1]]}],Piecewise[{{auxTab1[[indPreSol1,ind]],ListQ[auxTab1[[indPreSol1,ind]]]}},{auxTab1[[indPreSol1,ind]]}]],{ind,1,Length[auxTab1[[indPreSol1]]]}];],
 allSol[[indPreSol1]]={{}};];];
-(*Print[allSol];*)
 allSol=DeleteCases[DeleteDuplicates[Flatten[allSol,1]],{}];];
-(*Print["Ctrl2"];*)
-(*Print[allSol];*)
 (*///////Condition 4////////*)
-If[Length[preCond4]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond4/.allSol]],True]]>0,
-(*Print[allSol];*)
-auxTab2=Table[DeleteCases[DeleteDuplicates[preCond4/.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
-(*Print[auxTab2];*)
-auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond4/.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
-(*Print[auxTab1];*)
-(*Print[allSol];*)
+If[Length[preCond4]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond4//.allSol]],True]]>0,
+auxTab2=Table[DeleteCases[DeleteDuplicates[preCond4//.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
+auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond4//.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
 For[indPreSol1=1,indPreSol1<=Length[allSol],indPreSol1++,
 If[auxTab1[[indPreSol1]]!={{}},If[ToString[auxTab1[[indPreSol1]]]==ToString[{{"AA"->"AA"}}],
 allSol[[indPreSol1]]=Piecewise[{{{allSol[[indPreSol1]]},ListQ[allSol[[indPreSol1]]]}},{{allSol[[indPreSol1]]}}];,
 allSol[[indPreSol1]]=Table[Join[Piecewise[{{allSol[[indPreSol1]],ListQ[allSol[[indPreSol1]]]}},{allSol[[indPreSol1]]}],Piecewise[{{auxTab1[[indPreSol1,ind]],ListQ[auxTab1[[indPreSol1,ind]]]}},{auxTab1[[indPreSol1,ind]]}]],{ind,1,Length[auxTab1[[indPreSol1]]]}];],
 allSol[[indPreSol1]]={{}};];];
-(*Print[allSol];*)
 allSol=DeleteCases[DeleteDuplicates[Flatten[allSol,1]],{}];];
-(*Print["Ctrl4"];*)
-(*Print[allSol];*)
 (*//////Condition 6d///////*)
-If[Length[preCond6d]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond6d/.allSol]],True]]>0,
-(*Print[allSol];*)
-auxTab2=Table[DeleteCases[DeleteDuplicates[preCond6d/.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
-(*Print[auxTab2];*)
-auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond6d/.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
-(*Print[auxTab1];*)
-(*Print[allSol];*)
+If[Length[preCond6d]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond6d//.allSol]],True]]>0,
+auxTab2=Table[DeleteCases[DeleteDuplicates[preCond6d//.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
+auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond6d//.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
 For[indPreSol1=1,indPreSol1<=Length[allSol],indPreSol1++,
 If[auxTab1[[indPreSol1]]!={{}},
 If[ToString[auxTab1[[indPreSol1]]]==ToString[{{"AA"->"AA"}}],
@@ -617,11 +615,11 @@ allSol=DeleteCases[DeleteDuplicates[Flatten[allSol,1]],{}];];
 (*Print["Ctrl3d"];*)
 (*Print[allSol];*)
 (*//////Condition 6c///////*)
-If[Length[preCond6c]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond6c/.allSol]],True]]>0,
+If[Length[preCond6c]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond6c//.allSol]],True]]>0,
 (*Print[allSol];*)
-auxTab2=Table[DeleteCases[DeleteDuplicates[preCond6c/.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
+auxTab2=Table[DeleteCases[DeleteDuplicates[preCond6c//.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
 (*Print[auxTab2];*)
-auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond6c/.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
+auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond6c//.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
 (*Print[auxTab1];*)
 (*Print[allSol];*)
 For[indPreSol1=1,indPreSol1<=Length[allSol],indPreSol1++,
@@ -634,11 +632,11 @@ allSol=DeleteCases[DeleteDuplicates[Flatten[allSol,1]],{}];];
 (*Print["Ctrl3c"];*)
 (*Print[allSol];*)
 (*//////Condition 6b///////*)
-If[Length[preCond6b]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond6b/.allSol]],True]]>0,
+If[Length[preCond6b]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond6b//.allSol]],True]]>0,
 (*Print[allSol];*)
-auxTab2=Table[DeleteCases[DeleteDuplicates[preCond6b/.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
+auxTab2=Table[DeleteCases[DeleteDuplicates[preCond6b//.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
 (*Print[auxTab2];*)
-auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond6b/.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
+auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond6b//.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
 (*Print[auxTab1];*)
 (*Print[allSol];*)
 For[indPreSol1=1,indPreSol1<=Length[allSol],indPreSol1++,
@@ -651,11 +649,11 @@ allSol=DeleteCases[DeleteDuplicates[Flatten[allSol,1]],{}];];
 (*Print["Ctrl3b"];*)
 (*Print[allSol];*)
 (*//////Condition 6a///////*)
-If[Length[preCond6a]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond6a/.allSol]],True]]>0,
+If[Length[preCond6a]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond6a//.allSol]],True]]>0,
 (*Print[allSol];*)
-auxTab2=Table[DeleteCases[DeleteDuplicates[preCond6a/.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
+auxTab2=Table[DeleteCases[DeleteDuplicates[preCond6a//.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
 (*Print[auxTab2];*)
-auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond6a/.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
+auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond6a//.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
 (*Print[auxTab1];*)
 (*Print[allSol];*)
 For[indPreSol1=1,indPreSol1<=Length[allSol],indPreSol1++,
@@ -668,13 +666,11 @@ allSol=DeleteCases[DeleteDuplicates[Flatten[allSol,1]],{}];];
 (*Print["Ctrl3a"];*)
 (*Print[allSol];*)
 (*//////Condition 5///////*)
-If[Length[preCond5]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond5/.allSol]],True]]>0,
+If[Length[preCond5]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond5//.allSol]],True]]>0,
 (*Print[allSol];*)
-auxTab2=Table[DeleteCases[DeleteDuplicates[preCond5/.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
+auxTab2=Table[DeleteCases[DeleteDuplicates[preCond5//.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
 (*Print[auxTab2];*)
-auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond5/.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
-(*Print[auxTab1];*)
-(*Print[allSol];*)
+auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond5//.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
 For[indPreSol1=1,indPreSol1<=Length[allSol],indPreSol1++,
 If[auxTab1[[indPreSol1]]!={{}},If[ToString[auxTab1[[indPreSol1]]]==ToString[{{"AA"->"AA"}}],
 allSol[[indPreSol1]]=Piecewise[{{{allSol[[indPreSol1]]},ListQ[allSol[[indPreSol1]]]}},{{allSol[[indPreSol1]]}}];,
@@ -685,11 +681,11 @@ allSol=DeleteCases[DeleteDuplicates[Flatten[allSol,1]],{}];];
 (*Print["Ctrl5"];*)
 (*Print[allSol];*)
 (*//////Condition 3///////*)
-If[Length[preCond3]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond3/.allSol]],True]]>0,
+If[Length[preCond3]>0&&Length[DeleteCases[DeleteDuplicates[Flatten[preCond3//.allSol]],True]]>0,
 (*Print[allSol];*)
-auxTab2=Table[DeleteCases[DeleteDuplicates[preCond3/.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
+auxTab2=Table[DeleteCases[DeleteDuplicates[preCond3//.allSol[[indSol]]],True],{indSol,1,Length[allSol]}];
 (*Print[auxTab2];*)
-auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond3/.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
+auxTab1=Table[If[auxTab2[[indSol]]!={},DeleteDuplicates[Quiet[Solve[preCond3//.allSol[[indSol]]]]],{{"AA"->"AA"}}],{indSol,1,Length[allSol]}];
 (*Print[auxTab1];*)
 (*Print[allSol];*)
 For[indPreSol1=1,indPreSol1<=Length[allSol],indPreSol1++,
@@ -708,14 +704,18 @@ onePartExtDictioSMEFTsimBasis:=Block[{indPart,solFlaSym,ret,conseqFlaSym,maxCons
 For[indPart=1,indPart<=cutOffPart,indPart++,setAllToZero[all];n[nameListAll[[indPart]]]=1;listM[nameListAll[[indPart]]]={m};allocateAllMasses;solFlaSym=superSolAsummOpe[flavourSym];
 flag="YES";
 If[solFlaSym=={},solFlaSym={vanishAllUVCouplings};flag="NO"];
-If[Length[solFlaSym]>1,conseqFlaSym=Table[Length[DeleteCases[DeleteCases[Chop[ReleaseHold[requiredWCsmeftsimBasis[[2;;-1,2]]]/.listReempAllReal/.solFlaSym[[i]]/.listReempAllReal],0.],0]],{i,1,Length[solFlaSym]}];
+If[Length[solFlaSym]>1,conseqFlaSym=Table[Length[DeleteCases[DeleteCases[Chop[ReleaseHold[requiredWCsmeftsimBasis[[2;;-1,2]]]/.listReempAllReal//.solFlaSym[[i]]/.listReempAllReal],0.],0]],{i,1,Length[solFlaSym]}];
 maxConseq=Position[conseqFlaSym,Max[conseqFlaSym]];
 If[Length[maxConseq],Print["There are more than 1 solutions to the Flavour assumptions that maximizes the number of non-vanishing WCs."];];
 Print[maxConseq[[1,1]]];
 solFlaSym={solFlaSym[[maxConseq[[1,1]]]]};
 ];
-ret=Join[ret,{{nameListAll[[indPart]],ParallelTable[{requiredWCsmeftsimBasis[[j,1]],ReleaseHold[requiredWCsmeftsimBasis[[j,2]]]},{j,2,Length[requiredWCsmeftsimBasis]}]/.listReempAllReal/.solFlaSym[[1]],flag}}];
+ret=Join[ret,{{nameListAll[[indPart]],ParallelTable[{requiredWCsmeftsimBasis[[j,1]],ReleaseHold[requiredWCsmeftsimBasis[[j,2]]]},{j,2,Length[requiredWCsmeftsimBasis]}]/.listReempAllReal//.solFlaSym[[1]],flag}}];
 Print[indPart];];
 ret];
 allDictSMEFT=onePartExtDictioSMEFTsimBasis;
-Export[Directory[]<>"\\dict_all_SMEFTsim_Local_New_YukaTop_UpTo"<>ToString[cutOffPart]<>".wxf",allDictSMEFT,"WXF"]
+Export[Directory[]<>"\\dict_all_SMEFiT_Local_New_YukaTop_UpTo"<>ToString[cutOffPart]<>"_"<>DateString[{"Day","_","Month","_","Year"}]<>".wxf",allDictSMEFT,"WXF"]
+
+
+
+
