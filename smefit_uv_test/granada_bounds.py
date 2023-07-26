@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import rc, use
 
-collections = ["Granada"]
+collections = ["1L"]
 
 here = pathlib.Path(__file__).parent
 
@@ -76,12 +76,16 @@ def compute_bounds(collection, mod_nrs, label, caption):
     table += "\\toprule\n"
 
     table_dict = nested_dict(4)
+
     n_params = 0
     for mod_nr in mod_nrs:
         print(mod_nr)
         model_row = True
+
+        n_invariants = []
         for pQCD in ["LO", "NLO"]:
             for EFT in ["NHO", "HO"]:
+                n_inv = 0
                 # path to posterior with model number
                 posterior_path_mod = Path(posterior_path.format(collection, mod_nr, pQCD, EFT))
                 if posterior_path_mod.exists():
@@ -95,17 +99,25 @@ def compute_bounds(collection, mod_nrs, label, caption):
                             continue
                         else:
                             if min(samples) > 0:
-                                low, up = 0, np.nanpercentile(samples, 95.0)
+                                low = 0
+                                up = np.nanpercentile(samples, 95.0)
+                                table_dict[mod_nr][key][pQCD][EFT] = "{:.3f}".format(np.round(up, 3))
                             else:
                                 low, up = np.nanpercentile(samples, 2.5), np.nanpercentile(samples, 97.5)
+                                table_dict[mod_nr][key][pQCD][EFT] = "[{:.3f}, {:.3f}]".format(np.round(low, 3),
+                                                                                               np.round(up, 3))
 
-                            table_dict[mod_nr][key][pQCD][EFT] = "[{:.3f}, {:.3f}]".format(np.round(low, 3), np.round(up, 3))
 
+                            if up > 200 or low < -200:
+                                table_dict[mod_nr][key][pQCD][EFT] = "$\\times$"
                             # hdi is two sides, so we cannot use it: |g| > 0 requires one sided test
                             # table_dict[mod_nr][key][pQCD][EFT] = az.hdi(np.array(samples), hdi_prob=.95)
                             #table_dict[mod_nr][key][pQCD][EFT] = low, up
-                            n_params += 1
-
+                            n_inv += 1
+                    n_invariants.append(n_inv)
+        print(n_invariants)
+        if n_invariants:
+            n_params += max(n_invariants)
         for parameter, param_dict in table_dict[mod_nr].items():
 
             LO_NHO = param_dict["LO"]["NHO"]
@@ -125,7 +137,7 @@ def compute_bounds(collection, mod_nrs, label, caption):
     table += "\\end{center}\n"
     table += "\\end{table}\n"
 
-    return table, int(n_params / 4)
+    return table, n_params
 
 
 scalar_mdl_nrs = range(21)
@@ -142,24 +154,9 @@ latex_table_vboson, n_vbosons = compute_bounds("Granada", vboson_mdl_nrs, "cl-he
 latex_table_vfermion, n_vfermions = compute_bounds("Granada", vfermion_mdl_nrs, "cl-heavy-vfermion",
                                                    "95\\% CL intervals of the heavy vector fermion fields UV couplings.")
 
-# mp_dict, n_mp = compute_bounds("MP", mp_mdl_idx)
-# oneloop_dict, n_scalars_1L = compute_bounds("1L", oneloop_mdl_idx)
+latex_table_mp, n_mp = compute_bounds("MP", mp_mdl_idx, "cl-mp-model", "95\\% CL intervals of the UV couplings that enter in the multiparticle model.")
+latex_table_1l, n_scalars_1L = compute_bounds("1L", oneloop_mdl_idx, "cl-1l-model", "95\\% CL intervals of the UV couplings in \\varphi at one-loop.")
 
-
-# latex_table_mp = dict_to_latex_table(
-#     mp_dict,
-#     mod_dict,
-#     uv_param_dict,
-#     "cl-mp-model",
-#     "95\\% CL intervals of the UV couplings that enter in the multiparticle model.",
-# )
-# latex_table_1l = dict_to_latex_table(
-#     oneloop_dict,
-#     mod_dict,
-#     uv_param_dict,
-#     "cl-1l-model",
-#     "95\\% CL intervals of the UV couplings in \\varphi at one-loop.",
-# )
 
 # Save LaTeX code to a .tex file
 with open(result_dir / "table_scalar.tex", "w") as file:
@@ -168,12 +165,10 @@ with open(result_dir / "table_vboson.tex", "w") as file:
     file.write(latex_table_vboson)
 with open(result_dir / "table_vfermion.tex", "w") as file:
     file.write(latex_table_vfermion)
-# with open(result_dir / "table_mp.tex", "w") as file:
-#     file.write(latex_table_mp)
-# with open(result_dir / "table_1l.tex", "w") as file:
-#     file.write(latex_table_1l)
-
-sys.exit()
+with open(result_dir / "table_mp.tex", "w") as file:
+    file.write(latex_table_mp)
+with open(result_dir / "table_1l.tex", "w") as file:
+    file.write(latex_table_1l)
 
 def find_xrange(samples):
     x_low = []
@@ -323,10 +318,10 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
             fig.savefig(result_dir / "{}_posteriors_HO_vs_NHO_{}.pdf".format(collection, pQCD))
 
 
-# plot_uv_posterior(n_mp, "MP", mp_mdl_idx, EFT="NHO")
-# plot_uv_posterior(n_mp, "MP", mp_mdl_idx, EFT="HO")
-# plot_uv_posterior(n_mp, "MP",mp_mdl_idx, pQCD="LO")
-# plot_uv_posterior(n_mp, "MP", mp_mdl_idx, pQCD="NLO")
+plot_uv_posterior(n_mp, "MP", mp_mdl_idx, EFT="NHO")
+plot_uv_posterior(n_mp, "MP", mp_mdl_idx, EFT="HO")
+plot_uv_posterior(n_mp, "MP",mp_mdl_idx, pQCD="LO")
+plot_uv_posterior(n_mp, "MP", mp_mdl_idx, pQCD="NLO")
 
 plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="NHO", name="vbosons")
 plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="HO", name="vbosons")
@@ -342,10 +337,10 @@ plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, name="vfermions", pQ
 plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, name="scalars", pQCD="LO")
 plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, name="scalars", pQCD="NLO")
 
-# plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, EFT="NHO", name="scalars")
-# plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, EFT="HO", name="scalars")
-# plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, pQCD="LO", name="scalars")
-# plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, pQCD="NLO", name="scalars")
+plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, EFT="NHO", name="scalars")
+plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, EFT="HO", name="scalars")
+plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, pQCD="LO", name="scalars")
+plot_uv_posterior(n_scalars_1L, "1L", oneloop_mdl_idx, pQCD="NLO", name="scalars")
 
 
 for file in result_dir.iterdir():
