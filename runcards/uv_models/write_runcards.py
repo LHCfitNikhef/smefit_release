@@ -100,13 +100,16 @@ def dump_runcard(
     eft_order: str,
     pto: str,
     fitting_mode: str,
+    mass:str,
     is_uv: bool,
 ) -> None:
     """Parse a model card to a SMEFiT runcard."""
-    if is_uv:
-        file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_1_Tree.yaml"
+    if is_uv and '1L' in collection:
+        file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Loop.yaml"
+    elif is_uv:
+        file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
     else:
-        file_path = f"WC_scan/{collection}/dict_WC_scan_Coll_{collection}_Mod_{idx_model}_Mass_1_Tree.yaml"
+        file_path = f"WC_scan/{collection}/dict_WC_scan_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
 
     with open(here / file_path, "r") as f:
         model_dict = yaml.safe_load(f)
@@ -153,7 +156,7 @@ if __name__ == "__main__":
         "-o", "--qcd_order", help="QCD order: LO, NLO", type=str, required=True
     )
     parser.add_argument(
-        "-m", "--mode", help="Fitting mode: NS, MC", type=str, default="NS"
+        "-f", "--mode", help="Fitting mode: NS, MC", type=str, default="NS"
     )
     parser.add_argument(
         "-c",
@@ -161,6 +164,9 @@ if __name__ == "__main__":
         help="Model collection: Granada, Fitmaker",
         type=str,
         required=True,
+    )
+    parser.add_argument(
+        "-m", "--mass", help="Particle masses", type=str, default="1"
     )
     parser.add_argument(
         "-u",
@@ -176,6 +182,7 @@ if __name__ == "__main__":
         args.eft_order,
         args.qcd_order,
         args.mode,
+        args.mass,
         args.is_uv,
     )
 
