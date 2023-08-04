@@ -55,14 +55,14 @@ cQt1 : [{gWH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
 cQt8 : [{gWH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
 ctt1 : [{gWH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
 cll : [{gWH: [-0.25,0],gWLf11: [1,1],gWLf22: [1,1],gWLf33: [1,0],gWqf33: [1,0]}]
-cbp : [{gWH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
+cbp : [{gWH: [-0.006002165432052166,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
 ctp : [{gWH: [-0.2480703588615627,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
 ctG : [{gWH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
 ccp : [{gWH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
-ctap : [{gWH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
+ctap : [{gWH: [-0.0025559460452279554,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
 ctW : [{gWH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
 ctZ : [{gWH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_Local_New_YukaTop_Upto48_25_07_2023.wxf
-Export date: Tue 25 Jul 2023 16:28:45
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_Local_New_Yukas_Upto48_25_07_2023.wxf
+Export date: Fri 4 Aug 2023 11:21:41
