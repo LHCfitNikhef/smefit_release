@@ -1,8 +1,15 @@
 import numpy as np
+
 from utils import inspect_model
 
 
-MODEL_SPECS = dict(id= "Varphi", collection="1LoopMatching", mass=1, pto="NLO", eft="NHO")
+MODEL_SPECS = dict(
+	 id= "Varphi",
+	 collection= "1LoopMatching",
+	 mass=1, # in TeV
+	 pto="NLO",
+	 eft="NHO"
+)
 
 
 def inv1(results):
