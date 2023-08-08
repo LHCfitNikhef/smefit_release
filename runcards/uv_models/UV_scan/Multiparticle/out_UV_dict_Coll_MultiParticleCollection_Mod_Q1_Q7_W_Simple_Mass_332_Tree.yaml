@@ -56,14 +56,14 @@ cQt1 : [{gWtiH: [0.,0],lamQuf: [1,0]}]
 cQt8 : [{gWtiH: [0.,0],lamQuf: [1,0]}]
 ctt1 : [{gWtiH: [0.,0],lamQuf: [1,0]}]
 cll : [{gWtiH: [0.,0],lamQuf: [1,0]}]
-cbp : [{gWtiH: [0.,0],lamQuf: [1,0]}]
+cbp : [{gWtiH: [-0.0009603464691283466,2],lamQuf: [1,0]}]
 ctp : [{gWtiH: [0.11025349282736123,0],lamQuf: [1,2]},{gWtiH: [-0.03969125741785003,2],lamQuf: [1,0]}]
 ctG : [{gWtiH: [0.,0],lamQuf: [1,0]}]
 ccp : [{gWtiH: [0.,0],lamQuf: [1,0]}]
-ctap : [{gWtiH: [0.,0],lamQuf: [1,0]}]
+ctap : [{gWtiH: [-0.00040895136723647296,2],lamQuf: [1,0]}]
 ctW : [{gWtiH: [0.,0],lamQuf: [1,0]}]
 ctZ : [{gWtiH: [0.,0],lamQuf: [1,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
 # Tree-level results address: C:\Users\a95826ar.DS\Documents\GitHub\MMEFT2SMEFiT\/sample_results/MatchingResult_multiparticle_treelevel.dat
-# Export date: Thu 27 Jul 2023 14:14:57
+# Export date: Tue 8 Aug 2023 10:00:29

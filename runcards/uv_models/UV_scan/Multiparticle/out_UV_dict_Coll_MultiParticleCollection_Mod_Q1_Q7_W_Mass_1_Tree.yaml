@@ -1,8 +1,8 @@
 # UV dictionary with WCs in terms of UV variables
 # ~~~~~~~~~~~~~~~~~~~~~~
 UV Collection : MultiParticleCollection
-UV model : Q1_Q7_W1
-Model name : Q1_Q7_W1
+UV model : Q1_Q7_W
+Model name : Q1_Q7_W
 # ~~~~~~~~~~~~~~~~~~~~~~
 UV couplings : [gWtiH, gWLf11, gWLf22, gWLf33, gWqf33, lamQ1uf3, lamQ7f33]
 UV masses : [MQ1, MQ7, MWti]
@@ -10,7 +10,7 @@ UV masses : [MQ1, MQ7, MWti]
 # Loop level of the results : 0
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Setting of the UV mass in TeV:
-m : {1.} TeV
+m : 1 TeV
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Expressions for all the WCs in SMEFiT basis
 cpG : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
@@ -56,14 +56,14 @@ cQt1 : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],l
 cQt8 : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctt1 : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 cll : [{gWtiH: [-0.25,0],gWLf11: [1,1],gWLf22: [1,1],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
-cbp : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
+cbp : [{gWtiH: [-0.006002165432052166,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctp : [{gWtiH: [0.4961407177231255,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,2]},{gWtiH: [0.4961407177231255,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,2],lamQ7f33: [1,0]},{gWtiH: [-0.2480703588615627,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctG : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ccp : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
-ctap : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
+ctap : [{gWtiH: [-0.0025559460452279554,2],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctW : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 ctZ : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
 # Tree-level results address: C:\Users\a95826ar.DS\Documents\GitHub\MMEFT2SMEFiT\/sample_results/MatchingResult_multiparticle_treelevel.dat
-# Export date: Tue 25 Jul 2023 17:13:04
+# Export date: Tue 8 Aug 2023 09:56:16
