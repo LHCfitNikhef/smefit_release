@@ -9,7 +9,7 @@ UV couplings : [gBef11, gBef22, gBef33, gBH, gBLf11, gBLf22, gBLf33, gBqf33, gBu
 # Loop level of the results : 0
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Setting of the UV mass in TeV:
-m : 1 TeV
+m : 1 # TeV
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Expressions for all the WCs in SMEFiT basis
 cpG : [{gBef11: [0.,0],gBef22: [1,0],gBef33: [1,0],gBH: [1,0],gBLf11: [1,0],gBLf22: [1,0],gBLf33: [1,0],gBqf33: [1,0],gBuf33: [1,0]}]

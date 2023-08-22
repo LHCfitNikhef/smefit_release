@@ -9,7 +9,7 @@ UV couplings : [gY5f33]
 # Loop level of the results : 0
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Setting of the UV mass in TeV:
-m : 1 TeV
+m : 1 # TeV
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Expressions for all the WCs in SMEFiT basis
 cpG : [{gY5f33: [0.,0]}]

@@ -10,7 +10,7 @@ UV masses : [MQ1, MQ7, MWti]
 # Loop level of the results : 0
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Setting of the UV mass in TeV:
-m : 1 TeV
+m : 1 # TeV
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Expressions for all the WCs in SMEFiT basis
 cpG : [{gWtiH: [0.,0],gWLf11: [1,0],gWLf22: [1,0],gWLf33: [1,0],gWqf33: [1,0],lamQ1uf3: [1,0],lamQ7f33: [1,0]}]

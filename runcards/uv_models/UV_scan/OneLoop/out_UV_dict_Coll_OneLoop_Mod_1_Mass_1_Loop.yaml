@@ -9,7 +9,7 @@ UV couplings : [lamS]
 # Loop level of the results : 1
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Setting of the UV mass in TeV:
-m : 1 TeV
+m : 1 # TeV
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Expressions for all the WCs in SMEFiT basis
 cpG : [{lamS: [0.,0]}]
