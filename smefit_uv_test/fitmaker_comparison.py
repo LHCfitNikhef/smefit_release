@@ -3,13 +3,14 @@ import numpy as np
 import json
 from matplotlib import rc, use
 import pandas as pd
+import subprocess
 
 use("PDF")
 rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"], 'size': 20})
 rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 
 # Data for the comparison
-categories = ['$S$', '$\\varphi$', '$\\Xi$', r'$\\mathcal{B}_1$', r'$\mathcal{W}_1$', '$N$', '$E$', '$\\Delta_1$', '$\\Delta_3$', '$\\Sigma$',
+categories = ['$S$', '$\\phi$', '$\\Xi$', '$\\mathcal{B}_1$', r'$\mathcal{W}_1$', '$N$', '$E$', '$\\Delta_1$', '$\\Delta_3$', '$\\Sigma$',
               '$\\Sigma_1$', '$U$', '$D$', '$Q_5$', '$Q_7$', '$T_1$', '$T_2$', '$T$', '$Q_{17}$']
 
 fitmaker_bounds = np.array(
@@ -79,3 +80,4 @@ plt.legend(frameon=False, ncol=3)
 
 # Show the plot
 plt.savefig('uv_smefit_vs_fitmaker_all.pdf')
+subprocess.run(["pdfcrop", './uv_smefit_vs_fitmaker_all.pdf', './uv_smefit_vs_fitmaker_all.pdf'])
