@@ -9,7 +9,7 @@ rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"], 'size': 20})
 rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 
 # Data for the comparison
-categories = ['$S$', '$\\varphi$', '$\\Xi$', '$B_1$', '$W_1$', '$N$', '$E$', '$\\Delta_1$', '$\\Delta_3$', '$\\Sigma$',
+categories = ['$S$', '$\\varphi$', '$\\Xi$', r'$\\mathcal{B}_1$', r'$\mathcal{W}_1$', '$N$', '$E$', '$\\Delta_1$', '$\\Delta_3$', '$\\Sigma$',
               '$\\Sigma_1$', '$U$', '$D$', '$Q_5$', '$Q_7$', '$T_1$', '$T_2$', '$T$', '$Q_{17}$']
 
 fitmaker_bounds = np.array(
