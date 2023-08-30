@@ -1,0 +1,68 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 3
+Model name : \text{S1}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [yS1]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 # TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{yS1: [0.,0]}]
+cpB : [{yS1: [0.,0]}]
+cpW : [{yS1: [0.,0]}]
+cpWB : [{yS1: [0.,0]}]
+cpd : [{yS1: [0.,0]}]
+cpD : [{yS1: [0.,0]}]
+cWWW : [{yS1: [0.,0]}]
+cpqMi : [{yS1: [0.,0]}]
+cpQM : [{yS1: [0.,0]}]
+c3pq : [{yS1: [0.,0]}]
+c3pQ3 : [{yS1: [0.,0]}]
+cpl1 : [{yS1: [0.,0]}]
+cpl2 : [{yS1: [0.,0]}]
+cpl3 : [{yS1: [0.,0]}]
+c3pl1 : [{yS1: [0.,0]}]
+c3pl2 : [{yS1: [0.,0]}]
+c3pl3 : [{yS1: [0.,0]}]
+cpui : [{yS1: [0.,0]}]
+cpdi : [{yS1: [0.,0]}]
+cpt : [{yS1: [0.,0]}]
+cpe : [{yS1: [0.,0]}]
+cpmu : [{yS1: [0.,0]}]
+cpta : [{yS1: [0.,0]}]
+c81qq : [{yS1: [0.,0]}]
+c11qq : [{yS1: [0.,0]}]
+c83qq : [{yS1: [0.,0]}]
+c13qq : [{yS1: [0.,0]}]
+c8qt : [{yS1: [0.,0]}]
+c1qt : [{yS1: [0.,0]}]
+c8ut : [{yS1: [0.,0]}]
+c1ut : [{yS1: [0.,0]}]
+c8qu : [{yS1: [0.,0]}]
+c1qu : [{yS1: [0.,0]}]
+c8dt : [{yS1: [0.,0]}]
+c1dt : [{yS1: [0.,0]}]
+c8qd : [{yS1: [0.,0]}]
+c1qd : [{yS1: [0.,0]}]
+cQQ1 : [{yS1: [0.,0]}]
+cQQ8 : [{yS1: [0.,0]}]
+cQt1 : [{yS1: [0.,0]}]
+cQt8 : [{yS1: [0.,0]}]
+ctt1 : [{yS1: [0.,0]}]
+cll : [{yS1: [1,2]}]
+cbp : [{yS1: [0.,0]}]
+ctp : [{yS1: [0.,0]}]
+ctG : [{yS1: [0.,0]}]
+ccp : [{yS1: [0.,0]}]
+ctap : [{yS1: [0.,0]}]
+ctW : [{yS1: [0.,0]}]
+ctZ : [{yS1: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_30Aug23.wxf
+# Export date: Wed 30 Aug 2023 10:38:01
