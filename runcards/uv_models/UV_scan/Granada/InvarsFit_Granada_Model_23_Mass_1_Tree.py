@@ -15,15 +15,10 @@ def inv2(results):
 
 def inv3(results):
 	gWH = results.gWH
-	gWLf22 = results.gWLf22
-	return (gWH*gWLf22)/np.abs(gWH)
-
-def inv4(results):
-	gWH = results.gWH
 	gWLf33 = results.gWLf33
 	return (gWH*gWLf33)/np.abs(gWH)
 
-def inv5(results):
+def inv4(results):
 	gWH = results.gWH
 	gWqf33 = results.gWqf33
 	return (gWH*gWqf33)/np.abs(gWH)
