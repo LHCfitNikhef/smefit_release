@@ -32,9 +32,9 @@ c3pl3 : [{lamDelta1f1: [0.,0]}]
 cpui : [{lamDelta1f1: [0.,0]}]
 cpdi : [{lamDelta1f1: [0.,0]}]
 cpt : [{lamDelta1f1: [0.,0]}]
-cpe : [{lamDelta1f1: [0,0]},{lamDelta1f1: [0,1]},{lamDelta1f1: [0.5,2]}]
-cpmu : [{lamDelta1f1: [0,0]},{lamDelta1f1: [0,1]},{lamDelta1f1: [0.5,2]}]
-cpta : [{lamDelta1f1: [0,0]},{lamDelta1f1: [0,1]},{lamDelta1f1: [0.5,2]}]
+cpe : [{lamDelta1f1: [0.5,2]}]
+cpmu : [{lamDelta1f1: [0.5,2]}]
+cpta : [{lamDelta1f1: [0.5,2]}]
 c81qq : [{lamDelta1f1: [0.,0]}]
 c11qq : [{lamDelta1f1: [0.,0]}]
 c83qq : [{lamDelta1f1: [0.,0]}]
@@ -55,14 +55,15 @@ cQt1 : [{lamDelta1f1: [0.,0]}]
 cQt8 : [{lamDelta1f1: [0.,0]}]
 ctt1 : [{lamDelta1f1: [0.,0]}]
 cll : [{lamDelta1f1: [0.,0]}]
+cll1111 : [{lamDelta1f1: [0.,0]}]
 cbp : [{lamDelta1f1: [0.,0]}]
 ctp : [{lamDelta1f1: [0.,0]}]
 ctG : [{lamDelta1f1: [0.,0]}]
 ccp : [{lamDelta1f1: [0.,0]}]
-ctap : [{lamDelta1f1: [0,0]},{lamDelta1f1: [0,1]},{lamDelta1f1: [0.005111892090455911,2]}]
+ctap : [{lamDelta1f1: [0.005111892090455911,2]}]
 ctW : [{lamDelta1f1: [0.,0]}]
 ctZ : [{lamDelta1f1: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
-Export date: Thu 8 Dec 2022 11:06:49
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_1Sep23.wxf
+# Export date: Fri 1 Sep 2023 13:14:25

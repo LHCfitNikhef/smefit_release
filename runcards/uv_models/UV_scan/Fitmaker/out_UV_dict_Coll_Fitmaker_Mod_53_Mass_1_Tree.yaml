@@ -55,6 +55,7 @@ cQt1 : [{gHB: [0.,0]}]
 cQt8 : [{gHB: [0.,0]}]
 ctt1 : [{gHB: [0.,0]}]
 cll : [{gHB: [0.,0]}]
+cll1111 : [{gHB: [0.,0]}]
 cbp : [{gHB: [-0.024008661728208668,2]}]
 ctp : [{gHB: [-0.992281435446251,2]}]
 ctG : [{gHB: [0.,0]}]
@@ -64,5 +65,5 @@ ctW : [{gHB: [0.,0]}]
 ctZ : [{gHB: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker_29Aug23.wxf
-# Export date: Tue 29 Aug 2023 10:23:11
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_1Sep23.wxf
+# Export date: Fri 1 Sep 2023 13:14:26

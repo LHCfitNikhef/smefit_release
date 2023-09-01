@@ -16,8 +16,8 @@ cpG : [{gBH: [0.,0]}]
 cpB : [{gBH: [0.,0]}]
 cpW : [{gBH: [0.,0]}]
 cpWB : [{gBH: [0.,0]}]
-cpd : [{gBH: [0,0]},{gBH: [0,1]},{gBH: [0.5,2]}]
-cpD : [{gBH: [0,0]},{gBH: [0,1]},{gBH: [-2.,2]}]
+cpd : [{gBH: [0.5,2]}]
+cpD : [{gBH: [-2.,2]}]
 cWWW : [{gBH: [0.,0]}]
 cpqMi : [{gBH: [0.,0]}]
 cpQM : [{gBH: [0.,0]}]
@@ -55,6 +55,7 @@ cQt1 : [{gBH: [0.,0]}]
 cQt8 : [{gBH: [0.,0]}]
 ctt1 : [{gBH: [0.,0]}]
 cll : [{gBH: [0.,0]}]
+cll1111 : [{gBH: [0.,0]}]
 cbp : [{gBH: [0.,0]}]
 ctp : [{gBH: [0.,0]}]
 ctG : [{gBH: [0.,0]}]
@@ -64,5 +65,5 @@ ctW : [{gBH: [0.,0]}]
 ctZ : [{gBH: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
-Export date: Thu 8 Dec 2022 11:06:48
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_1Sep23.wxf
+# Export date: Fri 1 Sep 2023 13:14:25

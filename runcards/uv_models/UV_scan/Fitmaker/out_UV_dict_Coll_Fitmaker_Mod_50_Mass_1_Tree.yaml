@@ -20,9 +20,9 @@ cpd : [{sLt: [0.,0]}]
 cpD : [{sLt: [0.,0]}]
 cWWW : [{sLt: [0.,0]}]
 cpqMi : [{sLt: [0.,0]}]
-cpQM : [{sLt: [0,0]},{sLt: [0,1]},{sLt: [16.495038975170882,2]}]
+cpQM : [{sLt: [16.495038975170882,2]}]
 c3pq : [{sLt: [0.,0]}]
-c3pQ3 : [{sLt: [0,0]},{sLt: [0,1]},{sLt: [-8.247519487585441,2]}]
+c3pQ3 : [{sLt: [-8.247519487585441,2]}]
 cpl1 : [{sLt: [0.,0]}]
 cpl2 : [{sLt: [0.,0]}]
 cpl3 : [{sLt: [0.,0]}]
@@ -55,8 +55,9 @@ cQt1 : [{sLt: [0.,0]}]
 cQt8 : [{sLt: [0.,0]}]
 ctt1 : [{sLt: [0.,0]}]
 cll : [{sLt: [0.,0]}]
+cll1111 : [{sLt: [0.,0]}]
 cbp : [{sLt: [0.,0]}]
-ctp : [{sLt: [0,0]},{sLt: [0,1]},{sLt: [16.36772095202442,2]}]
+ctp : [{sLt: [16.36772095202442,2]}]
 ctG : [{sLt: [0.,0]}]
 ccp : [{sLt: [0.,0]}]
 ctap : [{sLt: [0.,0]}]
@@ -64,5 +65,5 @@ ctW : [{sLt: [0.,0]}]
 ctZ : [{sLt: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
-Export date: Thu 8 Dec 2022 11:06:49
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_1Sep23.wxf
+# Export date: Fri 1 Sep 2023 13:14:26

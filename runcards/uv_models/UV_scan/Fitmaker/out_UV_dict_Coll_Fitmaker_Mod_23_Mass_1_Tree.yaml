@@ -16,7 +16,7 @@ cpG : [{gWH: [0.,0]}]
 cpB : [{gWH: [0.,0]}]
 cpW : [{gWH: [0.,0]}]
 cpWB : [{gWH: [0.,0]}]
-cpd : [{gWH: [0,0]},{gWH: [0,1]},{gWH: [0.375,2]}]
+cpd : [{gWH: [0.375,2]}]
 cpD : [{gWH: [0.,0]}]
 cWWW : [{gWH: [0.,0]}]
 cpqMi : [{gWH: [0.,0]}]
@@ -55,14 +55,15 @@ cQt1 : [{gWH: [0.,0]}]
 cQt8 : [{gWH: [0.,0]}]
 ctt1 : [{gWH: [0.,0]}]
 cll : [{gWH: [0.,0]}]
-cbp : [{gWH: [0,0]},{gWH: [0,1]},{gWH: [-0.006002165432052166,2]}]
-ctp : [{gWH: [0,0]},{gWH: [0,1]},{gWH: [-0.2480703588615627,2]}]
+cll1111 : [{gWH: [0.,0]}]
+cbp : [{gWH: [-0.006002165432052166,2]}]
+ctp : [{gWH: [-0.2480703588615627,2]}]
 ctG : [{gWH: [0.,0]}]
 ccp : [{gWH: [0.,0]}]
-ctap : [{gWH: [0,0]},{gWH: [0,1]},{gWH: [-0.0025559460452279554,2]}]
+ctap : [{gWH: [-0.0025559460452279554,2]}]
 ctW : [{gWH: [0.,0]}]
 ctZ : [{gWH: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
-Export date: Thu 8 Dec 2022 11:06:48
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_1Sep23.wxf
+# Export date: Fri 1 Sep 2023 13:14:25

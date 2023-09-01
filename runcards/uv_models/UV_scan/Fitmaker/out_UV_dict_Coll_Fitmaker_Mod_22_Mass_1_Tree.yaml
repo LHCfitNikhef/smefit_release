@@ -16,8 +16,8 @@ cpG : [{gB1H: [0.,0]}]
 cpB : [{gB1H: [0.,0]}]
 cpW : [{gB1H: [0.,0]}]
 cpWB : [{gB1H: [0.,0]}]
-cpd : [{gB1H: [0,0]},{gB1H: [0,1]},{gB1H: [0.5,2]}]
-cpD : [{gB1H: [0,0]},{gB1H: [0,1]},{gB1H: [1,2]}]
+cpd : [{gB1H: [0.5,2]}]
+cpD : [{gB1H: [1,2]}]
 cWWW : [{gB1H: [0.,0]}]
 cpqMi : [{gB1H: [0.,0]}]
 cpQM : [{gB1H: [0.,0]}]
@@ -55,14 +55,15 @@ cQt1 : [{gB1H: [0.,0]}]
 cQt8 : [{gB1H: [0.,0]}]
 ctt1 : [{gB1H: [0.,0]}]
 cll : [{gB1H: [0.,0]}]
-cbp : [{gB1H: [0,0]},{gB1H: [0,1]},{gB1H: [-0.012004330864104332,2]}]
-ctp : [{gB1H: [0,0]},{gB1H: [0,1]},{gB1H: [-0.4961407177231255,2]}]
+cll1111 : [{gB1H: [0.,0]}]
+cbp : [{gB1H: [-0.012004330864104332,2]}]
+ctp : [{gB1H: [-0.4961407177231255,2]}]
 ctG : [{gB1H: [0.,0]}]
 ccp : [{gB1H: [0.,0]}]
-ctap : [{gB1H: [0,0]},{gB1H: [0,1]},{gB1H: [-0.005111892090455911,2]}]
+ctap : [{gB1H: [-0.005111892090455911,2]}]
 ctW : [{gB1H: [0.,0]}]
 ctZ : [{gB1H: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
-Export date: Thu 8 Dec 2022 11:06:48
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_1Sep23.wxf
+# Export date: Fri 1 Sep 2023 13:14:25

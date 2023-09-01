@@ -55,8 +55,9 @@ cQt1 : [{lambdaQ: [0.,0]}]
 cQt8 : [{lambdaQ: [0.,0]}]
 ctt1 : [{lambdaQ: [0.,0]}]
 cll : [{lambdaQ: [0.,0]}]
+cll1111 : [{lambdaQ: [0.,0]}]
 cbp : [{lambdaQ: [0.,0]}]
-ctp : [{lambdaQ: [0,0]},{lambdaQ: [0,1]},{lambdaQ: [0.992281435446251,2]}]
+ctp : [{lambdaQ: [0.992281435446251,2]}]
 ctG : [{lambdaQ: [0.,0]}]
 ccp : [{lambdaQ: [0.,0]}]
 ctap : [{lambdaQ: [0.,0]}]
@@ -64,5 +65,5 @@ ctW : [{lambdaQ: [0.,0]}]
 ctZ : [{lambdaQ: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFTsim_FitMakerModels_YukaFitMaker.wxf
-Export date: Thu 8 Dec 2022 11:06:49
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_1Sep23.wxf
+# Export date: Fri 1 Sep 2023 13:14:26
