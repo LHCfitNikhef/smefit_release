@@ -23,20 +23,25 @@ def inv4(results):
 
 def inv5(results):
 	gBH = results.gBH
+	gBLf11 = results.gBLf11
+	return (gBH*gBLf11)/np.abs(gBH)
+
+def inv6(results):
+	gBH = results.gBH
 	gBLf22 = results.gBLf22
 	return (gBH*gBLf22)/np.abs(gBH)
 
-def inv6(results):
+def inv7(results):
 	gBH = results.gBH
 	gBLf33 = results.gBLf33
 	return (gBH*gBLf33)/np.abs(gBH)
 
-def inv7(results):
+def inv8(results):
 	gBH = results.gBH
 	gBqf33 = results.gBqf33
 	return (gBH*gBqf33)/np.abs(gBH)
 
-def inv8(results):
+def inv9(results):
 	gBH = results.gBH
 	gBuf33 = results.gBuf33
 	return (gBH*gBuf33)/np.abs(gBH)
