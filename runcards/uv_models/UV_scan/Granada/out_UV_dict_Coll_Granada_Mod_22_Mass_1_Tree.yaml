@@ -55,6 +55,7 @@ cQt1 : [{gB1H: [0.,0]}]
 cQt8 : [{gB1H: [0.,0]}]
 ctt1 : [{gB1H: [0.,0]}]
 cll : [{gB1H: [0.,0]}]
+cll1111 : [{gB1H: [0.,0]}]
 cbp : [{gB1H: [-0.012004330864104332,2]}]
 ctp : [{gB1H: [-0.4961407177231255,2]}]
 ctG : [{gB1H: [0.,0]}]
@@ -64,5 +65,5 @@ ctW : [{gB1H: [0.,0]}]
 ctZ : [{gB1H: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_Local_New_Yukas_Upto48_25_07_2023.wxf
-Export date: Fri 4 Aug 2023 11:21:40
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_Local_New_Yukas_indepcll1111_Upto48_01_09_2023.wxf
+# Export date: Fri 1 Sep 2023 13:14:23
