@@ -6,20 +6,22 @@ MODEL_SPECS = dict(id=21, collection="Granada", mass=1, pto="NLO", eft="NHO" )
 
 def inv1(results):
 	gBef11 = results.gBef11
-	return np.abs(gBef11)
+	gBH = results.gBH
+	return gBef11*gBH
 
 def inv2(results):
-	gBef22 = results.gBef22
-	return np.abs(gBef22)
+	gBH = results.gBH
+	return np.abs(gBH)
 
 def inv3(results):
-	gBef33 = results.gBef33
-	return np.abs(gBef33)
+	gBef22 = results.gBef22
+	gBH = results.gBH
+	return gBef22*gBH
 
 def inv4(results):
-	gBef11 = results.gBef11
+	gBef33 = results.gBef33
 	gBH = results.gBH
-	return (gBef11*gBH)/np.abs(gBef11)
+	return gBef33*gBH
 
 def inv5(results):
 	gBH = results.gBH
@@ -29,12 +31,12 @@ def inv5(results):
 def inv6(results):
 	gBH = results.gBH
 	gBLf22 = results.gBLf22
-	return (gBH*gBLf22)/np.abs(gBH)
+	return gBH*gBLf22
 
 def inv7(results):
 	gBH = results.gBH
 	gBLf33 = results.gBLf33
-	return (gBH*gBLf33)/np.abs(gBH)
+	return gBH*gBLf33
 
 def inv8(results):
 	gBH = results.gBH
