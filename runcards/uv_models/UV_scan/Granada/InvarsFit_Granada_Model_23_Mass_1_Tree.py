@@ -5,26 +5,24 @@ MODEL_SPECS = dict(id=23, collection="Granada", mass=1, pto="NLO", eft="NHO" )
 
 
 def inv1(results):
-	gWH = results.gWH
-	return np.abs(gWH)
+	gWLf11 = results.gWLf11
+	return np.abs(gWLf11)
 
 def inv2(results):
-	gWH = results.gWH
 	gWLf11 = results.gWLf11
-	return (gWH*gWLf11)/np.abs(gWH)
+	gWLf22 = results.gWLf22
+	return (gWLf11*gWLf22)/np.abs(gWLf11)
 
 def inv3(results):
-	gWH = results.gWH
-	gWLf22 = results.gWLf22
-	return (gWH*gWLf22)/np.abs(gWH)
+	gWLf33 = results.gWLf33
+	return np.abs(gWLf33)
 
 def inv4(results):
-	gWH = results.gWH
-	gWLf33 = results.gWLf33
-	return (gWH*gWLf33)/np.abs(gWH)
+	gWqf33 = results.gWqf33
+	return np.abs(gWqf33)
 
 def inv5(results):
-	gWH = results.gWH
 	gWqf33 = results.gWqf33
-	return (gWH*gWqf33)/np.abs(gWH)
+	gWtiH = results.gWtiH
+	return (gWqf33*gWtiH)/np.abs(gWqf33)
 
