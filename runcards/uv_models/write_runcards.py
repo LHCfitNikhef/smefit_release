@@ -22,7 +22,6 @@ def parse_UV_coeffs(model_dict: dict) -> dict:
     coeff_dict = {}
     free_dofs = []
 
-
     # add uv couplings
     for c in model_dict["UV couplings"]:
         free_dofs.append(c)
@@ -39,19 +38,6 @@ def parse_UV_coeffs(model_dict: dict) -> dict:
             # new syntax
             if any(val[0] == 0 for val in rel[0].values()):
                 continue
-
-        # if len(rel) == 1:
-        #
-        #     # drop coeff fixed to a value
-        #
-        #     value = rel[0][free_dofs[0]][0]
-        #     if value != 0:
-        #         coeff_dict[f"O{coeff[1:]}"] = {"value": value,
-        #                                        "constrain": True,
-        #                                        "min": -MAX_VALUE,
-        #                                        "max": MAX_VALUE,}
-        #         continue
-        #     continue
 
         new_constrain = []
         for sum_element in rel:
@@ -100,11 +86,11 @@ def dump_runcard(
     eft_order: str,
     pto: str,
     fitting_mode: str,
-    mass:str,
+    mass: str,
     is_uv: bool,
 ) -> None:
     """Parse a model card to a SMEFiT runcard."""
-    if is_uv and '1L' in collection:
+    if is_uv and "1L" in collection:
         file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Loop.yaml"
     elif is_uv:
         file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
@@ -165,9 +151,7 @@ if __name__ == "__main__":
         type=str,
         required=True,
     )
-    parser.add_argument(
-        "-m", "--mass", help="Particle masses", type=str, default="1"
-    )
+    parser.add_argument("-m", "--mass", help="Particle masses", type=str, default="1")
     parser.add_argument(
         "-u",
         "--is_uv",
@@ -185,4 +169,3 @@ if __name__ == "__main__":
         args.mass,
         args.is_uv,
     )
-
