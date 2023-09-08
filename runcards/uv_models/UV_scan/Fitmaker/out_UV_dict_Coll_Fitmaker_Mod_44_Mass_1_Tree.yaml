@@ -1,0 +1,69 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 44
+Model name : \text{Df}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lamDff1]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 # TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{lamDff1: [0.,0]}]
+cpB : [{lamDff1: [0.,0]}]
+cpW : [{lamDff1: [0.,0]}]
+cpWB : [{lamDff1: [0.,0]}]
+cpd : [{lamDff1: [0.,0]}]
+cpD : [{lamDff1: [0.,0]}]
+cWWW : [{lamDff1: [0.,0]}]
+cpqMi : [{lamDff1: [0.,0]}]
+cpQM : [{lamDff1: [0.,0]}]
+c3pq : [{lamDff1: [-0.25,2]}]
+c3pQ3 : [{lamDff1: [-0.25,2]}]
+cpl1 : [{lamDff1: [0.,0]}]
+cpl2 : [{lamDff1: [0.,0]}]
+cpl3 : [{lamDff1: [0.,0]}]
+c3pl1 : [{lamDff1: [0.,0]}]
+c3pl2 : [{lamDff1: [0.,0]}]
+c3pl3 : [{lamDff1: [0.,0]}]
+cpui : [{lamDff1: [0.,0]}]
+cpdi : [{lamDff1: [0.,0]}]
+cpt : [{lamDff1: [0.,0]}]
+cpe : [{lamDff1: [0.,0]}]
+cpmu : [{lamDff1: [0.,0]}]
+cpta : [{lamDff1: [0.,0]}]
+c81qq : [{lamDff1: [0.,0]}]
+c11qq : [{lamDff1: [0.,0]}]
+c83qq : [{lamDff1: [0.,0]}]
+c13qq : [{lamDff1: [0.,0]}]
+c8qt : [{lamDff1: [0.,0]}]
+c1qt : [{lamDff1: [0.,0]}]
+c8ut : [{lamDff1: [0.,0]}]
+c1ut : [{lamDff1: [0.,0]}]
+c8qu : [{lamDff1: [0.,0]}]
+c1qu : [{lamDff1: [0.,0]}]
+c8dt : [{lamDff1: [0.,0]}]
+c1dt : [{lamDff1: [0.,0]}]
+c8qd : [{lamDff1: [0.,0]}]
+c1qd : [{lamDff1: [0.,0]}]
+cQQ1 : [{lamDff1: [0.,0]}]
+cQQ8 : [{lamDff1: [0.,0]}]
+cQt1 : [{lamDff1: [0.,0]}]
+cQt8 : [{lamDff1: [0.,0]}]
+ctt1 : [{lamDff1: [0.,0]}]
+cll : [{lamDff1: [0.,0]}]
+cll1111 : [{lamDff1: [0.,0]}]
+cbp : [{lamDff1: [0.012004330864104332,2]}]
+ctp : [{lamDff1: [0.,0]}]
+ctG : [{lamDff1: [0.,0]}]
+ccp : [{lamDff1: [0.,0]}]
+ctap : [{lamDff1: [0.,0]}]
+ctW : [{lamDff1: [0.,0]}]
+ctZ : [{lamDff1: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_1Sep23.wxf
+# Export date: Fri 1 Sep 2023 13:14:25
