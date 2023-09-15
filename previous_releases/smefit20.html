@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SMEFiT2.0 &mdash; SMEFiT 0.1.0 documentation</title>
@@ -12,16 +12,16 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="People" href="../people/people.html" />
+    <link rel="next" title="The automation of SMEFT-Assisted Constraints on UV-Complete Models" href="smefit_uv.html" />
     <link rel="prev" title="SMEFiT VBS" href="smefit_vbs.html" /> 
 </head>
 
@@ -80,6 +80,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#released-fits">Released fits</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
 <ul>
@@ -117,7 +118,7 @@
            <div itemprop="articleBody">
              
   <section id="smefit2-0">
-<h1>SMEFiT2.0<a class="headerlink" href="#smefit2-0" title="Permalink to this heading"></a></h1>
+<h1>SMEFiT2.0<a class="headerlink" href="#smefit2-0" title="Link to this heading"></a></h1>
 <p>Here we present the results of the SMEFiT global analysis described in the following publication</p>
 <ul class="simple">
 <li><p><em>Combined SMEFT interpretation of Higgs, diboson, and top quark data from the LHC</em>,  J. Ethier, G.Magni, F. Maltoni, L. Mantani, E. R. Nocera, J. Rojo, E. Slade, E. Vryonidou, C. Zhang <span id="id1">[<a class="reference internal" href="../zzz-refs.html#id29" title="Jacob J. Ethier, Giacomo Magni, Fabio Maltoni, Luca Mantani, Emanuele R. Nocera, Juan Rojo, Emma Slade, Eleni Vryonidou, and Cen Zhang. Combined smeft interpretation of higgs, diboson, and top quark data from the lhc. 2021. arXiv:2105.00006.">EMM+21</a>]</span></p></li>
@@ -131,15 +132,15 @@
 <li><p><a class="reference internal" href="#smefit2-0-released-fits"><span class="std std-ref">Released fits</span></a></p></li>
 </ul>
 <section id="operator-basis">
-<span id="smefit2-0-operator-basis"></span><h2>Operator basis<a class="headerlink" href="#operator-basis" title="Permalink to this heading"></a></h2>
+<span id="smefit2-0-operator-basis"></span><h2>Operator basis<a class="headerlink" href="#operator-basis" title="Link to this heading"></a></h2>
 <p>The EFT analysis presented in this work is based on the following operator basis, see Sect. 2 in the paper for the explicit definition of the various degrees of freedom and the flavour assumptions adopted.  We categorize these EFT coefficients into four disjoint classes: four-quark (two-light-two-heavy), four-quark (four-heavy), two-fermion, and purely bosonic operators. Note that some of these coefficients are not independent but rather related among them via the EWPOs</p>
 <p>In the table below we list the EFT coefficients considered in this work together with the notation used in the plots and in the output files associated to the analysis results.</p>
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Operator basis</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Operator basis</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
 <colgroup>
-<col style="width: 20%" />
-<col style="width: 40%" />
-<col style="width: 40%" />
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 40.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Class</p></th>
@@ -180,7 +181,7 @@
 </table>
 </section>
 <section id="analysis-code">
-<span id="smefit2-0-analysis-code"></span><h2>Analysis code<a class="headerlink" href="#analysis-code" title="Permalink to this heading"></a></h2>
+<span id="smefit2-0-analysis-code"></span><h2>Analysis code<a class="headerlink" href="#analysis-code" title="Link to this heading"></a></h2>
 <p>The results collected in the table above have been obtained for the global input dataset and for the baseline theory settings, which in particular include NLO QCD corrections to the EFT cross-sections whenever available. However many users might be interested in evaluating statistical estimators for fits based on different input datasets, different settings of the EFT calculations, or for fits where the parameter space has been restricted as motivated by specific UV-complete models. For example, one may wish to compare with the outcome of the global fit based on LO EFT calculations, or to use the bounds derived in the top-philic scenario.</p>
 <p>The <strong>posterior probability distributions</strong> corresponding to all the fits presented in this work are made available in the <a class="reference external" href="https://github.com/LHCfitNikhef/SMEFiT/">SMEFiT GitHub public repository</a>, together with Python analysis code to process them and produce a range of statistical estimators. For instance, upon choosing a given fit (see <a class="reference internal" href="#smefit2-0-released-fits"><span class="std std-ref">Released fits</span></a>), whose output is constitured by <span class="math notranslate nohighlight">\(N_{\rm spl}\)</span> posterior samples for the <span class="math notranslate nohighlight">\(n_{\rm op}=49\)</span> EFT coefficients considered in this analysis, the analysis code can evaluate  <strong>statistical estimators</strong> such as means, standard deviations, and correlations,</p>
 <div class="math notranslate nohighlight">
@@ -199,17 +200,17 @@
 <a class="reference internal image-reference" href="../_images/Coeffs_Corr_Baseline_quad.png"><img alt="SMEFIT logo" class="align-center" src="../_images/Coeffs_Corr_Baseline_quad.png" style="width: 500px;" /></a>
 </section>
 <section id="released-fits">
-<span id="smefit2-0-released-fits"></span><h2>Released fits<a class="headerlink" href="#released-fits" title="Permalink to this heading"></a></h2>
+<span id="smefit2-0-released-fits"></span><h2>Released fits<a class="headerlink" href="#released-fits" title="Link to this heading"></a></h2>
 <p>The list of fits that are made available with <strong>this release of the SMEFiT global analysis</strong> are summarised
 in the table below.
 For each configuration we provide a runcard and the corresponding posterior distributions stored in <code class="docutils literal notranslate"><span class="pre">json</span></code> format.</p>
 <table class="docutils align-default" id="id3">
-<caption><span class="caption-text">SMEFiT2.0 fits</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">SMEFiT2.0 fits</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
 <colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Descriptor</p></th>
@@ -275,7 +276,7 @@ For each configuration we provide a runcard and the corresponding posterior dist
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="smefit_vbs.html" class="btn btn-neutral float-left" title="SMEFiT VBS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../people/people.html" class="btn btn-neutral float-right" title="People" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="smefit_uv.html" class="btn btn-neutral float-right" title="The automation of SMEFT-Assisted Constraints on UV-Complete Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

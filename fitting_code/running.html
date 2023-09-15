@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>How to run the code &mdash; SMEFiT 0.1.0 documentation</title>
@@ -12,11 +12,11 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -89,6 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_top.html">SMEFiT Top</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit20.html">SMEFiT2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
 <ul>
@@ -126,11 +127,11 @@
            <div itemprop="articleBody">
              
   <section id="how-to-run-the-code">
-<span id="running-fit"></span><h1>How to run the code<a class="headerlink" href="#how-to-run-the-code" title="Permalink to this heading"></a></h1>
+<span id="running-fit"></span><h1>How to run the code<a class="headerlink" href="#how-to-run-the-code" title="Link to this heading"></a></h1>
 <p>In the following we provide detailed instructions on how to use the code in its different
 running modes and on how to analyse the results.</p>
 <section id="runcard-specifications">
-<span id="runcard"></span><h2>Runcard specifications<a class="headerlink" href="#runcard-specifications" title="Permalink to this heading"></a></h2>
+<span id="runcard"></span><h2>Runcard specifications<a class="headerlink" href="#runcard-specifications" title="Link to this heading"></a></h2>
 <p>The basic object required to run the code is a runcard.
 In this section we document the different parameters which have to be specified here.
 As example we will refer to the runcard to reproduce <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code>,
@@ -144,7 +145,7 @@ After cloning the repository, run</p>
 In the folder <code class="docutils literal notranslate"><span class="pre">smefit_database/runcards</span></code> the input runcards for MC and NS fits with both linear (NHO)
 and linear+quadratic corrections (HO) are available.</p>
 <section id="input-and-output-path">
-<h3>Input and output path<a class="headerlink" href="#input-and-output-path" title="Permalink to this heading"></a></h3>
+<h3>Input and output path<a class="headerlink" href="#input-and-output-path" title="Link to this heading"></a></h3>
 <p>The path to where the experimental data and the corresponding theory tables are stored
 is automatically set to those contained in <code class="docutils literal notranslate"><span class="pre">smefit_dayabase</span></code> by the script <code class="docutils literal notranslate"><span class="pre">update_runcards_path.py</span></code>.
 The user can change them manually if other set of data are desired.
@@ -159,7 +160,7 @@ If <code class="docutils literal notranslate"><span class="pre">result_ID</span>
 </div>
 </section>
 <section id="theory-specifications">
-<h3>Theory specifications<a class="headerlink" href="#theory-specifications" title="Permalink to this heading"></a></h3>
+<h3>Theory specifications<a class="headerlink" href="#theory-specifications" title="Link to this heading"></a></h3>
 <p>The perturbative order of the QCD theory prediction (LO or NLO) should be specified using <code class="docutils literal notranslate"><span class="pre">order</span></code>.
 <code class="docutils literal notranslate"><span class="pre">use_quad</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">True</span></code> for a fit with quadratic corrections, <code class="docutils literal notranslate"><span class="pre">use_t0</span></code> controls the use
 of the <code class="docutils literal notranslate"><span class="pre">t0</span></code> prescription and <code class="docutils literal notranslate"><span class="pre">use_theory_covmat</span></code> specifies whether or not to use the theory covariance matrix
@@ -172,7 +173,7 @@ which can be specified in the theory files.</p>
 </div>
 </section>
 <section id="minimizer-specifications">
-<h3>Minimizer specifications<a class="headerlink" href="#minimizer-specifications" title="Permalink to this heading"></a></h3>
+<h3>Minimizer specifications<a class="headerlink" href="#minimizer-specifications" title="Link to this heading"></a></h3>
 <p>The different parameters controlling the minimizer used in the analysis are specified here.
 If <code class="docutils literal notranslate"><span class="pre">single_parameter_fits</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the Wilson coefficient specified in the run-card
 will be fit one at time, setting all the others to 0. See <a class="reference external" href="./example.html#single-parameter-fits">here</a> for more details.
@@ -198,7 +199,7 @@ Pairwise fits are supported only with |NS|.</p>
 </div>
 </section>
 <section id="datasets-to-consider-and-coefficients-to-fit">
-<h3>Datasets to consider and coefficients to fit<a class="headerlink" href="#datasets-to-consider-and-coefficients-to-fit" title="Permalink to this heading"></a></h3>
+<h3>Datasets to consider and coefficients to fit<a class="headerlink" href="#datasets-to-consider-and-coefficients-to-fit" title="Link to this heading"></a></h3>
 <p>The datasets and Wilson coefficients to be included in the analysis must be listed under <code class="docutils literal notranslate"><span class="pre">datasets</span></code>
 and <code class="docutils literal notranslate"><span class="pre">coefficients</span></code> respectively.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">datasets</span><span class="p">:</span>
@@ -233,7 +234,7 @@ and <code class="docutils literal notranslate"><span class="pre">coefficients</s
 will perform the sampling.</p>
 </section>
 <section id="constrains-between-coefficients">
-<h3>Constrains between coefficients<a class="headerlink" href="#constrains-between-coefficients" title="Permalink to this heading"></a></h3>
+<h3>Constrains between coefficients<a class="headerlink" href="#constrains-between-coefficients" title="Link to this heading"></a></h3>
 <p>Some Wilson coefficients are not directly fit, but rather constrained to be linear combinations
 of the other ones. Taking as example some coefficient of the Higgs sector considered in <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code>,
 this can be specified in the runcard in the following way</p>
@@ -251,7 +252,7 @@ this can be specified in the runcard in the following way</p>
 </div>
 </section>
 <section id="fit-in-different-basis">
-<h3>Fit in different basis<a class="headerlink" href="#fit-in-different-basis" title="Permalink to this heading"></a></h3>
+<h3>Fit in different basis<a class="headerlink" href="#fit-in-different-basis" title="Link to this heading"></a></h3>
 <p>It is possible to run a fit using a different basis.
 In this case the coefficients specified in the runcard should be the ones to fit, and
 a rotation basis defining the new basis in terms of the Warsaw basis should be given as input. This can be done
@@ -262,7 +263,7 @@ using the option below.</p>
 </section>
 </section>
 <section id="running-a-fit-with-ns">
-<span id="ns"></span><h2>Running a fit with NS<a class="headerlink" href="#running-a-fit-with-ns" title="Permalink to this heading"></a></h2>
+<span id="ns"></span><h2>Running a fit with NS<a class="headerlink" href="#running-a-fit-with-ns" title="Link to this heading"></a></h2>
 <p>To run a fiy using Nested Sampling use the command</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">smefit NS path/to/the/runcard/runcard.yaml</span>
 </pre></div>
@@ -271,7 +272,7 @@ using the option below.</p>
 containing the posterior distribution of the coefficients specified in the runcard.</p>
 </section>
 <section id="running-a-fit-with-mc">
-<span id="mc"></span><h2>Running a fit with MC<a class="headerlink" href="#running-a-fit-with-mc" title="Permalink to this heading"></a></h2>
+<span id="mc"></span><h2>Running a fit with MC<a class="headerlink" href="#running-a-fit-with-mc" title="Link to this heading"></a></h2>
 <p>The basic command to run a fit using Monte Carlo is</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>MC<span class="w"> </span>path/to/the/runcard/runcard.yaml<span class="w"> </span>-n<span class="w"> </span>replica_number
 </pre></div>
@@ -289,7 +290,7 @@ Replicas not satisfying the PostFit criteria will be discarded. If the final num
 The final output is the file <code class="docutils literal notranslate"><span class="pre">posterior.json</span></code> containing the full posterior of the Wilson coefficients.</p>
 </section>
 <section id="single-parameter-fits">
-<h2>Single parameter fits<a class="headerlink" href="#single-parameter-fits" title="Permalink to this heading"></a></h2>
+<h2>Single parameter fits<a class="headerlink" href="#single-parameter-fits" title="Link to this heading"></a></h2>
 <p>Given a runcard with a number of Wilson coefficients specified, it is possible to fit each of them in turn,
 keeping all the other ones fix to 0.
 To do this add to the runcard</p>
@@ -301,7 +302,7 @@ For both NS and MC, the final output will be the file <code class="docutils lite
 containing the independent posterior of the fitted Wilson coefficients, obtained by a series os independent single parameter fits.</p>
 </section>
 <section id="individual-parameter-scan">
-<h2>Individual parameter scan<a class="headerlink" href="#individual-parameter-scan" title="Permalink to this heading"></a></h2>
+<h2>Individual parameter scan<a class="headerlink" href="#individual-parameter-scan" title="Link to this heading"></a></h2>
 <p>The code can also be used to produce 1-dimensional scans of the chi2 function.
 The command</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>SCAN<span class="w"> </span>/path/to/the/runcard/runcard.yaml
