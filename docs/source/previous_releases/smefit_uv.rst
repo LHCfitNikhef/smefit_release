@@ -4,7 +4,7 @@ The automation of SMEFT-Assisted Constraints on UV-Complete Models
 On this page, we collect additional results we obtained on the constraints of UV models matched to the SMEFT as presented in:
 
 
-- *The automation of SMEFT-Assisted Constraints on UV-Complete Models*,  J. ter Hoeve, G.Magni, J. Rojo, A. N. Rossia and E. Vryonidou :cite:`Smefit_uv`
+- *The automation of SMEFT-Assisted Constraints on UV-Complete Models*,  J. ter Hoeve, G.Magni, J. Rojo, A. N. Rossia and E. Vryonidou :cite:`terHoeve:2023pvs`
 
 Using both tree-level and one-loop matching, we derive bounds on a wide range of single- and multi-particle extensions of the SM from a
 global dataset composed by LHC and LEP measurements. Whenever possible, we benchmark our results
