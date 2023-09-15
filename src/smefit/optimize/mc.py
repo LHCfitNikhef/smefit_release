@@ -124,7 +124,7 @@ class MCOptimizer(Optimizer):
             config.get("use_multiplicative_prescription", False),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
-            config.get("uv_coupligs", False),
+            config.get("uv_couplings", False),
         )
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])

@@ -1,0 +1,69 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 45
+Model name : \text{Q1}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lamQ1uf3]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 # TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{lamQ1uf3: [0.,0]}]
+cpB : [{lamQ1uf3: [0.,0]}]
+cpW : [{lamQ1uf3: [0.,0]}]
+cpWB : [{lamQ1uf3: [0.,0]}]
+cpd : [{lamQ1uf3: [0.,0]}]
+cpD : [{lamQ1uf3: [0.,0]}]
+cWWW : [{lamQ1uf3: [0.,0]}]
+cpqMi : [{lamQ1uf3: [0.,0]}]
+cpQM : [{lamQ1uf3: [0.,0]}]
+c3pq : [{lamQ1uf3: [0.,0]}]
+c3pQ3 : [{lamQ1uf3: [0.,0]}]
+cpl1 : [{lamQ1uf3: [0.,0]}]
+cpl2 : [{lamQ1uf3: [0.,0]}]
+cpl3 : [{lamQ1uf3: [0.,0]}]
+c3pl1 : [{lamQ1uf3: [0.,0]}]
+c3pl2 : [{lamQ1uf3: [0.,0]}]
+c3pl3 : [{lamQ1uf3: [0.,0]}]
+cpui : [{lamQ1uf3: [0.,0]}]
+cpdi : [{lamQ1uf3: [0.,0]}]
+cpt : [{lamQ1uf3: [-0.5,2]}]
+cpe : [{lamQ1uf3: [0.,0]}]
+cpmu : [{lamQ1uf3: [0.,0]}]
+cpta : [{lamQ1uf3: [0.,0]}]
+c81qq : [{lamQ1uf3: [0.,0]}]
+c11qq : [{lamQ1uf3: [0.,0]}]
+c83qq : [{lamQ1uf3: [0.,0]}]
+c13qq : [{lamQ1uf3: [0.,0]}]
+c8qt : [{lamQ1uf3: [0.,0]}]
+c1qt : [{lamQ1uf3: [0.,0]}]
+c8ut : [{lamQ1uf3: [0.,0]}]
+c1ut : [{lamQ1uf3: [0.,0]}]
+c8qu : [{lamQ1uf3: [0.,0]}]
+c1qu : [{lamQ1uf3: [0.,0]}]
+c8dt : [{lamQ1uf3: [0.,0]}]
+c1dt : [{lamQ1uf3: [0.,0]}]
+c8qd : [{lamQ1uf3: [0.,0]}]
+c1qd : [{lamQ1uf3: [0.,0]}]
+cQQ1 : [{lamQ1uf3: [0.,0]}]
+cQQ8 : [{lamQ1uf3: [0.,0]}]
+cQt1 : [{lamQ1uf3: [0.,0]}]
+cQt8 : [{lamQ1uf3: [0.,0]}]
+ctt1 : [{lamQ1uf3: [0.,0]}]
+cll : [{lamQ1uf3: [0.,0]}]
+cll1111 : [{lamQ1uf3: [0.,0]}]
+cbp : [{lamQ1uf3: [0.,0]}]
+ctp : [{lamQ1uf3: [0.4961407177231255,2]}]
+ctG : [{lamQ1uf3: [0.,0]}]
+ccp : [{lamQ1uf3: [0.,0]}]
+ctap : [{lamQ1uf3: [0.,0]}]
+ctW : [{lamQ1uf3: [0.,0]}]
+ctZ : [{lamQ1uf3: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_Local_New_Yukas_indepcll1111_Upto48_01_09_2023.wxf
+# Export date: Fri 1 Sep 2023 13:14:24

@@ -1,0 +1,69 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 19
+Model name : \Upsilon
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [yUpsf33]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 # TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{yUpsf33: [0.,0]}]
+cpB : [{yUpsf33: [0.,0]}]
+cpW : [{yUpsf33: [0.,0]}]
+cpWB : [{yUpsf33: [0.,0]}]
+cpd : [{yUpsf33: [0.,0]}]
+cpD : [{yUpsf33: [0.,0]}]
+cWWW : [{yUpsf33: [0.,0]}]
+cpqMi : [{yUpsf33: [0.,0]}]
+cpQM : [{yUpsf33: [0.,0]}]
+c3pq : [{yUpsf33: [0.,0]}]
+c3pQ3 : [{yUpsf33: [0.,0]}]
+cpl1 : [{yUpsf33: [0.,0]}]
+cpl2 : [{yUpsf33: [0.,0]}]
+cpl3 : [{yUpsf33: [0.,0]}]
+c3pl1 : [{yUpsf33: [0.,0]}]
+c3pl2 : [{yUpsf33: [0.,0]}]
+c3pl3 : [{yUpsf33: [0.,0]}]
+cpui : [{yUpsf33: [0.,0]}]
+cpdi : [{yUpsf33: [0.,0]}]
+cpt : [{yUpsf33: [0.,0]}]
+cpe : [{yUpsf33: [0.,0]}]
+cpmu : [{yUpsf33: [0.,0]}]
+cpta : [{yUpsf33: [0.,0]}]
+c81qq : [{yUpsf33: [0.,0]}]
+c11qq : [{yUpsf33: [0.,0]}]
+c83qq : [{yUpsf33: [0.,0]}]
+c13qq : [{yUpsf33: [0.,0]}]
+c8qt : [{yUpsf33: [0.,0]}]
+c1qt : [{yUpsf33: [0.,0]}]
+c8ut : [{yUpsf33: [0.,0]}]
+c1ut : [{yUpsf33: [0.,0]}]
+c8qu : [{yUpsf33: [0.,0]}]
+c1qu : [{yUpsf33: [0.,0]}]
+c8dt : [{yUpsf33: [0.,0]}]
+c1dt : [{yUpsf33: [0.,0]}]
+c8qd : [{yUpsf33: [0.,0]}]
+c1qd : [{yUpsf33: [0.,0]}]
+cQQ1 : [{yUpsf33: [1.3333333333333333,2]}]
+cQQ8 : [{yUpsf33: [2.,2]}]
+cQt1 : [{yUpsf33: [0.,0]}]
+cQt8 : [{yUpsf33: [0.,0]}]
+ctt1 : [{yUpsf33: [0.,0]}]
+cll : [{yUpsf33: [0.,0]}]
+cll1111 : [{yUpsf33: [0.,0]}]
+cbp : [{yUpsf33: [0.,0]}]
+ctp : [{yUpsf33: [0.,0]}]
+ctG : [{yUpsf33: [0.,0]}]
+ccp : [{yUpsf33: [0.,0]}]
+ctap : [{yUpsf33: [0.,0]}]
+ctW : [{yUpsf33: [0.,0]}]
+ctZ : [{yUpsf33: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_Local_New_Yukas_indepcll1111_Upto48_01_09_2023.wxf
+# Export date: Fri 1 Sep 2023 13:14:22
