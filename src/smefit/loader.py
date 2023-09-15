@@ -450,7 +450,7 @@ def load_datasets(
     use_multiplicative_prescription,
     theory_path=None,
     rot_to_fit_basis=None,
-    has_uv_coupligs=False,
+    has_uv_couplings=False,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
@@ -521,7 +521,7 @@ def load_datasets(
     sorted_keys = None
     # if uv couplings are present allow for op which are not in the
     # theory files
-    if has_uv_coupligs:
+    if has_uv_couplings:
         sorted_keys = np.unique((*operators_to_keep,))
     operators_names, lin_corr_values = construct_corrections_matrix(
         lin_corr_list, n_data_tot, sorted_keys
