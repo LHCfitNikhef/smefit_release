@@ -1,0 +1,32 @@
+# path to save projections
+projections_path: /Users/tommy/physics/smefit_release/projections
+
+
+# path to commondata
+commondata_path: /Users/tommy/physics/smefit_release/commondata/
+
+# path to theory tables
+theory_path:  /Users/tommy/physics/smefit_release/theory/
+
+
+# datset for which projections are wanted
+dataset: STXS_2020_public_final
+
+
+# to use SMEFT corrections
+use_smeft: True
+order: NLO
+use_quad: False
+
+# values of coefficients to use to produce projection central values when using SMEFT corrections 
+coefficients:
+
+  c2q2l_01: {'value': 1.0}
+  c2q2l_02: {'value': 1.0}
+  c2q2l_03: {'value': 1.0}
+
+rot_to_fit_basis: /Users/tommy/physics/smefit_release/rotations/fitbasis_28_pars.json
+
+
+
+
