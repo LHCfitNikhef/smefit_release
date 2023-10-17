@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>smefit.runner &mdash; SMEFiT 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SMEFiT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/general.html">Fitting assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/MCFit.html">The Monte Carlo replica method</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../data_theory/data.html">Experimental data format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_theory/theory.html">Theory tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_theory/rotation.html">Basis rotation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../fitting_code/code_struct.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fitting_code/running.html">How to run the code</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reports:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../report/tools.html">Report functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../report/running.html">Produce a report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../report/links.html">Link to reports</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_rw.html">SMEFiT RW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_top.html">SMEFiT Top</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit20.html">SMEFiT2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../people/people.html">People</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../people/people.html#former-members">Former members</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References &amp; API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/smefit/smefit.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz-refs.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMEFiT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">smefit.runner</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for smefit.runner</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">copyfile</span>
+
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
+
+<span class="kn">from</span> <span class="nn">.analyze.pca</span> <span class="kn">import</span> <span class="n">RotateToPca</span>
+<span class="kn">from</span> <span class="nn">.chi2</span> <span class="kn">import</span> <span class="n">Scanner</span>
+<span class="kn">from</span> <span class="nn">.log</span> <span class="kn">import</span> <span class="n">logging</span>
+<span class="kn">from</span> <span class="nn">.optimize.mc</span> <span class="kn">import</span> <span class="n">MCOptimizer</span>
+<span class="kn">from</span> <span class="nn">.optimize.ns</span> <span class="kn">import</span> <span class="n">NSOptimizer</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Runner">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner">[docs]</a>
+<span class="k">class</span> <span class="nc">Runner</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Container for all the possible |SMEFiT| run methods.</span>
+
+<span class="sd">    Init the root path of the package where tables,</span>
+<span class="sd">    results, plot config and reports are stored.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">        run_card : dict</span>
+<span class="sd">            run card dictionary</span>
+<span class="sd">        single_parameter_fits : bool</span>
+<span class="sd">            True for single parameter fits</span>
+<span class="sd">        runcard_file : pathlib.Path, None</span>
+<span class="sd">            path to runcard if already present</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">run_card</span><span class="p">,</span> <span class="n">single_parameter_fits</span><span class="p">,</span> <span class="n">pairwise_fits</span><span class="p">,</span> <span class="n">runcard_file</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span> <span class="o">=</span> <span class="n">run_card</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runcard_file</span> <span class="o">=</span> <span class="n">runcard_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">single_parameter_fits</span> <span class="o">=</span> <span class="n">single_parameter_fits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pairwise_fits</span> <span class="o">=</span> <span class="n">pairwise_fits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_result_folder</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Runner.setup_result_folder">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.setup_result_folder">[docs]</a>
+    <span class="k">def</span> <span class="nf">setup_result_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create result folder and copy the runcard there</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Construct results folder</span>
+        <span class="n">result_ID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span><span class="p">[</span><span class="s2">&quot;result_ID&quot;</span><span class="p">]</span>
+        <span class="n">result_folder</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_card</span><span class="p">[</span><span class="s2">&quot;result_path&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span><span class="p">[</span><span class="s2">&quot;replica&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">res_folder_fit</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">result_folder</span> <span class="o">/</span> <span class="n">result_ID</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;replica_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">run_card</span><span class="p">[</span><span class="s1">&#39;replica&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res_folder_fit</span> <span class="o">=</span> <span class="n">result_folder</span> <span class="o">/</span> <span class="n">result_ID</span>
+
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mkdir -p </span><span class="si">{</span><span class="n">result_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res_folder_fit</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">res_folder_fit</span><span class="si">}</span><span class="s2"> already found, overwriting old results&quot;</span><span class="p">)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mkdir -p </span><span class="si">{</span><span class="n">res_folder_fit</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Copy yaml runcard to results folder or dump it</span>
+        <span class="c1"># in case no given file is passed</span>
+        <span class="n">runcard_copy</span> <span class="o">=</span> <span class="n">result_folder</span> <span class="o">/</span> <span class="n">result_ID</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">.yaml&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runcard_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">runcard_copy</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_card</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">copyfile</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">runcard_file</span><span class="p">,</span>
+                <span class="n">runcard_copy</span><span class="p">,</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Runner.from_file">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.from_file">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">runcard_file</span><span class="p">,</span> <span class="n">replica</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create Runner from a runcard file</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        runcard_file: pathlib.Path, str</span>
+<span class="sd">            path to runcard</span>
+<span class="sd">        replica: int</span>
+<span class="sd">            replica number. Optional used only for MC</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            runner: `smefit.runner.Runner`</span>
+<span class="sd">                instance of class Runner</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># load file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">runcard_file</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;replica&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">replica</span>
+        <span class="c1"># set result ID to runcard name by default</span>
+        <span class="k">if</span> <span class="s2">&quot;result_ID&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;result_ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">runcard_file</span><span class="o">.</span><span class="n">stem</span>
+
+        <span class="n">single_parameter_fits</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;single_parameter_fits&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">pairwise_fits</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pairwise_fits&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">config</span><span class="p">,</span> <span class="n">single_parameter_fits</span><span class="p">,</span> <span class="n">pairwise_fits</span><span class="p">,</span> <span class="n">runcard_file</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Runner.ns">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.ns">[docs]</a>
+    <span class="k">def</span> <span class="nf">ns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a fit with |NS|.&quot;&quot;&quot;</span>
+
+        <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
+        <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">opt</span> <span class="o">=</span> <span class="n">NSOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">opt</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Run optimizer</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">bcast</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">run_sampling</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Runner.mc">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.mc">[docs]</a>
+    <span class="k">def</span> <span class="nf">mc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a fit with |MC|.&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="n">MCOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">run_sampling</span><span class="p">()</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Runner.rotate_to_pca">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.rotate_to_pca">[docs]</a>
+    <span class="k">def</span> <span class="nf">rotate_to_pca</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rotate input basis to PCA basis&quot;</span><span class="p">)</span>
+        <span class="n">pca_rot</span> <span class="o">=</span> <span class="n">RotateToPca</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_card</span><span class="p">)</span>
+        <span class="n">pca_rot</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+        <span class="n">pca_rot</span><span class="o">.</span><span class="n">update_runcard</span><span class="p">()</span>
+        <span class="n">pca_rot</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Runner.global_analysis">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.global_analysis">[docs]</a>
+    <span class="k">def</span> <span class="nf">global_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a global fit using the selected optimizer</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        optimizer: string</span>
+<span class="sd">            optimizer to be used (NS or MC)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span>
+        <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;NS&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;MC&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mc</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Runner.single_parameter_analysis">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.single_parameter_analysis">[docs]</a>
+    <span class="k">def</span> <span class="nf">single_parameter_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a seried of single parameter fits for all the operators specified in the runcard</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        optimizer: string</span>
+<span class="sd">            optimizer to be used (NS or MC)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span>
+        <span class="k">for</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">single_coeff_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="n">single_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">single_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;NS&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">(</span><span class="n">single_coeff_config</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;MC&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mc</span><span class="p">(</span><span class="n">single_coeff_config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Runner.pairwise_analysis">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.pairwise_analysis">[docs]</a>
+    <span class="k">def</span> <span class="nf">pairwise_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a series of pairwise parameter fits for all the operators specified in the runcard</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        optimizer: string</span>
+<span class="sd">            optimizer to be used (NS or MC)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">pairwise_coeff_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="n">pairwise_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">pairwise_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">c1</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">c1</span><span class="p">]</span>
+            <span class="n">pairwise_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">c2</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">c2</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;NS&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">(</span><span class="n">pairwise_coeff_config</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;MC&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mc</span><span class="p">(</span><span class="n">pairwise_coeff_config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Runner.run_analysis">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.run_analysis">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run either the global analysis or a series of single parameter fits</span>
+<span class="sd">        using the selected optimizer.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        optimizer: string</span>
+<span class="sd">            optimizer to be used (NS or MC)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_parameter_fits</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">single_parameter_analysis</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairwise_fits</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pairwise_analysis</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_analysis</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Runner.chi2_scan">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.chi2_scan">[docs]</a>
+    <span class="k">def</span> <span class="nf">chi2_scan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_replica</span><span class="p">,</span> <span class="n">compute_bounds</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Run an individual :math:`\chi^2` scan.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_replica: int</span>
+<span class="sd">            number of replicas to use.</span>
+<span class="sd">            If 0 only the :math:`\chi^2` experimental data</span>
+<span class="sd">            will be computed.</span>
+<span class="sd">        compute_bounds: bool</span>
+<span class="sd">            if True compute and save the :math:`\chi^2` bounds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scan</span> <span class="o">=</span> <span class="n">Scanner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_card</span><span class="p">,</span> <span class="n">n_replica</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">compute_bounds</span><span class="p">:</span>
+            <span class="n">scan</span><span class="o">.</span><span class="n">compute_bounds</span><span class="p">()</span>
+        <span class="n">scan</span><span class="o">.</span><span class="n">compute_scan</span><span class="p">()</span>
+        <span class="n">scan</span><span class="o">.</span><span class="n">plot_scan</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, the SMEFiT developers&#39; team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

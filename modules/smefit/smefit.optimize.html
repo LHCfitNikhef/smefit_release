@@ -17,6 +17,7 @@
         <script src="../../_static/documentation_options.js?v=01f34227"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -88,24 +89,25 @@
 <li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html">smefit.analyze package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.cli.html">smefit.cli package</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">smefit.optimize package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.optimize.Optimizer"><code class="docutils literal notranslate"><span class="pre">Optimizer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#smefit-optimize-mc-module">smefit.optimize.mc module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#smefit-optimize-ns-module">smefit.optimize.ns module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smefit.optimize.mc">smefit.optimize.mc module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smefit.optimize.ns">smefit.optimize.ns module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html">smefit.postfit package</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="smefit.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.html#smefit-basis-rotation-module">smefit.basis_rotation module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.html#smefit-chi2-module">smefit.chi2 module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.html#smefit-coefficients-module">smefit.coefficients module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.html#smefit-compute-theory-module">smefit.compute_theory module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.html#smefit-covmat-module">smefit.covmat module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.html#smefit-fit-manager-module">smefit.fit_manager module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.html#smefit-loader-module">smefit.loader module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.html#smefit-log-module">smefit.log module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.html#smefit-runner-module">smefit.runner module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.basis_rotation">smefit.basis_rotation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.chi2">smefit.chi2 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.coefficients">smefit.coefficients module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.compute_theory">smefit.compute_theory module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.covmat">smefit.covmat module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.fit_manager">smefit.fit_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.loader">smefit.loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.log">smefit.log module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.runner">smefit.runner module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../zzz-refs.html">References</a></li>
@@ -136,16 +138,298 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="smefit-optimize-package">
-<h1>smefit.optimize package<a class="headerlink" href="#smefit-optimize-package" title="Link to this heading"></a></h1>
+  <section id="module-smefit.optimize">
+<span id="smefit-optimize-package"></span><h1>smefit.optimize package<a class="headerlink" href="#module-smefit.optimize" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.optimize.Optimizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.optimize.</span></span><span class="sig-name descname"><span class="pre">Optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loaded_datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_parameter_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize.html#Optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.Optimizer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Common interface for Chi2 profile, NS and McFiT</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results_path</strong> (<em>pathlib.path</em>) – </p></li>
+<li><p><strong>loaded_datasets</strong> (<a class="reference internal" href="smefit.html#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a><em>,</em>) – dataset tuple</p></li>
+<li><p><strong>coefficients</strong> – </p></li>
+<li><p><strong>use_quad</strong> – if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> correction</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.Optimizer.chi2_func">
+<span class="sig-name descname"><span class="pre">chi2_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_replica</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize.html#Optimizer.chi2_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.Optimizer.chi2_func" title="Link to this definition"></a></dt>
+<dd><p>Wrap the math:<cite>chi^2</cite> in a function for the optimizer. Pass noise and
+data info as args. Log the math:<cite>chi^2</cite> value and values of the coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>current_chi2</strong> – computed <span class="math notranslate nohighlight">\(\chi^2\)</span></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.Optimizer.dump_posterior">
+<span class="sig-name descname"><span class="pre">dump_posterior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posterior_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize.html#Optimizer.dump_posterior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.Optimizer.dump_posterior" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.optimize.Optimizer.free_parameters">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">free_parameters</span></span><a class="headerlink" href="#smefit.optimize.Optimizer.free_parameters" title="Link to this definition"></a></dt>
+<dd><p>Returns the free parameters entering fit</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.Optimizer.generate_chi2_table">
+<span class="sig-name descname"><span class="pre">generate_chi2_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chi2_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2_tot</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize.html#Optimizer.generate_chi2_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.Optimizer.generate_chi2_table" title="Link to this definition"></a></dt>
+<dd><p>Generate log <span class="math notranslate nohighlight">\(\chi^2\)</span> table</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.optimize.Optimizer.print_rate">
+<span class="sig-name descname"><span class="pre">print_rate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">500</span></em><a class="headerlink" href="#smefit.optimize.Optimizer.print_rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="smefit-optimize-mc-module">
-<h2>smefit.optimize.mc module<a class="headerlink" href="#smefit-optimize-mc-module" title="Link to this heading"></a></h2>
+<section id="module-smefit.optimize.mc">
+<span id="smefit-optimize-mc-module"></span><h2>smefit.optimize.mc module<a class="headerlink" href="#module-smefit.optimize.mc" title="Link to this heading"></a></h2>
+<p>Fitting the Wilson coefficients with <abbr title="Monte Carlo">MC</abbr>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.optimize.mc.MCOptimizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.optimize.mc.</span></span><span class="sig-name descname"><span class="pre">MCOptimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loaded_datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replica</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_parameter_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_bounds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimizer_specs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/mc.html#MCOptimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.mc.MCOptimizer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smefit.optimize.Optimizer" title="smefit.optimize.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Optimizer</span></code></a></p>
+<p>Optimizer specification for <abbr title="Monte Carlo">MC</abbr>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loaded_datasets</strong> (<cite>smefit.loader.DataTuple</cite>) – dataset tuple</p></li>
+<li><p><strong>coefficients</strong> (<cite>smefit.coefficients.CoefficientManager</cite>) – instance of <cite>CoefficientManager</cite> with all the relevant coefficients to fit</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – If True use also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>result_ID</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – result ID</p></li>
+<li><p><strong>replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – replica number</p></li>
+<li><p><strong>single_parameter_fits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – True for individual scan fits</p></li>
+<li><p><strong>use_bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – If true start the minimization with the specified values of min and max for each coeffient</p></li>
+<li><p><strong>minimizer_specs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – <p>minimizer options. The allowed optrions are:</p>
+<p>Args:</p>
+<ul>
+<li><p>mc_minimiser: minimizer alogrithm: ‘cma’, ‘dual_annealing’, ‘trust-constr’.</p></li>
+<li><p>maxiter: number of maximium iterations.</p></li>
+<li><p>restarts: only for cma, number of restarts (&lt; 9).</p></li>
+<li><dl class="simple">
+<dt>initial_temp: only for dual_annealing.</dt><dd><p>The initial temperature, use higher values to facilitates a wider search
+of the energy landscape, allowing dual_annealing to escape local minima that it is trapped in.
+Default value is 5230. Range is (0.01, 5.e4].</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>restart_temp_ratio: only for dual_annealing.</dt><dd><p>During the annealing process, temperature is decreasing,
+when it reaches initial_temp * restart_temp_ratio, the reannealing process is triggered.
+Default value of the ratio is 2e-5. Range is (0, 1).</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>See also <cite>cma.fmin</cite>, <cite>scipy.optimize.minimize</cite>, <cite>scipy.optimize.dual_annealing</cite>.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.mc.MCOptimizer.chi2_func_mc">
+<span class="sig-name descname"><span class="pre">chi2_func_mc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/mc.html#MCOptimizer.chi2_func_mc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.mc.MCOptimizer.chi2_func_mc" title="Link to this definition"></a></dt>
+<dd><p>Wrap the chi2 in a function for the optimizer. Pass noise and
+data info as args. Log the chi2 value and values of the coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<em>np.ndarray</em>) – noise and data info</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>chi2 value</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.mc.MCOptimizer.from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/mc.html#MCOptimizer.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.mc.MCOptimizer.from_dict" title="Link to this definition"></a></dt>
+<dd><p>Create object from theory dictionary.
+The default minimizer is trust-constr.</p>
+<p>The minimizer options have to be specified with:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">mc_minimiser:</span> <span class="pre">'cma'</span>
+<span class="pre">maxiter:</span> <span class="pre">100000</span>
+<span class="pre">restarts:</span> <span class="pre">0</span>
+<span class="pre">`</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – configuration dictionary</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>created object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#smefit.optimize.Optimizer" title="smefit.optimize.Optimizer">Optimizer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.mc.MCOptimizer.get_status">
+<span class="sig-name descname"><span class="pre">get_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chi2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/mc.html#MCOptimizer.get_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.mc.MCOptimizer.get_status" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.mc.MCOptimizer.run_sampling">
+<span class="sig-name descname"><span class="pre">run_sampling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/mc.html#MCOptimizer.run_sampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.mc.MCOptimizer.run_sampling" title="Link to this definition"></a></dt>
+<dd><p>Run the minimization with <abbr title="Monte Carlo">MC</abbr>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.mc.MCOptimizer.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/mc.html#MCOptimizer.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.mc.MCOptimizer.save" title="Link to this definition"></a></dt>
+<dd><p>Save MC replicas to json inside a dictionary:
+{coff: replica values}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – result dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="smefit-optimize-ns-module">
-<h2>smefit.optimize.ns module<a class="headerlink" href="#smefit-optimize-ns-module" title="Link to this heading"></a></h2>
+<section id="module-smefit.optimize.ns">
+<span id="smefit-optimize-ns-module"></span><h2>smefit.optimize.ns module<a class="headerlink" href="#module-smefit.optimize.ns" title="Link to this heading"></a></h2>
+<p>Fitting the Wilson coefficients with NS</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.optimize.ns.</span></span><span class="sig-name descname"><span class="pre">NSOptimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loaded_datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_parameter_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairwise_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">live_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">efficiency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const_efficiency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#smefit.optimize.Optimizer" title="smefit.optimize.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Optimizer</span></code></a></p>
+<p>Optimizer specification for <abbr title="Nested Sampling">NS</abbr></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loaded_datasets</strong> (<cite>smefit.loader.DataTuple</cite>,) – dataset tuple</p></li>
+<li><p><strong>coefficients</strong> (<cite>smefit.coefficients.CoefficientManager</cite>) – instance of <cite>CoefficientManager</cite> with all the relevant coefficients to fit</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – If True use also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>live_points</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of <abbr title="Nested Sampling">NS</abbr> live points</p></li>
+<li><p><strong>efficiency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – sampling efficiency</p></li>
+<li><p><strong>const_efficiency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True use the constant efficiency mode</p></li>
+<li><p><strong>tolerance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – evidence tolerance</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.chi2_func_ns">
+<span class="sig-name descname"><span class="pre">chi2_func_ns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.chi2_func_ns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.chi2_func_ns" title="Link to this definition"></a></dt>
+<dd><p>Wrap the chi2 in a function for the optimizer. Pass noise and
+data info as args. Log the chi2 value and values of the coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<em>np.ndarray</em>) – noise and data info</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>current_chi2</strong> – chi2 function</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.clean">
+<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.clean" title="Link to this definition"></a></dt>
+<dd><p>Remove raw <abbr title="Nested Sampling">NS</abbr> output if you want to keep raw output, don’t call this method</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.flat_prior">
+<span class="sig-name descname"><span class="pre">flat_prior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypercube</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.flat_prior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.flat_prior" title="Link to this definition"></a></dt>
+<dd><p>Update the prior function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hypercube</strong> (<em>np.ndarray</em>) – hypercube prior</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>flat_prior</strong> – updated hypercube prior</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.from_dict" title="Link to this definition"></a></dt>
+<dd><p>Create object from theory dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – configuration dictionary</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>cls</strong> – created object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#smefit.optimize.Optimizer" title="smefit.optimize.Optimizer">Optimizer</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.gaussian_loglikelihood">
+<span class="sig-name descname"><span class="pre">gaussian_loglikelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypercube</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.gaussian_loglikelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.gaussian_loglikelihood" title="Link to this definition"></a></dt>
+<dd><p>Multi gaussian log likelihood function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hypercube</strong> (<em>np.ndarray</em>) – hypercube prior</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>-0.5 * chi2</strong> – multi gaussian log likelihood</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.print_rate">
+<span class="sig-name descname"><span class="pre">print_rate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5000</span></em><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.print_rate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.run_sampling">
+<span class="sig-name descname"><span class="pre">run_sampling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.run_sampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.run_sampling" title="Link to this definition"></a></dt>
+<dd><p>Run the minimization with Nested Sampling</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.save" title="Link to this definition"></a></dt>
+<dd><p>Save <abbr title="Nested Sampling">NS</abbr> replicas to json inside a dictionary:
+{coff: [replicas values]}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – result dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>smefit.analyze.chi2_utils &mdash; SMEFiT 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            SMEFiT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/general.html">Fitting assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/MCFit.html">The Monte Carlo replica method</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_theory/data.html">Experimental data format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_theory/theory.html">Theory tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_theory/rotation.html">Basis rotation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../fitting_code/code_struct.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../fitting_code/running.html">How to run the code</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reports:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../report/tools.html">Report functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../report/running.html">Produce a report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../report/links.html">Link to reports</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit_rw.html">SMEFiT RW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit_top.html">SMEFiT Top</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit20.html">SMEFiT2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../people/people.html">People</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../people/people.html#former-members">Former members</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References &amp; API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules/smefit/smefit.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../zzz-refs.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SMEFiT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../analyze.html">smefit.analyze</a></li>
+      <li class="breadcrumb-item active">smefit.analyze.chi2_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for smefit.analyze.chi2_utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">chi2table_header</span><span class="p">,</span> <span class="n">latex_packages</span>
+
+
+<div class="viewcode-block" id="Chi2tableCalculator">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator">[docs]</a>
+<span class="k">class</span> <span class="nc">Chi2tableCalculator</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the :math:`\chi^2` for each replica and produce:</span>
+
+<span class="sd">        * Tables with :math:`\chi^2` for each dataset and datagroup.</span>
+<span class="sd">        * Plot of :math:`\chi^2` for each dataset.</span>
+<span class="sd">        * Plot of :math:`\chi^2` for each replica</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data_info: pandas.DataFrame</span>
+<span class="sd">        datasets information (references and data groups)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_info</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span> <span class="o">=</span> <span class="n">data_info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm_grouped</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Chi2tableCalculator.compute">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.compute">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">smeft_predictions</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the :math:`\chi^2` for each replica and dataset.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            datasets: smefit.loader.DataTuple</span>
+<span class="sd">                loaded datasets</span>
+<span class="sd">            smeft_predictions: np.ndarray</span>
+<span class="sd">                array with all the predictions for each replica</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame:</span>
+<span class="sd">            :math:`\chi^2` for each dataset</span>
+<span class="sd">        np.ndarray:</span>
+<span class="sd">            :math:`\chi^2/n_{pts}` for each replica</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">chi2</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">chi2_sm</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">chi2_rep</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">Commondata</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">smeft_predictions</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">covmat_diff</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">InvCovMat</span> <span class="o">@</span> <span class="n">diff</span>
+
+        <span class="n">diff_sm</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">Commondata</span> <span class="o">-</span> <span class="n">datasets</span><span class="o">.</span><span class="n">SMTheory</span>
+        <span class="n">covmat_diff_sm</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">InvCovMat</span> <span class="o">@</span> <span class="n">diff_sm</span>
+
+        <span class="c1"># do the difference replica by replica and multiply by cov inverse</span>
+        <span class="n">diff_rep</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">datasets</span><span class="o">.</span><span class="n">Commondata</span><span class="p">,</span> <span class="p">(</span><span class="n">smeft_predictions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="o">-</span> <span class="n">smeft_predictions</span>
+        <span class="p">)</span>
+        <span class="n">covmat_diff_rep</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">InvCovMat</span> <span class="o">@</span> <span class="n">diff_rep</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="c1"># Compute per experiment</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ndat_exp</span> <span class="ow">in</span> <span class="n">datasets</span><span class="o">.</span><span class="n">NdataExp</span><span class="p">:</span>
+
+            <span class="n">chi2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+                    <span class="n">diff</span><span class="p">[</span><span class="n">cnt</span> <span class="p">:</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat_exp</span><span class="p">],</span>
+                    <span class="n">covmat_diff</span><span class="p">[</span><span class="n">cnt</span> <span class="p">:</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat_exp</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">chi2_sm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+                    <span class="n">diff_sm</span><span class="p">[</span><span class="n">cnt</span> <span class="p">:</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat_exp</span><span class="p">],</span>
+                    <span class="n">covmat_diff_sm</span><span class="p">[</span><span class="n">cnt</span> <span class="p">:</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat_exp</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Compute chi2 by replica</span>
+            <span class="c1"># multiply the second term of the chi2 and</span>
+            <span class="c1"># take the diagonal (replica left = replica right).</span>
+            <span class="c1"># here np.einsum is faster than np.diag(a @ b), since</span>
+            <span class="c1"># a and b are large usually</span>
+            <span class="n">chi2_rep</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+                    <span class="s2">&quot;ij,ji-&gt;i&quot;</span><span class="p">,</span>
+                    <span class="n">diff_rep</span><span class="p">[:,</span> <span class="n">cnt</span> <span class="p">:</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat_exp</span><span class="p">],</span>
+                    <span class="n">covmat_diff_rep</span><span class="p">[</span><span class="n">cnt</span> <span class="p">:</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat_exp</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">cnt</span> <span class="o">+=</span> <span class="n">ndat_exp</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;ndat&quot;</span><span class="p">:</span> <span class="n">datasets</span><span class="o">.</span><span class="n">NdataExp</span><span class="p">,</span>
+                    <span class="s2">&quot;chi2&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">chi2</span><span class="p">),</span>
+                    <span class="s2">&quot;chi2_std&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">chi2_rep</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="s2">&quot;chi2_sm&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">chi2_sm</span><span class="p">),</span>
+                <span class="p">},</span>
+                <span class="n">index</span><span class="o">=</span><span class="n">datasets</span><span class="o">.</span><span class="n">ExpNames</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">chi2_rep</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">datasets</span><span class="o">.</span><span class="n">Commondata</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Chi2tableCalculator.add_normalized_chi2">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.add_normalized_chi2">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">add_normalized_chi2</span><span class="p">(</span><span class="n">chi2_df</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add the normalized :math:`\chi^2` to the table.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        chi2_df : pd.DataFrame</span>
+<span class="sd">            :math:`\chi^2` table for each dataset</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame:</span>
+<span class="sd">            :math:`\chi^2` table for each dataset with normalization</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># reduced chi2</span>
+        <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2/ndat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;ndat&quot;</span><span class="p">]</span>
+        <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2_sm/ndat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2_sm&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;ndat&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">chi2_df</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_add_chi2_df_colors</span><span class="p">(</span><span class="n">chi2_df</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Values higer than one std are labelled with blue.</span>
+<span class="sd">        Values lowe  than one std are labelled with red.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">chi2_upper</span> <span class="o">=</span> <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2_std&quot;</span><span class="p">]</span>
+        <span class="n">chi2_lower</span> <span class="o">=</span> <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2_std&quot;</span><span class="p">]</span>
+        <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+        <span class="n">chi2_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2_sm&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">chi2_upper</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;blue&quot;</span>
+        <span class="n">chi2_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2_sm&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">chi2_lower</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
+        <span class="k">return</span> <span class="n">chi2_df</span>
+
+<div class="viewcode-block" id="Chi2tableCalculator.group_chi2_df">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.group_chi2_df">[docs]</a>
+    <span class="k">def</span> <span class="nf">group_chi2_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_df</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Group the :math:`\chi^2` according to the data type.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        chi2_df : pd.DataFrame</span>
+<span class="sd">            :math:`\chi^2` table for each dataset</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame:</span>
+<span class="sd">            :math:`\chi^2` table with deviation info</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">chi2_df_grouped</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span> <span class="n">chi2_df</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;level_1&quot;</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;chi2_std&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">chi2_df_grouped</span> <span class="o">=</span> <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;level_0&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">numeric_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;data_group&quot;</span>
+
+        <span class="c1"># add total values</span>
+        <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">&quot;Total&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">chi2_df_grouped</span><span class="p">[</span><span class="s2">&quot;chi2/ndat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">chi2_df_grouped</span><span class="p">[</span><span class="s2">&quot;chi2&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">chi2_df_grouped</span><span class="p">[</span><span class="s2">&quot;ndat&quot;</span><span class="p">]</span>
+        <span class="n">chi2_df_grouped</span><span class="p">[</span><span class="s2">&quot;chi2_sm/ndat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">chi2_df_grouped</span><span class="p">[</span><span class="s2">&quot;chi2_sm&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">chi2_df_grouped</span><span class="p">[</span><span class="s2">&quot;ndat&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">chi2_df_grouped</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_split_table_entries_sm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the chi2_df dict for all included datasets.&quot;&quot;&quot;</span>
+        <span class="n">labels_to_include</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ndat&quot;</span><span class="p">,</span> <span class="s2">&quot;chi2_sm/ndat&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">chi2_df</span><span class="p">,</span> <span class="n">chi2_df_grouped</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="n">chi2_dict</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">chi2_dict_group</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span><span class="p">,</span> <span class="n">chi2_df</span><span class="p">[</span><span class="n">labels_to_include</span><span class="p">]],</span>
+                <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm_grouped</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm_grouped</span><span class="p">,</span> <span class="n">chi2_df_grouped</span><span class="p">[</span><span class="n">labels_to_include</span><span class="p">]],</span>
+                <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="c1"># TODO: is this woking with different element in each group?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span><span class="p">[</span>
+            <span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="s2">&quot;first&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm_grouped</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm_grouped</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Chi2tableCalculator.write">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write">[docs]</a>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Write the :math:`\chi^2` latex tables.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        chi2_dict : dict</span>
+<span class="sd">            tables computed with compute() method for each fit</span>
+<span class="sd">        chi2_dict_group: dict</span>
+<span class="sd">            tables obtained with group_chi2_df() method for each fit</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list(str)</span>
+<span class="sd">            list with the latex commands</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_split_table_entries_sm</span><span class="p">(</span><span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">)</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">latex_packages</span><span class="p">()</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="sa">r</span><span class="s2">&quot;\usepackage</span><span class="si">{underscore}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{document}</span><span class="s2">&quot;</span><span class="p">])</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_chi2_grouped</span><span class="p">(</span><span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">))</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">])</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_chi2_summary</span><span class="p">(</span><span class="n">chi2_dict_group</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">L</span></div>
+
+
+<div class="viewcode-block" id="Chi2tableCalculator.write_chi2_grouped">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write_chi2_grouped">[docs]</a>
+    <span class="k">def</span> <span class="nf">write_chi2_grouped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Write the :math:`\chi^2` latex tables for each data group.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        chi2_dict : dict</span>
+<span class="sd">            tables computed with compute() method per each fit</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list(str)</span>
+<span class="sd">            list with the latex commands</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">r</span><span class="s2">&quot;$\chi^2$ table. Blue color text represents a value that is lower than the SM $\chi^2$ </span><span class="se">\</span>
+<span class="s2">            by more than one standard deviation of the $\chi^2$ distribution.</span><span class="se">\</span>
+<span class="s2">            Similarly, red color text represents values that are higher than the SM $\chi^2$ by more than one standard deviation.</span><span class="se">\</span>
+<span class="s2">            In parenthesis is the total SM $\chi^2$ for the dataset included in the fit. </span><span class="se">\\</span><span class="s2">&quot;</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">group</span><span class="p">,</span> <span class="n">datasets</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{table}</span><span class="s2">[H]&quot;</span><span class="p">,</span>
+                    <span class="sa">r</span><span class="s2">&quot;\centering&quot;</span><span class="p">,</span>
+                    <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{tabular}</span><span class="s2">{|l|c|c|&quot;</span> <span class="o">+</span> <span class="s2">&quot;c|&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">chi2_dict</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">chi2table_header</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+            <span class="c1"># loop over datasets</span>
+            <span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">datasets</span><span class="o">.</span><span class="n">droplevel</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">href</span><span class="se">{{</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="se">}}{{</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; &amp; </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span><span class="s1">&#39;ndat&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot; &amp; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span><span class="s1">&#39;chi2_sm/ndat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">chi2_df</span> <span class="ow">in</span> <span class="n">chi2_dict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                    <span class="n">temp</span> <span class="o">+=</span> <span class="s2">&quot; &amp; &quot;</span>
+                    <span class="n">chi2_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_chi2_df_colors</span><span class="p">(</span><span class="n">chi2_df</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">chi2_df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+                        <span class="n">temp</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">textcolor</span><span class="se">{{</span><span class="si">{</span><span class="n">chi2_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;color&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">}}\</span>
+<span class="s2">                            </span><span class="se">{{</span><span class="si">{</span><span class="n">chi2_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;chi2/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="se">}}</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; </span><span class="se">\\</span><span class="s2"> \hline&quot;</span>
+                <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+
+            <span class="n">closing_line</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\hline Total &amp; &amp; &quot;</span>
+            <span class="k">for</span> <span class="n">chi2_df_grouped</span> <span class="ow">in</span> <span class="n">chi2_dict_group</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">closing_line</span> <span class="o">+=</span> <span class="s2">&quot; &amp; &quot;</span>
+                <span class="k">if</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+                    <span class="n">closing_line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;chi2/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;chi2_sm/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="n">closing_line</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; </span><span class="se">\\</span><span class="s2"> \hline&quot;</span>
+            <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">closing_line</span><span class="p">,</span>
+                    <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{tabular}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">caption</span><span class="se">{{</span><span class="s2">$</span><span class="se">\\</span><span class="s2">chi^2$ table for </span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2"> data</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{table}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">L</span></div>
+
+
+<div class="viewcode-block" id="Chi2tableCalculator.write_chi2_summary">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write_chi2_summary">[docs]</a>
+    <span class="k">def</span> <span class="nf">write_chi2_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Write the summary :math:`\chi^2` table for grouped data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        chi2_dict_group : dict</span>
+<span class="sd">            tables obtained with group_chi2_df() method for each fit</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list(str)</span>
+<span class="sd">           list with the latex commands</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{table}</span><span class="s2">[H]&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;\centering&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;\begin</span><span class="si">{tabular}</span><span class="s2">{|l|&quot;</span> <span class="o">+</span> <span class="s2">&quot;c|c|&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">chi2_dict_group</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s2">&quot;\hline&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">chi2_dict_group</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&amp; </span><span class="se">\\</span><span class="s2">multicolumn</span><span class="se">{{</span><span class="s2">2</span><span class="se">}}{{</span><span class="s2">c|</span><span class="se">}}{{</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+        <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2"> \hline&quot;</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;Process &quot;</span>
+            <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot; &amp; $N_{\rm data}$ &amp; $\chi^2/N_{\rm data}$&quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">chi2_dict_group</span><span class="p">)</span>
+            <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2"> \hline&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">for</span> <span class="n">chi2_df_grouped</span> <span class="ow">in</span> <span class="n">chi2_dict_group</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+                    <span class="n">temp</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; &amp; </span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ndat&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                        &amp; </span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;chi2/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                            (</span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">group</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;chi2_sm/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">temp</span> <span class="o">+=</span> <span class="s2">&quot; &amp; &amp; &quot;</span>
+            <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; </span><span class="se">\\</span><span class="s2"> \hline&quot;</span>
+            <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+
+        <span class="n">temp</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot; \hline Total&quot;</span>
+        <span class="k">for</span> <span class="n">chi2_df_grouped</span> <span class="ow">in</span> <span class="n">chi2_dict_group</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">temp</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; &amp; </span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ndat&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                &amp; </span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;chi2/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                    (</span><span class="si">{</span><span class="n">chi2_df_grouped</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;Total&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;chi2_sm/ndat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="n">temp</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot; </span><span class="se">\\</span><span class="s2"> \hline&quot;</span>
+        <span class="n">L</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">temp</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{tabular}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\caption{$\chi^2$ table for grouped data. In parenthesis is the total SM $\chi^2$ for the dataset included in the fit.</span><span class="se">\</span>
+<span class="s2">                    The SM column refers to all the datasets available in the group}&quot;</span><span class="p">,</span>
+                <span class="sa">r</span><span class="s2">&quot;\end</span><span class="si">{table}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">L</span></div>
+
+
+<div class="viewcode-block" id="Chi2tableCalculator.plot_exp">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.plot_exp">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_exp</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">chi2_dict</span><span class="p">,</span>
+        <span class="n">fig_name</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Plots a bar plot of the :math:`\chi^2` values per experiment&quot;&quot;&quot;</span>
+
+        <span class="n">chi2_bar</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">chi2_bar</span><span class="p">[</span><span class="sa">r</span><span class="s2">&quot;${\rm SM}$&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span><span class="p">[</span><span class="s2">&quot;chi2_sm/ndat&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">chi2_df</span> <span class="ow">in</span> <span class="n">chi2_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">chi2_bar</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">chi2_df</span><span class="p">[</span><span class="s2">&quot;chi2/ndat&quot;</span><span class="p">]</span>
+        <span class="n">chi2_bar</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">rm</span><span class="se">{{</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">chi2_bar</span><span class="o">.</span><span class="n">index</span>
+        <span class="p">]</span>
+        <span class="n">chi2_bar</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;barh&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">chi2_bar</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">x_max</span> <span class="o">=</span> <span class="n">chi2_bar</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">x_max</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">chi2_bar</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span>
+            <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\chi^2$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">chi2_bar</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">11</span><span class="p">})</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fig_name</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fig_name</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Chi2tableCalculator.plot_dist">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.plot_dist">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_hist</span><span class="p">,</span> <span class="n">fig_name</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">)):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Plots the :math:`\chi^2` distribution.&quot;&quot;&quot;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">chi2_list</span><span class="p">)</span> <span class="ow">in</span> <span class="n">chi2_hist</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span>
+                <span class="n">chi2_list</span><span class="p">,</span>
+                <span class="n">bins</span><span class="o">=</span><span class="s2">&quot;fd&quot;</span><span class="p">,</span>
+                <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\rm $\chi^2$\ distribution&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">11</span><span class="p">})</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fig_name</span><span class="si">}</span><span class="s2">.pdf&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fig_name</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, the SMEFiT developers&#39; team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

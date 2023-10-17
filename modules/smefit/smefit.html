@@ -17,6 +17,7 @@
         <script src="../../_static/documentation_options.js?v=01f34227"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -92,15 +93,128 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#smefit-basis-rotation-module">smefit.basis_rotation module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#smefit-chi2-module">smefit.chi2 module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#smefit-coefficients-module">smefit.coefficients module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#smefit-compute-theory-module">smefit.compute_theory module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#smefit-covmat-module">smefit.covmat module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#smefit-fit-manager-module">smefit.fit_manager module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#smefit-loader-module">smefit.loader module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#smefit-log-module">smefit.log module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#smefit-runner-module">smefit.runner module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.basis_rotation">smefit.basis_rotation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.basis_rotation.rotate_to_fit_basis"><code class="docutils literal notranslate"><span class="pre">rotate_to_fit_basis()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.chi2">smefit.chi2 module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.chi2.Scanner"><code class="docutils literal notranslate"><span class="pre">Scanner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.chi2.Scanner.compute_bounds"><code class="docutils literal notranslate"><span class="pre">Scanner.compute_bounds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.chi2.Scanner.compute_scan"><code class="docutils literal notranslate"><span class="pre">Scanner.compute_scan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.chi2.Scanner.plot_scan"><code class="docutils literal notranslate"><span class="pre">Scanner.plot_scan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.chi2.Scanner.regularized_chi2_func"><code class="docutils literal notranslate"><span class="pre">Scanner.regularized_chi2_func()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.chi2.compute_chi2"><code class="docutils literal notranslate"><span class="pre">compute_chi2()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.coefficients">smefit.coefficients module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.coefficients.Coefficient"><code class="docutils literal notranslate"><span class="pre">Coefficient</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.Coefficient.build_additive_factor_dict"><code class="docutils literal notranslate"><span class="pre">Coefficient.build_additive_factor_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.Coefficient.update_constrain"><code class="docutils literal notranslate"><span class="pre">Coefficient.update_constrain()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.coefficients.CoefficientManager"><code class="docutils literal notranslate"><span class="pre">CoefficientManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.free_parameters"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.free_parameters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.from_dict"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.maximum"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.maximum</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.minimum"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.minimum</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.name"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.set_constraints"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.set_constraints()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.set_free_parameters"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.set_free_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.size"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.update_constrain"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.update_constrain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.coefficients.CoefficientManager.value"><code class="docutils literal notranslate"><span class="pre">CoefficientManager.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.compute_theory">smefit.compute_theory module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.compute_theory.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.compute_theory.make_predictions"><code class="docutils literal notranslate"><span class="pre">make_predictions()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.covmat">smefit.covmat module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.covmat.construct_covmat"><code class="docutils literal notranslate"><span class="pre">construct_covmat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.covmat.covmat_from_systematics"><code class="docutils literal notranslate"><span class="pre">covmat_from_systematics()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.fit_manager">smefit.fit_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.fit_manager.FitManager"><code class="docutils literal notranslate"><span class="pre">FitManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.path"><code class="docutils literal notranslate"><span class="pre">FitManager.path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.name"><code class="docutils literal notranslate"><span class="pre">FitManager.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.label"><code class="docutils literal notranslate"><span class="pre">FitManager.label</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.config"><code class="docutils literal notranslate"><span class="pre">FitManager.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.has_posterior"><code class="docutils literal notranslate"><span class="pre">FitManager.has_posterior</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.results"><code class="docutils literal notranslate"><span class="pre">FitManager.results</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.coefficients"><code class="docutils literal notranslate"><span class="pre">FitManager.coefficients</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.load_configuration"><code class="docutils literal notranslate"><span class="pre">FitManager.load_configuration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.load_datasets"><code class="docutils literal notranslate"><span class="pre">FitManager.load_datasets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.load_results"><code class="docutils literal notranslate"><span class="pre">FitManager.load_results()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.n_replica"><code class="docutils literal notranslate"><span class="pre">FitManager.n_replica</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.smeft_predictions"><code class="docutils literal notranslate"><span class="pre">FitManager.smeft_predictions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.loader">smefit.loader module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.DataTuple"><code class="docutils literal notranslate"><span class="pre">DataTuple</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.Commondata"><code class="docutils literal notranslate"><span class="pre">DataTuple.Commondata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.ExpNames"><code class="docutils literal notranslate"><span class="pre">DataTuple.ExpNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.InvCovMat"><code class="docutils literal notranslate"><span class="pre">DataTuple.InvCovMat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.LinearCorrections"><code class="docutils literal notranslate"><span class="pre">DataTuple.LinearCorrections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.NdataExp"><code class="docutils literal notranslate"><span class="pre">DataTuple.NdataExp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.OperatorsNames"><code class="docutils literal notranslate"><span class="pre">DataTuple.OperatorsNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.QuadraticCorrections"><code class="docutils literal notranslate"><span class="pre">DataTuple.QuadraticCorrections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.Replica"><code class="docutils literal notranslate"><span class="pre">DataTuple.Replica</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.SMTheory"><code class="docutils literal notranslate"><span class="pre">DataTuple.SMTheory</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.Loader"><code class="docutils literal notranslate"><span class="pre">Loader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.central_values"><code class="docutils literal notranslate"><span class="pre">Loader.central_values</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.commondata_path"><code class="docutils literal notranslate"><span class="pre">Loader.commondata_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.covmat"><code class="docutils literal notranslate"><span class="pre">Loader.covmat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.lin_corrections"><code class="docutils literal notranslate"><span class="pre">Loader.lin_corrections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.load_experimental_data"><code class="docutils literal notranslate"><span class="pre">Loader.load_experimental_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.load_theory"><code class="docutils literal notranslate"><span class="pre">Loader.load_theory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.n_data"><code class="docutils literal notranslate"><span class="pre">Loader.n_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.quad_corrections"><code class="docutils literal notranslate"><span class="pre">Loader.quad_corrections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.sm_prediction"><code class="docutils literal notranslate"><span class="pre">Loader.sm_prediction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.stat_error"><code class="docutils literal notranslate"><span class="pre">Loader.stat_error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.sys_error"><code class="docutils literal notranslate"><span class="pre">Loader.sys_error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.sys_error_t0"><code class="docutils literal notranslate"><span class="pre">Loader.sys_error_t0</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.theory_covmat"><code class="docutils literal notranslate"><span class="pre">Loader.theory_covmat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.theory_path"><code class="docutils literal notranslate"><span class="pre">Loader.theory_path</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.check_file"><code class="docutils literal notranslate"><span class="pre">check_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.check_missing_oparators"><code class="docutils literal notranslate"><span class="pre">check_missing_oparators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.construct_corrections_matrix"><code class="docutils literal notranslate"><span class="pre">construct_corrections_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.get_dataset"><code class="docutils literal notranslate"><span class="pre">get_dataset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.load_datasets"><code class="docutils literal notranslate"><span class="pre">load_datasets()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.log">smefit.log module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.log.print_banner"><code class="docutils literal notranslate"><span class="pre">print_banner()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.log.setup_console"><code class="docutils literal notranslate"><span class="pre">setup_console()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.runner">smefit.runner module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.runner.Runner"><code class="docutils literal notranslate"><span class="pre">Runner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.chi2_scan"><code class="docutils literal notranslate"><span class="pre">Runner.chi2_scan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.from_file"><code class="docutils literal notranslate"><span class="pre">Runner.from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.global_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.global_analysis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.mc"><code class="docutils literal notranslate"><span class="pre">Runner.mc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.ns"><code class="docutils literal notranslate"><span class="pre">Runner.ns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.pairwise_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.pairwise_analysis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.rotate_to_pca"><code class="docutils literal notranslate"><span class="pre">Runner.rotate_to_pca()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.run_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.run_analysis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.setup_result_folder"><code class="docutils literal notranslate"><span class="pre">Runner.setup_result_folder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.single_parameter_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.single_parameter_analysis()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../zzz-refs.html">References</a></li>
@@ -130,70 +244,1145 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="smefit-package">
-<h1>smefit package<a class="headerlink" href="#smefit-package" title="Link to this heading"></a></h1>
+  <section id="module-smefit">
+<span id="smefit-package"></span><h1>smefit package<a class="headerlink" href="#module-smefit" title="Link to this heading"></a></h1>
 <section id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="smefit.analyze.html">smefit.analyze package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.run_report"><code class="docutils literal notranslate"><span class="pre">run_report()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit-analyze-chi2-utils-module">smefit.analyze.chi2_utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit-analyze-coefficients-utils-module">smefit.analyze.coefficients_utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit-analyze-contours-2d-module">smefit.analyze.contours_2d module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit-analyze-correlations-module">smefit.analyze.correlations module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit-analyze-fisher-module">smefit.analyze.fisher module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit-analyze-html-utils-module">smefit.analyze.html_utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit-analyze-latex-tools-module">smefit.analyze.latex_tools module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit-analyze-pca-module">smefit.analyze.pca module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit-analyze-report-module">smefit.analyze.report module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#smefit-analyze-summary-module">smefit.analyze.summary module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.chi2_utils">smefit.analyze.chi2_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.add_normalized_chi2"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.add_normalized_chi2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.compute"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.compute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.group_chi2_df"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.group_chi2_df()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.plot_dist"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.plot_dist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.plot_exp"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.plot_exp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.write()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write_chi2_grouped"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.write_chi2_grouped()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write_chi2_summary"><code class="docutils literal notranslate"><span class="pre">Chi2tableCalculator.write_chi2_summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.coefficients_utils">smefit.analyze.coefficients_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_coeffs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs_bar"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_coeffs_bar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_contours_2d"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_contours_2d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_posteriors"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_posteriors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.write_cl_table"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.write_cl_table()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.compute_confidence_level"><code class="docutils literal notranslate"><span class="pre">compute_confidence_level()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.get_confidence_values"><code class="docutils literal notranslate"><span class="pre">get_confidence_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.split_solution"><code class="docutils literal notranslate"><span class="pre">split_solution()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.contours_2d">smefit.analyze.contours_2d module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.contours_2d.confidence_ellipse"><code class="docutils literal notranslate"><span class="pre">confidence_ellipse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.contours_2d.plot_contours"><code class="docutils literal notranslate"><span class="pre">plot_contours()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.correlations">smefit.analyze.correlations module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.correlations.plot_correlations"><code class="docutils literal notranslate"><span class="pre">plot_correlations()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.fisher">smefit.analyze.fisher module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.fisher.FisherCalculator"><code class="docutils literal notranslate"><span class="pre">FisherCalculator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.compute_linear"><code class="docutils literal notranslate"><span class="pre">FisherCalculator.compute_linear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.compute_quadratic"><code class="docutils literal notranslate"><span class="pre">FisherCalculator.compute_quadratic()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.groupby_data"><code class="docutils literal notranslate"><span class="pre">FisherCalculator.groupby_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.normalize"><code class="docutils literal notranslate"><span class="pre">FisherCalculator.normalize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.plot"><code class="docutils literal notranslate"><span class="pre">FisherCalculator.plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.write_grouped"><code class="docutils literal notranslate"><span class="pre">FisherCalculator.write_grouped()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.html_utils">smefit.analyze.html_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.html_utils.dump_html_index"><code class="docutils literal notranslate"><span class="pre">dump_html_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.html_utils.html_link"><code class="docutils literal notranslate"><span class="pre">html_link()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.html_utils.run_htlatex"><code class="docutils literal notranslate"><span class="pre">run_htlatex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.html_utils.write_html_container"><code class="docutils literal notranslate"><span class="pre">write_html_container()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.latex_tools">smefit.analyze.latex_tools module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.latex_tools.chi2table_header"><code class="docutils literal notranslate"><span class="pre">chi2table_header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.latex_tools.compile_tex"><code class="docutils literal notranslate"><span class="pre">compile_tex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.latex_tools.dump_to_tex"><code class="docutils literal notranslate"><span class="pre">dump_to_tex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.latex_tools.latex_packages"><code class="docutils literal notranslate"><span class="pre">latex_packages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.latex_tools.multicolum_table_header"><code class="docutils literal notranslate"><span class="pre">multicolum_table_header()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.latex_tools.run_pdflatex"><code class="docutils literal notranslate"><span class="pre">run_pdflatex()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.pca">smefit.analyze.pca module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.PcaCalculator"><code class="docutils literal notranslate"><span class="pre">PcaCalculator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.PcaCalculator.compute"><code class="docutils literal notranslate"><span class="pre">PcaCalculator.compute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.PcaCalculator.plot_heatmap"><code class="docutils literal notranslate"><span class="pre">PcaCalculator.plot_heatmap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.PcaCalculator.write"><code class="docutils literal notranslate"><span class="pre">PcaCalculator.write()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.RotateToPca"><code class="docutils literal notranslate"><span class="pre">RotateToPca</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.RotateToPca.compute"><code class="docutils literal notranslate"><span class="pre">RotateToPca.compute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.RotateToPca.from_dict"><code class="docutils literal notranslate"><span class="pre">RotateToPca.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.RotateToPca.save"><code class="docutils literal notranslate"><span class="pre">RotateToPca.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.RotateToPca.update_runcard"><code class="docutils literal notranslate"><span class="pre">RotateToPca.update_runcard()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.impose_constrain"><code class="docutils literal notranslate"><span class="pre">impose_constrain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.pca.make_sym_matrix"><code class="docutils literal notranslate"><span class="pre">make_sym_matrix()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.report">smefit.analyze.report module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report"><code class="docutils literal notranslate"><span class="pre">Report</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.report"><code class="docutils literal notranslate"><span class="pre">Report.report</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.fits"><code class="docutils literal notranslate"><span class="pre">Report.fits</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.data_info"><code class="docutils literal notranslate"><span class="pre">Report.data_info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.coeff_info"><code class="docutils literal notranslate"><span class="pre">Report.coeff_info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.chi2"><code class="docutils literal notranslate"><span class="pre">Report.chi2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.coefficients"><code class="docutils literal notranslate"><span class="pre">Report.coefficients()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.correlations"><code class="docutils literal notranslate"><span class="pre">Report.correlations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.fisher"><code class="docutils literal notranslate"><span class="pre">Report.fisher()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.pca"><code class="docutils literal notranslate"><span class="pre">Report.pca()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.report.Report.summary"><code class="docutils literal notranslate"><span class="pre">Report.summary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.summary">smefit.analyze.summary module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.SummaryWriter"><code class="docutils literal notranslate"><span class="pre">SummaryWriter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.SummaryWriter.fit_settings"><code class="docutils literal notranslate"><span class="pre">SummaryWriter.fit_settings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write_coefficients_table"><code class="docutils literal notranslate"><span class="pre">SummaryWriter.write_coefficients_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write_dataset_table"><code class="docutils literal notranslate"><span class="pre">SummaryWriter.write_dataset_table()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.add_bounded_coeff"><code class="docutils literal notranslate"><span class="pre">add_bounded_coeff()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="smefit.cli.html">smefit.cli package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="smefit.cli.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.cli.html#smefit-cli-base-module">smefit.cli.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.cli.html#module-smefit.cli.base">smefit.cli.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.cli.html#smefit.cli.base.root_path"><code class="docutils literal notranslate"><span class="pre">root_path</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="smefit.optimize.html">smefit.optimize package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#smefit-optimize-mc-module">smefit.optimize.mc module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#smefit-optimize-ns-module">smefit.optimize.ns module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer"><code class="docutils literal notranslate"><span class="pre">Optimizer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.chi2_func"><code class="docutils literal notranslate"><span class="pre">Optimizer.chi2_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.dump_posterior"><code class="docutils literal notranslate"><span class="pre">Optimizer.dump_posterior()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.free_parameters"><code class="docutils literal notranslate"><span class="pre">Optimizer.free_parameters</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.generate_chi2_table"><code class="docutils literal notranslate"><span class="pre">Optimizer.generate_chi2_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.print_rate"><code class="docutils literal notranslate"><span class="pre">Optimizer.print_rate</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="smefit.postfit.html">smefit.postfit package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#module-smefit.optimize.mc">smefit.optimize.mc module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer"><code class="docutils literal notranslate"><span class="pre">MCOptimizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer.chi2_func_mc"><code class="docutils literal notranslate"><span class="pre">MCOptimizer.chi2_func_mc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer.from_dict"><code class="docutils literal notranslate"><span class="pre">MCOptimizer.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer.get_status"><code class="docutils literal notranslate"><span class="pre">MCOptimizer.get_status()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer.run_sampling"><code class="docutils literal notranslate"><span class="pre">MCOptimizer.run_sampling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer.save"><code class="docutils literal notranslate"><span class="pre">MCOptimizer.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#module-smefit.optimize.ns">smefit.optimize.ns module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer"><code class="docutils literal notranslate"><span class="pre">NSOptimizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.chi2_func_ns"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.chi2_func_ns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.clean"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.clean()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.flat_prior"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.flat_prior()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.from_dict"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.gaussian_loglikelihood"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.gaussian_loglikelihood()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.print_rate"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.print_rate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.run_sampling"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.run_sampling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.save"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="smefit.postfit.html">smefit.postfit package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smefit.postfit.html#smefit.postfit.Postfit"><code class="docutils literal notranslate"><span class="pre">Postfit</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html#smefit.postfit.Postfit.clean"><code class="docutils literal notranslate"><span class="pre">Postfit.clean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html#smefit.postfit.Postfit.from_file"><code class="docutils literal notranslate"><span class="pre">Postfit.from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html#smefit.postfit.Postfit.save"><code class="docutils literal notranslate"><span class="pre">Postfit.save()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
-<section id="smefit-basis-rotation-module">
-<h2>smefit.basis_rotation module<a class="headerlink" href="#smefit-basis-rotation-module" title="Link to this heading"></a></h2>
+<section id="module-smefit.basis_rotation">
+<span id="smefit-basis-rotation-module"></span><h2>smefit.basis_rotation module<a class="headerlink" href="#module-smefit.basis_rotation" title="Link to this heading"></a></h2>
+<p>Implement the corrections table basis rotation</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.basis_rotation.rotate_to_fit_basis">
+<span class="sig-prename descclassname"><span class="pre">smefit.basis_rotation.</span></span><span class="sig-name descname"><span class="pre">rotate_to_fit_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lin_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quad_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_matrix_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/basis_rotation.html#rotate_to_fit_basis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.basis_rotation.rotate_to_fit_basis" title="Link to this definition"></a></dt>
+<dd><p>Rotate to fitting basis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lin_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – theory dictionary with linear operator corrections in the table
+basis</p></li>
+<li><p><strong>quad_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – theory dictionary with quadratic operator corrections in the table
+basis, emptry if quadratic corrections are not used</p></li>
+<li><p><strong>rotation_matrix</strong> (<em>pandas.DataFrame</em>) – rotation matrix from tables basis to fitting basis</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>lin_dict_fit_basis</strong> (<em>dict</em>) – theory dictionary with linear operator corrections in the fit
+basis</p></li>
+<li><p><strong>quad_dict_fit_basis</strong> (<em>dict</em>) – theory dictionary with quadratic operator corrections in the fit
+basis, emptry if quadratic corrections are not used</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="smefit-chi2-module">
-<h2>smefit.chi2 module<a class="headerlink" href="#smefit-chi2-module" title="Link to this heading"></a></h2>
+<section id="module-smefit.chi2">
+<span id="smefit-chi2-module"></span><h2>smefit.chi2 module<a class="headerlink" href="#module-smefit.chi2" title="Link to this heading"></a></h2>
+<p>Module for the computation of chi-squared values.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.chi2.Scanner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.chi2.</span></span><span class="sig-name descname"><span class="pre">Scanner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_card</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_replica</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/chi2.html#Scanner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.chi2.Scanner" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class to compute and plot the idividual <span class="math notranslate nohighlight">\(\chi^2\)</span> scan.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_card</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – run card dictionary</p></li>
+<li><p><strong>n_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of replica to use</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.chi2.Scanner.compute_bounds">
+<span class="sig-name descname"><span class="pre">compute_bounds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/chi2.html#Scanner.compute_bounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.chi2.Scanner.compute_bounds" title="Link to this definition"></a></dt>
+<dd><p>Compute individual bounds solving.</p>
+<dl class="simple">
+<dt>..math::</dt><dd><p>chi^2`- 2 = 0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.chi2.Scanner.compute_scan">
+<span class="sig-name descname"><span class="pre">compute_scan</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/chi2.html#Scanner.compute_scan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.chi2.Scanner.compute_scan" title="Link to this definition"></a></dt>
+<dd><p>Compute the individual <span class="math notranslate nohighlight">\(\chi^2\)</span> scan for each replica and coefficient.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.chi2.Scanner.plot_scan">
+<span class="sig-name descname"><span class="pre">plot_scan</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/chi2.html#Scanner.plot_scan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.chi2.Scanner.plot_scan" title="Link to this definition"></a></dt>
+<dd><p>Plot and save the <span class="math notranslate nohighlight">\(\chi^2\)</span> scan for each coefficient.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.chi2.Scanner.regularized_chi2_func">
+<span class="sig-name descname"><span class="pre">regularized_chi2_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_replica</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/chi2.html#Scanner.regularized_chi2_func"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.chi2.Scanner.regularized_chi2_func" title="Link to this definition"></a></dt>
+<dd><p>Individual <span class="math notranslate nohighlight">\(\chi^2\)</span> wrappper over series of values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coeff</strong> (<cite>smefit.coefficient.Coefficient</cite>) – coefficient to switch on.</p></li>
+<li><p><strong>xs</strong> (<em>numpy.array</em>) – coeffient values.</p></li>
+<li><p><strong>use_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True compute the <span class="math notranslate nohighlight">\(\chi^2\)</span> on <abbr title="Monte Carlo">MC</abbr> replicas.</p></li>
+<li><p><strong>Returns</strong> – </p></li>
+<li><p><strong>--------</strong> – individual reduced <span class="math notranslate nohighlight">\(\chi^2\)</span> for each x value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.chi2.compute_chi2">
+<span class="sig-prename descclassname"><span class="pre">smefit.chi2.</span></span><span class="sig-name descname"><span class="pre">compute_chi2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_replica</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/chi2.html#compute_chi2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.chi2.compute_chi2" title="Link to this definition"></a></dt>
+<dd><p>Compute the <span class="math notranslate nohighlight">\(\chi^2\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a>) – dataset tuple</p></li>
+<li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
+<li><p><strong>use_multiplicative_prescription</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True add the <abbr title="Effective Field Theory">EFT</abbr> contribution as a key factor</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>chi2_total</strong> – <span class="math notranslate nohighlight">\(\chi^2\)</span> value</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="smefit-coefficients-module">
-<h2>smefit.coefficients module<a class="headerlink" href="#smefit-coefficients-module" title="Link to this heading"></a></h2>
+<section id="module-smefit.coefficients">
+<span id="smefit-coefficients-module"></span><h2>smefit.coefficients module<a class="headerlink" href="#module-smefit.coefficients" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.coefficients.Coefficient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.coefficients.</span></span><span class="sig-name descname"><span class="pre">Coefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constrain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#Coefficient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.Coefficient" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Coefficient object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the operator corresponding to the Wilson coefficient</p></li>
+<li><p><strong>minimum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – minimum value</p></li>
+<li><p><strong>maximum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – maximum value</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>, </em><em>optional</em>) – best value. If None set to random between minimum and maximum</p></li>
+<li><p><strong>constrain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – <ul>
+<li><p>if False, the parameter is free, default option</p></li>
+<li><p>if True, the parameter is fixed to the given value</p></li>
+<li><p>if dict the parameter is fixed to a function of other coefficients</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.coefficients.Coefficient.build_additive_factor_dict">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_additive_factor_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">constrain</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#Coefficient.build_additive_factor_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.Coefficient.build_additive_factor_dict" title="Link to this definition"></a></dt>
+<dd><p>Build the dictionary for each additive factor appearing in the constrain:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>constrain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – dict object with the form {‘c1’: a1, ‘c2’: [a2,n2], …}</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>factor_dict</strong> – dict object with the form {‘c1’: [a1,1], ‘c2’: [a2,n2], …}</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.coefficients.Coefficient.update_constrain">
+<span class="sig-name descname"><span class="pre">update_constrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inv_rotation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#Coefficient.update_constrain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.Coefficient.update_constrain" title="Link to this definition"></a></dt>
+<dd><p>Update the constrain when a new basis is chosen.
+Only linear constrain are supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inv_rotation</strong> (<em>pd.DataFrame</em>) – rotation matrix from the original basis to the new_basis</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.coefficients.</span></span><span class="sig-name descname"><span class="pre">CoefficientManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#CoefficientManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.CoefficientManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Coefficient objcts manager</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_array</strong> (<em>np.ndarray</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of <cite>smefit.coefficients.Coefficient</cite> instances</p>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.free_parameters">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">free_parameters</span></span><a class="headerlink" href="#smefit.coefficients.CoefficientManager.free_parameters" title="Link to this definition"></a></dt>
+<dd><p>Returns the table containing only free parameters</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coefficient_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#CoefficientManager.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.CoefficientManager.from_dict" title="Link to this definition"></a></dt>
+<dd><p>Create a coefficientManager from a dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>coefficient_config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – coefficients configuration dictionary</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>coefficient_manager</strong> – instance of the class</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>smefit.coefficients.CoefficientManager</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.maximum">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maximum</span></span><a class="headerlink" href="#smefit.coefficients.CoefficientManager.maximum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.minimum">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum</span></span><a class="headerlink" href="#smefit.coefficients.CoefficientManager.minimum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#smefit.coefficients.CoefficientManager.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.set_constraints">
+<span class="sig-name descname"><span class="pre">set_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#CoefficientManager.set_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.CoefficientManager.set_constraints" title="Link to this definition"></a></dt>
+<dd><p>Sets constraints between coefficients according to the
+coefficient.constrain information:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.set_free_parameters">
+<span class="sig-name descname"><span class="pre">set_free_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#CoefficientManager.set_free_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.CoefficientManager.set_free_parameters" title="Link to this definition"></a></dt>
+<dd><p>Set the values of the free parmaters</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#smefit.coefficients.CoefficientManager.size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.update_constrain">
+<span class="sig-name descname"><span class="pre">update_constrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inv_rotation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/coefficients.html#CoefficientManager.update_constrain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.coefficients.CoefficientManager.update_constrain" title="Link to this definition"></a></dt>
+<dd><p>Update the constraints according to rotation matrix.
+Only linear constrain are supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inv_rotation</strong> (<em>pd.DataFrame</em>) – rotation matrix from the original basis to the new_basis</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.coefficients.CoefficientManager.value">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#smefit.coefficients.CoefficientManager.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="smefit-compute-theory-module">
-<h2>smefit.compute_theory module<a class="headerlink" href="#smefit-compute-theory-module" title="Link to this heading"></a></h2>
+<section id="module-smefit.compute_theory">
+<span id="smefit-compute-theory-module"></span><h2>smefit.compute_theory module<a class="headerlink" href="#module-smefit.compute_theory" title="Link to this heading"></a></h2>
+<p>Module for the generation of theory predictions</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.compute_theory.flatten">
+<span class="sig-prename descclassname"><span class="pre">smefit.compute_theory.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quad_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/compute_theory.html#flatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.compute_theory.flatten" title="Link to this definition"></a></dt>
+<dd><p>Delete lower triangular part of a quadratic matrix
+and flatten it into an array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>quad_mat</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – tensor to flatten</p></li>
+<li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – axis along which the triangular part is selected</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.compute_theory.make_predictions">
+<span class="sig-prename descclassname"><span class="pre">smefit.compute_theory.</span></span><span class="sig-name descname"><span class="pre">make_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/compute_theory.html#make_predictions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.compute_theory.make_predictions" title="Link to this definition"></a></dt>
+<dd><p>Generate the corrected theory predictions for dataset
+given a set of <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference internal" href="#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a>) – dataset tuple</p></li>
+<li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>corrected_theory</strong> – SM + EFT theory predictions</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="smefit-covmat-module">
-<h2>smefit.covmat module<a class="headerlink" href="#smefit-covmat-module" title="Link to this heading"></a></h2>
+<section id="module-smefit.covmat">
+<span id="smefit-covmat-module"></span><h2>smefit.covmat module<a class="headerlink" href="#module-smefit.covmat" title="Link to this heading"></a></h2>
+<p>Module containing computation of covariance matrix.
+Based on
+<a class="reference external" href="https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats_utils.py">https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats_utils.py</a>
+<a class="reference external" href="https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats.py">https://github.com/NNPDF/nnpdf/tree/master/validphys2/src/validphys/covmats.py</a></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.covmat.construct_covmat">
+<span class="sig-prename descclassname"><span class="pre">smefit.covmat.</span></span><span class="sig-name descname"><span class="pre">construct_covmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stat_errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sys_errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/covmat.html#construct_covmat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.covmat.construct_covmat" title="Link to this definition"></a></dt>
+<dd><p>Basic function to construct a covariance matrix (covmat), given the
+statistical error and a dataframe of systematics.
+Errors with name UNCORR or THEORYUNCORR are added in quadrature with
+the statistical error to the diagonal of the covmat.
+Other systematics are treated as correlated; their covmat contribution is
+found by multiplying them by their transpose.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stat_errors</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – a 1-D array of statistical uncertainties</p></li>
+<li><p><strong>sys_errors</strong> (<em>pandas.DataFrame</em>) – a dataframe with shape (N_data * N_sys) and systematic name as the
+column headers. The uncertainties should be in the same units as the
+data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>cov_mat</strong> – Covariance matrix</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function doesn’t contain any logic to ignore certain contributions to
+the covmat, if you wanted to not include a particular systematic/set of
+systematics i.e all uncertainties with MULT errors, then filter those out
+of <code class="docutils literal notranslate"><span class="pre">sys_errors</span></code> before passing that to this function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.covmat.covmat_from_systematics">
+<span class="sig-prename descclassname"><span class="pre">smefit.covmat.</span></span><span class="sig-name descname"><span class="pre">covmat_from_systematics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stat_errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sys_errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/covmat.html#covmat_from_systematics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.covmat.covmat_from_systematics" title="Link to this definition"></a></dt>
+<dd><p>Given two lists containing the statistic and systematic errors,
+construct the full covariance matrix.</p>
+<p>This is similar to <a class="reference internal" href="#smefit.covmat.construct_covmat" title="smefit.covmat.construct_covmat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">construct_covmat()</span></code></a>
+except that special corr systematics are concatenated across all datasets
+before being multiplied by their transpose to give off block-diagonal
+contributions. The other systematics contribute to the block diagonal in the
+same way as <a class="reference internal" href="#smefit.covmat.construct_covmat" title="smefit.covmat.construct_covmat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">construct_covmat()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stat_errors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>(</em><em>stat_errors: np.array</em><em>)</em><em>]</em>) – list of stat_errors for each dataset.</p></li>
+<li><p><strong>sys_errors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>[</em><em>(</em><em>sys_errors: pd.DataFrame</em><em>)</em><em>]</em>) – list of sys_errors for each dataset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>cov_mat</strong> – Numpy array which is N_dat x N_dat (where N_dat is the number of data points)
+containing uncertainty and correlation information.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="smefit-fit-manager-module">
-<h2>smefit.fit_manager module<a class="headerlink" href="#smefit-fit-manager-module" title="Link to this heading"></a></h2>
+<section id="module-smefit.fit_manager">
+<span id="smefit-fit-manager-module"></span><h2>smefit.fit_manager module<a class="headerlink" href="#module-smefit.fit_manager" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.fit_manager.</span></span><span class="sig-name descname"><span class="pre">FitManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/fit_manager.html#FitManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.fit_manager.FitManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class to collect all the fit information,
+load the results, compute best theory predictions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.path">
+<span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.path" title="Link to this definition"></a></dt>
+<dd><p>path to fit location</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.name" title="Link to this definition"></a></dt>
+<dd><p>fit name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>srt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.label">
+<span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.label" title="Link to this definition"></a></dt>
+<dd><p>fit label if any otherwise guess it from the name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.config" title="Link to this definition"></a></dt>
+<dd><p>configuration dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.has_posterior">
+<span class="sig-name descname"><span class="pre">has_posterior</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.has_posterior" title="Link to this definition"></a></dt>
+<dd><p>True if the fi contains the full posterrio distribution,
+False if only cl bounds are stored (external fits for benchmark)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.results">
+<span class="sig-name descname"><span class="pre">results</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.results" title="Link to this definition"></a></dt>
+<dd><p>fit results, they need to be loaded by <cite>load_results</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – path to fit location</p></li>
+<li><p><strong>name</strong> (<em>srt</em>) – fit name</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – fit label if any otherwise guess it from the name</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.coefficients">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">coefficients</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.coefficients" title="Link to this definition"></a></dt>
+<dd><p>coefficient manager</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.load_configuration">
+<span class="sig-name descname"><span class="pre">load_configuration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/fit_manager.html#FitManager.load_configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.fit_manager.FitManager.load_configuration" title="Link to this definition"></a></dt>
+<dd><p>Load configuration yaml card.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>configuration card</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.load_datasets">
+<span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/fit_manager.html#FitManager.load_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.fit_manager.FitManager.load_datasets" title="Link to this definition"></a></dt>
+<dd><p>Load all datasets.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.load_results">
+<span class="sig-name descname"><span class="pre">load_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/fit_manager.html#FitManager.load_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.fit_manager.FitManager.load_results" title="Link to this definition"></a></dt>
+<dd><p>Load posterior distribution of a fit.
+If the fit is produced by and external source it loads
+the results. Results are stored in a class attribute</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.n_replica">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_replica</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.n_replica" title="Link to this definition"></a></dt>
+<dd><p>Number of replicas</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.smeft_predictions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">smeft_predictions</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.smeft_predictions" title="Link to this definition"></a></dt>
+<dd><p>Compute <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> predictions for each replica.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><abbr title="Standard Model Effective Field Theory">SMEFT</abbr> predictions for each replica</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="smefit-loader-module">
-<h2>smefit.loader module<a class="headerlink" href="#smefit-loader-module" title="Link to this heading"></a></h2>
+<section id="module-smefit.loader">
+<span id="smefit-loader-module"></span><h2>smefit.loader module<a class="headerlink" href="#module-smefit.loader" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">DataTuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Commondata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SMTheory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">OperatorsNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LinearCorrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QuadraticCorrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExpNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NdataExp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">InvCovMat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Replica</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smefit.loader.DataTuple" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple.Commondata">
+<span class="sig-name descname"><span class="pre">Commondata</span></span><a class="headerlink" href="#smefit.loader.DataTuple.Commondata" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple.ExpNames">
+<span class="sig-name descname"><span class="pre">ExpNames</span></span><a class="headerlink" href="#smefit.loader.DataTuple.ExpNames" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 5</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple.InvCovMat">
+<span class="sig-name descname"><span class="pre">InvCovMat</span></span><a class="headerlink" href="#smefit.loader.DataTuple.InvCovMat" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 7</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple.LinearCorrections">
+<span class="sig-name descname"><span class="pre">LinearCorrections</span></span><a class="headerlink" href="#smefit.loader.DataTuple.LinearCorrections" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple.NdataExp">
+<span class="sig-name descname"><span class="pre">NdataExp</span></span><a class="headerlink" href="#smefit.loader.DataTuple.NdataExp" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 6</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple.OperatorsNames">
+<span class="sig-name descname"><span class="pre">OperatorsNames</span></span><a class="headerlink" href="#smefit.loader.DataTuple.OperatorsNames" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple.QuadraticCorrections">
+<span class="sig-name descname"><span class="pre">QuadraticCorrections</span></span><a class="headerlink" href="#smefit.loader.DataTuple.QuadraticCorrections" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple.Replica">
+<span class="sig-name descname"><span class="pre">Replica</span></span><a class="headerlink" href="#smefit.loader.DataTuple.Replica" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 8</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple.SMTheory">
+<span class="sig-name descname"><span class="pre">SMTheory</span></span><a class="headerlink" href="#smefit.loader.DataTuple.SMTheory" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.loader.Loader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">Loader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_to_fit_basis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#Loader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.Loader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class to check, load commondata and corresponding theory predictions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>setname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – dataset name to load</p></li>
+<li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of operators for which corrections are loaded</p></li>
+<li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) – EFT perturbative order</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True loads also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – </p></li>
+<li><p><strong>one</strong> (<em>if True add the theory covariance matrix to the experimental</em>) – </p></li>
+<li><p><strong>rot_to_fit_basis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>None</em>) – matrix rotation to fit basis or None</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.central_values">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">central_values</span></span><a class="headerlink" href="#smefit.loader.Loader.central_values" title="Link to this definition"></a></dt>
+<dd><p>Central values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>central_values</strong> – experimental central values</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.Loader.commondata_path">
+<span class="sig-name descname"><span class="pre">commondata_path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('.')</span></em><a class="headerlink" href="#smefit.loader.Loader.commondata_path" title="Link to this definition"></a></dt>
+<dd><p>path to commondata folder, commondata excluded</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.covmat">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">covmat</span></span><a class="headerlink" href="#smefit.loader.Loader.covmat" title="Link to this definition"></a></dt>
+<dd><p>Experimental covariance matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>covmat</strong> – experimental covariance matrix of a single dataset</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.lin_corrections">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lin_corrections</span></span><a class="headerlink" href="#smefit.loader.Loader.lin_corrections" title="Link to this definition"></a></dt>
+<dd><p><abbr title="Not Higher Order corrections, linear">NHO</abbr> corrections</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lin_corrections</strong> – dictionary with operator names and <abbr title="Not Higher Order corrections, linear">NHO</abbr> correctsions</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.loader.Loader.load_experimental_data">
+<span class="sig-name descname"><span class="pre">load_experimental_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#Loader.load_experimental_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.Loader.load_experimental_data" title="Link to this definition"></a></dt>
+<dd><p>Load experimental data with corresponding uncertainties</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>cental_values</strong> (<em>numpy.ndarray</em>) – experimental central values</p></li>
+<li><p><strong>covmat</strong> (<em>numpy.ndarray</em>) – experimental covariance matrix</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.loader.Loader.load_theory">
+<span class="sig-name descname"><span class="pre">load_theory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#Loader.load_theory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.Loader.load_theory" title="Link to this definition"></a></dt>
+<dd><p>Load theory predictions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of operators to keep</p></li>
+<li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) – EFT perturbative order</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True returns also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True add the theory covariance matrix to the experimental one</p></li>
+<li><p><strong>rotation_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – rotation matrix from tables basis to fitting basis</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>sm</strong> (<em>numpy.ndarray</em>) – <abbr title="Standard Model">SM</abbr> predictions</p></li>
+<li><p><strong>lin_dict</strong> (<em>dict</em>) – dictionary with <abbr title="Not Higher Order corrections, linear">NHO</abbr> corrections</p></li>
+<li><p><strong>quad_dict</strong> (<em>dict</em>) – dictionary with <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections, empty if not use_quad</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.n_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_data</span></span><a class="headerlink" href="#smefit.loader.Loader.n_data" title="Link to this definition"></a></dt>
+<dd><p>Number of data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_data</strong> – number of experimental data</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.quad_corrections">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">quad_corrections</span></span><a class="headerlink" href="#smefit.loader.Loader.quad_corrections" title="Link to this definition"></a></dt>
+<dd><p><abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>quad_corrections</strong> – dictionary with operator names and <abbr title="Higher Order corrections, quadratics">HO</abbr> correctsions</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.sm_prediction">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sm_prediction</span></span><a class="headerlink" href="#smefit.loader.Loader.sm_prediction" title="Link to this definition"></a></dt>
+<dd><p><abbr title="Standard Model">SM</abbr> prediction for the dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>SM_predictions</strong> – best <abbr title="Standard Model">SM</abbr> prediction</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.stat_error">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stat_error</span></span><a class="headerlink" href="#smefit.loader.Loader.stat_error" title="Link to this definition"></a></dt>
+<dd><p>Statistical errors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stat_error</strong> – statistical errors of the dataset</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.sys_error">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sys_error</span></span><a class="headerlink" href="#smefit.loader.Loader.sys_error" title="Link to this definition"></a></dt>
+<dd><p>Systematic errors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sys_error</strong> – systematic errors of the dataset</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.sys_error_t0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sys_error_t0</span></span><a class="headerlink" href="#smefit.loader.Loader.sys_error_t0" title="Link to this definition"></a></dt>
+<dd><p>Systematic errors modified according to t0 prescription</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sys_error_t0</strong> – t0 systematic errors of the dataset</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.theory_covmat">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">theory_covmat</span></span><a class="headerlink" href="#smefit.loader.Loader.theory_covmat" title="Link to this definition"></a></dt>
+<dd><p>Theory covariance matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>theory covmat</strong> – theory covariance matrix of a single dataset</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.Loader.theory_path">
+<span class="sig-name descname"><span class="pre">theory_path</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('.')</span></em><a class="headerlink" href="#smefit.loader.Loader.theory_path" title="Link to this definition"></a></dt>
+<dd><p>path to theory folder, theory excluded. Default it assumes to be the same as commondata_path</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.loader.check_file">
+<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">check_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#check_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.check_file" title="Link to this definition"></a></dt>
+<dd><p>Check if path exists.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.loader.check_missing_oparators">
+<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">check_missing_oparators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loaded_corrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#check_missing_oparators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.check_missing_oparators" title="Link to this definition"></a></dt>
+<dd><p>Check if all the coefficient in the runcard are also present inside the theory tables.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.loader.construct_corrections_matrix">
+<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">construct_corrections_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">corrections_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_data_tot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sorted_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#construct_corrections_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.construct_corrections_matrix" title="Link to this definition"></a></dt>
+<dd><p>Construct a unique list of correction name,
+with corresponding values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>corrections_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>)</em>) – list containing corrections per experiment</p></li>
+<li><p><strong>n_data_tot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – total number of experimental data points</p></li>
+<li><p><strong>sorted_keys</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – list of sorted operator corrections</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>sorted_keys</strong> (<em>np.ndarray</em>) – unique list of operators for which at least one correction is present</p></li>
+<li><p><strong>corr_values</strong> (<em>np.ndarray</em>) – matrix with correction values (n_data_tot, sorted_keys.size)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.loader.get_dataset">
+<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">get_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#get_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.get_dataset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.loader.load_datasets">
+<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commondata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theory_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_to_fit_basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_uv_couplings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#load_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.load_datasets" title="Link to this definition"></a></dt>
+<dd><p>Loads experimental data, theory and <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> corrections into a namedtuple</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>commondata_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – path to commondata folder, commondata excluded</p></li>
+<li><p><strong>datasets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of datasets to be loaded</p></li>
+<li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of operators for which corrections are loaded</p></li>
+<li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) – EFT perturbative order</p></li>
+<li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True loads also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True add the theory covariance matrix to the experimental one</p></li>
+<li><p><strong>theory_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a><em>, </em><em>optional</em>) – path to theory folder, theory excluded.
+Default it assumes to be the same as commondata_path</p></li>
+<li><p><strong>rot_to_fit_basis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – matrix rotation to fit basis or None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="smefit-log-module">
-<h2>smefit.log module<a class="headerlink" href="#smefit-log-module" title="Link to this heading"></a></h2>
+<section id="module-smefit.log">
+<span id="smefit-log-module"></span><h2>smefit.log module<a class="headerlink" href="#module-smefit.log" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.log.print_banner">
+<span class="sig-prename descclassname"><span class="pre">smefit.log.</span></span><span class="sig-name descname"><span class="pre">print_banner</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/log.html#print_banner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.log.print_banner" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.log.setup_console">
+<span class="sig-prename descclassname"><span class="pre">smefit.log.</span></span><span class="sig-name descname"><span class="pre">setup_console</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/log.html#setup_console"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.log.setup_console" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="smefit-runner-module">
-<h2>smefit.runner module<a class="headerlink" href="#smefit-runner-module" title="Link to this heading"></a></h2>
+<section id="module-smefit.runner">
+<span id="smefit-runner-module"></span><h2>smefit.runner module<a class="headerlink" href="#module-smefit.runner" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.runner.Runner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.runner.</span></span><span class="sig-name descname"><span class="pre">Runner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_card</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_parameter_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairwise_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runcard_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Container for all the possible <abbr title="Standard Model Effective Field Theory fitter">SMEFiT</abbr> run methods.</p>
+<p>Init the root path of the package where tables,
+results, plot config and reports are stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_card</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – run card dictionary</p></li>
+<li><p><strong>single_parameter_fits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – True for single parameter fits</p></li>
+<li><p><strong>runcard_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a><em>, </em><em>None</em>) – path to runcard if already present</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.chi2_scan">
+<span class="sig-name descname"><span class="pre">chi2_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_replica</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_bounds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.chi2_scan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.chi2_scan" title="Link to this definition"></a></dt>
+<dd><p>Run an individual <span class="math notranslate nohighlight">\(\chi^2\)</span> scan.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of replicas to use.
+If 0 only the <span class="math notranslate nohighlight">\(\chi^2\)</span> experimental data
+will be computed.</p></li>
+<li><p><strong>compute_bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True compute and save the <span class="math notranslate nohighlight">\(\chi^2\)</span> bounds.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.from_file">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runcard_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replica</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.from_file" title="Link to this definition"></a></dt>
+<dd><p>Create Runner from a runcard file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>runcard_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – path to runcard</p></li>
+<li><p><strong>replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – replica number. Optional used only for MC</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>runner</strong> – instance of class Runner</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>smefit.runner.Runner</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.global_analysis">
+<span class="sig-name descname"><span class="pre">global_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.global_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.global_analysis" title="Link to this definition"></a></dt>
+<dd><p>Run a global fit using the selected optimizer
+:param optimizer: optimizer to be used (NS or MC)
+:type optimizer: string</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.mc">
+<span class="sig-name descname"><span class="pre">mc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.mc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.mc" title="Link to this definition"></a></dt>
+<dd><p>Run a fit with <abbr title="Monte Carlo">MC</abbr>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.ns">
+<span class="sig-name descname"><span class="pre">ns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.ns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.ns" title="Link to this definition"></a></dt>
+<dd><p>Run a fit with <abbr title="Nested Sampling">NS</abbr>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.pairwise_analysis">
+<span class="sig-name descname"><span class="pre">pairwise_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.pairwise_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.pairwise_analysis" title="Link to this definition"></a></dt>
+<dd><p>Run a series of pairwise parameter fits for all the operators specified in the runcard
+:param optimizer: optimizer to be used (NS or MC)
+:type optimizer: string</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.rotate_to_pca">
+<span class="sig-name descname"><span class="pre">rotate_to_pca</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.rotate_to_pca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.rotate_to_pca" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.run_analysis">
+<span class="sig-name descname"><span class="pre">run_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.run_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.run_analysis" title="Link to this definition"></a></dt>
+<dd><p>Run either the global analysis or a series of single parameter fits
+using the selected optimizer.
+:param optimizer: optimizer to be used (NS or MC)
+:type optimizer: string</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.setup_result_folder">
+<span class="sig-name descname"><span class="pre">setup_result_folder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.setup_result_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.setup_result_folder" title="Link to this definition"></a></dt>
+<dd><p>Create result folder and copy the runcard there</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.single_parameter_analysis">
+<span class="sig-name descname"><span class="pre">single_parameter_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.single_parameter_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.single_parameter_analysis" title="Link to this definition"></a></dt>
+<dd><p>Run a seried of single parameter fits for all the operators specified in the runcard
+:param optimizer: optimizer to be used (NS or MC)
+:type optimizer: string</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
