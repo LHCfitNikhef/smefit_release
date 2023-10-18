@@ -201,7 +201,6 @@
         <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
         <span class="n">rot_to_fit_basis</span><span class="p">,</span>
     <span class="p">):</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">_data_folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">commondata_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sys_folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">commondata_path</span> <span class="o">/</span> <span class="s2">&quot;systypes&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_theory_folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theory_path</span>
@@ -360,7 +359,6 @@
 
         <span class="c1"># split corrections into a linear and quadratic dict</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">raw_th_data</span><span class="p">[</span><span class="n">order</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-
             <span class="c1"># quadratic terms</span>
             <span class="k">if</span> <span class="s2">&quot;*&quot;</span> <span class="ow">in</span> <span class="n">key</span> <span class="ow">and</span> <span class="n">use_quad</span><span class="p">:</span>
                 <span class="n">quad_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
@@ -381,9 +379,18 @@
 
         <span class="c1"># rotate corrections to fitting basis</span>
         <span class="k">if</span> <span class="n">rotation_matrix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">lin_dict_to_keep</span><span class="p">,</span> <span class="n">quad_dict_to_keep</span> <span class="o">=</span> <span class="n">rotate_to_fit_basis</span><span class="p">(</span>
+            <span class="n">lin_dict_fit_basis</span><span class="p">,</span> <span class="n">quad_dict_fit_basis</span> <span class="o">=</span> <span class="n">rotate_to_fit_basis</span><span class="p">(</span>
                 <span class="n">lin_dict</span><span class="p">,</span> <span class="n">quad_dict</span><span class="p">,</span> <span class="n">rotation_matrix</span>
             <span class="p">)</span>
+
+            <span class="n">lin_dict_to_keep</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">k</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">lin_dict_fit_basis</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">is_to_keep</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="n">quad_dict_to_keep</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">k</span><span class="p">:</span> <span class="n">val</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">quad_dict_fit_basis</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">is_to_keep</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="p">}</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lin_dict_to_keep</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">lin_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">is_to_keep</span><span class="p">(</span><span class="n">k</span><span class="p">)}</span>
             <span class="n">quad_dict_to_keep</span> <span class="o">=</span> <span class="p">{</span>
@@ -391,7 +398,6 @@
                 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">quad_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">is_to_keep</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
             <span class="p">}</span>
-
         <span class="n">best_sm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">raw_th_data</span><span class="p">[</span><span class="s2">&quot;best_sm&quot;</span><span class="p">])</span>
         <span class="n">th_cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">best_sm</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">best_sm</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">use_theory_covmat</span><span class="p">:</span>
@@ -546,7 +552,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">sorted_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[[</span><span class="o">*</span><span class="n">c</span><span class="p">,]</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">corrections_list</span><span class="p">]</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span>
+                <span class="o">*</span><span class="n">c</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">corrections_list</span>
+        <span class="p">]</span>
         <span class="n">sorted_keys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">([</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">tmp</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">])</span>
     <span class="n">corr_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_data_tot</span><span class="p">,</span> <span class="n">sorted_keys</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
     <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
@@ -554,7 +565,6 @@
     <span class="k">for</span> <span class="n">n_dat</span><span class="p">,</span> <span class="n">correction_dict</span> <span class="ow">in</span> <span class="n">corrections_list</span><span class="p">:</span>
         <span class="c1"># loop on corrections</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">correction_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-
             <span class="k">if</span> <span class="s2">&quot;*&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
                 <span class="n">op1</span><span class="p">,</span> <span class="n">op2</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">op2</span> <span class="o">&lt;</span> <span class="n">op1</span><span class="p">:</span>
@@ -625,7 +635,6 @@
         <span class="n">Loader</span><span class="o">.</span><span class="n">theory_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">commondata_path</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">sset</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">datasets</span><span class="p">):</span>
-
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span>
             <span class="n">sset</span><span class="p">,</span>
             <span class="n">operators_to_keep</span><span class="p">,</span>
@@ -706,7 +715,6 @@
 <div class="viewcode-block" id="get_dataset">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.get_dataset">[docs]</a>
 <span class="k">def</span> <span class="nf">get_dataset</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">data_name</span><span class="p">):</span>
-
     <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">datasets</span><span class="o">.</span><span class="n">ExpNames</span> <span class="o">==</span> <span class="n">data_name</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">ndata</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">NdataExp</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
     <span class="n">posix_in</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">NdataExp</span><span class="p">[:</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
