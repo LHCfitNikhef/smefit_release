@@ -1,8 +1,10 @@
 import yaml
 import pathlib
+import numpy as np
 
-from ..loader import Loader
+from ..loader import Loader, load_datasets
 from ..log import logging
+from ..compute_theory import make_predictions
 
 _logger = logging.getLogger(__name__)
 
@@ -12,7 +14,7 @@ class Projection:
         self,
         commondata_path,
         theory_path,
-        dataset_name,
+        dataset_names,
         projections_path,
         coefficients,
         order,
@@ -21,7 +23,7 @@ class Projection:
     ):
         self.commondata_path = commondata_path
         self.theory_path = theory_path
-        self.dataset_name = dataset_name
+        self.dataset_names = dataset_names
         self.projections_path = projections_path
         self.coefficients = coefficients
         self.order = order
@@ -38,23 +40,17 @@ class Projection:
         projections_path = pathlib.Path(
             projection_config["projections_path"]
         ).absolute()
-        dataset_name = projection_config["dataset"]
+        dataset_names = projection_config["datasets"]
 
-        if projection_config["use_smeft"]:
-            coefficients = projection_config["coefficients"]
-            order = projection_config["order"]
-            use_quad = projection_config["use_quad"]
-            rot_to_fit_basis = projection_config["rot_to_fit_basis"]
-        else:
-            coefficients = []
-            order = "LO"
-            use_quad = False
-            rot_to_fit_basis = None
+        coefficients = projection_config.get("coefficients", [])
+        order = projection_config.get("order", "LO")
+        use_quad = projection_config.get("use_quad", False)
+        rot_to_fit_basis = projection_config.get("rot_to_fit_basis", None)
 
         return cls(
             commondata_path,
             theory_path,
-            dataset_name,
+            dataset_names,
             projections_path,
             coefficients,
             order,
@@ -62,41 +58,51 @@ class Projection:
             rot_to_fit_basis,
         )
 
-    def load_dataset(self):
-        Loader.commondata_path = self.commondata_path
-        Loader.theory_path = self.theory_path
-
-        dataset = Loader(
-            self.dataset_name,
+    def compute_cv_projection(self, dataset_name):
+        _logger.info(f"Building projection for : {dataset_name}")
+        dataset = load_datasets(
+            self.commondata_path,
+            dataset_name,
             self.coefficients,
             self.order,
             self.use_quad,
             False,
             False,
-            self.rot_to_fit_basis,
+            False,
+            theory_path=self.theory_path,
         )
-        import pdb; pdb.set_trace()
-        return dataset.sm_prediction, dataset.stat_error
+
+        cv = dataset.SMTheory
+        if self.coefficients:
+            _logger.warning(
+                f"Some coefficients are specified in the runcard: EFT correction will be used for the central values"
+            )
+            coefficient_values = []
+            for coeff in dataset.OperatorsNames:
+                coefficient_values.append(self.coefficients[coeff]["value"])
+
+            cv = make_predictions(dataset, coefficient_values, self.use_quad, False)
+        return cv
 
     def build_projection(self, reduction_factor):
-        # load original experimental set
-        _logger.info(f"Reading experimental dataset : {self.dataset_name}")
-        path_to_dataset = self.commondata_path / f"{self.dataset_name}.yaml"
+        for dataset in self.dataset_names:
+            # load original experimental set
 
-        with open(path_to_dataset, encoding="utf-8") as f:
-            data_dict = yaml.safe_load(f)
+            path_to_dataset = self.commondata_path / f"{dataset}.yaml"
 
-        # get sm predictions and stat
-        sm, stat = self.load_dataset()
+            with open(path_to_dataset, encoding="utf-8") as f:
+                data_dict = yaml.safe_load(f)
 
-        # use sm predictions for central values
-        data_dict["data_central"] = sm
-        # replace stat with the new one
-        data_dict["statistical_error"] = (reduction_factor * stat).tolist()
+            # get new cv
+            cv = self.compute_cv_projection(dataset)
 
-        projection_folder = self.projections_path
-        projection_folder.mkdir(exist_ok=True)
-        with open(
-            f"{projection_folder}/{self.dataset_name}_projection.yaml", "w"
-        ) as file:
-            yaml.dump(data_dict, file, sort_keys=False)
+            # use sm predictions for central values
+            data_dict["data_central"] = cv.tolist()
+            # replace stat with the new one
+            stat = np.asarray(data_dict["statistical_error"])
+            data_dict["statistical_error"] = (reduction_factor * stat).tolist()
+
+            projection_folder = self.projections_path
+            projection_folder.mkdir(exist_ok=True)
+            with open(f"{projection_folder}/{dataset}_projection.yaml", "w") as file:
+                yaml.dump(data_dict, file, sort_keys=False)
