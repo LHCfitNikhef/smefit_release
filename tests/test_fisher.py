@@ -91,7 +91,7 @@ def test_fisher():
             "order": "NLO",
             "use_theory_covmat": True,
             "theory_path": commondata_path,
-            "use_multiplicative_prescription": False,
+            "use_multiplicative_prescription": True,
         }
         chi2 = Scanner2D(run_card, n_rep)
         xs = np.linspace(0, x_max, n_rep)

@@ -82,7 +82,6 @@ class Loader:
         use_multiplicative_prescription,
         rot_to_fit_basis,
     ):
-
         self._data_folder = self.commondata_path
         self._sys_folder = self.commondata_path / "systypes"
         self._theory_folder = self.theory_path
@@ -236,7 +235,6 @@ class Loader:
 
         # split corrections into a linear and quadratic dict
         for key, value in raw_th_data[order].items():
-
             # quadratic terms
             if "*" in key and use_quad:
                 quad_dict[key] = np.array(value)
@@ -257,9 +255,18 @@ class Loader:
 
         # rotate corrections to fitting basis
         if rotation_matrix is not None:
-            lin_dict_to_keep, quad_dict_to_keep = rotate_to_fit_basis(
+            lin_dict_fit_basis, quad_dict_fit_basis = rotate_to_fit_basis(
                 lin_dict, quad_dict, rotation_matrix
             )
+
+            lin_dict_to_keep = {
+                k: val for k, val in lin_dict_fit_basis.items() if is_to_keep(k)
+            }
+            quad_dict_to_keep = {
+                k: val
+                for k, val in quad_dict_fit_basis.items()
+                if is_to_keep(k.split("*")[0], k.split("*")[1])
+            }
         else:
             lin_dict_to_keep = {k: val for k, val in lin_dict.items() if is_to_keep(k)}
             quad_dict_to_keep = {
@@ -267,7 +274,6 @@ class Loader:
                 for k, val in quad_dict.items()
                 if is_to_keep(k.split("*")[0], k.split("*")[1])
             }
-
         best_sm = np.array(raw_th_data["best_sm"])
         th_cov = np.zeros((best_sm.size, best_sm.size))
         if use_theory_covmat:
@@ -418,7 +424,12 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
     """
 
     if sorted_keys is None:
-        tmp = [[*c,] for _, c in corrections_list]
+        tmp = [
+            [
+                *c,
+            ]
+            for _, c in corrections_list
+        ]
         sorted_keys = np.unique([item for sublist in tmp for item in sublist])
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
     cnt = 0
@@ -426,7 +437,6 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
     for n_dat, correction_dict in corrections_list:
         # loop on corrections
         for key, values in correction_dict.items():
-
             if "*" in key:
                 op1, op2 = key.split("*")
                 if op2 < op1:
@@ -494,7 +504,6 @@ def load_datasets(
         Loader.theory_path = pathlib.Path(commondata_path)
 
     for sset in np.unique(datasets):
-
         dataset = Loader(
             sset,
             operators_to_keep,
@@ -572,7 +581,6 @@ def load_datasets(
 
 
 def get_dataset(datasets, data_name):
-
     idx = np.where(datasets.ExpNames == data_name)[0][0]
     ndata = datasets.NdataExp[idx]
     posix_in = datasets.NdataExp[:idx].sum()
