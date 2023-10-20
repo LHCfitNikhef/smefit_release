@@ -205,12 +205,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.from_file"><code class="docutils literal notranslate"><span class="pre">Runner.from_file()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.global_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.global_analysis()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.mc"><code class="docutils literal notranslate"><span class="pre">Runner.mc()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.ns"><code class="docutils literal notranslate"><span class="pre">Runner.ns()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.pairwise_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.pairwise_analysis()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.rotate_to_pca"><code class="docutils literal notranslate"><span class="pre">Runner.rotate_to_pca()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.run_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.run_analysis()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.setup_result_folder"><code class="docutils literal notranslate"><span class="pre">Runner.setup_result_folder()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.single_parameter_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.single_parameter_analysis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.ultranest"><code class="docutils literal notranslate"><span class="pre">Runner.ultranest()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -393,16 +393,15 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#module-smefit.optimize.ns">smefit.optimize.ns module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer"><code class="docutils literal notranslate"><span class="pre">NSOptimizer</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.chi2_func_ns"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.chi2_func_ns()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.clean"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.clean()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.flat_prior"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.flat_prior()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.from_dict"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.from_dict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.gaussian_loglikelihood"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.gaussian_loglikelihood()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.print_rate"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.print_rate</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.run_sampling"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.run_sampling()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ns.NSOptimizer.save"><code class="docutils literal notranslate"><span class="pre">NSOptimizer.save()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#module-smefit.optimize.ultranest">smefit.optimize.ultranest module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ultranest.USOptimizer"><code class="docutils literal notranslate"><span class="pre">USOptimizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.chi2_func_ns"><code class="docutils literal notranslate"><span class="pre">USOptimizer.chi2_func_ns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.flat_prior"><code class="docutils literal notranslate"><span class="pre">USOptimizer.flat_prior()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.from_dict"><code class="docutils literal notranslate"><span class="pre">USOptimizer.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.gaussian_loglikelihood"><code class="docutils literal notranslate"><span class="pre">USOptimizer.gaussian_loglikelihood()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.print_rate"><code class="docutils literal notranslate"><span class="pre">USOptimizer.print_rate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.run_sampling"><code class="docutils literal notranslate"><span class="pre">USOptimizer.run_sampling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.save"><code class="docutils literal notranslate"><span class="pre">USOptimizer.save()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1340,17 +1339,14 @@ will be computed.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.runner.Runner.ns">
-<span class="sig-name descname"><span class="pre">ns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.ns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.ns" title="Link to this definition"></a></dt>
-<dd><p>Run a fit with <abbr title="Nested Sampling">NS</abbr>.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="smefit.runner.Runner.pairwise_analysis">
 <span class="sig-name descname"><span class="pre">pairwise_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.pairwise_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.pairwise_analysis" title="Link to this definition"></a></dt>
-<dd><p>Run a series of pairwise parameter fits for all the operators specified in the runcard
-:param optimizer: optimizer to be used (NS or MC)
-:type optimizer: string</p>
+<dd><p>Run a series of pairwise parameter fits for all the operators specified in the runcard.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>optimizer</strong> (<em>string</em>) – optimizer to be used (NS or MC)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1379,6 +1375,12 @@ using the selected optimizer.
 <dd><p>Run a seried of single parameter fits for all the operators specified in the runcard
 :param optimizer: optimizer to be used (NS or MC)
 :type optimizer: string</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.ultranest">
+<span class="sig-name descname"><span class="pre">ultranest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.ultranest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.ultranest" title="Link to this definition"></a></dt>
+<dd><p>Run a fit with Ultra Nest.</p>
 </dd></dl>
 
 </dd></dl>

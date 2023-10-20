@@ -17,10 +17,10 @@ smefit.optimize.mc module
    :undoc-members:
    :show-inheritance:
 
-smefit.optimize.ns module
--------------------------
+smefit.optimize.ultranest module
+--------------------------------
 
-.. automodule:: smefit.optimize.ns
+.. automodule:: smefit.optimize.ultranest
    :members:
    :undoc-members:
    :show-inheritance:

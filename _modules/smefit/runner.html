@@ -116,13 +116,19 @@
 <span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">copyfile</span>
 
 <span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
 
 <span class="kn">from</span> <span class="nn">.analyze.pca</span> <span class="kn">import</span> <span class="n">RotateToPca</span>
 <span class="kn">from</span> <span class="nn">.chi2</span> <span class="kn">import</span> <span class="n">Scanner</span>
 <span class="kn">from</span> <span class="nn">.log</span> <span class="kn">import</span> <span class="n">logging</span>
 <span class="kn">from</span> <span class="nn">.optimize.mc</span> <span class="kn">import</span> <span class="n">MCOptimizer</span>
-<span class="kn">from</span> <span class="nn">.optimize.ns</span> <span class="kn">import</span> <span class="n">NSOptimizer</span>
+<span class="kn">from</span> <span class="nn">.optimize.ultranest</span> <span class="kn">import</span> <span class="n">USOptimizer</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
+
+    <span class="n">run_parallel</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="n">run_parallel</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -227,21 +233,22 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Runner.ns">
-<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.ns">[docs]</a>
-    <span class="k">def</span> <span class="nf">ns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a fit with |NS|.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Runner.ultranest">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.ultranest">[docs]</a>
+    <span class="k">def</span> <span class="nf">ultranest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a fit with Ultra Nest.&quot;&quot;&quot;</span>
 
-        <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
-        <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">opt</span> <span class="o">=</span> <span class="n">NSOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">run_parallel</span><span class="p">:</span>
+            <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
+            <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">opt</span> <span class="o">=</span> <span class="n">USOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">opt</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">opt</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">bcast</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">opt</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">opt</span> <span class="o">=</span> <span class="n">USOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 
-        <span class="c1"># Run optimizer</span>
-        <span class="n">opt</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">bcast</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">opt</span><span class="o">.</span><span class="n">run_sampling</span><span class="p">()</span></div>
 
 
@@ -277,8 +284,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span>
+        <span class="c1"># if optimizer == &quot;NS&quot;:</span>
+        <span class="c1">#     self.ns(config)</span>
         <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;NS&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ultranest</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;MC&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mc</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
 
@@ -300,7 +309,7 @@
             <span class="n">single_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;NS&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">(</span><span class="n">single_coeff_config</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ultranest</span><span class="p">(</span><span class="n">single_coeff_config</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;MC&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">mc</span><span class="p">(</span><span class="n">single_coeff_config</span><span class="p">)</span></div>
 
@@ -308,7 +317,8 @@
 <div class="viewcode-block" id="Runner.pairwise_analysis">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.pairwise_analysis">[docs]</a>
     <span class="k">def</span> <span class="nf">pairwise_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a series of pairwise parameter fits for all the operators specified in the runcard</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a series of pairwise parameter fits for all the operators specified in the runcard.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        optimizer: string</span>
@@ -324,7 +334,7 @@
             <span class="n">pairwise_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">c2</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">c2</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;NS&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ns</span><span class="p">(</span><span class="n">pairwise_coeff_config</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ultranest</span><span class="p">(</span><span class="n">pairwise_coeff_config</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;MC&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">mc</span><span class="p">(</span><span class="n">pairwise_coeff_config</span><span class="p">)</span></div>
 

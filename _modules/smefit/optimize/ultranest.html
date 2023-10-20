@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>smefit.optimize.ns &mdash; SMEFiT 0.1.0 documentation</title>
+  <title>smefit.optimize.ultranest &mdash; SMEFiT 0.1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
@@ -100,7 +100,7 @@
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
           <li class="breadcrumb-item"><a href="../optimize.html">smefit.optimize</a></li>
-      <li class="breadcrumb-item active">smefit.optimize.ns</li>
+      <li class="breadcrumb-item active">smefit.optimize.ultranest</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -109,33 +109,39 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for smefit.optimize.ns</h1><div class="highlight"><pre>
+  <h1>Source code for smefit.optimize.ultranest</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Fitting the Wilson coefficients with NS</span>
+<span class="sd">Fitting the Wilson coefficients with |NS|</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
-<span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
-<span class="kn">from</span> <span class="nn">pymultinest.solve</span> <span class="kn">import</span> <span class="n">solve</span>
+<span class="kn">import</span> <span class="nn">ultranest</span>
 <span class="kn">from</span> <span class="nn">rich.style</span> <span class="kn">import</span> <span class="n">Style</span>
 <span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">from</span> <span class="nn">ultranest</span> <span class="kn">import</span> <span class="n">stepsampler</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">log</span>
 <span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
 <span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">load_datasets</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Optimizer</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
+
+    <span class="n">run_parallel</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="n">run_parallel</span> <span class="o">=</span> <span class="kc">False</span>
+
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="NSOptimizer">
-<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer">[docs]</a>
-<span class="k">class</span> <span class="nc">NSOptimizer</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
+<div class="viewcode-block" id="USOptimizer">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer">[docs]</a>
+<span class="k">class</span> <span class="nc">USOptimizer</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Optimizer specification for |NS|</span>
+<span class="sd">    Optimizer specification for Ultra nest</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -147,12 +153,18 @@
 <span class="sd">            If True use also |HO| corrections</span>
 <span class="sd">        live_points : int</span>
 <span class="sd">            number of |NS| live points</span>
-<span class="sd">        efficiency : float</span>
-<span class="sd">            sampling efficiency</span>
-<span class="sd">        const_efficiency: bool</span>
-<span class="sd">            if True use the constant efficiency mode</span>
-<span class="sd">        tolerance: float</span>
-<span class="sd">            evidence tolerance</span>
+<span class="sd">        lepsilon : float</span>
+<span class="sd">            sampling tollerance. Terminate when live point likelihoods are all the same, within Lepsilon tolerance.</span>
+<span class="sd">            Increase this when your likelihood function is inaccurate,</span>
+<span class="sd">        target_evidence_unc: float</span>
+<span class="sd">            target evidence uncertainty.</span>
+<span class="sd">        target_post_unc: float</span>
+<span class="sd">            target posterior uncertainty.</span>
+<span class="sd">        frac_remain: float</span>
+<span class="sd">            integrate until this fraction of the integral is left in the remainder.</span>
+<span class="sd">            Set to a higher number (0.5) if you know the posterior is simple.</span>
+<span class="sd">        store_raw: bool</span>
+<span class="sd">            if True store the result to eventually resume the job</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">print_rate</span> <span class="o">=</span> <span class="mi">5000</span>
@@ -168,9 +180,11 @@
         <span class="n">pairwise_fits</span><span class="p">,</span>
         <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
         <span class="n">live_points</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-        <span class="n">efficiency</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
-        <span class="n">const_efficiency</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">lepsilon</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+        <span class="n">target_evidence_unc</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">target_post_unc</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">frac_remain</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+        <span class="n">store_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -181,15 +195,17 @@
             <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">live_points</span> <span class="o">=</span> <span class="n">live_points</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">efficiency</span> <span class="o">=</span> <span class="n">efficiency</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">const_efficiency</span> <span class="o">=</span> <span class="n">const_efficiency</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="n">tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lepsilon</span> <span class="o">=</span> <span class="n">lepsilon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_evidence_unc</span> <span class="o">=</span> <span class="n">target_evidence_unc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_post_unc</span> <span class="o">=</span> <span class="n">target_post_unc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frac_remain</span> <span class="o">=</span> <span class="n">frac_remain</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result_ID</span> <span class="o">=</span> <span class="n">result_ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pairwise_fits</span> <span class="o">=</span> <span class="n">pairwise_fits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store_raw</span> <span class="o">=</span> <span class="n">store_raw</span>
 
-<div class="viewcode-block" id="NSOptimizer.from_dict">
-<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.from_dict">[docs]</a>
+<div class="viewcode-block" id="USOptimizer.from_dict">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.from_dict">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -231,23 +247,31 @@
                 <span class="sa">f</span><span class="s2">&quot;Number of live points (nlive) not set in the input card. Using default: </span><span class="si">{</span><span class="n">nlive</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-        <span class="n">efr</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;efr&quot;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;efr&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">lepsilon</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lepsilon&quot;</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;lepsilon&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Sampling efficiency (efr) not set in the input card. Using default: </span><span class="si">{</span><span class="n">efr</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Sampling tollerance (Lepsilon) not set in the input card. Using default: </span><span class="si">{</span><span class="n">lepsilon</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-        <span class="n">ceff</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ceff&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;ceff&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">target_evidence_unc</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;target_evidence_unc&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;target_evidence_unc&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Constant efficiency mode (ceff) not set in the input card. Using default: </span><span class="si">{</span><span class="n">ceff</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Target Evidence uncertanty (target_evidence_unc) not set in the input card. Using default: </span><span class="si">{</span><span class="n">target_evidence_unc</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-        <span class="n">toll</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;toll&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;toll&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">target_post_unc</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;target_post_unc&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;target_post_unc&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Evidence tolerance (toll) not set in the input card. Using default: </span><span class="si">{</span><span class="n">toll</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Target Posterior uncertanty (target_post_unc) not set in the input card. Using default: </span><span class="si">{</span><span class="n">target_post_unc</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
+
+        <span class="n">frac_remain</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;frac_remain&quot;</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;frac_remain&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Remaining fraction (frac_remain) not set in the input card. Using default: </span><span class="si">{</span><span class="n">frac_remain</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">store_raw</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;store_raw&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="n">use_multiplicative_prescription</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="s2">&quot;use_multiplicative_prescription&quot;</span><span class="p">,</span> <span class="kc">False</span>
@@ -262,14 +286,16 @@
             <span class="n">pairwise_fits</span><span class="p">,</span>
             <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
             <span class="n">live_points</span><span class="o">=</span><span class="n">nlive</span><span class="p">,</span>
-            <span class="n">efficiency</span><span class="o">=</span><span class="n">efr</span><span class="p">,</span>
-            <span class="n">const_efficiency</span><span class="o">=</span><span class="n">ceff</span><span class="p">,</span>
-            <span class="n">tolerance</span><span class="o">=</span><span class="n">toll</span><span class="p">,</span>
+            <span class="n">lepsilon</span><span class="o">=</span><span class="n">lepsilon</span><span class="p">,</span>
+            <span class="n">target_evidence_unc</span><span class="o">=</span><span class="n">target_evidence_unc</span><span class="p">,</span>
+            <span class="n">target_post_unc</span><span class="o">=</span><span class="n">target_post_unc</span><span class="p">,</span>
+            <span class="n">frac_remain</span><span class="o">=</span><span class="n">frac_remain</span><span class="p">,</span>
+            <span class="n">store_raw</span><span class="o">=</span><span class="n">store_raw</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="NSOptimizer.chi2_func_ns">
-<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.chi2_func_ns">[docs]</a>
+<div class="viewcode-block" id="USOptimizer.chi2_func_ns">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.chi2_func_ns">[docs]</a>
     <span class="k">def</span> <span class="nf">chi2_func_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wrap the chi2 in a function for the optimizer. Pass noise and</span>
@@ -291,8 +317,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="NSOptimizer.gaussian_loglikelihood">
-<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.gaussian_loglikelihood">[docs]</a>
+<div class="viewcode-block" id="USOptimizer.gaussian_loglikelihood">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.gaussian_loglikelihood">[docs]</a>
     <span class="k">def</span> <span class="nf">gaussian_loglikelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypercube</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Multi gaussian log likelihood function</span>
@@ -311,8 +337,8 @@
         <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func_ns</span><span class="p">(</span><span class="n">hypercube</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="NSOptimizer.flat_prior">
-<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.flat_prior">[docs]</a>
+<div class="viewcode-block" id="USOptimizer.flat_prior">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.flat_prior">[docs]</a>
     <span class="k">def</span> <span class="nf">flat_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypercube</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update the prior function</span>
@@ -327,60 +353,49 @@
 <span class="sd">            flat_prior : np.ndarray</span>
 <span class="sd">                updated hypercube prior</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">min_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">minimum</span>
-        <span class="n">max_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">maximum</span>
+        <span class="n">min_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">minimum</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">max_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">maximum</span><span class="o">.</span><span class="n">values</span>
         <span class="k">return</span> <span class="n">hypercube</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">+</span> <span class="n">min_val</span></div>
 
 
-<div class="viewcode-block" id="NSOptimizer.clean">
-<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.clean">[docs]</a>
-    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove raw |NS| output if you want to keep raw output, don&#39;t call this method&quot;&quot;&quot;</span>
-
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_path</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">live_points</span><span class="si">}</span><span class="s2">_&quot;</span><span class="p">):</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">/</span> <span class="n">f</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="NSOptimizer.run_sampling">
-<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.run_sampling">[docs]</a>
+<div class="viewcode-block" id="USOptimizer.run_sampling">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.run_sampling">[docs]</a>
     <span class="k">def</span> <span class="nf">run_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the minimization with Nested Sampling&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the minimization with Ultra nest.&quot;&quot;&quot;</span>
 
-        <span class="c1"># Prefix for results</span>
-        <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">live_points</span><span class="si">}</span><span class="s2">_&quot;</span>
-
-        <span class="c1"># Additional check</span>
-        <span class="c1"># Multinest will crash if the length of the results</span>
-        <span class="c1"># path+post_equal_weights.txt is longer than 100.</span>
-        <span class="c1"># you can solve this making you path or fit id shorter.</span>
-        <span class="c1"># Otherwise you can hack /pymultinest/solve.py</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">post_equal_weights.txt&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">UserWarning</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Py multinest support a buffer or maximum 100 characters: </span><span class="se">\</span>
-<span class="s2">                    </span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">post_equal_weights.txt is too long, </span><span class="se">\</span>
-<span class="s2">                         please chose a shorter path or Fit ID&quot;</span>
-            <span class="p">)</span>
+        <span class="n">log_dir</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_raw</span><span class="p">:</span>
+            <span class="n">log_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span>
 
         <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-        <span class="n">result</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span>
-            <span class="n">LogLikelihood</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gaussian_loglikelihood</span><span class="p">,</span>
-            <span class="n">Prior</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">flat_prior</span><span class="p">,</span>
-            <span class="n">n_dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span><span class="p">,</span>
-            <span class="n">n_params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">npar</span><span class="p">,</span>
-            <span class="n">outputfiles_basename</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">prefix</span><span class="p">),</span>
-            <span class="n">n_live_points</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">live_points</span><span class="p">,</span>
-            <span class="n">sampling_efficiency</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">efficiency</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">importance_nested_sampling</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">const_efficiency_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">const_efficiency</span><span class="p">,</span>
-            <span class="n">evidence_tolerance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span><span class="p">,</span>
+        <span class="n">sampler</span> <span class="o">=</span> <span class="n">ultranest</span><span class="o">.</span><span class="n">ReactiveNestedSampler</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gaussian_loglikelihood</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">flat_prior</span><span class="p">,</span>
+            <span class="n">log_dir</span><span class="o">=</span><span class="n">log_dir</span><span class="p">,</span>
+            <span class="n">resume</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">npar</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="c1"># set up step sampler. Here, we use a differential evolution slice sampler:</span>
+            <span class="n">sampler</span><span class="o">.</span><span class="n">stepsampler</span> <span class="o">=</span> <span class="n">stepsampler</span><span class="o">.</span><span class="n">SliceSampler</span><span class="p">(</span>
+                <span class="n">nsteps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                <span class="n">generate_direction</span><span class="o">=</span><span class="n">stepsampler</span><span class="o">.</span><span class="n">generate_region_oriented_direction</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">min_num_live_points</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">live_points</span><span class="p">,</span>
+            <span class="n">dlogz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target_evidence_unc</span><span class="p">,</span>
+            <span class="n">frac_remain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">frac_remain</span><span class="p">,</span>
+            <span class="n">dKL</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target_post_unc</span><span class="p">,</span>
+            <span class="n">Lepsilon</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lepsilon</span><span class="p">,</span>
+            <span class="n">update_interval_volume_fraction</span><span class="o">=</span><span class="mf">0.8</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">npar</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="k">else</span> <span class="mf">0.2</span><span class="p">,</span>
+            <span class="n">max_num_improvement_loops</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">t2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
-        <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
+        <span class="n">rank</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">run_parallel</span><span class="p">:</span>
+            <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
+            <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time : </span><span class="si">{</span><span class="p">((</span><span class="n">t2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">60.0</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> minutes&quot;</span><span class="p">)</span>
@@ -396,12 +411,11 @@
                 <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">par</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="NSOptimizer.save">
-<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ns.NSOptimizer.save">[docs]</a>
+<div class="viewcode-block" id="USOptimizer.save">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.save">[docs]</a>
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save |NS| replicas to json inside a dictionary:</span>

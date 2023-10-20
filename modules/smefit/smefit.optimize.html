@@ -92,7 +92,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#smefit.optimize.Optimizer"><code class="docutils literal notranslate"><span class="pre">Optimizer</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-smefit.optimize.mc">smefit.optimize.mc module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-smefit.optimize.ns">smefit.optimize.ns module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-smefit.optimize.ultranest">smefit.optimize.ultranest module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html">smefit.postfit package</a></li>
@@ -309,14 +309,14 @@ The default minimizer is trust-constr.</p>
 </dd></dl>
 
 </section>
-<section id="module-smefit.optimize.ns">
-<span id="smefit-optimize-ns-module"></span><h2>smefit.optimize.ns module<a class="headerlink" href="#module-smefit.optimize.ns" title="Link to this heading"></a></h2>
-<p>Fitting the Wilson coefficients with NS</p>
+<section id="module-smefit.optimize.ultranest">
+<span id="smefit-optimize-ultranest-module"></span><h2>smefit.optimize.ultranest module<a class="headerlink" href="#module-smefit.optimize.ultranest" title="Link to this heading"></a></h2>
+<p>Fitting the Wilson coefficients with <abbr title="Nested Sampling">NS</abbr></p>
 <dl class="py class">
-<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.optimize.ns.</span></span><span class="sig-name descname"><span class="pre">NSOptimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loaded_datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_parameter_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairwise_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">live_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">efficiency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const_efficiency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="smefit.optimize.ultranest.USOptimizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.optimize.ultranest.</span></span><span class="sig-name descname"><span class="pre">USOptimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loaded_datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_parameter_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairwise_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">live_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lepsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_evidence_unc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_post_unc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frac_remain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_raw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ultranest.html#USOptimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ultranest.USOptimizer" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#smefit.optimize.Optimizer" title="smefit.optimize.Optimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Optimizer</span></code></a></p>
-<p>Optimizer specification for <abbr title="Nested Sampling">NS</abbr></p>
+<p>Optimizer specification for Ultra nest</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -324,15 +324,19 @@ The default minimizer is trust-constr.</p>
 <li><p><strong>coefficients</strong> (<cite>smefit.coefficients.CoefficientManager</cite>) – instance of <cite>CoefficientManager</cite> with all the relevant coefficients to fit</p></li>
 <li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – If True use also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
 <li><p><strong>live_points</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – number of <abbr title="Nested Sampling">NS</abbr> live points</p></li>
-<li><p><strong>efficiency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – sampling efficiency</p></li>
-<li><p><strong>const_efficiency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True use the constant efficiency mode</p></li>
-<li><p><strong>tolerance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – evidence tolerance</p></li>
+<li><p><strong>lepsilon</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – sampling tollerance. Terminate when live point likelihoods are all the same, within Lepsilon tolerance.
+Increase this when your likelihood function is inaccurate,</p></li>
+<li><p><strong>target_evidence_unc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – target evidence uncertainty.</p></li>
+<li><p><strong>target_post_unc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – target posterior uncertainty.</p></li>
+<li><p><strong>frac_remain</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – integrate until this fraction of the integral is left in the remainder.
+Set to a higher number (0.5) if you know the posterior is simple.</p></li>
+<li><p><strong>store_raw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True store the result to eventually resume the job</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.chi2_func_ns">
-<span class="sig-name descname"><span class="pre">chi2_func_ns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.chi2_func_ns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.chi2_func_ns" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="smefit.optimize.ultranest.USOptimizer.chi2_func_ns">
+<span class="sig-name descname"><span class="pre">chi2_func_ns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ultranest.html#USOptimizer.chi2_func_ns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ultranest.USOptimizer.chi2_func_ns" title="Link to this definition"></a></dt>
 <dd><p>Wrap the chi2 in a function for the optimizer. Pass noise and
 data info as args. Log the chi2 value and values of the coefficients.</p>
 <dl class="field-list simple">
@@ -349,14 +353,8 @@ data info as args. Log the chi2 value and values of the coefficients.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.clean">
-<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.clean" title="Link to this definition"></a></dt>
-<dd><p>Remove raw <abbr title="Nested Sampling">NS</abbr> output if you want to keep raw output, don’t call this method</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.flat_prior">
-<span class="sig-name descname"><span class="pre">flat_prior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypercube</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.flat_prior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.flat_prior" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="smefit.optimize.ultranest.USOptimizer.flat_prior">
+<span class="sig-name descname"><span class="pre">flat_prior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypercube</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ultranest.html#USOptimizer.flat_prior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ultranest.USOptimizer.flat_prior" title="Link to this definition"></a></dt>
 <dd><p>Update the prior function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -372,8 +370,8 @@ data info as args. Log the chi2 value and values of the coefficients.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.from_dict">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.from_dict" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="smefit.optimize.ultranest.USOptimizer.from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ultranest.html#USOptimizer.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ultranest.USOptimizer.from_dict" title="Link to this definition"></a></dt>
 <dd><p>Create object from theory dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -389,8 +387,8 @@ data info as args. Log the chi2 value and values of the coefficients.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.gaussian_loglikelihood">
-<span class="sig-name descname"><span class="pre">gaussian_loglikelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypercube</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.gaussian_loglikelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.gaussian_loglikelihood" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="smefit.optimize.ultranest.USOptimizer.gaussian_loglikelihood">
+<span class="sig-name descname"><span class="pre">gaussian_loglikelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hypercube</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ultranest.html#USOptimizer.gaussian_loglikelihood"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ultranest.USOptimizer.gaussian_loglikelihood" title="Link to this definition"></a></dt>
 <dd><p>Multi gaussian log likelihood function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -406,19 +404,19 @@ data info as args. Log the chi2 value and values of the coefficients.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.print_rate">
-<span class="sig-name descname"><span class="pre">print_rate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5000</span></em><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.print_rate" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="smefit.optimize.ultranest.USOptimizer.print_rate">
+<span class="sig-name descname"><span class="pre">print_rate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5000</span></em><a class="headerlink" href="#smefit.optimize.ultranest.USOptimizer.print_rate" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.run_sampling">
-<span class="sig-name descname"><span class="pre">run_sampling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.run_sampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.run_sampling" title="Link to this definition"></a></dt>
-<dd><p>Run the minimization with Nested Sampling</p>
+<dt class="sig sig-object py" id="smefit.optimize.ultranest.USOptimizer.run_sampling">
+<span class="sig-name descname"><span class="pre">run_sampling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ultranest.html#USOptimizer.run_sampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ultranest.USOptimizer.run_sampling" title="Link to this definition"></a></dt>
+<dd><p>Run the minimization with Ultra nest.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.optimize.ns.NSOptimizer.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ns.html#NSOptimizer.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ns.NSOptimizer.save" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="smefit.optimize.ultranest.USOptimizer.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ultranest.html#USOptimizer.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ultranest.USOptimizer.save" title="Link to this definition"></a></dt>
 <dd><p>Save <abbr title="Nested Sampling">NS</abbr> replicas to json inside a dictionary:
 {coff: [replicas values]}</p>
 <dl class="field-list simple">

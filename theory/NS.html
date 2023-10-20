@@ -119,8 +119,9 @@
              
   <section id="nested-sampling">
 <h1>Nested Sampling<a class="headerlink" href="#nested-sampling" title="Link to this heading"></a></h1>
-<p><abbr title="Standard Model Effective Field Theory fitter">SMEFiT</abbr> implements one fitting strategies using the MultiNest and <a class="reference internal" href="#"><span class="doc">Nested Sampling</span></a>
-algorithm <span id="id1">[<a class="reference internal" href="../zzz-refs.html#id17" title="F. Feroz, M. P. Hobson, E. Cameron, and A. N. Pettitt. Importance Nested Sampling and the MultiNest Algorithm. 2013. arXiv:1306.2144, doi:10.21105/astro.1306.2144.">FHCP13</a>, <a class="reference internal" href="../zzz-refs.html#id16" title="Farhan Feroz and M.P. Hobson. Multimodal nested sampling: an efficient and robust alternative to MCMC methods for astronomical data analysis. Mon. Not. Roy. Astron. Soc., 384:449, 2008. arXiv:0704.3704, doi:10.1111/j.1365-2966.2007.12353.x.">FH08</a>]</span>, a robust sampling procedure is based on Bayesian inference.</p>
+<p><abbr title="Standard Model Effective Field Theory fitter">SMEFiT</abbr> implements one fitting strategies using Ultranest and <a class="reference internal" href="#"><span class="doc">Nested Sampling</span></a>
+algorithm <span id="id1">[<a class="reference internal" href="../zzz-refs.html#id18" title="Johannes Buchner. Collaborative nested sampling: big data versus complex physical models. Publications of the Astronomical Society of the Pacific, 131(1004):108005, aug 2019. URL: https://doi.org/10.1088%2F1538-3873%2Faae7fc, doi:10.1088/1538-3873/aae7fc.">Buc19</a>, <a class="reference internal" href="../zzz-refs.html#id17" title="F. Feroz, M. P. Hobson, E. Cameron, and A. N. Pettitt. Importance Nested Sampling and the MultiNest Algorithm. 2013. arXiv:1306.2144, doi:10.21105/astro.1306.2144.">FHCP13</a>, <a class="reference internal" href="../zzz-refs.html#id16" title="Farhan Feroz and M.P. Hobson. Multimodal nested sampling: an efficient and robust alternative to MCMC methods for astronomical data analysis. Mon. Not. Roy. Astron. Soc., 384:449, 2008. arXiv:0704.3704, doi:10.1111/j.1365-2966.2007.12353.x.">FH08</a>]</span>, a robust sampling procedure is based on Bayesian inference.
+The actual implemtation is based on the package <a class="reference external" href="https://johannesbuchner.github.io/UltraNest/index.html">Ultranest</a></p>
 <section id="formalism">
 <h2>Formalism<a class="headerlink" href="#formalism" title="Link to this heading"></a></h2>
 <p>The starting point of Nested Sampling (<abbr title="Nested Sampling">NS</abbr>) is Bayes’ theorem, which allows us to evaluate the
@@ -235,8 +236,8 @@ a hard boundary of <span class="math notranslate nohighlight">\(\left( -50 , 50 
 </section>
 <section id="performance">
 <h2>Performance<a class="headerlink" href="#performance" title="Link to this heading"></a></h2>
-<p>To increase the efficiency of the posterior probability estimation by NS, we enable the
-<em>constant efficiency mode</em> in MultiNest, which adjusts the
+<p>To increase the efficiency of the posterior probability estimation by NS,
+we set <cite>lepsilon=0.05</cite>, which adjusts the
 total volume of ellipsoids spanning the live points so that the sampling
 efficiency is close to its associated hyperparameter set by the user.
 With 24 cpu cores,

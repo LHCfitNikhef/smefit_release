@@ -67,16 +67,19 @@ single_parameter_fits: False
 bounds: Null
 
 # NS settings
-nlive: 1000
-efr: 0.005
-ceff: True
-toll: 0.5
+nlive: 400 # number of live points used during sampling
+lepsilon: 0.05 #  Terminate when live point likelihoods are all the same, within Lepsilon tolerance.
+target_evidence_unc: 0.5 # target evidence uncertanty
+target_post_unc: 0.5 # target posterior uncertanty
+frac_remain: 0.01 # Set to a higher number (0.5) if you know the posterior is simple.
+store_raw: false # if true strare the raw result and enable resuming the job.
+
 
 #MC settings
-mc_minimiser: 'cma'
-restarts: 7
-maxiter: 100000
-chi2_threshold: 3.0
+mc_minimiser: 'cma' # Allowed options are: 'cma', 'dual_annealing', 'trust-constr'
+restarts: 7 # number of restarts (only for cma)
+maxiter: 100000 # max number of iteration
+chi2_threshold: 3.0 # post fit chi2 threshold
 ```
 
 ### Datasets to consider and coefficients to fit

@@ -113,12 +113,18 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">pathlib</span>
 
-<span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
 <span class="kn">from</span> <span class="nn">rich.style</span> <span class="kn">import</span> <span class="n">Style</span>
 <span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">log</span>
 <span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">get_dataset</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
+
+    <span class="n">run_parallel</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="n">run_parallel</span> <span class="o">=</span> <span class="kc">False</span>
 
 
 <div class="viewcode-block" id="Optimizer">
@@ -195,9 +201,11 @@
 <span class="sd">            current_chi2 : np.ndarray</span>
 <span class="sd">                computed :math:`\chi^2`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rank</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">run_parallel</span><span class="p">:</span>
+            <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
+            <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
 
-        <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
-        <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="n">print_log</span><span class="p">:</span>
