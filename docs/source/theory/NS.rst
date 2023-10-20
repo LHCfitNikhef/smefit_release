@@ -2,8 +2,9 @@ Nested Sampling
 ===============
 
 
-|SMEFiT| implements one fitting strategies using the MultiNest and :doc:`Nested Sampling<NS>`
-algorithm :cite:`Feroz:2007kg,Feroz:2013hea`, a robust sampling procedure is based on Bayesian inference.
+|SMEFiT| implements one fitting strategies using Ultranest and :doc:`Nested Sampling<NS>`
+algorithm :cite:`Feroz:2007kg,Feroz:2013hea,Buchner_2019`, a robust sampling procedure is based on Bayesian inference.
+The actual implemtation is based on the package `Ultranest <https://johannesbuchner.github.io/UltraNest/index.html>`_
 
 
 Formalism
@@ -152,8 +153,8 @@ Performance
 ~~~~~~~~~~~
 
 
-To increase the efficiency of the posterior probability estimation by NS, we enable the
-*constant efficiency mode* in MultiNest, which adjusts the
+To increase the efficiency of the posterior probability estimation by NS,
+we set `lepsilon=0.05`, which adjusts the
 total volume of ellipsoids spanning the live points so that the sampling
 efficiency is close to its associated hyperparameter set by the user.
 With 24 cpu cores,

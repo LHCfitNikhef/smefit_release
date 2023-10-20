@@ -2,7 +2,6 @@
 import pathlib
 
 import click
-from mpi4py import MPI
 
 from .. import log
 from ..analyze import run_report
@@ -10,6 +9,13 @@ from ..log import print_banner, setup_console
 from ..postfit import Postfit
 from ..runner import Runner
 from .base import base_command, root_path
+
+try:
+    from mpi4py import MPI
+
+    run_parallel = True
+except ModuleNotFoundError:
+    run_parallel = False
 
 fit_card = click.argument(
     "fit_card",
@@ -50,12 +56,14 @@ rotate_to_pca = click.option(
 def nested_sampling(
     fit_card: pathlib.Path, log_file: pathlib.Path, rotate_to_pca: bool
 ):
-    """Run a fit with |NS|.
+    """Run a fit with |NS| (Ultra Nest).
 
     Usage: smefit NS [OPTIONS] path_to_runcard
     """
-    comm = MPI.COMM_WORLD
-    rank = comm.Get_rank()
+    rank = 0
+    if run_parallel:
+        comm = MPI.COMM_WORLD
+        rank = comm.Get_rank()
 
     if rank == 0:
         setup_console(log_file)
@@ -67,7 +75,8 @@ def nested_sampling(
     else:
         runner = None
 
-    runner = comm.bcast(runner, root=0)
+    if run_parallel:
+        runner = comm.bcast(runner, root=0)
     runner.run_analysis("NS")
 
 

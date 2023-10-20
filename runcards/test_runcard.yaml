@@ -1,13 +1,14 @@
 # Input YAML configurations for SMEFiT code
+result_ID: test_runcard
 
 # absolute path where results are stored
 result_path: /data/theorie/gmagni/smefit_release/results
 
 # path to common data
-data_path:  /data/theorie/gmagni/smefit_release/commondata
+data_path:  /data/theorie/gmagni/smefit_database/commondata
 
 # path to theory tables, default same as data path
-theory_path:  /data/theorie/gmagni/smefit_release/theory
+theory_path:  /data/theorie/gmagni/smefit_database/theory
 
 # pQCD order (LO or NLO)
 order: NLO
@@ -21,10 +22,14 @@ use_quad: False
 bounds: Null
 
 # NS settings
-nlive: 50
-efr: 0.05
-ceff: True
-toll: 0.5
+nlive: 400
+lepsilon: 0.05
+target_evidence_unc: 0.5
+target_post_unc: 0.5
+frac_remain: 0.01
+store_raw: false
+
+use_t0: True
 
 # Datasets to include
 datasets:
@@ -130,73 +135,74 @@ datasets:
 coefficients:
 
   ## TOP COEFFICIENTS ##
-  OpQM: {'min': -10, 'max': 10}
+  OpQM: {'min': -10.0, 'max': 10.0}
   O3pQ3: {'min': -2.0, 'max': 2.0}
-  Opt: {'min': -25.0, 'max': 15.0}
-  OtW: {'min': -1.0, 'max': 1.0}
-  OtG: {'min': -1.0, 'max': 1.0}
-  Otp: {'min': -10.0, 'max': 5.0}
-  OtZ: {'min': -10, 'max': 10}
+#   Opt: {'min': -25.0, 'max': 15.0}
+#   OtW: {'min': -1.0, 'max': 1.0}
+#   OtG: {'min': -1.0, 'max': 1.0}
+#   Otp: {'min': -10.0, 'max': 5.0}
+#   OtZ: {'min': -20.0, 'max': 10.0}
 
-  # OQQ1: {'min': -10, 'max': 10.0}
-  # OQQ8: {'min': -20.0, 'max': 20.0}
-  # OQt1: {'min': -10.0, 'max': 10.0}
-  # OQt8: {'min': -20.0, 'max': 20.0}
-  # Ott1: {'min': -10.0, 'max': 10.0}
+#   OQQ1: {'min': -200.0, 'max': 200.0}
+#   OQQ8: {'min': -200.0, 'max': 200.0}
+#   OQt1: {'min': -200.0, 'max': 200.0}
+#   OQt8: {'min': -200.0, 'max': 200.0}
+#   Ott1: {'min': -200.0, 'max': 200.0}
 
-  O81qq: {'min': -5, 'max': 5}
-  O11qq: {'min': -5, 'max': 5}
-  O83qq: {'min': -5, 'max': 5}
-  O13qq: {'min': -5, 'max': 5}
-  O8qt: {'min': -5, 'max': 5}
-  O1qt: {'min': -5, 'max': 5}
-  O8ut: {'min': -5, 'max': 5}
-  O1ut: {'min': -5, 'max': 5}
-  O8qu: {'min': -5, 'max': 5}
-  O1qu: {'min': -5, 'max': 5}
-  O8dt: {'min': -5, 'max': 5}
-  O1dt: {'min': -5, 'max': 5}
-  O8qd: {'min': -5, 'max': 5}
-  O1qd: {'min': -5, 'max': 5}
+#   O81qq: {'min': -5, 'max': 5}
+#   O11qq: {'min': -50, 'max': 50}
+#   O83qq: {'min': -50, 'max': 50}
+#   O13qq: {'min': -5, 'max': 5}
+#   O8qt: {'min': -5, 'max': 5}
+#   O1qt: {'min': -50, 'max': 50}
+#   O8ut: {'min': -50, 'max': 50}
+#   O1ut: {'min': -50, 'max': 50}
+#   O8qu: {'min': -50, 'max': 50}
+#   O1qu: {'min': -50, 'max': 50}
+#   O8dt: {'min': -50, 'max': 50}
+#   O1dt: {'min': -50, 'max': 50}
+#   O8qd: {'min': -50, 'max': 50}
+#   O1qd: {'min': -50, 'max': 50}
 
-  # Do not enter with our flavor assumptions
-  #Off: {'fixed': True,  'min': -35.0, 'max': 10.0}
-  #ObW: {'fixed': True,  'min': -35.0, 'max': 10.0}
-  #OQtQb1: {'fixed': True,  'min': -35.0, 'max': 10.0}
-  #OQtQb8: {'fixed': True,  'min': -35.0, 'max': 10.0}
-  #OQb1: {'fixed': True,  'min': -35.0, 'max': 10.0}
-  #OQb8: {'fixed': True,  'min': -35.0, 'max': 10.0}
-  #Otb1: {'fixed': True,  'min': -35.0, 'max': 10.0}
-  #Otb8: {'fixed': True,  'min': -35.0, 'max': 10.0}
+#   # # Do not enter with our flavor assumptions
+#   # # Off: {'fixed': True,  'min': -35.0, 'max': 10.0}
+#   # # ObW: {'fixed': True,  'min': -35.0, 'max': 10.0}
+#   # # OQtQb1: {'fixed': True,  'min': -35.0, 'max': 10.0}
+#   # # OQtQb8: {'fixed': True,  'min': -35.0, 'max': 10.0}
+#   # # OQb1: {'fixed': True,  'min': -35.0, 'max': 10.0}
+#   # # OQb8: {'fixed': True,  'min': -35.0, 'max': 10.0}
+#   # # Otb1: {'fixed': True,  'min': -35.0, 'max': 10.0}
+#   # # Otb8: {'fixed': True,  'min': -35.0, 'max': 10.0}
 
-  ## HIGGS COEFFICIENTS ##
-  OpG: {'min': -0.2, 'max': 0.075}
-  OpB: {'min': -0.5, 'max': 0.35}
-  OpW: {'min': -0.4, 'max': 0.5}
-  OpWB: {'min': -0.3, 'max': 0.5}
-  Opd: {'min': -5.0, 'max': 5.0}
-  OpD: {'min': -1.0, 'max': 1.0}
-  OpqMi: {'constrain': [{'OpD': 0.9248},{'OpWB': 1.8347}], 'min': -30, 'max': 30}
-  O3pq: {'constrain': [{'OpD': -0.8415},{'OpWB': -1.8347}], 'min': -0.5, 'max': 1.0}
-  Opui: {'constrain': {'OpD': 0.3333}, 'min': -0.5, 'max': 1.0}
-  Opdi: {'constrain': {'OpD': -0.1667}, 'min': -0.5, 'max': 1.0}
-  Ocp: {'min': -0.44, 'max': 0.81}
-  Obp: {'min': -0.6, 'max': 0.22}
-  Opl1: {'constrain': {'OpD': -0.25}, 'min': -0.5, 'max': 1.0}
-  Opl2: {'constrain': {'OpD': -0.25}, 'min': -0.5, 'max': 1.0}
-  Opl3: {'constrain': {'OpD': -0.25}, 'min': -0.5, 'max': 1.0}
-  O3pl1: {'constrain': [{'OpD': -0.8415},{'OpWB': -1.8347}], 'min': -30.0, 'max': 60.0}
-  O3pl2: {'constrain': [{'OpD': -0.8415},{'OpWB': -1.8347}], 'min': -30.0, 'max': 60.0}
-  O3pl3: {'constrain': [{'OpD': -0.8415},{'OpWB': -1.8347}], 'min': -0.5, 'max': 1.0}
-  Ope: {'constrain': {'OpD': -0.5}, 'min': -0.5, 'max': 1.0}
-  Opmu: {'constrain': {'OpD': -0.5}, 'min': -0.5, 'max': 1.0}
-  Opta: {'constrain': {'OpD': -0.5}, 'min': -0.5, 'max': 1.0}
-  Otap: {'min': -0.28, 'max': 0.72}
-  Oll: {'constrain': True, 'value': 0.0,  'min': -0.5, 'max': 1.0}
+#   # ## HIGGS COEFFICIENTS ##
+#   OpG: {'min': -1.0, 'max': 1.0}
+#   OpB: {'min': -5.0, 'max': 5.0}
+#   OpW: {'min': -10.0, 'max': 10}
+#   OpWB: {'min': -10, 'max': 10}
+#   Opd: {'min': -5.0, 'max': 15.0}
+#   OpD: {'min': -5.0, 'max': 15.0}
 
-  # DIBOSON COEFFICIENTS ##
-  OWWW: {'min': -0.85, 'max': 0.35}
-  OW: {'constrain': [{'OpD': -5.1754},{'OpWB': -11.2835}], 'min': -0.80, 'max': 0.25}
-  OB: {'constrain': {'OpD': 2.8209}, 'value':, 'min': -0.85, 'max': 0.30}
+#   OpqMi: {'constrain': [{'OpD': 0.9248},{'OpWB': 1.8347}], 'min': -30, 'max': 30}
+#   O3pq: {'constrain': [{'OpD': -0.8415},{'OpWB': -1.8347}], 'min': -0.5, 'max': 1.0}
+#   Opui: {'constrain': {'OpD': 0.3333}, 'min': -0.5, 'max': 1.0}
+#   Opdi: {'constrain': {'OpD': -0.1667}, 'min': -0.5, 'max': 1.0}
+#   Ocp: {'min': -0.44, 'max': 0.81}
+#   Obp: {'min': -0.6, 'max': 0.22}
+#   Opl1: {'constrain': {'OpD': -0.25}, 'min': -0.5, 'max': 1.0}
+#   Opl2: {'constrain': {'OpD': -0.25}, 'min': -0.5, 'max': 1.0}
+#   Opl3: {'constrain': {'OpD': -0.25}, 'min': -0.5, 'max': 1.0}
+#   O3pl1: {'constrain': [{'OpD': -0.8415},{'OpWB': -1.8347}], 'min': -30.0, 'max': 60.0}
+#   O3pl2: {'constrain': [{'OpD': -0.8415},{'OpWB': -1.8347}], 'min': -30.0, 'max': 60.0}
+#   O3pl3: {'constrain': [{'OpD': -0.8415},{'OpWB': -1.8347}], 'min': -0.5, 'max': 1.0}
+#   Ope: {'constrain': {'OpD': -0.5}, 'min': -0.5, 'max': 1.0}
+#   Opmu: {'constrain': {'OpD': -0.5}, 'min': -0.5, 'max': 1.0}
+#   Opta: {'constrain': {'OpD': -0.5}, 'min': -0.5, 'max': 1.0}
+#   Otap: {'min': -0.28, 'max': 0.72}
+#   Oll: {'constrain': True, 'value': 0.0,  'min': -0.5, 'max': 1.0}
+
+#   ## DIBOSON COEFFICIENTS ##
+#   OWWW: {'min': -15.0, 'max': 15.0}
+#   OW: {'constrain': [{'OpD': -5.1754},{'OpWB': -11.2835}], 'min': -0.80, 'max': 0.25}
+#   OB: {'constrain': {'OpD': 2.8209}, 'value':, 'min': -0.85, 'max': 0.30}
 
 rot_to_fit_basis: null
