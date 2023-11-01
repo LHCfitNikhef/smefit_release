@@ -1,8 +1,8 @@
 # UV dictionary with WCs in terms of UV variables
 # ~~~~~~~~~~~~~~~~~~~~~~
-UV Collection : TestMatchingCollection1Loop
-UV model : UserModel
-Model name : UserModel
+UV Collection : OneLoop
+UV model : T1
+Model name : T1
 # ~~~~~~~~~~~~~~~~~~~~~~
 UV couplings : [lambdaT13]
 UV masses : [MT1]
