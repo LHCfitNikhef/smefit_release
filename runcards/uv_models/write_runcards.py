@@ -104,7 +104,7 @@ def dump_runcard(
     is_uv: bool,
 ) -> None:
     """Parse a model card to a SMEFiT runcard."""
-    if is_uv and '1L' in collection:
+    if is_uv and '1L' in collection or "OneLoop" in collection:
         file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Loop.yaml"
     elif is_uv:
         file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
@@ -120,12 +120,6 @@ def dump_runcard(
     runcard["order"] = pto
     runcard["use_quad"] = eft_order == "HO"
 
-    # names
-    runcard["resultID"] = f"Model_{is_uv}_{idx_model}_{pto}_{eft_order}"
-    runcard["Model name"] = model_dict["Model name"]
-    runcard["UV Collection"] = model_dict["UV Collection"]
-    runcard["UV model"] = model_dict["UV model"]
-    runcard["uv_couplings"] = is_uv
 
     if is_uv:
         coeff_dict = parse_UV_coeffs(model_dict)
@@ -134,6 +128,12 @@ def dump_runcard(
         coeff_dict = parse_WC_coeffs(model_dict)
         flag = "WC"
 
+    # names
+    runcard["resultID"] = f"Model_{flag}_{idx_model}_{pto}_{eft_order}"
+    runcard["Model name"] = model_dict["Model name"]
+    runcard["UV Collection"] = model_dict["UV Collection"]
+    runcard["UV model"] = model_dict["UV model"]
+    runcard["uv_couplings"] = is_uv
     runcard["coefficients"] = coeff_dict
     with open(
         f"{here.parent}/{collection}_{flag}_{idx_model}_{pto}_{eft_order}_{fitting_mode}.yaml",
