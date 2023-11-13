@@ -41,11 +41,13 @@ def chi2(g):
     # bin 1
     sigma_exp = 1
     sigma_sm = 1
+    c0 = 0#g[1] ** 2
     c1 = matching_1(g)
     c2 = matching_2(g)
     sigma_1 = -30
-    sigma_2 = 50
-    sigma_th = sigma_sm + c1 * sigma_1 + c2 * sigma_2
+    sigma_2 = 5
+    sigma_0 = -10
+    sigma_th = sigma_sm + c1 * sigma_1 + c2 * sigma_2 + c0 * sigma_0
     chi_sq += (sigma_exp - sigma_th) ** 2
 
     return chi_sq
@@ -123,16 +125,16 @@ fig, ax = plt.subplots(n_rows, n_cols, figsize=(4 * n_cols, 4 * n_rows))
 g1 = np.linspace(-2, -0.001, 100)
 ax.scatter(res['samples'][:, 0], res['samples'][:, 1], s=1)
 
-ax.plot(g1, - 0.02 * (-0.2 - 30 * g1 ** 2) / g1, color='red')
-ax.plot(-g1, - 0.02 * (-0.2 - 30 * g1 ** 2) / (-g1), color='red')
-ax.arrow(-0.5, -0.308, 0.5 * eigvec_1[0, 0], 0.5 * eigvec_1[1, 0], color='k', head_width=.1, zorder=2)
-ax.arrow(-0.5, -0.308, 0.5 * eigvec_1[0, 1], 0.5 * eigvec_1[1, 1], color='k', head_width=.1,zorder=2)
-ax.arrow(0, 0.6, 0.5 * eigvec_2[0, 0], 0.5 * eigvec_2[1, 0], color='k', head_width=.1,zorder=2)
-ax.arrow(0, 0.6, 0.5 * eigvec_2[0, 1], 0.5 * eigvec_2[1, 1], color='k', head_width=.1,zorder=2)
+# ax.plot(g1, - 0.02 * (-0.2 - 30 * g1 ** 2) / g1, color='red')
+# ax.plot(-g1, - 0.02 * (-0.2 - 30 * g1 ** 2) / (-g1), color='red')
+# ax.arrow(-0.5, -0.308, 0.5 * eigvec_1[0, 0], 0.5 * eigvec_1[1, 0], color='k', head_width=.1, zorder=2)
+# ax.arrow(-0.5, -0.308, 0.5 * eigvec_1[0, 1], 0.5 * eigvec_1[1, 1], color='k', head_width=.1,zorder=2)
+# ax.arrow(0, 0.6, 0.5 * eigvec_2[0, 0], 0.5 * eigvec_2[1, 0], color='k', head_width=.1,zorder=2)
+# ax.arrow(0, 0.6, 0.5 * eigvec_2[0, 1], 0.5 * eigvec_2[1, 1], color='k', head_width=.1,zorder=2)
 
 
-ax.set_xlim(-2, 2)
-ax.set_ylim(-2, 2)
+# ax.set_xlim(-2, 2)
+# ax.set_ylim(-2, 2)
 ax.set_xlabel('$g_1$')
 ax.set_ylabel('$g_2$')
 
@@ -145,5 +147,5 @@ ax.set_ylabel('$g_2$')
 
 plt.tight_layout()
 
-fig.savefig('./fisher_test_2.pdf')
+fig.savefig('./fisher_test_3.pdf')
 

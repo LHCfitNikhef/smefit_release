@@ -1,7 +1,7 @@
 import numpy as np
 from utils import inspect_model
 
-MODEL_SPECS = dict(id="Q1_Q7_W_Simple", collection="MultiParticleCollection", mass=332, pto="NLO", eft="NHO" )
+MODEL_SPECS = dict(id="Q1_Q7_W_Simple", collection="Multiparticle", mass=332, pto="NLO", eft="NHO" )
 
 
 def inv1(results):

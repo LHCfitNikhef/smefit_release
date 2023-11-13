@@ -23,6 +23,6 @@ def inv4(results):
 
 def inv5(results):
 	gWqf33 = results.gWqf33
-	gWtiH = results.gWtiH
-	return (gWqf33*gWtiH)/np.abs(gWqf33)
+	gWH = results.gWH
+	return (gWqf33*gWH)/np.abs(gWqf33)
 

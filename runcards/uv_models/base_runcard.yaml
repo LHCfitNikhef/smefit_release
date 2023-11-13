@@ -5,7 +5,10 @@ order: "NLO"
 use_quad: False
 use_theory_covmat: True
 uv_couplings: True
-nlive: 500
+nlive: 1000
+toll: 0.5
+ceff: true
+efr: 0.005
 maxiter: 10000
 use_t0: true
 datasets: [ "ATLAS_tt_8TeV_ljets_Mtt",

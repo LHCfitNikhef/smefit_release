@@ -3,15 +3,14 @@ from utils import inspect_model
 
 MODEL_SPECS = dict(id=21, collection="Granada", mass=1, pto="NLO", eft="NHO" )
 
-
 def inv1(results):
+	gBH = results.gBH
+	return np.abs(gBH)
+
+def inv2(results):
 	gBef11 = results.gBef11
 	gBH = results.gBH
 	return gBef11*gBH
-
-def inv2(results):
-	gBH = results.gBH
-	return np.abs(gBH)
 
 def inv3(results):
 	gBef22 = results.gBef22

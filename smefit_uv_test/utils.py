@@ -51,8 +51,7 @@ def inspect_model(MODEL_SPECS, build_uv_posterior, inv_list, check_constrain=Non
 
     fit_name_uv = f"{colllection}_UV_{model_id}_{pto}_{eft}_NS"
 
-    # load results and build postrerio for uv couplings
-    # in case of WC fits
+    # load results and build posterior for uv couplings
     fit_uv = FitManager(parent / "results", fit_name_uv)
     results_uv = load_results(fit_uv)
 

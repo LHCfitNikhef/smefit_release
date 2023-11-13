@@ -21,3 +21,6 @@ def inv2(results):
 	yVarphiuf33 = results.yVarphiuf33
 	return (lamvarphi*yVarphiuf33)/np.abs(lamvarphi)
 
+def inv3(results):
+	m = results.m
+	return m

@@ -60,7 +60,7 @@ def chi2(g):
     sigma_sm = sigma_exp
     c1 = matching_1(g)
     c2 = matching_2(g)
-    sigma_1 = -30
+    sigma_1 = -10
     sigma_2 = 50
     sigma_th = sigma_sm + c1 * sigma_1 + c2 * sigma_2
     chi_sq += (sigma_exp - sigma_th) ** 2
@@ -89,8 +89,8 @@ def fisher(g1, g2):
         c1 = matching_1([g1_i, g2_i])
         c2 = matching_2([g1_i, g2_i])
 
-        f[i, 0, 0] = 3600 * g1_i ** 2 - 6000 * g1_i * g2_i + 2500 * g2_i ** 2
-        f[i, 0, 1] = -3000 * g1_i ** 2 + 2500 * g1_i * g2_i
+        f[i, 0, 0] = 400 * g1_i ** 2 - 2000 * g1_i * g2_i + 2500 * g2_i ** 2
+        f[i, 0, 1] = -1000 * g1_i ** 2 + 2500 * g1_i * g2_i
         f[i, 1, 0] = f[i, 0, 1]
         f[i, 1, 1] = 2500 * g1_i ** 2
 
@@ -100,11 +100,11 @@ def fisher(g1, g2):
         g[i, 1, 1] = 0
 
     h = f - g
-    import pdb ;pdb.set_trace()
+    
     return f
 
 
-res = solve(log_like, prior, n_dims=2, n_params=2, n_live_points=500)
+res = solve(log_like, prior, n_dims=2, n_params=2, n_live_points=2000)
 
 g1_samples = res['samples'][:, 0]
 g2_samples = res['samples'][:, 1]
@@ -212,3 +212,4 @@ ax[2].set_xlabel('$v_2$')
 
 plt.tight_layout()
 fig.savefig('./fisher_test.pdf')
+import pdb; pdb.set_trace()

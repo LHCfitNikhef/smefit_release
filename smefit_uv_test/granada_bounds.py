@@ -17,7 +17,7 @@ import numpy as np
 from matplotlib import rc, use
 from histogram_tools import find_xrange
 
-collections = ["Granada"]
+collections = ["OneLoop"]
 
 
 here = pathlib.Path(__file__).parent
@@ -46,7 +46,6 @@ EFT = ['NHO', 'HO']
 for model in mod_list:
     for pQCD in ['LO', 'NLO']:
         for EFT in ['NHO', 'HO']:
-            print(model)
             model.MODEL_SPECS['pto'] = pQCD
             model.MODEL_SPECS['eft'] = EFT
             invariants = []
@@ -56,6 +55,7 @@ for model in mod_list:
             try:
                 model.inspect_model(model.MODEL_SPECS, invariants)
             except FileNotFoundError:
+                print("File not found", model)
                 continue
 
 # Specify the path to the JSON file
@@ -134,7 +134,7 @@ def compute_bounds(collection, mod_nrs, label, caption):
                             #table_dict[mod_nr][key][pQCD][EFT] = low, up
                             n_inv += 1
                     n_invariants.append(n_inv)
-        print(n_invariants)
+        print("n_invariants:", n_invariants)
         if n_invariants:
             n_params += max(n_invariants)
         for parameter, param_dict in table_dict[mod_nr].items():
@@ -164,30 +164,30 @@ scalar_mdl_nrs = range(21)
 vboson_mdl_nrs = range(21, 37)
 vfermion_mdl_nrs = range(37, 50)
 mp_mdl_idx = ["Q1_Q7_W"]
-oneloop_mdl_idx = ["Varphi"]
-
-latex_table_scalar, n_scalars = compute_bounds("Granada", scalar_mdl_nrs, "cl-heavy-scalar",
-                                              "95\\% CL intervals of the heavy scalar fields UV couplings.")
-
-latex_table_vboson, n_vbosons = compute_bounds("Granada", vboson_mdl_nrs, "cl-heavy-vboson",
-                                             "95\\% CL intervals of the heavy vector boson fields UV couplings.")
-
-latex_table_vfermion, n_vfermions = compute_bounds("Granada", vfermion_mdl_nrs, "cl-heavy-vfermion",
-                                                  "95\\% CL intervals of the heavy vector fermion fields UV couplings.")
-
-latex_table_mp, n_mp = compute_bounds("MultiParticleCollection", mp_mdl_idx, "cl-mp-model-spl", "95\\% CL intervals of the UV couplings that enter in the multiparticle model.")
-latex_table_1l, n_scalars_1L = compute_bounds("1LoopMatching", oneloop_mdl_idx, "cl-1l-model", "95\\% CL intervals of the UV couplings in \\varphi at one-loop.")
+oneloop_mdl_idx = ["T1", "T2"]
+#
+# latex_table_scalar, n_scalars = compute_bounds("Granada", scalar_mdl_nrs, "cl-heavy-scalar",
+#                                               "95\\% CL intervals of the heavy scalar fields UV couplings.")
+#
+# latex_table_vboson, n_vbosons = compute_bounds("Granada", vboson_mdl_nrs, "cl-heavy-vboson",
+#                                              "95\\% CL intervals of the heavy vector boson fields UV couplings.")
+#
+# latex_table_vfermion, n_vfermions = compute_bounds("Granada", vfermion_mdl_nrs, "cl-heavy-vfermion",
+#                                                   "95\\% CL intervals of the heavy vector fermion fields UV couplings.")
+#
+# latex_table_mp, n_mp = compute_bounds("MultiParticleCollection", mp_mdl_idx, "cl-mp-model-spl", "95\\% CL intervals of the UV couplings that enter in the multiparticle model.")
+latex_table_1l, n_scalars_1L = compute_bounds("OneLoop", oneloop_mdl_idx, "cl-1l-model", "95\\% CL intervals of the UV couplings in \\varphi at one-loop.")
 
 
 # Save LaTeX code to a .tex file
-with open(result_dir / "table_scalar.tex", "w") as file:
-    file.write(latex_table_scalar)
-with open(result_dir / "table_vboson.tex", "w") as file:
-   file.write(latex_table_vboson)
-with open(result_dir / "table_vfermion.tex", "w") as file:
-    file.write(latex_table_vfermion)
-with open(result_dir / "table_mp.tex", "w") as file:
-   file.write(latex_table_mp)
+# with open(result_dir / "table_scalar.tex", "w") as file:
+#     file.write(latex_table_scalar)
+# with open(result_dir / "table_vboson.tex", "w") as file:
+#    file.write(latex_table_vboson)
+# with open(result_dir / "table_vfermion.tex", "w") as file:
+#     file.write(latex_table_vfermion)
+# with open(result_dir / "table_mp.tex", "w") as file:
+#    file.write(latex_table_mp)
 with open(result_dir / "table_1l.tex", "w") as file:
     file.write(latex_table_1l)
 
@@ -323,26 +323,26 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
 # plot_uv_posterior(n_mp, "MultiParticleCollection",mp_mdl_idx, pQCD="LO")
 # plot_uv_posterior(n_mp, "MultiParticleCollection", mp_mdl_idx, pQCD="NLO")
 
-plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="NHO", name="vbosons")
-plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="HO", name="vbosons")
-plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, EFT="NHO", name="vfermions")
-plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, EFT="HO", name="vfermions")
-plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, EFT="NHO", name="scalars")
-plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, EFT="HO", name="scalars")
+# plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="NHO", name="vbosons")
+# plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, EFT="HO", name="vbosons")
+# plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, EFT="NHO", name="vfermions")
+# plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, EFT="HO", name="vfermions")
+# plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, EFT="NHO", name="scalars")
+# plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, EFT="HO", name="scalars")
+# #
+# plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="LO")
+# plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="NLO")
+# plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="LO")
+# plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="NLO")
+# plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, name="scalars", pQCD="LO")
+# plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, name="scalars", pQCD="NLO")
+
+# plot_uv_posterior(n_scalars_1L, "OneLoop", oneloop_mdl_idx, EFT="NHO")
+# plot_uv_posterior(n_scalars_1L, "OneLoop", oneloop_mdl_idx, EFT="HO")
+# plot_uv_posterior(n_scalars_1L, "OneLoop", oneloop_mdl_idx, pQCD="LO")
+# plot_uv_posterior(n_scalars_1L, "OneLoop", oneloop_mdl_idx, pQCD="NLO")
 #
-plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="LO")
-plot_uv_posterior(n_vbosons, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="NLO")
-plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="LO")
-plot_uv_posterior(n_vfermions, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="NLO")
-plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, name="scalars", pQCD="LO")
-plot_uv_posterior(n_scalars, "Granada", scalar_mdl_nrs, name="scalars", pQCD="NLO")
-
-# plot_uv_posterior(n_scalars_1L, "1LoopMatching", oneloop_mdl_idx, EFT="NHO")
-# plot_uv_posterior(n_scalars_1L, "1LoopMatching", oneloop_mdl_idx, EFT="HO")
-# plot_uv_posterior(n_scalars_1L, "1LoopMatching", oneloop_mdl_idx, pQCD="LO")
-# plot_uv_posterior(n_scalars_1L, "1LoopMatching", oneloop_mdl_idx, pQCD="NLO")
-
-
-for file in result_dir.iterdir():
-    if file.suffix == ".pdf":
-        subprocess.run(["pdfcrop", str(file), str(file)])
+#
+# for file in result_dir.iterdir():
+#     if file.suffix == ".pdf":
+#         subprocess.run(["pdfcrop", str(file), str(file)])
