@@ -101,16 +101,18 @@ def monte_carlo_fit(
     log.console.log("Running : MonteCarlo Fit")
     runner.run_analysis("MC")
 
+
 @base_command.command("PREFIT")
 @fit_card
 def pre_fit(fit_card: pathlib.Path):
     """Run prefit: computes the SM chi2 as a check before fitting.
 
-    Usage: smefit PREFIT [OPTIONS] 
+    Usage: smefit PREFIT [OPTIONS]
     """
     runner = Runner.from_file(fit_card.absolute())
     prefit = Prefit(runner.run_card)
     prefit.chi2_sm()
+
 
 @base_command.command("POSTFIT")
 @click.argument(

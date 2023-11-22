@@ -21,13 +21,12 @@ class Chi2tableCalculator:
     """
 
     def __init__(self, data_info):
-
         self.data_info = data_info
         self.chi2_df_sm = pd.DataFrame()
         self.chi2_df_sm_grouped = pd.DataFrame()
 
     @staticmethod
-    def compute(datasets, smeft_predictions):
+    def compute(datasets, smeft_predictions=None):
         r"""Compute the :math:`\chi^2` for each replica and dataset.
 
         Parameters
@@ -35,7 +34,8 @@ class Chi2tableCalculator:
             datasets: smefit.loader.DataTuple
                 loaded datasets
             smeft_predictions: np.ndarray
-                array with all the predictions for each replica
+                array with all the predictions for each replica.
+                When None, only the SM chi2 is comptued
 
         Returns
         -------
@@ -49,46 +49,49 @@ class Chi2tableCalculator:
         chi2_sm = []
         chi2_rep = []
 
-        diff = datasets.Commondata - np.mean(smeft_predictions, axis=0)
-        covmat_diff = datasets.InvCovMat @ diff
-
         diff_sm = datasets.Commondata - datasets.SMTheory
         covmat_diff_sm = datasets.InvCovMat @ diff_sm
 
-        # do the difference replica by replica and multiply by cov inverse
-        diff_rep = (
-            np.tile(datasets.Commondata, (smeft_predictions.shape[0], 1))
-            - smeft_predictions
-        )
-        covmat_diff_rep = datasets.InvCovMat @ diff_rep.T
+        # when SMEFT predictions are provided
+        if smeft_predictions is not None:
+            diff = datasets.Commondata - np.mean(smeft_predictions, axis=0)
+            covmat_diff = datasets.InvCovMat @ diff
+
+            # do the difference replica by replica and multiply by cov inverse
+            diff_rep = (
+                np.tile(datasets.Commondata, (smeft_predictions.shape[0], 1))
+                - smeft_predictions
+            )
+            covmat_diff_rep = datasets.InvCovMat @ diff_rep.T
 
         # Compute per experiment
         cnt = 0
         for ndat_exp in datasets.NdataExp:
-
-            chi2.append(
-                np.dot(
-                    diff[cnt : cnt + ndat_exp],
-                    covmat_diff[cnt : cnt + ndat_exp],
+            if smeft_predictions is not None:
+                chi2.append(
+                    np.dot(
+                        diff[cnt : cnt + ndat_exp],
+                        covmat_diff[cnt : cnt + ndat_exp],
+                    )
                 )
-            )
+
+                # Compute chi2 by replica
+                # multiply the second term of the chi2 and
+                # take the diagonal (replica left = replica right).
+                # here np.einsum is faster than np.diag(a @ b), since
+                # a and b are large usually
+                chi2_rep.append(
+                    np.einsum(
+                        "ij,ji->i",
+                        diff_rep[:, cnt : cnt + ndat_exp],
+                        covmat_diff_rep[cnt : cnt + ndat_exp],
+                    )
+                )
+
             chi2_sm.append(
                 np.dot(
                     diff_sm[cnt : cnt + ndat_exp],
                     covmat_diff_sm[cnt : cnt + ndat_exp],
-                )
-            )
-
-            # Compute chi2 by replica
-            # multiply the second term of the chi2 and
-            # take the diagonal (replica left = replica right).
-            # here np.einsum is faster than np.diag(a @ b), since
-            # a and b are large usually
-            chi2_rep.append(
-                np.einsum(
-                    "ij,ji->i",
-                    diff_rep[:, cnt : cnt + ndat_exp],
-                    covmat_diff_rep[cnt : cnt + ndat_exp],
                 )
             )
             cnt += ndat_exp
@@ -368,7 +371,7 @@ class Chi2tableCalculator:
         plt.figure(figsize=figsize)
         ax = plt.subplot(111)
 
-        for (label, chi2_list) in chi2_hist.items():
+        for label, chi2_list in chi2_hist.items():
             ax.hist(
                 chi2_list,
                 bins="fd",

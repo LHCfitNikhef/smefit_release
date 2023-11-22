@@ -29,7 +29,6 @@ class FisherCalculator:
     """
 
     def __init__(self, coefficients, datasets, compute_quad):
-
         self.coefficients = coefficients
         self.free_parameters = self.coefficients.free_parameters.index
         self.datasets = datasets

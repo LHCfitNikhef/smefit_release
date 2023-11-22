@@ -301,7 +301,6 @@ class USOptimizer(Optimizer):
             values[c] = []
 
         for sample in result["samples"]:
-
             self.coefficients.set_free_parameters(sample)
             self.coefficients.set_constraints()
 

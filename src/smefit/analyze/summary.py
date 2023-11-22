@@ -50,7 +50,6 @@ class SummaryWriter:
     """
 
     def __init__(self, fits, data_groups, coeff_config):
-
         self.fits = fits
         self.data_info = data_groups
         self.coeff_info = coeff_config

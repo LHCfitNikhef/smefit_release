@@ -91,7 +91,6 @@ def compute_confidence_level(
                 ).stack()
             # single solution
             else:
-
                 bounds[(group, latex_name)] = pd.DataFrame(
                     [get_confidence_values(posterior[name], has_posterior)]
                 ).stack()
@@ -128,7 +127,6 @@ class CoefficientsPlotter:
     """
 
     def __init__(self, report_path, coeff_config, logo=False):
-
         self.report_folder = report_path
         self.coeff_info = coeff_config
 
@@ -417,8 +415,7 @@ class CoefficientsPlotter:
         j = 1
 
         # loop over coefficient pairs
-        for (c1, c2) in itertools.combinations(coeff, 2):
-
+        for c1, c2 in itertools.combinations(coeff, 2):
             if c1 != c1_old:
                 row_idx += -1
                 col_idx = -1 - j
@@ -430,7 +427,6 @@ class CoefficientsPlotter:
             # loop over fits
             hndls_all = []
             for clr_idx, (posterior, kde) in enumerate(posteriors):
-
                 hndls_contours = plot_contours(
                     ax,
                     posterior,
