@@ -15,6 +15,7 @@ _logger = logging.getLogger(__name__)
 
 class Prefit:
     def __init__(self, config):
+
         self.datasets = load_datasets(
             config["data_path"],
             config["datasets"],
@@ -30,7 +31,9 @@ class Prefit:
         )
 
     def chi2_sm(self):
-        """Prints the SM chi2 per datapoint per dataset."""
+        """Prints the SM chi2 per datapoint per dataset.
+
+        """
 
         diff_sm = self.datasets.Commondata - self.datasets.SMTheory
         covmat_diff_sm = self.datasets.InvCovMat @ diff_sm
@@ -40,8 +43,8 @@ class Prefit:
         for ndat_exp in self.datasets.NdataExp:
             chi2_sm.append(
                 np.dot(
-                    diff_sm[cnt : cnt + ndat_exp],
-                    covmat_diff_sm[cnt : cnt + ndat_exp],
+                    diff_sm[cnt: cnt + ndat_exp],
+                    covmat_diff_sm[cnt: cnt + ndat_exp],
                 )
             )
             cnt += ndat_exp
@@ -55,3 +58,4 @@ class Prefit:
         )
 
         _logger.info(f"Chi2 average : {df.to_string()}")
+

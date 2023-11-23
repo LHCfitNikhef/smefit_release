@@ -42,6 +42,7 @@ class Runner:
     def __init__(
         self, run_card, single_parameter_fits, pairwise_fits, runcard_file=None
     ):
+
         self.run_card = run_card
         self.runcard_file = runcard_file
         self.single_parameter_fits = single_parameter_fits
@@ -137,6 +138,7 @@ class Runner:
         opt.save()
 
     def rotate_to_pca(self):
+
         _logger.info("Rotate input basis to PCA basis")
         pca_rot = RotateToPca.from_dict(self.run_card)
         pca_rot.compute()
@@ -189,7 +191,7 @@ class Runner:
 
         config = self.run_card
 
-        for c1, c2 in itertools.combinations(config["coefficients"].keys(), 2):
+        for (c1, c2) in itertools.combinations(config["coefficients"].keys(), 2):
             pairwise_coeff_config = dict(config)
             pairwise_coeff_config["coefficients"] = {}
             pairwise_coeff_config["coefficients"][c1] = config["coefficients"][c1]

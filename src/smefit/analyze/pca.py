@@ -30,6 +30,7 @@ class RotateToPca:
     """
 
     def __init__(self, loaded_datasets, coefficients, config):
+
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.config = config
@@ -237,6 +238,7 @@ class PcaCalculator:
     """
 
     def __init__(self, datasets, coefficients, latex_names):
+
         self.coefficients = coefficients
         self.datasets = datasets
         self.latex_names = latex_names

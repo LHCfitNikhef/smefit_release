@@ -174,6 +174,7 @@ class MCOptimizer(Optimizer):
         )
 
     def get_status(self, chi2):
+
         if len(self.chi2_values) == 0:
             self.chi2_values.append(chi2)
 

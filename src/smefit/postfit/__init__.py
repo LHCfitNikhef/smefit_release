@@ -13,6 +13,7 @@ _logger = logging.getLogger(__name__)
 
 class Postfit:
     def __init__(self, result_path, single_parameter_fits, chi2_threshold):
+
         self.results_folder = result_path
         self.finished_replicas = 0
         for name in self.results_folder.iterdir():
@@ -25,6 +26,7 @@ class Postfit:
 
     @classmethod
     def from_file(cls, result_folder):
+
         # load file
         with open(result_folder / f"{result_folder.stem}.yaml", encoding="utf-8") as f:
             config = yaml.safe_load(f)
@@ -43,6 +45,7 @@ class Postfit:
         )
 
     def save(self, nrep):
+
         postfit_res = []
         chi2_list = []
 
@@ -84,6 +87,7 @@ class Postfit:
             self.not_completed = True
 
         else:
+
             posterior = {}
             for i, c in enumerate(coeffs):
                 posterior[c] = list(np.array(postfit_res).T[i, :])

@@ -70,11 +70,12 @@ class Scanner:
     """
 
     def __init__(self, run_card, n_replica):
+
         self.n_replica = n_replica
         self.use_quad = run_card["use_quad"]
         self.result_path = f"{run_card['result_path']}/{run_card['result_ID']}"
-        self.use_multiplicative_prescription = run_card.get(
-            "use_multiplicative_prescription", False
+        self.use_multiplicative_prescription = (
+            run_card.get("use_multiplicative_prescription", False)
         )
         self.datasets = load_datasets(
             run_card["data_path"],

@@ -145,6 +145,7 @@ def plot_contours(
         )
 
     else:  # draw ellipses for linear EFT fit
+
         p1 = confidence_ellipse(
             x_values,
             y_values,

@@ -122,6 +122,7 @@ class Optimizer:
         return chi2_tot
 
     def dump_posterior(self, posterior_file, values):
+
         if self.single_parameter_fits:
             if posterior_file.is_file():
                 with open(posterior_file, encoding="utf-8") as f:
