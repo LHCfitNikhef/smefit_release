@@ -176,7 +176,7 @@ Once an high enough number of replicas have been produced, the results can be me
 running PostFit
 
 ```bash
-    smefit PF path/to/the/result/ -n number_of_replicas
+    smefit POSTFIT path/to/the/result/ -n number_of_replicas
 ```
 where ``<number_of_replicas>`` specifies the number of replicas to be used to build the posterior.
 Replicas not satisfying the PostFit criteria will be discarded. If the final number of good replicas is lower than
