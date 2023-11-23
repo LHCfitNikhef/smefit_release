@@ -1,10 +1,12 @@
-import yaml
+# -*- coding: utf-8 -*-
 import pathlib
-import numpy as np
 
+import numpy as np
+import yaml
+
+from ..compute_theory import make_predictions
 from ..loader import Loader, load_datasets
 from ..log import logging
-from ..compute_theory import make_predictions
 
 _logger = logging.getLogger(__name__)
 
@@ -21,6 +23,7 @@ class Projection:
         use_quad,
         rot_to_fit_basis,
     ):
+
         self.commondata_path = commondata_path
         self.theory_path = theory_path
         self.dataset_names = dataset_names
@@ -29,6 +32,23 @@ class Projection:
         self.order = order
         self.use_quad = use_quad
         self.rot_to_fit_basis = rot_to_fit_basis
+
+        self.datasets = load_datasets(
+            self.commondata_path,
+            self.dataset_names,
+            self.coefficients,
+            self.order,
+            self.use_quad,
+            False,
+            False,
+            False,
+            theory_path=self.theory_path,
+        )
+
+        if self.coefficients:
+            _logger.info(
+                f"Some coefficients are specified in the runcard: EFT correction will be used for the central values"
+            )
 
     @classmethod
     def from_config(cls, projection_card):
@@ -58,51 +78,76 @@ class Projection:
             rot_to_fit_basis,
         )
 
-    def compute_cv_projection(self, dataset_name):
-        _logger.info(f"Building projection for : {dataset_name}")
-        dataset = load_datasets(
-            self.commondata_path,
-            dataset_name,
-            self.coefficients,
-            self.order,
-            self.use_quad,
-            False,
-            False,
-            False,
-            theory_path=self.theory_path,
-        )
+    def compute_cv_projection(self):
+        """
+        Computes the new central value under the EFT hypothesis (is SM when coefficients are zero)
 
-        cv = dataset.SMTheory
+        Returns
+        -------
+            cv : numpy.ndarray
+                SM + EFT theory predictions
+        """
+        cv = self.datasets.SMTheory
+
         if self.coefficients:
-            _logger.warning(
-                f"Some coefficients are specified in the runcard: EFT correction will be used for the central values"
-            )
             coefficient_values = []
-            for coeff in dataset.OperatorsNames:
+            for coeff in self.datasets.OperatorsNames:
                 coefficient_values.append(self.coefficients[coeff]["value"])
-
-            cv = make_predictions(dataset, coefficient_values, self.use_quad, False)
+            cv = make_predictions(
+                self.datasets, coefficient_values, self.use_quad, False
+            )
         return cv
 
-    def build_projection(self, reduction_factor):
-        for dataset in self.dataset_names:
-            # load original experimental set
+    def build_projection(self, lumi_new):
+        """
+        Constructs runcard for projection by updating the central value and statistical uncertainties
 
-            path_to_dataset = self.commondata_path / f"{dataset}.yaml"
+        Parameters
+        ----------
+        lumi_new: float
+            Adjusts the statistical uncertainties according to the specified luminosity
+        """
+
+        # compute central values under projection
+        cv = self.compute_cv_projection()
+
+        cnt = 0
+        for dataset_idx, ndat in enumerate(self.datasets.NdataExp):
+
+            dataset_name = self.datasets.ExpNames[dataset_idx]
+            path_to_dataset = self.commondata_path / f"{dataset_name}.yaml"
+
+            _logger.info(f"Building projection for : {dataset_name}")
 
             with open(path_to_dataset, encoding="utf-8") as f:
                 data_dict = yaml.safe_load(f)
 
-            # get new cv
-            cv = self.compute_cv_projection(dataset)
+            idxs = slice(cnt, cnt + ndat)
 
-            # use sm predictions for central values
-            data_dict["data_central"] = cv.tolist()
-            # replace stat with the new one
+            # statistical uncertainties get reduced by lumi_old/lumi_new
+            lumi_old = self.datasets.Luminosity[dataset_idx]
+            reduction_factor = lumi_old / lumi_new
+
+            # replace cv with updated central values
+            data_dict["data_central"] = cv[idxs].tolist()
+
+            # replace stat with rescaled ones
             stat = np.asarray(data_dict["statistical_error"])
+
+            # skip dataset when no separation between systematics and statistical uncertainties are provided
+            if not np.any(stat):
+                _logger.warning(
+                    f"No separation between stat and sys uncertainties provided, skipping: {dataset_name}"
+                )
+                continue
+
             data_dict["statistical_error"] = (reduction_factor * stat).tolist()
 
             projection_folder = self.projections_path
             projection_folder.mkdir(exist_ok=True)
-            with open(f"{projection_folder}/{dataset}_projection.yaml", "w") as file:
+            with open(
+                f"{projection_folder}/{dataset_name}_projection.yaml", "w"
+            ) as file:
                 yaml.dump(data_dict, file, sort_keys=False)
+
+            cnt += ndat

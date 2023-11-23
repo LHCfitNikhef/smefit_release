@@ -7,8 +7,8 @@ from .. import log
 from ..analyze import run_report
 from ..log import print_banner, setup_console
 from ..postfit import Postfit
-from ..runner import Runner
 from ..projections import Projection
+from ..runner import Runner
 from .base import base_command, root_path
 
 try:
@@ -179,17 +179,13 @@ def report(report_card: pathlib.Path):
     type=click.Path(path_type=pathlib.Path, exists=True),
 )
 @click.option(
-    "-r",
-    "--reduction_factor",
+    "--lumi",
     type=float,
     default=None,
     required=True,
-    help="reduction fator for statistical uncertainty"
+    help="Adjusts the statistical uncertainties according to the specified luminosity",
 )
-
-def projection(projection_card: pathlib.Path, reduction_factor: float):
+def projection(projection_card: pathlib.Path, lumi: float):
     r"""Compute projection for specified dataset"""
     projection = Projection.from_config(projection_card)
-    projection.build_projection(reduction_factor)
-    
-
+    projection.build_projection(lumi)
