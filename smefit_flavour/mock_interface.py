@@ -2,6 +2,52 @@ import numpy as np
 import wilson
 import matplotlib.pyplot as plt
 import scipy
+import pathlib
+
+from smefit.runner import Runner
+from smefit.chi2 import Scanner
+import smefit.log as log
+from smefit.log import print_banner, setup_console
+from smefit.optimize.ultranest import USOptimizer
+
+log_path = pathlib.Path('/data/theorie/jthoeve/smefit_release/cluster/logs/flavour_log.log')
+fit_card = pathlib.Path("/data/theorie/jthoeve/smefit_release/runcards/NS_smefit_flavour_LO_HO.yaml")
+
+setup_console(log_path)
+print_banner()
+runner = Runner.from_file(fit_card.absolute())
+log.console.log("Running : Nested Sampling Fit ")
+
+# set up the optimizer
+opt = USOptimizer.from_dict(runner.run_card)
+
+# compute mixing matrix
+M_smeft_wet = []
+
+# why doesnt this work for O3pl1 and Opl1?
+wcxf_dict = {'lq3_1111': 'O3pl1', 'lq3_1133': 'O3pl2'}
+
+for wcxf_op, smefit_op in wcxf_dict.items():
+    smeft_values = { name: 0.0 for name in wcxf_dict.keys()}
+    smeft_values[wcxf_op] = 1.0
+
+    smeft_wc = wilson.Wilson(smeft_values, 1000, 'SMEFT', 'Warsaw')
+    wet_wc = smeft_wc.match_run(4.2, 'WET', 'EOS')
+
+    M_smeft_wet.append([np.real(wet_wc.dict[wet_op]) if wet_op in wet_wc.dict.keys() else 0.0 for wet_op in wet_ops])
+
+M_smeft_wet = np.array(M_smeft_wet).T
+
+import pdb; pdb.set_trace()
+#
+
+opt.loaded_datasets
+
+# start fit
+opt.run_sampling()
+import pdb; pdb.set_trace()
+#runner.ultranest(runner.run_card)
+
 
 def make_eos_data_2023_01():
     mean = np.array([1.0, 0.0, 0.0, 0.0, 0.0])
@@ -44,7 +90,7 @@ def make_smeft_likelihood(name:str, smeft_ops:list[str]):
 
     return lambda wc: wet_llh(np.dot(M_smeft_wet, wc))
 
-smeft_ops = ['lq3_1111', 'lq3_1133']
+
 
 smeft_llh = make_smeft_likelihood('EOS-DATA-2023-01', smeft_ops)
 
