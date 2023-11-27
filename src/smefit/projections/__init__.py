@@ -6,9 +6,9 @@ import pandas as pd
 import yaml
 
 from ..compute_theory import make_predictions
+from ..covmat import covmat_from_systematics
 from ..loader import Loader, load_datasets
 from ..log import logging
-from ..covmat import covmat_from_systematics
 
 _logger = logging.getLogger(__name__)
 
@@ -131,7 +131,7 @@ class Projection:
             reduction_factor = lumi_old / lumi_new
             # replace stat with rescaled ones
             stat = np.asarray(data_dict["statistical_error"])
-            
+
             # skip dataset when no separation between systematics and statistical uncertainties are provided
             if not np.any(stat):
                 _logger.warning(
@@ -141,20 +141,26 @@ class Projection:
 
             data_dict["statistical_error"] = (reduction_factor * stat).tolist()
 
-            # get systematics 
-            sys = pd.DataFrame(data_dict['systematics'],data_dict['sys_names']).T
+            # get systematics
+            if isinstance(data_dict["sys_names"], str):
+                sys = pd.DataFrame(data_dict["systematics"], [data_dict["sys_names"]]).T
+            else:
+                sys = pd.DataFrame(data_dict["systematics"], data_dict["sys_names"]).T
+
             # build covmat for projections. Use rescaled stat
-            newcov = covmat_from_systematics([reduction_factor * stat],[sys])
-            # add L1 noise to cv 
+            newcov = covmat_from_systematics([reduction_factor * stat], [sys])
+            # add L1 noise to cv
             cv_projection = np.random.multivariate_normal(cv[idxs], newcov)
-            
+
             # replace cv with updated central values
-            data_dict["data_central"] = cv_projection.tolist()
+            if len(cv_projection) > 1:
+                data_dict["data_central"] = cv_projection.tolist()
+            else:
+                data_dict["data_central"] = float(cv_projection[0])
+
             projection_folder = self.projections_path
             projection_folder.mkdir(exist_ok=True)
-            with open(
-                f"{projection_folder}/{dataset_name}_projection.yaml", "w"
-            ) as file:
+            with open(f"{projection_folder}/{dataset_name}.yaml", "w") as file:
                 yaml.dump(data_dict, file, sort_keys=False)
 
             cnt += ndat
