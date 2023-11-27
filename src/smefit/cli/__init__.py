@@ -7,6 +7,7 @@ from .. import log
 from ..analyze import run_report
 from ..log import print_banner, setup_console
 from ..postfit import Postfit
+from ..prefit import Prefit
 from ..runner import Runner
 from .base import base_command, root_path
 
@@ -101,7 +102,19 @@ def monte_carlo_fit(
     runner.run_analysis("MC")
 
 
-@base_command.command("PF")
+@base_command.command("PREFIT")
+@fit_card
+def pre_fit(fit_card: pathlib.Path):
+    """Run prefit: computes the SM chi2 as a check before fitting.
+
+    Usage: smefit PREFIT [OPTIONS] path_to_runcard
+    """
+    runner = Runner.from_file(fit_card.absolute())
+    prefit = Prefit(runner.run_card)
+    prefit.chi2_sm()
+
+
+@base_command.command("POSTFIT")
 @click.argument(
     "result_folder",
     type=click.Path(path_type=pathlib.Path, exists=True),
@@ -124,7 +137,7 @@ def monte_carlo_fit(
 def post_fit(result_folder: pathlib.Path, n_replica: int, clean_rep: bool):
     """Run postfit selection over |MC| replicas.
 
-    Usage: smefit PF [OPTIONS] path_to_result_folder
+    Usage: smefit POSTFIT [OPTIONS] path_to_result_folder
     """
     postfit = Postfit.from_file(result_folder.absolute())
     postfit.save(n_replica)
