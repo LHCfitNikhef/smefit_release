@@ -53,7 +53,7 @@ class Optimizer:
         self.npts = self.loaded_datasets.Commondata.size
         self.single_parameter_fits = single_parameter_fits
         self.use_multiplicative_prescription = use_multiplicative_prescription
-
+        self.external_chi2 = None
         self.counter = 0
 
     @property
@@ -102,6 +102,9 @@ class Optimizer:
             self.use_multiplicative_prescription,
             use_replica,
         )
+
+        if self.external_chi2 is not None:
+            chi2_tot += self.external_chi2(self.coefficients.value)
 
         if print_log:
             chi2_dict = {}
