@@ -28,18 +28,13 @@ nlive: 100
 # Datasets to include
 datasets:
 
-  # High pT data
   - LEP_Zdata
   - LEP_alphaEW
   - LEP_Bhabha
   - LEP_BrW
 
-  # flavour data
-  #- eos_data_2023
-
 # Coefficients to fit
 coefficients:
-
 
   O3pl1: { 'min': -0.5, 'max': 1.0 }
   Opl1: { 'min': -0.5, 'max': 1.0 }
