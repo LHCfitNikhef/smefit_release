@@ -39,5 +39,8 @@ coefficients:
   O3pl1: { 'min': -0.5, 'max': 1.0 }
   Opl1: { 'min': -0.5, 'max': 1.0 }
 
+external_chi2:
+  'flavour_chi2': /data/theorie/jthoeve/smefit_release/smefit_flavour/run_fit.py
+  
 
 rot_to_fit_basis: null
