@@ -71,6 +71,7 @@ class USOptimizer(Optimizer):
         target_post_unc=0.5,
         frac_remain=0.01,
         store_raw=False,
+        external_chi2=None,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -79,6 +80,7 @@ class USOptimizer(Optimizer):
             use_quad,
             single_parameter_fits,
             use_multiplicative_prescription,
+            external_chi2,
         )
         self.live_points = live_points
         self.lepsilon = lepsilon
@@ -160,6 +162,9 @@ class USOptimizer(Optimizer):
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
         )
+
+        external_chi2 = config.get("external_chi2", None)
+
         return cls(
             loaded_datasets,
             coefficients,
@@ -175,6 +180,7 @@ class USOptimizer(Optimizer):
             target_post_unc=target_post_unc,
             frac_remain=frac_remain,
             store_raw=store_raw,
+            external_chi2=external_chi2,
         )
 
     def chi2_func_ns(self, params):
@@ -301,7 +307,6 @@ class USOptimizer(Optimizer):
             values[c] = []
 
         for sample in result["samples"]:
-
             self.coefficients.set_free_parameters(sample)
             self.coefficients.set_constraints()
 
