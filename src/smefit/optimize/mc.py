@@ -70,6 +70,7 @@ class MCOptimizer(Optimizer):
         use_bounds,
         minimizer_specs,
         use_multiplicative_prescription,
+        external_chi2=None,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -78,6 +79,7 @@ class MCOptimizer(Optimizer):
             use_quad,
             single_parameter_fits,
             use_multiplicative_prescription,
+            external_chi2,
         )
         self.chi2_values = []
         self.coeff_steps = []
@@ -160,6 +162,9 @@ class MCOptimizer(Optimizer):
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
         )
+
+        external_chi2 = config.get("external_chi2", None)
+
         return cls(
             loaded_datasets,
             coefficients,
@@ -171,10 +176,10 @@ class MCOptimizer(Optimizer):
             use_bounds,
             minimizer_specs,
             use_multiplicative_prescription,
+            external_chi2,
         )
 
     def get_status(self, chi2):
-
         if len(self.chi2_values) == 0:
             self.chi2_values.append(chi2)
 

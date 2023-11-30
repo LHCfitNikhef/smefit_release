@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 import pathlib
+import importlib
+import sys
 
 from rich.style import Style
 from rich.table import Table
@@ -45,6 +47,7 @@ class Optimizer:
         use_quad,
         single_parameter_fits,
         use_multiplicative_prescription,
+        external_chi2,
     ):
         self.results_path = pathlib.Path(results_path)
         self.loaded_datasets = loaded_datasets
@@ -53,7 +56,7 @@ class Optimizer:
         self.npts = self.loaded_datasets.Commondata.size
         self.single_parameter_fits = single_parameter_fits
         self.use_multiplicative_prescription = use_multiplicative_prescription
-
+        self.external_chi2 = external_chi2
         self.counter = 0
 
     @property
@@ -72,6 +75,16 @@ class Optimizer:
         table.add_row("Total", f"{(chi2_tot/self.npts):.5}")
 
         return table
+
+    def load_external_chi2(self):
+        chi2_modules = {}
+        for name, chi2_mod_path in self.external_chi2.items():
+            path = pathlib.Path(chi2_mod_path)
+            base_path, stem = path.parent, path.stem
+            sys.path = [str(base_path)] + sys.path
+            chi2_modules[name] = importlib.import_module(stem)
+
+        return chi2_modules
 
     def chi2_func(self, use_replica=False, print_log=True):
         r"""
@@ -103,6 +116,13 @@ class Optimizer:
             use_replica,
         )
 
+        # add external chi2 modules if specified in the runcard
+        if self.external_chi2 is not None:
+            chi2_modules = self.load_external_chi2()
+            for name, chi2_module in chi2_modules.items():
+                chi2_ext = getattr(chi2_modules[name], name)
+                chi2_tot += chi2_ext(self.coefficients.value)
+
         if print_log:
             chi2_dict = {}
             for data_name in self.loaded_datasets.ExpNames:
@@ -122,7 +142,6 @@ class Optimizer:
         return chi2_tot
 
     def dump_posterior(self, posterior_file, values):
-
         if self.single_parameter_fits:
             if posterior_file.is_file():
                 with open(posterior_file, encoding="utf-8") as f:
