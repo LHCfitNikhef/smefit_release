@@ -38,6 +38,7 @@ When using the code please cite:
     theory/SMEFT.rst
     theory/general
     theory/NS
+    theory/Analytic
     theory/MCFit
 
 

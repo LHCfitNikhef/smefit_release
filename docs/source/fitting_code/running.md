@@ -80,6 +80,9 @@ mc_minimiser: 'cma' # Allowed options are: 'cma', 'dual_annealing', 'trust-const
 restarts: 7 # number of restarts (only for cma)
 maxiter: 100000 # max number of iteration
 chi2_threshold: 3.0 # post fit chi2 threshold
+
+#A settings
+n_samples: 1000 # number of the required samples of the posterior distribution
 ```
 
 ### Datasets to consider and coefficients to fit
@@ -116,8 +119,8 @@ coefficients:
 ```
 
 As exemplified above, the syntax to specify the Wilson coefficient corresponding to the operator
-``O1`` is ``O1 : {'min': , 'max':} `` where ``min`` and ``max`` indicate the bounds within which NS
-will perform the sampling.
+``O1`` is ``O1 : {'min': , 'max':} `` where ``min`` and ``max`` indicate the bounds within which 
+the sampling is performed.
 
 ### Constrains between coefficients
 Some Wilson coefficients are not directly fit, but rather constrained to be linear combinations
@@ -153,7 +156,7 @@ rot_to_fit_basis: /path/to/rotation/rotation.json
 ```
 ## Running a fit with NS
 To run a fiy using Nested Sampling use the command
-```yaml
+```bash
 smefit NS path/to/the/runcard/runcard.yaml
 ```
 
@@ -169,6 +172,14 @@ The basic command to run a fit using Monte Carlo is
 ```bash
     smefit MC path/to/the/runcard/runcard.yaml -n replica_number
 ```
+## Solving the linear problem
+In case only linear cocrrections are used one
+can find the analytic solution to the linear problem doing
+```bash
+    smefit A path/to/the/runcard/runcard.yaml
+```
+This will also sample the posterior distribution accoding to the runcard.
+
 
 This will produce a file called ``replica_<replica_number>/coefficients_rep_<replica_number>.json``
 in the result folder, containing the values of the Wilson coefficients for the replica.
@@ -191,7 +202,7 @@ To do this add to the runcard
 single_parameter_fits: True
 ```
 and proceed as documented above for a normal fit.
-For both NS and MC, the final output will be the file ``posterior.json``
+For both NS, MC and A the final output will be the file ``posterior.json``
 containing the independent posterior of the fitted Wilson coefficients, obtained by a series os independent single parameter fits.
 
 
