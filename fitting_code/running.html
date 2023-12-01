@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>How to run the code &mdash; SMEFiT 0.1.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f74d80cf" />
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -284,7 +286,7 @@ containing the posterior distribution of the coefficients specified in the runca
 in the result folder, containing the values of the Wilson coefficients for the replica.
 Once an high enough number of replicas have been produced, the results can be merged into the final posterior
 running PostFit</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>PF<span class="w"> </span>path/to/the/result/<span class="w"> </span>-n<span class="w"> </span>number_of_replicas
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>POSTFIT<span class="w"> </span>path/to/the/result/<span class="w"> </span>-n<span class="w"> </span>number_of_replicas
 </pre></div>
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">&lt;number_of_replicas&gt;</span></code> specifies the number of replicas to be used to build the posterior.

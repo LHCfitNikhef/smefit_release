@@ -16,6 +16,7 @@ Subpackages
    smefit.cli
    smefit.optimize
    smefit.postfit
+   smefit.prefit
 
 Submodules
 ----------

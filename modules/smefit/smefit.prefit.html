@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>smefit.postfit package &mdash; SMEFiT 0.1.0 documentation</title>
+  <title>smefit.prefit package &mdash; SMEFiT 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f74d80cf" />
@@ -22,8 +22,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="smefit.prefit package" href="smefit.prefit.html" />
-    <link rel="prev" title="smefit.optimize package" href="smefit.optimize.html" /> 
+    <link rel="next" title="References" href="../../zzz-refs.html" />
+    <link rel="prev" title="smefit.postfit package" href="smefit.postfit.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -90,11 +90,11 @@
 <li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html">smefit.analyze package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.cli.html">smefit.cli package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html">smefit.optimize package</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">smefit.postfit package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#smefit.postfit.Postfit"><code class="docutils literal notranslate"><span class="pre">Postfit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html">smefit.postfit package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">smefit.prefit package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.prefit.Prefit"><code class="docutils literal notranslate"><span class="pre">Prefit</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="smefit.prefit.html">smefit.prefit package</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="smefit.html#submodules">Submodules</a></li>
@@ -127,9 +127,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="smefit.html">smefit package</a></li>
-      <li class="breadcrumb-item active">smefit.postfit package</li>
+      <li class="breadcrumb-item active">smefit.prefit package</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/modules/smefit/smefit.postfit.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/modules/smefit/smefit.prefit.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -137,26 +137,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-smefit.postfit">
-<span id="smefit-postfit-package"></span><h1>smefit.postfit package<a class="headerlink" href="#module-smefit.postfit" title="Link to this heading"></a></h1>
+  <section id="module-smefit.prefit">
+<span id="smefit-prefit-package"></span><h1>smefit.prefit package<a class="headerlink" href="#module-smefit.prefit" title="Link to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="smefit.postfit.Postfit">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.postfit.</span></span><span class="sig-name descname"><span class="pre">Postfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_parameter_fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi2_threshold</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/postfit.html#Postfit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.postfit.Postfit" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="smefit.prefit.Prefit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.prefit.</span></span><span class="sig-name descname"><span class="pre">Prefit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/prefit.html#Prefit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.prefit.Prefit" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.postfit.Postfit.clean">
-<span class="sig-name descname"><span class="pre">clean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/postfit.html#Postfit.clean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.postfit.Postfit.clean" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="smefit.postfit.Postfit.from_file">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/postfit.html#Postfit.from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.postfit.Postfit.from_file" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="smefit.postfit.Postfit.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nrep</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/postfit.html#Postfit.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.postfit.Postfit.save" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="smefit.prefit.Prefit.chi2_sm">
+<span class="sig-name descname"><span class="pre">chi2_sm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/prefit.html#Prefit.chi2_sm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.prefit.Prefit.chi2_sm" title="Link to this definition"></a></dt>
+<dd><p>Prints the SM chi2 per datapoint per dataset.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -166,8 +157,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="smefit.optimize.html" class="btn btn-neutral float-left" title="smefit.optimize package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="smefit.prefit.html" class="btn btn-neutral float-right" title="smefit.prefit package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="smefit.postfit.html" class="btn btn-neutral float-left" title="smefit.postfit package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../zzz-refs.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
