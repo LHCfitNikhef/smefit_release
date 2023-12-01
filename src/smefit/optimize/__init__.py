@@ -18,24 +18,25 @@ except ModuleNotFoundError:
 
 class Optimizer:
     """
-    Common interface for Chi2 profile, NS and McFiT
+    Common interface for Chi2 profile, NS and MC and A optimizers.
 
     Parameters
     ----------
         results_path : pathlib.path
-
+            path to result folder
         loaded_datasets : DataTuple,
             dataset tuple
-        coefficients :
-
-        use_quad :
-            if True include also |HO| correction
-
+        coefficients : `smefit.coefficients.CoefficientManager`
+            instance of `CoefficientManager` with all the relevant coefficients to fit
+        use_quad : bool
+            if True includes also |HO| correction
+        single_parameter_fits : bool
+            True for single parameter fits
+        use_multiplicative_prescription:
+            if True uses the multiplicative prescription for the |EFT| corrections.
     """
 
     print_rate = 500
-
-    # TODO: docstring
 
     def __init__(
         self,
@@ -122,7 +123,6 @@ class Optimizer:
         return chi2_tot
 
     def dump_posterior(self, posterior_file, values):
-
         if self.single_parameter_fits:
             if posterior_file.is_file():
                 with open(posterior_file, encoding="utf-8") as f:

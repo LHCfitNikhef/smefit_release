@@ -9,7 +9,7 @@ from ..log import print_banner, setup_console
 from ..postfit import Postfit
 from ..prefit import Prefit
 from ..runner import Runner
-from .base import base_command, root_path
+from .base import base_command
 
 try:
     from mpi4py import MPI
@@ -79,6 +79,26 @@ def nested_sampling(
     if run_parallel:
         runner = comm.bcast(runner, root=0)
     runner.run_analysis("NS")
+
+
+@base_command.command("A")
+@fit_card
+@log_file
+@rotate_to_pca
+def analytic_linear(
+    fit_card: pathlib.Path, log_file: pathlib.Path, rotate_to_pca: bool
+):
+    """Get the analytic solution of the linear problem.
+
+    Usage: smefit A [OPTIONS] path_to_runcard
+    """
+    setup_console(log_file)
+    print_banner()
+    runner = Runner.from_file(fit_card.absolute())
+    if rotate_to_pca:
+        runner.rotate_to_pca()
+    log.console.log("Running : analytic solution.")
+    runner.run_analysis("A")
 
 
 @base_command.command("MC")

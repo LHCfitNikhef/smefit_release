@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-
-"""
-Fitting the Wilson coefficients with |NS|
-"""
+"""Fitting the Wilson coefficients with |NS|"""
 import time
 
 import ultranest
@@ -26,31 +22,41 @@ _logger = log.logging.getLogger(__name__)
 
 
 class USOptimizer(Optimizer):
-    """
-    Optimizer specification for Ultra nest
+    """Optimizer specification for Ultra nest.
 
     Parameters
     ----------
-        loaded_datasets : `smefit.loader.DataTuple`,
-            dataset tuple
-        coefficients : `smefit.coefficients.CoefficientManager`
-            instance of `CoefficientManager` with all the relevant coefficients to fit
-        use_quad : bool
-            If True use also |HO| corrections
-        live_points : int
-            number of |NS| live points
-        lepsilon : float
-            sampling tollerance. Terminate when live point likelihoods are all the same, within Lepsilon tolerance.
-            Increase this when your likelihood function is inaccurate,
-        target_evidence_unc: float
-            target evidence uncertainty.
-        target_post_unc: float
-            target posterior uncertainty.
-        frac_remain: float
-            integrate until this fraction of the integral is left in the remainder.
-            Set to a higher number (0.5) if you know the posterior is simple.
-        store_raw: bool
-            if True store the result to eventually resume the job
+    loaded_datasets : `smefit.loader.DataTuple`,
+        dataset tuple
+    coefficients : `smefit.coefficients.CoefficientManager`
+        instance of `CoefficientManager` with all the relevant coefficients to fit
+    result_path: pathlib.Path
+        path to result folder
+    use_quad : bool
+        If True use also |HO| corrections
+    result_ID : str
+        result name
+    single_parameter_fits : bool
+        True for single parameter fits
+    pairwise_fits : bool
+        True for pairwise parameter fits
+    use_multiplicative_prescription : bool
+        if True uses the multiplicative prescription for the |EFT| corrections
+    live_points : int
+        number of |NS| live points
+    lepsilon : float
+        sampling tollerance. Terminate when live point likelihoods are all the same, within Lepsilon tolerance.
+        Increase this when your likelihood function is inaccurate,
+    target_evidence_unc: float
+        target evidence uncertainty.
+    target_post_unc: float
+        target posterior uncertainty.
+    frac_remain: float
+        integrate until this fraction of the integral is left in the remainder.
+        Set to a higher number (0.5) if you know the posterior is simple.
+    store_raw: bool
+        if True store the result to eventually resume the job
+
     """
 
     print_rate = 5000
@@ -92,18 +98,17 @@ class USOptimizer(Optimizer):
 
     @classmethod
     def from_dict(cls, config):
-        """
-        Create object from theory dictionary.
+        """Create object from theory dictionary.
 
         Parameters
         ----------
-            config : dict
-                configuration dictionary
+        config : dict
+            configuration dictionary
 
         Returns
         -------
-            cls : Optimizer
-                created object
+        cls : Optimizer
+            created object
         """
 
         loaded_datasets = load_datasets(
@@ -178,19 +183,18 @@ class USOptimizer(Optimizer):
         )
 
     def chi2_func_ns(self, params):
-        """
-        Wrap the chi2 in a function for the optimizer. Pass noise and
+        """Wrap the chi2 in a function for the optimizer. Pass noise and
         data info as args. Log the chi2 value and values of the coefficients.
 
         Parameters
         ----------
-            params : np.ndarray
-                noise and data info
+        params : np.ndarray
+            noise and data info
+
         Returns
         -------
-            current_chi2 : np.ndarray
-                chi2 function
-
+        current_chi2 : np.ndarray
+            chi2 function
         """
         self.coefficients.set_free_parameters(params)
         self.coefficients.set_constraints()
@@ -198,35 +202,33 @@ class USOptimizer(Optimizer):
         return self.chi2_func()
 
     def gaussian_loglikelihood(self, hypercube):
-        """
-        Multi gaussian log likelihood function
+        """Multi gaussian log likelihood function.
 
         Parameters
         ----------
-            hypercube :  np.ndarray
-                hypercube prior
+        hypercube :  np.ndarray
+            hypercube prior
 
         Returns
         -------
-            -0.5 * chi2 : np.ndarray
-                multi gaussian log likelihood
+        -0.5 * chi2 : np.ndarray
+            multi gaussian log likelihood
         """
 
         return -0.5 * self.chi2_func_ns(hypercube)
 
     def flat_prior(self, hypercube):
-        """
-        Update the prior function
+        """Update the prior function.
 
         Parameters
         ----------
-            hypercube : np.ndarray
-                hypercube prior
+        hypercube : np.ndarray
+            hypercube prior
 
         Returns
         -------
-            flat_prior : np.ndarray
-                updated hypercube prior
+        flat_prior : np.ndarray
+            updated hypercube prior
         """
         min_val = self.free_parameters.minimum.values
         max_val = self.free_parameters.maximum.values
@@ -286,14 +288,12 @@ class USOptimizer(Optimizer):
             self.save(result)
 
     def save(self, result):
-        """
-        Save |NS| replicas to json inside a dictionary:
-        {coff: [replicas values]}
+        """Save |NS| replicas to json inside a dictionary: {coff: [replicas values]}.
 
         Parameters
         ----------
-            result : dict
-                result dictionary
+        result : dict
+            result dictionary
 
         """
         values = {}
@@ -301,7 +301,6 @@ class USOptimizer(Optimizer):
             values[c] = []
 
         for sample in result["samples"]:
-
             self.coefficients.set_free_parameters(sample)
             self.coefficients.set_constraints()
 
