@@ -12,6 +12,11 @@ from . import Optimizer
 _logger = log.logging.getLogger(__name__)
 
 
+def is_semi_pos_def(x):
+    """Check is a matrix is positive-semidefinite."""
+    return np.all(np.linalg.eigvals(x) >= 0)
+
+
 class ALOptimizer(Optimizer):
     """Optimizer specification for the linear analytic solution.
 
@@ -126,16 +131,24 @@ class ALOptimizer(Optimizer):
         )
         diff_sm = self.loaded_datasets.Commondata - self.loaded_datasets.SMTheory
         coeff_covmat = np.linalg.inv(fisher)
+
+        # check if there are not flat directions
+        if not is_semi_pos_def(coeff_covmat):
+            raise ValueError(
+                """Coefficient covariance is not symmetric positive-semidefinite,
+                There might be flat directions to comment out."""
+            )
+
         coeff_best = (
             coeff_covmat
             @ new_LinearCorrections
             @ self.loaded_datasets.InvCovMat
             @ diff_sm
         )
-
         self.log_result(coeff_best, coeff_covmat)
 
         # sample
+        _logger.info("Sampling solutions ...")
         samples = np.random.multivariate_normal(
             coeff_best, coeff_covmat, size=(self.n_samples,)
         )
