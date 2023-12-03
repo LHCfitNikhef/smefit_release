@@ -41,9 +41,6 @@ def get_confidence_values(dist, has_posterior=True):
     return cl_vals
 
 
-
-
-
 def compute_confidence_level(
     posterior, coeff_info, has_posterior, disjointed_list=None
 ):
@@ -80,7 +77,6 @@ def compute_confidence_level(
                 ).stack()
             # single solution
             else:
-
                 bounds[(group, latex_name)] = pd.DataFrame(
                     [get_confidence_values(posterior[name], has_posterior)]
                 ).stack()
@@ -117,7 +113,6 @@ class CoefficientsPlotter:
     """
 
     def __init__(self, report_path, coeff_config, logo=False):
-
         self.report_folder = report_path
         self.coeff_info = coeff_config
 
@@ -369,7 +364,14 @@ class CoefficientsPlotter:
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
         plt.savefig(f"{self.report_folder}/coefficient_histo.png")
 
-    def plot_contours_2d(self, posteriors, labels, confidence_level=95, dofs_show=None, double_solution=None):
+    def plot_contours_2d(
+        self,
+        posteriors,
+        labels,
+        confidence_level=95,
+        dofs_show=None,
+        double_solution=None,
+    ):
         """Plots 2D marginalised projections confidence level contours
 
         Parameters
@@ -397,10 +399,10 @@ class CoefficientsPlotter:
 
         n_cols = n_par - 1 if n_par != 2 else 2
         n_rows = n_cols
-        if n_par>2:
+        if n_par > 2:
             fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
             grid = plt.GridSpec(n_rows, n_cols, hspace=0.1, wspace=0.1)
-        else: 
+        else:
             fig = plt.figure()
             grid = plt.GridSpec(1, 2, hspace=0.1, wspace=0.1)
 
@@ -411,23 +413,22 @@ class CoefficientsPlotter:
         j = 1
 
         # loop over coefficient pairs
-        for (c1, c2) in itertools.combinations(coeff, 2):
-
+        for c1, c2 in itertools.combinations(coeff, 2):
             if c1 != c1_old:
                 row_idx += -1
                 col_idx = -1 - j
                 j += 1
                 c1_old = c1
-            if n_par>2:
+            if n_par > 2:
                 ax = fig.add_subplot(grid[row_idx, col_idx])
             else:
-                ax = fig.add_subplot(grid[0,0])
+                ax = fig.add_subplot(grid[0, 0])
 
             # loop over fits
             hndls_all = []
-            fit_number=-1
+            fit_number = -1
             for clr_idx, (posterior, kde) in enumerate(posteriors):
-                fit_number=fit_number+1
+                fit_number = fit_number + 1
                 if isinstance(confidence_level, list):
                     colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
                     # plot the first one dashed
@@ -441,9 +442,8 @@ class CoefficientsPlotter:
                             linestyles="dashed",
                             linewidths=2,
                             color=colors[clr_idx],
-                            label=confidence_level[0]
+                            label=confidence_level[0],
                         )
-
 
                     else:
                         confidence_ellipse(
@@ -455,10 +455,9 @@ class CoefficientsPlotter:
                             linestyle="dashed",
                             linewidth=2,
                         )
-                    
-                    
+
                     cl = confidence_level[1]
-                else: 
+                else:
                     cl = confidence_level
 
                 hndls_contours = plot_contours(
@@ -473,7 +472,7 @@ class CoefficientsPlotter:
                     kde=kde,
                     clr_idx=clr_idx,
                     confidence_level=cl,
-                    double_solution=list(double_solution.values())[clr_idx]
+                    double_solution=list(double_solution.values())[clr_idx],
                 )
 
                 hndls_all.append(hndls_contours)
@@ -493,21 +492,53 @@ class CoefficientsPlotter:
                         labelleft=False,
                     )
                 if isinstance(confidence_level, list):
-                    hndls_all.append(mlines.Line2D([], [], linestyle='--' ,linewidth=2,alpha=1,color= colors[clr_idx]))
-                    hndls_all.append(mlines.Line2D([], [],linestyle='-',linewidth=2, alpha=1, color=colors[clr_idx]))
-                    hndls_all.append(mlines.Line2D([], [], color=colors[clr_idx], marker='o', linestyle='None', markersize=8, label='Best fit'))
-                    labels.insert(1+4*fit_number,str(confidence_level[0])+"\% C.L.")
-                    labels.insert(2+4*fit_number,str(confidence_level[1])+"\% C.L.")
-                    labels.insert(3+4*fit_number,"Best fit")
-                    #labels already contain all fit name, so for each fit we need to insert C.L. contours at right pos
+                    hndls_all.append(
+                        mlines.Line2D(
+                            [],
+                            [],
+                            linestyle="--",
+                            linewidth=2,
+                            alpha=1,
+                            color=colors[clr_idx],
+                        )
+                    )
+                    hndls_all.append(
+                        mlines.Line2D(
+                            [],
+                            [],
+                            linestyle="-",
+                            linewidth=2,
+                            alpha=1,
+                            color=colors[clr_idx],
+                        )
+                    )
+                    hndls_all.append(
+                        mlines.Line2D(
+                            [],
+                            [],
+                            color=colors[clr_idx],
+                            marker="o",
+                            linestyle="None",
+                            markersize=8,
+                            label="Best fit",
+                        )
+                    )
+                    labels.insert(
+                        1 + 4 * fit_number, str(confidence_level[0]) + "\% C.L."
+                    )
+                    labels.insert(
+                        2 + 4 * fit_number, str(confidence_level[1]) + "\% C.L."
+                    )
+                    labels.insert(3 + 4 * fit_number, "Best fit")
+                    # labels already contain all fit name, so for each fit we need to insert C.L. contours at right pos
             hndls_sm_point = ax.scatter(0, 0, c="k", marker="+", s=50, zorder=10)
             hndls_all.append(hndls_sm_point)
 
             col_idx -= 1
-            ax.locator_params(axis='x',nbins=5)
-            ax.locator_params(axis='y',nbins=6)
+            ax.locator_params(axis="x", nbins=5)
+            ax.locator_params(axis="y", nbins=6)
             ax.minorticks_on()
-            ax.grid(linestyle='dotted', linewidth=0.5)
+            ax.grid(linestyle="dotted", linewidth=0.5)
 
         ax = fig.add_subplot(grid[0, -1])
         ax.axis("off")
@@ -522,8 +553,6 @@ class CoefficientsPlotter:
             handletextpad=1,
             title_fontsize=24,
         )
-
-
 
         fig.suptitle(
             r"$\mathrm{Marginalised}\:95\:\%\:\mathrm{C.L.\:intervals}$", fontsize=18

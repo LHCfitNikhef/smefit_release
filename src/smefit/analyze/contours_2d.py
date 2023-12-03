@@ -6,6 +6,7 @@ import seaborn as sns
 from matplotlib import patches, transforms
 from matplotlib.patches import Ellipse
 
+
 def split_solution(full_solution):
     """Split the posterior solution"""
 
@@ -20,6 +21,7 @@ def split_solution(full_solution):
         solution1, solution2 = solution2, solution1
 
     return solution1, solution2
+
 
 def confidence_ellipse(
     coeff1, coeff2, ax, facecolor="none", confidence_level=95, **kwargs
@@ -95,7 +97,15 @@ def confidence_ellipse(
 
 
 def plot_contours(
-    ax, posterior, ax_labels, coeff1, coeff2, kde, clr_idx, confidence_level=95,double_solution=None
+    ax,
+    posterior,
+    ax_labels,
+    coeff1,
+    coeff2,
+    kde,
+    clr_idx,
+    confidence_level=95,
+    double_solution=None,
 ):
     """
 
@@ -157,7 +167,7 @@ def plot_contours(
             ax=ax,
             alpha=1,
             color=colors[clr_idx],
-            label=confidence_level
+            label=confidence_level,
         )
         ax.scatter(
             np.mean(solution1x),
@@ -182,7 +192,6 @@ def plot_contours(
         )
 
     else:  # draw ellipses for linear EFT fit
-
         p1 = confidence_ellipse(
             x_values,
             y_values,

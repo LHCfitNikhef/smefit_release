@@ -49,7 +49,6 @@ class Report:
     """
 
     def __init__(self, report_path, result_path, report_config):
-
         self.report = pathlib.Path(f"{report_path}/{report_config['name']}").absolute()
         self.fits = []
         # build the fits labels if needed
@@ -155,7 +154,8 @@ class Report:
         chi2_replica = {}
         for fit in self.fits:
             chi2_df, chi2_total_rep = chi2_cal.compute(
-                fit.datasets, fit.smeft_predictions,
+                fit.datasets,
+                fit.smeft_predictions,
             )
             chi2_replica[fit.label] = chi2_total_rep
             chi2_dict[fit.label] = chi2_cal.add_normalized_chi2(chi2_df)
@@ -222,7 +222,11 @@ class Report:
         if hide_dofs is not None:
             coeff_config = coeff_config.drop(hide_dofs, level=1)
 
-        coeff_plt = CoefficientsPlotter(self.report, coeff_config, logo=logo,)
+        coeff_plt = CoefficientsPlotter(
+            self.report,
+            coeff_config,
+            logo=logo,
+        )
 
         # compute confidence level bounds
         bounds_dict = {}
@@ -329,7 +333,11 @@ class Report:
         self._append_section("Correlations", figs=figs_list)
 
     def pca(
-        self, table=True, plot=None, thr_show=1e-2, fit_list=None,
+        self,
+        table=True,
+        plot=None,
+        thr_show=1e-2,
+        fit_list=None,
     ):
         """Principal Components Analysis runner.
 
@@ -353,7 +361,9 @@ class Report:
         for fit in fit_list:
             _logger.info(f"Computing PCA for fit {fit.name}")
             pca_cal = PcaCalculator(
-                fit.datasets, fit.coefficients, self.coeff_info.droplevel(0),
+                fit.datasets,
+                fit.coefficients,
+                self.coeff_info.droplevel(0),
             )
             pca_cal.compute()
 
@@ -374,7 +384,12 @@ class Report:
         self._append_section("PCA", figs=figs_list, links=links_list)
 
     def fisher(
-        self, norm="coeff", summary_only=True, plot=None, fit_list=None, log=False,
+        self,
+        norm="coeff",
+        summary_only=True,
+        plot=None,
+        fit_list=None,
+        log=False,
     ):
         """Fisher information table and plots runner.
 
