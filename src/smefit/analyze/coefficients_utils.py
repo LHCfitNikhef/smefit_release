@@ -3,14 +3,14 @@ import itertools
 import pathlib
 from collections.abc import Iterable
 
+import matplotlib.lines as mlines
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib import cm
 import seaborn as sns
-import matplotlib.lines as mlines
+from matplotlib import cm
 
-from .contours_2d import plot_contours, confidence_ellipse, split_solution
+from .contours_2d import confidence_ellipse, plot_contours, split_solution
 from .latex_tools import latex_packages, multicolum_table_header
 
 
