@@ -444,7 +444,6 @@ class CoefficientsPlotter:
                             color=colors[clr_idx],
                             label=confidence_level[0],
                         )
-
                     else:
                         confidence_ellipse(
                             posterior[c2].values,
@@ -455,7 +454,6 @@ class CoefficientsPlotter:
                             linestyle="dashed",
                             linewidth=2,
                         )
-
                     cl = confidence_level[1]
                 else:
                     cl = confidence_level
@@ -474,7 +472,6 @@ class CoefficientsPlotter:
                     confidence_level=cl,
                     double_solution=list(double_solution.values())[clr_idx],
                 )
-
                 hndls_all.append(hndls_contours)
 
                 if row_idx != -1:
