@@ -2,12 +2,18 @@
 import json
 import pathlib
 
-from mpi4py import MPI
 from rich.style import Style
 from rich.table import Table
 
 from .. import chi2, log
 from ..loader import get_dataset
+
+try:
+    from mpi4py import MPI
+
+    run_parallel = True
+except ModuleNotFoundError:
+    run_parallel = False
 
 
 class Optimizer:
@@ -77,9 +83,11 @@ class Optimizer:
             current_chi2 : np.ndarray
                 computed :math:`\chi^2`
         """
+        rank = 0
+        if run_parallel:
+            comm = MPI.COMM_WORLD
+            rank = comm.Get_rank()
 
-        comm = MPI.COMM_WORLD
-        rank = comm.Get_rank()
         if rank == 0:
             self.counter += 1
             if print_log:

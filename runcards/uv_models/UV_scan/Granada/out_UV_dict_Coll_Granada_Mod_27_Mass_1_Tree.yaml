@@ -1,0 +1,69 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 27
+Model name : H
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [gHf33]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 # TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{gHf33: [0.,0]}]
+cpB : [{gHf33: [0.,0]}]
+cpW : [{gHf33: [0.,0]}]
+cpWB : [{gHf33: [0.,0]}]
+cpd : [{gHf33: [0.,0]}]
+cpD : [{gHf33: [0.,0]}]
+cWWW : [{gHf33: [0.,0]}]
+cpqMi : [{gHf33: [0.,0]}]
+cpQM : [{gHf33: [0.,0]}]
+c3pq : [{gHf33: [0.,0]}]
+c3pQ3 : [{gHf33: [0.,0]}]
+cpl1 : [{gHf33: [0.,0]}]
+cpl2 : [{gHf33: [0.,0]}]
+cpl3 : [{gHf33: [0.,0]}]
+c3pl1 : [{gHf33: [0.,0]}]
+c3pl2 : [{gHf33: [0.,0]}]
+c3pl3 : [{gHf33: [0.,0]}]
+cpui : [{gHf33: [0.,0]}]
+cpdi : [{gHf33: [0.,0]}]
+cpt : [{gHf33: [0.,0]}]
+cpe : [{gHf33: [0.,0]}]
+cpmu : [{gHf33: [0.,0]}]
+cpta : [{gHf33: [0.,0]}]
+c81qq : [{gHf33: [0.,0]}]
+c11qq : [{gHf33: [0.,0]}]
+c83qq : [{gHf33: [0.,0]}]
+c13qq : [{gHf33: [0.,0]}]
+c8qt : [{gHf33: [0.,0]}]
+c1qt : [{gHf33: [0.,0]}]
+c8ut : [{gHf33: [0.,0]}]
+c1ut : [{gHf33: [0.,0]}]
+c8qu : [{gHf33: [0.,0]}]
+c1qu : [{gHf33: [0.,0]}]
+c8dt : [{gHf33: [0.,0]}]
+c1dt : [{gHf33: [0.,0]}]
+c8qd : [{gHf33: [0.,0]}]
+c1qd : [{gHf33: [0.,0]}]
+cQQ1 : [{gHf33: [-0.2222222222222222,2]}]
+cQQ8 : [{gHf33: [0.4166666666666667,2]}]
+cQt1 : [{gHf33: [0.,0]}]
+cQt8 : [{gHf33: [0.,0]}]
+ctt1 : [{gHf33: [0.,0]}]
+cll : [{gHf33: [0.,0]}]
+cll1111 : [{gHf33: [0.,0]}]
+cbp : [{gHf33: [0.,0]}]
+ctp : [{gHf33: [0.,0]}]
+ctG : [{gHf33: [0.,0]}]
+ccp : [{gHf33: [0.,0]}]
+ctap : [{gHf33: [0.,0]}]
+ctW : [{gHf33: [0.,0]}]
+ctZ : [{gHf33: [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_Local_New_Yukas_indepcll1111_Upto48_01_09_2023.wxf
+# Export date: Fri 1 Sep 2023 13:14:23

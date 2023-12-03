@@ -1,27 +1,33 @@
 # -*- coding: utf-8 -*-
 
 """
-Fitting the Wilson coefficients with NS
+Fitting the Wilson coefficients with |NS|
 """
-import os
 import time
 
-from mpi4py import MPI
-from pymultinest.solve import solve
+import ultranest
 from rich.style import Style
 from rich.table import Table
+from ultranest import stepsampler
 
 from .. import log
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
 
+try:
+    from mpi4py import MPI
+
+    run_parallel = True
+except ModuleNotFoundError:
+    run_parallel = False
+
 _logger = log.logging.getLogger(__name__)
 
 
-class NSOptimizer(Optimizer):
+class USOptimizer(Optimizer):
     """
-    Optimizer specification for |NS|
+    Optimizer specification for Ultra nest
 
     Parameters
     ----------
@@ -33,12 +39,18 @@ class NSOptimizer(Optimizer):
             If True use also |HO| corrections
         live_points : int
             number of |NS| live points
-        efficiency : float
-            sampling efficiency
-        const_efficiency: bool
-            if True use the constant efficiency mode
-        tolerance: float
-            evidence tolerance
+        lepsilon : float
+            sampling tollerance. Terminate when live point likelihoods are all the same, within Lepsilon tolerance.
+            Increase this when your likelihood function is inaccurate,
+        target_evidence_unc: float
+            target evidence uncertainty.
+        target_post_unc: float
+            target posterior uncertainty.
+        frac_remain: float
+            integrate until this fraction of the integral is left in the remainder.
+            Set to a higher number (0.5) if you know the posterior is simple.
+        store_raw: bool
+            if True store the result to eventually resume the job
     """
 
     print_rate = 5000
@@ -54,9 +66,11 @@ class NSOptimizer(Optimizer):
         pairwise_fits,
         use_multiplicative_prescription,
         live_points=500,
-        efficiency=0.01,
-        const_efficiency=False,
-        tolerance=0.5,
+        lepsilon=0.001,
+        target_evidence_unc=0.5,
+        target_post_unc=0.5,
+        frac_remain=0.01,
+        store_raw=False,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -67,12 +81,14 @@ class NSOptimizer(Optimizer):
             use_multiplicative_prescription,
         )
         self.live_points = live_points
-        self.efficiency = efficiency
-        self.const_efficiency = const_efficiency
-        self.tolerance = tolerance
+        self.lepsilon = lepsilon
+        self.target_evidence_unc = target_evidence_unc
+        self.target_post_unc = target_post_unc
+        self.frac_remain = frac_remain
         self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
         self.pairwise_fits = pairwise_fits
+        self.store_raw = store_raw
 
     @classmethod
     def from_dict(cls, config):
@@ -101,7 +117,7 @@ class NSOptimizer(Optimizer):
             config.get("use_multiplicative_prescription", False),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
-            config.get("uv_coupligs", False),
+            config.get("uv_couplings", False),
         )
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
@@ -115,23 +131,31 @@ class NSOptimizer(Optimizer):
                 f"Number of live points (nlive) not set in the input card. Using default: {nlive}"
             )
 
-        efr = config.get("efr", 0.01)
-        if "efr" not in config:
+        lepsilon = config.get("lepsilon", 0.05)
+        if "lepsilon" not in config:
             _logger.warning(
-                f"Sampling efficiency (efr) not set in the input card. Using default: {efr}"
+                f"Sampling tollerance (Lepsilon) not set in the input card. Using default: {lepsilon}"
             )
 
-        ceff = config.get("ceff", False)
-        if "ceff" not in config:
+        target_evidence_unc = config.get("target_evidence_unc", 0.5)
+        if "target_evidence_unc" not in config:
             _logger.warning(
-                f"Constant efficiency mode (ceff) not set in the input card. Using default: {ceff}"
+                f"Target Evidence uncertanty (target_evidence_unc) not set in the input card. Using default: {target_evidence_unc}"
             )
 
-        toll = config.get("toll", 0.5)
-        if "toll" not in config:
+        target_post_unc = config.get("target_post_unc", 0.5)
+        if "target_post_unc" not in config:
             _logger.warning(
-                f"Evidence tolerance (toll) not set in the input card. Using default: {toll}"
+                f"Target Posterior uncertanty (target_post_unc) not set in the input card. Using default: {target_post_unc}"
             )
+
+        frac_remain = config.get("frac_remain", 0.01)
+        if "frac_remain" not in config:
+            _logger.warning(
+                f"Remaining fraction (frac_remain) not set in the input card. Using default: {frac_remain}"
+            )
+
+        store_raw = config.get("store_raw", False)
 
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
@@ -146,9 +170,11 @@ class NSOptimizer(Optimizer):
             pairwise_fits,
             use_multiplicative_prescription,
             live_points=nlive,
-            efficiency=efr,
-            const_efficiency=ceff,
-            tolerance=toll,
+            lepsilon=lepsilon,
+            target_evidence_unc=target_evidence_unc,
+            target_post_unc=target_post_unc,
+            frac_remain=frac_remain,
+            store_raw=store_raw,
         )
 
     def chi2_func_ns(self, params):
@@ -202,54 +228,46 @@ class NSOptimizer(Optimizer):
             flat_prior : np.ndarray
                 updated hypercube prior
         """
-        min_val = self.free_parameters.minimum
-        max_val = self.free_parameters.maximum
+        min_val = self.free_parameters.minimum.values
+        max_val = self.free_parameters.maximum.values
         return hypercube * (max_val - min_val) + min_val
 
-    def clean(self):
-        """Remove raw |NS| output if you want to keep raw output, don't call this method"""
-
-        for f in os.listdir(self.results_path):
-            if f.startswith(f"{self.live_points}_"):
-                os.remove(self.results_path / f)
-
     def run_sampling(self):
-        """Run the minimization with Nested Sampling"""
+        """Run the minimization with Ultra nest."""
 
-        # Prefix for results
-        prefix = self.results_path / f"{self.live_points}_"
-
-        # Additional check
-        # Multinest will crash if the length of the results
-        # path+post_equal_weights.txt is longer than 100.
-        # you can solve this making you path or fit id shorter.
-        # Otherwise you can hack /pymultinest/solve.py
-        if len(f"{prefix}post_equal_weights.txt") >= 100:
-            raise UserWarning(
-                f"Py multinest support a buffer or maximum 100 characters: \
-                    {prefix}post_equal_weights.txt is too long, \
-                         please chose a shorter path or Fit ID"
-            )
+        log_dir = None
+        if self.store_raw:
+            log_dir = self.results_path
 
         t1 = time.time()
-
-        result = solve(
-            LogLikelihood=self.gaussian_loglikelihood,
-            Prior=self.flat_prior,
-            n_dims=self.npar,
-            n_params=self.npar,
-            outputfiles_basename=str(prefix),
-            n_live_points=self.live_points,
-            sampling_efficiency=self.efficiency,
-            verbose=False,
-            importance_nested_sampling=True,
-            const_efficiency_mode=self.const_efficiency,
-            evidence_tolerance=self.tolerance,
+        sampler = ultranest.ReactiveNestedSampler(
+            self.free_parameters.index.tolist(),
+            self.gaussian_loglikelihood,
+            self.flat_prior,
+            log_dir=log_dir,
+            resume=True,
+        )
+        if self.npar > 10:
+            # set up step sampler. Here, we use a differential evolution slice sampler:
+            sampler.stepsampler = stepsampler.SliceSampler(
+                nsteps=100,
+                generate_direction=stepsampler.generate_region_oriented_direction,
+            )
+        result = sampler.run(
+            min_num_live_points=self.live_points,
+            dlogz=self.target_evidence_unc,
+            frac_remain=self.frac_remain,
+            dKL=self.target_post_unc,
+            Lepsilon=self.lepsilon,
+            update_interval_volume_fraction=0.8 if self.npar > 20 else 0.2,
+            max_num_improvement_loops=0,
         )
 
         t2 = time.time()
-        comm = MPI.COMM_WORLD
-        rank = comm.Get_rank()
+        rank = 0
+        if run_parallel:
+            comm = MPI.COMM_WORLD
+            rank = comm.Get_rank()
 
         if rank == 0:
             log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
@@ -266,7 +284,6 @@ class NSOptimizer(Optimizer):
             log.console.print(table)
 
             self.save(result)
-            self.clean()
 
     def save(self, result):
         """
