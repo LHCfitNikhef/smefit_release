@@ -119,7 +119,7 @@ coefficients:
 ```
 
 As exemplified above, the syntax to specify the Wilson coefficient corresponding to the operator
-``O1`` is ``O1 : {'min': , 'max':} `` where ``min`` and ``max`` indicate the bounds within which 
+``O1`` is ``O1 : {'min': , 'max':} `` where ``min`` and ``max`` indicate the bounds within 
 the sampling is performed.
 
 ### Constrains between coefficients
@@ -172,14 +172,6 @@ The basic command to run a fit using Monte Carlo is
 ```bash
     smefit MC path/to/the/runcard/runcard.yaml -n replica_number
 ```
-## Solving the linear problem
-In case only linear cocrrections are used one
-can find the analytic solution to the linear problem doing
-```bash
-    smefit A path/to/the/runcard/runcard.yaml
-```
-This will also sample the posterior distribution accoding to the runcard.
-
 
 This will produce a file called ``replica_<replica_number>/coefficients_rep_<replica_number>.json``
 in the result folder, containing the values of the Wilson coefficients for the replica.
@@ -193,6 +185,15 @@ where ``<number_of_replicas>`` specifies the number of replicas to be used to bu
 Replicas not satisfying the PostFit criteria will be discarded. If the final number of good replicas is lower than
 ``<number_of_replicas>`` the code will output an error message asking to produce more replicas first.
 The final output is the file ``posterior.json`` containing the full posterior of the Wilson coefficients.
+
+## Solving the linear problem
+In case only linear cocrrections are used, one
+can find the analytic solution to the linear problem by
+```bash
+    smefit A path/to/the/runcard/runcard.yaml
+```
+This will also sample the posterior distribution according to the runcard.
+
 
 ## Single parameter fits
 Given a runcard with a number of Wilson coefficients specified, it is possible to fit each of them in turn,
