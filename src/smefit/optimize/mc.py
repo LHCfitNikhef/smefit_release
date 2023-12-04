@@ -127,6 +127,7 @@ class MCOptimizer(Optimizer):
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
+            config.get("external_chi2", False),
         )
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])

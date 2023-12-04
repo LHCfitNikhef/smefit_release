@@ -122,6 +122,7 @@ class FitManager:
             self.config.get("theory_path", None),
             self.config.get("rot_to_fit_basis", None),
             self.config.get("uv_couplings", False),
+            self.config.get("external_chi2", False),
         )
 
     @property
