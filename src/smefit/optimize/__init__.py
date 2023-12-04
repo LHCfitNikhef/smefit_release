@@ -121,7 +121,7 @@ class Optimizer:
             chi2_modules = self.load_external_chi2()
             for name, chi2_module in chi2_modules.items():
                 chi2_ext = getattr(chi2_modules[name], name)
-                chi2_tot += chi2_ext(self.coefficients.value)
+                chi2_tot += chi2_ext(self.coefficients)
 
         if print_log:
             chi2_dict = {}
