@@ -9,6 +9,14 @@ smefit.optimize package
 Submodules
 ----------
 
+smefit.optimize.analytic module
+-------------------------------
+
+.. automodule:: smefit.optimize.analytic
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smefit.optimize.mc module
 -------------------------
 

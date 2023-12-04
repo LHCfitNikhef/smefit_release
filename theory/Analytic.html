@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Code structure &mdash; SMEFiT 0.1.0 documentation</title>
+  <title>Analytic solution &mdash; SMEFiT 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f74d80cf" />
@@ -19,11 +19,12 @@
         <script src="../_static/documentation_options.js?v=01f34227"></script>
         <script src="../_static/doctools.js?v=888ff710"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="How to run the code" href="running.html" />
-    <link rel="prev" title="Basis rotation" href="../data_theory/rotation.html" /> 
+    <link rel="next" title="The Monte Carlo replica method" href="MCFit.html" />
+    <link rel="prev" title="Nested Sampling" href="NS.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,12 +47,12 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../theory/general.html">Fitting assumptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../theory/NS.html">Nested Sampling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../theory/Analytic.html">Analytic solution</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../theory/MCFit.html">The Monte Carlo replica method</a></li>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="SMEFT.html">Standard Model Effective Field Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html">Fitting assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NS.html">Nested Sampling</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Analytic solution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MCFit.html">The Monte Carlo replica method</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
 <ul>
@@ -61,9 +62,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/rotation.html">Basis rotation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Code structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="running.html">How to run the code</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../fitting_code/code_struct.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fitting_code/running.html">How to run the code</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reports:</span></p>
 <ul>
@@ -104,9 +105,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Code structure</li>
+      <li class="breadcrumb-item active">Analytic solution</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/fitting_code/code_struct.md.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/theory/Analytic.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -114,49 +115,28 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="code-structure">
-<span id="codestruct"></span><h1>Code structure<a class="headerlink" href="#code-structure" title="Link to this heading"></a></h1>
-<p>In the following the provide a quick overview of how the code works.
-We refer to the <a class="reference external" href="./running.html">tutorial</a> for a step by step guide on how to use it.</p>
-<ul>
-<li><p>The information required to set up the analysis are read from an input
-<a class="reference external" href="./running.html#runcard-specifications">runcard</a>.
-The code will load the specified datasets, collecting the full experimental information and the
-Standard Model and EFT corrections to build the corresponding theory predictions.
-In the same input card the operators whose Wilson coefficients should be fitted
-are specified. If some of them do not appear in any of the selected datasets, the code will stop with an error message.</p></li>
-<li><p>Using the loaded information the loglikelihood is build as a function of the Wilson coefficients to fit.
-This is then given as input to an <code class="docutils literal notranslate"><span class="pre">Optimizer</span></code> object, encoding all the specifications of the
-minimizer used in the analysis.
-The provided options are <a class="reference external" href="./running.html#running-a-fit-with-ns">Nested Sampling</a> and
-<a class="reference external" href="./running.html#running-a-fit-with-mc">MonteCarlo</a>, based
-on the external Utranest library and on an internal implementation respectively.
-In the first case the output is the full posterior distribution for the fitted Wilson coefficients,
-while in the second is the result for a single MC replica.
-To get the full posterior using MC, after producing a sufficient number of replicas
-the code must be run in the PostFit mode, which discards replicas having <code class="docutils literal notranslate"><span class="pre">chi^2</span></code>
-higher than a certain threshold set by the user and produce the final output file.</p></li>
-<li><p>The final output of the fit is a json file having the following structure</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-<span class="nt">  O_1 </span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sample_1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sample_2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">...</span><span class="p p-Indicator">],</span>
-<span class="nt">  O_2 </span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">sample_1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">sample_2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">...</span><span class="p p-Indicator">],</span>
-<span class="w">  </span><span class="nv">...</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>where each entry correspond to a list of samples of the Wilson coefficient corresponding to the specified operator.
-The final posterior is therefore provided as a discrete set of samples for each fitted Wilson coefficient.</p>
-</li>
-<li><p>The code can be run in the <a class="reference external" href="./../report/running.html#producing-a-report">Report mode</a> in order to produce a report to visualize the results. The different functionalities currently supported in the report are documented <a class="reference external" href="./../report/tools.html">here</a></p></li>
-</ul>
+  <section id="analytic-solution">
+<h1>Analytic solution<a class="headerlink" href="#analytic-solution" title="Link to this heading"></a></h1>
+<p>In case only linear <abbr title="Effective Field Theory">EFT</abbr> corrections are needed or available, <abbr title="Standard Model Effective Field Theory fitter">SMEFiT</abbr>
+allows you to obtain the analytic solution of the linear problem.</p>
+<p>The central value of the Wilson coefficient is given by solving the equation <span class="math notranslate nohighlight">\(\partial \chi^2 / \partial c = 0\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[c_i = \left (  \kappa_{i,k} \text{cov}_{k,l}^{-1}  \kappa_{j,l} \right )^{-1} \kappa_{j,m} \text{cov}_{m,n}^{-1} \left ( \sigma_{n}^{\text{(exp)}} -  \sigma_{n}^{\text{(sm)}} \right ) \quad i,j=\{1,\dots N_{op}\}, \quad m,n,k,l=\{1,\dots N_{dat}\}\]</div>
+<p>and its covariance matrix is given by the Fisher information:</p>
+<div class="math notranslate nohighlight">
+\[X_{ij} = \kappa_{i,k} \text{Cov}_{k,l}^{-1} \kappa_{j,l} \quad i,j=\{1,\dots N_{op}\}\]</div>
+<p>Starting from the central values and the covariance one can then draw the required number of samples from a muli Gaussian distribution <span class="math notranslate nohighlight">\(\mathcal{N}(c, X)\)</span>.</p>
+<p>This analytic method is really efficient, however it does not work in the presence of flat
+directions, which can result in a <span class="math notranslate nohighlight">\(X_{ij}\)</span> matrix that is not semipositive definite.</p>
+<p>Also quadratic relations between Wilson coefficient, as well as quadratic <abbr title="Effective Field Theory">EFT</abbr> corrections are not supported.</p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../data_theory/rotation.html" class="btn btn-neutral float-left" title="Basis rotation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="running.html" class="btn btn-neutral float-right" title="How to run the code" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="NS.html" class="btn btn-neutral float-left" title="Nested Sampling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MCFit.html" class="btn btn-neutral float-right" title="The Monte Carlo replica method" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

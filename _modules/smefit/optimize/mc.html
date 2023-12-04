@@ -47,6 +47,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../theory/general.html">Fitting assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../theory/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/Analytic.html">Analytic solution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../theory/MCFit.html">The Monte Carlo replica method</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
@@ -112,9 +113,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for smefit.optimize.mc</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="sd">&quot;&quot;&quot;Fitting the Wilson coefficients with |MC|.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Fitting the Wilson coefficients with |MC|.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">import</span> <span class="nn">cma</span>
@@ -143,14 +142,18 @@
 <span class="sd">        dataset tuple</span>
 <span class="sd">    coefficients : `smefit.coefficients.CoefficientManager`</span>
 <span class="sd">        instance of `CoefficientManager` with all the relevant coefficients to fit</span>
+<span class="sd">    result_path: pathlib.Path</span>
+<span class="sd">        path to result folder</span>
 <span class="sd">    use_quad : bool</span>
 <span class="sd">        If True use also |HO| corrections</span>
 <span class="sd">    result_ID : str</span>
-<span class="sd">        result ID</span>
-<span class="sd">    replica : int</span>
-<span class="sd">        replica number</span>
+<span class="sd">        result name</span>
 <span class="sd">    single_parameter_fits : bool</span>
 <span class="sd">        True for individual scan fits</span>
+<span class="sd">    use_multiplicative_prescription : bool</span>
+<span class="sd">        if True uses the multiplicative prescription for the |EFT| corrections</span>
+<span class="sd">    replica : int</span>
+<span class="sd">        replica number</span>
 <span class="sd">    use_bounds : bool</span>
 <span class="sd">        If true start the minimization with the specified values of min and max for each coeffient</span>
 <span class="sd">    minimizer_specs : dict</span>
@@ -181,11 +184,11 @@
         <span class="n">result_path</span><span class="p">,</span>
         <span class="n">use_quad</span><span class="p">,</span>
         <span class="n">result_ID</span><span class="p">,</span>
-        <span class="n">replica</span><span class="p">,</span>
         <span class="n">single_parameter_fits</span><span class="p">,</span>
+        <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
+        <span class="n">replica</span><span class="p">,</span>
         <span class="n">use_bounds</span><span class="p">,</span>
         <span class="n">minimizer_specs</span><span class="p">,</span>
-        <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -284,18 +287,17 @@
             <span class="n">config</span><span class="p">[</span><span class="s2">&quot;result_path&quot;</span><span class="p">],</span>
             <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">],</span>
             <span class="n">config</span><span class="p">[</span><span class="s2">&quot;result_ID&quot;</span><span class="p">],</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;replica&quot;</span><span class="p">],</span>
             <span class="n">single_parameter_fits</span><span class="p">,</span>
+            <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
+            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;replica&quot;</span><span class="p">],</span>
             <span class="n">use_bounds</span><span class="p">,</span>
             <span class="n">minimizer_specs</span><span class="p">,</span>
-            <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="MCOptimizer.get_status">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.get_status">[docs]</a>
     <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2</span><span class="p">):</span>
-
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chi2_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">chi2_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chi2</span><span class="p">)</span>
 

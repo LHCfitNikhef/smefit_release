@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../theory/general.html">Fitting assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../theory/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/Analytic.html">Analytic solution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../theory/MCFit.html">The Monte Carlo replica method</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
@@ -204,8 +205,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smefit.runner">smefit.runner module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.runner.Runner"><code class="docutils literal notranslate"><span class="pre">Runner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.analytic"><code class="docutils literal notranslate"><span class="pre">Runner.analytic()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.chi2_scan"><code class="docutils literal notranslate"><span class="pre">Runner.chi2_scan()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.from_file"><code class="docutils literal notranslate"><span class="pre">Runner.from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.get_optimizer"><code class="docutils literal notranslate"><span class="pre">Runner.get_optimizer()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.global_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.global_analysis()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.mc"><code class="docutils literal notranslate"><span class="pre">Runner.mc()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.runner.Runner.pairwise_analysis"><code class="docutils literal notranslate"><span class="pre">Runner.pairwise_analysis()</span></code></a></li>
@@ -385,6 +388,17 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#module-smefit.optimize.analytic">smefit.optimize.analytic module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.analytic.ALOptimizer"><code class="docutils literal notranslate"><span class="pre">ALOptimizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.analytic.ALOptimizer.from_dict"><code class="docutils literal notranslate"><span class="pre">ALOptimizer.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.analytic.ALOptimizer.log_result"><code class="docutils literal notranslate"><span class="pre">ALOptimizer.log_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.analytic.ALOptimizer.run_sampling"><code class="docutils literal notranslate"><span class="pre">ALOptimizer.run_sampling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.analytic.ALOptimizer.save"><code class="docutils literal notranslate"><span class="pre">ALOptimizer.save()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.analytic.is_semi_pos_def"><code class="docutils literal notranslate"><span class="pre">is_semi_pos_def()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#module-smefit.optimize.mc">smefit.optimize.mc module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer"><code class="docutils literal notranslate"><span class="pre">MCOptimizer</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.mc.MCOptimizer.chi2_func_mc"><code class="docutils literal notranslate"><span class="pre">MCOptimizer.chi2_func_mc()</span></code></a></li>
@@ -1299,6 +1313,12 @@ results, plot config and reports are stored.</p>
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.analytic">
+<span class="sig-name descname"><span class="pre">analytic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.analytic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.analytic" title="Link to this definition"></a></dt>
+<dd><p>Sample the analytic linear solution.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="smefit.runner.Runner.chi2_scan">
 <span class="sig-name descname"><span class="pre">chi2_scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_replica</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_bounds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.chi2_scan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.chi2_scan" title="Link to this definition"></a></dt>
 <dd><p>Run an individual <span class="math notranslate nohighlight">\(\chi^2\)</span> scan.</p>
@@ -1335,11 +1355,20 @@ will be computed.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="smefit.runner.Runner.get_optimizer">
+<span class="sig-name descname"><span class="pre">get_optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.get_optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.get_optimizer" title="Link to this definition"></a></dt>
+<dd><p>Return the seleted optimizer.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="smefit.runner.Runner.global_analysis">
 <span class="sig-name descname"><span class="pre">global_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.global_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.global_analysis" title="Link to this definition"></a></dt>
-<dd><p>Run a global fit using the selected optimizer
-:param optimizer: optimizer to be used (NS or MC)
-:type optimizer: string</p>
+<dd><p>Run a global fit using the selected optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>optimizer</strong> (<em>string</em>) – optimizer to be used (NS, MC or A)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1354,7 +1383,7 @@ will be computed.</p></li>
 <dd><p>Run a series of pairwise parameter fits for all the operators specified in the runcard.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>optimizer</strong> (<em>string</em>) – optimizer to be used (NS or MC)</p>
+<dd class="field-odd"><p><strong>optimizer</strong> (<em>string</em>) – optimizer to be used only NS is supported</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1362,15 +1391,18 @@ will be computed.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.runner.Runner.rotate_to_pca">
 <span class="sig-name descname"><span class="pre">rotate_to_pca</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.rotate_to_pca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.rotate_to_pca" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Rotate to <abbr title="Principal Components Analysis">PCA</abbr> basis.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.runner.Runner.run_analysis">
 <span class="sig-name descname"><span class="pre">run_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.run_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.run_analysis" title="Link to this definition"></a></dt>
-<dd><p>Run either the global analysis or a series of single parameter fits
-using the selected optimizer.
-:param optimizer: optimizer to be used (NS or MC)
-:type optimizer: string</p>
+<dd><p>Run either the global analysis or a series of single parameter fits using the selected optimizer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>optimizer</strong> (<em>string</em>) – optimizer to be used (NS, MC or A)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1382,9 +1414,12 @@ using the selected optimizer.
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.runner.Runner.single_parameter_analysis">
 <span class="sig-name descname"><span class="pre">single_parameter_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/runner.html#Runner.single_parameter_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.runner.Runner.single_parameter_analysis" title="Link to this definition"></a></dt>
-<dd><p>Run a seried of single parameter fits for all the operators specified in the runcard
-:param optimizer: optimizer to be used (NS or MC)
-:type optimizer: string</p>
+<dd><p>Run a seried of single parameter fits for all the operators specified in the runcard.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>optimizer</strong> (<em>string</em>) – optimizer to be used (NS, MC or A)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

@@ -47,6 +47,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../theory/general.html">Fitting assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../theory/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/Analytic.html">Analytic solution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../theory/MCFit.html">The Monte Carlo replica method</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
@@ -122,6 +123,7 @@
 <span class="kn">from</span> <span class="nn">.analyze.pca</span> <span class="kn">import</span> <span class="n">RotateToPca</span>
 <span class="kn">from</span> <span class="nn">.chi2</span> <span class="kn">import</span> <span class="n">Scanner</span>
 <span class="kn">from</span> <span class="nn">.log</span> <span class="kn">import</span> <span class="n">logging</span>
+<span class="kn">from</span> <span class="nn">.optimize.analytic</span> <span class="kn">import</span> <span class="n">ALOptimizer</span>
 <span class="kn">from</span> <span class="nn">.optimize.mc</span> <span class="kn">import</span> <span class="n">MCOptimizer</span>
 <span class="kn">from</span> <span class="nn">.optimize.ultranest</span> <span class="kn">import</span> <span class="n">USOptimizer</span>
 
@@ -157,7 +159,6 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">run_card</span><span class="p">,</span> <span class="n">single_parameter_fits</span><span class="p">,</span> <span class="n">pairwise_fits</span><span class="p">,</span> <span class="n">runcard_file</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span> <span class="o">=</span> <span class="n">run_card</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runcard_file</span> <span class="o">=</span> <span class="n">runcard_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">single_parameter_fits</span> <span class="o">=</span> <span class="n">single_parameter_fits</span>
@@ -235,6 +236,29 @@
         <span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="Runner.get_optimizer">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.get_optimizer">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_optimizer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the seleted optimizer.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;NS&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ultranest</span>
+        <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;MC&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mc</span>
+        <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">analytic</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">optimizer</span><span class="si">}</span><span class="s2"> is not available&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Runner.analytic">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.analytic">[docs]</a>
+    <span class="k">def</span> <span class="nf">analytic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sample the analytic linear solution.&quot;&quot;&quot;</span>
+
+        <span class="n">a_opt</span> <span class="o">=</span> <span class="n">ALOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">a_opt</span><span class="o">.</span><span class="n">run_sampling</span><span class="p">()</span></div>
+
+
 <div class="viewcode-block" id="Runner.ultranest">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.ultranest">[docs]</a>
     <span class="k">def</span> <span class="nf">ultranest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
@@ -244,29 +268,30 @@
             <span class="n">comm</span> <span class="o">=</span> <span class="n">MPI</span><span class="o">.</span><span class="n">COMM_WORLD</span>
             <span class="n">rank</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">Get_rank</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">opt</span> <span class="o">=</span> <span class="n">USOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+                <span class="n">ns_opt</span> <span class="o">=</span> <span class="n">USOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">opt</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">opt</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">bcast</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">ns_opt</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">ns_opt</span> <span class="o">=</span> <span class="n">comm</span><span class="o">.</span><span class="n">bcast</span><span class="p">(</span><span class="n">ns_opt</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">opt</span> <span class="o">=</span> <span class="n">USOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="n">ns_opt</span> <span class="o">=</span> <span class="n">USOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 
-        <span class="n">opt</span><span class="o">.</span><span class="n">run_sampling</span><span class="p">()</span></div>
+        <span class="n">ns_opt</span><span class="o">.</span><span class="n">run_sampling</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Runner.mc">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.mc">[docs]</a>
     <span class="k">def</span> <span class="nf">mc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a fit with |MC|.&quot;&quot;&quot;</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span>
-        <span class="n">opt</span> <span class="o">=</span> <span class="n">MCOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-        <span class="n">opt</span><span class="o">.</span><span class="n">run_sampling</span><span class="p">()</span>
-        <span class="n">opt</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+        <span class="n">mc_opt</span> <span class="o">=</span> <span class="n">MCOptimizer</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">mc_opt</span><span class="o">.</span><span class="n">run_sampling</span><span class="p">()</span>
+        <span class="n">mc_opt</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Runner.rotate_to_pca">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.rotate_to_pca">[docs]</a>
     <span class="k">def</span> <span class="nf">rotate_to_pca</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rotate to |PCA| basis.&quot;&quot;&quot;</span>
 
         <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Rotate input basis to PCA basis&quot;</span><span class="p">)</span>
         <span class="n">pca_rot</span> <span class="o">=</span> <span class="n">RotateToPca</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_card</span><span class="p">)</span>
@@ -278,30 +303,27 @@
 <div class="viewcode-block" id="Runner.global_analysis">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.global_analysis">[docs]</a>
     <span class="k">def</span> <span class="nf">global_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a global fit using the selected optimizer</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a global fit using the selected optimizer.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        optimizer: string</span>
-<span class="sd">            optimizer to be used (NS or MC)</span>
+<span class="sd">            optimizer to be used (NS, MC or A)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span>
-        <span class="c1"># if optimizer == &quot;NS&quot;:</span>
-        <span class="c1">#     self.ns(config)</span>
-        <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;NS&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ultranest</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;MC&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">mc</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+        <span class="n">opt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+        <span class="n">opt</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Runner.single_parameter_analysis">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.single_parameter_analysis">[docs]</a>
     <span class="k">def</span> <span class="nf">single_parameter_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a seried of single parameter fits for all the operators specified in the runcard</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a seried of single parameter fits for all the operators specified in the runcard.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        optimizer: string</span>
-<span class="sd">            optimizer to be used (NS or MC)</span>
+<span class="sd">            optimizer to be used (NS, MC or A)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span>
@@ -310,10 +332,8 @@
             <span class="n">single_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">single_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;NS&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ultranest</span><span class="p">(</span><span class="n">single_coeff_config</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;MC&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">mc</span><span class="p">(</span><span class="n">single_coeff_config</span><span class="p">)</span></div>
+            <span class="n">opt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+            <span class="n">opt</span><span class="p">(</span><span class="n">single_coeff_config</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Runner.pairwise_analysis">
@@ -324,32 +344,31 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        optimizer: string</span>
-<span class="sd">            optimizer to be used (NS or MC)</span>
+<span class="sd">            optimizer to be used only NS is supported</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">optimizer</span> <span class="o">!=</span> <span class="s2">&quot;NS&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Paiwise analysis is implemented only for NS.&quot;</span><span class="p">)</span>
 
         <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_card</span>
-
-        <span class="k">for</span> <span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
             <span class="n">pairwise_coeff_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
             <span class="n">pairwise_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">pairwise_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">c1</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">c1</span><span class="p">]</span>
             <span class="n">pairwise_coeff_config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">c2</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">][</span><span class="n">c2</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;NS&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ultranest</span><span class="p">(</span><span class="n">pairwise_coeff_config</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;MC&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">mc</span><span class="p">(</span><span class="n">pairwise_coeff_config</span><span class="p">)</span></div>
+            <span class="n">opt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">)</span>
+            <span class="n">opt</span><span class="p">(</span><span class="n">pairwise_coeff_config</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Runner.run_analysis">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.runner.Runner.run_analysis">[docs]</a>
     <span class="k">def</span> <span class="nf">run_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run either the global analysis or a series of single parameter fits</span>
-<span class="sd">        using the selected optimizer.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run either the global analysis or a series of single parameter fits using the selected optimizer.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        optimizer: string</span>
-<span class="sd">            optimizer to be used (NS or MC)</span>
+<span class="sd">            optimizer to be used (NS, MC or A)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_parameter_fits</span><span class="p">:</span>

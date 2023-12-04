@@ -47,6 +47,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../theory/general.html">Fitting assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../theory/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory/Analytic.html">Analytic solution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../theory/MCFit.html">The Monte Carlo replica method</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
@@ -112,11 +113,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for smefit.optimize.ultranest</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Fitting the Wilson coefficients with |NS|</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Fitting the Wilson coefficients with |NS|&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">import</span> <span class="nn">ultranest</span>
@@ -142,31 +139,41 @@
 <div class="viewcode-block" id="USOptimizer">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer">[docs]</a>
 <span class="k">class</span> <span class="nc">USOptimizer</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Optimizer specification for Ultra nest</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimizer specification for Ultra nest.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">        loaded_datasets : `smefit.loader.DataTuple`,</span>
-<span class="sd">            dataset tuple</span>
-<span class="sd">        coefficients : `smefit.coefficients.CoefficientManager`</span>
-<span class="sd">            instance of `CoefficientManager` with all the relevant coefficients to fit</span>
-<span class="sd">        use_quad : bool</span>
-<span class="sd">            If True use also |HO| corrections</span>
-<span class="sd">        live_points : int</span>
-<span class="sd">            number of |NS| live points</span>
-<span class="sd">        lepsilon : float</span>
-<span class="sd">            sampling tollerance. Terminate when live point likelihoods are all the same, within Lepsilon tolerance.</span>
-<span class="sd">            Increase this when your likelihood function is inaccurate,</span>
-<span class="sd">        target_evidence_unc: float</span>
-<span class="sd">            target evidence uncertainty.</span>
-<span class="sd">        target_post_unc: float</span>
-<span class="sd">            target posterior uncertainty.</span>
-<span class="sd">        frac_remain: float</span>
-<span class="sd">            integrate until this fraction of the integral is left in the remainder.</span>
-<span class="sd">            Set to a higher number (0.5) if you know the posterior is simple.</span>
-<span class="sd">        store_raw: bool</span>
-<span class="sd">            if True store the result to eventually resume the job</span>
+<span class="sd">    loaded_datasets : `smefit.loader.DataTuple`,</span>
+<span class="sd">        dataset tuple</span>
+<span class="sd">    coefficients : `smefit.coefficients.CoefficientManager`</span>
+<span class="sd">        instance of `CoefficientManager` with all the relevant coefficients to fit</span>
+<span class="sd">    result_path: pathlib.Path</span>
+<span class="sd">        path to result folder</span>
+<span class="sd">    use_quad : bool</span>
+<span class="sd">        If True use also |HO| corrections</span>
+<span class="sd">    result_ID : str</span>
+<span class="sd">        result name</span>
+<span class="sd">    single_parameter_fits : bool</span>
+<span class="sd">        True for single parameter fits</span>
+<span class="sd">    pairwise_fits : bool</span>
+<span class="sd">        True for pairwise parameter fits</span>
+<span class="sd">    use_multiplicative_prescription : bool</span>
+<span class="sd">        if True uses the multiplicative prescription for the |EFT| corrections</span>
+<span class="sd">    live_points : int</span>
+<span class="sd">        number of |NS| live points</span>
+<span class="sd">    lepsilon : float</span>
+<span class="sd">        sampling tollerance. Terminate when live point likelihoods are all the same, within Lepsilon tolerance.</span>
+<span class="sd">        Increase this when your likelihood function is inaccurate,</span>
+<span class="sd">    target_evidence_unc: float</span>
+<span class="sd">        target evidence uncertainty.</span>
+<span class="sd">    target_post_unc: float</span>
+<span class="sd">        target posterior uncertainty.</span>
+<span class="sd">    frac_remain: float</span>
+<span class="sd">        integrate until this fraction of the integral is left in the remainder.</span>
+<span class="sd">        Set to a higher number (0.5) if you know the posterior is simple.</span>
+<span class="sd">    store_raw: bool</span>
+<span class="sd">        if True store the result to eventually resume the job</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">print_rate</span> <span class="o">=</span> <span class="mi">5000</span>
@@ -210,18 +217,17 @@
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.from_dict">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create object from theory dictionary.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create object from theory dictionary.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            config : dict</span>
-<span class="sd">                configuration dictionary</span>
+<span class="sd">        config : dict</span>
+<span class="sd">            configuration dictionary</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">            cls : Optimizer</span>
-<span class="sd">                created object</span>
+<span class="sd">        cls : Optimizer</span>
+<span class="sd">            created object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">loaded_datasets</span> <span class="o">=</span> <span class="n">load_datasets</span><span class="p">(</span>
@@ -299,19 +305,18 @@
 <div class="viewcode-block" id="USOptimizer.chi2_func_ns">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.chi2_func_ns">[docs]</a>
     <span class="k">def</span> <span class="nf">chi2_func_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Wrap the chi2 in a function for the optimizer. Pass noise and</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrap the chi2 in a function for the optimizer. Pass noise and</span>
 <span class="sd">        data info as args. Log the chi2 value and values of the coefficients.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            params : np.ndarray</span>
-<span class="sd">                noise and data info</span>
+<span class="sd">        params : np.ndarray</span>
+<span class="sd">            noise and data info</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">            current_chi2 : np.ndarray</span>
-<span class="sd">                chi2 function</span>
-
+<span class="sd">        current_chi2 : np.ndarray</span>
+<span class="sd">            chi2 function</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
@@ -322,18 +327,17 @@
 <div class="viewcode-block" id="USOptimizer.gaussian_loglikelihood">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.gaussian_loglikelihood">[docs]</a>
     <span class="k">def</span> <span class="nf">gaussian_loglikelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypercube</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Multi gaussian log likelihood function</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Multi gaussian log likelihood function.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            hypercube :  np.ndarray</span>
-<span class="sd">                hypercube prior</span>
+<span class="sd">        hypercube :  np.ndarray</span>
+<span class="sd">            hypercube prior</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">            -0.5 * chi2 : np.ndarray</span>
-<span class="sd">                multi gaussian log likelihood</span>
+<span class="sd">        -0.5 * chi2 : np.ndarray</span>
+<span class="sd">            multi gaussian log likelihood</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func_ns</span><span class="p">(</span><span class="n">hypercube</span><span class="p">)</span></div>
@@ -342,18 +346,17 @@
 <div class="viewcode-block" id="USOptimizer.flat_prior">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.flat_prior">[docs]</a>
     <span class="k">def</span> <span class="nf">flat_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypercube</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Update the prior function</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the prior function.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            hypercube : np.ndarray</span>
-<span class="sd">                hypercube prior</span>
+<span class="sd">        hypercube : np.ndarray</span>
+<span class="sd">            hypercube prior</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">            flat_prior : np.ndarray</span>
-<span class="sd">                updated hypercube prior</span>
+<span class="sd">        flat_prior : np.ndarray</span>
+<span class="sd">            updated hypercube prior</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">min_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">minimum</span><span class="o">.</span><span class="n">values</span>
         <span class="n">max_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">maximum</span><span class="o">.</span><span class="n">values</span>
@@ -419,14 +422,12 @@
 <div class="viewcode-block" id="USOptimizer.save">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.save">[docs]</a>
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Save |NS| replicas to json inside a dictionary:</span>
-<span class="sd">        {coff: [replicas values]}</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save |NS| replicas to json inside a dictionary: {coff: [replicas values]}.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">            result : dict</span>
-<span class="sd">                result dictionary</span>
+<span class="sd">        result : dict</span>
+<span class="sd">            result dictionary</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">values</span> <span class="o">=</span> <span class="p">{}</span>
@@ -434,7 +435,6 @@
             <span class="n">values</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;samples&quot;</span><span class="p">]:</span>
-
             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
 

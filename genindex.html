@@ -47,6 +47,7 @@
 <li class="toctree-l1"><a class="reference internal" href="theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory/general.html">Fitting assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory/Analytic.html">Analytic solution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory/MCFit.html">The Monte Carlo replica method</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
@@ -141,9 +142,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/smefit/smefit.analyze.html#smefit.analyze.summary.add_bounded_coeff">add_bounded_coeff() (in module smefit.analyze.summary)</a>
 </li>
+      <li><a href="modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.add_normalized_chi2">add_normalized_chi2() (smefit.analyze.chi2_utils.Chi2tableCalculator static method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.add_normalized_chi2">add_normalized_chi2() (smefit.analyze.chi2_utils.Chi2tableCalculator static method)</a>
+      <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.analytic.ALOptimizer">ALOptimizer (class in smefit.optimize.analytic)</a>
+</li>
+      <li><a href="modules/smefit/smefit.html#smefit.runner.Runner.analytic">analytic() (smefit.runner.Runner method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -283,18 +288,20 @@
 </li>
       <li><a href="modules/smefit/smefit.html#smefit.compute_theory.flatten">flatten() (in module smefit.compute_theory)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/smefit/smefit.html#smefit.coefficients.CoefficientManager.free_parameters">free_parameters (smefit.coefficients.CoefficientManager property)</a>
 
       <ul>
         <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.Optimizer.free_parameters">(smefit.optimize.Optimizer property)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.from_dict">from_dict() (smefit.analyze.pca.RotateToPca class method)</a>
 
       <ul>
         <li><a href="modules/smefit/smefit.html#smefit.coefficients.CoefficientManager.from_dict">(smefit.coefficients.CoefficientManager class method)</a>
+</li>
+        <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.analytic.ALOptimizer.from_dict">(smefit.optimize.analytic.ALOptimizer class method)</a>
 </li>
         <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.from_dict">(smefit.optimize.mc.MCOptimizer class method)</a>
 </li>
@@ -323,6 +330,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="modules/smefit/smefit.html#smefit.runner.Runner.get_optimizer">get_optimizer() (smefit.runner.Runner method)</a>
+</li>
       <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.get_status">get_status() (smefit.optimize.mc.MCOptimizer method)</a>
 </li>
       <li><a href="modules/smefit/smefit.html#smefit.runner.Runner.global_analysis">global_analysis() (smefit.runner.Runner method)</a>
@@ -355,6 +364,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/smefit/smefit.html#smefit.loader.DataTuple.InvCovMat">InvCovMat (smefit.loader.DataTuple attribute)</a>
 </li>
+      <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.analytic.is_semi_pos_def">is_semi_pos_def() (in module smefit.optimize.analytic)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -371,14 +382,14 @@
 </li>
       <li><a href="modules/smefit/smefit.html#smefit.fit_manager.FitManager.load_configuration">load_configuration() (smefit.fit_manager.FitManager method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/smefit/smefit.html#smefit.loader.load_datasets">load_datasets() (in module smefit.loader)</a>
 
       <ul>
         <li><a href="modules/smefit/smefit.html#smefit.fit_manager.FitManager.load_datasets">(smefit.fit_manager.FitManager method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="modules/smefit/smefit.html#smefit.loader.Loader.load_experimental_data">load_experimental_data() (smefit.loader.Loader method)</a>
 </li>
       <li><a href="modules/smefit/smefit.html#smefit.fit_manager.FitManager.load_results">load_results() (smefit.fit_manager.FitManager method)</a>
@@ -386,6 +397,8 @@
       <li><a href="modules/smefit/smefit.html#smefit.loader.Loader.load_theory">load_theory() (smefit.loader.Loader method)</a>
 </li>
       <li><a href="modules/smefit/smefit.html#smefit.loader.Loader">Loader (class in smefit.loader)</a>
+</li>
+      <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.analytic.ALOptimizer.log_result">log_result() (smefit.optimize.analytic.ALOptimizer method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -454,6 +467,8 @@
         <li><a href="modules/smefit/smefit.html#module-smefit.log">smefit.log</a>
 </li>
         <li><a href="modules/smefit/smefit.optimize.html#module-smefit.optimize">smefit.optimize</a>
+</li>
+        <li><a href="modules/smefit/smefit.optimize.html#module-smefit.optimize.analytic">smefit.optimize.analytic</a>
 </li>
         <li><a href="modules/smefit/smefit.optimize.html#module-smefit.optimize.mc">smefit.optimize.mc</a>
 </li>
@@ -600,9 +615,11 @@
 </li>
       <li><a href="modules/smefit/smefit.analyze.html#smefit.analyze.run_report">run_report() (in module smefit.analyze)</a>
 </li>
-      <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.run_sampling">run_sampling() (smefit.optimize.mc.MCOptimizer method)</a>
+      <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.analytic.ALOptimizer.run_sampling">run_sampling() (smefit.optimize.analytic.ALOptimizer method)</a>
 
       <ul>
+        <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.run_sampling">(smefit.optimize.mc.MCOptimizer method)</a>
+</li>
         <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.run_sampling">(smefit.optimize.ultranest.USOptimizer method)</a>
 </li>
       </ul></li>
@@ -617,6 +634,8 @@
       <li><a href="modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.save">save() (smefit.analyze.pca.RotateToPca method)</a>
 
       <ul>
+        <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.analytic.ALOptimizer.save">(smefit.optimize.analytic.ALOptimizer method)</a>
+</li>
         <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.mc.MCOptimizer.save">(smefit.optimize.mc.MCOptimizer method)</a>
 </li>
         <li><a href="modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.save">(smefit.optimize.ultranest.USOptimizer method)</a>
@@ -801,6 +820,13 @@
 
       <ul>
         <li><a href="modules/smefit/smefit.optimize.html#module-smefit.optimize">module</a>
+</li>
+      </ul></li>
+      <li>
+    smefit.optimize.analytic
+
+      <ul>
+        <li><a href="modules/smefit/smefit.optimize.html#module-smefit.optimize.analytic">module</a>
 </li>
       </ul></li>
       <li>

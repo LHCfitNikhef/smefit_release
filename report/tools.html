@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../theory/general.html">Fitting assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../theory/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/Analytic.html">Analytic solution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../theory/MCFit.html">The Monte Carlo replica method</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
@@ -129,7 +130,7 @@ estimators.</p>
 <h2>PCA<a class="headerlink" href="#pca" title="Link to this heading"></a></h2>
 <p>The Principal Components Analysis (<abbr title="Principal Components Analysis">PCA</abbr>) is the singular values decomposition of the matrix defined as:</p>
 <div class="math notranslate nohighlight">
-\[X_{ij} = \kappa_{i,k} \text{Cov}_{k,l}^{-1} \kappa_{j,l} \quad i,j=\{1,\dots N_{op}\}, \quad l,l=\{1,\dots N_{dat}\}\]</div>
+\[X_{ij} = \kappa_{i,k} \text{Cov}_{k,l}^{-1} \kappa_{j,l} \quad i,j=\{1,\dots N_{op}\}, \quad k,l=\{1,\dots N_{dat}\}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\kappa_{i,k}\)</span> are the linear <abbr title="Effective Field Theory">EFT</abbr> contibution for each operator and datapoint,
 <span class="math notranslate nohighlight">\(\text{Cov}_{k,l}^{-1}\)</span> is the inverse of the total covariance matrix.</p>
 <p>Then <span class="math notranslate nohighlight">\(X_{ij}\)</span> is decomposed as:</p>
