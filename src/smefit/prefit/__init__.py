@@ -23,7 +23,7 @@ class Prefit:
             config["use_quad"],
             config["use_theory_covmat"],
             config["use_t0"],
-            config.get("use_multiplicative_prescription", False),
+            False,
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),

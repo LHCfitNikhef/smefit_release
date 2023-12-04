@@ -80,6 +80,9 @@ mc_minimiser: 'cma' # Allowed options are: 'cma', 'dual_annealing', 'trust-const
 restarts: 7 # number of restarts (only for cma)
 maxiter: 100000 # max number of iteration
 chi2_threshold: 3.0 # post fit chi2 threshold
+
+#A settings
+n_samples: 1000 # number of the required samples of the posterior distribution
 ```
 
 ### Datasets to consider and coefficients to fit
@@ -116,8 +119,8 @@ coefficients:
 ```
 
 As exemplified above, the syntax to specify the Wilson coefficient corresponding to the operator
-``O1`` is ``O1 : {'min': , 'max':} `` where ``min`` and ``max`` indicate the bounds within which NS
-will perform the sampling.
+``O1`` is ``O1 : {'min': , 'max':} `` where ``min`` and ``max`` indicate the bounds within 
+the sampling is performed.
 
 ### Constrains between coefficients
 Some Wilson coefficients are not directly fit, but rather constrained to be linear combinations
@@ -153,7 +156,7 @@ rot_to_fit_basis: /path/to/rotation/rotation.json
 ```
 ## Running a fit with NS
 To run a fiy using Nested Sampling use the command
-```yaml
+```bash
 smefit NS path/to/the/runcard/runcard.yaml
 ```
 
@@ -183,6 +186,15 @@ Replicas not satisfying the PostFit criteria will be discarded. If the final num
 ``<number_of_replicas>`` the code will output an error message asking to produce more replicas first.
 The final output is the file ``posterior.json`` containing the full posterior of the Wilson coefficients.
 
+## Solving the linear problem
+In case only linear cocrrections are used, one
+can find the analytic solution to the linear problem by
+```bash
+    smefit A path/to/the/runcard/runcard.yaml
+```
+This will also sample the posterior distribution according to the runcard.
+
+
 ## Single parameter fits
 Given a runcard with a number of Wilson coefficients specified, it is possible to fit each of them in turn,
 keeping all the other ones fix to 0.
@@ -191,7 +203,7 @@ To do this add to the runcard
 single_parameter_fits: True
 ```
 and proceed as documented above for a normal fit.
-For both NS and MC, the final output will be the file ``posterior.json``
+For both NS, MC and A the final output will be the file ``posterior.json``
 containing the independent posterior of the fitted Wilson coefficients, obtained by a series os independent single parameter fits.
 
 

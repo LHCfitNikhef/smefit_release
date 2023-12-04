@@ -12,7 +12,7 @@ PCA
 The Principal Components Analysis (|PCA|) is the singular values decomposition of the matrix defined as:
 
 .. math ::
-    X_{ij} = \kappa_{i,k} \text{Cov}_{k,l}^{-1} \kappa_{j,l} \quad i,j=\{1,\dots N_{op}\}, \quad l,l=\{1,\dots N_{dat}\}
+    X_{ij} = \kappa_{i,k} \text{Cov}_{k,l}^{-1} \kappa_{j,l} \quad i,j=\{1,\dots N_{op}\}, \quad k,l=\{1,\dots N_{dat}\}
 
 where :math:`\kappa_{i,k}` are the linear |EFT| contibution for each operator and datapoint,
 :math:`\text{Cov}_{k,l}^{-1}` is the inverse of the total covariance matrix.
