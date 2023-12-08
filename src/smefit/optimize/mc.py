@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """Fitting the Wilson coefficients with |MC|."""
 import time
 
@@ -27,14 +26,18 @@ class MCOptimizer(Optimizer):
         dataset tuple
     coefficients : `smefit.coefficients.CoefficientManager`
         instance of `CoefficientManager` with all the relevant coefficients to fit
+    result_path: pathlib.Path
+        path to result folder
     use_quad : bool
         If True use also |HO| corrections
     result_ID : str
-        result ID
-    replica : int
-        replica number
+        result name
     single_parameter_fits : bool
         True for individual scan fits
+    use_multiplicative_prescription : bool
+        if True uses the multiplicative prescription for the |EFT| corrections
+    replica : int
+        replica number
     use_bounds : bool
         If true start the minimization with the specified values of min and max for each coeffient
     minimizer_specs : dict
@@ -181,6 +184,7 @@ class MCOptimizer(Optimizer):
         )
 
     def get_status(self, chi2):
+
         if len(self.chi2_values) == 0:
             self.chi2_values.append(chi2)
 

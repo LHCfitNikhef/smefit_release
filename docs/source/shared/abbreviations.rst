@@ -40,3 +40,6 @@
 
 .. |MC| replace::
    :abbr:`MC (Monte Carlo)`
+
+.. |A| replace::
+   :abbr:`A (Analytic linear)`
