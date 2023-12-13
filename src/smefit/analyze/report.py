@@ -83,7 +83,7 @@ class Report:
     def _load_grouped_info(self, raw_dict, key):
         """Load grouped info of coefficients and datasets.
 
-        Only elements appearing ad lest once in the fit configs are kept.
+        Only elements appearing at least once in the fit configs are kept.
 
         Parameters
         ----------

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """Fitting the Wilson coefficients with |MC|."""
 import time
 
@@ -27,14 +26,18 @@ class MCOptimizer(Optimizer):
         dataset tuple
     coefficients : `smefit.coefficients.CoefficientManager`
         instance of `CoefficientManager` with all the relevant coefficients to fit
+    result_path: pathlib.Path
+        path to result folder
     use_quad : bool
         If True use also |HO| corrections
     result_ID : str
-        result ID
-    replica : int
-        replica number
+        result name
     single_parameter_fits : bool
         True for individual scan fits
+    use_multiplicative_prescription : bool
+        if True uses the multiplicative prescription for the |EFT| corrections
+    replica : int
+        replica number
     use_bounds : bool
         If true start the minimization with the specified values of min and max for each coeffient
     minimizer_specs : dict
@@ -70,6 +73,7 @@ class MCOptimizer(Optimizer):
         use_bounds,
         minimizer_specs,
         use_multiplicative_prescription,
+        external_chi2=None,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -78,6 +82,7 @@ class MCOptimizer(Optimizer):
             use_quad,
             single_parameter_fits,
             use_multiplicative_prescription,
+            external_chi2,
         )
         self.chi2_values = []
         self.coeff_steps = []
@@ -125,6 +130,7 @@ class MCOptimizer(Optimizer):
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
+            config.get("external_chi2", False),
         )
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
@@ -160,6 +166,9 @@ class MCOptimizer(Optimizer):
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
         )
+
+        external_chi2 = config.get("external_chi2", None)
+
         return cls(
             loaded_datasets,
             coefficients,
@@ -171,6 +180,7 @@ class MCOptimizer(Optimizer):
             use_bounds,
             minimizer_specs,
             use_multiplicative_prescription,
+            external_chi2,
         )
 
     def get_status(self, chi2):

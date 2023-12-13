@@ -324,14 +324,17 @@ class CoefficientsPlotter:
                 list of coefficients with double solutions per fit
         """
         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
-        grid_size = int(np.sqrt(self.npar)) + 1
-        fig = plt.figure(figsize=(grid_size * 4, grid_size * 3))
+
+        n_cols = int(np.ceil(np.sqrt(self.npar)))
+        if self.npar < n_cols:
+            n_cols = n_params
+        n_rows = int(np.ceil(self.npar / n_cols))
+
+        fig = plt.figure(figsize=(n_cols * 4, n_rows * 3))
         # loop on coefficients
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
-            try:
-                ax = plt.subplot(grid_size - 1, grid_size, idx + 1)
-            except ValueError:
-                ax = plt.subplot(grid_size, grid_size, idx + 1)
+
+            ax = plt.subplot(n_rows, n_cols, idx + 1)
             # loop on fits
             for clr_idx, posterior in enumerate(posteriors):
                 if l not in posterior:
@@ -368,15 +371,19 @@ class CoefficientsPlotter:
                 )
                 ax.tick_params(which="both", direction="in", labelsize=22.5)
                 ax.tick_params(labelleft=False)
+                print(latex_name)
 
         lines, labels = fig.axes[0].get_legend_handles_labels()
         for axes in fig.axes:
             if len(axes.get_legend_handles_labels()[0]) > len(lines):
                 lines, labels = axes.get_legend_handles_labels()
+
+        plt.tight_layout(rect=[0, 0, 1, 1 - 0.05 * (10. / n_rows)])
         fig.legend(
-            lines, labels, loc="lower center", prop={"size": 35}, ncol=len(posteriors)
+            lines, labels, prop={"size": 25 * (n_cols * 4) / 20}, bbox_to_anchor=(0.5, 1.0), loc='upper center',
+            frameon=False, ncol=len(posteriors)
         )
-        plt.tight_layout()
+
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
         plt.savefig(f"{self.report_folder}/coefficient_histo.png")
 
