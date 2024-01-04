@@ -184,6 +184,7 @@ class Report:
         self,
         scatter_plot=None,
         confidence_level_bar=None,
+        spider_plot=None,
         posterior_histograms=True,
         contours_2d=None,
         hide_dofs=None,
@@ -257,6 +258,21 @@ class Report:
                 **confidence_level_bar,
             )
             figs_list.append("coefficient_bar")
+
+        if spider_plot is not None:
+            _logger.info("Plotting : spider plot")
+            bar_cl = spider_plot["confidence_level"]
+            spider_plot.pop("confidence_level")
+            zero_sol = 0
+            coeff_plt.plot_spider(
+                {
+                    name: -bound_df.loc[zero_sol, f"low{bar_cl}"]
+                    + bound_df.loc[zero_sol, f"high{bar_cl}"]
+                    for name, bound_df in bounds_dict.items()
+                },
+                **spider_plot,
+            )
+            figs_list.append("spider_plot")
 
         if posterior_histograms:
             _logger.info("Plotting : Posterior histograms")
