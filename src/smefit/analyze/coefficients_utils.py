@@ -400,12 +400,13 @@ class CoefficientsPlotter:
         """
         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
         grid_size = int(np.sqrt(self.npar)) + 1
-        fig = plt.figure(figsize=(grid_size * 4, grid_size * 3))
+        fig = plt.figure(figsize=(grid_size * 4, grid_size * 4))
         # loop on coefficients
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
             try:
-                ax = plt.subplot(grid_size - 1, grid_size, idx + 1)
+                ax = plt.subplot(grid_size , grid_size, idx + 1)
             except ValueError:
+
                 ax = plt.subplot(grid_size, grid_size, idx + 1)
             # loop on fits
             for clr_idx, posterior in enumerate(posteriors):
@@ -451,7 +452,8 @@ class CoefficientsPlotter:
         fig.legend(
             lines, labels, loc="lower center", prop={"size": 35}, ncol=len(posteriors)
         )
-        plt.tight_layout()
+        fig.tight_layout()
+
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
         plt.savefig(f"{self.report_folder}/coefficient_histo.png")
 
