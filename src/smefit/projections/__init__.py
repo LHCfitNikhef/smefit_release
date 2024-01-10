@@ -137,6 +137,7 @@ class Projection:
                 _logger.warning(
                     f"No separation between stat and sys uncertainties provided, skipping: {dataset_name}"
                 )
+                cnt += ndat
                 continue
 
             data_dict["statistical_error"] = (reduction_factor * stat).tolist()
