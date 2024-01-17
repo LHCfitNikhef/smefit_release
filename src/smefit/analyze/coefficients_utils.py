@@ -334,10 +334,10 @@ class CoefficientsPlotter:
             error: dict
                confidence level bounds per fit and coefficient
         """
-        def cart2pol(x, y):
-            rho = np.sqrt(x**2 + y**2)
-            phi = np.arctan2(y, x)
-            return rho, phi
+        # def cart2pol(x, y):
+        #     rho = np.sqrt(x**2 + y**2)
+        #     phi = np.arctan2(y, x)
+        #     return rho, phi
 
         def log_transform(x, delta):
             return np.log10(x) + delta
@@ -356,47 +356,55 @@ class CoefficientsPlotter:
         delta = 0.2
         ratio = df.iloc[:, 1].values / df.iloc[:, 0].values * 100
         data = log_transform(ratio, delta)
-        #data = df.iloc[:, 1].values / df.iloc[:, 0].values * 100
 
         x = data * np.cos(theta)
         y = data * np.sin(theta)
         x = np.r_[x]
         y = np.r_[y]
 
-        from scipy import interpolate
-        tck, u = interpolate.splprep([x,y], s=0, per=False)
-        xi, yi = interpolate.splev(np.linspace(0, 1, 1000), tck)
+        # from scipy import interpolate
+        # tck, u = interpolate.splprep([x,y], s=0, per=False)
+        # xi, yi = interpolate.splev(np.linspace(0, 1, 1000), tck)
 
         spoke_labels = [op[1] for op in df.index]
 
-        fig, ax = plt.subplots(figsize=(9, 9),
-                                subplot_kw=dict(projection='radar'))
-        fig.subplots_adjust(wspace=0.25, hspace=0.20, top=0.85, bottom=0.05)
+        fig = plt.figure(figsize=(9,9))
+        rect = [0.05, 0.05, 0.95, 0.95]
+        n_axis = 3
+        axes = [fig.add_axes(rect, projection='radar') for i in range(n_axis)]
 
         radial_perc_lines = [1, 5, 10, 20, 40, 60, 80]
         radial_perc_lines_log = log_transform(radial_perc_lines, delta)
-        ax.set_rgrids(radial_perc_lines_log)
-        ax.set_yticks(radial_perc_lines_log, [r"$1\%$", r"$5\%$", r"$10\%$",r"$20\%$", r"$40\%$", r"$60\%$", r"$80\%$"], va='bottom')
 
-        ax.set_ylim(0, log_transform(100))
+        # take first axis as main, the rest only serve to show the remaining percentage axes
+        ax = axes[0]
+        angles = np.arange(270, 270 + 360, 360./ n_axis) # zero degrees is 12 o'clock
+        labels = [r"$1\%$", r"$5\%$", r"$10\%$", r"$20\%$", r"$40\%$", r"$60\%$", r"$80\%$"]
 
-        ax.set_rlabel_position(180 / 45)
+        for i, axis in enumerate(axes):
+            if i > 0:
+                axis.patch.set_visible(False)
+                axis.grid("off")
+                axis.xaxis.set_visible(False)
+
+            if i == 0:
+                axis.set_rgrids(radial_perc_lines_log, angle=angles[i], labels=labels)
+            else:
+                axis.set_rgrids(radial_perc_lines_log[1:], angle=angles[i], labels=labels[1:])
+            axis.yaxis.set_tick_params(labelsize=10)
+            axis.set_ylim(0, log_transform(100, delta))
 
         ax.plot(theta, data, color='gold', label=r'$\mathrm{FCCee,\:NLO}\:\mathcal{O}\left(\Lambda^{-2}\right)$')
-        #ax.plot(cart2pol(xi, yi)[1], cart2pol(xi,yi)[0], color='C1', label='smooth')
+        # #ax.plot(cart2pol(xi, yi)[1], cart2pol(xi,yi)[0], color='C1', label='smooth')
         ax.scatter(theta, data, color='gold', marker='*', s=140)
         ax.fill(theta, data, facecolor='gold', alpha=0.25, label='_nolegend_')
         ax.set_varlabels(spoke_labels)
         ax.set_title(r'$\mathrm{Relative\:improvement}$')
 
-        #plt.legend(frameon=False, loc='upper right')
-
-
         ax.legend(loc=(0, 1), labelspacing=0, fontsize='small', frameon=False)
 
-        plt.tight_layout()
-        plt.savefig(f"{self.report_folder}/spider_plot.pdf", dpi=500)
-        plt.savefig(f"{self.report_folder}/spider_plot.png")
+        plt.savefig(f"{self.report_folder}/spider_plot.pdf", dpi=500, bbox_inches='tight')
+        plt.savefig(f"{self.report_folder}/spider_plot.png", bbox_inches='tight')
 
 
     def plot_posteriors(self, posteriors, labels, disjointed_lists=None):
