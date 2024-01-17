@@ -319,6 +319,7 @@ class CoefficientsPlotter:
     def plot_spider(
             self,
             error,
+            labels,
             figsize=(10, 15),
             plot_cutoff=400,
             x_log=True,
@@ -354,13 +355,13 @@ class CoefficientsPlotter:
 
         # normalise to first fit
         delta = 0.2
-        ratio = df.iloc[:, 1].values / df.iloc[:, 0].values * 100
+        ratio = df.iloc[:, 1:].values / df.iloc[:, 0].values.reshape(-1,1) * 100
         data = log_transform(ratio, delta)
 
-        x = data * np.cos(theta)
-        y = data * np.sin(theta)
-        x = np.r_[x]
-        y = np.r_[y]
+        # x = data * np.cos(theta)
+        # y = data * np.sin(theta)
+        # x = np.r_[x]
+        # y = np.r_[y]
 
         # from scipy import interpolate
         # tck, u = interpolate.splprep([x,y], s=0, per=False)
@@ -379,7 +380,7 @@ class CoefficientsPlotter:
         # take first axis as main, the rest only serve to show the remaining percentage axes
         ax = axes[0]
         angles = np.arange(270, 270 + 360, 360./ n_axis) # zero degrees is 12 o'clock
-        labels = [r"$1\%$", r"$5\%$", r"$10\%$", r"$20\%$", r"$40\%$", r"$60\%$", r"$80\%$"]
+        perc_labels = [r"$1\%$", r"$5\%$", r"$10\%$", r"$20\%$", r"$40\%$", r"$60\%$", r"$80\%$"]
 
         for i, axis in enumerate(axes):
             if i > 0:
@@ -388,18 +389,22 @@ class CoefficientsPlotter:
                 axis.xaxis.set_visible(False)
 
             if i == 0:
-                axis.set_rgrids(radial_perc_lines_log, angle=angles[i], labels=labels)
+                axis.set_rgrids(radial_perc_lines_log, angle=angles[i], labels=perc_labels)
             else:
-                axis.set_rgrids(radial_perc_lines_log[1:], angle=angles[i], labels=labels[1:])
+                axis.set_rgrids(radial_perc_lines_log[1:], angle=angles[i], labels=perc_labels[1:])
             axis.yaxis.set_tick_params(labelsize=10)
             axis.set_ylim(0, log_transform(100, delta))
 
-        ax.plot(theta, data, color='gold', label=r'$\mathrm{FCCee,\:NLO}\:\mathcal{O}\left(\Lambda^{-2}\right)$')
+        prop_cycle = plt.rcParams['axes.prop_cycle']
+        colors = prop_cycle.by_key()['color']
+
+        for i, data_fit_i in enumerate(data.T):
+            ax.plot(theta, data_fit_i, label=labels[i + 1], color=colors[i])
         # #ax.plot(cart2pol(xi, yi)[1], cart2pol(xi,yi)[0], color='C1', label='smooth')
-        ax.scatter(theta, data, color='gold', marker='*', s=140)
-        ax.fill(theta, data, facecolor='gold', alpha=0.25, label='_nolegend_')
+            ax.scatter(theta, data_fit_i, marker='*', s=140, color=colors[i])
+            ax.fill(theta, data_fit_i, alpha=0.25, label='_nolegend_', color=colors[i])
         ax.set_varlabels(spoke_labels)
-        ax.set_title(r'$\mathrm{Relative\:improvement}$')
+        ax.set_title(r'$\mathrm{Relative\:improvement,\:marginalised}$')
 
         ax.legend(loc=(0, 1), labelspacing=0, fontsize='small', frameon=False)
 
