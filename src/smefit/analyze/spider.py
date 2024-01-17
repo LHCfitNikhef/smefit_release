@@ -41,7 +41,8 @@ def radar_factory(num_vars, frame='circle'):
         PolarTransform = RadarTransform
 
         def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
+            
+            super().__init__(*args, aspect='equal', **kwargs)
             # rotate plot such that the first axis is at the top
             self.set_theta_zero_location('N')
 

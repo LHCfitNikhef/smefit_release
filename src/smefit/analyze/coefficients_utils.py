@@ -350,7 +350,8 @@ class CoefficientsPlotter:
         theta = radar_factory(len(df), frame='circle')
 
         # normalise to first fit
-        data = df.iloc[:, 1].values / df.iloc[:, 0].values
+        data = np.log10(df.iloc[:, 1].values / df.iloc[:, 0].values * 100) + 0.2
+        #data = df.iloc[:, 1].values / df.iloc[:, 0].values * 100
 
         x = data * np.cos(theta)
         y = data * np.sin(theta)
@@ -367,9 +368,19 @@ class CoefficientsPlotter:
                                 subplot_kw=dict(projection='radar'))
         fig.subplots_adjust(wspace=0.25, hspace=0.20, top=0.85, bottom=0.05)
 
-        ax.set_rgrids([0.2, 0.4, 0.6, 0.8])
+        ax.set_rgrids(np.log10([1, 5, 10, 20, 40, 60, 80]) + 0.2)
+        ax.set_yticks(np.log10([1, 5, 10, 20, 40, 60, 80]) + 0.2, [r"$1\%$", r"$5\%$", r"$10\%$",r"$20\%$", r"$40\%$", r"$60\%$", r"$80\%$"], va='bottom')
+        #import pdb; pdb.set_trace()
+        ax.set_ylim(0, np.log10(100) + 0.2)
 
-        ax.plot(theta, data, color='gold', label=r'$\mathrm{LHC + FCCee + OO(WW),\:NLO}\:\mathcal{O}\left(\Lambda^{-2}\right)$')
+        ax.set_rlabel_position(180 / 45)
+
+        # ax.set_rgrids([20, 40, 60, 80])
+        # ax.set_yticks([20, 40, 60, 80], [r"$20\%$", r"$40\%$", r"$60\%$", r"$80\%$"], va='bottom')
+        # #import pdb; pdb.set_trace()
+        # ax.set_ylim(0, 100)
+
+        ax.plot(theta, data, color='gold', label=r'$\mathrm{FCCee,\:NLO}\:\mathcal{O}\left(\Lambda^{-2}\right)$')
         #ax.plot(cart2pol(xi, yi)[1], cart2pol(xi,yi)[0], color='C1', label='smooth')
         ax.scatter(theta, data, color='gold', marker='*', s=140)
         ax.fill(theta, data, facecolor='gold', alpha=0.25, label='_nolegend_')
