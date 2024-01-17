@@ -397,14 +397,16 @@ class CoefficientsPlotter:
 
         prop_cycle = plt.rcParams['axes.prop_cycle']
         colors = prop_cycle.by_key()['color']
+        marker = itertools.cycle(('*', '.'))
+
 
         for i, data_fit_i in enumerate(data.T):
             ax.plot(theta, data_fit_i, label=labels[i + 1], color=colors[i])
         # #ax.plot(cart2pol(xi, yi)[1], cart2pol(xi,yi)[0], color='C1', label='smooth')
-            ax.scatter(theta, data_fit_i, marker='*', s=140, color=colors[i])
+            ax.scatter(theta, data_fit_i, marker= next(marker), s=140, color=colors[i])
             ax.fill(theta, data_fit_i, alpha=0.25, label='_nolegend_', color=colors[i])
         ax.set_varlabels(spoke_labels)
-        ax.set_title(r'$\mathrm{Relative\:improvement,\:marginalised}$')
+        ax.set_title(r'$\mathrm{Ratio\:of\:Uncertainties\:to\:Global\:Fit\:Baseline}$')
 
         ax.legend(loc=(0, 1), labelspacing=0, fontsize='small', frameon=False)
 
