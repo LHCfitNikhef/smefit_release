@@ -339,6 +339,9 @@ class CoefficientsPlotter:
             phi = np.arctan2(y, x)
             return rho, phi
 
+        def log_transform(x, delta):
+            return np.log10(x) + delta
+
 
         df = pd.DataFrame(error)
         
@@ -350,7 +353,9 @@ class CoefficientsPlotter:
         theta = radar_factory(len(df), frame='circle')
 
         # normalise to first fit
-        data = np.log10(df.iloc[:, 1].values / df.iloc[:, 0].values * 100) + 0.2
+        delta = 0.2
+        ratio = df.iloc[:, 1].values / df.iloc[:, 0].values * 100
+        data = log_transform(ratio, delta)
         #data = df.iloc[:, 1].values / df.iloc[:, 0].values * 100
 
         x = data * np.cos(theta)
@@ -368,17 +373,14 @@ class CoefficientsPlotter:
                                 subplot_kw=dict(projection='radar'))
         fig.subplots_adjust(wspace=0.25, hspace=0.20, top=0.85, bottom=0.05)
 
-        ax.set_rgrids(np.log10([1, 5, 10, 20, 40, 60, 80]) + 0.2)
-        ax.set_yticks(np.log10([1, 5, 10, 20, 40, 60, 80]) + 0.2, [r"$1\%$", r"$5\%$", r"$10\%$",r"$20\%$", r"$40\%$", r"$60\%$", r"$80\%$"], va='bottom')
-        #import pdb; pdb.set_trace()
-        ax.set_ylim(0, np.log10(100) + 0.2)
+        radial_perc_lines = [1, 5, 10, 20, 40, 60, 80]
+        radial_perc_lines_log = log_transform(radial_perc_lines, delta)
+        ax.set_rgrids(radial_perc_lines_log)
+        ax.set_yticks(radial_perc_lines_log, [r"$1\%$", r"$5\%$", r"$10\%$",r"$20\%$", r"$40\%$", r"$60\%$", r"$80\%$"], va='bottom')
+
+        ax.set_ylim(0, log_transform(100))
 
         ax.set_rlabel_position(180 / 45)
-
-        # ax.set_rgrids([20, 40, 60, 80])
-        # ax.set_yticks([20, 40, 60, 80], [r"$20\%$", r"$40\%$", r"$60\%$", r"$80\%$"], va='bottom')
-        # #import pdb; pdb.set_trace()
-        # ax.set_ylim(0, 100)
 
         ax.plot(theta, data, color='gold', label=r'$\mathrm{FCCee,\:NLO}\:\mathcal{O}\left(\Lambda^{-2}\right)$')
         #ax.plot(cart2pol(xi, yi)[1], cart2pol(xi,yi)[0], color='C1', label='smooth')
