@@ -54,7 +54,7 @@ class Optimizer:
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.use_quad = use_quad
-        self.npts = self.loaded_datasets.Commondata.size
+        self.npts = self.loaded_datasets.Commondata.size if self.loaded_datasets is not None else 0
         self.single_parameter_fits = single_parameter_fits
         self.use_multiplicative_prescription = use_multiplicative_prescription
         self.external_chi2 = external_chi2
@@ -109,20 +109,28 @@ class Optimizer:
         else:
             print_log = False
 
-        chi2_tot = chi2.compute_chi2(
-            self.loaded_datasets,
-            self.coefficients.value,
-            self.use_quad,
-            self.use_multiplicative_prescription,
-            use_replica,
-        )
+        # only compute the internal chi2 when datasets are loaded
+        if self.loaded_datasets is not None:
+            chi2_tot = chi2.compute_chi2(
+                self.loaded_datasets,
+                self.coefficients.value,
+                self.use_quad,
+                self.use_multiplicative_prescription,
+                use_replica,
+            )
+        else:
+            chi2_tot = 0
 
         # add external chi2 modules if specified in the runcard
         if self.external_chi2 is not None:
             chi2_modules = self.load_external_chi2()
             for name, chi2_module in chi2_modules.items():
                 chi2_ext = getattr(chi2_modules[name], name)
-                chi2_tot += chi2_ext(self.coefficients)
+                chi2_ext_i, npts_i = chi2_ext(self.coefficients)
+
+                # accumulate result
+                chi2_tot += chi2_ext_i
+                self.npts += npts_i
 
         if print_log:
             chi2_dict = {}
