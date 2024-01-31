@@ -126,9 +126,9 @@ class Projection:
 
             idxs = slice(cnt, cnt + ndat)
 
-            # statistical uncertainties get reduced by lumi_old/lumi_new
+            # statistical uncertainties get reduced by sqrt(lumi_old/lumi_new)
             lumi_old = self.datasets.Luminosity[dataset_idx]
-            reduction_factor = lumi_old / lumi_new
+            reduction_factor = np.sqrt(lumi_old / lumi_new)
             # replace stat with rescaled ones
             stat = np.asarray(data_dict["statistical_error"])
 
