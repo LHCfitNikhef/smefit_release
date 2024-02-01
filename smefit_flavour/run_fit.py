@@ -13,8 +13,10 @@ import smefit.log as log
 from smefit.log import print_banner, setup_console
 from smefit.optimize.ultranest import USOptimizer
 
+smeft_ops = ['phiq3_33', 'uG_33']
+flavour_datasets = ['EOS-DATA-2023-01']
 
-def make_flavour_chi2(flavour_datasets: list[str], smeft_ops: list[str]):
+def make_flavour_chi2():
     """
     Constructs the WET likelihood as a function of the SMEFT operators, which are first run down to the WET
     scale and then used to evaluate the WET likelihoods
@@ -40,24 +42,21 @@ def make_flavour_chi2(flavour_datasets: list[str], smeft_ops: list[str]):
         wet_llh_factory, wet_ops = fl_llh.dataset_dict[dataset_name]
 
         # compute running matrix from the SMEFT to the WET
+        smeft_value_init = 1e-4
         m_smeft_wet = []
         for smeft_op in smeft_ops:
             smeft_values = {name: 0.0 for name in smeft_ops}
-            smeft_values[smeft_op] = 1
+            smeft_values[smeft_op] = smeft_value_init
             smeft_wc = wilson.Wilson(smeft_values, 1e3, 'SMEFT', 'Warsaw')
+            smeft_wc.set_option('smeft_accuracy', 'leadinglog')
             wet_wc = smeft_wc.match_run(scale=4.2, eft='WET', basis='EOS')
             m_smeft_wet.append(
                 [np.real(wet_wc.dict[wet_op]) if wet_op in wet_wc.dict.keys() else 0.0 for wet_op in wet_ops])
-        m_smeft_wet = np.array(m_smeft_wet).T
+        m_smeft_wet = np.array(m_smeft_wet).T / smeft_value_init
 
         wet_llhs.append(wet_llh_factory())
 
     return lambda wc: sum(-0.5 * wet_llh(np.dot(m_smeft_wet, wc)) for wet_llh in wet_llhs)
 
 
-smeft_ops = ['lq3_1111', 'lq3_1133']
-flavour_datasets = ['EOS-DATA-2023-01']
-
-# construct the flavour likelihood as a function of the SMEFT operators
-flavour_chi2 = make_flavour_chi2(flavour_datasets, smeft_ops)
 
