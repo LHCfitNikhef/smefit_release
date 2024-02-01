@@ -114,20 +114,23 @@ class USOptimizer(Optimizer):
             created object
         """
 
-        loaded_datasets = load_datasets(
-            config["data_path"],
-            config["datasets"],
-            config["coefficients"],
-            config["order"],
-            config["use_quad"],
-            config["use_theory_covmat"],
-            config["use_t0"],
-            config.get("use_multiplicative_prescription", False),
-            config.get("theory_path", None),
-            config.get("rot_to_fit_basis", None),
-            config.get("uv_couplings", False),
-            config.get("external_chi2", False),
-        )
+        if config.get("datasets") is not None:
+            loaded_datasets = load_datasets(
+                config["data_path"],
+                config["datasets"],
+                config["coefficients"],
+                config["order"],
+                config["use_quad"],
+                config["use_theory_covmat"],
+                config["use_t0"],
+                config.get("use_multiplicative_prescription", False),
+                config.get("theory_path", None),
+                config.get("rot_to_fit_basis", None),
+                config.get("uv_couplings", False),
+                config.get("external_chi2", False),
+            )
+        elif config.get("external_chi2") is not None:
+            loaded_datasets = None
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
