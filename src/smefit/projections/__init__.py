@@ -161,7 +161,7 @@ class Projection:
 
             projection_folder = self.projections_path
             projection_folder.mkdir(exist_ok=True)
-            with open(f"{projection_folder}/{dataset_name}.yaml", "w") as file:
+            with open(f"{projection_folder}/{dataset_name}_proj.yaml", "w") as file:
                 yaml.dump(data_dict, file, sort_keys=False)
 
             cnt += ndat
