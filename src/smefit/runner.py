@@ -134,16 +134,18 @@ class Runner:
     def ultranest(self, config):
         """Run a fit with Ultra Nest."""
 
-        if run_parallel:
-            comm = MPI.COMM_WORLD
-            rank = comm.Get_rank()
-            if rank == 0:
-                ns_opt = USOptimizer.from_dict(config)
-            else:
-                ns_opt = None
-            ns_opt = comm.bcast(ns_opt, root=0)
-        else:
-            ns_opt = USOptimizer.from_dict(config)
+        # if run_parallel:
+        #     comm = MPI.COMM_WORLD
+        #     rank = comm.Get_rank()
+        #     if rank == 0:
+        #         ns_opt = USOptimizer.from_dict(config)
+        #     else:
+        #         ns_opt = None
+        #     ns_opt = comm.bcast(ns_opt, root=0)
+        # else:
+        #     ns_opt = USOptimizer.from_dict(config)
+
+        ns_opt = USOptimizer.from_dict(config)
 
         ns_opt.run_sampling()
 

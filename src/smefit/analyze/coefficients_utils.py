@@ -477,6 +477,7 @@ class CoefficientsPlotter:
         for axes in fig.axes:
             if len(axes.get_legend_handles_labels()[0]) > len(lines):
                 lines, labels = axes.get_legend_handles_labels()
+
         fig.legend(
             lines, labels, loc="lower center", prop={"size": 35}, ncol=len(posteriors)
         )
