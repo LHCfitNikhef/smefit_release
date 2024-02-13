@@ -119,7 +119,7 @@ coefficients:
 ```
 
 As exemplified above, the syntax to specify the Wilson coefficient corresponding to the operator
-``O1`` is ``O1 : {'min': , 'max':} `` where ``min`` and ``max`` indicate the bounds within 
+``O1`` is ``O1 : {'min': , 'max':} `` where ``min`` and ``max`` indicate the bounds within
 the sampling is performed.
 
 ### Constrains between coefficients
@@ -149,6 +149,14 @@ using the option below.
 ```yaml
 rot_to_fit_basis: /path/to/rotation/rotation.json
 
+```
+
+In addition, it is possible to perform a fit in a PCA rotated basis. This corresponds to the basis spanned
+by the eigenvectors of the Fisher information matrix at the linear level in the EFT expansion. To carry out such a fit,
+add the following flag
+
+```bash
+smefit NS --rotate_to_pca path/to/the/runcard/runcard.yaml
 ```
 
 ```eval_rst
