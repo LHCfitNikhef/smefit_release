@@ -270,6 +270,12 @@ using the option below.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rot_to_fit_basis</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/rotation/rotation.json</span>
 </pre></div>
 </div>
+<p>In addition, it is possible to perform a fit in a PCA rotated basis. This corresponds to the basis spanned
+by the eigenvectors of the Fisher information matrix at the linear level in the EFT expansion. To carry out such a fit,
+add the following flag</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>smefit<span class="w"> </span>NS<span class="w"> </span>--rotate_to_pca<span class="w"> </span>path/to/the/runcard/runcard.yaml
+</pre></div>
+</div>
 </section>
 </section>
 <section id="running-a-fit-with-ns">
