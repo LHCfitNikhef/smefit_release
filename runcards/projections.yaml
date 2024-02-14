@@ -28,6 +28,9 @@ coefficients:
 order: NLO
 use_quad: True  
 rot_to_fit_basis: null
+fred_sys: 0.5
+fred_tot: 0.333
+
 
 
 

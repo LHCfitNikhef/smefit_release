@@ -109,6 +109,60 @@ class Projection:
             )
         return cv
 
+    def rescale_sys(self, sys, fred):
+        """
+        Rescales the systematics
+
+        Parameters
+        ----------
+        sys: systematics
+        fred: reduction factor
+
+        Returns
+        -------
+
+        """
+
+        # check if breakdown of systematic sources is provided, characterised by a non-square matrix
+
+        # TODO: this test fails if the number of systematics equals the number of datapoints
+        if sys.shape[0] == sys.shape[1]:
+
+            is_sys_diag = np.count_nonzero(sys - np.diag(np.diagonal(sys))) == 0
+            if not is_sys_diag:  # artificial systematics
+
+                # reconstruct covmat and keep only diagonal components
+                cov_tot = sys @ sys.T
+                sys_diag = np.sqrt(np.diagonal(cov_tot))
+
+                # rescale systematics and make df
+                sys_rescaled = np.diag(sys_diag * self.fred_sys)
+                return pd.DataFrame(sys_rescaled, index=sys.index, columns=sys.columns)
+
+            else:  # diagonal systematics
+                return sys * self.fred_sys
+        else:
+            return sys * self.fred_sys
+
+    def rescale_stat(self, stat, dataset, lumi_new):
+
+        """
+        Rescales the statistical uncertainties
+
+        Parameters
+        ----------
+        stat
+        dataset
+        lumi_new
+
+        Returns
+        -------
+
+        """
+        lumi_old = self.datasets.Luminosity[dataset]
+        fred_stat = np.sqrt(lumi_old / lumi_new)
+        return stat * fred_stat
+
     def build_projection(self, lumi_new):
         """
         Constructs runcard for projection by updating the central value and statistical uncertainties
@@ -135,10 +189,6 @@ class Projection:
 
             idxs = slice(cnt, cnt + ndat)
 
-            # statistical uncertainties get reduced by sqrt(lumi_old/lumi_new)
-            lumi_old = self.datasets.Luminosity[dataset_idx]
-            fred_stat = np.sqrt(lumi_old / lumi_new)
-
             # load the statistical and systematic uncertainties
             stat = np.asarray(data_dict["statistical_error"])
             if not isinstance(data_dict["sys_names"], list):  # for a single systematic (replace by check on number of syst?)
@@ -147,52 +197,21 @@ class Projection:
                 sys = pd.DataFrame(data_dict["systematics"], data_dict["sys_names"]).T
 
             # if all stat unc are zero, we rescale the total error by 1/3 (compromise)
+            stat_red = stat
             if not np.any(stat):
-
-                # check if systematics are diagonal
-                is_sys_diag = np.count_nonzero(sys - np.diag(np.diagonal(sys))) == 0
-                if not is_sys_diag:
-
-                    # reconstruct covmat and keep only diagonal components
-                    cov_tot = sys @ sys.T
-                    sys_diag = np.sqrt(np.diagonal(cov_tot))
-
-                    # rescale systematics
-                    sys_rescaled = np.diag(sys_diag * self.fred_sys)
-                    sys = pd.DataFrame(sys_rescaled, index=sys.index, columns=sys.columns)
-                    
-                else:
-                    sys = sys * self.fred_sys
-
-
-                cnt += ndat
-                continue
+                fred = self.fred_tot
+                sys_red = self.rescale_sys(sys, fred)
+            # if separate stat and sys
             else:
-                continue
+                fred = self.fred_sys
+                sys_red = self.rescale_sys(sys, fred)
+                stat_red = self.rescale_stat(stat, dataset_idx, lumi_new)
 
-            # check for the breakdown of various sources of systematic uncertainties, characterised by a non-square
-            # systematic entry
-            #
-            # TODO: if the number of sources equals the number of datapoints, this test fails)
-
-
-
-            if sys.shape[0] == sys.shape[1]:  # square
-                if sys.shape[0] == 1: # a single uncorrelated systematic
-                    sys *= self.fred_sys
-                else:
-                    import pdb; pdb.set_trace()
-
-
-
-
-            data_dict["statistical_error"] = (reduction_factor * stat).tolist()
-
-
-
+            data_dict["systematics"] = sys_red.values.tolist()
+            data_dict["statistical_error"] = stat_red.tolist()
 
             # build covmat for projections. Use rescaled stat
-            newcov = covmat_from_systematics([reduction_factor * stat], [sys])
+            newcov = covmat_from_systematics([stat_red], [sys_red])
             # add L1 noise to cv
             cv_projection = np.random.multivariate_normal(cv[idxs], newcov)
 
