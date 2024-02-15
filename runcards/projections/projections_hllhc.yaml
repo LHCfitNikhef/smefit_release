@@ -13,42 +13,40 @@ datasets:
   # TOP QUARK PRODUCTION
   # ttbar
   - ATLAS_tt_13TeV_ljets_2016_Mtt
-  - CMS_tt_13TeV_dilep_2015_Mtt
+  #- CMS_tt_13TeV_dilep_2015_Mtt
   - CMS_tt_13TeV_dilep_2016_Mtt
-  - CMS_tt_13TeV_ljets_2015_Mtt
-  - CMS_tt_13TeV_ljets_2016_Mtt
-  - CMS_TTBAR_13TEV_LJETS_TOTAL
+  #- CMS_tt_13TeV_ljets_2015_Mtt
+  #- CMS_tt_13TeV_ljets_2016_Mtt
   - CMS_TTBAR_13TEV_TTM
-  - CMS_TTBAR_13TEV_ASY
 
   # ttbar asymm and helicity frac
-  - ATLAS_tt_AC_13TeV
   - ATLAS_TTBAR_13TEV_ASY_2022_uncor
+  - CMS_TTBAR_13TEV_ASY
   - ATLAS_WHEL_13TEV_uncor
 
   # ttbb
   - ATLAS_ttbb_13TeV_2016
-  - CMS_ttbb_13TeV
-  - CMS_ttbb_13TeV_2016
+  #- CMS_ttbb_13TeV
+  - CMS_ttbb_13TeV_2016 # all jets final state
   - CMS_TTBB_13TEV_DILEPTON_TOTAL
   - CMS_TTBB_13TEV_LJETS_TOTAL
 
   # tttt
-  - ATLAS_tttt_13TeV_run2
-  - CMS_tttt_13TeV
-  - CMS_tttt_13TeV_run2
+  - ATLAS_tttt_13TeV_run2 # multilepton final state
+  #- CMS_tttt_13TeV
+  - CMS_tttt_13TeV_run2 # two same-sign charged lepton, or at least 3 leptons and jets
   - ATLAS_4TOP_13TEV_SLEP_TOTAL
   - CMS_4TOP_13TEV_SLEP_TOTAL
 
   # ttZ
-  - ATLAS_ttZ_13TeV
+  #- ATLAS_ttZ_13TeV
   - ATLAS_ttZ_13TeV_2016
   - CMS_ttZ_13TeV
   - CMS_ttZ_13TeV_pTZ
   - ATLAS_ttZ_13TeV_pTZ_uncor
 
   # ttW
-  - ATLAS_ttW_13TeV
+  #- ATLAS_ttW_13TeV
   - ATLAS_ttW_13TeV_2016
   - CMS_ttW_13TeV
 
@@ -58,21 +56,21 @@ datasets:
   - CMS_t_tch_13TeV_inc
   - CMS_t_tch_13TeV_2019_diff_Yt
   - ATLAS_SINGLETOP_SCH_13TEV_TOTAL
-  - CMS_SINGLETOPW_13TEV_SLEP_TOTAL
 
   # tW
   - ATLAS_tW_13TeV_inc
   - CMS_tW_13TeV_inc
+  - CMS_SINGLETOPW_13TEV_SLEP_TOTAL
 
   # tZ
-  - ATLAS_tZ_13TeV_inc
+  #- ATLAS_tZ_13TeV_inc
   - ATLAS_tZ_13TeV_run2_inc
   - CMS_tZ_13TeV_2016_inc
-  - CMS_tZ_13TeV_inc
+  #- CMS_tZ_13TeV_inc
   - CMS_SINGLETOPZ_13TEV_PTT_uncor
 
   # HIGGS PRODUCTION
-  
+
   # ATLAS & CMS Run II Higgs Differential
   - CMS_H_13TeV_2015_pTH
 
@@ -87,7 +85,7 @@ datasets:
   # DIBOSON DATA
   - ATLAS_WW_13TeV_2016_memu
   - ATLAS_WZ_13TeV_2016_mTWZ
-  - CMS_WZ_13TeV_2016_pTZ
+  - CMS_WZ_13TeV_2016_pTZ # keep alongside 2022 version because of separate statistical unc.
   - CMS_WZ_13TeV_2022_pTZ
 
 order: NLO
