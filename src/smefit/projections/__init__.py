@@ -209,7 +209,10 @@ class Projection:
                 stat_red = self.rescale_stat(stat, lumi_old, lumi_new)
                 sys_red = self.rescale_sys(sys, fred)
 
-            data_dict["systematics"] = sys_red.values.tolist()
+            if len(sys_red) > 1:
+                data_dict["systematics"] = sys_red.values.tolist()
+            else:
+                data_dict["systematics"] = sys_red.values.flatten().tolist()
             data_dict["statistical_error"] = stat_red.tolist()
 
             # build covmat for projections. Use rescaled stat
