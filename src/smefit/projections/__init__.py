@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pathlib
-
+import shutil
 import numpy as np
 import pandas as pd
 import yaml
@@ -176,7 +176,7 @@ class Projection:
         cv = self.compute_cv_projection()
 
         cnt = 0
-        for dataset_idx, ndat in enumerate(self.datasets.NdataExp):
+        for dataset_idx, num_data in enumerate(self.datasets.NdataExp):
 
             dataset_name = self.datasets.ExpNames[dataset_idx]
             path_to_dataset = self.commondata_path / f"{dataset_name}.yaml"
@@ -186,15 +186,19 @@ class Projection:
             with open(path_to_dataset, encoding="utf-8") as f:
                 data_dict = yaml.safe_load(f)
 
-            idxs = slice(cnt, cnt + ndat)
+            idxs = slice(cnt, cnt + num_data)
 
             # load the statistical and systematic uncertainties
             stat = np.asarray(data_dict["statistical_error"])
 
+            name_sys = data_dict["sys_names"]
+            num_sys = data_dict["num_sys"]
+
+            sys = np.array(data_dict["systematics"]).reshape((num_sys, num_data))
             if not isinstance(data_dict["sys_names"], list):  # for a single systematic
-                sys = pd.DataFrame(data_dict["systematics"], [data_dict["sys_names"]]).T
+                sys = pd.DataFrame(data=sys.T, columns=[name_sys])
             else:
-                sys = pd.DataFrame(data_dict["systematics"], data_dict["sys_names"]).T
+                sys = pd.DataFrame(data=sys.T, columns=name_sys)
 
             # if all stats are zero, we only have access to the total error which we rescale by 1/3 (compromise)
             no_stats = not np.any(stat)
@@ -210,14 +214,13 @@ class Projection:
                 sys_red = self.rescale_sys(sys, fred)
 
             if len(sys_red) > 1:
-                data_dict["systematics"] = sys_red.values.tolist()
+                data_dict["systematics"] = sys_red.T.values.tolist()
             else:
-                data_dict["systematics"] = sys_red.values.flatten().tolist()
+                data_dict["systematics"] = sys_red.T.values.flatten().tolist()
             data_dict["statistical_error"] = stat_red.tolist()
 
             # build covmat for projections. Use rescaled stat
             newcov = covmat_from_systematics([stat_red], [sys_red])
-
 
             # add L1 noise to cv
             cv_projection = np.random.multivariate_normal(cv[idxs], newcov)
@@ -233,4 +236,7 @@ class Projection:
             with open(f"{projection_folder}/{dataset_name}_proj.yaml", "w") as file:
                 yaml.dump(data_dict, file, sort_keys=False)
 
-            cnt += ndat
+            # copy corresponding theory predictions with _proj appended to filename
+            shutil.copy(self.theory_path / f"{dataset_name}.json", self.theory_path / f"{dataset_name}_proj.json")
+
+            cnt += num_data
