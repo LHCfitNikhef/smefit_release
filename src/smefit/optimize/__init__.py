@@ -54,14 +54,19 @@ class Optimizer:
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.use_quad = use_quad
-        self.npts = self.loaded_datasets.Commondata.size if self.loaded_datasets is not None else 0
+        self.npts = (
+            self.loaded_datasets.Commondata.size
+            if self.loaded_datasets is not None
+            else 0
+        )
         self.single_parameter_fits = single_parameter_fits
         self.use_multiplicative_prescription = use_multiplicative_prescription
         self.counter = 0
 
         # load external chi2 modules as amortized objects (fast to evaluate)
-        self.chi2_ext = self.load_external_chi2(external_chi2) if external_chi2 else None
-
+        self.chi2_ext = (
+            self.load_external_chi2(external_chi2) if external_chi2 else None
+        )
 
     def load_external_chi2(self, external_chi2):
         """
@@ -80,15 +85,19 @@ class Optimizer:
         """
         # dynamical import
         ext_chi2_modules = []
-        for name, chi2_mod_path in external_chi2.items():
-            path = pathlib.Path(chi2_mod_path)
+
+        for class_name, class_dict in external_chi2.items():
+            path = pathlib.Path(class_dict["path"])
             base_path, stem = path.parent, path.stem
             sys.path = [str(base_path)] + sys.path
             chi2_module = importlib.import_module(stem)
-            chi2_ext = getattr(chi2_module, name)
 
-            # accumulate external chi2 modules
-            ext_chi2_modules.append(chi2_ext(self.coefficients))
+            chi2_class = getattr(chi2_module, class_name)
+            chi2 = chi2_class(self.coefficients)
+
+            for method_chi2 in class_dict["methods"]:
+                chi2_ext = getattr(chi2, method_chi2)
+                ext_chi2_modules.append(chi2_ext)
 
         return ext_chi2_modules
 
@@ -145,9 +154,8 @@ class Optimizer:
 
         if self.chi2_ext is not None:
             for chi2_ext in self.chi2_ext:
-                chi2_ext_i, npts_i = chi2_ext(self.coefficients.value)
+                chi2_ext_i = chi2_ext(self.coefficients.value)
                 chi2_tot += chi2_ext_i
-                self.npts += npts_i
 
         if print_log:
             chi2_dict = {}
