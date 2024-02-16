@@ -304,6 +304,7 @@ class CoefficientsPlotter:
             self,
             error,
             labels,
+            title,
             log_scale=True,
             figsize=(10, 15),
             plot_cutoff=400,
@@ -382,7 +383,7 @@ class CoefficientsPlotter:
             ax.scatter(theta, data_fit_i, marker= next(marker), s=140, color=colors[i])
             ax.fill(theta, data_fit_i, alpha=0.25, label='_nolegend_', color=colors[i])
         ax.set_varlabels(spoke_labels)
-        ax.set_title(r'$\mathrm{Ratio\:of\:Uncertainties\:to\:Global\:Fit\:Baseline}$')
+        ax.set_title(title)
 
         ax.legend(loc=(0, 1), labelspacing=0, fontsize='small', frameon=False)
 
