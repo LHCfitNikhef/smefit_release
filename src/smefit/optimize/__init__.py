@@ -63,8 +63,7 @@ class Optimizer:
         self.chi2_ext = self.load_external_chi2(external_chi2) if external_chi2 else None
 
 
-    @staticmethod
-    def load_external_chi2(external_chi2):
+    def load_external_chi2(self, external_chi2):
         """
         Loads the external chi2 modules
 
@@ -89,7 +88,7 @@ class Optimizer:
             chi2_ext = getattr(chi2_module, name)
 
             # accumulate external chi2 modules
-            ext_chi2_modules.append(chi2_ext())
+            ext_chi2_modules.append(chi2_ext(self.coefficients))
 
         return ext_chi2_modules
 
@@ -146,8 +145,9 @@ class Optimizer:
 
         if self.chi2_ext is not None:
             for chi2_ext in self.chi2_ext:
-                chi2_ext_i = chi2_ext(self.coefficients.value)
+                chi2_ext_i, npts_i = chi2_ext(self.coefficients.value)
                 chi2_tot += chi2_ext_i
+                self.npts += npts_i
 
         if print_log:
             chi2_dict = {}
