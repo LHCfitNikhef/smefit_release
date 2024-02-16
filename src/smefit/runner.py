@@ -231,10 +231,10 @@ class Runner:
                     if coeff in addend:
                         new_constrain.append(addend)
                     # check that the coefficient appearing in all the addends is the same
-                    elif new_constrain != []:
+                    elif new_constrain:
                         MultipleConstrainError()
 
-                if new_constrain != []:
+                if new_constrain:
                     new_coeff_config[coeff2] = vals
 
             # add fitted coefficient
