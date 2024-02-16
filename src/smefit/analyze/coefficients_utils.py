@@ -320,6 +320,7 @@ class CoefficientsPlotter:
             self,
             error,
             labels,
+            log_scale=True,
             figsize=(10, 15),
             plot_cutoff=400,
             x_log=True,
@@ -335,37 +336,26 @@ class CoefficientsPlotter:
             error: dict
                confidence level bounds per fit and coefficient
         """
-        # def cart2pol(x, y):
-        #     rho = np.sqrt(x**2 + y**2)
-        #     phi = np.arctan2(y, x)
-        #     return rho, phi
 
         def log_transform(x, delta):
             return np.log10(x) + delta
-
 
         df = pd.DataFrame(error)
         
         # check if more than one fit is loaded
         if df.shape[1] < 2:
             print("At least two fits are required for the spider plot atm")
-        
 
         theta = radar_factory(len(df), frame='circle')
 
         # normalise to first fit
-        delta = 0.2
+        delta = 0.3
         ratio = df.iloc[:, 1:].values / df.iloc[:, 0].values.reshape(-1,1) * 100
-        data = log_transform(ratio, delta)
-
-        # x = data * np.cos(theta)
-        # y = data * np.sin(theta)
-        # x = np.r_[x]
-        # y = np.r_[y]
-
-        # from scipy import interpolate
-        # tck, u = interpolate.splprep([x,y], s=0, per=False)
-        # xi, yi = interpolate.splev(np.linspace(0, 1, 1000), tck)
+        if log_scale:
+            data = log_transform(ratio, delta)
+        else:
+            data = ratio
+        
 
         spoke_labels = [op[1] for op in df.index]
 
@@ -375,7 +365,8 @@ class CoefficientsPlotter:
         axes = [fig.add_axes(rect, projection='radar') for i in range(n_axis)]
 
         radial_perc_lines = [1, 5, 10, 20, 40, 60, 80]
-        radial_perc_lines_log = log_transform(radial_perc_lines, delta)
+        if log_scale:
+            radial_perc_lines = log_transform(radial_perc_lines, delta)
 
         # take first axis as main, the rest only serve to show the remaining percentage axes
         ax = axes[0]
@@ -389,20 +380,21 @@ class CoefficientsPlotter:
                 axis.xaxis.set_visible(False)
 
             if i == 0:
-                axis.set_rgrids(radial_perc_lines_log, angle=angles[i], labels=perc_labels)
+                axis.set_rgrids(radial_perc_lines, angle=angles[i], labels=perc_labels)
             else:
-                axis.set_rgrids(radial_perc_lines_log[1:], angle=angles[i], labels=perc_labels[1:])
+                axis.set_rgrids(radial_perc_lines[1:], angle=angles[i], labels=perc_labels[1:])
             axis.yaxis.set_tick_params(labelsize=10)
-            axis.set_ylim(0, log_transform(100, delta))
+            if log_scale:
+                axis.set_ylim(0, log_transform(100, delta))
+            else:
+                axis.set_ylim(0, 100)
 
         prop_cycle = plt.rcParams['axes.prop_cycle']
         colors = prop_cycle.by_key()['color']
         marker = itertools.cycle(('*', '.'))
 
-
         for i, data_fit_i in enumerate(data.T):
             ax.plot(theta, data_fit_i, label=labels[i + 1], color=colors[i])
-        # #ax.plot(cart2pol(xi, yi)[1], cart2pol(xi,yi)[0], color='C1', label='smooth')
             ax.scatter(theta, data_fit_i, marker= next(marker), s=140, color=colors[i])
             ax.fill(theta, data_fit_i, alpha=0.25, label='_nolegend_', color=colors[i])
         ax.set_varlabels(spoke_labels)

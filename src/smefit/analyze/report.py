@@ -270,6 +270,7 @@ class Report:
                     + bound_df.loc[zero_sol, f"high{bar_cl}"]
                     for name, bound_df in bounds_dict.items()
                 },
+                labels=[fit.label for fit in self.fits],
                 **spider_plot,
             )
             figs_list.append("spider_plot")
