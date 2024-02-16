@@ -52,7 +52,7 @@ datasets:
 
   # Single top
   - ATLAS_t_tch_13TeV_inc
-  - CMS_t_tch_13TeV_2016_diff_Yt
+  #- CMS_t_tch_13TeV_2016_diff_Yt
   - CMS_t_tch_13TeV_inc
   - CMS_t_tch_13TeV_2019_diff_Yt
   - ATLAS_SINGLETOP_SCH_13TEV_TOTAL
