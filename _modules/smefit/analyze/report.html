@@ -114,8 +114,8 @@
              
   <h1>Source code for smefit.analyze.report</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
 <span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -166,7 +166,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_path</span><span class="p">,</span> <span class="n">result_path</span><span class="p">,</span> <span class="n">report_config</span><span class="p">):</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">report_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">report_config</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># build the fits labels if needed</span>
@@ -277,7 +276,8 @@
         <span class="n">chi2_replica</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">:</span>
             <span class="n">chi2_df</span><span class="p">,</span> <span class="n">chi2_total_rep</span> <span class="o">=</span> <span class="n">chi2_cal</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span>
-                <span class="n">fit</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">smeft_predictions</span><span class="p">,</span>
+                <span class="n">fit</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span>
+                <span class="n">fit</span><span class="o">.</span><span class="n">smeft_predictions</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">chi2_replica</span><span class="p">[</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">chi2_total_rep</span>
             <span class="n">chi2_dict</span><span class="p">[</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">chi2_cal</span><span class="o">.</span><span class="n">add_normalized_chi2</span><span class="p">(</span><span class="n">chi2_df</span><span class="p">)</span>
@@ -347,7 +347,11 @@
         <span class="k">if</span> <span class="n">hide_dofs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">coeff_config</span> <span class="o">=</span> <span class="n">coeff_config</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">hide_dofs</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="n">coeff_plt</span> <span class="o">=</span> <span class="n">CoefficientsPlotter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">coeff_config</span><span class="p">,</span> <span class="n">logo</span><span class="o">=</span><span class="n">logo</span><span class="p">,)</span>
+        <span class="n">coeff_plt</span> <span class="o">=</span> <span class="n">CoefficientsPlotter</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span>
+            <span class="n">coeff_config</span><span class="p">,</span>
+            <span class="n">logo</span><span class="o">=</span><span class="n">logo</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># compute confidence level bounds</span>
         <span class="n">bounds_dict</span> <span class="o">=</span> <span class="p">{}</span>
@@ -417,6 +421,7 @@
                 <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">],</span>
                 <span class="n">confidence_level</span><span class="o">=</span><span class="n">contours_2d</span><span class="p">[</span><span class="s2">&quot;confidence_level&quot;</span><span class="p">],</span>
                 <span class="n">dofs_show</span><span class="o">=</span><span class="n">contours_2d</span><span class="p">[</span><span class="s2">&quot;dofs_show&quot;</span><span class="p">],</span>
+                <span class="n">double_solution</span><span class="o">=</span><span class="n">double_solution</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;contours_2d&quot;</span><span class="p">)</span>
 
@@ -459,7 +464,11 @@
 <div class="viewcode-block" id="Report.pca">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.pca">[docs]</a>
     <span class="k">def</span> <span class="nf">pca</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">thr_show</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">fit_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">table</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">thr_show</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
+        <span class="n">fit_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Principal Components Analysis runner.</span>
 
@@ -483,7 +492,9 @@
         <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="n">fit_list</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Computing PCA for fit </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">pca_cal</span> <span class="o">=</span> <span class="n">PcaCalculator</span><span class="p">(</span>
-                <span class="n">fit</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">coefficients</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="o">.</span><span class="n">droplevel</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                <span class="n">fit</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span>
+                <span class="n">fit</span><span class="o">.</span><span class="n">coefficients</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="o">.</span><span class="n">droplevel</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
             <span class="p">)</span>
             <span class="n">pca_cal</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 
@@ -507,7 +518,12 @@
 <div class="viewcode-block" id="Report.fisher">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.fisher">[docs]</a>
     <span class="k">def</span> <span class="nf">fisher</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;coeff&quot;</span><span class="p">,</span> <span class="n">summary_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;coeff&quot;</span><span class="p">,</span>
+        <span class="n">summary_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">fit_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fisher information table and plots runner.</span>
 

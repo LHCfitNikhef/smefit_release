@@ -361,7 +361,7 @@ Note: double solutions are appended under “2”</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_contours_2d">
-<span class="sig-name descname"><span class="pre">plot_contours_2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posteriors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter.plot_contours_2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_contours_2d" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot_contours_2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posteriors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs_show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_solution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#CoefficientsPlotter.plot_contours_2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_contours_2d" title="Link to this definition"></a></dt>
 <dd><p>Plots 2D marginalised projections confidence level contours</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -426,12 +426,6 @@ Note: double solutions are appended under “2”</p>
 <dd><p>Get confidence level bounds given the distribution</p>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="smefit.analyze.coefficients_utils.split_solution">
-<span class="sig-prename descclassname"><span class="pre">smefit.analyze.coefficients_utils.</span></span><span class="sig-name descname"><span class="pre">split_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_solution</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/coefficients_utils.html#split_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.coefficients_utils.split_solution" title="Link to this definition"></a></dt>
-<dd><p>Split the posterior solution</p>
-</dd></dl>
-
 </section>
 <section id="module-smefit.analyze.contours_2d">
 <span id="smefit-analyze-contours-2d-module"></span><h2>smefit.analyze.contours_2d module<a class="headerlink" href="#module-smefit.analyze.contours_2d" title="Link to this heading"></a></h2>
@@ -460,7 +454,7 @@ Note: double solutions are appended under “2”</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.analyze.contours_2d.plot_contours">
-<span class="sig-prename descclassname"><span class="pre">smefit.analyze.contours_2d.</span></span><span class="sig-name descname"><span class="pre">plot_contours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clr_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/contours_2d.html#plot_contours"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.contours_2d.plot_contours" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.contours_2d.</span></span><span class="sig-name descname"><span class="pre">plot_contours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kde</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clr_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_solution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/contours_2d.html#plot_contours"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.contours_2d.plot_contours" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -481,6 +475,12 @@ Note: double solutions are appended under “2”</p>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.analyze.contours_2d.split_solution">
+<span class="sig-prename descclassname"><span class="pre">smefit.analyze.contours_2d.</span></span><span class="sig-name descname"><span class="pre">split_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_solution</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/contours_2d.html#split_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.contours_2d.split_solution" title="Link to this definition"></a></dt>
+<dd><p>Split the posterior solution</p>
 </dd></dl>
 
 </section>

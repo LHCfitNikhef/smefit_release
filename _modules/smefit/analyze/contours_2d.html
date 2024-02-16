@@ -122,6 +122,25 @@
 <span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Ellipse</span>
 
 
+<div class="viewcode-block" id="split_solution">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.contours_2d.split_solution">[docs]</a>
+<span class="k">def</span> <span class="nf">split_solution</span><span class="p">(</span><span class="n">full_solution</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split the posterior solution&quot;&quot;&quot;</span>
+
+    <span class="n">min_val</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">full_solution</span><span class="p">)</span>
+    <span class="n">max_val</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">full_solution</span><span class="p">)</span>
+    <span class="n">mid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">max_val</span><span class="p">,</span> <span class="n">min_val</span><span class="p">])</span>
+
+    <span class="c1"># solution 1 should be closer to 0</span>
+    <span class="n">solution1</span> <span class="o">=</span> <span class="n">full_solution</span><span class="p">[</span><span class="n">full_solution</span> <span class="o">&lt;</span> <span class="n">mid</span><span class="p">]</span>
+    <span class="n">solution2</span> <span class="o">=</span> <span class="n">full_solution</span><span class="p">[</span><span class="n">full_solution</span> <span class="o">&gt;</span> <span class="n">mid</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">solution2</span><span class="p">))</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">solution1</span><span class="p">)):</span>
+        <span class="n">solution1</span><span class="p">,</span> <span class="n">solution2</span> <span class="o">=</span> <span class="n">solution2</span><span class="p">,</span> <span class="n">solution1</span>
+
+    <span class="k">return</span> <span class="n">solution1</span><span class="p">,</span> <span class="n">solution2</span></div>
+
+
+
 <div class="viewcode-block" id="confidence_ellipse">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.contours_2d.confidence_ellipse">[docs]</a>
 <span class="k">def</span> <span class="nf">confidence_ellipse</span><span class="p">(</span>
@@ -201,7 +220,15 @@
 <div class="viewcode-block" id="plot_contours">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.contours_2d.plot_contours">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_contours</span><span class="p">(</span>
-    <span class="n">ax</span><span class="p">,</span> <span class="n">posterior</span><span class="p">,</span> <span class="n">ax_labels</span><span class="p">,</span> <span class="n">coeff1</span><span class="p">,</span> <span class="n">coeff2</span><span class="p">,</span> <span class="n">kde</span><span class="p">,</span> <span class="n">clr_idx</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mi">95</span>
+    <span class="n">ax</span><span class="p">,</span>
+    <span class="n">posterior</span><span class="p">,</span>
+    <span class="n">ax_labels</span><span class="p">,</span>
+    <span class="n">coeff1</span><span class="p">,</span>
+    <span class="n">coeff2</span><span class="p">,</span>
+    <span class="n">kde</span><span class="p">,</span>
+    <span class="n">clr_idx</span><span class="p">,</span>
+    <span class="n">confidence_level</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span>
+    <span class="n">double_solution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
@@ -237,6 +264,14 @@
 
     <span class="c1"># perform kde for quadratic EFT fit</span>
     <span class="k">if</span> <span class="n">kde</span><span class="p">:</span>
+        <span class="n">solution1x</span> <span class="o">=</span> <span class="n">solution2x</span> <span class="o">=</span> <span class="n">x_values</span>
+        <span class="k">if</span> <span class="n">coeff2</span> <span class="ow">in</span> <span class="n">double_solution</span><span class="p">:</span>
+            <span class="n">solution1x</span><span class="p">,</span> <span class="n">solution2x</span> <span class="o">=</span> <span class="n">split_solution</span><span class="p">(</span><span class="n">posterior</span><span class="p">[</span><span class="n">coeff2</span><span class="p">])</span>
+
+        <span class="n">solution1y</span> <span class="o">=</span> <span class="n">solution2y</span> <span class="o">=</span> <span class="n">y_values</span>
+        <span class="k">if</span> <span class="n">coeff1</span> <span class="ow">in</span> <span class="n">double_solution</span><span class="p">:</span>
+            <span class="n">solution1y</span><span class="p">,</span> <span class="n">solution2y</span> <span class="o">=</span> <span class="n">split_solution</span><span class="p">(</span><span class="n">posterior</span><span class="p">[</span><span class="n">coeff1</span><span class="p">])</span>
+
         <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span>
             <span class="n">x</span><span class="o">=</span><span class="n">x_values</span><span class="p">,</span>
             <span class="n">y</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span>
@@ -255,6 +290,21 @@
             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">clr_idx</span><span class="p">],</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">confidence_level</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">solution1x</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">solution1y</span><span class="p">),</span>
+            <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">clr_idx</span><span class="p">],</span>
+            <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">solution2x</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">solution2y</span><span class="p">),</span>
+            <span class="n">c</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">clr_idx</span><span class="p">],</span>
+            <span class="n">s</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">hndls</span> <span class="o">=</span> <span class="p">(</span>
@@ -265,7 +315,6 @@
         <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># draw ellipses for linear EFT fit</span>
-
         <span class="n">p1</span> <span class="o">=</span> <span class="n">confidence_ellipse</span><span class="p">(</span>
             <span class="n">x_values</span><span class="p">,</span>
             <span class="n">y_values</span><span class="p">,</span>
