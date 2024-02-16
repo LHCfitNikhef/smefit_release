@@ -48,7 +48,7 @@ class Optimizer:
         use_quad,
         single_parameter_fits,
         use_multiplicative_prescription,
-        external_chi2,
+        external_chi2=None,
     ):
         self.results_path = pathlib.Path(results_path)
         self.loaded_datasets = loaded_datasets
@@ -57,8 +57,41 @@ class Optimizer:
         self.npts = self.loaded_datasets.Commondata.size if self.loaded_datasets is not None else 0
         self.single_parameter_fits = single_parameter_fits
         self.use_multiplicative_prescription = use_multiplicative_prescription
-        self.external_chi2 = external_chi2
         self.counter = 0
+
+        # load external chi2 modules as amortized objects (fast to evaluate)
+        self.chi2_ext = self.load_external_chi2(external_chi2) if external_chi2 else None
+
+
+    @staticmethod
+    def load_external_chi2(external_chi2):
+        """
+        Loads the external chi2 modules
+
+        Parameters
+        ----------
+        external_chi2: dict
+            dict of external chi2s, with the name of the function object as key and the path to the external script
+            as value
+
+        Returns
+        -------
+        ext_chi2_modules: list
+             List of external chi2 objects that can be evaluated by passing a coefficients instance
+        """
+        # dynamical import
+        ext_chi2_modules = []
+        for name, chi2_mod_path in external_chi2.items():
+            path = pathlib.Path(chi2_mod_path)
+            base_path, stem = path.parent, path.stem
+            sys.path = [str(base_path)] + sys.path
+            chi2_module = importlib.import_module(stem)
+            chi2_ext = getattr(chi2_module, name)
+
+            # accumulate external chi2 modules
+            ext_chi2_modules.append(chi2_ext())
+
+        return ext_chi2_modules
 
     @property
     def free_parameters(self):
@@ -76,16 +109,6 @@ class Optimizer:
         table.add_row("Total", f"{(chi2_tot/self.npts):.5}")
 
         return table
-
-    def load_external_chi2(self):
-        chi2_modules = {}
-        for name, chi2_mod_path in self.external_chi2.items():
-            path = pathlib.Path(chi2_mod_path)
-            base_path, stem = path.parent, path.stem
-            sys.path = [str(base_path)] + sys.path
-            chi2_modules[name] = importlib.import_module(stem)
-
-        return chi2_modules
 
     def chi2_func(self, use_replica=False, print_log=True):
         r"""
@@ -121,16 +144,10 @@ class Optimizer:
         else:
             chi2_tot = 0
 
-        # add external chi2 modules if specified in the runcard
-        if self.external_chi2 is not None:
-            chi2_modules = self.load_external_chi2()
-            for name, chi2_module in chi2_modules.items():
-                chi2_ext = getattr(chi2_modules[name], name)
-                chi2_ext_i, npts_i = chi2_ext(self.coefficients)
-
-                # accumulate result
+        if self.chi2_ext is not None:
+            for chi2_ext in self.chi2_ext:
+                chi2_ext_i = chi2_ext(self.coefficients.value)
                 chi2_tot += chi2_ext_i
-                self.npts += npts_i
 
         if print_log:
             chi2_dict = {}
