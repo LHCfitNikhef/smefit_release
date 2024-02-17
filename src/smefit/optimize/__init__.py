@@ -86,18 +86,16 @@ class Optimizer:
         # dynamical import
         ext_chi2_modules = []
 
-        for class_name, class_dict in external_chi2.items():
-            path = pathlib.Path(class_dict["path"])
+        for class_name, module_path in external_chi2.items():
+            path = pathlib.Path(module_path)
             base_path, stem = path.parent, path.stem
             sys.path = [str(base_path)] + sys.path
             chi2_module = importlib.import_module(stem)
 
-            chi2_class = getattr(chi2_module, class_name)
-            chi2 = chi2_class(self.coefficients)
+            my_chi2_class = getattr(chi2_module, class_name)
+            chi2_ext = my_chi2_class(self.coefficients)
 
-            for method_chi2 in class_dict["methods"]:
-                chi2_ext = getattr(chi2, method_chi2)
-                ext_chi2_modules.append(chi2_ext)
+            ext_chi2_modules.append(chi2_ext.compute_chi2)
 
         return ext_chi2_modules
 
