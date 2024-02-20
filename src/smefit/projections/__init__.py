@@ -23,6 +23,7 @@ class Projection:
         coefficients,
         order,
         use_quad,
+        use_theory_covmat,
         rot_to_fit_basis,
         fred_tot,
         fred_sys,
@@ -35,6 +36,7 @@ class Projection:
         self.coefficients = coefficients
         self.order = order
         self.use_quad = use_quad
+        self.use_theory_covmat = use_theory_covmat
         self.rot_to_fit_basis = rot_to_fit_basis
         self.fred_tot = fred_tot
         self.fred_sys = fred_sys
@@ -45,7 +47,7 @@ class Projection:
             self.coefficients,
             self.order,
             self.use_quad,
-            False,
+            self.use_theory_covmat,
             False,
             False,
             theory_path=self.theory_path,
@@ -71,6 +73,7 @@ class Projection:
         coefficients = projection_config.get("coefficients", [])
         order = projection_config.get("order", "LO")
         use_quad = projection_config.get("use_quad", False)
+        use_theory_covmat = projection_config.get("use_theory_covmat", True)
         rot_to_fit_basis = projection_config.get("rot_to_fit_basis", None)
 
         fred_tot = projection_config.get("fred_tot", 1)
@@ -84,6 +87,7 @@ class Projection:
             coefficients,
             order,
             use_quad,
+            use_theory_covmat,
             rot_to_fit_basis,
             fred_tot,
             fred_sys
@@ -204,6 +208,8 @@ class Projection:
             else:
                 sys = pd.DataFrame(data=sys.T, columns=name_sys)
 
+            th_covmat = self.datasets.ThCovMat[idxs, idxs]
+
             if not closure:
                 # if all stats are zero, we only have access to the total error which we rescale by 1/3 (compromise)
                 no_stats = not np.any(stat)
@@ -224,10 +230,13 @@ class Projection:
                     data_dict["systematics"] = sys_red.T.values.flatten().tolist()
                 data_dict["statistical_error"] = stat_red.tolist()
 
-                # build covmat for projections. Use rescaled stat
+                # build covmat for projections. Use rescaled uncertainties
                 newcov = covmat_from_systematics([stat_red], [sys_red])
             else:  # closure test
                 newcov = covmat_from_systematics([stat], [sys])
+
+            if self.use_theory_covmat:
+                newcov += th_covmat
 
             # add L1 noise to cv
             cv_projection = np.random.multivariate_normal(cv[idxs], newcov)

@@ -82,6 +82,7 @@ datasets:
 order: NLO
 use_quad: False
 rot_to_fit_basis: null
+use_theory_covmat: True
 
 fred_sys: 0.5 # systematics get reduced by 1/2
 fred_tot: 0.333 # total errors get reduced by 1/3
