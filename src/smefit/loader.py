@@ -26,6 +26,7 @@ DataTuple = namedtuple(
         "ExpNames",
         "NdataExp",
         "InvCovMat",
+        "ThCovMat",
         "Luminosity",
         "Replica",
     ),
@@ -594,6 +595,7 @@ def load_datasets(
         np.array(exp_name),
         np.array(n_data_exp),
         np.linalg.inv(fit_covmat),
+        theory_covariance,
         np.array(lumi_exp),
         replica,
     )
