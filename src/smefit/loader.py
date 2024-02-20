@@ -137,7 +137,7 @@ class Loader:
 
         central_values = np.array(data_dict["data_central"])
         stat_error = np.array(data_dict["statistical_error"])
-        luminosity = data_dict["luminosity"]
+        luminosity = data_dict.get("luminosity", None)
 
         num_sys = data_dict["num_sys"]
         num_data = data_dict["num_data"]

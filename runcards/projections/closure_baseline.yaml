@@ -13,14 +13,12 @@ datasets:
   - ATLAS_CMS_SSinc_RunI
   - ATLAS_CMS_tt_AC_8TeV
   - ATLAS_SSinc_RunII
-  - ATLAS_STXS_runII
-  - ATLAS_STXS_runII_uncor
+  - ATLAS_STXS_runII_13TeV
   - ATLAS_WH_Hbb_13TeV
   - ATLAS_WW_13TeV_2016_memu
   - ATLAS_WZ_13TeV_2016_mTWZ
   - ATLAS_WhelF_8TeV
   - ATLAS_Whel_13TeV
-  - ATLAS_Whel_13TeV_uncor
   - ATLAS_ZH_Hbb_13TeV
   - ATLAS_ggF_13TeV_2015
   - ATLAS_ggF_ZZ_13TeV
@@ -39,10 +37,8 @@ datasets:
   - ATLAS_ttZ_13TeV
   - ATLAS_ttZ_13TeV_2016
   - ATLAS_ttZ_13TeV_pTZ
-  - ATLAS_ttZ_13TeV_pTZ_uncor
   - ATLAS_ttZ_8TeV
   - ATLAS_tt_13TeV_asy_2022
-  - ATLAS_tt_13TeV_asy_2022_uncor
   - ATLAS_tt_13TeV_ljets_2016_Mtt
   - ATLAS_tt_8TeV_dilep_Mtt
   - ATLAS_tt_8TeV_ljets_Mtt
@@ -62,7 +58,6 @@ datasets:
   - CMS_tZ_13TeV_2016_inc
   - CMS_tZ_13TeV_inc
   - CMS_tZ_13TeV_pTt
-  - CMS_tZ_13TeV_pTt_uncor
   - CMS_t_sch_8TeV
   - CMS_t_tch_13TeV_2016_diff_Yt
   - CMS_t_tch_13TeV_2019_diff_Yt
