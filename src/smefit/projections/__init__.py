@@ -162,7 +162,7 @@ class Projection:
         fred_stat = np.sqrt(lumi_old / lumi_new)
         return stat * fred_stat
 
-    def build_projection(self, lumi_new):
+    def build_projection(self, lumi_new, closure):
         """
         Constructs runcard for projection by updating the central value and statistical uncertainties
 
@@ -183,8 +183,12 @@ class Projection:
 
             _logger.info(f"Building projection for : {dataset_name}")
 
-            with open(path_to_dataset, encoding="utf-8") as f:
-                data_dict = yaml.safe_load(f)
+            try:
+                with open(path_to_dataset, encoding="utf-8") as f:
+                    data_dict = yaml.safe_load(f)
+            except FileNotFoundError:
+                _logger.info(f"Dataset {dataset_name} not in the database")
+                continue
 
             idxs = slice(cnt, cnt + num_data)
 
@@ -200,27 +204,30 @@ class Projection:
             else:
                 sys = pd.DataFrame(data=sys.T, columns=name_sys)
 
-            # if all stats are zero, we only have access to the total error which we rescale by 1/3 (compromise)
-            no_stats = not np.any(stat)
-            if no_stats:
-                fred = self.fred_tot
-                sys_red = self.rescale_sys(sys, fred)
-                stat_red = stat
-            # if separate stat and sys
-            else:
-                fred = self.fred_sys
-                lumi_old = self.datasets.Luminosity[dataset_idx]
-                stat_red = self.rescale_stat(stat, lumi_old, lumi_new)
-                sys_red = self.rescale_sys(sys, fred)
+            if not closure:
+                # if all stats are zero, we only have access to the total error which we rescale by 1/3 (compromise)
+                no_stats = not np.any(stat)
+                if no_stats:
+                    fred = self.fred_tot
+                    sys_red = self.rescale_sys(sys, fred)
+                    stat_red = stat
+                # if separate stat and sys
+                else:
+                    fred = self.fred_sys
+                    lumi_old = self.datasets.Luminosity[dataset_idx]
+                    stat_red = self.rescale_stat(stat, lumi_old, lumi_new)
+                    sys_red = self.rescale_sys(sys, fred)
 
-            if len(sys_red) > 1:
-                data_dict["systematics"] = sys_red.T.values.tolist()
-            else:
-                data_dict["systematics"] = sys_red.T.values.flatten().tolist()
-            data_dict["statistical_error"] = stat_red.tolist()
+                if len(sys_red) > 1:
+                    data_dict["systematics"] = sys_red.T.values.tolist()
+                else:
+                    data_dict["systematics"] = sys_red.T.values.flatten().tolist()
+                data_dict["statistical_error"] = stat_red.tolist()
 
-            # build covmat for projections. Use rescaled stat
-            newcov = covmat_from_systematics([stat_red], [sys_red])
+                # build covmat for projections. Use rescaled stat
+                newcov = covmat_from_systematics([stat_red], [sys_red])
+            else:  # closure test
+                newcov = covmat_from_systematics([stat], [sys])
 
             # add L1 noise to cv
             cv_projection = np.random.multivariate_normal(cv[idxs], newcov)
@@ -233,10 +240,20 @@ class Projection:
 
             projection_folder = self.projections_path
             projection_folder.mkdir(exist_ok=True)
-            with open(f"{projection_folder}/{dataset_name}_proj.yaml", "w") as file:
-                yaml.dump(data_dict, file, sort_keys=False)
+
+            if projection_folder != self.commondata_path:
+                if not closure:
+                    with open(f"{projection_folder}/{dataset_name}_proj.yaml", "w") as file:
+                        yaml.dump(data_dict, file, sort_keys=False)
+                else:
+                    with open(f"{projection_folder}/{dataset_name}.yaml", "w") as file:
+                        yaml.dump(data_dict, file, sort_keys=False)
+            else:
+                print("Choose a different projection folder from commondata to avoid overwriting results")
+                sys.exit()
 
             # copy corresponding theory predictions with _proj appended to filename
-            shutil.copy(self.theory_path / f"{dataset_name}.json", self.theory_path / f"{dataset_name}_proj.json")
+            if not closure:
+                shutil.copy(self.theory_path / f"{dataset_name}.json", self.theory_path / f"{dataset_name}_proj.json")
 
             cnt += num_data
