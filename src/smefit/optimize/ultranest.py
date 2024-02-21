@@ -226,7 +226,13 @@ class USOptimizer(Optimizer):
             multi gaussian log likelihood
         """
 
-        return -0.5 * self.chi2_func_ns(hypercube)
+        likelihood_external = 0
+        if self.likelihood_ext is not None:
+            for likelihood_ext in self.likelihood_ext:
+                likelihood_ext_i = likelihood_ext(self.coefficients.value)
+                likelihood_external += likelihood_ext_i
+
+        return -0.5 * self.chi2_func_ns(hypercube) + likelihood_external
 
     def flat_prior(self, hypercube):
         """Update the prior function.

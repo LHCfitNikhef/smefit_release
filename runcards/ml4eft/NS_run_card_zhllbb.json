@@ -1,0 +1,28 @@
+{
+  "fit_id": "glob_ptz_lin_5c",
+  "mode": "nn",
+  "process": "zh",
+  "order": "quad",
+  "lumi": 3e5,
+  "observed_data_path": "/Users/jaco/Documents/PhD/smefit_database_projections/smefit_database/ml_observables/events_0.pkl.gz",
+  "bins": {
+    "pt_z": [
+      75,
+      150,
+      250,
+      400,
+      10000
+    ]
+  },
+  "path_to_models": "/Users/jaco/Documents/PhD/smefit_database_projections/smefit_database/ml_observables/zh_particle_7_feat",
+  "path_to_theory_pred": "/Users/jaco/Documents/ML4EFT/zenodo/training_data/zh_llbb",
+  "prior": {
+    "cHu":  [-50, 50],
+    "cHd":  [-50, 50],
+    "cHj1":  [-50, 50],
+    "cHj3":  [-50, 50],
+    "cbHRe":  [-50, 50],
+    "cHW":  [-50, 50],
+    "cHWB":  [-50, 50]},
+  "th_features": ["y", "m_tt", "pt_t"]
+}
