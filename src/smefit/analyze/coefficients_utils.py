@@ -456,9 +456,11 @@ class CoefficientsPlotter:
                 lines, labels = axes.get_legend_handles_labels()
 
         fig.legend(
-            lines, labels, loc="lower center", prop={"size": 35}, ncol=len(posteriors)
+            lines, labels, ncol=len(posteriors),
+            prop={"size": 25 * (grid_size * 4) / 20}, bbox_to_anchor=(0.5, 1.0), loc='upper center', frameon=False
         )
-        fig.tight_layout()
+        fig.tight_layout(rect=[0, 0.05 * (5. / grid_size), 1, 1 - 0.08 * (5. / grid_size)])
+        #fig.tight_layout()
 
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
         plt.savefig(f"{self.report_folder}/coefficient_histo.png")
