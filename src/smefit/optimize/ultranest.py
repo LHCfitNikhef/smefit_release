@@ -229,7 +229,7 @@ class USOptimizer(Optimizer):
         likelihood_external = 0
         if self.likelihood_ext is not None:
             for likelihood_ext in self.likelihood_ext:
-                likelihood_ext_i = likelihood_ext(self.coefficients.value)
+                likelihood_ext_i = likelihood_ext(hypercube)
                 likelihood_external += likelihood_ext_i
 
         return -0.5 * self.chi2_func_ns(hypercube) + likelihood_external
@@ -259,6 +259,7 @@ class USOptimizer(Optimizer):
             log_dir = self.results_path
 
         t1 = time.time()
+
         sampler = ultranest.ReactiveNestedSampler(
             self.free_parameters.index.tolist(),
             self.gaussian_loglikelihood,

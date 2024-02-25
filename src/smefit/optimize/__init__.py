@@ -151,7 +151,7 @@ class Optimizer:
         else:
             chi2_tot = 0
 
-        if print_log:
+        if print_log and self.loaded_datasets is not None:
             chi2_dict = {}
             for data_name in self.loaded_datasets.ExpNames:
                 dataset = get_dataset(self.loaded_datasets, data_name)
