@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib import cm
+import matplotlib.patches as patches
 from .spider import radar_factory
 
 
@@ -306,6 +307,7 @@ class CoefficientsPlotter:
             labels,
             title,
             log_scale=True,
+            fontsize=12,
             figsize=(10, 15),
             plot_cutoff=400,
             x_log=True,
@@ -345,7 +347,7 @@ class CoefficientsPlotter:
         spoke_labels = [op[1] for op in df.index]
 
         fig = plt.figure(figsize=(9,9))
-        rect = [0.05, 0.05, 0.95, 0.95]
+        rect = [0.05, 0.05, 0.9, 0.9]
         n_axis = 3
         axes = [fig.add_axes(rect, projection='radar') for i in range(n_axis)]
 
@@ -370,9 +372,9 @@ class CoefficientsPlotter:
                 axis.set_rgrids(radial_perc_lines[1:], angle=angles[i], labels=perc_labels[1:])
             axis.yaxis.set_tick_params(labelsize=10)
             if log_scale:
-                axis.set_ylim(0, log_transform(100, delta))
+                axis.set_ylim(0, log_transform(110, delta))
             else:
-                axis.set_ylim(0, 100)
+                axis.set_ylim(0, 110)
 
         prop_cycle = plt.rcParams['axes.prop_cycle']
         colors = prop_cycle.by_key()['color']
@@ -382,8 +384,43 @@ class CoefficientsPlotter:
             ax.plot(theta, data_fit_i, label=labels[i + 1], color=colors[i])
             ax.scatter(theta, data_fit_i, marker= next(marker), s=140, color=colors[i])
             ax.fill(theta, data_fit_i, alpha=0.25, label='_nolegend_', color=colors[i])
-        ax.set_varlabels(spoke_labels)
+
+        ax.set_varlabels(spoke_labels, fontsize=fontsize)
         ax.set_title(title)
+
+
+        ax2 = fig.add_axes(rect=[0, 0, 1, 1])
+        ax2.patch.set_visible(False)
+        ax2.grid("off")
+        ax2.xaxis.set_visible(False)
+        ax2.yaxis.set_visible(False)
+        radius = 0.5
+
+
+        class_names = ['4H', '2L2H', '2FB', 'B']
+        angle_sweep = [sum([op_type in index for index in self.coeff_info.index]) / len(self.coeff_info) for op_type in class_names]
+
+        # determine angles of the colored arcs
+        prop_cycle = plt.rcParams['axes.prop_cycle']
+        colors = prop_cycle.by_key()['color']
+
+        filled_start_angle = 90 - 180 / len(self.coeff_info)
+
+        for i, op_type in enumerate(class_names):
+              # Start angle in degrees
+            filled_end_angle = angle_sweep[i] * 360 + filled_start_angle  # End angle in degrees
+            center = (0.5, 0.5)  # Coordinates relative to the figure
+
+            alpha = 0.3
+
+            ax2.axis('off')
+
+            # Create the filled portion of the circular patch
+            filled_wedge = patches.Wedge(center, radius, filled_start_angle, filled_end_angle, facecolor=colors[i],
+                                         alpha=alpha, ec=None, width=0.05, transform = ax2.transAxes)
+            ax2.add_patch(filled_wedge)
+
+            filled_start_angle += angle_sweep[i] * 360
 
         ax.legend(loc=(0, 1), labelspacing=0, fontsize='small', frameon=False)
 
