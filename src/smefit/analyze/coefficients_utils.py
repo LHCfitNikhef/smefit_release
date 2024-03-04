@@ -308,12 +308,9 @@ class CoefficientsPlotter:
             title,
             log_scale=True,
             fontsize=12,
-            figsize=(10, 15),
-            plot_cutoff=400,
-            x_log=True,
-            x_min=1e-2,
-            x_max=500,
+            figsize=(9, 9),
             legend_loc="best",
+            radial_perc_lines = [1, 5, 10, 20, 40, 60, 80]
     ):
         """
         Plot error bars at given confidence level
@@ -342,25 +339,23 @@ class CoefficientsPlotter:
             data = log_transform(ratio, delta)
         else:
             data = ratio
-        
 
         spoke_labels = [op[1] for op in df.index]
 
-        fig = plt.figure(figsize=(9,9))
+        fig = plt.figure(figsize=figsize)
         outer_ax_width = 0.8
         left_outer_ax = (1 - outer_ax_width) / 2
         rect = [left_outer_ax, left_outer_ax, outer_ax_width, outer_ax_width]
         n_axis = 3
         axes = [fig.add_axes(rect, projection='radar') for i in range(n_axis)]
 
-        radial_perc_lines = [1, 5, 10, 20, 40, 60, 80]
         if log_scale:
             radial_perc_lines = log_transform(radial_perc_lines, delta)
 
         # take first axis as main, the rest only serve to show the remaining percentage axes
         ax = axes[0]
         angles = np.arange(270, 270 + 360, 360./ n_axis) # zero degrees is 12 o'clock
-        perc_labels = [r"$1\%$", r"$5\%$", r"$10\%$", r"$20\%$", r"$40\%$", r"$60\%$", r"$80\%$"]
+        perc_labels = [rf"$\mathbf{{{perc}}}\%$" for perc in radial_perc_lines]
 
         for i, axis in enumerate(axes):
             if i > 0:
@@ -369,9 +364,9 @@ class CoefficientsPlotter:
                 axis.xaxis.set_visible(False)
 
             if i == 0:
-                axis.set_rgrids(radial_perc_lines, angle=angles[i], labels=perc_labels)
+                axis.set_rgrids(radial_perc_lines, angle=angles[i], labels=perc_labels, zorder=3)
             else:
-                axis.set_rgrids(radial_perc_lines[1:], angle=angles[i], labels=perc_labels[1:])
+                axis.set_rgrids(radial_perc_lines[1:], angle=angles[i], labels=perc_labels[1:], zorder=3)
             axis.yaxis.set_tick_params(labelsize=10)
             if log_scale:
                 axis.set_ylim(0, log_transform(100, delta))
@@ -390,15 +385,14 @@ class CoefficientsPlotter:
         ax.set_varlabels(spoke_labels, fontsize=fontsize)
         ax.tick_params(axis='x', pad=13)
 
-
         ax2 = fig.add_axes(rect=[0, 0, 1, 1])
         width_disk = 0.05
         ax2.patch.set_visible(False)
         ax2.grid("off")
         ax2.xaxis.set_visible(False)
         ax2.yaxis.set_visible(False)
-        delta_disk = 0.1
-        radius = outer_ax_width / 2 + (1 + delta) * width_disk
+        delta_disk = 0.3
+        radius = outer_ax_width / 2 + (1 + delta_disk) * width_disk
 
         ax2.set_title(title, fontsize=18)
 
@@ -412,7 +406,7 @@ class CoefficientsPlotter:
         filled_start_angle = 90 - 180 / len(self.coeff_info)
 
         for i, op_type in enumerate(class_names):
-              # Start angle in degrees
+
             filled_end_angle = angle_sweep[i] * 360 + filled_start_angle  # End angle in degrees
             center = (0.5, 0.5)  # Coordinates relative to the figure
 
@@ -427,10 +421,8 @@ class CoefficientsPlotter:
 
             filled_start_angle += angle_sweep[i] * 360
 
-        #ax2.legend(loc=(0, 1), labelspacing=0, fontsize=15, frameon=False)
-
         handles = [plt.Line2D([0], [0], color=colors[i], linewidth=2) for i in range(len(labels[1:]))]
-        ax2.legend(handles, labels[1:], frameon=False, fontsize=15, loc='lower right')
+        ax2.legend(handles, labels[1:], frameon=False, fontsize=15, loc=legend_loc)
 
         plt.savefig(f"{self.report_folder}/spider_plot.pdf", dpi=500, bbox_inches='tight')
         plt.savefig(f"{self.report_folder}/spider_plot.png", bbox_inches='tight')
