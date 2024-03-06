@@ -175,7 +175,7 @@
         <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">ndat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">NdataExp</span><span class="p">:</span>
             <span class="n">fisher_row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-            <span class="n">idxs</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">idxs</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat</span><span class="p">)</span>
             <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_LinearCorrections</span><span class="p">[:,</span> <span class="n">idxs</span><span class="p">]</span>
             <span class="n">fisher_row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">sigma</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">InvCovMat</span><span class="p">[</span><span class="n">idxs</span><span class="p">,</span> <span class="n">idxs</span><span class="p">]</span> <span class="o">@</span> <span class="n">sigma</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
             <span class="n">fisher_tab</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fisher_row</span><span class="p">)</span>
@@ -223,7 +223,7 @@
             <span class="n">description</span><span class="o">=</span><span class="s2">&quot;[green]Computing quadratic Fisher information per dataset...&quot;</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="c1"># slice the big matrices</span>
-            <span class="n">idxs</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">idxs</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat</span><span class="p">)</span>
             <span class="n">quad_corr</span> <span class="o">=</span> <span class="n">diag_corr</span><span class="p">[</span><span class="n">idxs</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">T</span>
             <span class="n">lin_corr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_LinearCorrections</span><span class="p">[:,</span> <span class="n">idxs</span><span class="p">]</span>
             <span class="n">inv_corr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">InvCovMat</span><span class="p">[</span><span class="n">idxs</span><span class="p">,</span> <span class="n">idxs</span><span class="p">]</span>
@@ -302,6 +302,7 @@
         <span class="p">)</span>
         <span class="n">summary_table</span> <span class="o">=</span> <span class="n">summary_table</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;level_0&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">numeric_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">summary_table</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;data_group&quot;</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">summary_table</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">log</span><span class="p">)</span></div>
 
 
