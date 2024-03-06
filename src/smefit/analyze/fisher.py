@@ -101,7 +101,7 @@ class FisherCalculator:
             description="[green]Computing quadratic Fisher information per dataset...",
         ):
             # slice the big matrices
-            idxs = slice(cnt, cnt + ndat + 1)
+            idxs = slice(cnt, cnt + ndat)
             quad_corr = diag_corr[idxs, :].T
             lin_corr = self.new_LinearCorrections[:, idxs]
             inv_corr = self.datasets.InvCovMat[idxs, idxs]
