@@ -35,8 +35,6 @@ datasets:
   - CMS_tttt_13TeV_slep_inc
 
   # ttZ
-#  - ATLAS_ttZ_13TeV_2016
-#  - CMS_ttZ_13TeV
   - CMS_ttZ_13TeV_pTZ
   - ATLAS_ttZ_13TeV_pTZ_uncor
 
@@ -46,7 +44,6 @@ datasets:
 
   # Single top
   - ATLAS_t_tch_13TeV_inc
-  #- CMS_t_tch_13TeV_inc
   - CMS_t_tch_13TeV_2019_diff_Yt
   - ATLAS_t_sch_13TeV_inc
 
@@ -57,10 +54,13 @@ datasets:
 
   # tZ
   - ATLAS_tZ_13TeV_run2_inc
-  - CMS_tZ_13TeV_2016_inc
   - CMS_tZ_13TeV_pTt_uncor
 
   # HIGGS PRODUCTION
+
+  # Signal Strengths
+  - ATLAS_SSinc_RunII
+  - CMS_SSinc_RunII
 
   # ATLAS & CMS Run II Higgs Differential
   - CMS_H_13TeV_2015_pTH
@@ -82,7 +82,7 @@ datasets:
 order: NLO
 use_quad: False
 rot_to_fit_basis: null
-use_theory_covmat: True
+use_theory_covmat: False
 
 fred_sys: 0.5 # systematics get reduced by 1/2
 fred_tot: 0.333 # total errors get reduced by 1/3
