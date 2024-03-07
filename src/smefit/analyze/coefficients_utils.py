@@ -349,13 +349,22 @@ class CoefficientsPlotter:
         n_axis = 3
         axes = [fig.add_axes(rect, projection='radar') for i in range(n_axis)]
 
+        perc_labels = [rf"$\mathbf{{{perc}}}$" for perc in radial_perc_lines]
         if log_scale:
             radial_perc_lines = log_transform(radial_perc_lines, delta)
 
         # take first axis as main, the rest only serve to show the remaining percentage axes
         ax = axes[0]
         angles = np.arange(270, 270 + 360, 360./ n_axis) # zero degrees is 12 o'clock
-        perc_labels = [rf"$\mathbf{{{perc}}}\%$" for perc in radial_perc_lines]
+
+        prop_cycle = plt.rcParams['axes.prop_cycle']
+        colors = prop_cycle.by_key()['color']
+        marker = itertools.cycle(('*', '.'))
+
+        for i, data_fit_i in enumerate(data.T):
+            ax.plot(theta, data_fit_i, color=colors[i], zorder=1)
+            ax.scatter(theta, data_fit_i, marker= next(marker), s=140, color=colors[i], zorder=1)
+            ax.fill(theta, data_fit_i, alpha=0.25, label='_nolegend_', color=colors[i], zorder=1)
 
         for i, axis in enumerate(axes):
             if i > 0:
@@ -364,26 +373,17 @@ class CoefficientsPlotter:
                 axis.xaxis.set_visible(False)
 
             if i == 0:
-                axis.set_rgrids(radial_perc_lines, angle=angles[i], labels=perc_labels, zorder=3)
+                axis.set_rgrids(radial_perc_lines, angle=angles[i], labels=perc_labels)
             else:
-                axis.set_rgrids(radial_perc_lines[1:], angle=angles[i], labels=perc_labels[1:], zorder=3)
-            axis.yaxis.set_tick_params(labelsize=10)
+                axis.set_rgrids(radial_perc_lines[1:], angle=angles[i], labels=perc_labels[1:])
+            axis.yaxis.set_tick_params(labelsize=10, zorder=100)
             if log_scale:
                 axis.set_ylim(0, log_transform(100, delta))
             else:
                 axis.set_ylim(0, 100)
 
-        prop_cycle = plt.rcParams['axes.prop_cycle']
-        colors = prop_cycle.by_key()['color']
-        marker = itertools.cycle(('*', '.'))
-
-        for i, data_fit_i in enumerate(data.T):
-            ax.plot(theta, data_fit_i, color=colors[i])
-            ax.scatter(theta, data_fit_i, marker= next(marker), s=140, color=colors[i])
-            ax.fill(theta, data_fit_i, alpha=0.25, label='_nolegend_', color=colors[i])
-
         ax.set_varlabels(spoke_labels, fontsize=fontsize)
-        ax.tick_params(axis='x', pad=13)
+        ax.tick_params(axis='x', pad=14)
 
         ax2 = fig.add_axes(rect=[0, 0, 1, 1])
         width_disk = 0.05
@@ -421,8 +421,9 @@ class CoefficientsPlotter:
 
             filled_start_angle += angle_sweep[i] * 360
 
-        handles = [plt.Line2D([0], [0], color=colors[i], linewidth=2) for i in range(len(labels[1:]))]
-        ax2.legend(handles, labels[1:], frameon=False, fontsize=15, loc=legend_loc)
+        handles = [plt.Line2D([0], [0], color=colors[i], linewidth=3,  marker=next(marker), markersize=12) for i in range(len(labels[1:]))]
+        ax2.legend(handles, labels[1:], frameon=False, fontsize=15, loc=legend_loc, ncol=df.shape[1] - 1,
+                   bbox_to_anchor = (0., -0.05, 1., .05), bbox_transform=fig.transFigure)
 
         plt.savefig(f"{self.report_folder}/spider_plot.pdf", dpi=500, bbox_inches='tight')
         plt.savefig(f"{self.report_folder}/spider_plot.png", bbox_inches='tight')
