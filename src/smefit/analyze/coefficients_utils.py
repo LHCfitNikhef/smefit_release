@@ -332,9 +332,11 @@ class CoefficientsPlotter:
 
         theta = radar_factory(len(df), frame='circle')
 
+
         # normalise to first fit
-        delta = 0.3
         ratio = df.iloc[:, 1:].values / df.iloc[:, 0].values.reshape(-1,1) * 100
+        delta = np.abs(np.log10(min(ratio.flatten())))
+
         if log_scale:
             data = log_transform(ratio, delta)
         else:
