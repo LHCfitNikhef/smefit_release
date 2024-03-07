@@ -95,9 +95,118 @@ datasets:
   - LEP_eeWW_198GeV
   - LEP_eeWW_206GeV
 
+  - FCCee_Brw_161GeV
+  - FCCee_Brw_240GeV
+  - FCCee_Brw_365GeV
+  - FCCee_Zdata
+  - FCCee_alphaEW
+  - FCCee_bb_240GeV
+  - FCCee_bb_365GeV
+  - FCCee_bb_Afb_240GeV
+  - FCCee_bb_Afb_365GeV
+  - FCCee_cc_240GeV
+  - FCCee_cc_365GeV
+  - FCCee_cc_Afb_240GeV
+  - FCCee_cc_Afb_365GeV
+  - FCCee_ee_240GeV
+  - FCCee_ee_365GeV
+  - FCCee_ee_Afb_240GeV
+  - FCCee_ee_Afb_365GeV
+  - FCCee_mumu_240GeV
+  - FCCee_mumu_365GeV
+  - FCCee_mumu_Afb_240GeV
+  - FCCee_mumu_Afb_365GeV
+  - FCCee_tautau_240GeV
+  - FCCee_tautau_365GeV
+  - FCCee_tautau_Afb_240GeV
+  - FCCee_tautau_Afb_365GeV
+  - FCCee_vvh_WW_365GeV
+  - FCCee_vvh_ZZ_365GeV
+  - FCCee_vvh_aa_365GeV
+  - FCCee_vvh_bb_240GeV
+  - FCCee_vvh_bb_365GeV
+  - FCCee_vvh_cc_365GeV
+  - FCCee_vvh_gg_365GeV
+  - FCCee_vvh_tautau_365GeV
+  - FCCee_ww_161GeV
+  - FCCee_ww_240GeV
+  - FCCee_ww_365GeV
+  - FCCee_zh_240GeV
+  - FCCee_zh_365GeV
+  - FCCee_zh_WW_240GeV
+  - FCCee_zh_WW_365GeV
+  - FCCee_zh_ZZ_240GeV
+  - FCCee_zh_ZZ_365GeV
+  - FCCee_zh_aZ_240GeV
+  - FCCee_zh_aa_240GeV
+  - FCCee_zh_aa_365GeV
+  - FCCee_zh_bb_240GeV
+  - FCCee_zh_bb_365GeV
+  - FCCee_zh_cc_240GeV
+  - FCCee_zh_cc_365GeV
+  - FCCee_zh_gg_240GeV
+  - FCCee_zh_gg_365GeV
+  - FCCee_zh_tautau_240GeV
+  - FCCee_zh_tautau_365GeV
+
+  - CEPC_Brw_161GeV
+  - CEPC_Brw_240GeV
+  - CEPC_Brw_365GeV
+  - CEPC_Wwidth
+  - CEPC_Zdata
+  - CEPC_alphaEW
+  - CEPC_bb_240GeV
+  - CEPC_bb_365GeV
+  - CEPC_bb_Afb_240GeV
+  - CEPC_bb_Afb_365GeV
+  - CEPC_cc_240GeV
+  - CEPC_cc_365GeV
+  - CEPC_cc_Afb_240GeV
+  - CEPC_cc_Afb_365GeV
+  - CEPC_ee_240GeV
+  - CEPC_ee_365GeV
+  - CEPC_ee_Afb_240GeV
+  - CEPC_ee_Afb_365GeV
+  - CEPC_mumu_240GeV
+  - CEPC_mumu_365GeV
+  - CEPC_mumu_Afb_240GeV
+  - CEPC_mumu_Afb_365GeV
+  - CEPC_tautau_240GeV
+  - CEPC_tautau_365GeV
+  - CEPC_tautau_Afb_240GeV
+  - CEPC_tautau_Afb_365GeV
+  - CEPC_vvh_WW_365GeV
+  - CEPC_vvh_ZZ_365GeV
+  - CEPC_vvh_aa_365GeV
+  - CEPC_vvh_bb_240GeV
+  - CEPC_vvh_bb_365GeV
+  - CEPC_vvh_cc_365GeV
+  - CEPC_vvh_gg_365GeV
+  - CEPC_vvh_tautau_365GeV
+  - CEPC_ww_161GeV
+  - CEPC_ww_240GeV
+  - CEPC_ww_365GeV
+  - CEPC_zh_240GeV
+  - CEPC_zh_365GeV
+  - CEPC_zh_WW_240GeV
+  - CEPC_zh_WW_365GeV
+  - CEPC_zh_ZZ_240GeV
+  - CEPC_zh_ZZ_365GeV
+  - CEPC_zh_aZ_240GeV
+  - CEPC_zh_aa_240GeV
+  - CEPC_zh_aa_365GeV
+  - CEPC_zh_bb_240GeV
+  - CEPC_zh_bb_365GeV
+  - CEPC_zh_cc_240GeV
+  - CEPC_zh_cc_365GeV
+  - CEPC_zh_gg_240GeV
+  - CEPC_zh_gg_365GeV
+  - CEPC_zh_tautau_240GeV
+  - CEPC_zh_tautau_365GeV
+
 order: NLO
 use_quad: False
-use_theory_covmat: True
+use_theory_covmat: False
 rot_to_fit_basis: null
 
 fred_sys: 0.5 # systematics get reduced by 1/2
