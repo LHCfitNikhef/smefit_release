@@ -304,6 +304,8 @@ class CoefficientsPlotter:
         labels,
         title,
         marker,
+        ncol,
+        ymax=100,
         log_scale=True,
         fontsize=12,
         figsize=(9, 9),
@@ -413,9 +415,9 @@ class CoefficientsPlotter:
                 )
 
             if log_scale:
-                axis.set_ylim(0, log_transform(100, delta))
+                axis.set_ylim(0, log_transform(ymax, delta))
             else:
-                axis.set_ylim(0, 100)
+                axis.set_ylim(0, ymax)
 
         ax.set_varlabels(spoke_labels, fontsize=fontsize)
         ax.tick_params(axis="x", pad=14)
@@ -482,18 +484,18 @@ class CoefficientsPlotter:
             )
             for i in range(len(labels[1:]))
         ]
+
+
         ax2.legend(
             handles,
             labels[1:],
             frameon=False,
             fontsize=15,
             loc=legend_loc,
-            ncol=df.shape[1] - 1,
+            ncol=ncol,
             bbox_to_anchor=(0.0, -0.05, 1.0, 0.05),
             bbox_transform=fig.transFigure,
         )
-        # ax2.legend(handles, labels[1:], frameon=False, fontsize=15, loc=legend_loc, ncol=df.shape[1] - 1,
-        #            bbox_to_anchor=(0., 0.93, 1., .05), bbox_transform=fig.transFigure)
 
         self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
@@ -518,6 +520,7 @@ class CoefficientsPlotter:
         grid_size = int(np.sqrt(self.npar)) + 1
         fig = plt.figure(figsize=(grid_size * 4, grid_size * 4))
         # loop on coefficients
+        cnt = 0
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
             try:
                 ax = plt.subplot(grid_size, grid_size, idx + 1)
@@ -560,6 +563,7 @@ class CoefficientsPlotter:
                 )
                 ax.tick_params(which="both", direction="in", labelsize=22.5)
                 ax.tick_params(labelleft=False)
+            cnt += 1
 
         lines, labels = fig.axes[0].get_legend_handles_labels()
         for axes in fig.axes:
@@ -575,10 +579,22 @@ class CoefficientsPlotter:
             loc="upper center",
             frameon=False,
         )
+
+        ax_logo = plt.subplot(grid_size, grid_size, cnt + 1)
+        # ax_logo = fig.axes[grid_size]
+        # ax_logo.patch.set_visible(False)
+        # ax_logo.xaxis.set_visible(False)
+        # ax_logo.yaxis.set_visible(False)
+        plt.axis('off')
+        self._plot_logo(ax_logo, [0, 1, 0.001, 0.4])
+        # self._plot_logo(ax_logo, [0, 1, 1.1, 1.3])
+
         fig.tight_layout(
             rect=[0, 0.05 * (5.0 / grid_size), 1, 1 - 0.08 * (5.0 / grid_size)]
         )
         # fig.tight_layout()
+
+
 
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
         plt.savefig(f"{self.report_folder}/coefficient_histo.png")
