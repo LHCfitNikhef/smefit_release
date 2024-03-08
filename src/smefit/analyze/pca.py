@@ -252,10 +252,10 @@ class PcaCalculator:
         new_LinearCorrections = impose_constrain(self.datasets, self.coefficients)
         X = new_LinearCorrections @ self.datasets.InvCovMat @ new_LinearCorrections.T
         # Decompose matrix with SVD and identify PCs
-        X_centered = X - X.mean(axis=0)
-        _, W, Vt = np.linalg.svd(X_centered)
+        _, W, Vt = np.linalg.svd(X)
 
         pca_labels = [f"PC{i:02d}" for i in range(W.size)]
+        
         self.pc_matrix = pd.DataFrame(Vt.T, index=free_parameters, columns=pca_labels)
         self.SVs = pd.Series(W, index=pca_labels)
 
