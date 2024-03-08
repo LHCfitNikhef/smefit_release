@@ -392,10 +392,9 @@ class Report:
                 )
                 links_list.append((f"pca_table_{fit.name}", f"Table {fit.label}"))
             if plot is not None:
-                fit_plot = copy.deepcopy(plot)
-                title = fit.label if fit_plot.pop("title") else None
+                title = fit.name
                 pca_cal.plot_heatmap(
-                    f"{self.report}/pca_heatmap_{fit.name}", title=title, **fit_plot
+                    f"{self.report}/pca_heatmap_{fit.name}", title=title
                 )
                 figs_list.append(f"pca_heatmap_{fit.name}")
         self._append_section("PCA", figs=figs_list, links=links_list)
