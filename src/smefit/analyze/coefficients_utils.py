@@ -4,17 +4,16 @@ import pathlib
 from collections.abc import Iterable
 
 import matplotlib.lines as mlines
+import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib import cm
-import matplotlib.patches as patches
-from .spider import radar_factory
-
 
 from .contours_2d import confidence_ellipse, plot_contours, split_solution
 from .latex_tools import latex_packages, multicolum_table_header
+from .spider import radar_factory
 
 
 def get_confidence_values(dist, has_posterior=True):
@@ -130,13 +129,13 @@ class CoefficientsPlotter:
 
         self.npar = self.coeff_info.shape[0]
 
-    def _plot_logo(self, ax):
+    def _plot_logo(self, ax, extent=[0.8, 0.999, 0.001, 0.30]):
         if self.logo is not None:
             ax.imshow(
                 self.logo,
                 aspect="auto",
                 transform=ax.transAxes,
-                extent=[0.8, 0.999, 0.001, 0.30],
+                extent=extent,
                 zorder=-1,
             )
 
@@ -299,18 +298,17 @@ class CoefficientsPlotter:
         plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_bar.png")
 
-    
-
     def plot_spider(
-            self,
-            error,
-            labels,
-            title,
-            log_scale=True,
-            fontsize=12,
-            figsize=(9, 9),
-            legend_loc="best",
-            radial_perc_lines = [1, 5, 10, 20, 40, 60, 80]
+        self,
+        error,
+        labels,
+        title,
+        marker,
+        log_scale=True,
+        fontsize=12,
+        figsize=(9, 9),
+        legend_loc="best",
+        radial_lines=[1, 5, 10, 20, 40, 60, 80],
     ):
         """
         Plot error bars at given confidence level
@@ -325,16 +323,15 @@ class CoefficientsPlotter:
             return np.log10(x) + delta
 
         df = pd.DataFrame(error)
-        
+
         # check if more than one fit is loaded
         if df.shape[1] < 2:
             print("At least two fits are required for the spider plot atm")
 
-        theta = radar_factory(len(df), frame='circle')
-
+        theta = radar_factory(len(df), frame="circle")
 
         # normalise to first fit
-        ratio = df.iloc[:, 1:].values / df.iloc[:, 0].values.reshape(-1,1) * 100
+        ratio = df.iloc[:, 1:].values / df.iloc[:, 0].values.reshape(-1, 1) * 100
         delta = np.abs(np.log10(min(ratio.flatten())))
 
         if log_scale:
@@ -345,47 +342,83 @@ class CoefficientsPlotter:
         spoke_labels = [op[1] for op in df.index]
 
         fig = plt.figure(figsize=figsize)
+        # outer_ax_width = 0.7
         outer_ax_width = 0.8
         left_outer_ax = (1 - outer_ax_width) / 2
         rect = [left_outer_ax, left_outer_ax, outer_ax_width, outer_ax_width]
         n_axis = 3
-        axes = [fig.add_axes(rect, projection='radar') for i in range(n_axis)]
+        axes = [fig.add_axes(rect, projection="radar") for i in range(n_axis)]
 
-        perc_labels = [rf"$\mathbf{{{perc}}}$" for perc in radial_perc_lines]
+        perc_labels = [rf"$\mathbf{{{(perc / 100):.3g}}}$" for perc in radial_lines]
         if log_scale:
-            radial_perc_lines = log_transform(radial_perc_lines, delta)
+            radial_lines = log_transform(radial_lines, delta)
 
         # take first axis as main, the rest only serve to show the remaining percentage axes
         ax = axes[0]
-        angles = np.arange(270, 270 + 360, 360./ n_axis) # zero degrees is 12 o'clock
 
-        prop_cycle = plt.rcParams['axes.prop_cycle']
-        colors = prop_cycle.by_key()['color']
-        marker = itertools.cycle(('*', '.'))
+        # align with Oll
+
+        Oll_idx = [pair[1] for pair in self.coeff_info.index.tolist()].index("Oll")
+        start_angle = theta[Oll_idx] * 180 / np.pi
+
+        angles = np.arange(
+            start_angle, start_angle + 360, 360.0 / n_axis
+        )  # zero degrees is 12 o'clock
+
+        prop_cycle = plt.rcParams["axes.prop_cycle"]
+        colors = prop_cycle.by_key()["color"]
+
+        markers = itertools.cycle(marker)
 
         for i, data_fit_i in enumerate(data.T):
             ax.plot(theta, data_fit_i, color=colors[i], zorder=1)
-            ax.scatter(theta, data_fit_i, marker= next(marker), s=140, color=colors[i], zorder=1)
-            ax.fill(theta, data_fit_i, alpha=0.25, label='_nolegend_', color=colors[i], zorder=1)
+            ax.scatter(
+                theta, data_fit_i, marker=next(markers), s=50, color=colors[i], zorder=1
+            )
+            ax.fill(
+                theta,
+                data_fit_i,
+                alpha=0.25,
+                label="_nolegend_",
+                color=colors[i],
+                zorder=1,
+            )
 
         for i, axis in enumerate(axes):
             if i > 0:
                 axis.patch.set_visible(False)
-                axis.grid("off")
+                # axis.rgrid("off")
                 axis.xaxis.set_visible(False)
 
+            angle = angles[i]
+            text_alignment = "right" if angle % 360 > 180 else "left"
+
+            axis.yaxis.set_tick_params(labelsize=11, zorder=100)
+
             if i == 0:
-                axis.set_rgrids(radial_perc_lines, angle=angles[i], labels=perc_labels)
+                axis.set_rgrids(
+                    radial_lines,
+                    angle=angle,
+                    labels=perc_labels,
+                    horizontalalignment=text_alignment,
+                    zorder=0,
+                )
             else:
-                axis.set_rgrids(radial_perc_lines[1:], angle=angles[i], labels=perc_labels[1:])
-            axis.yaxis.set_tick_params(labelsize=10, zorder=100)
+                axis.set_rgrids(
+                    radial_lines[1:],
+                    angle=angle,
+                    labels=perc_labels[1:],
+                    horizontalalignment=text_alignment,
+                    zorder=0,
+                )
+
             if log_scale:
                 axis.set_ylim(0, log_transform(100, delta))
             else:
                 axis.set_ylim(0, 100)
 
         ax.set_varlabels(spoke_labels, fontsize=fontsize)
-        ax.tick_params(axis='x', pad=14)
+        ax.tick_params(axis="x", pad=14)
 
         ax2 = fig.add_axes(rect=[0, 0, 1, 1])
         width_disk = 0.05
@@ -398,38 +431,76 @@ class CoefficientsPlotter:
 
         ax2.set_title(title, fontsize=18)
 
-        class_names = ['4H', '2L2H', '2FB', '4L', 'B']
-        angle_sweep = [sum([op_type in index for index in self.coeff_info.index]) / len(self.coeff_info) for op_type in class_names]
+        class_names = ["4H", "2L2H", "2FB", "4L", "B"]
+        angle_sweep = [
+            sum(op_type in index for index in self.coeff_info.index)
+            / len(self.coeff_info)
+            for op_type in class_names
+        ]
 
         # determine angles of the colored arcs
-        prop_cycle = plt.rcParams['axes.prop_cycle']
-        colors = prop_cycle.by_key()['color']
+        prop_cycle = plt.rcParams["axes.prop_cycle"]
+        colors = prop_cycle.by_key()["color"]
 
         filled_start_angle = 90 - 180 / len(self.coeff_info)
 
         for i, op_type in enumerate(class_names):
 
-            filled_end_angle = angle_sweep[i] * 360 + filled_start_angle  # End angle in degrees
+            filled_end_angle = (
+                angle_sweep[i] * 360 + filled_start_angle
+            )  # End angle in degrees
             center = (0.5, 0.5)  # Coordinates relative to the figure
 
             alpha = 0.3
 
-            ax2.axis('off')
+            ax2.axis("off")
 
             # Create the filled portion of the circular patch
-            filled_wedge = patches.Wedge(center, radius, filled_start_angle, filled_end_angle, facecolor=colors[i],
-                                         alpha=alpha, ec=None, width=width_disk, transform = ax2.transAxes)
+            filled_wedge = patches.Wedge(
+                center,
+                radius,
+                filled_start_angle,
+                filled_end_angle,
+                facecolor=colors[i],
+                alpha=alpha,
+                ec=None,
+                width=width_disk,
+                transform=ax2.transAxes,
+            )
             ax2.add_patch(filled_wedge)
 
             filled_start_angle += angle_sweep[i] * 360
 
-        handles = [plt.Line2D([0], [0], color=colors[i], linewidth=3,  marker=next(marker), markersize=12) for i in range(len(labels[1:]))]
-        ax2.legend(handles, labels[1:], frameon=False, fontsize=15, loc=legend_loc, ncol=df.shape[1] - 1,
-                   bbox_to_anchor = (0., -0.05, 1., .05), bbox_transform=fig.transFigure)
+        handles = [
+            plt.Line2D(
+                [0],
+                [0],
+                color=colors[i],
+                linewidth=3,
+                marker=next(markers),
+                markersize=10,
+            )
+            for i in range(len(labels[1:]))
+        ]
+        ax2.legend(
+            handles,
+            labels[1:],
+            frameon=False,
+            fontsize=15,
+            loc=legend_loc,
+            ncol=df.shape[1] - 1,
+            bbox_to_anchor=(0.0, -0.05, 1.0, 0.05),
+            bbox_transform=fig.transFigure,
+        )
+        # ax2.legend(handles, labels[1:], frameon=False, fontsize=15, loc=legend_loc, ncol=df.shape[1] - 1,
+        #            bbox_to_anchor=(0., 0.93, 1., .05), bbox_transform=fig.transFigure)
 
-        plt.savefig(f"{self.report_folder}/spider_plot.pdf", dpi=500, bbox_inches='tight')
-        plt.savefig(f"{self.report_folder}/spider_plot.png", bbox_inches='tight')
+        self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
+        plt.savefig(
+            f"{self.report_folder}/spider_plot.pdf", dpi=500, bbox_inches="tight"
+        )
+        plt.savefig(f"{self.report_folder}/spider_plot.png", bbox_inches="tight")
 
     def plot_posteriors(self, posteriors, labels, disjointed_lists=None):
         """Plot posteriors histograms.
@@ -449,7 +520,7 @@ class CoefficientsPlotter:
         # loop on coefficients
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
             try:
-                ax = plt.subplot(grid_size , grid_size, idx + 1)
+                ax = plt.subplot(grid_size, grid_size, idx + 1)
             except ValueError:
 
                 ax = plt.subplot(grid_size, grid_size, idx + 1)
@@ -496,11 +567,18 @@ class CoefficientsPlotter:
                 lines, labels = axes.get_legend_handles_labels()
 
         fig.legend(
-            lines, labels, ncol=len(posteriors),
-            prop={"size": 25 * (grid_size * 4) / 20}, bbox_to_anchor=(0.5, 1.0), loc='upper center', frameon=False
+            lines,
+            labels,
+            ncol=len(posteriors),
+            prop={"size": 25 * (grid_size * 4) / 20},
+            bbox_to_anchor=(0.5, 1.0),
+            loc="upper center",
+            frameon=False,
         )
-        fig.tight_layout(rect=[0, 0.05 * (5. / grid_size), 1, 1 - 0.08 * (5. / grid_size)])
-        #fig.tight_layout()
+        fig.tight_layout(
+            rect=[0, 0.05 * (5.0 / grid_size), 1, 1 - 0.08 * (5.0 / grid_size)]
+        )
+        # fig.tight_layout()
 
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
         plt.savefig(f"{self.report_folder}/coefficient_histo.png")
@@ -662,10 +740,10 @@ class CoefficientsPlotter:
                         )
                     )
                     labels.insert(
-                        1 + 4 * fit_number, str(confidence_level[0]) + "\% C.L."
+                        1 + 4 * fit_number, str(confidence_level[0]) + r"\% C.L."
                     )
                     labels.insert(
-                        2 + 4 * fit_number, str(confidence_level[1]) + "\% C.L."
+                        2 + 4 * fit_number, str(confidence_level[1]) + r"\% C.L."
                     )
                     labels.insert(3 + 4 * fit_number, "Best fit")
                     # labels already contain all fit name, so for each fit we need to insert C.L. contours at right pos
