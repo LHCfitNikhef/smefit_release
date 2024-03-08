@@ -56,7 +56,7 @@ class FisherCalculator:
         cnt = 0
         for ndat in self.datasets.NdataExp:
             fisher_row = np.zeros(self.free_parameters.size)
-            idxs = slice(cnt, cnt + ndat + 1)
+            idxs = slice(cnt, cnt + ndat)
             sigma = self.new_LinearCorrections[:, idxs]
             fisher_row = np.diag(sigma @ self.datasets.InvCovMat[idxs, idxs] @ sigma.T)
             fisher_tab.append(fisher_row)
@@ -101,7 +101,7 @@ class FisherCalculator:
             description="[green]Computing quadratic Fisher information per dataset...",
         ):
             # slice the big matrices
-            idxs = slice(cnt, cnt + ndat + 1)
+            idxs = slice(cnt, cnt + ndat)
             quad_corr = diag_corr[idxs, :].T
             lin_corr = self.new_LinearCorrections[:, idxs]
             inv_corr = self.datasets.InvCovMat[idxs, idxs]
@@ -174,6 +174,7 @@ class FisherCalculator:
         )
         summary_table = summary_table.groupby("level_0").sum(numeric_only=True)
         summary_table.index.name = "data_group"
+
         return self.normalize(summary_table, norm, log)
 
     def write_grouped(self, coeff_config, data_groups, summary_only):
