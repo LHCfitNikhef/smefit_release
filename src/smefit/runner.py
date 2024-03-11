@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+import importlib
 import itertools
 import pathlib
 import subprocess
+import sys
 from shutil import copyfile
 
 import yaml
@@ -135,6 +137,15 @@ class Runner:
         """Run a fit with Ultra Nest."""
 
         if run_parallel:
+
+            # dynamical import of all external modules on all processors
+            if "external_chi2" in config:
+                external_chi2 = config["external_chi2"]
+                for class_name, module_path in external_chi2.items():
+                    path = pathlib.Path(module_path)
+                    base_path, stem = path.parent, path.stem
+                    sys.path = [str(base_path)] + sys.path
+
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
             if rank == 0:

@@ -162,6 +162,20 @@ smefit NS --rotate_to_pca path/to/the/runcard/runcard.yaml
 ```eval_rst
 .. _ns:
 ```
+
+### Adding custom likelihoods
+SMEFiT supports the addition of customised likelihoods. This can be relevant when an external likelihood is already at hand
+and one would like to combine it with the one constructed internally in SMEFiT. To make use of this feature, one should add
+the following to the runcard:
+
+```yaml
+external_chi2:
+  'chi2_name': /path/to/external/chi2.py
+```
+Here, ``chi2_name`` must match the name of the function that is given in the external module. This function must take an array as input with length equal to the
+the number of EFT coefficients specified in the runcard, and in the same order.
+
+
 ## Running a fit with NS
 To run a fiy using Nested Sampling use the command
 ```bash

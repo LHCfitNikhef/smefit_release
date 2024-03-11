@@ -206,3 +206,6 @@ coefficients:
 #   OB: {'constrain': {'OpD': 2.8209}, 'value':, 'min': -0.85, 'max': 0.30}
 
 rot_to_fit_basis: null
+
+external_chi2:
+  'flavour_chi2': <path_to_external_chi2.py>
