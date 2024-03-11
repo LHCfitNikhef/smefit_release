@@ -19,13 +19,6 @@ To install smefit you can do:
 pip install smefit
 ```
 
-Note this installation does not allow you to run in parallel mode.
-To do that you can install from source using the provided conda environment
-or if you have an MPI compiler available just add:
-
-```bash
-pip install mpi4py
-```
 
 ## Installation from source using conda
 You can install smefit from source using a conda environnement.
