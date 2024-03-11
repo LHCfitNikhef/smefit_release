@@ -39,6 +39,8 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals[f"mean_err{cl}"] = (cl_vals[f"high{cl}"] - cl_vals[f"low{cl}"]) / 2.0
         cl_vals[f"err{cl}_low"] = cl_vals["mid"] - cl_vals[f"low{cl}"]
         cl_vals[f"err{cl}_high"] = cl_vals[f"high{cl}"] - cl_vals["mid"]
+        
+    cl_vals["pull"] = cl_vals["mid"] / cl_vals["mean_err95"]
 
     return cl_vals
 
@@ -297,6 +299,96 @@ class CoefficientsPlotter:
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_bar.png")
+        
+    def plot_pull(
+        self,
+        pull,
+        figsize=(10, 15),
+        legend_loc="best",
+    ):
+        """
+        Plot error bars at given confidence level
+
+        Parameters
+        ----------
+            error: dict
+               confidence level bounds per fit and coefficient
+        """
+        # df = pd.DataFrame(pull)
+        # groups, axs = self._get_suplblots(figsize)
+        #
+        # for ax, (g, bars) in zip(axs, df.groupby(level=0)):
+        #     import pdb; pdb.set_trace()
+        #     bars.droplevel(0).plot(
+        #         kind="scatter",
+        #         width=0.6,
+        #         ax=ax,
+        #         legend=None,
+        #         logx=False,
+        #         xlim=(-4, 4),
+        #         fontsize=13,
+        #     )
+        #     ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
+        #     ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
+        #
+        # self._plot_logo(axs[-1])
+        # axs[-1].set_xlabel(
+        #     r"${\rm Pull}$", fontsize=20
+        # )
+        # axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
+        # plt.tight_layout()
+        # plt.savefig(f"{self.report_folder}/coefficient_pull.pdf", dpi=500)
+        # plt.savefig(f"{self.report_folder}/coefficient_pull.png")
+
+        groups, axs = self._get_suplblots(figsize)
+        bas10 = np.concatenate([-np.logspace(-4, 2, 7), np.logspace(-4, 2, 7)])
+
+        # Spacing between fit results
+
+        nfits = len(pull)
+        y_shift = np.linspace(-0.4 * nfits, 0.4 * nfits, nfits)
+        colors = cm.get_cmap("tab10")
+
+
+        # loop on gropus
+        cnt_plot = 0
+        for ax, (g, npar) in zip(axs, groups.items()):
+            Y = 3 * np.arange(npar)
+            # loop over fits
+            for i, (fit_name, pull_df) in enumerate(pull.items()):
+                label = fit_name
+                # loop on coeffs
+                for cnt, (coeff_name, pull_coeff) in enumerate(pull_df[g].items()):
+                
+                    ax.scatter(
+                        x=pull_coeff,
+                        y=Y[cnt] + y_shift[i],
+                        color=colors(i),
+                        label = label
+                    )
+                    label = None
+
+
+            # y thicks
+            ax.set_ylim(-2, Y[-1] + 2)
+            ax.set_yticks(Y, self.coeff_info[g], fontsize=13)
+            # x grid
+            ax.vlines(0, -2, Y[-1] + 2, ls="dashed", color="black", alpha=0.7)
+
+            ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
+
+            ax.set_xlim(-2, 2)
+
+            ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
+            cnt_plot += npar
+
+        self._plot_logo(axs[-1])
+        axs[-1].set_xlabel(r"${\rm Fit\:Residual\:}(\sigma)$", fontsize=20)
+        axs[0].legend(loc='upper center', frameon=False, prop={"size": 13}, bbox_to_anchor=(0.0, 1.06, 1.0, 0.05),
+           ncol=nfits)
+        plt.tight_layout()
+        plt.savefig(f"{self.report_folder}/coefficient_pull.pdf", dpi=500)
+        plt.savefig(f"{self.report_folder}/coefficient_pull.png")
 
     def plot_spider(
         self,
