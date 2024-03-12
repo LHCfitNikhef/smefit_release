@@ -2,34 +2,41 @@
 import json
 import pathlib
 
-from mpi4py import MPI
 from rich.style import Style
 from rich.table import Table
 
 from .. import chi2, log
 from ..loader import get_dataset
 
+try:
+    from mpi4py import MPI
+
+    run_parallel = True
+except ModuleNotFoundError:
+    run_parallel = False
+
 
 class Optimizer:
     """
-    Common interface for Chi2 profile, NS and McFiT
+    Common interface for Chi2 profile, NS and MC and A optimizers.
 
     Parameters
     ----------
         results_path : pathlib.path
-
+            path to result folder
         loaded_datasets : DataTuple,
             dataset tuple
-        coefficients :
-
-        use_quad :
-            if True include also |HO| correction
-
+        coefficients : `smefit.coefficients.CoefficientManager`
+            instance of `CoefficientManager` with all the relevant coefficients to fit
+        use_quad : bool
+            if True includes also |HO| correction
+        single_parameter_fits : bool
+            True for single parameter fits
+        use_multiplicative_prescription:
+            if True uses the multiplicative prescription for the |EFT| corrections.
     """
 
     print_rate = 500
-
-    # TODO: docstring
 
     def __init__(
         self,
@@ -77,9 +84,11 @@ class Optimizer:
             current_chi2 : np.ndarray
                 computed :math:`\chi^2`
         """
+        rank = 0
+        if run_parallel:
+            comm = MPI.COMM_WORLD
+            rank = comm.Get_rank()
 
-        comm = MPI.COMM_WORLD
-        rank = comm.Get_rank()
         if rank == 0:
             self.counter += 1
             if print_log:
@@ -114,7 +123,6 @@ class Optimizer:
         return chi2_tot
 
     def dump_posterior(self, posterior_file, values):
-
         if self.single_parameter_fits:
             if posterior_file.is_file():
                 with open(posterior_file, encoding="utf-8") as f:

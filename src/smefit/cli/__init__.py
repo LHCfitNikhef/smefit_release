@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 import pathlib
 import sys
+
 import click
 
 from .. import log
 from ..analyze import run_report
 from ..log import print_banner, setup_console
 from ..postfit import Postfit
+from ..prefit import Prefit
 from ..projections import Projection
 from ..runner import Runner
-from .base import base_command, root_path
+from .base import base_command
 
 try:
     from mpi4py import MPI
@@ -81,6 +83,26 @@ def nested_sampling(
     runner.run_analysis("NS")
 
 
+@base_command.command("A")
+@fit_card
+@log_file
+@rotate_to_pca
+def analytic_linear(
+    fit_card: pathlib.Path, log_file: pathlib.Path, rotate_to_pca: bool
+):
+    """Get the analytic solution of the linear problem.
+
+    Usage: smefit A [OPTIONS] path_to_runcard
+    """
+    setup_console(log_file)
+    print_banner()
+    runner = Runner.from_file(fit_card.absolute())
+    if rotate_to_pca:
+        runner.rotate_to_pca()
+    log.console.log("Running : analytic solution.")
+    runner.run_analysis("A")
+
+
 @base_command.command("MC")
 @fit_card
 @n_replica
@@ -102,7 +124,19 @@ def monte_carlo_fit(
     runner.run_analysis("MC")
 
 
-@base_command.command("PF")
+@base_command.command("PREFIT")
+@fit_card
+def pre_fit(fit_card: pathlib.Path):
+    """Run prefit: computes the SM chi2 as a check before fitting.
+
+    Usage: smefit PREFIT [OPTIONS] path_to_runcard
+    """
+    runner = Runner.from_file(fit_card.absolute())
+    prefit = Prefit(runner.run_card)
+    prefit.chi2_sm()
+
+
+@base_command.command("POSTFIT")
 @click.argument(
     "result_folder",
     type=click.Path(path_type=pathlib.Path, exists=True),
@@ -125,7 +159,7 @@ def monte_carlo_fit(
 def post_fit(result_folder: pathlib.Path, n_replica: int, clean_rep: bool):
     """Run postfit selection over |MC| replicas.
 
-    Usage: smefit PF [OPTIONS] path_to_result_folder
+    Usage: smefit POSTFIT [OPTIONS] path_to_result_folder
     """
     postfit = Postfit.from_file(result_folder.absolute())
     postfit.save(n_replica)
@@ -200,8 +234,7 @@ def projection(projection_card: pathlib.Path, lumi: float, closure: bool):
         projection_setup.build_projection(lumi, closure)
     else:
         print(lumi, closure)
-        print("Usage: specify exclusively either a luminosity in fb-1 after --lumi or run a SM closure test with --closure")
+        print(
+            "Usage: specify exclusively either a luminosity in fb-1 after --lumi or run a SM closure test with --closure"
+        )
         sys.exit()
-
-
-
