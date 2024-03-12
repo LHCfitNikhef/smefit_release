@@ -9,7 +9,7 @@ import yaml
 from .analyze.pca import RotateToPca
 from .chi2 import Scanner
 from .log import logging
-from .optimize.analytic import ALOptimizer
+from .optimize.analytic import ALOptimizer, ALOptimizerClosure
 from .optimize.mc import MCOptimizer
 from .optimize.ultranest import USOptimizer
 
@@ -127,8 +127,10 @@ class Runner:
 
     def analytic(self, config):
         """Sample the analytic linear solution."""
-
-        a_opt = ALOptimizer.from_dict(config)
+        if "n_samples" in config:
+            a_opt = ALOptimizer.from_dict(config)
+        else:
+            a_opt = ALOptimizerClosure.from_dict(config)
         a_opt.run_sampling()
 
     def ultranest(self, config):
