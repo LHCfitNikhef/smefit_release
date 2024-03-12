@@ -67,16 +67,22 @@ single_parameter_fits: False
 bounds: Null
 
 # NS settings
-nlive: 1000
-efr: 0.005
-ceff: True
-toll: 0.5
+nlive: 400 # number of live points used during sampling
+lepsilon: 0.05 #  Terminate when live point likelihoods are all the same, within Lepsilon tolerance.
+target_evidence_unc: 0.5 # target evidence uncertanty
+target_post_unc: 0.5 # target posterior uncertanty
+frac_remain: 0.01 # Set to a higher number (0.5) if you know the posterior is simple.
+store_raw: false # if true strare the raw result and enable resuming the job.
+
 
 #MC settings
-mc_minimiser: 'cma'
-restarts: 7
-maxiter: 100000
-chi2_threshold: 3.0
+mc_minimiser: 'cma' # Allowed options are: 'cma', 'dual_annealing', 'trust-constr'
+restarts: 7 # number of restarts (only for cma)
+maxiter: 100000 # max number of iteration
+chi2_threshold: 3.0 # post fit chi2 threshold
+
+#A settings
+n_samples: 1000 # number of the required samples of the posterior distribution
 ```
 
 ### Datasets to consider and coefficients to fit
@@ -113,8 +119,8 @@ coefficients:
 ```
 
 As exemplified above, the syntax to specify the Wilson coefficient corresponding to the operator
-``O1`` is ``O1 : {'min': , 'max':} `` where ``min`` and ``max`` indicate the bounds within which NS
-will perform the sampling.
+``O1`` is ``O1 : {'min': , 'max':} `` where ``min`` and ``max`` indicate the bounds within
+the sampling is performed.
 
 ### Constrains between coefficients
 Some Wilson coefficients are not directly fit, but rather constrained to be linear combinations
@@ -145,12 +151,20 @@ rot_to_fit_basis: /path/to/rotation/rotation.json
 
 ```
 
+In addition, it is possible to perform a fit in a PCA rotated basis. This corresponds to the basis spanned
+by the eigenvectors of the Fisher information matrix at the linear level in the EFT expansion. To carry out such a fit,
+add the following flag
+
+```bash
+smefit NS --rotate_to_pca path/to/the/runcard/runcard.yaml
+```
+
 ```eval_rst
 .. _ns:
 ```
 ## Running a fit with NS
 To run a fiy using Nested Sampling use the command
-```yaml
+```bash
 smefit NS path/to/the/runcard/runcard.yaml
 ```
 
@@ -173,12 +187,21 @@ Once an high enough number of replicas have been produced, the results can be me
 running PostFit
 
 ```bash
-    smefit PF path/to/the/result/ -n number_of_replicas
+    smefit POSTFIT path/to/the/result/ -n number_of_replicas
 ```
 where ``<number_of_replicas>`` specifies the number of replicas to be used to build the posterior.
 Replicas not satisfying the PostFit criteria will be discarded. If the final number of good replicas is lower than
 ``<number_of_replicas>`` the code will output an error message asking to produce more replicas first.
 The final output is the file ``posterior.json`` containing the full posterior of the Wilson coefficients.
+
+## Solving the linear problem
+In case only linear cocrrections are used, one
+can find the analytic solution to the linear problem by
+```bash
+    smefit A path/to/the/runcard/runcard.yaml
+```
+This will also sample the posterior distribution according to the runcard.
+
 
 ## Single parameter fits
 Given a runcard with a number of Wilson coefficients specified, it is possible to fit each of them in turn,
@@ -188,7 +211,7 @@ To do this add to the runcard
 single_parameter_fits: True
 ```
 and proceed as documented above for a normal fit.
-For both NS and MC, the final output will be the file ``posterior.json``
+For both NS, MC and A the final output will be the file ``posterior.json``
 containing the independent posterior of the fitted Wilson coefficients, obtained by a series os independent single parameter fits.
 
 

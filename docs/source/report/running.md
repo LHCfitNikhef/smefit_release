@@ -79,7 +79,7 @@ coefficients_plots:
 
   # 2 dimensional contour plot
   contours_2d:
-    confidence_level: 95 # Avalable CL are 95% or 68%
+    confidence_level: 95 # Avalable CL are 95% or 68%, as a list both are plotted
     dofs_show: ["Op1", "Op2"] # list of operator to be displayed (will include all the possible pairs), default is Null
 
   # show the posterior histograms

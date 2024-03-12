@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
 import copy
+import pytest
 import pathlib
 
 import numpy as np
@@ -274,18 +274,17 @@ config_corr["use_multiplicative_prescription"] = False
 
 
 class TestOptimize_NS:
-
     config_no_corr["use_multiplicative_prescription"] = True
-    test_opt_mult = opt.ns.NSOptimizer.from_dict(config_no_corr)
+    test_opt_mult = opt.ultranest.USOptimizer.from_dict(config_no_corr)
 
     config_no_corr["use_multiplicative_prescription"] = False
-    test_opt = opt.ns.NSOptimizer.from_dict(config_no_corr)
+    test_opt = opt.ultranest.USOptimizer.from_dict(config_no_corr)
 
     config_corr["use_t0"] = False
-    test_opt_corr = opt.ns.NSOptimizer.from_dict(config_corr)
+    test_opt_corr = opt.ultranest.USOptimizer.from_dict(config_corr)
 
     config_corr["use_t0"] = True
-    test_opt_corr_t0 = opt.ns.NSOptimizer.from_dict(config_corr)
+    test_opt_corr_t0 = opt.ultranest.USOptimizer.from_dict(config_corr)
 
     def test_init(self):
         assert self.test_opt.results_path == commondata_path / "test"
@@ -344,7 +343,6 @@ class TestOptimize_NS:
 
 
 class TestOptimize_MC:
-
     test_opt = opt.mc.MCOptimizer.from_dict(config_no_corr)
 
     def test_init(self):
@@ -365,7 +363,6 @@ class TestOptimize_MC:
         # test chi2_mc computing the jacobian
 
         def jacobian(params):
-
             self.test_opt.coefficients.set_free_parameters(params)
             self.test_opt.coefficients.set_constraints()
 
@@ -415,3 +412,55 @@ class TestOptimize_MC:
             self.test_opt.chi2_func_mc, jacobian, np.random.rand(3)
         )
         np.testing.assert_allclose(test, 0, atol=5e-5)
+
+
+def test_is_semi_pos_def():
+    a = [
+        [
+            2,
+            0,
+        ],
+        [2, 0],
+    ]
+    b = [
+        [
+            -2.0,
+            0,
+        ],
+        [-2.0, 0],
+    ]
+    assert opt.analytic.is_semi_pos_def(a)
+    assert not opt.analytic.is_semi_pos_def(b)
+
+
+class TestOptimize_A:
+    config_no_corr["use_multiplicative_prescription"] = False
+    config_no_corr["use_quad"] = False
+    config_no_corr["n_samples"] = 2
+
+    test_opt = opt.analytic.ALOptimizer.from_dict(config_no_corr)
+
+    def test_from_dict(self):
+        config_quad = copy.deepcopy(config_no_corr)
+        config_quad["use_quad"] = True
+        with pytest.raises(ValueError):
+            opt.analytic.ALOptimizer.from_dict(config_quad)
+
+    def test_init(self):
+        assert self.test_opt.results_path == commondata_path / "test"
+        np.testing.assert_equal(
+            self.test_opt.loaded_datasets.ExpNames, datasets_no_corr
+        )
+        np.testing.assert_equal(
+            self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]
+        )
+
+    def test_free_parameters(self):
+        np.testing.assert_equal(
+            list(self.test_opt.free_parameters.index), ["Op1", "Op2", "Op3"]
+        )
+
+    def test_run_sampling(self):
+        # test that indeed here you have some flat direction
+        with pytest.raises(ValueError):
+            self.test_opt.run_sampling()
