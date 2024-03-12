@@ -184,6 +184,7 @@ class Report:
         self,
         scatter_plot=None,
         confidence_level_bar=None,
+        pull_bar=None,
         spider_plot=None,
         posterior_histograms=True,
         contours_2d=None,
@@ -262,6 +263,18 @@ class Report:
                 **confidence_level_bar,
             )
             figs_list.append("coefficient_bar")
+
+        if pull_bar is not None:
+            _logger.info("Plotting : Pull ")
+            zero_sol = 0
+            coeff_plt.plot_pull(
+                {
+                    name: bound_df.loc[zero_sol, "pull"]
+                    for name, bound_df in bounds_dict.items()
+                },
+                **pull_bar,
+            )
+            figs_list.append("pull_bar")
 
         if spider_plot is not None:
             _logger.info("Plotting : spider plot")
