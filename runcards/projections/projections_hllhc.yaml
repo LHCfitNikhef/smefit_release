@@ -33,6 +33,8 @@ datasets:
   - CMS_tttt_13TeV_run2 # two same-sign charged lepton, or at least 3 leptons and jets
   - ATLAS_tttt_13TeV_slep_inc
   - CMS_tttt_13TeV_slep_inc
+  - ATLAS_tttt_13TeV_2023
+  - CMS_tttt_13TeV_2023
 
   # ttZ
   - CMS_ttZ_13TeV_pTZ
