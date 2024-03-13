@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import pathlib
 import shutil
-
 import numpy as np
 import pandas as pd
 import yaml
@@ -91,7 +90,7 @@ class Projection:
             use_theory_covmat,
             rot_to_fit_basis,
             fred_tot,
-            fred_sys,
+            fred_sys
         )
 
     def compute_cv_projection(self):
@@ -197,19 +196,13 @@ class Projection:
 
             idxs = slice(cnt, cnt + num_data)
 
-            # we use relative uncertainties for the projection
-            cv_exp = np.array(data_dict["data_central"])
-            cv_theory = cv[idxs]
-            ratio = np.abs(cv_theory / cv_exp)
-
-            stat_rel = np.asarray(data_dict["statistical_error"]) * ratio
-            sys_rel = np.array(data_dict["systematics"]) * ratio
+            # load the statistical and systematic uncertainties
+            stat = np.asarray(data_dict["statistical_error"])
 
             name_sys = data_dict["sys_names"]
             num_sys = data_dict["num_sys"]
 
-            sys = sys_rel.reshape((num_sys, num_data))
-
+            sys = np.array(data_dict["systematics"]).reshape((num_sys, num_data))
             if not isinstance(data_dict["sys_names"], list):  # for a single systematic
                 sys = pd.DataFrame(data=sys.T, columns=[name_sys])
             else:
@@ -219,16 +212,16 @@ class Projection:
 
             if not closure:
                 # if all stats are zero, we only have access to the total error which we rescale by 1/3 (compromise)
-                no_stats = not np.any(stat_rel)
+                no_stats = not np.any(stat)
                 if no_stats:
                     fred = self.fred_tot
                     sys_red = self.rescale_sys(sys, fred)
-                    stat_red = stat_rel
+                    stat_red = stat
                 # if separate stat and sys
                 else:
                     fred = self.fred_sys
                     lumi_old = self.datasets.Luminosity[dataset_idx]
-                    stat_red = self.rescale_stat(stat_rel, lumi_old, lumi_new)
+                    stat_red = self.rescale_stat(stat, lumi_old, lumi_new)
                     sys_red = self.rescale_sys(sys, fred)
 
                 if len(sys_red) > 1:
@@ -240,7 +233,7 @@ class Projection:
                 # build covmat for projections. Use rescaled uncertainties
                 newcov = covmat_from_systematics([stat_red], [sys_red])
             else:  # closure test
-                newcov = covmat_from_systematics([stat_rel], [sys])
+                newcov = covmat_from_systematics([stat], [sys])
 
             if self.use_theory_covmat:
                 newcov += th_covmat
@@ -259,24 +252,17 @@ class Projection:
 
             if projection_folder != self.commondata_path:
                 if not closure:
-                    with open(
-                        f"{projection_folder}/{dataset_name}_proj.yaml", "w"
-                    ) as file:
+                    with open(f"{projection_folder}/{dataset_name}_proj.yaml", "w") as file:
                         yaml.dump(data_dict, file, sort_keys=False)
                 else:
                     with open(f"{projection_folder}/{dataset_name}.yaml", "w") as file:
                         yaml.dump(data_dict, file, sort_keys=False)
             else:
-                print(
-                    "Choose a different projection folder from commondata to avoid overwriting results"
-                )
+                print("Choose a different projection folder from commondata to avoid overwriting results")
                 sys.exit()
 
             # copy corresponding theory predictions with _proj appended to filename
             if not closure:
-                shutil.copy(
-                    self.theory_path / f"{dataset_name}.json",
-                    self.theory_path / f"{dataset_name}_proj.json",
-                )
+                shutil.copy(self.theory_path / f"{dataset_name}.json", self.theory_path / f"{dataset_name}_proj.json")
 
             cnt += num_data
