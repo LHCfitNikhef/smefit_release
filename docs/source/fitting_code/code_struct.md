@@ -19,7 +19,7 @@ This is then given as input to an ``Optimizer`` object, encoding all the specifi
 minimizer used in the analysis.
 The provided options are [Nested Sampling](./running.html#running-a-fit-with-ns) and
 [MonteCarlo](./running.html#running-a-fit-with-mc), based
-on the external MultiNest library and on an internal implementation respectively.
+on the external Utranest library and on an internal implementation respectively.
 In the first case the output is the full posterior distribution for the fitted Wilson coefficients,
 while in the second is the result for a single MC replica.
 To get the full posterior using MC, after producing a sufficient number of replicas

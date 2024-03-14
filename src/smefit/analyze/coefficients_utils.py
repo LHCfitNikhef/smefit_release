@@ -3,12 +3,14 @@ import itertools
 import pathlib
 from collections.abc import Iterable
 
+import matplotlib.lines as mlines
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 from matplotlib import cm
 
-from .contours_2d import plot_contours
+from .contours_2d import confidence_ellipse, plot_contours, split_solution
 from .latex_tools import latex_packages, multicolum_table_header
 
 
@@ -37,22 +39,6 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals[f"err{cl}_high"] = cl_vals[f"high{cl}"] - cl_vals["mid"]
 
     return cl_vals
-
-
-def split_solution(full_solution):
-    """Split the posterior solution"""
-
-    min_val = min(full_solution)
-    max_val = max(full_solution)
-    mid = np.mean([max_val, min_val])
-
-    # solution 1 should be closer to 0
-    solution1 = full_solution[full_solution < mid]
-    solution2 = full_solution[full_solution > mid]
-    if min(abs(solution2)) < min(abs(solution1)):
-        solution1, solution2 = solution2, solution1
-
-    return solution1, solution2
 
 
 def compute_confidence_level(
@@ -91,7 +77,6 @@ def compute_confidence_level(
                 ).stack()
             # single solution
             else:
-
                 bounds[(group, latex_name)] = pd.DataFrame(
                     [get_confidence_values(posterior[name], has_posterior)]
                 ).stack()
@@ -128,7 +113,6 @@ class CoefficientsPlotter:
     """
 
     def __init__(self, report_path, coeff_config, logo=False):
-
         self.report_folder = report_path
         self.coeff_info = coeff_config
 
@@ -379,7 +363,14 @@ class CoefficientsPlotter:
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
         plt.savefig(f"{self.report_folder}/coefficient_histo.png")
 
-    def plot_contours_2d(self, posteriors, labels, confidence_level=95, dofs_show=None):
+    def plot_contours_2d(
+        self,
+        posteriors,
+        labels,
+        confidence_level=95,
+        dofs_show=None,
+        double_solution=None,
+    ):
         """Plots 2D marginalised projections confidence level contours
 
         Parameters
@@ -393,6 +384,8 @@ class CoefficientsPlotter:
             are included.
         """
 
+        if double_solution is None:
+            double_solution = {"fit1": [], "fit2": []}
         if dofs_show is not None:
             posteriors = [
                 (posterior[0][dofs_show], posterior[1]) for posterior in posteriors
@@ -405,9 +398,12 @@ class CoefficientsPlotter:
 
         n_cols = n_par - 1 if n_par != 2 else 2
         n_rows = n_cols
-
-        fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
-        grid = plt.GridSpec(n_rows, n_cols, hspace=0.1, wspace=0.1)
+        if n_par > 2:
+            fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
+            grid = plt.GridSpec(n_rows, n_cols, hspace=0.1, wspace=0.1)
+        else:
+            fig = plt.figure()
+            grid = plt.GridSpec(1, 2, hspace=0.1, wspace=0.1)
 
         c1_old = coeff[0]
 
@@ -416,19 +412,50 @@ class CoefficientsPlotter:
         j = 1
 
         # loop over coefficient pairs
-        for (c1, c2) in itertools.combinations(coeff, 2):
-
+        for c1, c2 in itertools.combinations(coeff, 2):
             if c1 != c1_old:
                 row_idx += -1
                 col_idx = -1 - j
                 j += 1
                 c1_old = c1
-
-            ax = fig.add_subplot(grid[row_idx, col_idx])
+            if n_par > 2:
+                ax = fig.add_subplot(grid[row_idx, col_idx])
+            else:
+                ax = fig.add_subplot(grid[0, 0])
 
             # loop over fits
             hndls_all = []
+            fit_number = -1
             for clr_idx, (posterior, kde) in enumerate(posteriors):
+                fit_number = fit_number + 1
+                if isinstance(confidence_level, list):
+                    colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+                    # plot the first one dashed
+                    if kde:
+                        sns.kdeplot(
+                            x=posterior[c2].values,
+                            y=posterior[c1].values,
+                            levels=[1 - confidence_level[0] / 100.0, 1.0],
+                            bw_adjust=1.2,
+                            ax=ax,
+                            linestyles="dashed",
+                            linewidths=2,
+                            color=colors[clr_idx],
+                            label=confidence_level[0],
+                        )
+                    else:
+                        confidence_ellipse(
+                            posterior[c2].values,
+                            posterior[c1].values,
+                            ax,
+                            edgecolor=colors[clr_idx],
+                            confidence_level=confidence_level[0],
+                            linestyle="dashed",
+                            linewidth=2,
+                        )
+                    cl = confidence_level[1]
+                else:
+                    cl = confidence_level
 
                 hndls_contours = plot_contours(
                     ax,
@@ -441,9 +468,9 @@ class CoefficientsPlotter:
                     ],
                     kde=kde,
                     clr_idx=clr_idx,
-                    confidence_level=confidence_level,
+                    confidence_level=cl,
+                    double_solution=list(double_solution.values())[clr_idx],
                 )
-
                 hndls_all.append(hndls_contours)
 
                 if row_idx != -1:
@@ -460,15 +487,57 @@ class CoefficientsPlotter:
                         which="both",  # both major and minor ticks are affected
                         labelleft=False,
                     )
-
+                if isinstance(confidence_level, list):
+                    hndls_all.append(
+                        mlines.Line2D(
+                            [],
+                            [],
+                            linestyle="--",
+                            linewidth=2,
+                            alpha=1,
+                            color=colors[clr_idx],
+                        )
+                    )
+                    hndls_all.append(
+                        mlines.Line2D(
+                            [],
+                            [],
+                            linestyle="-",
+                            linewidth=2,
+                            alpha=1,
+                            color=colors[clr_idx],
+                        )
+                    )
+                    hndls_all.append(
+                        mlines.Line2D(
+                            [],
+                            [],
+                            color=colors[clr_idx],
+                            marker="o",
+                            linestyle="None",
+                            markersize=8,
+                            label="Best fit",
+                        )
+                    )
+                    labels.insert(
+                        1 + 4 * fit_number, str(confidence_level[0]) + r"\% C.L."
+                    )
+                    labels.insert(
+                        2 + 4 * fit_number, str(confidence_level[1]) + r"\% C.L."
+                    )
+                    labels.insert(3 + 4 * fit_number, "Best fit")
+                    # labels already contain all fit name, so for each fit we need to insert C.L. contours at right pos
             hndls_sm_point = ax.scatter(0, 0, c="k", marker="+", s=50, zorder=10)
             hndls_all.append(hndls_sm_point)
 
             col_idx -= 1
+            ax.locator_params(axis="x", nbins=5)
+            ax.locator_params(axis="y", nbins=6)
+            ax.minorticks_on()
+            ax.grid(linestyle="dotted", linewidth=0.5)
 
         ax = fig.add_subplot(grid[0, -1])
         ax.axis("off")
-
         ax.legend(
             labels=labels + [r"$\mathrm{SM}$"],
             handles=hndls_all,

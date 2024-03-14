@@ -7,6 +7,22 @@ from matplotlib import patches, transforms
 from matplotlib.patches import Ellipse
 
 
+def split_solution(full_solution):
+    """Split the posterior solution"""
+
+    min_val = min(full_solution)
+    max_val = max(full_solution)
+    mid = np.mean([max_val, min_val])
+
+    # solution 1 should be closer to 0
+    solution1 = full_solution[full_solution < mid]
+    solution2 = full_solution[full_solution > mid]
+    if min(abs(solution2)) < min(abs(solution1)):
+        solution1, solution2 = solution2, solution1
+
+    return solution1, solution2
+
+
 def confidence_ellipse(
     coeff1, coeff2, ax, facecolor="none", confidence_level=95, **kwargs
 ):
@@ -81,7 +97,15 @@ def confidence_ellipse(
 
 
 def plot_contours(
-    ax, posterior, ax_labels, coeff1, coeff2, kde, clr_idx, confidence_level=95
+    ax,
+    posterior,
+    ax_labels,
+    coeff1,
+    coeff2,
+    kde,
+    clr_idx,
+    confidence_level=95,
+    double_solution=None,
 ):
     """
 
@@ -117,6 +141,14 @@ def plot_contours(
 
     # perform kde for quadratic EFT fit
     if kde:
+        solution1x = solution2x = x_values
+        if coeff2 in double_solution:
+            solution1x, solution2x = split_solution(posterior[coeff2])
+
+        solution1y = solution2y = y_values
+        if coeff1 in double_solution:
+            solution1y, solution2y = split_solution(posterior[coeff1])
+
         sns.kdeplot(
             x=x_values,
             y=y_values,
@@ -135,6 +167,21 @@ def plot_contours(
             ax=ax,
             alpha=1,
             color=colors[clr_idx],
+            label=confidence_level,
+        )
+        ax.scatter(
+            np.mean(solution1x),
+            np.mean(solution1y),
+            c=colors[clr_idx],
+            s=50,
+            marker="o",
+        )
+        ax.scatter(
+            np.mean(solution2x),
+            np.mean(solution2y),
+            c=colors[clr_idx],
+            s=50,
+            marker="o",
         )
 
         hndls = (
@@ -145,7 +192,6 @@ def plot_contours(
         )
 
     else:  # draw ellipses for linear EFT fit
-
         p1 = confidence_ellipse(
             x_values,
             y_values,

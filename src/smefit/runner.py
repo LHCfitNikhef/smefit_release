@@ -5,13 +5,20 @@ import subprocess
 from shutil import copyfile
 
 import yaml
-from mpi4py import MPI
 
 from .analyze.pca import RotateToPca
 from .chi2 import Scanner
 from .log import logging
+from .optimize.analytic import ALOptimizer
 from .optimize.mc import MCOptimizer
-from .optimize.ns import NSOptimizer
+from .optimize.ultranest import USOptimizer
+
+try:
+    from mpi4py import MPI
+
+    run_parallel = True
+except ModuleNotFoundError:
+    run_parallel = False
 
 _logger = logging.getLogger(__name__)
 
@@ -36,7 +43,6 @@ class Runner:
     def __init__(
         self, run_card, single_parameter_fits, pairwise_fits, runcard_file=None
     ):
-
         self.run_card = run_card
         self.runcard_file = runcard_file
         self.single_parameter_fits = single_parameter_fits
@@ -108,29 +114,48 @@ class Runner:
             config, single_parameter_fits, pairwise_fits, runcard_file.absolute()
         )
 
-    def ns(self, config):
-        """Run a fit with |NS|."""
+    def get_optimizer(self, optimizer):
+        """Return the seleted optimizer."""
 
-        comm = MPI.COMM_WORLD
-        rank = comm.Get_rank()
+        if optimizer == "NS":
+            return self.ultranest
+        elif optimizer == "MC":
+            return self.mc
+        elif optimizer == "A":
+            return self.analytic
+        raise ValueError(f"{optimizer} is not available")
 
-        if rank == 0:
-            opt = NSOptimizer.from_dict(config)
+    def analytic(self, config):
+        """Sample the analytic linear solution."""
+
+        a_opt = ALOptimizer.from_dict(config)
+        a_opt.run_sampling()
+
+    def ultranest(self, config):
+        """Run a fit with Ultra Nest."""
+
+        if run_parallel:
+            comm = MPI.COMM_WORLD
+            rank = comm.Get_rank()
+            if rank == 0:
+                ns_opt = USOptimizer.from_dict(config)
+            else:
+                ns_opt = None
+            ns_opt = comm.bcast(ns_opt, root=0)
         else:
-            opt = None
+            ns_opt = USOptimizer.from_dict(config)
 
-        # Run optimizer
-        opt = comm.bcast(opt, root=0)
-        opt.run_sampling()
+        ns_opt.run_sampling()
 
     def mc(self, config):
         """Run a fit with |MC|."""
-        config = self.run_card
-        opt = MCOptimizer.from_dict(config)
-        opt.run_sampling()
-        opt.save()
+
+        mc_opt = MCOptimizer.from_dict(config)
+        mc_opt.run_sampling()
+        mc_opt.save()
 
     def rotate_to_pca(self):
+        """Rotate to |PCA| basis."""
 
         _logger.info("Rotate input basis to PCA basis")
         pca_rot = RotateToPca.from_dict(self.run_card)
@@ -139,66 +164,114 @@ class Runner:
         pca_rot.save()
 
     def global_analysis(self, optimizer):
-        """Run a global fit using the selected optimizer
+        """Run a global fit using the selected optimizer.
+
         Parameters
         ----------
         optimizer: string
-            optimizer to be used (NS or MC)
+            optimizer to be used (NS, MC or A)
         """
-
         config = self.run_card
-        if optimizer == "NS":
-            self.ns(config)
-        elif optimizer == "MC":
-            self.mc(config)
+        opt = self.get_optimizer(optimizer)
+        opt(config)
 
     def single_parameter_analysis(self, optimizer):
-        """Run a seried of single parameter fits for all the operators specified in the runcard
+        """Run a seried of single parameter fits for all the operators specified in the runcard.
+
         Parameters
         ----------
         optimizer: string
-            optimizer to be used (NS or MC)
+            optimizer to be used (NS, MC or A)
         """
 
+        def MultipleConstrainError():
+            raise ValueError(
+                "Constrain with multiple coefficients do not make sense, in sigle parameter fits."
+            )
+
         config = self.run_card
+
+        # loop on all the coefficients
         for coeff in config["coefficients"].keys():
             single_coeff_config = dict(config)
             single_coeff_config["coefficients"] = {}
-            single_coeff_config["coefficients"][coeff] = config["coefficients"][coeff]
 
-            if optimizer == "NS":
-                self.ns(single_coeff_config)
-            elif optimizer == "MC":
-                self.mc(single_coeff_config)
+            # skip contrained coeffs
+            if "constrain" in config["coefficients"][coeff]:
+                _logger.info("Skipping contrained coefficient %s", coeff)
+                continue
+
+            # if there are constrained coefficients, only
+            # relations in which appears a single indepentent
+            # coefficient make sense.
+            new_coeff_config = {}
+
+            # seach for a realtion: loop on all the coefficients
+            for coeff2, vals in config["coefficients"].items():
+                if "constrain" not in vals:
+                    continue
+
+                # if fixed value, crash
+                if isinstance(vals["constrain"], (int, float)):
+                    raise ValueError(
+                        "Fixed value constrain do not make sense for single parameter fits."
+                    )
+
+                constrain = (
+                    vals["constrain"]
+                    if isinstance(vals["constrain"], list)
+                    else [vals["constrain"]]
+                )
+
+                # only single coefficient constrain are supported
+                new_constrain = []
+                for addend in constrain:
+                    if len(addend) > 1:
+                        MultipleConstrainError()
+                    if coeff in addend:
+                        new_constrain.append(addend)
+                    # check that the coefficient appearing in all the addends is the same
+                    elif new_constrain:
+                        MultipleConstrainError()
+
+                if new_constrain:
+                    new_coeff_config[coeff2] = vals
+
+            # add fitted coefficient
+            new_coeff_config[coeff] = config["coefficients"][coeff]
+            single_coeff_config["coefficients"] = new_coeff_config
+
+            opt = self.get_optimizer(optimizer)
+            opt(single_coeff_config)
 
     def pairwise_analysis(self, optimizer):
-        """Run a series of pairwise parameter fits for all the operators specified in the runcard
+        """Run a series of pairwise parameter fits for all the operators specified in the runcard.
+
         Parameters
         ----------
         optimizer: string
-            optimizer to be used (NS or MC)
+            optimizer to be used only NS is supported
         """
+        if optimizer != "NS":
+            raise ValueError("Paiwise analysis is implemented only for NS.")
 
         config = self.run_card
-
-        for (c1, c2) in itertools.combinations(config["coefficients"].keys(), 2):
+        for c1, c2 in itertools.combinations(config["coefficients"].keys(), 2):
             pairwise_coeff_config = dict(config)
             pairwise_coeff_config["coefficients"] = {}
             pairwise_coeff_config["coefficients"][c1] = config["coefficients"][c1]
             pairwise_coeff_config["coefficients"][c2] = config["coefficients"][c2]
 
-            if optimizer == "NS":
-                self.ns(pairwise_coeff_config)
-            elif optimizer == "MC":
-                self.mc(pairwise_coeff_config)
+            opt = self.get_optimizer(optimizer)
+            opt(pairwise_coeff_config)
 
     def run_analysis(self, optimizer):
-        """Run either the global analysis or a series of single parameter fits
-        using the selected optimizer.
+        """Run either the global analysis or a series of single parameter fits using the selected optimizer.
+
         Parameters
         ----------
         optimizer: string
-            optimizer to be used (NS or MC)
+            optimizer to be used (NS, MC or A)
         """
 
         if self.single_parameter_fits:

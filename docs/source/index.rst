@@ -38,6 +38,7 @@ When using the code please cite:
     theory/SMEFT.rst
     theory/general
     theory/NS
+    theory/Analytic
     theory/MCFit
 
 
@@ -78,6 +79,7 @@ When using the code please cite:
     previous_releases/smefit_top
     previous_releases/smefit_vbs
     previous_releases/smefit20
+    previous_releases/smefit_uv
 
 .. toctree::
     :maxdepth: 1

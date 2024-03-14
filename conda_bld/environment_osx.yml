@@ -11,3 +11,4 @@ dependencies:
   - liblapack
   - libblas
   - mpi4py=3.1.4
+  - xattr
