@@ -28,39 +28,39 @@ here = pathlib.Path(__file__).parent
 
 # result dir
 result_dir = here / "results_fcc"
-Path.mkdir(result_dir, parents=True, exist_ok=True)
-
-mod_list = []
-for col in collections:
-    base_path = pathlib.Path(f"{here.parent}/runcards/uv_models/UV_scan/{col}/")
-    sys.path = [str(base_path)] + sys.path
-    for p in base_path.iterdir():
-        if p.name.startswith("InvarsFit") and p.suffix == ".py":
-            mod_list.append(importlib.import_module(f"{p.stem}"))
-
-
-use("PDF")
-rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
-rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
-
-# compute the invariants
-pQCD = ['NLO']
-EFT = ['NHO']
-
-for model in mod_list:
-    for pQCD in ['LO', 'NLO']:
-        for EFT in ['NHO', 'HO']:
-            model.MODEL_SPECS['pto'] = pQCD
-            model.MODEL_SPECS['eft'] = EFT
-            invariants = []
-            for k, attr in model.__dict__.items():
-                if k.startswith('inv'):
-                    invariants.append(attr)
-            try:
-                model.inspect_model(model.MODEL_SPECS, invariants)
-            except FileNotFoundError:
-                print("File not found", model)
-                continue
+# Path.mkdir(result_dir, parents=True, exist_ok=True)
+#
+# mod_list = []
+# for col in collections:
+#     base_path = pathlib.Path(f"{here.parent}/runcards/uv_models/UV_scan/{col}/")
+#     sys.path = [str(base_path)] + sys.path
+#     for p in base_path.iterdir():
+#         if p.name.startswith("InvarsFit") and p.suffix == ".py":
+#             mod_list.append(importlib.import_module(f"{p.stem}"))
+#
+#
+# use("PDF")
+# rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
+# rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
+#
+# # compute the invariants
+# pQCD = ['NLO']
+# EFT = ['NHO']
+#
+# for model in mod_list:
+#     for pQCD in ['LO', 'NLO']:
+#         for EFT in ['NHO', 'HO']:
+#             model.MODEL_SPECS['pto'] = pQCD
+#             model.MODEL_SPECS['eft'] = EFT
+#             invariants = []
+#             for k, attr in model.__dict__.items():
+#                 if k.startswith('inv'):
+#                     invariants.append(attr)
+#             try:
+#                 model.inspect_model(model.MODEL_SPECS, invariants)
+#             except FileNotFoundError:
+#                 print("File not found", model)
+#                 continue
 
 
 # Specify the path to the JSON file
@@ -195,6 +195,146 @@ oneloop_mdl_idx = ["T1", "T2"]
 #    file.write(latex_table_mp)
 # with open(result_dir / "table_1l.tex", "w") as file:
 #     file.write(latex_table_1l)
+
+def plot_uv_posterior_bar(n_params, collection, models, EFT=None, name=None, pQCD=None):
+
+    fig, axes = plt.subplots(figsize=(18, 8 * 3), ncols=1, nrows=3)
+
+    category = [r'${\rm Heavy\:Scalar}$', r'${\rm Heavy\:Fermion}$', r'${\rm Heavy\:Vector\:Boson}$']
+
+    for i, mod_nrs in enumerate(models):
+
+        lhc_bounds = []
+        hllhc_bounds = []
+        fcc_bounds = []
+        x_labels = []
+        for mod_nr in mod_nrs:
+            if mod_nr == 5:
+                continue
+            print(mod_nr)
+
+            posterior_path_mod_1 = Path(posterior_path.format(collection, "lhc", mod_nr, pQCD, "NHO"))
+            posterior_path_mod_2 = Path(posterior_path.format(collection, "hllhc", mod_nr, pQCD, "NHO"))
+            posterior_path_mod_3 = Path(posterior_path.format(collection, "fcc", mod_nr, pQCD, "NHO"))
+
+            if posterior_path_mod_1.exists():
+                # Open the JSON file and load its contents
+                try:
+                    with open(posterior_path_mod_1) as f:
+                        posterior_1 = json.load(f)
+
+                    with open(posterior_path_mod_2) as f:
+                        posterior_2 = json.load(f)
+
+                    with open(posterior_path_mod_3) as f:
+                        posterior_3 = json.load(f)
+                except FileNotFoundError:
+                    continue
+
+                n_invariants = 0
+                for key in posterior_1.keys():
+                    if key.startswith('inv'):
+                        n_invariants += 1
+
+                if n_invariants > 1:
+                    continue
+
+                for (key, samples_1_list), (_, samples_2_list), (_, samples_3_list) in zip(
+                        posterior_1.items(), posterior_2.items(), posterior_3.items()
+                ):
+                    if not key.startswith("inv"):
+                        continue
+                    else:
+                        samples_1 = np.array(samples_1_list)
+                        samples_2 = np.array(samples_2_list)
+                        samples_3 = np.array(samples_3_list)
+
+                        lhc_up = np.percentile(np.abs(samples_1), 95)
+                        hllhc_up = np.percentile(np.abs(samples_2), 95)
+                        fcc_up = np.percentile(np.abs(samples_3), 95)
+
+                        lhc_bounds.append([1 / lhc_up, 4 * np.pi / lhc_up])
+                        hllhc_bounds.append([1 / hllhc_up, 4 * np.pi / hllhc_up])
+                        fcc_bounds.append([1 / fcc_up, 4 * np.pi / fcc_up])
+
+                        x_labels.append(mod_dict[mod_nr])
+
+        lhc_bounds = np.array(lhc_bounds)
+        hllhc_bounds = np.array(hllhc_bounds)
+        fcc_bounds = np.array(fcc_bounds)
+
+        total_width = 8
+        bar_width = total_width / 2
+        x = np.linspace(0, 200, len(lhc_bounds))
+        dx = x[1] - x[0]
+
+        logo = plt.imread("/data/theorie/jthoeve/smefit_release/src/smefit/analyze/logo.png")
+
+        axes[-1].imshow(
+            logo,
+            aspect="auto",
+            transform=axes[-1].transAxes,
+            extent=[0.88, 0.98, 0.87, 0.97],
+            zorder=10,
+        )
+
+
+
+        # Plot the bars
+
+        axes[i].bar(x - bar_width, lhc_bounds[:, 0], bar_width, align='center', label=r'$\rm{LEP+LHC_{Run-2}}, \:g_{{\rm UV}}=1$', color='C0')
+
+        axes[i].bar(x - bar_width, lhc_bounds[:, 1], bar_width, align='center', edgecolor='C0',
+                    linestyle='--', alpha=0.3, label=r'$\rm{LEP+LHC_{Run-2}},\:g_{{\rm UV}}=4\pi$')
+
+        axes[i].bar(x, hllhc_bounds[:, 0], bar_width, align='center', label=r'$\rm{+\:HL-LHC}, \:g_{{\rm UV}}=1$',
+                    color='C1')
+
+        axes[i].bar(x, hllhc_bounds[:, 1], bar_width, align='center', edgecolor='C1',
+                    linestyle='--', alpha=0.3, label=r'$\rm{+\:HL-LHC}, \:g_{{\rm UV}}=4\pi$')
+
+        axes[i].bar(x + bar_width, fcc_bounds[:, 0], bar_width, align='center', label=r'$\rm{+\:FCC-ee}, \:g_{{\rm UV}}=1$',
+                    color='C2')
+
+        axes[i].bar(x + bar_width, fcc_bounds[:, 1], bar_width, align='center', edgecolor='C2',
+                    linestyle='--', alpha=0.3, label=r'$\rm{+\:FCC-ee}, \:g_{{\rm UV}}=4\pi$')
+
+        axes[i].set_xticks(x, x_labels)
+        axes[i].set_ylabel(r'$M_{\mathrm{UV}}\:{\rm [TeV]}$')
+        axes[i].tick_params(axis='x', which='major', pad=15)
+        #axes[i].legend(frameon=False, ncol=3)
+        axes[i].set_yscale('log')
+
+        if i == 2:
+            axes[i].set_ylim(0.08, 5 * 10 **3)
+
+        axes[i].text(
+            0.02,
+            0.95,
+            category[i],
+            fontsize=24,
+            ha="left",
+            va="top",
+            transform=axes[i].transAxes
+        )
+
+
+
+
+    axes[0].legend(
+        frameon=False,
+        ncol=3,
+        loc='upper right',
+        fontsize=18
+    )
+
+
+    #axes[-1].set_xlim(x.min() - 2 * bar_width, x.max() + 2 * bar_width)
+
+    fig.tight_layout()
+
+    fig.savefig(result_dir / "fcc_uv_bounds.pdf")
+
 
 def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=None):
     plot_nr = 1
@@ -334,15 +474,18 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
 
         fig.savefig(result_dir / "{}_posteriors_lhc_vs_hlhc_{}.png".format(collection, name))
 
+# plot_uv_posterior_bar(10, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="NLO")
+# plot_uv_posterior(15, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="NLO")
+plot_uv_posterior_bar(10, "Granada", [scalar_mdl_nrs, vfermion_mdl_nrs, vboson_mdl_nrs], name="scalars", pQCD="NLO")
 
 # plot_uv_posterior(n_mp, "MultiParticleCollection", mp_mdl_idx, EFT="NHO")
 # plot_uv_posterior(n_mp, "MultiParticleCollection", mp_mdl_idx, EFT="HO")
 # plot_uv_posterior(n_mp, "MultiParticleCollection",mp_mdl_idx, pQCD="LO")
 # plot_uv_posterior(n_mp, "MultiParticleCollection", mp_mdl_idx, pQCD="NLO")
 
-plot_uv_posterior(10, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="NLO")
-plot_uv_posterior(15, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="NLO")
-plot_uv_posterior(10, "Granada", scalar_mdl_nrs, name="scalars", pQCD="NLO")
+# plot_uv_posterior(10, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="NLO")
+# plot_uv_posterior(15, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="NLO")
+# plot_uv_posterior(10, "Granada", scalar_mdl_nrs, name="scalars", pQCD="NLO")
 
 # plot_uv_posterior(n_scalars_1L, "OneLoop", oneloop_mdl_idx, EFT="NHO")
 # plot_uv_posterior(n_scalars_1L, "OneLoop", oneloop_mdl_idx, EFT="HO")
