@@ -1,5 +1,5 @@
 # path to save projections
-projections_path: /data/theorie/jthoeve/smefit_database/commondata_projections
+projections_path: /data/theorie/jthoeve/smefit_database/commondata_projections_t0
 
 # path to commondata
 commondata_path: /data/theorie/jthoeve/smefit_database/commondata
@@ -96,7 +96,6 @@ datasets:
   - LEP_eeWW_189GeV
   - LEP_eeWW_198GeV
   - LEP_eeWW_206GeV
-
   - FCCee_Brw_161GeV
   - FCCee_Brw_240GeV
   - FCCee_Brw_365GeV
@@ -151,7 +150,6 @@ datasets:
   - FCCee_zh_gg_365GeV
   - FCCee_zh_tautau_240GeV
   - FCCee_zh_tautau_365GeV
-
   - CEPC_Brw_161GeV
   - CEPC_Brw_240GeV
   - CEPC_Brw_365GeV
@@ -212,6 +210,7 @@ order: NLO
 use_quad: False
 use_theory_covmat: False
 rot_to_fit_basis: null
+use_t0: True
 
 fred_sys: 0.5 # systematics get reduced by 1/2
 fred_tot: 0.333 # total errors get reduced by 1/3

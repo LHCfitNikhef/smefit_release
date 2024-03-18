@@ -27,6 +27,7 @@ class Projection:
         rot_to_fit_basis,
         fred_tot,
         fred_sys,
+        use_t0,
     ):
 
         self.commondata_path = commondata_path
@@ -40,6 +41,7 @@ class Projection:
         self.rot_to_fit_basis = rot_to_fit_basis
         self.fred_tot = fred_tot
         self.fred_sys = fred_sys
+        self.use_t0 = use_t0
 
         self.datasets = load_datasets(
             self.commondata_path,
@@ -48,7 +50,7 @@ class Projection:
             self.order,
             self.use_quad,
             self.use_theory_covmat,
-            False,
+            self.use_t0,
             False,
             theory_path=self.theory_path,
         )
@@ -79,6 +81,8 @@ class Projection:
         fred_tot = projection_config.get("fred_tot", 1)
         fred_sys = projection_config.get("fred_sys", 1)
 
+        use_t0 = projection_config.get("use_t0", False)
+
         return cls(
             commondata_path,
             theory_path,
@@ -90,7 +94,8 @@ class Projection:
             use_theory_covmat,
             rot_to_fit_basis,
             fred_tot,
-            fred_sys
+            fred_sys,
+            use_t0
         )
 
     def compute_cv_projection(self):

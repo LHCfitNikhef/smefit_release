@@ -1,5 +1,5 @@
 # path to save projections
-projections_path: /data/theorie/jthoeve/smefit_database/commondata_projections
+projections_path: /data/theorie/jthoeve/smefit_database/commondata_projections_t0
 
 # path to commondata
 commondata_path: /data/theorie/jthoeve/smefit_database/commondata
@@ -81,10 +81,12 @@ datasets:
   - CMS_WZ_13TeV_2016_pTZ # keep alongside 2022 version because of separate statistical unc.
   - CMS_WZ_13TeV_2022_pTZ
 
+
 order: NLO
 use_quad: False
-rot_to_fit_basis: null
 use_theory_covmat: False
+rot_to_fit_basis: null
+use_t0: True
 
 fred_sys: 0.5 # systematics get reduced by 1/2
 fred_tot: 0.333 # total errors get reduced by 1/3
