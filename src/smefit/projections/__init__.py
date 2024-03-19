@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pathlib
 import shutil
+
 import numpy as np
 import pandas as pd
 import yaml
@@ -95,7 +96,7 @@ class Projection:
             rot_to_fit_basis,
             fred_tot,
             fred_sys,
-            use_t0
+            use_t0,
         )
 
     def compute_cv_projection(self):
@@ -201,17 +202,47 @@ class Projection:
 
             idxs = slice(cnt, cnt + num_data)
 
+            central_values = np.array(data_dict["data_central"])
+
             # load the statistical and systematic uncertainties
             stat = np.asarray(data_dict["statistical_error"])
 
-            name_sys = data_dict["sys_names"]
             num_sys = data_dict["num_sys"]
+            sys_add = np.array(data_dict["systematics"])
 
-            sys = np.array(data_dict["systematics"]).reshape((num_sys, num_data))
-            if not isinstance(data_dict["sys_names"], list):  # for a single systematic
-                sys = pd.DataFrame(data=sys.T, columns=[name_sys])
+            cv_theory = cv[idxs]
+
+            if num_sys != 0:
+                type_sys = np.array(data_dict["sys_type"])
+                name_sys = data_dict["sys_names"]
+
+                # express systematics as percentage values of the central values
+                sys_mult = sys_add / central_values * 1e2
+
+                # Identify add and mult systematics
+                # and replace the mult ones with corresponding value computed
+                # from data central value. Required for implementation of t0 prescription
+                indx_add = np.where(type_sys == "ADD")[0]
+                indx_mult = np.where(type_sys == "MULT")[0]
+                sys_t0 = np.zeros((num_sys, num_data))
+                sys_t0[indx_add] = sys_add[indx_add].reshape(sys_t0[indx_add].shape)
+                sys_t0[indx_mult] = (
+                    sys_mult[indx_mult].reshape(sys_t0[indx_mult].shape)
+                    * cv_theory
+                    * 1e-2
+                )
+
+                # limit case with 1 sys
+                if num_sys == 1:
+                    name_sys = [name_sys]
+            # limit case no sys
             else:
-                sys = pd.DataFrame(data=sys.T, columns=name_sys)
+                name_sys = ["UNCORR"]
+                sys_t0 = np.zeros((num_sys + 1, num_data))
+
+            # these are absolute systematics
+            sys = pd.DataFrame(data=sys_t0.T, columns=name_sys)
+            n_sys = len(sys)
 
             th_covmat = self.datasets.ThCovMat[idxs, idxs]
 
@@ -229,15 +260,29 @@ class Projection:
                     stat_red = self.rescale_stat(stat, lumi_old, lumi_new)
                     sys_red = self.rescale_sys(sys, fred)
 
-                if len(sys_red) > 1:
+                if n_sys > 1:
                     data_dict["systematics"] = sys_red.T.values.tolist()
                 else:
                     data_dict["systematics"] = sys_red.T.values.flatten().tolist()
+
+                if data_dict["sys_type"] is not None:
+                    data_dict["sys_type"] = ["ADD"] * n_sys if n_sys > 1 else "ADD"
+
                 data_dict["statistical_error"] = stat_red.tolist()
 
                 # build covmat for projections. Use rescaled uncertainties
                 newcov = covmat_from_systematics([stat_red], [sys_red])
             else:  # closure test
+
+                # we store absolute uncertainties and convert all multipicative uncertainties to additive ones
+                if n_sys > 1:
+                    data_dict["systematics"] = sys.T.values.tolist()
+                else:
+                    data_dict["systematics"] = sys.T.values.flatten().tolist()
+
+                if data_dict["sys_type"] is not None:
+                    data_dict["sys_type"] = ["ADD"] * n_sys if n_sys > 1 else "ADD"
+
                 newcov = covmat_from_systematics([stat], [sys])
 
             if self.use_theory_covmat:
@@ -257,17 +302,24 @@ class Projection:
 
             if projection_folder != self.commondata_path:
                 if not closure:
-                    with open(f"{projection_folder}/{dataset_name}_proj.yaml", "w") as file:
+                    with open(
+                        f"{projection_folder}/{dataset_name}_proj.yaml", "w"
+                    ) as file:
                         yaml.dump(data_dict, file, sort_keys=False)
                 else:
                     with open(f"{projection_folder}/{dataset_name}.yaml", "w") as file:
                         yaml.dump(data_dict, file, sort_keys=False)
             else:
-                print("Choose a different projection folder from commondata to avoid overwriting results")
+                print(
+                    "Choose a different projection folder from commondata to avoid overwriting results"
+                )
                 sys.exit()
 
             # copy corresponding theory predictions with _proj appended to filename
             if not closure:
-                shutil.copy(self.theory_path / f"{dataset_name}.json", self.theory_path / f"{dataset_name}_proj.json")
+                shutil.copy(
+                    self.theory_path / f"{dataset_name}.json",
+                    self.theory_path / f"{dataset_name}_proj.json",
+                )
 
             cnt += num_data
