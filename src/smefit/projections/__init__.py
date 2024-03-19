@@ -242,7 +242,8 @@ class Projection:
 
             # these are absolute systematics
             sys = pd.DataFrame(data=sys_t0.T, columns=name_sys)
-            n_sys = len(sys)
+            n_sys = data_dict["num_sys"]
+
 
             th_covmat = self.datasets.ThCovMat[idxs, idxs]
 
@@ -260,7 +261,7 @@ class Projection:
                     stat_red = self.rescale_stat(stat, lumi_old, lumi_new)
                     sys_red = self.rescale_sys(sys, fred)
 
-                if n_sys > 1:
+                if num_data > 1:
                     data_dict["systematics"] = sys_red.T.values.tolist()
                 else:
                     data_dict["systematics"] = sys_red.T.values.flatten().tolist()
@@ -275,7 +276,8 @@ class Projection:
             else:  # closure test
 
                 # we store absolute uncertainties and convert all multipicative uncertainties to additive ones
-                if n_sys > 1:
+
+                if num_data > 1:
                     data_dict["systematics"] = sys.T.values.tolist()
                 else:
                     data_dict["systematics"] = sys.T.values.flatten().tolist()
