@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 """Solve the linear plolem to get the best analytic bounds."""
 import numpy as np
 from rich.style import Style
 from rich.table import Table
 
-from .. import log
+from .. import chi2, log
 from ..analyze.pca import impose_constrain
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
@@ -45,6 +46,7 @@ class ALOptimizer(Optimizer):
         single_parameter_fits,
         n_samples,
     ):
+
         super().__init__(
             f"{result_path}/{result_ID}",
             loaded_datasets,
@@ -93,13 +95,14 @@ class ALOptimizer(Optimizer):
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
         single_parameter_fits = config.get("single_parameter_fits", False)
+        n_samples = config.get("n_samples", False)
         return cls(
             loaded_datasets,
             coefficients,
             config["result_path"],
             config["result_ID"],
             single_parameter_fits,
-            config["n_samples"],
+            n_samples,
         )
 
     def log_result(self, coeff_best, coeff_covmat):
@@ -177,3 +180,70 @@ class ALOptimizer(Optimizer):
 
         posterior_file = self.results_path / "posterior.json"
         self.dump_posterior(posterior_file, values)
+
+
+class ALOptimizerClosure(ALOptimizer):
+    def __init__(
+        self,
+        loaded_datasets,
+        coefficients,
+        result_path,
+        result_ID,
+        single_parameter_fits,
+        n_samples,
+    ):
+
+        super(ALOptimizerClosure, self).__init__(
+            loaded_datasets,
+            coefficients,
+            result_path,
+            result_ID,
+            single_parameter_fits,
+            n_samples,
+        )
+
+    def run_sampling(self):
+        """Run sapmling accordying to the analytic solution."""
+
+        # update linear corrections in casde
+        new_LinearCorrections = impose_constrain(
+            self.loaded_datasets, self.coefficients
+        )
+
+        # compute mean and cov
+        _logger.info("Computing Analytic solution ...")
+        fisher = (
+            new_LinearCorrections
+            @ self.loaded_datasets.InvCovMat
+            @ new_LinearCorrections.T
+        )
+        diff_sm = self.loaded_datasets.Commondata - self.loaded_datasets.SMTheory
+        coeff_covmat = np.linalg.inv(fisher)
+
+        # check if there are not flat directions
+        if not is_semi_pos_def(coeff_covmat):
+            raise ValueError(
+                """Coefficient covariance is not symmetric positive-semidefinite,
+                There might be flat directions to comment out."""
+            )
+
+        coeff_best = (
+            coeff_covmat
+            @ new_LinearCorrections
+            @ self.loaded_datasets.InvCovMat
+            @ diff_sm
+        )
+
+        self.coefficients.set_free_parameters(coeff_best)
+        self.coefficients.set_constraints()
+
+        chi2_tot = chi2.compute_chi2(
+            self.loaded_datasets,
+            self.coefficients.value,
+            self.use_quad,
+            self.use_multiplicative_prescription,
+        )
+        chi2_red = chi2_tot / self.loaded_datasets.Commondata.size
+
+        with open(self.results_path / "chi2.dat", "a") as f:
+            f.write("{} \n".format(chi2_red))

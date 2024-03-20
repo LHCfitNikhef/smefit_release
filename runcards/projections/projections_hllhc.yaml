@@ -1,0 +1,94 @@
+# path to save projections
+projections_path: /data/theorie/jthoeve/smefit_database/commondata_projections_t0
+
+# path to commondata
+commondata_path: /data/theorie/jthoeve/smefit_database/commondata
+
+# path to theory tables
+theory_path:  /data/theorie/jthoeve/smefit_database/theory
+
+# datsets for which projections are wanted
+datasets:
+
+  # TOP QUARK PRODUCTION
+  # ttbar
+  - ATLAS_tt_13TeV_ljets_2016_Mtt
+  - CMS_tt_13TeV_dilep_2016_Mtt
+  - CMS_tt_13TeV_Mtt
+  - CMS_tt_13TeV_ljets_inc
+
+  # ttbar asymm and helicity frac
+  - ATLAS_tt_13TeV_asy_2022_uncor
+  - CMS_tt_13TeV_asy
+  - ATLAS_Whel_13TeV_uncor
+
+  # ttbb
+  - ATLAS_ttbb_13TeV_2016
+  - CMS_ttbb_13TeV_2016 # all jets final state
+  - CMS_ttbb_13TeV_dilepton_inc
+  - CMS_ttbb_13TeV_ljets_inc
+
+  # tttt
+  - ATLAS_tttt_13TeV_run2 # multilepton final state
+  - CMS_tttt_13TeV_run2 # two same-sign charged lepton, or at least 3 leptons and jets
+  - ATLAS_tttt_13TeV_slep_inc
+  - CMS_tttt_13TeV_slep_inc
+  - ATLAS_tttt_13TeV_2023
+  - CMS_tttt_13TeV_2023
+
+  # ttZ
+  - CMS_ttZ_13TeV_pTZ
+  - ATLAS_ttZ_13TeV_pTZ_uncor
+
+  # ttW
+  - ATLAS_ttW_13TeV_2016
+  - CMS_ttW_13TeV
+
+  # Single top
+  - ATLAS_t_tch_13TeV_inc
+  - CMS_t_tch_13TeV_2019_diff_Yt
+  - ATLAS_t_sch_13TeV_inc
+
+  # tW
+  - ATLAS_tW_13TeV_inc
+  - CMS_tW_13TeV_inc
+  - CMS_tW_13TeV_slep_inc
+
+  # tZ
+  - ATLAS_tZ_13TeV_run2_inc
+  - CMS_tZ_13TeV_pTt_uncor
+
+  # HIGGS PRODUCTION
+
+  # Signal Strengths
+  - ATLAS_SSinc_RunII
+  - CMS_SSinc_RunII
+
+  # ATLAS & CMS Run II Higgs Differential
+  - CMS_H_13TeV_2015_pTH
+
+  # ATLAS & CMS STXS
+  - ATLAS_WH_Hbb_13TeV
+  - ATLAS_ZH_Hbb_13TeV
+  - ATLAS_ggF_13TeV_2015
+  - ATLAS_ggF_ZZ_13TeV
+  - CMS_ggF_aa_13TeV
+  - ATLAS_STXS_runII_13TeV_uncor
+
+  # DIBOSON DATA
+  - ATLAS_WW_13TeV_2016_memu
+  - ATLAS_WZ_13TeV_2016_mTWZ
+  - CMS_WZ_13TeV_2016_pTZ # keep alongside 2022 version because of separate statistical unc.
+  - CMS_WZ_13TeV_2022_pTZ
+
+
+order: NLO
+use_quad: False
+use_theory_covmat: False
+rot_to_fit_basis: null
+use_t0: True
+
+fred_sys: 0.5 # systematics get reduced by 1/2
+fred_tot: 0.333 # total errors get reduced by 1/3
+
+

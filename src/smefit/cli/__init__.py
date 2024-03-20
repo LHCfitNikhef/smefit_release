@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import sys
 
 import click
 
@@ -8,6 +9,7 @@ from ..analyze import run_report
 from ..log import print_banner, setup_console
 from ..postfit import Postfit
 from ..prefit import Prefit
+from ..projections import Projection
 from ..runner import Runner
 from .base import base_command
 
@@ -203,3 +205,36 @@ def report(report_card: pathlib.Path):
     Usage: smefit R path_to_runcard
     """
     run_report(report_card.absolute())
+
+
+@base_command.command("PROJ")
+@click.argument(
+    "projection_card",
+    type=click.Path(path_type=pathlib.Path, exists=True),
+)
+@click.option(
+    "--lumi",
+    type=float,
+    default=None,
+    required=False,
+    help="Adjusts the statistical uncertainties according to the specified luminosity",
+)
+@click.option(
+    "--closure",
+    type=bool,
+    is_flag=True,
+    default=False,
+    help="Produces datasets under the SM",
+)
+def projection(projection_card: pathlib.Path, lumi: float, closure: bool):
+    r"""Compute projection for specified dataset"""
+
+    if (lumi is not None) ^ closure:
+        projection_setup = Projection.from_config(projection_card)
+        projection_setup.build_projection(lumi, closure)
+    else:
+        print(lumi, closure)
+        print(
+            "Usage: specify exclusively either a luminosity in fb-1 after --lumi or run a SM closure test with --closure"
+        )
+        sys.exit()
