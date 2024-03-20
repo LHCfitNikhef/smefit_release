@@ -203,14 +203,20 @@ class Projection:
             idxs = slice(cnt, cnt + num_data)
 
             central_values = np.array(data_dict["data_central"])
+            cv_theory = cv[idxs]
 
-            # load the statistical and systematic uncertainties
-            stat = np.asarray(data_dict["statistical_error"])
+            # ratio SM to experimental central value
+            ratio_sm_exp = cv_theory / central_values
 
+            # set negative ratios to one
+            ratio_sm_exp[ratio_sm_exp < 0] = 1
+
+            # rescale the statistical uncertainty to the SM
+            stat = np.asarray(data_dict["statistical_error"]) * np.sqrt(ratio_sm_exp)
+
+            # load systematics
             num_sys = data_dict["num_sys"]
             sys_add = np.array(data_dict["systematics"])
-
-            cv_theory = cv[idxs]
 
             if num_sys != 0:
                 type_sys = np.array(data_dict["sys_type"])
@@ -284,6 +290,8 @@ class Projection:
 
                 if data_dict["sys_type"] is not None:
                     data_dict["sys_type"] = ["ADD"] * n_sys if n_sys > 1 else "ADD"
+
+                data_dict["statistical_error"] = stat.tolist()
 
                 newcov = covmat_from_systematics([stat], [sys])
 
