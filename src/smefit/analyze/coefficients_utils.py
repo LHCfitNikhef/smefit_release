@@ -553,10 +553,10 @@ class CoefficientsPlotter:
                 axis.set_ylim(0, ymax)
 
         ax.set_varlabels(spoke_labels, fontsize=fontsize)
-        ax.tick_params(axis="x", pad=14)
+        ax.tick_params(axis="x", pad=17)
 
         ax2 = fig.add_axes(rect=[0, 0, 1, 1])
-        width_disk = 0.05
+        width_disk = 0.055
         ax2.patch.set_visible(False)
         ax2.grid("off")
         ax2.xaxis.set_visible(False)
@@ -566,7 +566,7 @@ class CoefficientsPlotter:
 
         ax2.set_title(title, fontsize=18)
 
-        class_names = ["4H", "2L2H", "2FB", "4L", "B"]
+        class_names = ["4H", "2L2H", "2FB", "4l", "B"]
         angle_sweep = [
             sum(op_type in index for index in self.coeff_info.index)
             / len(self.coeff_info)

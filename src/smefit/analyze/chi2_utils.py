@@ -357,7 +357,7 @@ class Chi2tableCalculator:
         )
         plt.tick_params(axis="x", direction="in", labelsize=15)
         plt.xlabel(r"$\chi^2$", fontsize=20)
-        plt.xlim(0, chi2_bar.max().max() + 0.01)
+        plt.xlim(-0.1, chi2_bar.max().max() + 0.2)
         plt.legend(loc="upper right", frameon=False, prop={"size": 11})
         plt.tight_layout()
         plt.savefig(f"{fig_name}.pdf")
