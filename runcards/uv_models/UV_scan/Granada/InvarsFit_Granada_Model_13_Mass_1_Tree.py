@@ -7,6 +7,3 @@ MODEL_SPECS = dict(id=13, collection="Granada", mass=1, pto="NLO", eft="NHO")  #
 
 def check_constrain(wc, uv):
     pass
-
-
-inspect_model(MODEL_SPECS, build_uv_posterior, [], check_constrain)
