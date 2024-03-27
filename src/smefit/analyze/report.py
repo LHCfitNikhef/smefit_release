@@ -278,13 +278,15 @@ class Report:
 
         if spider_plot is not None:
             _logger.info("Plotting : spider plot")
-            bar_cl = spider_plot["confidence_level"]
+
+            spider_cl = spider_plot["confidence_level"]
             spider_plot.pop("confidence_level")
+
             zero_sol = 0
+
             coeff_plt.plot_spider(
                 {
-                    name: -bound_df.loc[zero_sol, f"low{bar_cl}"]
-                    + bound_df.loc[zero_sol, f"high{bar_cl}"]
+                    name: bound_df.loc[zero_sol, f"hdi_{spider_cl}"]
                     for name, bound_df in bounds_dict.items()
                 },
                 labels=[fit.label for fit in self.fits],

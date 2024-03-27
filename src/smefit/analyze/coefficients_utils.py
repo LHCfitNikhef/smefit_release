@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib import cm
+import arviz
 
 from .contours_2d import confidence_ellipse, plot_contours, split_solution
 from .latex_tools import latex_packages, multicolum_table_header
@@ -39,6 +40,10 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals[f"mean_err{cl}"] = (cl_vals[f"high{cl}"] - cl_vals[f"low{cl}"]) / 2.0
         cl_vals[f"err{cl}_low"] = cl_vals["mid"] - cl_vals[f"low{cl}"]
         cl_vals[f"err{cl}_high"] = cl_vals[f"high{cl}"] - cl_vals["mid"]
+
+        # highest density intervals
+        hdi_widths = np.diff(arviz.hdi(dist.values, hdi=cl * 1e-2, multimodal=True), axis=1)
+        cl_vals[f"hdi_{cl}"] = np.sum(hdi_widths.flatten())
         
     cl_vals["pull"] = cl_vals["mid"] / cl_vals["mean_err68"]
 
@@ -694,6 +699,7 @@ class CoefficientsPlotter:
                     transform=ax.transAxes,
                     fontsize=25,
                 )
+
                 ax.tick_params(which="both", direction="in", labelsize=22.5)
                 ax.tick_params(labelleft=False)
             cnt += 1
