@@ -71,12 +71,7 @@ class USOptimizer(Optimizer):
         single_parameter_fits,
         pairwise_fits,
         use_multiplicative_prescription,
-        live_points=500,
-        lepsilon=0.001,
-        target_evidence_unc=0.5,
-        target_post_unc=0.5,
-        frac_remain=0.01,
-        store_raw=False,
+        ns_settings
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -86,15 +81,19 @@ class USOptimizer(Optimizer):
             single_parameter_fits,
             use_multiplicative_prescription,
         )
-        self.live_points = live_points
-        self.lepsilon = lepsilon
-        self.target_evidence_unc = target_evidence_unc
-        self.target_post_unc = target_post_unc
-        self.frac_remain = frac_remain
+        self.ns_settings = ns_settings
         self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
         self.pairwise_fits = pairwise_fits
-        self.store_raw = store_raw
+
+        # only store raw results when we want to have the option to continue a run.
+        # When ReactiveNS_settings is not specified in the runcard or single_parameter_fits is True
+        # we do not care about the raw output
+        if single_parameter_fits:
+            self.store_raw = False
+        else:
+            self.store_raw = bool(self.ns_settings['ReactiveNS_settings'])
+
 
     @classmethod
     def from_dict(cls, config):
@@ -128,39 +127,61 @@ class USOptimizer(Optimizer):
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
         single_parameter_fits = config.get("single_parameter_fits", False)
+
         pairwise_fits = config.get("pairwise_fits", False)
-        nlive = config.get("nlive", 500)
 
-        if "nlive" not in config:
+        ns_settings = config.get("ns_settings")
+        if ns_settings.get("sampling_settings") is None:
+            ns_settings["sampling_settings"] = {}
+        if ns_settings.get("ReactiveNS_settings") is None:
+            ns_settings["ReactiveNS_settings"] = {}
+
+        # do not support resuming old runs for individual fits
+        if single_parameter_fits:
+            if "ReactiveNS_settings" in ns_settings:
+                _logger.warning(
+                    f"Resuming individual fits not supported, overwriting old results"
+                )
+                ns_settings["ReactiveNS_settings"]["resume"] = "overwrite"
+
+        ns_settings["sampling_settings"] = ns_settings.get("sampling_settings", {})
+
+        if "min_num_live_points" not in ns_settings["sampling_settings"]:
+            min_num_live_points_def = 500
             _logger.warning(
-                f"Number of live points (nlive) not set in the input card. Using default: {nlive}"
+                f"Number of live points (nlive) not set in the input card. Using default: {min_num_live_points_def}"
             )
+            ns_settings["sampling_settings"]["min_num_live_points"] = min_num_live_points_def
 
-        lepsilon = config.get("lepsilon", 0.05)
-        if "lepsilon" not in config:
+        if "Lepsilon" not in ns_settings["sampling_settings"]:
+            Lepsilon_def = 0.05
             _logger.warning(
-                f"Sampling tollerance (Lepsilon) not set in the input card. Using default: {lepsilon}"
+                f"Sampling tollerance (Lepsilon) not set in the input card. Using default: {Lepsilon_def}"
             )
+            ns_settings["sampling_settings"]["Lepsilon"] = Lepsilon_def
 
-        target_evidence_unc = config.get("target_evidence_unc", 0.5)
-        if "target_evidence_unc" not in config:
+        if "dlogz" not in ns_settings["sampling_settings"]:
+            dlogz_def = 0.5
             _logger.warning(
-                f"Target Evidence uncertanty (target_evidence_unc) not set in the input card. Using default: {target_evidence_unc}"
+                f"Target Evidence uncertanty (dlogz) not set in the input card. Using default: {dlogz_def}"
             )
+            ns_settings["sampling_settings"]["dlogz"] = dlogz_def
 
-        target_post_unc = config.get("target_post_unc", 0.5)
-        if "target_post_unc" not in config:
+        if "dKL" not in ns_settings["sampling_settings"]:
+            dKL_def = 0.5
             _logger.warning(
-                f"Target Posterior uncertanty (target_post_unc) not set in the input card. Using default: {target_post_unc}"
+                f"Target Posterior uncertanty (dKL) not set in the input card. Using default: {dKL_def}"
             )
+            ns_settings["sampling_settings"]["dKL"] = dKL_def
 
-        frac_remain = config.get("frac_remain", 0.01)
-        if "frac_remain" not in config:
+        if "frac_remain" not in ns_settings["sampling_settings"]:
+            frac_remain_def = 0.01
             _logger.warning(
-                f"Remaining fraction (frac_remain) not set in the input card. Using default: {frac_remain}"
+                f"Remaining fraction (frac_remain) not set in the input card. Using default: {frac_remain_def}"
             )
+            ns_settings["sampling_settings"]["frac_remain"] = frac_remain_def
 
-        store_raw = config.get("store_raw", False)
+        #store_raw = ns_settings.get("store_raw", False)
 
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
@@ -174,12 +195,7 @@ class USOptimizer(Optimizer):
             single_parameter_fits,
             pairwise_fits,
             use_multiplicative_prescription,
-            live_points=nlive,
-            lepsilon=lepsilon,
-            target_evidence_unc=target_evidence_unc,
-            target_post_unc=target_post_unc,
-            frac_remain=frac_remain,
-            store_raw=store_raw,
+            ns_settings=ns_settings,
         )
 
     def chi2_func_ns(self, params):
@@ -242,27 +258,26 @@ class USOptimizer(Optimizer):
             log_dir = self.results_path
 
         t1 = time.time()
+
         sampler = ultranest.ReactiveNestedSampler(
             self.free_parameters.index.tolist(),
             self.gaussian_loglikelihood,
             self.flat_prior,
             log_dir=log_dir,
-            resume=True,
+            **self.ns_settings["ReactiveNS_settings"]
         )
+
         if self.npar > 10:
             # set up step sampler. Here, we use a differential evolution slice sampler:
             sampler.stepsampler = stepsampler.SliceSampler(
                 nsteps=100,
                 generate_direction=stepsampler.generate_region_oriented_direction,
             )
+
         result = sampler.run(
-            min_num_live_points=self.live_points,
-            dlogz=self.target_evidence_unc,
-            frac_remain=self.frac_remain,
-            dKL=self.target_post_unc,
-            Lepsilon=self.lepsilon,
             update_interval_volume_fraction=0.8 if self.npar > 20 else 0.2,
             max_num_improvement_loops=0,
+            **self.ns_settings["sampling_settings"]
         )
 
         t2 = time.time()
