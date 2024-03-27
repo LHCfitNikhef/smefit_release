@@ -67,13 +67,18 @@ single_parameter_fits: False
 bounds: Null
 
 # NS settings
-nlive: 400 # number of live points used during sampling
-lepsilon: 0.05 #  Terminate when live point likelihoods are all the same, within Lepsilon tolerance.
-target_evidence_unc: 0.5 # target evidence uncertanty
-target_post_unc: 0.5 # target posterior uncertanty
-frac_remain: 0.01 # Set to a higher number (0.5) if you know the posterior is simple.
-store_raw: false # if true strare the raw result and enable resuming the job.
+ns_settings:
 
+  sampling_settings:
+    min_num_live_points: 500 # number of live points used during sampling
+    dlogz: 0.5 # target evidence uncertainty
+    frac_remain: 0.01 # Set to a higher number (0.5) if you know the posterior is simple.
+    dKL: 0.5 # target posterior uncertainty
+    Lepsilon: 0.001  #  Terminate when live point likelihoods are all the same, within Lepsilon tolerance.
+
+  # only for global fits that potentially need to be resumed
+  ReactiveNS_settings:
+    resume: "resume-similar"
 
 #MC settings
 mc_minimiser: 'cma' # Allowed options are: 'cma', 'dual_annealing', 'trust-constr'
