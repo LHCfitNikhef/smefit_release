@@ -1,31 +1,30 @@
 import numpy as np
 from utils import inspect_model
 
-MODEL_SPECS = dict(id=23, collection="Granada", mass=1, pto="NLO", eft="NHO")
+MODEL_SPECS = dict(id=23, collection="Granada", mass=1, pto="NLO", eft="NHO" )
 
 
 def inv1(results):
-    gWLf11 = results.gWLf11
-    return np.abs(gWLf11)
-
+	gWH = results.gWH
+	return np.abs(gWH)
 
 def inv2(results):
-    gWLf11 = results.gWLf11
-    gWLf22 = results.gWLf22
-    return (gWLf11 * gWLf22) / np.abs(gWLf11)
-
+	gWH = results.gWH
+	gWLf11 = results.gWLf11
+	return (gWH*gWLf11)/np.abs(gWH)
 
 def inv3(results):
-    gWLf33 = results.gWLf33
-    return np.abs(gWLf33)
-
+	gWH = results.gWH
+	gWLf22 = results.gWLf22
+	return (gWH*gWLf22)/np.abs(gWH)
 
 def inv4(results):
-    gWqf33 = results.gWqf33
-    return np.abs(gWqf33)
-
+	gWH = results.gWH
+	gWLf33 = results.gWLf33
+	return (gWH*gWLf33)/np.abs(gWH)
 
 def inv5(results):
-    gWqf33 = results.gWqf33
-    gWtiH = results.gWtiH
-    return (gWqf33 * gWtiH) / np.abs(gWqf33)
+	gWH = results.gWH
+	gWqf33 = results.gWqf33
+	return (gWH*gWqf33)/np.abs(gWH)
+

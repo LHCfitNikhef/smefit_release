@@ -195,11 +195,62 @@ class Runner:
             optimizer to be used (NS, MC or A)
         """
 
+        def MultipleConstrainError():
+            raise ValueError(
+                "Constrain with multiple coefficients do not make sense, in sigle parameter fits."
+            )
+
         config = self.run_card
+
+        # loop on all the coefficients
         for coeff in config["coefficients"].keys():
             single_coeff_config = dict(config)
             single_coeff_config["coefficients"] = {}
-            single_coeff_config["coefficients"][coeff] = config["coefficients"][coeff]
+
+            # skip contrained coeffs
+            if "constrain" in config["coefficients"][coeff]:
+                _logger.info("Skipping contrained coefficient %s", coeff)
+                continue
+
+            # if there are constrained coefficients, only
+            # relations in which appears a single indepentent
+            # coefficient make sense.
+            new_coeff_config = {}
+
+            # seach for a realtion: loop on all the coefficients
+            for coeff2, vals in config["coefficients"].items():
+                if "constrain" not in vals:
+                    continue
+
+                # if fixed value, crash
+                if isinstance(vals["constrain"], (int, float)):
+                    raise ValueError(
+                        "Fixed value constrain do not make sense for single parameter fits."
+                    )
+
+                constrain = (
+                    vals["constrain"]
+                    if isinstance(vals["constrain"], list)
+                    else [vals["constrain"]]
+                )
+
+                # only single coefficient constrain are supported
+                new_constrain = []
+                for addend in constrain:
+                    if len(addend) > 1:
+                        MultipleConstrainError()
+                    if coeff in addend:
+                        new_constrain.append(addend)
+                    # check that the coefficient appearing in all the addends is the same
+                    elif new_constrain:
+                        MultipleConstrainError()
+
+                if new_constrain:
+                    new_coeff_config[coeff2] = vals
+
+            # add fitted coefficient
+            new_coeff_config[coeff] = config["coefficients"][coeff]
+            single_coeff_config["coefficients"] = new_coeff_config
 
             opt = self.get_optimizer(optimizer)
             opt(single_coeff_config)

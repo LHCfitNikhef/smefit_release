@@ -151,6 +151,14 @@ rot_to_fit_basis: /path/to/rotation/rotation.json
 
 ```
 
+In addition, it is possible to perform a fit in a PCA rotated basis. This corresponds to the basis spanned
+by the eigenvectors of the Fisher information matrix at the linear level in the EFT expansion. To carry out such a fit,
+add the following flag
+
+```bash
+smefit NS --rotate_to_pca path/to/the/runcard/runcard.yaml
+```
+
 ```eval_rst
 .. _ns:
 ```
