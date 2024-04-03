@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Fitting the Wilson coefficients with |MC|."""
 import time
 
@@ -67,11 +68,12 @@ class MCOptimizer(Optimizer):
         result_path,
         use_quad,
         result_ID,
-        single_parameter_fits,
-        use_multiplicative_prescription,
         replica,
+        single_parameter_fits,
         use_bounds,
         minimizer_specs,
+        use_multiplicative_prescription,
+        external_chi2=None,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -80,6 +82,7 @@ class MCOptimizer(Optimizer):
             use_quad,
             single_parameter_fits,
             use_multiplicative_prescription,
+            external_chi2,
         )
         self.chi2_values = []
         self.coeff_steps = []
@@ -127,6 +130,7 @@ class MCOptimizer(Optimizer):
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
+            config.get("external_chi2", False),
         )
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
@@ -162,20 +166,25 @@ class MCOptimizer(Optimizer):
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
         )
+
+        external_chi2 = config.get("external_chi2", None)
+
         return cls(
             loaded_datasets,
             coefficients,
             config["result_path"],
             config["use_quad"],
             config["result_ID"],
-            single_parameter_fits,
-            use_multiplicative_prescription,
             config["replica"],
+            single_parameter_fits,
             use_bounds,
             minimizer_specs,
+            use_multiplicative_prescription,
+            external_chi2,
         )
 
     def get_status(self, chi2):
+
         if len(self.chi2_values) == 0:
             self.chi2_values.append(chi2)
 

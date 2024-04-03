@@ -3,6 +3,7 @@ import itertools
 import pathlib
 from collections.abc import Iterable
 
+import arviz
 import matplotlib.lines as mlines
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
@@ -10,7 +11,6 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib import cm
-import arviz
 
 from .contours_2d import confidence_ellipse, plot_contours, split_solution
 from .latex_tools import latex_packages, multicolum_table_header
@@ -42,9 +42,11 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals[f"err{cl}_high"] = cl_vals[f"high{cl}"] - cl_vals["mid"]
 
         # highest density intervals
-        hdi_widths = np.diff(arviz.hdi(dist.values, hdi=cl * 1e-2, multimodal=True), axis=1)
+        hdi_widths = np.diff(
+            arviz.hdi(dist.values, hdi=cl * 1e-2, multimodal=True), axis=1
+        )
         cl_vals[f"hdi_{cl}"] = np.sum(hdi_widths.flatten())
-        
+
     cl_vals["pull"] = cl_vals["mid"] / cl_vals["mean_err68"]
 
     return cl_vals
@@ -89,7 +91,6 @@ def compute_confidence_level(
                 bounds[(group, latex_name)] = pd.DataFrame(
                     [get_confidence_values(posterior[name], has_posterior)]
                 ).stack()
-
     return pd.DataFrame(bounds)
 
 
@@ -269,7 +270,6 @@ class CoefficientsPlotter:
             error: dict
                confidence level bounds per fit and coefficient
         """
-
         df = pd.DataFrame(error)
         groups, axs = self._get_suplblots(figsize)
 
@@ -307,12 +307,12 @@ class CoefficientsPlotter:
         plt.savefig(f"{self.report_folder}/coefficient_bar.png")
 
     def plot_pull(
-                self,
-                pull,
-                x_min,
-                x_max,
-                figsize=(10, 15),
-                legend_loc="best",
+        self,
+        pull,
+        x_min,
+        x_max,
+        figsize=(10, 15),
+        legend_loc="best",
     ):
         """
         Plot error bars at given confidence level
@@ -338,14 +338,13 @@ class CoefficientsPlotter:
             ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
             ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
 
-
         self._plot_logo(axs[-1])
         axs[-1].set_xlabel(r"${\rm Fit\:Residual\:}(\sigma)$", fontsize=20)
         axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_pull.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_pull.png")
-        
+
     # def plot_pull(
     #     self,
     #     pull,
@@ -623,7 +622,6 @@ class CoefficientsPlotter:
             for i in range(len(labels[1:]))
         ]
 
-
         ax2.legend(
             handles,
             labels[1:],
@@ -663,7 +661,6 @@ class CoefficientsPlotter:
             try:
                 ax = plt.subplot(grid_size, grid_size, idx + 1)
             except ValueError:
-
                 ax = plt.subplot(grid_size, grid_size, idx + 1)
             # loop on fits
             for clr_idx, posterior in enumerate(posteriors):
@@ -699,7 +696,6 @@ class CoefficientsPlotter:
                     transform=ax.transAxes,
                     fontsize=25,
                 )
-
                 ax.tick_params(which="both", direction="in", labelsize=22.5)
                 ax.tick_params(labelleft=False)
             cnt += 1
@@ -721,20 +717,13 @@ class CoefficientsPlotter:
 
         ax_logo_nr = int(np.ceil(cnt / grid_size)) * grid_size
         ax_logo = plt.subplot(grid_size, grid_size, ax_logo_nr)
-        # ax_logo = fig.axes[grid_size]
-        # ax_logo.patch.set_visible(False)
-        # ax_logo.xaxis.set_visible(False)
-        # ax_logo.yaxis.set_visible(False)
-        plt.axis('off')
+
+        plt.axis("off")
         self._plot_logo(ax_logo, [0, 1, 0.001, 0.4])
-        # self._plot_logo(ax_logo, [0, 1, 1.1, 1.3])
 
         fig.tight_layout(
             rect=[0, 0.05 * (5.0 / grid_size), 1, 1 - 0.08 * (5.0 / grid_size)]
         )
-        # fig.tight_layout()
-
-
 
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
         plt.savefig(f"{self.report_folder}/coefficient_histo.png")
@@ -948,11 +937,7 @@ class CoefficientsPlotter:
             ]
         )
         L.extend(multicolum_table_header(bounds.keys(), ncolumn=1))
-        L.append(
-            r"Class & Coefficients"
-            + r"& 95\% CL Bounds" * nfits
-            + r"\\ \hline"
-        )
+        L.append(r"Class & Coefficients" + r"& 95\% CL Bounds" * nfits + r"\\ \hline")
 
         for group, coeff_group in self.coeff_info.groupby(level=0):
             coeff_group = coeff_group.droplevel(0)
@@ -976,11 +961,13 @@ class CoefficientsPlotter:
                     # double solution
                     try:
                         cl_vals_2 = bound_df[(group, latex_name)].dropna()[1]
-                        temp2 += f"& [{cl_vals_2['low95']:.3f}, {cl_vals_2['high95']:.3f}]"
+                        temp2 += (
+                            f"& [{cl_vals_2['low95']:.3f}, {cl_vals_2['high95']:.3f}]"
+                        )
                     except KeyError:
                         temp2 += r" &"
 
-                #append double solution
+                # append double solution
                 if temp2 != " &" * (nfits + 1) and "textemdash" not in temp:
                     temp += f" \\\\ \\cline{{3-{(2 + nfits)}}}"
                     temp += temp2

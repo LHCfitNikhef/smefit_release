@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Fitting the Wilson coefficients with |NS|"""
 import time
 
@@ -77,6 +78,7 @@ class USOptimizer(Optimizer):
         target_post_unc=0.5,
         frac_remain=0.01,
         store_raw=False,
+        external_chi2=None,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -85,6 +87,7 @@ class USOptimizer(Optimizer):
             use_quad,
             single_parameter_fits,
             use_multiplicative_prescription,
+            external_chi2,
         )
         self.live_points = live_points
         self.lepsilon = lepsilon
@@ -111,19 +114,23 @@ class USOptimizer(Optimizer):
             created object
         """
 
-        loaded_datasets = load_datasets(
-            config["data_path"],
-            config["datasets"],
-            config["coefficients"],
-            config["order"],
-            config["use_quad"],
-            config["use_theory_covmat"],
-            config["use_t0"],
-            config.get("use_multiplicative_prescription", False),
-            config.get("theory_path", None),
-            config.get("rot_to_fit_basis", None),
-            config.get("uv_couplings", False),
-        )
+        if config.get("datasets") is not None:
+            loaded_datasets = load_datasets(
+                config["data_path"],
+                config["datasets"],
+                config["coefficients"],
+                config["order"],
+                config["use_quad"],
+                config["use_theory_covmat"],
+                config["use_t0"],
+                config.get("use_multiplicative_prescription", False),
+                config.get("theory_path", None),
+                config.get("rot_to_fit_basis", None),
+                config.get("uv_couplings", False),
+                config.get("external_chi2", False),
+            )
+        elif config.get("external_chi2") is not None:
+            loaded_datasets = None
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
@@ -165,6 +172,9 @@ class USOptimizer(Optimizer):
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
         )
+
+        external_chi2 = config.get("external_chi2", None)
+
         return cls(
             loaded_datasets,
             coefficients,
@@ -180,6 +190,7 @@ class USOptimizer(Optimizer):
             target_post_unc=target_post_unc,
             frac_remain=frac_remain,
             store_raw=store_raw,
+            external_chi2=external_chi2,
         )
 
     def chi2_func_ns(self, params):
