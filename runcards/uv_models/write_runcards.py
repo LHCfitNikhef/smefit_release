@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import argparse
 import pathlib
 
@@ -9,9 +10,9 @@ MAX_VALUE = 1000
 MIN_VALUE = -1000
 
 
-def load_base() -> dict:
+def load_base(collider) -> dict:
     """Load basic runcard."""
-    with open(here / "base_runcard.yaml", encoding="utf-8") as f:
+    with open(here / f"base_runcard_{collider}.yaml", encoding="utf-8") as f:
         card = yaml.safe_load(f)
     return card
 
@@ -68,10 +69,11 @@ def dump_runcard(
     pto: str,
     fitting_mode: str,
     mass: str,
+    collider: str
 ) -> None:
     """Parse a model card to a SMEFiT runcard."""
     if "OneLoop" in collection:
-        file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_1Loop.yaml"
+        file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Loop.yaml"
     elif "Multiparticle" in collection:
         file_path = f"UV_scan/{collection}/out_UV_dict_Coll_MultiParticleCollection_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
     else:
@@ -80,14 +82,14 @@ def dump_runcard(
     with open(here / file_path, "r", encoding="utf-8") as f:
         model_dict = yaml.safe_load(f)
 
-    runcard = load_base()
+    runcard = load_base(collider)
 
     # orders
     runcard["order"] = pto
     runcard["use_quad"] = eft_order == "HO"
 
     # names
-    runcard["resultID"] = f"Model_UV_{idx_model}_{pto}_{eft_order}"
+    #runcard["result_ID"] = f"Model_UV_{idx_model}_{pto}_{eft_order}"
     runcard["Model name"] = model_dict["Model name"]
     runcard["UV Collection"] = model_dict["UV Collection"]
     runcard["UV model"] = model_dict["UV model"]
@@ -98,7 +100,7 @@ def dump_runcard(
 
     runcard["coefficients"] = coeff_dict
     with open(
-        f"{here.parent}/{collection}_{flag}_{idx_model}_{pto}_{eft_order}_{fitting_mode}.yaml",
+        f"{here.parent}/smefit_fcc_uv/{collection}_{collider}_{flag}_{idx_model}_{mass}_{pto}_{eft_order}_{fitting_mode}.yaml",
         "w",
         encoding="utf-8",
     ) as f:
@@ -129,6 +131,7 @@ if __name__ == "__main__":
         required=True,
     )
     parser.add_argument("-m", "--mass", help="Particle masses", type=str, default="1")
+    parser.add_argument("-d", "--collider", help="collider", type=str, required=True)
     args = parser.parse_args()
 
     dump_runcard(
@@ -138,4 +141,5 @@ if __name__ == "__main__":
         args.qcd_order,
         args.mode,
         args.mass,
+        args.collider
     )

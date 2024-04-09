@@ -194,9 +194,10 @@ def plot_spider(
     prop_cycle = plt.rcParams["axes.prop_cycle"]
     colors = prop_cycle.by_key()["color"]
 
-    markers = itertools.cycle(['+', 'x'])
+    markers = itertools.cycle(['*', 'o', 'P'])
 
     for i, data_fit_i in enumerate(data.T):
+
         ax.plot(theta, data_fit_i, color=colors[i], zorder=1)
         ax.scatter(
             theta, data_fit_i, marker=next(markers), s=50, color=colors[i], zorder=1
@@ -209,6 +210,7 @@ def plot_spider(
             color=colors[i],
             zorder=1,
         )
+        
 
     for i, axis in enumerate(axes):
         if i > 0:
@@ -241,13 +243,16 @@ def plot_spider(
 
 
 
+
+
+
         #axis.set_ylim(0, ymax)
 
     ax.set_varlabels(spoke_labels, fontsize=fontsize)
-    ax.tick_params(axis="x", pad=14)
+    ax.tick_params(axis="x", pad=45)
 
     ax2 = fig.add_axes(rect=[0, 0, 1, 1])
-    width_disk = 0.05
+    width_disk = 0.01
     ax2.patch.set_visible(False)
     ax2.grid("off")
     ax2.xaxis.set_visible(False)
@@ -257,24 +262,23 @@ def plot_spider(
 
     ax2.set_title(title, fontsize=18)
 
-    class_names = [op[0] for op in df.index]
-    angle_sweep = [
-        sum(op_type in index for index in df.index)
-        / len(df)
-        for op_type in class_names
-    ]
+    class_names = df.index.get_level_values(0)
+    angle_sweep = 360 * class_names.value_counts(sort=False) / len(class_names)
 
     # determine angles of the colored arcs
     prop_cycle = plt.rcParams["axes.prop_cycle"]
     colors = prop_cycle.by_key()["color"]
 
-    filled_start_angle = 90 - 180 / 3
+    filled_start_angle = 0 # 12'o clock
 
-    for i, op_type in enumerate(class_names):
-        filled_end_angle = (
-                angle_sweep[i] * 360 + filled_start_angle
-        )  # End angle in degrees
+
+    for i, (idx, angle) in enumerate(angle_sweep.items()):
+
+        filled_end_angle = angle + filled_start_angle  #  End angle in degrees
+
         center = (0.5, 0.5)  # Coordinates relative to the figure
+
+
 
         alpha = 0.3
 
@@ -284,8 +288,8 @@ def plot_spider(
         filled_wedge = patches.Wedge(
             center,
             radius,
-            filled_start_angle,
-            filled_end_angle,
+            filled_start_angle + 90 - 0.5 * angle_sweep.iloc[0],  # start at 12'o clock
+            filled_end_angle + 90 - 0.5 * angle_sweep.iloc[0],
             facecolor=colors[i],
             alpha=alpha,
             ec=None,
@@ -294,7 +298,12 @@ def plot_spider(
         )
         ax2.add_patch(filled_wedge)
 
-        filled_start_angle += angle_sweep[i] * 360
+        mid_angle = filled_start_angle - 0.5 * angle_sweep.iloc[0] + 0.5 * (filled_end_angle - filled_start_angle)
+        print(i, mid_angle)
+        ax.text(mid_angle * (np.pi / 180), 1.2, mod_dict[idx], color='black', fontsize=8,
+                bbox=dict(facecolor='none', edgecolor='black', boxstyle='round,pad=1'))
+
+        filled_start_angle = filled_end_angle
 
     handles = [
         plt.Line2D(
@@ -322,7 +331,7 @@ def plot_spider(
     #self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
 
-    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv_test/results_uv_param/spider_plot.png", bbox_inches="tight")
+    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_v3.png", bbox_inches="tight")
 
 
 collections = ["Granada"]
@@ -331,44 +340,44 @@ collections = ["Granada"]
 here = pathlib.Path(__file__).parent
 
 # result dir
-result_dir = here / "results_fcc"
-pathlib.Path.mkdir(result_dir, parents=True, exist_ok=True)
-
-mod_list = []
-for col in collections:
-    base_path = pathlib.Path(f"{here.parent}/runcards/uv_models/UV_scan/{col}/")
-    sys.path = [str(base_path)] + sys.path
-    for p in base_path.iterdir():
-        if '21' in p.name:
-            continue
-        if p.name.startswith("InvarsFit") and p.suffix == ".py":
-            mod_list.append(importlib.import_module(f"{p.stem}"))
-
-
+# result_dir = here / "results_fcc"
+# pathlib.Path.mkdir(result_dir, parents=True, exist_ok=True)
+#
+# mod_list = []
+# for col in collections:
+#     base_path = pathlib.Path(f"{here.parent}/runcards/uv_models/UV_scan/{col}/")
+#     sys.path = [str(base_path)] + sys.path
+#     for p in base_path.iterdir():
+#         if '21' in p.name:
+#             continue
+#         if p.name.startswith("InvarsFit") and p.suffix == ".py":
+#             mod_list.append(importlib.import_module(f"{p.stem}"))
+#
+#
 use("PDF")
 rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
 rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
-
-# compute the invariants
-pQCD = ['NLO']
-EFT = ['NHO']
-
-for model in mod_list:
-    for pQCD in ['NLO']:
-        for EFT in ['HO']:
-            model.MODEL_SPECS['pto'] = pQCD
-            model.MODEL_SPECS['eft'] = EFT
-            invariants = []
-            for k, attr in model.__dict__.items():
-                if k.startswith('inv'):
-                    invariants.append(attr)
-            try:
-                model.inspect_model(model.MODEL_SPECS, invariants)
-            except FileNotFoundError:
-                print("File not found", model)
-                continue
-
-sys.exit()
+#
+# # compute the invariants
+# pQCD = ['NLO']
+# EFT = ['NHO']
+#
+# for model in mod_list:
+#     for pQCD in ['NLO']:
+#         for EFT in ['HO']:
+#             model.MODEL_SPECS['pto'] = pQCD
+#             model.MODEL_SPECS['eft'] = EFT
+#             invariants = []
+#             for k, attr in model.__dict__.items():
+#                 if k.startswith('inv'):
+#                     invariants.append(attr)
+#             try:
+#                 model.inspect_model(model.MODEL_SPECS, invariants)
+#             except FileNotFoundError:
+#                 print("File not found", model)
+#                 continue
+#
+# sys.exit()
 # Specify the path to the JSON file
 posterior_path = f"{here.parent}/results/smefit_fcc_uv/{{}}_{{}}_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
 
@@ -416,13 +425,13 @@ def get_bounds(collection, mod_nrs):
                     samples_2 = np.array(samples_2_list)
                     samples_3 = np.array(samples_3_list)
 
-                    lhc_up = np.percentile(np.abs(samples_1), 95)
-                    hllhc_up = np.percentile(np.abs(samples_2), 95)
-                    fcc_up = np.percentile(np.abs(samples_3), 95)
+                    lhc_width = np.percentile(samples_1, 97.5) - np.percentile(samples_1, 2.5)
+                    hllhc_width = np.percentile(samples_2, 97.5) - np.percentile(samples_2, 2.5)
+                    fcc_width = np.percentile(samples_3, 97.5) - np.percentile(samples_3, 2.5)
 
-                    lhc_bounds[(mod, key)] = [1 / lhc_up]
-                    hllhc_bounds[(mod, key)] = [1 / hllhc_up]
-                    fcc_bounds[(mod, key)] = [1 / fcc_up]
+                    lhc_bounds[(mod, key)] = [lhc_width]
+                    hllhc_bounds[(mod, key)] = [hllhc_width]
+                    fcc_bounds[(mod, key)] = [fcc_width]
 
                     x_labels.append(mod_dict[mod])
 
@@ -434,11 +443,13 @@ def get_bounds(collection, mod_nrs):
     bounds = pd.concat([lhc_bounds, hllhc_bounds, fcc_bounds], axis=1)
 
 
-    plot_spider(bounds, title='Mass reach on UV particles',
+    plot_spider(bounds, title=r'${\rm UV\:couplings}$',
                 labels=[r"${\rm LHC}$", r"${\rm HL}-{\rm LHC}$", r"${\rm FCCee}$"],
                 legend_loc='upper center')
 
 
-get_bounds(["Granada", "Granada", "OneLoop"], [5, 23, "Varphi"])
+# get_bounds(["Granada", "Granada", "Granada", "Granada", "OneLoop"], ['48_10', '49_10', 5, 23, "Varphi"])
+get_bounds(["Granada", "Granada", "Granada", "OneLoop", "OneLoop", "OneLoop"],
+           ['48_10', '49_10', 5, "Varphi", "T1_10", "T2_10"])
 
 #
