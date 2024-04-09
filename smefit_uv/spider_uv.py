@@ -164,8 +164,7 @@ def plot_spider(
 
     if log_scale:
         data = log_transform(data, delta)
-    else:
-        data = ratio
+
 
     spoke_labels = [inv_param_dict[op[0]][op[1]] for op in df.index]
 
@@ -177,9 +176,13 @@ def plot_spider(
     n_axis = 3
     axes = [fig.add_axes(rect, projection="radar") for i in range(n_axis)]
 
-    y_log_min = math.floor(np.log10(df.values.min()))
-    y_log_max = math.ceil(np.log10(df.values.max()))
-    radial_labels = [rf"$\mathbf{{10^{{{i}}}}}$" for i in np.arange(y_log_min, y_log_max + 1)]
+    # y_log_min = math.floor(np.log10(df.values.min()))
+    # y_log_max = math.ceil(np.log10(df.values.max()))
+    # radial_labels = [rf"$\mathbf{{10^{{{i}}}}}$" for i in np.arange(y_log_min, y_log_max + 1)]
+
+    y_log_min = math.floor(df.values.min())
+    y_log_max = math.ceil(df.values.max())
+    radial_labels = [f"{i}" for i in np.arange(y_log_min, y_log_max + 1)]
 
 
     # take first axis as main, the rest only serve to show the remaining percentage axes
@@ -215,7 +218,7 @@ def plot_spider(
     for i, axis in enumerate(axes):
         if i > 0:
             axis.patch.set_visible(False)
-            # axis.rgrid("off")
+            #axis.rgrid("off")
             axis.xaxis.set_visible(False)
 
         angle = angles[i]
@@ -223,9 +226,20 @@ def plot_spider(
 
         axis.yaxis.set_tick_params(labelsize=11, zorder=100)
 
+        # if i == 0:
+        #     axis.set_rgrids(
+        #         [i for i in range(10)],
+        #         angle=angle,
+        #         labels=radial_labels,
+        #         horizontalalignment=text_alignment,
+        #         zorder=0,
+        #     )
+        # else:
+        #     axis.set_rgrids([], angle=angle)  # Hide radial lines here
+
         if i == 0:
             axis.set_rgrids(
-                np.arange(y_log_min, y_log_max + 1, dtype=float),
+                [i for i in range(9)],
                 angle=angle,
                 labels=radial_labels,
                 horizontalalignment=text_alignment,
@@ -234,22 +248,17 @@ def plot_spider(
         else:
 
             axis.set_rgrids(
-                np.arange(y_log_min, y_log_max + 1, dtype=float)[1:],
+                [i for i in range(9)][1:],
                 labels=radial_labels[1:],
                 angle=angle,
                 horizontalalignment=text_alignment,
                 zorder=0,
             )
 
-
-
-
-
-
-        #axis.set_ylim(0, ymax)
+        axis.set_ylim(0, 8.5)
 
     ax.set_varlabels(spoke_labels, fontsize=fontsize)
-    ax.tick_params(axis="x", pad=45)
+    ax.tick_params(axis="x", pad=35)
 
     ax2 = fig.add_axes(rect=[0, 0, 1, 1])
     width_disk = 0.01
@@ -257,10 +266,10 @@ def plot_spider(
     ax2.grid("off")
     ax2.xaxis.set_visible(False)
     ax2.yaxis.set_visible(False)
-    delta_disk = 0.3
+    delta_disk = 0
     radius = outer_ax_width / 2 + (1 + delta_disk) * width_disk
 
-    ax2.set_title(title, fontsize=18)
+    #ax2.set_title(title, fontsize=18)
 
     class_names = df.index.get_level_values(0)
     angle_sweep = 360 * class_names.value_counts(sort=False) / len(class_names)
@@ -298,10 +307,10 @@ def plot_spider(
         )
         ax2.add_patch(filled_wedge)
 
-        mid_angle = filled_start_angle - 0.5 * angle_sweep.iloc[0] + 0.5 * (filled_end_angle - filled_start_angle)
+        mid_angle = filled_start_angle - 0.5 * angle_sweep.iloc[0] + 0.1 * (filled_end_angle - filled_start_angle)
         print(i, mid_angle)
-        ax.text(mid_angle * (np.pi / 180), 1.2, mod_dict[idx], color='black', fontsize=8,
-                bbox=dict(facecolor='none', edgecolor='black', boxstyle='round,pad=1'))
+        ax.text(mid_angle * (np.pi / 180), 11, mod_dict[idx], color='black', fontsize=12, ha='center', va='bottom',
+                bbox=dict(facecolor='none', edgecolor=colors[i], pad=10.0))
 
         filled_start_angle = filled_end_angle
 
@@ -331,7 +340,7 @@ def plot_spider(
     #self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
 
-    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_v3.png", bbox_inches="tight")
+    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv.pdf", bbox_inches="tight")
 
 
 collections = ["Granada"]
@@ -442,10 +451,17 @@ def get_bounds(collection, mod_nrs):
 
     bounds = pd.concat([lhc_bounds, hllhc_bounds, fcc_bounds], axis=1)
 
+    bounds.drop( (5, 'inv1'), inplace=True)
+
+
+
+
+
 
     plot_spider(bounds, title=r'${\rm UV\:couplings}$',
-                labels=[r"${\rm LHC}$", r"${\rm HL}-{\rm LHC}$", r"${\rm FCCee}$"],
-                legend_loc='upper center')
+                labels=[  '$\mathrm{LHC}$', '$\mathrm{HL}\,\\textnormal{-}\,\mathrm{LHC}$',
+  '$\mathrm{HL}\,\\textnormal{-}\,\mathrm{LHC}+\mathrm{FCC}\,\\textnormal{-}\,\mathrm{ee}$',],
+                legend_loc='upper center', log_scale=False, figsize=[10, 10])
 
 
 # get_bounds(["Granada", "Granada", "Granada", "Granada", "OneLoop"], ['48_10', '49_10', 5, 23, "Varphi"])
