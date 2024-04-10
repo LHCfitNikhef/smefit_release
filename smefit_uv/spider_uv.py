@@ -160,10 +160,11 @@ def plot_spider(
     # normalise to first fit
     data = df.values
 
-    delta = 0
+    delta = np.abs(np.log10(min(data.flatten()))) + 0.1
 
     if log_scale:
         data = log_transform(data, delta)
+
 
 
     spoke_labels = [inv_param_dict[op[0]][op[1]] for op in df.index]
@@ -176,13 +177,33 @@ def plot_spider(
     n_axis = 3
     axes = [fig.add_axes(rect, projection="radar") for i in range(n_axis)]
 
-    # y_log_min = math.floor(np.log10(df.values.min()))
-    # y_log_max = math.ceil(np.log10(df.values.max()))
+    y_log_min = math.floor(np.log10(df.values.min()))
+    y_log_max = math.ceil(np.log10(df.values.max()))
+
+
+
+    radial_lines = [i + np.log10(j) for i in range(y_log_max + 1) for j in range(1, 10)]
+    radial_labels = []
+    for rad_line in radial_lines:
+        if rad_line % 1 == 0:
+            radial_labels.append(rf"$\mathbf{{10^{{{int(rad_line)}}}}}$")
+        else:
+            radial_labels.append("")
+    import pdb; pdb.set_trace()
+
+
+
+
+    # for radial_line in np.arange(y_log_min, y_log_max + 1, n_lines):
+    #     radial
     # radial_labels = [rf"$\mathbf{{10^{{{i}}}}}$" for i in np.arange(y_log_min, y_log_max + 1)]
 
-    y_log_min = math.floor(df.values.min())
-    y_log_max = math.ceil(df.values.max())
-    radial_labels = [f"{i}" for i in np.arange(y_log_min, y_log_max + 1)]
+
+
+
+    # y_log_min = math.floor(df.values.min())
+    # y_log_max = math.ceil(df.values.max())
+    # radial_labels = [f"{i}" for i in np.arange(y_log_min, y_log_max + 1)]
 
 
     # take first axis as main, the rest only serve to show the remaining percentage axes
@@ -237,9 +258,27 @@ def plot_spider(
         # else:
         #     axis.set_rgrids([], angle=angle)  # Hide radial lines here
 
+        # if i == 0:
+        #     axis.set_rgrids(
+        #         np.arange(y_log_min, y_log_max + 1),
+        #         angle=angle,
+        #         labels=radial_labels,
+        #         horizontalalignment=text_alignment,
+        #         zorder=0,
+        #     )
+        # else:
+        #
+        #     axis.set_rgrids(
+        #         np.arange(y_log_min, y_log_max + 1)[1:],
+        #         labels=radial_labels[1:],
+        #         angle=angle,
+        #         horizontalalignment=text_alignment,
+        #         zorder=0,
+        #     )
+
         if i == 0:
             axis.set_rgrids(
-                [i for i in range(9)],
+                radial_lines,
                 angle=angle,
                 labels=radial_labels,
                 horizontalalignment=text_alignment,
@@ -248,14 +287,15 @@ def plot_spider(
         else:
 
             axis.set_rgrids(
-                [i for i in range(9)][1:],
+                radial_lines[1:],
                 labels=radial_labels[1:],
                 angle=angle,
                 horizontalalignment=text_alignment,
                 zorder=0,
             )
 
-        axis.set_ylim(0, 8.5)
+
+        axis.set_ylim(0, 1.1 * y_log_max)
 
     ax.set_varlabels(spoke_labels, fontsize=fontsize)
     ax.tick_params(axis="x", pad=35)
@@ -309,8 +349,8 @@ def plot_spider(
 
         mid_angle = filled_start_angle - 0.5 * angle_sweep.iloc[0] + 0.1 * (filled_end_angle - filled_start_angle)
         print(i, mid_angle)
-        ax.text(mid_angle * (np.pi / 180), 11, mod_dict[idx], color='black', fontsize=12, ha='center', va='bottom',
-                bbox=dict(facecolor='none', edgecolor=colors[i], pad=10.0))
+        ax.text(mid_angle * (np.pi / 180), 1.2 * y_log_max, mod_dict[idx], color='black', fontsize=12, ha='center', va='bottom',
+                bbox=dict(facecolor='none', edgecolor=colors[i], boxstyle='round'))
 
         filled_start_angle = filled_end_angle
 
@@ -340,7 +380,7 @@ def plot_spider(
     #self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
 
-    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv.pdf", bbox_inches="tight")
+    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv_v4.png", bbox_inches="tight")
 
 
 collections = ["Granada"]
@@ -351,7 +391,7 @@ here = pathlib.Path(__file__).parent
 # result dir
 # result_dir = here / "results_fcc"
 # pathlib.Path.mkdir(result_dir, parents=True, exist_ok=True)
-#
+
 # mod_list = []
 # for col in collections:
 #     base_path = pathlib.Path(f"{here.parent}/runcards/uv_models/UV_scan/{col}/")
@@ -361,16 +401,16 @@ here = pathlib.Path(__file__).parent
 #             continue
 #         if p.name.startswith("InvarsFit") and p.suffix == ".py":
 #             mod_list.append(importlib.import_module(f"{p.stem}"))
-#
-#
+
+
 use("PDF")
 rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
 rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 #
 # # compute the invariants
-# pQCD = ['NLO']
-# EFT = ['NHO']
-#
+pQCD = ['NLO']
+EFT = ['NHO']
+
 # for model in mod_list:
 #     for pQCD in ['NLO']:
 #         for EFT in ['HO']:
@@ -385,10 +425,10 @@ rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 #             except FileNotFoundError:
 #                 print("File not found", model)
 #                 continue
-#
-# sys.exit()
+# #
+#sys.exit()
 # Specify the path to the JSON file
-posterior_path = f"{here.parent}/results/smefit_fcc_uv/{{}}_{{}}_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
+posterior_path = f"{here.parent}/results/smefit_fcc_uv_spider/{{}}_{{}}_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
 
 
 def get_bounds(collection, mod_nrs):
@@ -451,21 +491,14 @@ def get_bounds(collection, mod_nrs):
 
     bounds = pd.concat([lhc_bounds, hllhc_bounds, fcc_bounds], axis=1)
 
-    bounds.drop( (5, 'inv1'), inplace=True)
 
-
-
-
-
+    bounds.drop( ("5_10", 'inv1'), inplace=True)
 
     plot_spider(bounds, title=r'${\rm UV\:couplings}$',
                 labels=[  '$\mathrm{LHC}$', '$\mathrm{HL}\,\\textnormal{-}\,\mathrm{LHC}$',
   '$\mathrm{HL}\,\\textnormal{-}\,\mathrm{LHC}+\mathrm{FCC}\,\\textnormal{-}\,\mathrm{ee}$',],
-                legend_loc='upper center', log_scale=False, figsize=[10, 10])
+                legend_loc='upper center', log_scale=True, figsize=[10, 10])
 
 
-# get_bounds(["Granada", "Granada", "Granada", "Granada", "OneLoop"], ['48_10', '49_10', 5, 23, "Varphi"])
-get_bounds(["Granada", "Granada", "Granada", "OneLoop", "OneLoop", "OneLoop"],
-           ['48_10', '49_10', 5, "Varphi", "T1_10", "T2_10"])
-
-#
+get_bounds(["Granada", "Granada", "OneLoop", "OneLoop", "Granada", "OneLoop"],
+           ['48_10', '49_10', "T1_10", "T2_10", '5_10', "Varphi_10"])
