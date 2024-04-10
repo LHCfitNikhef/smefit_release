@@ -160,7 +160,7 @@ def plot_spider(
     # normalise to first fit
     data = df.values
 
-    delta = np.abs(np.log10(min(data.flatten()))) + 0.1
+    delta = 1 #np.abs(np.log10(min(data.flatten()))) + 0.1
 
     if log_scale:
         data = log_transform(data, delta)
@@ -182,16 +182,13 @@ def plot_spider(
 
 
 
-    radial_lines = [i + np.log10(j) for i in range(y_log_max + 1) for j in range(1, 10)]
+    radial_lines = [i + np.log10(j) for i in range(y_log_max - y_log_min) for j in range(1, 10)] + [y_log_max + 1]
     radial_labels = []
-    for rad_line in radial_lines:
-        if rad_line % 1 == 0:
-            radial_labels.append(rf"$\mathbf{{10^{{{int(rad_line)}}}}}$")
+    for i in range(y_log_min, y_log_max + 1):
+        if i < y_log_max:
+            radial_labels += [rf"$\mathbf{{10^{{{int(i)}}}}}$"] + 8*['']
         else:
-            radial_labels.append("")
-    import pdb; pdb.set_trace()
-
-
+            radial_labels += [rf"$\mathbf{{10^{{{int(i)}}}}}$"]
 
 
     # for radial_line in np.arange(y_log_min, y_log_max + 1, n_lines):
@@ -295,7 +292,7 @@ def plot_spider(
             )
 
 
-        axis.set_ylim(0, 1.1 * y_log_max)
+        axis.set_ylim(0, 0.1 + max(radial_lines))
 
     ax.set_varlabels(spoke_labels, fontsize=fontsize)
     ax.tick_params(axis="x", pad=35)
@@ -349,7 +346,7 @@ def plot_spider(
 
         mid_angle = filled_start_angle - 0.5 * angle_sweep.iloc[0] + 0.1 * (filled_end_angle - filled_start_angle)
         print(i, mid_angle)
-        ax.text(mid_angle * (np.pi / 180), 1.2 * y_log_max, mod_dict[idx], color='black', fontsize=12, ha='center', va='bottom',
+        ax.text(mid_angle * (np.pi / 180), 1.3 * (y_log_max + delta), mod_dict[idx], color='black', fontsize=12, ha='center', va='bottom',
                 bbox=dict(facecolor='none', edgecolor=colors[i], boxstyle='round'))
 
         filled_start_angle = filled_end_angle
@@ -380,7 +377,7 @@ def plot_spider(
     #self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
 
-    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv_v4.png", bbox_inches="tight")
+    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv.png", bbox_inches="tight")
 
 
 collections = ["Granada"]
@@ -431,7 +428,13 @@ EFT = ['NHO']
 posterior_path = f"{here.parent}/results/smefit_fcc_uv_spider/{{}}_{{}}_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
 
 
+
 def get_bounds(collection, mod_nrs):
+
+    n_cols = 4
+    n_rows = 3
+    fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
+    plot_nr = 1
     
     lhc_bounds = {}
     hllhc_bounds = {}
@@ -474,6 +477,40 @@ def get_bounds(collection, mod_nrs):
                     samples_2 = np.array(samples_2_list)
                     samples_3 = np.array(samples_3_list)
 
+
+                    ax = plt.subplot(n_rows, n_cols, plot_nr)
+                    plot_settings = {"bins": "fd",
+                        "density":True,
+                        "edgecolor": "black",
+                        "alpha": 0.4}
+                    ax.hist(samples_1, **plot_settings)
+                    ax.hist(samples_2, **plot_settings)
+                    ax.hist(samples_3, **plot_settings)
+                    ax.tick_params(which="both", direction="in", labelsize=22.5)
+                    ax.tick_params(labelleft=False)
+
+                    ax.text(
+                        0.1,
+                        0.95,
+                        inv_param_dict[mod][key],
+                        fontsize=12,
+                        ha="left",
+                        va="top",
+                        transform=ax.transAxes
+                    )
+
+                    ax.text(
+                        0.95,
+                        0.95,
+                        mod_dict[mod],
+                        fontsize=12,
+                        ha="right",
+                        va="top",
+                        transform=ax.transAxes
+                    )
+
+                    plot_nr += 1
+
                     lhc_width = np.percentile(samples_1, 97.5) - np.percentile(samples_1, 2.5)
                     hllhc_width = np.percentile(samples_2, 97.5) - np.percentile(samples_2, 2.5)
                     fcc_width = np.percentile(samples_3, 97.5) - np.percentile(samples_3, 2.5)
@@ -484,7 +521,7 @@ def get_bounds(collection, mod_nrs):
 
                     x_labels.append(mod_dict[mod])
 
-
+    fig.savefig('/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/posteriors.png')
     lhc_bounds = pd.DataFrame(lhc_bounds, index=[r"${\rm LHC}$"]).T
     hllhc_bounds = pd.DataFrame(hllhc_bounds, index=[r"${\rm HL-LHC}$"]).T
     fcc_bounds = pd.DataFrame(fcc_bounds, index=[r"${\rm FCC}$"]).T
@@ -500,5 +537,5 @@ def get_bounds(collection, mod_nrs):
                 legend_loc='upper center', log_scale=True, figsize=[10, 10])
 
 
-get_bounds(["Granada", "Granada", "OneLoop", "OneLoop", "Granada", "OneLoop"],
+get_bounds(["Granada", "Granada", "OneLoop", "OneLoop", "Granada","OneLoop"],
            ['48_10', '49_10', "T1_10", "T2_10", '5_10', "Varphi_10"])
