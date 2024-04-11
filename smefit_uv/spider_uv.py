@@ -9,7 +9,7 @@ from pathlib import Path
 from latex_dicts import mod_dict
 from latex_dicts import uv_param_dict
 from latex_dicts import inv_param_dict
-#import arviz as az
+import arviz as az
 import math
 from sigfig import round
 import pandas as pd
@@ -159,7 +159,7 @@ def plot_spider(
 
     # normalise to first fit
     data = df.values
-
+    
     y_log_min = math.floor(np.log10(df.values.min()))
     y_log_max = math.ceil(np.log10(df.values.max()))
 
@@ -247,7 +247,6 @@ def plot_spider(
                 zorder=0,
             )
 
-        import pdb; pdb.set_trace()
         axis.set_ylim(0, 0.1 + max(radial_lines))
 
     ax.set_varlabels(spoke_labels, fontsize=fontsize)
@@ -330,10 +329,20 @@ def plot_spider(
         bbox_transform=fig.transFigure,
     )
 
+    logo = plt.imread("/data/theorie/jthoeve/smefit_release/src/smefit/analyze/logo.png")
+
+    ax2.imshow(
+        logo,
+        aspect="auto",
+        transform=ax2.transAxes,
+        extent=[0.85, 0.98, 0, 0.05],
+        zorder=10,
+    )
+
     #self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
 
-    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv.pdf", bbox_inches="tight")
+    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv_hdi.pdf", bbox_inches="tight")
 
 
 collections = ["Multiparticle"]
@@ -344,7 +353,7 @@ here = pathlib.Path(__file__).parent
 # result dir
 result_dir = here / "results_fcc"
 pathlib.Path.mkdir(result_dir, parents=True, exist_ok=True)
-
+#
 # mod_list = []
 # for col in collections:
 #     base_path = pathlib.Path(f"{here.parent}/runcards/uv_models/UV_scan/{col}/")
@@ -360,9 +369,9 @@ use("PDF")
 rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
 rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 #
-# compute the invariants
-pQCD = ['NLO']
-EFT = ['NHO']
+#compute the invariants
+# pQCD = ['NLO']
+# EFT = ['NHO']
 #
 # for model in mod_list:
 #     for pQCD in ['NLO']:
@@ -374,13 +383,12 @@ EFT = ['NHO']
 #                 if k.startswith('inv'):
 #                     invariants.append(attr)
 #             try:
-#
 #                 model.inspect_model(model.MODEL_SPECS, invariants)
 #             except FileNotFoundError:
 #                 print("File not found", model)
 #                 continue
 # #
-#sys.exit()
+# sys.exit()
 # Specify the path to the JSON file
 posterior_path = f"{here.parent}/results/smefit_fcc_uv_spider/{{}}_{{}}_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
 
@@ -468,9 +476,22 @@ def get_bounds(collection, mod_nrs):
 
                     plot_nr += 1
 
-                    lhc_width = np.percentile(samples_1, 97.5) - np.percentile(samples_1, 2.5)
-                    hllhc_width = np.percentile(samples_2, 97.5) - np.percentile(samples_2, 2.5)
-                    fcc_width = np.percentile(samples_3, 97.5) - np.percentile(samples_3, 2.5)
+                    if min(samples_1) > 0:
+                        lhc_width = np.percentile(samples_1, 95)
+                    else:
+                        lhc_width = np.diff(az.hdi(samples_1, hdi=.95).flatten())[0]
+                    if min(samples_2) > 0:
+                        hllhc_width = np.percentile(samples_2, 95)
+                    else:
+                        hllhc_width = np.diff(az.hdi(samples_2, hdi=.95).flatten())[0]
+                    if min(samples_3) > 0:
+                        fcc_width = np.percentile(samples_3, 95)
+                    else:
+                        fcc_width = np.diff(az.hdi(samples_3, hdi=.95).flatten())[0]
+
+                    # lhc_width = np.percentile(samples_1, 97.5) - np.percentile(samples_1, 2.5)
+                    # hllhc_width = np.percentile(samples_2, 97.5) - np.percentile(samples_2, 2.5)
+                    # fcc_width = np.percentile(samples_3, 97.5) - np.percentile(samples_3, 2.5)
 
                     lhc_bounds[(mod, key)] = [lhc_width]
                     hllhc_bounds[(mod, key)] = [hllhc_width]
@@ -478,7 +499,7 @@ def get_bounds(collection, mod_nrs):
 
                     x_labels.append(mod_dict[mod])
 
-    fig.savefig('/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/posteriors_v3.png')
+    fig.savefig('/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/posteriors.png')
     lhc_bounds = pd.DataFrame(lhc_bounds, index=[r"${\rm LHC}$"]).T
     hllhc_bounds = pd.DataFrame(hllhc_bounds, index=[r"${\rm HL-LHC}$"]).T
     fcc_bounds = pd.DataFrame(fcc_bounds, index=[r"${\rm FCC}$"]).T
@@ -490,10 +511,10 @@ def get_bounds(collection, mod_nrs):
     bounds.drop(("Q1_Q7_W_NoDegen", 'inv3'), inplace=True)
 
     plot_spider(bounds, title=r'${\rm UV\:couplings}$',
-                labels=[  '$\mathrm{LHC}$', '$\mathrm{HL}\,\\textnormal{-}\,\mathrm{LHC}$',
-  '$\mathrm{HL}\,\\textnormal{-}\,\mathrm{LHC}+\mathrm{FCC}\,\\textnormal{-}\,\mathrm{ee}$',],
+                labels=[ r'$\rm{LEP+LHC_{Run-2}}$', r'$\rm{+\:HL-LHC}$',
+  r'$\rm{+\:FCC-ee}$'],
                 legend_loc='upper center', log_scale=True, figsize=[10, 10])
 
 
-get_bounds(["Granada", "Granada", "OneLoop", "OneLoop", "Granada","OneLoop", "Multiparticle_v4"],
+get_bounds(["Granada", "Granada", "OneLoop", "OneLoop", "Granada","OneLoop", "Multiparticle"],
            ['48_10', '49_10', "T1_10", "T2_10", '5_10', "Varphi_10", "Q1_Q7_W_NoDegen"])
