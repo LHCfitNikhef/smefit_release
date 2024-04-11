@@ -6,8 +6,8 @@ import yaml
 
 here = pathlib.Path(__file__).parent
 
-MAX_VALUE = 1000
-MIN_VALUE = -1000
+MAX_VALUE = 100
+MIN_VALUE = -100
 
 
 def load_base(collider) -> dict:
@@ -100,7 +100,7 @@ def dump_runcard(
 
     runcard["coefficients"] = coeff_dict
     with open(
-        f"{here.parent}/smefit_fcc_uv/{collection}_{collider}_{flag}_{idx_model}_{mass}_{pto}_{eft_order}_{fitting_mode}.yaml",
+        f"{here.parent}/smefit_fcc_uv_spider/{collection}_{collider}_{flag}_{idx_model}_{mass}_{pto}_{eft_order}_{fitting_mode}.yaml",
         "w",
         encoding="utf-8",
     ) as f:
