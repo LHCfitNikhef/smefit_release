@@ -342,7 +342,7 @@ def plot_spider(
     #self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
 
-    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv_hdi.pdf", bbox_inches="tight")
+    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv_v3.png", bbox_inches="tight")
 
 
 collections = ["Multiparticle"]
@@ -363,16 +363,16 @@ pathlib.Path.mkdir(result_dir, parents=True, exist_ok=True)
 #             continue
 #         if p.name.startswith("InvarsFit") and p.suffix == ".py":
 #             mod_list.append(importlib.import_module(f"{p.stem}"))
-#
+
 
 use("PDF")
 rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
 rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 #
 #compute the invariants
-# pQCD = ['NLO']
-# EFT = ['NHO']
-#
+pQCD = ['NLO']
+EFT = ['NHO']
+
 # for model in mod_list:
 #     for pQCD in ['NLO']:
 #         for EFT in ['HO']:
@@ -499,7 +499,7 @@ def get_bounds(collection, mod_nrs):
 
                     x_labels.append(mod_dict[mod])
 
-    fig.savefig('/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/posteriors.png')
+    fig.savefig('/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/posteriors_v3.png')
     lhc_bounds = pd.DataFrame(lhc_bounds, index=[r"${\rm LHC}$"]).T
     hllhc_bounds = pd.DataFrame(hllhc_bounds, index=[r"${\rm HL-LHC}$"]).T
     fcc_bounds = pd.DataFrame(fcc_bounds, index=[r"${\rm FCC}$"]).T
@@ -516,5 +516,5 @@ def get_bounds(collection, mod_nrs):
                 legend_loc='upper center', log_scale=True, figsize=[10, 10])
 
 
-get_bounds(["Granada", "Granada", "OneLoop", "OneLoop", "Granada","OneLoop", "Multiparticle"],
-           ['48_10', '49_10', "T1_10", "T2_10", '5_10', "Varphi_10", "Q1_Q7_W_NoDegen"])
+get_bounds(["Granada", "OneLoop", "Granada" , "OneLoop", "Granada","OneLoop", "Multiparticle_v2"],
+           ['48_10',  "T1_10", '49_10', "T2_10", '5_10', "Varphi_10", "Q1_Q7_W_NoDegen"])
