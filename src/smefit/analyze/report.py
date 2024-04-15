@@ -247,7 +247,7 @@ class Report:
             coeff_plt.plot_coeffs(bounds_dict, **scatter_plot)
             figs_list.append("coefficient_central")
 
-        # when we plot the 95% CL we show 95% CL for null solutions.
+        # when we plot the 95% CL we show the 95% CL for null solutions.
         # the error coming from a degenerate solution is not taken into account.
         if confidence_level_bar is not None:
             _logger.info("Plotting : Confidence Level error bars")
@@ -264,6 +264,8 @@ class Report:
             )
             figs_list.append("coefficient_bar")
 
+        # when we plot the 95% CL we show the 95% CL for null solutions.
+        # the error coming from a degenerate solution is not taken into account.
         if pull_bar is not None:
             _logger.info("Plotting : Pull ")
             zero_sol = 0
@@ -290,7 +292,12 @@ class Report:
                 if 1 in dbl_solution:
 
                     dbl_op = double_solution.get(fit.name, None)
-                    idx = [np.argwhere(self.coeff_info.index.get_level_values(1) == op).flatten()[0] for op in dbl_op]
+                    idx = [
+                        np.argwhere(
+                            self.coeff_info.index.get_level_values(1) == op
+                        ).flatten()[0]
+                        for op in dbl_op
+                    ]
                     bound_df_dbl = bound_df.iloc[:, idx]
 
                     width_0 = bound_df_dbl.loc[0, f"hdi_{spider_cl}"]
