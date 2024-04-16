@@ -22,54 +22,54 @@ result_path: /Users/jaco/Documents/smefit_release/results/example
 
 summary: True
 
-#coefficients_plots:
-#
-#  scatter_plot:
-#    figsize: [10,18]
-#    x_min: -50
-#    x_max: 50
-#    lin_thr: .01
-#    x_log: True
-#
-#  confidence_level_bar:
-#    confidence_level: 95
-#    figsize: [10,18]
-#    plot_cutoff: 400
-#    x_min: 0.001
-#    x_max: 1
-#    x_log: True
-#
-#  spider_plot:
-#    confidence_level: 95
-#    log_scale: True
-#    title: $\mathrm{Ratio\:of\:Uncertainties\:to\:}\mathrm{{\sc SMEFiT3.0}}\mathrm{\:Baseline,\:}\mathcal{O}\left(\Lambda^{-2}\right),\:\mathrm{Marginalised}$
-#    fontsize: 17
-#    ncol: 2
-#    legend_loc: 'upper center'
-#    radial_lines: [ 0.5, 1, 5, 10, 20, 40, 60, 80 ]
-#    marker_styles: [ '*', 'o', 'P' ]
-#    class_order: [ "4H", "2L2H", "2FB", "4l", "B" ]
-#
-#  pull_bar:
-#    figsize: [ 10,18 ] # figure size
-#    x_min: -3 # minimum number of sigmas to display
-#    x_max: 3 # maximum number of sigmas to display
-#
-#  posterior_histograms: True
-#
-#  table:
-#    round_val: 3
-#
-#  contours_2d:
-#    show: True
-#    confidence_level: 95
-#    dofs_show: ["OpqMi", "O3pq"] # or list of op per fit to be displayed
-#
-#  logo: True
-#  show_only: Null
-#  hide_dofs: Null # or list
-#  double_solution:  # Null or list of op per fit with dooble solution
-#    runcard_NS: []
+coefficients_plots:
+
+  scatter_plot:
+    figsize: [10,18]
+    x_min: -50
+    x_max: 50
+    lin_thr: .01
+    x_log: True
+
+  confidence_level_bar:
+    confidence_level: 95
+    figsize: [10,18]
+    plot_cutoff: 400
+    x_min: 0.001
+    x_max: 1
+    x_log: True
+
+  spider_plot:
+    confidence_level: 95
+    log_scale: True
+    title: $\mathrm{Ratio\:of\:Uncertainties\:to\:}\mathrm{{\sc SMEFiT3.0}}\mathrm{\:Baseline,\:}\mathcal{O}\left(\Lambda^{-2}\right),\:\mathrm{Marginalised}$
+    fontsize: 17
+    ncol: 2
+    legend_loc: 'upper center'
+    radial_lines: [ 0.5, 1, 5, 10, 20, 40, 60, 80 ]
+    marker_styles: [ '*', 'o', 'P' ]
+    class_order: [ "4H", "2L2H", "2FB", "4l", "B" ]
+
+  pull_bar:
+    figsize: [ 10,18 ] # figure size
+    x_min: -3 # minimum number of sigmas to display
+    x_max: 3 # maximum number of sigmas to display
+
+  posterior_histograms: True
+
+  table:
+    round_val: 3
+
+  contours_2d:
+    show: True
+    confidence_level: 95
+    dofs_show: ["OpqMi", "O3pq"] # or list of op per fit to be displayed
+
+  logo: True
+  show_only: Null
+  hide_dofs: Null # or list
+  double_solution:  # Null or list of op per fit with dooble solution
+    runcard_NS: []
 #
 correlations:
   fit_list: [ "LHC_NLO_LIN_GLOB", "HLLHC_NLO_LIN_GLOB" ]
