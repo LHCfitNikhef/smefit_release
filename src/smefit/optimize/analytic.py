@@ -245,5 +245,5 @@ class ALOptimizerClosure(ALOptimizer):
         )
         chi2_red = chi2_tot / self.loaded_datasets.Commondata.size
 
-        with open(self.results_path / "chi2.dat", "a") as f:
+        with open(self.results_path / "chi2_hllhc_only.dat", "a") as f:
             f.write("{} \n".format(chi2_red))
