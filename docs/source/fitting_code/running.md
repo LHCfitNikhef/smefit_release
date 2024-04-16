@@ -170,11 +170,41 @@ the following to the runcard:
 
 ```yaml
 external_chi2:
-  'chi2_name': /path/to/external/chi2.py
+  'ExternalChi2': /path/to/external/chi2.py
 ```
-Here, ``chi2_name`` must match the name of the function that is given in the external module. This function must take an array as input with length equal to the
-the number of EFT coefficients specified in the runcard, and in the same order.
+Here, ``ExternalChi2`` is the name of the class that must be defined in the referenced python file as follows:
 
+```python
+import numpy as np
+
+
+class ExternalChi2:
+    def __init__(self, coefficients):
+        """
+        Constructor that allows one to set attributes that can be called in the compute_chi2 method
+        Parameters
+        ----------
+        coefficients:  smefit.coefficients.CoefficientManager
+            attributes: name, value
+        """
+        self.example_attribute = coefficients.name
+
+    def compute_chi2(self, coefficient_values):
+        """
+        Parameters
+        ----------
+         coefficients_values : numpy.ndarray
+            |EFT| coefficients values
+
+        """
+
+        # example
+        chi2_value = np.sum(coefficient_values**2)
+        return chi2_value
+```
+One is free to set custom attributes in the constructor. The coefficient values during optimisation
+are accesible via ``coefficient_values`` in the ``compute_chi2`` method. In order for the external chi2
+to work, it is important one does not change the name of the ``compute_chi2`` method!
 
 ## Running a fit with NS
 To run a fiy using Nested Sampling use the command

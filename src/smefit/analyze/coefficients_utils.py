@@ -918,11 +918,15 @@ class CoefficientsPlotter:
                 "\n",
                 r"\begin{table}[H]",
                 r"\centering",
-                r"\begin{tabular}{|c|c|" + "c|" * nfits + "}",
+                r"\begin{tabular}{|c|c|" + "c|c|c|" * nfits + "}",
             ]
         )
-        L.extend(multicolum_table_header(bounds.keys(), ncolumn=1))
-        L.append(r"Class & Coefficients" + r"& 95\% CL Bounds" * nfits + r"\\ \hline")
+        L.extend(multicolum_table_header(bounds.keys(), ncolumn=3))
+        L.append(
+            r"Class & Coefficients"
+            + r" & best & 68\% CL Bounds & 95\% CL Bounds" * nfits
+            + r"\\ \hline"
+        )
 
         for group, coeff_group in self.coeff_info.groupby(level=0):
             coeff_group = coeff_group.droplevel(0)
@@ -938,26 +942,28 @@ class CoefficientsPlotter:
                     except KeyError:
                         # not fitted
                         if bound_df[(group, latex_name)].dropna().empty:
-                            temp += r" & \textemdash "
+                            temp += r" & \textemdash & \textemdash & \textemdash "
                             continue
                         raise KeyError(f"{latex_name} is not found in posterior")
 
-                    temp += f"& [{cl_vals['low95']:.3f}, {cl_vals['high95']:.3f}]"
+                    temp += f" & {np.round(cl_vals['mid'],round_val)} \
+                            & [{np.round(cl_vals['low68'],round_val)},{np.round(cl_vals['high68'],round_val)}] \
+                                & [{np.round(cl_vals['low95'],round_val)},{np.round(cl_vals['high95'],round_val)}]"
                     # double solution
                     try:
                         cl_vals_2 = bound_df[(group, latex_name)].dropna()[1]
-                        temp2 += (
-                            f"& [{cl_vals_2['low95']:.3f}, {cl_vals_2['high95']:.3f}]"
-                        )
+                        temp2 += f" & {np.round(cl_vals_2['mid'],round_val)} \
+                                & [{np.round(cl_vals_2['low68'],round_val)},{np.round(cl_vals_2['high68'],round_val)}] \
+                                    & [{np.round(cl_vals_2['low95'],round_val)},{np.round(cl_vals_2['high95'],round_val)}]"
                     except KeyError:
-                        temp2 += r" &"
+                        temp2 += r" & & &"
 
                 # append double solution
-                if temp2 != " &" * (nfits + 1) and "textemdash" not in temp:
-                    temp += f" \\\\ \\cline{{3-{(2 + nfits)}}}"
+                if temp2 != " &" * (3 * nfits + 1):
+                    temp += f" \\\\ \\cline{{3-{(2 + 3 * nfits)}}}"
                     temp += temp2
 
-                temp += f" \\\\ \\cline{{2-{(2 + nfits)}}}"
+                temp += f" \\\\ \\cline{{2-{(2 + 3 * nfits)}}}"
                 L.append(temp)
             L.append(r"\hline")
         L.extend(
@@ -970,73 +976,3 @@ class CoefficientsPlotter:
             ]
         )
         return L
-
-    # def write_cl_table(self, bounds, round_val=3):
-    #     """Coefficients latex table"""
-    #     nfits = len(bounds)
-    #     L = latex_packages()
-    #     L.extend(
-    #         [
-    #             r"\begin{document}",
-    #             "\n",
-    #             "\n",
-    #             r"\begin{table}[H]",
-    #             r"\centering",
-    #             r"\begin{tabular}{|c|c|" + "c|c|c|" * nfits + "}",
-    #         ]
-    #     )
-    #     L.extend(multicolum_table_header(bounds.keys(), ncolumn=3))
-    #     L.append(
-    #         r"Class & Coefficients"
-    #         + r" & best & 68\% CL Bounds & 95\% CL Bounds" * nfits
-    #         + r"\\ \hline"
-    #     )
-    #
-    #     for group, coeff_group in self.coeff_info.groupby(level=0):
-    #         coeff_group = coeff_group.droplevel(0)
-    #         L.append(f"\\multirow{{{coeff_group.shape[0]}}}{{*}}{{{group}}}")
-    #         # loop on coefficients
-    #         for latex_name in coeff_group.values:
-    #             temp = f" & {latex_name}"
-    #             temp2 = " &"
-    #             # loop on fits
-    #             for bound_df in bounds.values():
-    #                 try:
-    #                     cl_vals = bound_df[(group, latex_name)].dropna()[0]
-    #                 except KeyError:
-    #                     # not fitted
-    #                     if bound_df[(group, latex_name)].dropna().empty:
-    #                         temp += r" & \textemdash & \textemdash & \textemdash "
-    #                         continue
-    #                     raise KeyError(f"{latex_name} is not found in posterior")
-    #
-    #                 temp += f" & {np.round(cl_vals['mid'],round_val)} \
-    #                         & [{np.round(cl_vals['low68'],round_val)},{np.round(cl_vals['high68'],round_val)}] \
-    #                             & [{np.round(cl_vals['low95'],round_val)},{np.round(cl_vals['high95'],round_val)}]"
-    #                 # double solution
-    #                 try:
-    #                     cl_vals_2 = bound_df[(group, latex_name)].dropna()[1]
-    #                     temp2 += f" & {np.round(cl_vals_2['mid'],round_val)} \
-    #                             & [{np.round(cl_vals_2['low68'],round_val)},{np.round(cl_vals_2['high68'],round_val)}] \
-    #                                 & [{np.round(cl_vals_2['low95'],round_val)},{np.round(cl_vals_2['high95'],round_val)}]"
-    #                 except KeyError:
-    #                     temp2 += r" & & &"
-    #
-    #             # append double solution
-    #             if temp2 != " &" * (3 * nfits + 1):
-    #                 temp += f" \\\\ \\cline{{3-{(2 + 3 * nfits)}}}"
-    #                 temp += temp2
-    #
-    #             temp += f" \\\\ \\cline{{2-{(2 + 3 * nfits)}}}"
-    #             L.append(temp)
-    #         L.append(r"\hline")
-    #     L.extend(
-    #         [
-    #             r"\end{tabular}",
-    #             r"\caption{Coefficient comparison}",
-    #             r"\end{table}",
-    #             "\n",
-    #             "\n",
-    #         ]
-    #     )
-    #     return L

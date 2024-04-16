@@ -359,7 +359,9 @@ class Report:
 
         self._append_section("Coefficients", links=links_list, figs=figs_list)
 
-    def correlations(self, hide_dofs=None, thr_show=0.1, title=True):
+    def correlations(
+        self, hide_dofs=None, thr_show=0.1, title=True, fit_list=None, figsize=(10, 10)
+    ):
         """Plot coefficients correlation matrix.
 
         Parameters
@@ -371,10 +373,18 @@ class Report:
             If None the full correlation matrix is displayed.
         title: bool
             if True display fit label name as title
-
+        fit_list: list, optional
+            list of fit names for which the correlation is computed.
+            By default all the fits included in the report
         """
         figs_list = []
-        for fit in self.fits:
+
+        if fit_list is not None:
+            fit_list = [fit for fit in self.fits if fit in fit_list]
+        else:
+            fit_list = self.fits
+
+        for fit in fit_list:
             _logger.info(f"Plotting correlations for: {fit.name}")
             coeff_to_keep = fit.coefficients.free_parameters.index
             plot_correlations(
@@ -384,6 +394,7 @@ class Report:
                 title=fit.label if title else None,
                 hide_dofs=hide_dofs,
                 thr_show=thr_show,
+                figsize=figsize,
             )
             figs_list.append(f"correlations_{fit.name}")
 
@@ -412,7 +423,7 @@ class Report:
         """
         figs_list, links_list = [], []
         if fit_list is not None:
-            fit_list = self.fits[self.fits == fit_list]
+            fit_list = [fit for fit in self.fits if fit in fit_list]
         else:
             fit_list = self.fits
         for fit in fit_list:
@@ -469,7 +480,7 @@ class Report:
         """
         figs_list, links_list = [], []
         if fit_list is not None:
-            fit_list = self.fits[self.fits == fit_list]
+            fit_list = [fit for fit in self.fits if fit in fit_list]
         else:
             fit_list = self.fits
 
