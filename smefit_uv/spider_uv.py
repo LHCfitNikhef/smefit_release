@@ -299,7 +299,13 @@ def plot_spider(
         )
         ax2.add_patch(filled_wedge)
 
-        mid_angle = filled_start_angle - 0.5 * angle_sweep.iloc[0] + (filled_end_angle - filled_start_angle)
+        shift = [0.6, 0.5, 0.7, 0.7, 0.7, 1.5, 1.5]
+
+        mid_angle = filled_start_angle - shift[i] * angle_sweep.iloc[0] + (filled_end_angle - filled_start_angle)
+
+        # if angle_sweep.iloc[i] > angle_sweep.min():
+        #     mid_angle = filled_start_angle - 1.5 * angle_sweep.iloc[0] + (filled_end_angle - filled_start_angle)
+
         print(i, mid_angle)
         ax.text(mid_angle * (np.pi / 180), 1.25 * (y_log_max + delta), mod_dict[idx], color='black', fontsize=12, ha='center', va='bottom',
                 bbox=dict(facecolor='none', edgecolor=colors[i], boxstyle='round'))
@@ -342,18 +348,18 @@ def plot_spider(
     #self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
 
-    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv_v3.png", bbox_inches="tight")
+    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv.pdf", bbox_inches="tight")
 
 
-collections = ["Multiparticle"]
+collections = ["OneLoop"]
 
 
 here = pathlib.Path(__file__).parent
 
 # result dir
-result_dir = here / "results_fcc"
-pathlib.Path.mkdir(result_dir, parents=True, exist_ok=True)
-#
+# result_dir = here / "results_fcc"
+# pathlib.Path.mkdir(result_dir, parents=True, exist_ok=True)
+# #
 # mod_list = []
 # for col in collections:
 #     base_path = pathlib.Path(f"{here.parent}/runcards/uv_models/UV_scan/{col}/")
@@ -363,16 +369,16 @@ pathlib.Path.mkdir(result_dir, parents=True, exist_ok=True)
 #             continue
 #         if p.name.startswith("InvarsFit") and p.suffix == ".py":
 #             mod_list.append(importlib.import_module(f"{p.stem}"))
-
+#
 
 use("PDF")
 rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
 rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 #
 #compute the invariants
-pQCD = ['NLO']
-EFT = ['NHO']
-
+# pQCD = ['NLO']
+# EFT = ['NHO']
+#
 # for model in mod_list:
 #     for pQCD in ['NLO']:
 #         for EFT in ['HO']:
@@ -388,7 +394,7 @@ EFT = ['NHO']
 #                 print("File not found", model)
 #                 continue
 # #
-# sys.exit()
+#sys.exit()
 # Specify the path to the JSON file
 posterior_path = f"{here.parent}/results/smefit_fcc_uv_spider/{{}}_{{}}_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
 
@@ -499,7 +505,7 @@ def get_bounds(collection, mod_nrs):
 
                     x_labels.append(mod_dict[mod])
 
-    fig.savefig('/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/posteriors_v3.png')
+    fig.savefig('/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/posteriors_phi_5.png')
     lhc_bounds = pd.DataFrame(lhc_bounds, index=[r"${\rm LHC}$"]).T
     hllhc_bounds = pd.DataFrame(hllhc_bounds, index=[r"${\rm HL-LHC}$"]).T
     fcc_bounds = pd.DataFrame(fcc_bounds, index=[r"${\rm FCC}$"]).T
@@ -507,7 +513,7 @@ def get_bounds(collection, mod_nrs):
     bounds = pd.concat([lhc_bounds, hllhc_bounds, fcc_bounds], axis=1)
 
 
-    bounds.drop( ("5_10", 'inv1'), inplace=True)
+    bounds.drop( ("5_5", 'inv1'), inplace=True)
     bounds.drop(("Q1_Q7_W_NoDegen", 'inv3'), inplace=True)
 
     plot_spider(bounds, title=r'${\rm UV\:couplings}$',
@@ -517,4 +523,6 @@ def get_bounds(collection, mod_nrs):
 
 
 get_bounds(["Granada", "OneLoop", "Granada" , "OneLoop", "Granada","OneLoop", "Multiparticle_v2"],
-           ['48_10',  "T1_10", '49_10', "T2_10", '5_10', "Varphi_10", "Q1_Q7_W_NoDegen"])
+           ['48_10',  "T1_10", '49_10', "T2_10", '5_5', "Varphi_5", "Q1_Q7_W_NoDegen"])
+
+
