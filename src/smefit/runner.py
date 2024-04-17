@@ -136,25 +136,34 @@ class Runner:
     def ultranest(self, config):
         """Run a fit with Ultra Nest."""
 
-        if run_parallel:
 
-            # dynamical import of all external modules on all processors
-            if "external_chi2" in config:
+        # if run_parallel:
+        #
+        #     # dynamical import of all external modules on all processors
+        #     if "external_chi2" in config:
+        #         external_chi2 = config["external_chi2"]
+        #         for class_name, module_path in external_chi2.items():
+        #             path = pathlib.Path(module_path)
+        #             base_path, stem = path.parent, path.stem
+        #             sys.path = [str(base_path)] + sys.path
+        #
+        #     comm = MPI.COMM_WORLD
+        #     rank = comm.Get_rank()
+        #     if rank == 0:
+        #         ns_opt = USOptimizer.from_dict(config)
+        #     else:
+        #         ns_opt = None
+        #     ns_opt = comm.bcast(ns_opt, root=0)
+        # else:
+        #     ns_opt = USOptimizer.from_dict(config)
+
+        if "external_chi2" in config:
                 external_chi2 = config["external_chi2"]
                 for class_name, module_path in external_chi2.items():
                     path = pathlib.Path(module_path)
                     base_path, stem = path.parent, path.stem
                     sys.path = [str(base_path)] + sys.path
-
-            comm = MPI.COMM_WORLD
-            rank = comm.Get_rank()
-            if rank == 0:
-                ns_opt = USOptimizer.from_dict(config)
-            else:
-                ns_opt = None
-            ns_opt = comm.bcast(ns_opt, root=0)
-        else:
-            ns_opt = USOptimizer.from_dict(config)
+        ns_opt = USOptimizer.from_dict(config)
 
         ns_opt.run_sampling()
 

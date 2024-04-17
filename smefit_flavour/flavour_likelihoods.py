@@ -13,6 +13,7 @@ def make_eos_data_2023_01():
     data[0] = theory_sm[0] + sigma
     cov = np.diag(sigma ** 2 * np.ones(n_dat))
     invcovmat = np.linalg.inv(cov)
+
     return lambda wc: np.einsum("i,ij,j->", data - theory_sm - 1e-5 * wc, invcovmat, data - theory_sm - 1e-5 * wc)
 
 
