@@ -147,6 +147,7 @@ class ALOptimizer(Optimizer):
             @ diff_sm
         )
 
+        # generate samples in case n_samples > 0
         if self.n_samples > 0:
 
             self.log_result(coeff_best, coeff_covmat)
@@ -157,7 +158,7 @@ class ALOptimizer(Optimizer):
                 coeff_best, coeff_covmat, size=(self.n_samples,)
             )
             self.save(samples)
-        else:  # record only chi2 if no samples are requeste
+        else:  # record only chi2 if no samples are requested
 
             self.coefficients.set_free_parameters(coeff_best)
             self.coefficients.set_constraints()
