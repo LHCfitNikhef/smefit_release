@@ -11,7 +11,7 @@ jobs:
     strategy:
       #      max-parallel: 2
       matrix:
-        python-version: [3.8, 3.9, 3.10.13, 3.11.8]
+        python-version: [3.8, 3.9, 3.10, 3.11]
       fail-fast: false
 
     steps:
@@ -43,7 +43,7 @@ jobs:
           pip install pytest-env
           pytest
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         with:
           #token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
