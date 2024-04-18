@@ -1,6 +1,6 @@
 # Input YAML configurations for SMEFiT code
 
-result_ID: closure_test_v2
+result_ID: closure_test
 
 # absolute path where results are stored
 result_path: /Users/jaco/Documents/smefit_release/results

@@ -4,12 +4,12 @@
 
 import subprocess
 
-projection_runcard = "./closure_hl_only.yaml"
+projection_runcard = "./run_projection.yaml"
 
-fit_runcard = "./A_smefit_hllhc_only_glob_NLO_NHO.yaml"
+fit_runcard = "./run_closure.yaml"
 
 # run fits repeatedly on different pseudo datasets
-n_exp = 10
+n_exp = 1
 for i in range(n_exp):
 
     # run projection module

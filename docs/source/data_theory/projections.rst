@@ -73,7 +73,7 @@ and systematic uncertainties) as ``.yaml`` files in the standard SMEFiT format w
 
 .. code-block:: bash
 
-    smefit proj --lumi <luminosity> /path/to/projection_runcard.yaml
+    smefit PROJ --lumi <luminosity> /path/to/projection_runcard.yaml
 
 where the desired luminosity in :math:`{\rm fb}^{-1}` can be specified by replacing ``<luminosity>``. The ``projection_runcard``
 specifies which datasets need to be extrapolated, by which factor to reduce the systematics, and sets the necessary paths:
@@ -185,7 +185,7 @@ syntax
 
 .. code-block:: bash
 
-    smefit proj --closure /path/to/projection_runcard.yaml
+    smefit PROJ --closure /path/to/projection_runcard.yaml
 
 This does nothing to the statistical and systematic uncertainties - it only fluctuates the central value around the SM
 prediction according to the specified uncertainties.
