@@ -4,7 +4,7 @@ import numpy as np
 from rich.style import Style
 from rich.table import Table
 
-from .. import log
+from .. import chi2, log
 from ..analyze.pca import impose_constrain
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
@@ -146,14 +146,32 @@ class ALOptimizer(Optimizer):
             @ self.loaded_datasets.InvCovMat
             @ diff_sm
         )
-        self.log_result(coeff_best, coeff_covmat)
 
-        # sample
-        _logger.info("Sampling solutions ...")
-        samples = np.random.multivariate_normal(
-            coeff_best, coeff_covmat, size=(self.n_samples,)
-        )
-        self.save(samples)
+        if self.n_samples > 0:
+
+            self.log_result(coeff_best, coeff_covmat)
+
+            # sample
+            _logger.info("Sampling solutions ...")
+            samples = np.random.multivariate_normal(
+                coeff_best, coeff_covmat, size=(self.n_samples,)
+            )
+            self.save(samples)
+        else:  # record only chi2 if no samples are requeste
+
+            self.coefficients.set_free_parameters(coeff_best)
+            self.coefficients.set_constraints()
+
+            chi2_tot = chi2.compute_chi2(
+                self.loaded_datasets,
+                self.coefficients.value,
+                self.use_quad,
+                self.use_multiplicative_prescription,
+            )
+            chi2_red = chi2_tot / self.loaded_datasets.Commondata.size
+
+            with open(self.results_path / "chi2.dat", "a") as f:
+                f.write("{} \n".format(chi2_red))
 
     def save(self, samples):
         """Save samples to json inside a dictionary: {coff: [replicas values]}.
