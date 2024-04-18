@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test compute_theory and chi2 module"""
+import sys
+
 import numpy as np
 
 from smefit import chi2, compute_theory, loader
@@ -37,7 +39,8 @@ class TestPredictions:
             [0.6, 0.7, 0.8],
         ]
     )  # Op1^2, Op1*Op2, Op2^2
-    covmat = np.array([[0.01, 0.02], [0.02, 0.03]])
+    covmat = np.array([[0.03, 0.02], [0.02, 0.04]])
+
     replica = np.random.multivariate_normal(exp_data, covmat)
 
     dataset = loader.DataTuple(
@@ -66,7 +69,9 @@ class TestPredictions:
             + self.wilson_coeff[1] * self.lin_corr_values[1, 1],
         ]
         np.testing.assert_allclose(
-            compute_theory.make_predictions(self.dataset, self.wilson_coeff, False, False),
+            compute_theory.make_predictions(
+                self.dataset, self.wilson_coeff, False, False
+            ),
             lin_corr,
         )
         quad_corr = np.array(
@@ -87,7 +92,9 @@ class TestPredictions:
         )
         quad_corr += lin_corr
         np.testing.assert_allclose(
-            compute_theory.make_predictions(self.dataset, self.wilson_coeff, True, False),
+            compute_theory.make_predictions(
+                self.dataset, self.wilson_coeff, True, False
+            ),
             quad_corr,
         )
 
