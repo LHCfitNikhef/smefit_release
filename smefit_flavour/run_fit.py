@@ -32,13 +32,24 @@ class EOSLikelihood:
     function: A lambda function that return the overall likelihood for all datasets in `flavour_datasets`
     """
 
-    def __init__(self, coefficients):
+    def __init__(self, coefficients, id, likelihood):
+
+        self.id = id
+        self.likelihood = likelihood
+
+        eos_dataset = eos.DataSets()
+        self.varied_parameters, self.neg_log_pdf, self.chi2 = eos_dataset.likelihood(id, likelihood)
+
+        self.wet_ops = [p["name"] for p in self.varied_parameters]
+
+        # optimise: use 2 * self.neg_log_pdf
+        # goodness of fit: use self.chi2
 
         self.smeft_ops = ['phiq3_33', 'uG_33']  # List of SMEFT operators
-        self.flavour_datasets = ['EOS-DATA-2023-01']  # List of flavour datasets
+
 
         # do the running once
-        self.wet_llhs, self.m_smeft_wets = self.compute_rg()
+        self.compute_rg()
 
         # TODO: split up functionality
         # self.wet_llhs = self.get_wet_llhs()
@@ -50,39 +61,36 @@ class EOSLikelihood:
         Computes the SMEFT to WET RG matrix
         """
 
-        wet_llhs = []
-        m_smeft_wets = []
-        for dataset_name in self.flavour_datasets:
+        # compute running matrix from the SMEFT to the WET
+        smeft_value_init = 1e-4
+        m_smeft_wet = []
+        for smeft_op in self.smeft_ops:
+            smeft_values = {name: 0.0 for name in self.smeft_ops}
+            smeft_values[smeft_op] = smeft_value_init
+            smeft_wc = wilson.Wilson(smeft_values, 1e3, 'SMEFT', 'Warsaw')
+            smeft_wc.set_option('smeft_accuracy', 'leadinglog')
 
-            if dataset_name not in fl_llh.dataset_dict.keys():
-                continue
+            wet_wc = smeft_wc.match_run(scale=4.2, eft='WET', basis='EOS')
+            m_smeft_wet.append(
+                [np.real(wet_wc.dict[wet_op]) if wet_op in wet_wc.dict.keys() else 0.0 for wet_op in self.wet_ops])
 
-            wet_llh_factory, wet_ops = fl_llh.dataset_dict[dataset_name]
+        m_smeft_wet = np.array(m_smeft_wet).T / smeft_value_init
 
-            # compute running matrix from the SMEFT to the WET
-            smeft_value_init = 1e-4
-            m_smeft_wet = []
-            for smeft_op in self.smeft_ops:
-                smeft_values = {name: 0.0 for name in self.smeft_ops}
-                smeft_values[smeft_op] = smeft_value_init
-                smeft_wc = wilson.Wilson(smeft_values, 1e3, 'SMEFT', 'Warsaw')
-                smeft_wc.set_option('smeft_accuracy', 'leadinglog')
+        self.m_smeft_wet = m_smeft_wet
 
-                wet_wc = smeft_wc.match_run(scale=4.2, eft='WET', basis='EOS')
-                m_smeft_wet.append(
-                    [np.real(wet_wc.dict[wet_op]) if wet_op in wet_wc.dict.keys() else 0.0 for wet_op in wet_ops])
 
-            m_smeft_wet = np.array(m_smeft_wet).T / smeft_value_init
-
-            m_smeft_wets.append(m_smeft_wet)
-            wet_llhs.append(wet_llh_factory())
-
-        return wet_llhs, m_smeft_wets
+    def compute_neg_log_likelihood(self, coefficient_values):
+        wet_values = self.m_smeft_wet @ coefficient_values
+        return 2 * self.neg_log_pdf(wet_values)
 
     def compute_chi2(self, coefficient_values):
+        neg_log_likelihood = self.compute_neg_log_likelihood(coefficient_values)
+        return self.chi2(neg_log_likelihood)
 
-        chi2 = sum(-0.5 * wet_llh(np.dot(self.m_smeft_wets[0], coefficient_values)) for wet_llh in self.wet_llhs)
-        return chi2
+    # def compute_chi2(self, coefficient_values):
+    #
+    #     chi2 = sum(-0.5 * wet_llh(np.dot(self.m_smeft_wets[0], coefficient_values)) for wet_llh in self.wet_llhs)
+    #     return chi2
 
 
 

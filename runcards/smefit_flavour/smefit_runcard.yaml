@@ -1,0 +1,64 @@
+# Input YAML configurations for SMEFiT code
+
+result_ID: EOS_TEST
+
+# absolute path where results are stored
+result_path: /data/theorie/jthoeve/smefit_release/results/smefit_flavour
+
+# path to common data
+data_path: /data/theorie/jthoeve/smefit_database/commondata
+
+# path to theory tables, default same as data path
+theory_path: /data/theorie/jthoeve/smefit_database/theory
+
+# pQCD order (LO or NLO)
+order: NLO
+
+use_theory_covmat: True
+
+use_t0: True
+
+# SMEFT Expansion Order (NHO = Lambda^-2 , HO = Lambda^-4)
+use_quad: True
+
+# Set parameter bounds to previous SCAN result
+bounds: Null
+
+# NS settings
+nlive: 100
+
+#n_samples: 5000
+
+# Datasets to include
+datasets:
+
+  - ATLAS_WhelF_8TeV
+  - CMS_WhelF_8TeV
+  - ATLAS_Whel_13TeV
+  - ATLAS_ZH_Hbb_13TeV
+  - ATLAS_WW_13TeV_2016_memu
+  - ATLAS_ttZ_13TeV_pTZ
+
+# Coefficients to fit
+coefficients:
+
+  O3pQ3: { 'min': -5, 'max': 5 }
+  OtW: { 'min': -2, 'max': 2 }
+#  OtW: { 'min': -2, 'max': 2 }
+#  Oll: { 'min': -10, 'max': 10 }
+#  O3pl1: { 'min': -25, 'max': 25 }
+#  O3pl2: { 'min': -15, 'max': 15 }
+
+
+#external_chi2:
+#  'EOSLikelihood': /data/theorie/jthoeve/smefit_release/smefit_flavour/run_fit.py
+
+external_chi2:
+  - likelihood_type: 'EOSLikelihood'
+    id: "2023-01v2"
+    likelihood: "WET-ublnu"
+
+
+#uv_couplings: True
+
+rot_to_fit_basis: null
