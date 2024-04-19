@@ -17,7 +17,7 @@
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../_static/documentation_options.js?v=01f34227"></script>
-        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -59,6 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/theory.html">Theory tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/rotation.html">Basis rotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/projections.html">Projections</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
 <ul class="current">
@@ -78,6 +79,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#solving-the-linear-problem">Solving the linear problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#single-parameter-fits">Single parameter fits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#individual-parameter-scan">Individual parameter scan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projections">Projections</a></li>
 </ul>
 </li>
 </ul>
@@ -335,6 +337,12 @@ The command</p>
 </div>
 <p>will produce in the results folder a series of pdf files containing plots for
 1-dimensional scans of the chi2 with respect to each parameter in the runcard.</p>
+</section>
+<section id="projections">
+<h2>Projections<a class="headerlink" href="#projections" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>proj<span class="w"> </span>/path/to/the/projection_runcard/runcard.yaml
+</pre></div>
+</div>
 </section>
 </section>
 

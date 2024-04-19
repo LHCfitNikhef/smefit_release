@@ -17,6 +17,7 @@ Subpackages
    smefit.optimize
    smefit.postfit
    smefit.prefit
+   smefit.projections
 
 Submodules
 ----------

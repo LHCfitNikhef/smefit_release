@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>smefit.projections package &mdash; SMEFiT 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f74d80cf" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="References" href="../../zzz-refs.html" />
+    <link rel="prev" title="smefit.prefit package" href="smefit.prefit.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SMEFiT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/general.html">Fitting assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/Analytic.html">Analytic solution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/MCFit.html">The Monte Carlo replica method</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../data_theory/data.html">Experimental data format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_theory/theory.html">Theory tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_theory/rotation.html">Basis rotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_theory/projections.html">Projections</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../fitting_code/code_struct.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fitting_code/running.html">How to run the code</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reports:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../report/tools.html">Report functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../report/running.html">Produce a report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../report/links.html">Link to reports</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_rw.html">SMEFiT RW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_top.html">SMEFiT Top</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit20.html">SMEFiT2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../people/people.html">People</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../people/people.html#former-members">Former members</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References &amp; API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="smefit.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="smefit.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html">smefit.analyze package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.cli.html">smefit.cli package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html">smefit.optimize package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html">smefit.postfit package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.prefit.html">smefit.prefit package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">smefit.projections package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.projections.Projection"><code class="docutils literal notranslate"><span class="pre">Projection</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.basis_rotation">smefit.basis_rotation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.chi2">smefit.chi2 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.coefficients">smefit.coefficients module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.compute_theory">smefit.compute_theory module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.covmat">smefit.covmat module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.fit_manager">smefit.fit_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.loader">smefit.loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.log">smefit.log module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.runner">smefit.runner module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../zzz-refs.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SMEFiT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="smefit.html">smefit package</a></li>
+      <li class="breadcrumb-item active">smefit.projections package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/modules/smefit/smefit.projections.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-smefit.projections">
+<span id="smefit-projections-package"></span><h1>smefit.projections package<a class="headerlink" href="#module-smefit.projections" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.projections.Projection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.projections.</span></span><span class="sig-name descname"><span class="pre">Projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commondata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theory_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projections_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_to_fit_basis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fred_tot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fred_sys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_t0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/projections.html#Projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.projections.Projection" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.projections.Projection.build_projection">
+<span class="sig-name descname"><span class="pre">build_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lumi_new</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closure</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/projections.html#Projection.build_projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.projections.Projection.build_projection" title="Link to this definition"></a></dt>
+<dd><p>Constructs runcard for projection by updating the central value and statistical and
+systematic uncertainties</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lumi_new</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Adjusts the statistical uncertainties according to the specified luminosity</p></li>
+<li><p><strong>closure</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Set to true for a L1 closure test (no rescaling, only cv gets fluctuated according to
+original uncertainties)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.projections.Projection.compute_cv_projection">
+<span class="sig-name descname"><span class="pre">compute_cv_projection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/projections.html#Projection.compute_cv_projection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.projections.Projection.compute_cv_projection" title="Link to this definition"></a></dt>
+<dd><p>Computes the new central value under the EFT hypothesis (is SM when coefficients are zero)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cv</strong> – SM + EFT theory predictions</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.projections.Projection.from_config">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">projection_card</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/projections.html#Projection.from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.projections.Projection.from_config" title="Link to this definition"></a></dt>
+<dd><p>Returns the class Projection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>projection_card</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – path to projection runcard</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Projection class</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.projections.Projection.rescale_stat">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rescale_stat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lumi_old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lumi_new</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/projections.html#Projection.rescale_stat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.projections.Projection.rescale_stat" title="Link to this definition"></a></dt>
+<dd><p>Projects the statistical uncertainties from lumi_old to lumi_new</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stat</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – old statistical uncertainties</p></li>
+<li><p><strong>lumi_old</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Old luminosity</p></li>
+<li><p><strong>lumi_new</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – New luminosity</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated statistical uncertainties after projection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.projections.Projection.rescale_sys">
+<span class="sig-name descname"><span class="pre">rescale_sys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fred_sys</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/projections.html#Projection.rescale_sys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.projections.Projection.rescale_sys" title="Link to this definition"></a></dt>
+<dd><p>Projects the systematic uncertainties by reducing them by fred_sys</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sys</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – systematics</p></li>
+<li><p><strong>fred</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Systematics reduction factor</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Projected systematic uncertainties</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="smefit.prefit.html" class="btn btn-neutral float-left" title="smefit.prefit package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../zzz-refs.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, the SMEFiT developers&#39; team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -16,7 +16,7 @@
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../_static/documentation_options.js?v=01f34227"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -56,6 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../data_theory/theory.html">Theory tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../data_theory/rotation.html">Basis rotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_theory/projections.html">Projections</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
 <ul>
@@ -140,6 +141,8 @@
         <span class="s2">&quot;ExpNames&quot;</span><span class="p">,</span>
         <span class="s2">&quot;NdataExp&quot;</span><span class="p">,</span>
         <span class="s2">&quot;InvCovMat&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ThCovMat&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Luminosity&quot;</span><span class="p">,</span>
         <span class="s2">&quot;Replica&quot;</span><span class="p">,</span>
     <span class="p">),</span>
 <span class="p">)</span>
@@ -230,6 +233,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;sys_error&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;sys_error_t0&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;stat_error&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;luminosity&quot;</span><span class="p">],</span>
         <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_experimental_data</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;central_values&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;SM_predictions&quot;</span><span class="p">]):</span>
@@ -259,6 +263,7 @@
 
         <span class="n">central_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;data_central&quot;</span><span class="p">])</span>
         <span class="n">stat_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;statistical_error&quot;</span><span class="p">])</span>
+        <span class="n">luminosity</span> <span class="o">=</span> <span class="n">data_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;luminosity&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="n">num_sys</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;num_sys&quot;</span><span class="p">]</span>
         <span class="n">num_data</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s2">&quot;num_data&quot;</span><span class="p">]</span>
@@ -309,7 +314,7 @@
             <span class="n">central_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">central_values</span><span class="p">])</span>
 
         <span class="c1"># here return both exp sys and t0 modified sys</span>
-        <span class="k">return</span> <span class="n">central_values</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">df_t0</span><span class="p">,</span> <span class="n">stat_error</span></div>
+        <span class="k">return</span> <span class="n">central_values</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">df_t0</span><span class="p">,</span> <span class="n">stat_error</span><span class="p">,</span> <span class="n">luminosity</span></div>
 
 
 <div class="viewcode-block" id="Loader.load_theory">
@@ -419,6 +424,19 @@
 <span class="sd">                number of experimental data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;central_values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lumi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Integrated luminosity of the dataset in fb^-1</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            lumi: float</span>
+<span class="sd">                Integrated luminosity of the dataset in fb^-1</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;luminosity&quot;</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">central_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -628,6 +646,7 @@
     <span class="n">lin_corr_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">quad_corr_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">n_data_exp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">lumi_exp</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">exp_name</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">th_cov</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -649,6 +668,7 @@
         <span class="p">)</span>
         <span class="n">exp_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sset</span><span class="p">)</span>
         <span class="n">n_data_exp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">n_data</span><span class="p">)</span>
+        <span class="n">lumi_exp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">lumi</span><span class="p">)</span>
         <span class="n">exp_data</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">central_values</span><span class="p">)</span>
         <span class="n">sm_theory</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">sm_prediction</span><span class="p">)</span>
         <span class="n">lin_corr_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">dataset</span><span class="o">.</span><span class="n">n_data</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">lin_corrections</span><span class="p">])</span>
@@ -710,6 +730,8 @@
         <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">exp_name</span><span class="p">),</span>
         <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n_data_exp</span><span class="p">),</span>
         <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">fit_covmat</span><span class="p">),</span>
+        <span class="n">theory_covariance</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lumi_exp</span><span class="p">),</span>
         <span class="n">replica</span><span class="p">,</span>
     <span class="p">)</span></div>
 
@@ -720,6 +742,7 @@
 <span class="k">def</span> <span class="nf">get_dataset</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">data_name</span><span class="p">):</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">datasets</span><span class="o">.</span><span class="n">ExpNames</span> <span class="o">==</span> <span class="n">data_name</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">ndata</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">NdataExp</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">lumi</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">Luminosity</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
     <span class="n">posix_in</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">NdataExp</span><span class="p">[:</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="n">posix_out</span> <span class="o">=</span> <span class="n">posix_in</span> <span class="o">+</span> <span class="n">ndata</span>
 
@@ -734,6 +757,7 @@
         <span class="n">data_name</span><span class="p">,</span>
         <span class="n">ndata</span><span class="p">,</span>
         <span class="n">datasets</span><span class="o">.</span><span class="n">InvCovMat</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">],</span>
+        <span class="n">lumi</span><span class="p">,</span>
         <span class="n">datasets</span><span class="o">.</span><span class="n">Replica</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">],</span>
     <span class="p">)</span></div>
 

@@ -16,7 +16,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=01f34227"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -56,6 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../data_theory/theory.html">Theory tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../data_theory/rotation.html">Basis rotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../data_theory/projections.html">Projections</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
 <ul>
@@ -113,12 +114,13 @@
            <div itemprop="articleBody">
              
   <h1>Source code for smefit.optimize.analytic</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Solve the linear plolem to get the best analytic bounds.&quot;&quot;&quot;</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Solve the linear plolem to get the best analytic bounds.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">rich.style</span> <span class="kn">import</span> <span class="n">Style</span>
 <span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">log</span>
 <span class="kn">from</span> <span class="nn">..analyze.pca</span> <span class="kn">import</span> <span class="n">impose_constrain</span>
 <span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
 <span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">load_datasets</span>
@@ -275,14 +277,33 @@
             <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span><span class="o">.</span><span class="n">InvCovMat</span>
             <span class="o">@</span> <span class="n">diff_sm</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log_result</span><span class="p">(</span><span class="n">coeff_best</span><span class="p">,</span> <span class="n">coeff_covmat</span><span class="p">)</span>
 
-        <span class="c1"># sample</span>
-        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sampling solutions ...&quot;</span><span class="p">)</span>
-        <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span>
-            <span class="n">coeff_best</span><span class="p">,</span> <span class="n">coeff_covmat</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span><span class="p">,)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span></div>
+        <span class="c1"># generate samples in case n_samples &gt; 0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_result</span><span class="p">(</span><span class="n">coeff_best</span><span class="p">,</span> <span class="n">coeff_covmat</span><span class="p">)</span>
+
+            <span class="c1"># sample</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sampling solutions ...&quot;</span><span class="p">)</span>
+            <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span>
+                <span class="n">coeff_best</span><span class="p">,</span> <span class="n">coeff_covmat</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span><span class="p">,)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># record only chi2 if no samples are requested</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">coeff_best</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
+
+            <span class="n">chi2_tot</span> <span class="o">=</span> <span class="n">chi2</span><span class="o">.</span><span class="n">compute_chi2</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">use_quad</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">use_multiplicative_prescription</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">chi2_red</span> <span class="o">=</span> <span class="n">chi2_tot</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span><span class="o">.</span><span class="n">Commondata</span><span class="o">.</span><span class="n">size</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">/</span> <span class="s2">&quot;chi2.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chi2_red</span><span class="p">))</span></div>
 
 
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">):</span>

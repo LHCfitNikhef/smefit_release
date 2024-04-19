@@ -17,7 +17,7 @@
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../_static/documentation_options.js?v=01f34227"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -60,6 +60,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../data_theory/theory.html">Theory tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../data_theory/rotation.html">Basis rotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../data_theory/projections.html">Projections</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
 <ul>
@@ -94,6 +95,7 @@
 <li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html">smefit.optimize package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html">smefit.postfit package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.prefit.html">smefit.prefit package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.projections.html">smefit.projections package</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
@@ -167,11 +169,13 @@
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.ExpNames"><code class="docutils literal notranslate"><span class="pre">DataTuple.ExpNames</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.InvCovMat"><code class="docutils literal notranslate"><span class="pre">DataTuple.InvCovMat</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.LinearCorrections"><code class="docutils literal notranslate"><span class="pre">DataTuple.LinearCorrections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.Luminosity"><code class="docutils literal notranslate"><span class="pre">DataTuple.Luminosity</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.NdataExp"><code class="docutils literal notranslate"><span class="pre">DataTuple.NdataExp</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.OperatorsNames"><code class="docutils literal notranslate"><span class="pre">DataTuple.OperatorsNames</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.QuadraticCorrections"><code class="docutils literal notranslate"><span class="pre">DataTuple.QuadraticCorrections</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.Replica"><code class="docutils literal notranslate"><span class="pre">DataTuple.Replica</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.SMTheory"><code class="docutils literal notranslate"><span class="pre">DataTuple.SMTheory</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.DataTuple.ThCovMat"><code class="docutils literal notranslate"><span class="pre">DataTuple.ThCovMat</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.loader.Loader"><code class="docutils literal notranslate"><span class="pre">Loader</span></code></a><ul>
@@ -181,6 +185,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.lin_corrections"><code class="docutils literal notranslate"><span class="pre">Loader.lin_corrections</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.load_experimental_data"><code class="docutils literal notranslate"><span class="pre">Loader.load_experimental_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.load_theory"><code class="docutils literal notranslate"><span class="pre">Loader.load_theory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.lumi"><code class="docutils literal notranslate"><span class="pre">Loader.lumi</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.n_data"><code class="docutils literal notranslate"><span class="pre">Loader.n_data</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.quad_corrections"><code class="docutils literal notranslate"><span class="pre">Loader.quad_corrections</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.loader.Loader.sm_prediction"><code class="docutils literal notranslate"><span class="pre">Loader.sm_prediction</span></code></a></li>
@@ -441,6 +446,17 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="smefit.projections.html">smefit.projections package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="smefit.projections.html#smefit.projections.Projection"><code class="docutils literal notranslate"><span class="pre">Projection</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.projections.html#smefit.projections.Projection.build_projection"><code class="docutils literal notranslate"><span class="pre">Projection.build_projection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.projections.html#smefit.projections.Projection.compute_cv_projection"><code class="docutils literal notranslate"><span class="pre">Projection.compute_cv_projection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.projections.html#smefit.projections.Projection.from_config"><code class="docutils literal notranslate"><span class="pre">Projection.from_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.projections.html#smefit.projections.Projection.rescale_stat"><code class="docutils literal notranslate"><span class="pre">Projection.rescale_stat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.projections.html#smefit.projections.Projection.rescale_sys"><code class="docutils literal notranslate"><span class="pre">Projection.rescale_sys()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -525,7 +541,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 <li><p><strong>coeff</strong> (<cite>smefit.coefficient.Coefficient</cite>) – coefficient to switch on.</p></li>
 <li><p><strong>xs</strong> (<em>numpy.array</em>) – coeffient values.</p></li>
 <li><p><strong>use_replica</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True compute the <span class="math notranslate nohighlight">\(\chi^2\)</span> on <abbr title="Monte Carlo">MC</abbr> replicas.</p></li>
-<li><p><strong>Returns</strong> – </p></li>
+<li><p><strong>Returns</strong></p></li>
 <li><p><strong>--------</strong> – individual reduced <span class="math notranslate nohighlight">\(\chi^2\)</span> for each x value.</p></li>
 </ul>
 </dd>
@@ -949,7 +965,7 @@ the results. Results are stored in a class attribute</p>
 <span id="smefit-loader-module"></span><h2>smefit.loader module<a class="headerlink" href="#module-smefit.loader" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="smefit.loader.DataTuple">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">DataTuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Commondata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SMTheory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">OperatorsNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LinearCorrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QuadraticCorrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExpNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NdataExp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">InvCovMat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Replica</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smefit.loader.DataTuple" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">DataTuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Commondata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SMTheory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">OperatorsNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LinearCorrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QuadraticCorrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExpNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NdataExp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">InvCovMat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ThCovMat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Luminosity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Replica</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#smefit.loader.DataTuple" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="smefit.loader.DataTuple.Commondata">
@@ -976,6 +992,12 @@ the results. Results are stored in a class attribute</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple.Luminosity">
+<span class="sig-name descname"><span class="pre">Luminosity</span></span><a class="headerlink" href="#smefit.loader.DataTuple.Luminosity" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 9</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="smefit.loader.DataTuple.NdataExp">
 <span class="sig-name descname"><span class="pre">NdataExp</span></span><a class="headerlink" href="#smefit.loader.DataTuple.NdataExp" title="Link to this definition"></a></dt>
 <dd><p>Alias for field number 6</p>
@@ -996,13 +1018,19 @@ the results. Results are stored in a class attribute</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="smefit.loader.DataTuple.Replica">
 <span class="sig-name descname"><span class="pre">Replica</span></span><a class="headerlink" href="#smefit.loader.DataTuple.Replica" title="Link to this definition"></a></dt>
-<dd><p>Alias for field number 8</p>
+<dd><p>Alias for field number 10</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="smefit.loader.DataTuple.SMTheory">
 <span class="sig-name descname"><span class="pre">SMTheory</span></span><a class="headerlink" href="#smefit.loader.DataTuple.SMTheory" title="Link to this definition"></a></dt>
 <dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="smefit.loader.DataTuple.ThCovMat">
+<span class="sig-name descname"><span class="pre">ThCovMat</span></span><a class="headerlink" href="#smefit.loader.DataTuple.ThCovMat" title="Link to this definition"></a></dt>
+<dd><p>Alias for field number 8</p>
 </dd></dl>
 
 </dd></dl>
@@ -1019,8 +1047,8 @@ the results. Results are stored in a class attribute</p>
 <li><p><strong>operators_to_keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – list of operators for which corrections are loaded</p></li>
 <li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) – EFT perturbative order</p></li>
 <li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True loads also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
-<li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – </p></li>
-<li><p><strong>one</strong> (<em>if True add the theory covariance matrix to the experimental</em>) – </p></li>
+<li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>)</p></li>
+<li><p><strong>one</strong> (<em>if True add the theory covariance matrix to the experimental</em>)</p></li>
 <li><p><strong>rot_to_fit_basis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>None</em>) – matrix rotation to fit basis or None</p></li>
 </ul>
 </dd>
@@ -1109,6 +1137,20 @@ the results. Results are stored in a class attribute</p>
 <li><p><strong>quad_dict</strong> (<em>dict</em>) – dictionary with <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections, empty if not use_quad</p></li>
 </ul>
 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.loader.Loader.lumi">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lumi</span></span><a class="headerlink" href="#smefit.loader.Loader.lumi" title="Link to this definition"></a></dt>
+<dd><p>Integrated luminosity of the dataset in fb^-1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lumi</strong> – Integrated luminosity of the dataset in fb^-1</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
 </dd>
 </dl>
 </dd></dl>

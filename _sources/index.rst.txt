@@ -51,6 +51,7 @@ When using the code please cite:
     data_theory/theory
     data_theory/covariance
     data_theory/rotation.md
+    data_theory/projections
 
 .. toctree::
     :maxdepth: 3
