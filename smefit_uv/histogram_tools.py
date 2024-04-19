@@ -1,5 +1,7 @@
-import arviz as az
+# -*- coding: utf-8 -*-
+# import arviz as az
 import numpy as np
+
 
 def find_xrange(samples, threshold_x):
     x_low = []
@@ -11,14 +13,15 @@ def find_xrange(samples, threshold_x):
             sample,
             bins="fd",
             density=True,
-
         )
 
         max_index = np.argmax(n)
         threshold = threshold_x * n[max_index]
         indices = np.where(n >= threshold)[0]
 
-        low, up = az.hdi(sample, hdi_prob=.95)
+        low, up = np.percentile(sample, 2.5), np.percentile(
+            97.5
+        )  # az.hdi(sample, hdi_prob=.95)
 
         index_max = np.max(indices)
         index_min = np.min(indices)

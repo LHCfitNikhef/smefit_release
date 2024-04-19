@@ -5,6 +5,7 @@ from collections.abc import Iterable
 
 import arviz
 import matplotlib.lines as mlines
+import matplotlib.markers as markers
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
@@ -48,7 +49,6 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals[f"hdi_{cl}"] = np.sum(hdi_widths.flatten())
 
     cl_vals["pull"] = cl_vals["mid"] / cl_vals["mean_err68"]
-
 
     return cl_vals
 
@@ -270,6 +270,19 @@ class CoefficientsPlotter:
         ----------
             error: dict
                confidence level bounds per fit and coefficient
+            figsize: list, optional
+                Figure size, (10, 15) by default
+            plot_cutoff: float
+                Only show bounds up to here
+            x_log: bool, optional
+                Use a log scale on the x-axis, true by default
+            x_min: float, optional
+                Minimum x-value, 1e-2 by default
+            x_max: float, optional
+                Maximum x-value, 500 by default
+            legend_loc: string, optional
+                Legend location, "best" by default
+
         """
         df = pd.DataFrame(error)
         groups, axs = self._get_suplblots(figsize)
@@ -310,8 +323,8 @@ class CoefficientsPlotter:
     def plot_pull(
         self,
         pull,
-        x_min,
-        x_max,
+        x_min=-3,
+        x_max=3,
         figsize=(10, 15),
         legend_loc="best",
     ):
@@ -320,8 +333,16 @@ class CoefficientsPlotter:
 
         Parameters
         ----------
-            error: dict
-               confidence level bounds per fit and coefficient
+            pull: dict
+                Fit residuals per fit and coefficient
+            x_min: float, optional
+                Minimum sigma to display, -3 by default
+            x_max: float, optional
+                Maximum sigma to display, +3 by default
+            figsize: list, optional
+                Figure size, (10, 15) by default
+            legend_loc: string, optional
+                Legend location, "best" by default
         """
 
         df = pd.DataFrame(pull)
@@ -351,32 +372,75 @@ class CoefficientsPlotter:
         error,
         labels,
         title,
-        marker,
+        marker_styles,
         ncol,
         ymax=100,
         log_scale=True,
         fontsize=12,
         figsize=(9, 9),
         legend_loc="best",
-        radial_lines=[1, 5, 10, 20, 40, 60, 80],
+        radial_lines=None,
+        class_order=None,
     ):
         """
-        Plot error bars at given confidence level
+        Creates a spider plot that displays the ratio of uncertainties to a baseline fit,
+         which is taken as the first fit specified in the report runcard
 
         Parameters
         ----------
             error: dict
                confidence level bounds per fit and coefficient
+            labels: list
+                Fit labels, taken from the report runcard
+            title: string
+                Plot title
+            marker_styles: list, optional
+                Marker styles per fit
+            ncol: int, optional
+                Number of columns in the legend. Uses a single row by default.
+            ymax: float, optional
+                Radius in percentage
+            log_scale: bool, optional
+                Use a logarithmic radial scale, true by default
+            fontsize: int, optional
+                Font size
+            figsize: list, optional
+                Figure size, (9, 9) by default
+            legend_loc: string, optional
+                Location of the legend, "best" by default
+            radial_lines: list, optional
+                Location of radial lines in percentage
+            class_order: list, optional
+                Order of operator classes, starting at 12'o clock anticlockwise
+
         """
 
-        def log_transform(x, delta):
-            return np.log10(x) + delta
+        def log_transform(x, delta_shift):
+            """
+            Log transform plus possible shift to map to semi-positive value
+
+            Parameters
+            ----------
+            x: array_like
+            delta_shift: float
+
+            Returns
+            -------
+            Log transformed data
+            """
+            return np.log10(x) + delta_shift
 
         df = pd.DataFrame(error)
 
+        if radial_lines is None:
+            radial_lines = [1, 5, 10, 20, 40, 60, 80]
+        if class_order is None:
+            class_order = df.index.get_level_values(0).unique()
+
         # check if more than one fit is loaded
         if df.shape[1] < 2:
-            print("At least two fits are required for the spider plot atm")
+            print("At least two fits are required for the spider plot")
+            return
 
         theta = radar_factory(len(df), frame="circle")
 
@@ -385,18 +449,21 @@ class CoefficientsPlotter:
         delta = np.abs(np.log10(min(ratio.flatten())))
 
         if log_scale:
+            # in case the ratio < 1 %, its log transform is negative, so we add the absolute minimum
             data = log_transform(ratio, delta)
         else:
             data = ratio
 
-        spoke_labels = [op[1] for op in df.index]
+        spoke_labels = df.index.get_level_values(1)
 
         fig = plt.figure(figsize=figsize)
-        # outer_ax_width = 0.7
+
+        # margin settings
         outer_ax_width = 0.8
         left_outer_ax = (1 - outer_ax_width) / 2
         rect = [left_outer_ax, left_outer_ax, outer_ax_width, outer_ax_width]
-        n_axis = 3
+
+        n_axis = 3  # number of spines with radial labels
         axes = [fig.add_axes(rect, projection="radar") for i in range(n_axis)]
 
         perc_labels = [rf"$\mathbf{{{(perc / 100):.3g}}}$" for perc in radial_lines]
@@ -406,24 +473,30 @@ class CoefficientsPlotter:
         # take first axis as main, the rest only serve to show the remaining percentage axes
         ax = axes[0]
 
-        # align with Oll
+        # zero degrees is 12 o'clock
+        start_angle = (
+            theta[np.argwhere(theta > 2 * np.pi - np.pi / 3).flatten()[0]] * 180 / np.pi
+        )
 
-        Oll_idx = [pair[1] for pair in self.coeff_info.index.tolist()].index("Oll")
-        start_angle = theta[Oll_idx] * 180 / np.pi
-
-        angles = np.arange(
-            start_angle, start_angle + 360, 360.0 / n_axis
-        )  # zero degrees is 12 o'clock
+        angles = np.arange(start_angle, start_angle + 360, 360.0 / n_axis)
 
         prop_cycle = plt.rcParams["axes.prop_cycle"]
         colors = prop_cycle.by_key()["color"]
 
-        markers = itertools.cycle(marker)
+        if marker_styles is None:
+            marker_styles = list(markers.MarkerStyle.markers.keys())
+        marker_styles = itertools.cycle(marker_styles)
 
+        # add the ratios to the spider plot
         for i, data_fit_i in enumerate(data.T):
             ax.plot(theta, data_fit_i, color=colors[i], zorder=1)
             ax.scatter(
-                theta, data_fit_i, marker=next(markers), s=50, color=colors[i], zorder=1
+                theta,
+                data_fit_i,
+                marker=next(marker_styles),
+                s=50,
+                color=colors[i],
+                zorder=1,
             )
             ax.fill(
                 theta,
@@ -437,7 +510,6 @@ class CoefficientsPlotter:
         for i, axis in enumerate(axes):
             if i > 0:
                 axis.patch.set_visible(False)
-                # axis.rgrid("off")
                 axis.xaxis.set_visible(False)
 
             angle = angles[i]
@@ -479,13 +551,14 @@ class CoefficientsPlotter:
         delta_disk = 0.3
         radius = outer_ax_width / 2 + (1 + delta_disk) * width_disk
 
-        ax2.set_title(title, fontsize=18)
+        if title is not None:
+            ax2.set_title(title, fontsize=18)
 
-        class_names = ["4H", "2L2H", "2FB", "4l", "B"]
+        # add coloured arcs along circle
         angle_sweep = [
             sum(op_type in index for index in self.coeff_info.index)
             / len(self.coeff_info)
-            for op_type in class_names
+            for op_type in class_order
         ]
 
         # determine angles of the colored arcs
@@ -494,7 +567,7 @@ class CoefficientsPlotter:
 
         filled_start_angle = 90 - 180 / len(self.coeff_info)
 
-        for i, op_type in enumerate(class_names):
+        for i, op_type in enumerate(class_order):
 
             filled_end_angle = (
                 angle_sweep[i] * 360 + filled_start_angle
@@ -527,7 +600,7 @@ class CoefficientsPlotter:
                 [0],
                 color=colors[i],
                 linewidth=3,
-                marker=next(markers),
+                marker=next(marker_styles),
                 markersize=10,
             )
             for i in range(len(labels[1:]))
@@ -658,10 +731,13 @@ class CoefficientsPlotter:
         dofs_show: list, optional
             List of coefficients to include in the cornerplot, set to ``None`` by default, i.e. all fitted coefficients
             are included.
+        double_solution: dict, optional
+            Dictionary of operators with double (disjoint) solution per fit
         """
 
         if double_solution is None:
             double_solution = {"fit1": [], "fit2": []}
+
         if dofs_show is not None:
             posteriors = [
                 (posterior[0][dofs_show], posterior[1]) for posterior in posteriors
@@ -672,7 +748,7 @@ class CoefficientsPlotter:
             coeff = self.coeff_info.index.levels[1]
             n_par = self.npar
 
-        n_cols = n_par - 1 if n_par != 2 else 2
+        n_cols = n_par - 1
         n_rows = n_cols
         if n_par > 2:
             fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
@@ -704,6 +780,8 @@ class CoefficientsPlotter:
             fit_number = -1
             for clr_idx, (posterior, kde) in enumerate(posteriors):
                 fit_number = fit_number + 1
+
+                # case when confidence levels = [cl1, cl2]
                 if isinstance(confidence_level, list):
                     colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
                     # plot the first one dashed
@@ -717,7 +795,7 @@ class CoefficientsPlotter:
                             linestyles="dashed",
                             linewidths=2,
                             color=colors[clr_idx],
-                            label=confidence_level[0],
+                            label=None,
                         )
                     else:
                         confidence_ellipse(
@@ -745,7 +823,9 @@ class CoefficientsPlotter:
                     kde=kde,
                     clr_idx=clr_idx,
                     confidence_level=cl,
-                    double_solution=None#list(double_solution.values())[clr_idx],
+                    double_solution=list(double_solution.values())[clr_idx]
+                    if kde
+                    else None,
                 )
                 hndls_all.append(hndls_contours)
 
@@ -763,46 +843,7 @@ class CoefficientsPlotter:
                         which="both",  # both major and minor ticks are affected
                         labelleft=False,
                     )
-                if isinstance(confidence_level, list):
-                    hndls_all.append(
-                        mlines.Line2D(
-                            [],
-                            [],
-                            linestyle="--",
-                            linewidth=2,
-                            alpha=1,
-                            color=colors[clr_idx],
-                        )
-                    )
-                    hndls_all.append(
-                        mlines.Line2D(
-                            [],
-                            [],
-                            linestyle="-",
-                            linewidth=2,
-                            alpha=1,
-                            color=colors[clr_idx],
-                        )
-                    )
-                    hndls_all.append(
-                        mlines.Line2D(
-                            [],
-                            [],
-                            color=colors[clr_idx],
-                            marker="o",
-                            linestyle="None",
-                            markersize=8,
-                            label="Best fit",
-                        )
-                    )
-                    labels.insert(
-                        1 + 4 * fit_number, str(confidence_level[0]) + r"\% C.L."
-                    )
-                    labels.insert(
-                        2 + 4 * fit_number, str(confidence_level[1]) + r"\% C.L."
-                    )
-                    labels.insert(3 + 4 * fit_number, "Best fit")
-                    # labels already contain all fit name, so for each fit we need to insert C.L. contours at right pos
+
             hndls_sm_point = ax.scatter(0, 0, c="k", marker="+", s=50, zorder=10)
             hndls_all.append(hndls_sm_point)
 
@@ -812,8 +853,11 @@ class CoefficientsPlotter:
             ax.minorticks_on()
             ax.grid(linestyle="dotted", linewidth=0.5)
 
-        #ax = fig.add_subplot(grid[0, -1])
-        #ax.axis("off")
+        # in case n_par > 2, put legend outside subplot
+        if n_par > 2:
+            ax = fig.add_subplot(grid[0, -1])
+            ax.axis("off")
+
         ax.legend(
             labels=labels + [r"$\mathrm{SM}$"],
             handles=hndls_all,
@@ -827,8 +871,8 @@ class CoefficientsPlotter:
         )
 
         ax.set_title(
-            r"$\mathrm{Marginalised}\:95\:\%\:\mathrm{C.L.\:intervals,\:NLO}\:\mathcal{O}\left(\Lambda^{-2}\right)$",
-            fontsize=18
+            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.L.\:intervals}}$",
+            fontsize=18,
         )
         grid.tight_layout(fig)
         fig.savefig(f"{self.report_folder}/contours_2d.pdf")
@@ -845,11 +889,15 @@ class CoefficientsPlotter:
                 "\n",
                 r"\begin{table}[H]",
                 r"\centering",
-                r"\begin{tabular}{|c|c|" + "c|" * nfits + "}",
+                r"\begin{tabular}{|c|c|" + "c|c|c|" * nfits + "}",
             ]
         )
-        L.extend(multicolum_table_header(bounds.keys(), ncolumn=1))
-        L.append(r"Class & Coefficients" + r"& 95\% CL Bounds" * nfits + r"\\ \hline")
+        L.extend(multicolum_table_header(bounds.keys(), ncolumn=3))
+        L.append(
+            r"Class & Coefficients"
+            + r" & best & 68\% CL Bounds & 95\% CL Bounds" * nfits
+            + r"\\ \hline"
+        )
 
         for group, coeff_group in self.coeff_info.groupby(level=0):
             coeff_group = coeff_group.droplevel(0)
@@ -865,26 +913,28 @@ class CoefficientsPlotter:
                     except KeyError:
                         # not fitted
                         if bound_df[(group, latex_name)].dropna().empty:
-                            temp += r" & \textemdash "
+                            temp += r" & \textemdash & \textemdash & \textemdash "
                             continue
                         raise KeyError(f"{latex_name} is not found in posterior")
 
-                    temp += f"& [{cl_vals['low95']:.3f}, {cl_vals['high95']:.3f}]"
+                    temp += f" & {np.round(cl_vals['mid'],round_val)} \
+                            & [{np.round(cl_vals['low68'],round_val)},{np.round(cl_vals['high68'],round_val)}] \
+                                & [{np.round(cl_vals['low95'],round_val)},{np.round(cl_vals['high95'],round_val)}]"
                     # double solution
                     try:
                         cl_vals_2 = bound_df[(group, latex_name)].dropna()[1]
-                        temp2 += (
-                            f"& [{cl_vals_2['low95']:.3f}, {cl_vals_2['high95']:.3f}]"
-                        )
+                        temp2 += f" & {np.round(cl_vals_2['mid'],round_val)} \
+                                & [{np.round(cl_vals_2['low68'],round_val)},{np.round(cl_vals_2['high68'],round_val)}] \
+                                    & [{np.round(cl_vals_2['low95'],round_val)},{np.round(cl_vals_2['high95'],round_val)}]"
                     except KeyError:
-                        temp2 += r" &"
+                        temp2 += r" & & &"
 
                 # append double solution
-                if temp2 != " &" * (nfits + 1) and "textemdash" not in temp:
-                    temp += f" \\\\ \\cline{{3-{(2 + nfits)}}}"
+                if temp2 != " &" * (3 * nfits + 1):
+                    temp += f" \\\\ \\cline{{3-{(2 + 3 * nfits)}}}"
                     temp += temp2
 
-                temp += f" \\\\ \\cline{{2-{(2 + nfits)}}}"
+                temp += f" \\\\ \\cline{{2-{(2 + 3 * nfits)}}}"
                 L.append(temp)
             L.append(r"\hline")
         L.extend(
@@ -897,73 +947,3 @@ class CoefficientsPlotter:
             ]
         )
         return L
-
-    # def write_cl_table(self, bounds, round_val=3):
-    #     """Coefficients latex table"""
-    #     nfits = len(bounds)
-    #     L = latex_packages()
-    #     L.extend(
-    #         [
-    #             r"\begin{document}",
-    #             "\n",
-    #             "\n",
-    #             r"\begin{table}[H]",
-    #             r"\centering",
-    #             r"\begin{tabular}{|c|c|" + "c|c|c|" * nfits + "}",
-    #         ]
-    #     )
-    #     L.extend(multicolum_table_header(bounds.keys(), ncolumn=3))
-    #     L.append(
-    #         r"Class & Coefficients"
-    #         + r" & best & 68\% CL Bounds & 95\% CL Bounds" * nfits
-    #         + r"\\ \hline"
-    #     )
-    #
-    #     for group, coeff_group in self.coeff_info.groupby(level=0):
-    #         coeff_group = coeff_group.droplevel(0)
-    #         L.append(f"\\multirow{{{coeff_group.shape[0]}}}{{*}}{{{group}}}")
-    #         # loop on coefficients
-    #         for latex_name in coeff_group.values:
-    #             temp = f" & {latex_name}"
-    #             temp2 = " &"
-    #             # loop on fits
-    #             for bound_df in bounds.values():
-    #                 try:
-    #                     cl_vals = bound_df[(group, latex_name)].dropna()[0]
-    #                 except KeyError:
-    #                     # not fitted
-    #                     if bound_df[(group, latex_name)].dropna().empty:
-    #                         temp += r" & \textemdash & \textemdash & \textemdash "
-    #                         continue
-    #                     raise KeyError(f"{latex_name} is not found in posterior")
-    #
-    #                 temp += f" & {np.round(cl_vals['mid'],round_val)} \
-    #                         & [{np.round(cl_vals['low68'],round_val)},{np.round(cl_vals['high68'],round_val)}] \
-    #                             & [{np.round(cl_vals['low95'],round_val)},{np.round(cl_vals['high95'],round_val)}]"
-    #                 # double solution
-    #                 try:
-    #                     cl_vals_2 = bound_df[(group, latex_name)].dropna()[1]
-    #                     temp2 += f" & {np.round(cl_vals_2['mid'],round_val)} \
-    #                             & [{np.round(cl_vals_2['low68'],round_val)},{np.round(cl_vals_2['high68'],round_val)}] \
-    #                                 & [{np.round(cl_vals_2['low95'],round_val)},{np.round(cl_vals_2['high95'],round_val)}]"
-    #                 except KeyError:
-    #                     temp2 += r" & & &"
-    #
-    #             # append double solution
-    #             if temp2 != " &" * (3 * nfits + 1):
-    #                 temp += f" \\\\ \\cline{{3-{(2 + 3 * nfits)}}}"
-    #                 temp += temp2
-    #
-    #             temp += f" \\\\ \\cline{{2-{(2 + 3 * nfits)}}}"
-    #             L.append(temp)
-    #         L.append(r"\hline")
-    #     L.extend(
-    #         [
-    #             r"\end{tabular}",
-    #             r"\caption{Coefficient comparison}",
-    #             r"\end{table}",
-    #             "\n",
-    #             "\n",
-    #         ]
-    #     )
-    #     return L

@@ -1,6 +1,5 @@
+# -*- coding: utf-8 -*-
 import numpy as np
-import matplotlib
-
 from matplotlib.patches import Circle, RegularPolygon
 from matplotlib.path import Path
 from matplotlib.projections import register_projection
@@ -8,8 +7,11 @@ from matplotlib.projections.polar import PolarAxes
 from matplotlib.spines import Spine
 from matplotlib.transforms import Affine2D
 
-def radar_factory(num_vars, frame='circle'):
+
+def radar_factory(num_vars, frame="circle"):
     """
+    This function is copied from https://matplotlib.org/stable/gallery/specialty_plots/radar_chart.html
+
     Create a radar chart with `num_vars` axes.
 
     This function creates a RadarAxes projection and registers it.
@@ -26,7 +28,6 @@ def radar_factory(num_vars, frame='circle'):
     theta = np.linspace(0, 2 * np.pi, num_vars, endpoint=False)
 
     class RadarTransform(PolarAxes.PolarTransform):
-
         def transform_path_non_affine(self, path):
             # Paths with non-unit interpolation steps correspond to gridlines,
             # in which case we force interpolation (to defeat PolarTransform's
@@ -37,14 +38,14 @@ def radar_factory(num_vars, frame='circle'):
 
     class RadarAxes(PolarAxes):
 
-        name = 'radar'
+        name = "radar"
         PolarTransform = RadarTransform
 
         def __init__(self, *args, **kwargs):
-            
-            super().__init__(*args, aspect='equal', **kwargs)
+
+            super().__init__(*args, aspect="equal", **kwargs)
             # rotate plot such that the first axis is at the top
-            self.set_theta_zero_location('N')
+            self.set_theta_zero_location("N")
 
         def fill(self, *args, closed=True, **kwargs):
             """Override fill so that line is closed by default"""
@@ -56,7 +57,6 @@ def radar_factory(num_vars, frame='circle'):
             for line in lines:
                 self._close_line(line)
             return lines
-                
 
         def _close_line(self, line):
             x, y = line.get_data()
@@ -66,35 +66,36 @@ def radar_factory(num_vars, frame='circle'):
                 y = np.append(y, y[0])
                 line.set_data(x, y)
 
-
         def set_varlabels(self, labels, fontsize=12):
             self.set_thetagrids(np.degrees(theta), labels, fontsize=fontsize)
 
         def _gen_axes_patch(self):
             # The Axes patch must be centered at (0.5, 0.5) and of radius 0.5
             # in axes coordinates.
-            if frame == 'circle':
+            if frame == "circle":
                 return Circle((0.5, 0.5), 0.5)
-            elif frame == 'polygon':
-                return RegularPolygon((0.5, 0.5), num_vars,
-                                      radius=.5, edgecolor="k")
+            elif frame == "polygon":
+                return RegularPolygon((0.5, 0.5), num_vars, radius=0.5, edgecolor="k")
             else:
                 raise ValueError("Unknown value for 'frame': %s" % frame)
 
         def _gen_axes_spines(self):
-            if frame == 'circle':
+            if frame == "circle":
                 return super()._gen_axes_spines()
-            elif frame == 'polygon':
+            elif frame == "polygon":
                 # spine_type must be 'left'/'right'/'top'/'bottom'/'circle'.
-                spine = Spine(axes=self,
-                              spine_type='circle',
-                              path=Path.unit_regular_polygon(num_vars))
+                spine = Spine(
+                    axes=self,
+                    spine_type="circle",
+                    path=Path.unit_regular_polygon(num_vars),
+                )
                 # unit_regular_polygon gives a polygon of radius 1 centered at
                 # (0, 0) but we want a polygon of radius 0.5 centered at (0.5,
                 # 0.5) in axes coordinates.
-                spine.set_transform(Affine2D().scale(.5).translate(.5, .5)
-                                    + self.transAxes)
-                return {'polar': spine}
+                spine.set_transform(
+                    Affine2D().scale(0.5).translate(0.5, 0.5) + self.transAxes
+                )
+                return {"polar": spine}
             else:
                 raise ValueError("Unknown value for 'frame': %s" % frame)
 
