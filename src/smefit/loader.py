@@ -26,6 +26,8 @@ DataTuple = namedtuple(
         "ExpNames",
         "NdataExp",
         "InvCovMat",
+        "ThCovMat",
+        "Luminosity",
         "Replica",
     ),
 )
@@ -108,6 +110,7 @@ class Loader:
             self.dataspec["sys_error"],
             self.dataspec["sys_error_t0"],
             self.dataspec["stat_error"],
+            self.dataspec["luminosity"],
         ) = self.load_experimental_data()
 
         if len(self.dataspec["central_values"]) != len(self.dataspec["SM_predictions"]):
@@ -135,6 +138,7 @@ class Loader:
 
         central_values = np.array(data_dict["data_central"])
         stat_error = np.array(data_dict["statistical_error"])
+        luminosity = data_dict.get("luminosity", None)
 
         num_sys = data_dict["num_sys"]
         num_data = data_dict["num_data"]
@@ -185,7 +189,7 @@ class Loader:
             central_values = np.asarray([central_values])
 
         # here return both exp sys and t0 modified sys
-        return central_values, df, df_t0, stat_error
+        return central_values, df, df_t0, stat_error, luminosity
 
     def load_theory(
         self,
@@ -291,6 +295,19 @@ class Loader:
                 number of experimental data
         """
         return self.dataspec["central_values"].size
+
+    @property
+    def lumi(self):
+        """
+        Integrated luminosity of the dataset in fb^-1
+
+        Returns
+        -------
+            lumi: float
+                Integrated luminosity of the dataset in fb^-1
+
+        """
+        return self.dataspec["luminosity"]
 
     @property
     def central_values(self):
@@ -499,6 +516,7 @@ def load_datasets(
     lin_corr_list = []
     quad_corr_list = []
     n_data_exp = []
+    lumi_exp = []
     exp_name = []
     th_cov = []
 
@@ -520,6 +538,7 @@ def load_datasets(
         )
         exp_name.append(sset)
         n_data_exp.append(dataset.n_data)
+        lumi_exp.append(dataset.lumi)
         exp_data.extend(dataset.central_values)
         sm_theory.extend(dataset.sm_prediction)
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
@@ -582,6 +601,8 @@ def load_datasets(
         np.array(exp_name),
         np.array(n_data_exp),
         np.linalg.inv(fit_covmat),
+        theory_covariance,
+        np.array(lumi_exp),
         replica,
     )
 
@@ -589,6 +610,7 @@ def load_datasets(
 def get_dataset(datasets, data_name):
     idx = np.where(datasets.ExpNames == data_name)[0][0]
     ndata = datasets.NdataExp[idx]
+    lumi = datasets.Luminosity[idx]
     posix_in = datasets.NdataExp[:idx].sum()
     posix_out = posix_in + ndata
 
@@ -603,5 +625,6 @@ def get_dataset(datasets, data_name):
         data_name,
         ndata,
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],
+        lumi,
         datasets.Replica[posix_in:posix_out],
     )

@@ -269,3 +269,10 @@ The command
 ```
 will produce in the results folder a series of pdf files containing plots for
 1-dimensional scans of the chi2 with respect to each parameter in the runcard.
+
+
+## Projections
+
+```bash
+    smefit proj /path/to/the/projection_runcard/runcard.yaml
+```

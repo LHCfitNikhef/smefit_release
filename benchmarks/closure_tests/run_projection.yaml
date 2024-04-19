@@ -1,0 +1,63 @@
+# path to save projections
+projections_path: /Users/jaco/Documents/PhD/smefit_ewpo/smefit30_database/commondata_projections_closure_test
+
+# path to commondata
+commondata_path: /Users/jaco/Documents/PhD/smefit_ewpo/smefit30_database/commondata_projections
+
+# path to theory tables
+theory_path:  /Users/jaco/Documents/PhD/smefit_ewpo/smefit30_database/theory
+
+# datsets for which projections are wanted
+datasets:
+
+  - ATLAS_SSinc_RunII_proj
+  - ATLAS_STXS_runII_13TeV_uncor_proj
+  - ATLAS_WH_Hbb_13TeV_proj
+  - ATLAS_WW_13TeV_2016_memu_proj
+  - ATLAS_WZ_13TeV_2016_mTWZ_proj
+  - ATLAS_Whel_13TeV_uncor_proj
+  - ATLAS_ZH_Hbb_13TeV_proj
+  - ATLAS_ggF_13TeV_2015_proj
+  - ATLAS_ggF_ZZ_13TeV_proj
+  - ATLAS_tW_13TeV_inc_proj
+  - ATLAS_tZ_13TeV_run2_inc_proj
+  - ATLAS_t_sch_13TeV_inc_proj
+  - ATLAS_t_tch_13TeV_inc_proj
+  - ATLAS_ttW_13TeV_2016_proj
+  - ATLAS_ttZ_13TeV_pTZ_uncor_proj
+  - ATLAS_tt_13TeV_asy_2022_uncor_proj
+  - ATLAS_tt_13TeV_ljets_2016_Mtt_proj
+  - ATLAS_ttbb_13TeV_2016_proj
+  - ATLAS_tttt_13TeV_2023_proj
+  - ATLAS_tttt_13TeV_run2_proj
+  - ATLAS_tttt_13TeV_slep_inc_proj
+  - CMS_H_13TeV_2015_pTH_proj
+  - CMS_SSinc_RunII_proj
+  - CMS_WZ_13TeV_2016_pTZ_proj
+  - CMS_WZ_13TeV_2022_pTZ_proj
+  - CMS_ggF_aa_13TeV_proj
+  - CMS_tW_13TeV_inc_proj
+  - CMS_tW_13TeV_slep_inc_proj
+  - CMS_tZ_13TeV_pTt_uncor_proj
+  - CMS_t_tch_13TeV_2019_diff_Yt_proj
+  - CMS_ttW_13TeV_proj
+  - CMS_ttZ_13TeV_pTZ_proj
+  - CMS_tt_13TeV_Mtt_proj
+  - CMS_tt_13TeV_asy_proj
+  - CMS_tt_13TeV_dilep_2016_Mtt_proj
+  - CMS_tt_13TeV_ljets_inc_proj
+  - CMS_ttbb_13TeV_2016_proj
+  - CMS_ttbb_13TeV_dilepton_inc_proj
+  - CMS_ttbb_13TeV_ljets_inc_proj
+  - CMS_tttt_13TeV_2023_proj
+  - CMS_tttt_13TeV_run2_proj
+  - CMS_tttt_13TeV_slep_inc_proj
+
+order: NLO
+use_quad: False
+use_theory_covmat: False
+rot_to_fit_basis: null
+use_t0: True
+
+fred_sys: 0.5 # systematics get reduced by 1/2
+fred_tot: 0.333 # total errors get reduced by 1/3

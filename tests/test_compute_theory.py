@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """Test compute_theory and chi2 module"""
-import sys
-
 import numpy as np
 
 from smefit import chi2, compute_theory, loader
@@ -39,8 +37,9 @@ class TestPredictions:
             [0.6, 0.7, 0.8],
         ]
     )  # Op1^2, Op1*Op2, Op2^2
-    covmat = np.array([[0.03, 0.02], [0.02, 0.04]])
-
+    covmat = np.array([[0.06, 0.02], [0.02, 0.03]])
+    theory_covmat = np.array([[0.003, 0.001], [0.001, 0.002]])
+    luminosity = 300
     replica = np.random.multivariate_normal(exp_data, covmat)
 
     dataset = loader.DataTuple(
@@ -52,6 +51,8 @@ class TestPredictions:
         np.array(["exp1"]),
         np.array([exp_data.size]),
         np.linalg.inv(covmat),
+        theory_covmat,
+        luminosity,
         replica,
     )
     wilson_coeff = np.array([0.5, 0.6])
