@@ -1,0 +1,456 @@
+# Input YAML file for a report
+
+name: "HLLHC_NLO_QUAD"
+
+title: "smefit hllhc "
+
+result_IDs: [
+  "LHC_NLO_QUAD_GLOB", "HLLHC_NLO_QUAD_GLOB", "LHC_NLO_QUAD_IND", "HLLHC_NLO_QUAD_IND"
+]
+
+fit_labels: [
+ '$\mathrm{LHC}$', '$\mathrm{HL}\,\textnormal{-}\,\mathrm{LHC}$',
+  '$\mathrm{SMEFiT3.0},\:\mathrm{individual}$',
+  '$\mathrm{HL}\,\textnormal{-}\,\mathrm{LHC},\:\mathrm{individual}$'
+]
+# Input YAML file for a report
+
+# absolute path where results are stored
+report_path: /data/theorie/jthoeve/smefit_release/reports/smefit_fcc
+
+# absolute path where results are stored
+result_path: /data/theorie/jthoeve/smefit_release/results/smefit_fcc
+
+summary: True
+
+coefficients_plots:
+
+#  scatter_plot:
+#    figsize: [10,15]
+#    x_min: -50
+#    x_max: 50
+#    lin_thr: .01
+#    x_log: True
+#
+#  confidence_level_bar:
+#    confidence_level: 95
+#    figsize: [10,15]
+#    plot_cutoff: 400
+#    x_min: 0.001
+#    x_max: 500
+#    x_log: True
+
+  spider_plot:
+    confidence_level: 95
+    log_scale: True
+    title: $\mathrm{Ratio\:of\:Uncertainties\:to\:}\mathrm{{\sc SMEFiT3.0}}\mathrm{\:Baseline,\:}\mathcal{O}\left(\Lambda^{-4}\right),\:\mathrm{Marginalised}$
+    fontsize: 17
+    ncol: 2
+    legend_loc: 'upper center'
+    radial_lines: [1, 5, 10, 20, 40, 60, 80, 100, 150 ]
+    marker: ['*', 'o', 'P']
+    ymax: 170
+
+#  contours_2d:
+#    show: True
+#    confidence_level: 95
+#    dofs_show: ["O3pQ3", "OpQM"] # Null or list of op per fit to be displayed
+
+  posterior_histograms: True
+#
+#  table:
+#    round_val: 3
+#
+#  logo: True
+#  show_only: Null
+#  hide_dofs: Null #[Oll] # or list
+#
+  double_solution:  # List of op per fit with double solution
+    LHC_NLO_QUAD_IND: [ "OQQ1", "OQQ8", "OQt1", "OQt8", "Ott1", "Ocp", "OpB" ]
+    HLLHC_NLO_QUAD_IND:  [ "OQQ1", "OQQ8", "OQt1", "OQt8", "Ott1", "Ocp", "OpB" ]
+#
+#
+correlations:
+   hide_dofs: Null # Null or list of op not be displayed
+   thr_show: 0.1 # Min value to show, if Null show the full matrix
+#
+#PCA:
+#  table: True # display the list of PC decomposition
+#  thr_show: 1.e-2
+#  plot: True
+#  fit_list:
+#
+#chi2_plots:
+#  table: True # bool, chi2 table
+#  plot_experiment:  # chi2 plot per experiment
+#    figsize: [10,15]
+#  plot_distribution: #  chi2 distribution per replica
+#    figsize: [7,5]
+#
+## fisher information options
+#fisher:
+#
+#  norm: "coeff" # normalize per "coeff" or "data"
+#  summary_only: True # if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset
+#  log: False # show values in log scale ?
+#  fit_list:
+#
+#  # heatmap plot
+#  plot:
+#    summary_only: True # if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset
+#    figsize: [11, 15] # figure size
+#    title: true # if True display the fit label as title
+
+coeff_info:
+  4H: [
+    [OQQ1, "$c_{QQ}^{1}$"],
+    [OQQ8, "$c_{QQ}^{8}$"],
+    [OQt1, "$c_{Qt}^{1}$"],
+    [OQt8, "$c_{Qt}^{8}$"],
+    [OQb1, "$c_{Qb}^{1}$"],
+    [OQb8, "$c_{Qb}^{8}$"],
+    [Ott1, "$c_{tt}^{1}$"],
+    [Otb1, "$c_{tb}^{1}$"],
+    [Otb8, "$c_{tb}^{8}$"],
+    [OQtQb1, "$c_{QtQb}^{1}$"],
+    [OQtQb8, "$c_{QtQb}^{8}$"],
+  ]
+  2L2H: [
+    [O81qq, "$c_{Qq}^{1,8}$"],
+    [O11qq, "$c_{Qq}^{1,1}$"],
+    [O83qq, "$c_{Qq}^{3,8}$"],
+    [O13qq, "$c_{Qq}^{3,1}$"],
+    [O8qt, "$c_{tq}^{8}$"],
+    [O1qt, "$c_{tq}^{1}$"],
+    [O8ut, "$c_{tu}^{8}$"],
+    [O1ut, "$c_{tu}^{1}$"],
+    [O8qu, "$c_{Qu}^{8}$"],
+    [O1qu, "$c_{Qu}^{1}$"],
+    [O8dt, "$c_{td}^{8}$"],
+    [O1dt, "$c_{td}^{1}$"],
+    [O8qd, "$c_{Qd}^{8}$"],
+    [O1qd, "$c_{Qd}^{1}$"],
+  ]
+  2FB: [
+    [Ocp, "$c_{c \\varphi}$"],
+    [Obp, "$c_{b \\varphi}$"],
+    [Otp, "$c_{t \\varphi}$"],
+    [Otap, "$c_{\\tau \\varphi}$"],
+    [OtG, "$c_{tG}$"],
+    [Omup, "$c_{\\mu \\varphi}$"],
+    [OtW, "$c_{tW}$"],
+    [OtZ, "$c_{tZ}$"],  # Non Warsaw
+    [OtB, "$c_{tB}$"],
+    [ObW, "$c_{bW}$"],
+    [ O3pq, "$c_{\\varphi q}^{(3)}$" ],
+    [ O3pQ3, "$c_{\\varphi Q}^{(3)}$" ],
+    [ OpqMi, "$c_{\\varphi q}^{(-)}$" ],  # Non Warsaw
+    [ OpQM, "$c_{\\varphi Q}^{(-)}$" ],  # Non Warsaw
+    [ Opqi, "$c_{\\varphi q}^{(1)}$" ],
+    [ OpQ, "$c_{\\varphi Q}^{(1)}$" ],
+    [ Opui, "$c_{\\varphi u}$" ],
+    [ Opdi, "$c_{\\varphi d}$" ],
+    [ Opt, "$c_{\\varphi t}$" ],
+    [ Optb, "$c_{\\varphi tb}$" ],  # Non SMEFiT2.0
+    [Opl1, "$c_{\\varphi l_1}$"],
+    [Opl2, "$c_{\\varphi l_2}$"],
+    [Opl3, "$c_{\\varphi l_3}$"],
+    [O3pl1, "$c_{\\varphi l_1}^{(3)}$"],
+    [O3pl2, "$c_{\\varphi l_2}^{(3)}$"],
+    [O3pl3, "$c_{\\varphi l_3}^{(3)}$"],
+    [Ope, "$c_{\\varphi e}$"],
+    [Opmu, "$c_{\\varphi \\mu}$"],
+    [Opta, "$c_{\\varphi \\tau}$"]
+  ]
+  4l: [
+    [ Oll, "$c_{ll}$" ]
+  ]
+  B: [
+    [OpG, "$c_{\\varphi G}$"],
+    [OpGtil, "$c_{\\widetilde{\\varphi G}}$"],  # Non SMEFiT2.0
+    [OpB, "$c_{\\varphi B}$"],
+    [OpBtil, "$c_{\\widetilde{\\varphi B}}$"],  # Non SMEFiT2.0
+    [OpW, "$c_{\\varphi W}$"],
+    [OpWtil, "$c_{\\widetilde{\\varphi W}}$"],  # Non SMEFiT2.0
+    [OpWB, "$c_{\\varphi WB}$"],
+    [OpWBtil, "$c_{\\widetilde{\\varphi WB}}$"],  # Non SMEFiT2.0
+     [OWWW, "$c_{WWW}$"],
+    [Opd, "$c_{\\varphi \\Box}$"],
+    [OpD, "$c_{\\varphi D}$"],
+    [OWWWtil, "$c_{\\widetilde{WWW}}$"],
+    [OG, "$c_{G}$"],  # Non SMEFiT2.0
+    [OGtil, "$c_{\\widetilde{G}}$"],  # Non SMEFiT2.0
+  ]
+
+
+
+data_info:
+  tt8: [
+    [ ATLAS_tt_8TeV_dilep_Mtt, "https://arxiv.org" ],
+    [ ATLAS_tt_8TeV_ljets_Mtt, "https://arxiv.org" ],
+    [ CMS_tt2D_8TeV_dilep_MttYtt, "https://arxiv.org" ],
+    [ CMS_tt_8TeV_ljets_Ytt, "https://arxiv.org" ],
+  ]
+  tt13: [
+    [ ATLAS_tt_13TeV_ljets_2016_Mtt, "https://arxiv.org" ],
+    [ ATLAS_tt_13TeV_ljets_2016_Mtt_proj, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_Mtt, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_Mtt_proj, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_dilep_2015_Mtt, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_dilep_2016_Mtt, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_dilep_2016_Mtt_proj, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_ljets_2015_Mtt, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_ljets_2016_Mtt, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_ljets_inc, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_ljets_inc_proj, "https://arxiv.org" ],
+  ]
+  tta: [
+    [ ATLAS_tta_8TeV, "https://arxiv.org" ],
+    [ CMS_tta_8TeV, "https://arxiv.org" ],
+  ]
+  WhelF: [
+    [ ATLAS_WhelF_8TeV, "https://arxiv.org" ],
+    [ ATLAS_Whel_13TeV, "https://arxiv.org" ],
+    [ ATLAS_Whel_13TeV_uncor_proj, "https://arxiv.org" ],
+    [ CMS_WhelF_8TeV, "https://arxiv.org" ],
+  ]
+  AC: [
+    [ ATLAS_CMS_tt_AC_8TeV, "https://arxiv.org" ],
+    [ ATLAS_tt_13TeV_asy_2022, "https://arxiv.org" ],
+    [ ATLAS_tt_13TeV_asy_2022_uncor_proj, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_asy, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_asy_proj, "https://arxiv.org" ],
+  ]
+  4H: [
+    [ ATLAS_ttbb_13TeV_2016, "https://arxiv.org" ],
+    [ ATLAS_ttbb_13TeV_2016_proj, "https://arxiv.org" ],
+    [ ATLAS_tttt_13TeV_run2, "https://arxiv.org" ],
+    [ ATLAS_tttt_13TeV_run2_proj, "https://arxiv.org" ],
+    [ ATLAS_tttt_13TeV_slep_inc, "https://arxiv.org" ],
+    [ ATLAS_tttt_13TeV_slep_inc_proj, "https://arxiv.org" ],
+    [ CMS_ttbb_13TeV, "https://arxiv.org" ],
+    [ CMS_ttbb_13TeV_2016, "https://arxiv.org" ],
+    [ CMS_ttbb_13TeV_2016_proj, "https://arxiv.org" ],
+    [ CMS_ttbb_13TeV_dilepton_inc, "https://arxiv.org" ],
+    [ CMS_ttbb_13TeV_dilepton_inc_proj, "https://arxiv.org" ],
+    [ CMS_ttbb_13TeV_ljets_inc, "https://arxiv.org" ],
+    [ CMS_ttbb_13TeV_ljets_inc_proj, "https://arxiv.org" ],
+    [ CMS_tttt_13TeV, "https://arxiv.org" ],
+    [ CMS_tttt_13TeV_run2, "https://arxiv.org" ],
+    [ CMS_tttt_13TeV_run2_proj, "https://arxiv.org" ],
+    [ CMS_tttt_13TeV_slep_inc, "https://arxiv.org" ],
+    [ CMS_tttt_13TeV_slep_inc_proj, "https://arxiv.org" ],
+  ]
+  ttZ: [
+    [ ATLAS_ttZ_13TeV, "https://arxiv.org" ],
+    [ ATLAS_ttZ_13TeV_2016, "https://arxiv.org" ],
+    [ ATLAS_ttZ_13TeV_pTZ, "https://arxiv.org" ],
+    [ ATLAS_ttZ_13TeV_pTZ_uncor_proj, "https://arxiv.org" ],
+    [ ATLAS_ttZ_8TeV, "https://arxiv.org" ],
+    [ CMS_ttZ_13TeV, "https://arxiv.org" ],
+    [ CMS_ttZ_13TeV_pTZ, "https://arxiv.org" ],
+    [ CMS_ttZ_13TeV_pTZ_proj, "https://arxiv.org" ],
+    [ CMS_ttZ_8TeV, "https://arxiv.org" ],
+  ]
+  ttW: [
+    [ ATLAS_ttW_13TeV, "https://arxiv.org" ],
+    [ ATLAS_ttW_13TeV_2016, "https://arxiv.org" ],
+    [ ATLAS_ttW_13TeV_2016_proj, "https://arxiv.org" ],
+    [ ATLAS_ttW_8TeV, "https://arxiv.org" ],
+    [ CMS_ttW_13TeV, "https://arxiv.org" ],
+    [ CMS_ttW_13TeV_proj, "https://arxiv.org" ],
+    [ CMS_ttW_8TeV, "https://arxiv.org" ],
+  ]
+  t8: [
+    [ ATLAS_t_sch_8TeV, "https://arxiv.org" ],
+    [ ATLAS_t_tch_8TeV_diff_Yt, "https://arxiv.org" ],
+    [ CMS_t_sch_8TeV, "https://arxiv.org" ],
+    [ CMS_t_tch_8TeV_diff_Yt, "https://arxiv.org" ],
+    [ CMS_t_tch_8TeV_inc, "https://arxiv.org" ],
+  ]
+  t13: [
+    [ ATLAS_t_sch_13TeV_inc, "https://arxiv.org" ],
+    [ ATLAS_t_sch_13TeV_inc_proj, "https://arxiv.org" ],
+    [ ATLAS_t_tch_13TeV_inc, "https://arxiv.org" ],
+    [ ATLAS_t_tch_13TeV_inc_proj, "https://arxiv.org" ],
+    [ CMS_t_tch_13TeV_2016_diff_Yt, "https://arxiv.org" ],
+    [ CMS_t_tch_13TeV_2019_diff_Yt, "https://arxiv.org" ],
+    [ CMS_t_tch_13TeV_2019_diff_Yt_proj, "https://arxiv.org" ],
+    [ CMS_t_tch_13TeV_inc, "https://arxiv.org" ],
+  ]
+  tW: [
+    [ ATLAS_tW_13TeV_inc, "https://arxiv.org" ],
+    [ ATLAS_tW_13TeV_inc_proj, "https://arxiv.org" ],
+    [ ATLAS_tW_8TeV_inc, "https://arxiv.org" ],
+    [ ATLAS_tW_slep_8TeV_inc, "https://arxiv.org" ],
+    [ CMS_tW_13TeV_inc, "https://arxiv.org" ],
+    [ CMS_tW_13TeV_inc_proj, "https://arxiv.org" ],
+    [ CMS_tW_13TeV_slep_inc, "https://arxiv.org" ],
+    [ CMS_tW_13TeV_slep_inc_proj, "https://arxiv.org" ],
+    [ CMS_tW_8TeV_inc, "https://arxiv.org" ],
+  ]
+  tZ: [
+    [ ATLAS_tZ_13TeV_inc, "https://arxiv.org" ],
+    [ ATLAS_tZ_13TeV_run2_inc, "https://arxiv.org" ],
+    [ ATLAS_tZ_13TeV_run2_inc_proj, "https://arxiv.org" ],
+    [ CMS_tZ_13TeV_2016_inc, "https://arxiv.org" ],
+    [ CMS_tZ_13TeV_inc, "https://arxiv.org" ],
+    [ CMS_tZ_13TeV_pTt, "https://arxiv.org" ],
+    [ CMS_tZ_13TeV_pTt_uncor_proj, "https://arxiv.org" ],
+  ]
+  HrunI: [
+    [ ATLAS_CMS_SSinc_RunI, "https://arxiv.org" ],
+  ]
+  HrunII: [
+    [ ATLAS_SSinc_RunII, "https://arxiv.org" ],
+    [ ATLAS_SSinc_RunII_proj.yaml, "https://arxiv.org" ],
+    [ CMS_SSinc_RunII, "https://arxiv.org" ],
+    [ CMS_SSinc_RunII_proj.yaml,  "https://arxiv.org" ]
+  ]
+  Hdiff: [
+    [ ATLAS_WH_Hbb_13TeV, "https://arxiv.org" ],
+    [ ATLAS_WH_Hbb_13TeV_proj, "https://arxiv.org" ],
+    [ ATLAS_ZH_Hbb_13TeV, "https://arxiv.org" ],
+    [ ATLAS_ZH_Hbb_13TeV_proj, "https://arxiv.org" ],
+    [ ATLAS_ggF_13TeV_2015, "https://arxiv.org" ],
+    [ ATLAS_ggF_13TeV_2015_proj, "https://arxiv.org" ],
+    [ ATLAS_ggF_ZZ_13TeV, "https://arxiv.org" ],
+    [ ATLAS_ggF_ZZ_13TeV_proj, "https://arxiv.org" ],
+    [ CMS_H_13TeV_2015_pTH, "https://arxiv.org" ],
+    [ CMS_H_13TeV_2015_pTH_proj, "https://arxiv.org" ],
+    [ CMS_ggF_aa_13TeV, "https://arxiv.org" ],
+    [ CMS_ggF_aa_13TeV_proj, "https://arxiv.org" ],
+    [ ATLAS_STXS_runII_13TeV, "https://arxiv.org" ],
+    [ ATLAS_STXS_runII_13TeV_uncor_proj, "https://arxiv.org" ],
+  ]
+  VV: [
+    [ ATLAS_WW_13TeV_2016_memu, "https://arxiv.org" ],
+    [ ATLAS_WW_13TeV_2016_memu_proj, "https://arxiv.org" ],
+    [ ATLAS_WZ_13TeV_2016_mTWZ, "https://arxiv.org" ],
+    [ ATLAS_WZ_13TeV_2016_mTWZ_proj, "https://arxiv.org" ],
+    [ CMS_WZ_13TeV_2016_pTZ, "https://arxiv.org" ],
+    [ CMS_WZ_13TeV_2016_pTZ_proj, "https://arxiv.org" ],
+    [ CMS_WZ_13TeV_2022_pTZ, "https://arxiv.org" ],
+    [ CMS_WZ_13TeV_2022_pTZ_proj, "https://arxiv.org" ],
+  ]
+  LEP: [
+    [ LEP1_EWPOs_2006, "https://arxiv.org" ],
+    [ LEP_Bhabha_2013, "https://arxiv.org" ],
+    [ LEP_Brw_2013, "https://arxiv.org" ],
+    [ LEP_alphaEW, "https://arxiv.org" ],
+    [ LEP_eeWW_182GeV, "https://arxiv.org" ],
+    [ LEP_eeWW_189GeV, "https://arxiv.org" ],
+    [ LEP_eeWW_198GeV, "https://arxiv.org" ],
+    [ LEP_eeWW_206GeV, "https://arxiv.org" ],
+  ]
+  FCC: [
+   [ FCCee_Brw_161GeV, "https://arxiv.org"],
+   [ FCCee_Brw_240GeV, "https://arxiv.org"],
+   [ FCCee_Brw_365GeV, "https://arxiv.org"],
+   [ FCCee_Zdata, "https://arxiv.org"],
+   [ FCCee_alphaEW, "https://arxiv.org"],
+   [ FCCee_bb_240GeV, "https://arxiv.org"],
+   [ FCCee_bb_365GeV, "https://arxiv.org"],
+   [ FCCee_bb_Afb_240GeV, "https://arxiv.org"],
+   [ FCCee_bb_Afb_365GeV, "https://arxiv.org"],
+   [ FCCee_cc_240GeV, "https://arxiv.org"],
+   [ FCCee_cc_365GeV, "https://arxiv.org"],
+   [ FCCee_cc_Afb_240GeV, "https://arxiv.org"],
+   [ FCCee_cc_Afb_365GeV, "https://arxiv.org"],
+   [ FCCee_ee_240GeV, "https://arxiv.org"],
+   [ FCCee_ee_365GeV, "https://arxiv.org"],
+   [ FCCee_ee_Afb_240GeV, "https://arxiv.org"],
+   [ FCCee_ee_Afb_365GeV, "https://arxiv.org"],
+   [ FCCee_mumu_240GeV, "https://arxiv.org"],
+   [ FCCee_mumu_365GeV, "https://arxiv.org"],
+   [ FCCee_mumu_Afb_240GeV, "https://arxiv.org"],
+   [ FCCee_mumu_Afb_365GeV, "https://arxiv.org"],
+   [ FCCee_tautau_240GeV, "https://arxiv.org"],
+   [ FCCee_tautau_365GeV, "https://arxiv.org"],
+   [ FCCee_tautau_Afb_240GeV, "https://arxiv.org"],
+   [ FCCee_tautau_Afb_365GeV, "https://arxiv.org"],
+   [ FCCee_vvh_WW_365GeV, "https://arxiv.org"],
+   [ FCCee_vvh_ZZ_365GeV, "https://arxiv.org"],
+   [ FCCee_vvh_aa_365GeV, "https://arxiv.org"],
+   [ FCCee_vvh_bb_240GeV, "https://arxiv.org"],
+   [ FCCee_vvh_bb_365GeV, "https://arxiv.org"],
+   [ FCCee_vvh_cc_365GeV, "https://arxiv.org"],
+   [ FCCee_vvh_gg_365GeV, "https://arxiv.org"],
+   [ FCCee_vvh_tautau_365GeV, "https://arxiv.org"],
+   [ FCCee_ww_161GeV, "https://arxiv.org"],
+   [ FCCee_ww_240GeV, "https://arxiv.org"],
+   [ FCCee_ww_365GeV, "https://arxiv.org"],
+   [ FCCee_zh_240GeV, "https://arxiv.org"],
+   [ FCCee_zh_365GeV, "https://arxiv.org"],
+   [ FCCee_zh_WW_240GeV, "https://arxiv.org"],
+   [ FCCee_zh_WW_365GeV, "https://arxiv.org"],
+   [ FCCee_zh_ZZ_240GeV, "https://arxiv.org"],
+   [ FCCee_zh_ZZ_365GeV, "https://arxiv.org"],
+   [ FCCee_zh_aZ_240GeV, "https://arxiv.org"],
+   [ FCCee_zh_aa_240GeV, "https://arxiv.org"],
+   [ FCCee_zh_aa_365GeV, "https://arxiv.org"],
+   [ FCCee_zh_bb_240GeV, "https://arxiv.org"],
+   [ FCCee_zh_bb_365GeV, "https://arxiv.org"],
+   [ FCCee_zh_cc_240GeV, "https://arxiv.org"],
+   [ FCCee_zh_cc_365GeV, "https://arxiv.org"],
+   [ FCCee_zh_gg_240GeV, "https://arxiv.org"],
+   [ FCCee_zh_gg_365GeV, "https://arxiv.org"],
+   [ FCCee_zh_tautau_240GeV, "https://arxiv.org"],
+   [ FCCee_zh_tautau_365GeV, "https://arxiv.org"],
+  ]
+  CEPC: [
+    [ CEPC_Brw_161GeV, "https://arxiv.org" ],
+    [ CEPC_Brw_240GeV, "https://arxiv.org" ],
+    [ CEPC_Brw_365GeV, "https://arxiv.org" ],
+    [ CEPC_Wwidth, "https://arxiv.org" ],
+    [ CEPC_Zdata, "https://arxiv.org" ],
+    [ CEPC_alphaEW, "https://arxiv.org" ],
+    [ CEPC_bb_240GeV, "https://arxiv.org" ],
+    [ CEPC_bb_365GeV, "https://arxiv.org" ],
+    [ CEPC_bb_Afb_240GeV, "https://arxiv.org" ],
+    [ CEPC_bb_Afb_365GeV, "https://arxiv.org" ],
+    [ CEPC_cc_240GeV, "https://arxiv.org" ],
+    [ CEPC_cc_365GeV, "https://arxiv.org" ],
+    [ CEPC_cc_Afb_240GeV, "https://arxiv.org" ],
+    [ CEPC_cc_Afb_365GeV, "https://arxiv.org" ],
+    [ CEPC_ee_240GeV, "https://arxiv.org" ],
+    [ CEPC_ee_365GeV, "https://arxiv.org" ],
+    [ CEPC_ee_Afb_240GeV, "https://arxiv.org" ],
+    [ CEPC_ee_Afb_365GeV, "https://arxiv.org" ],
+    [ CEPC_mumu_240GeV, "https://arxiv.org" ],
+    [ CEPC_mumu_365GeV, "https://arxiv.org" ],
+    [ CEPC_mumu_Afb_240GeV, "https://arxiv.org" ],
+    [ CEPC_mumu_Afb_365GeV, "https://arxiv.org" ],
+    [ CEPC_tautau_240GeV, "https://arxiv.org" ],
+    [ CEPC_tautau_365GeV, "https://arxiv.org" ],
+    [ CEPC_tautau_Afb_240GeV, "https://arxiv.org" ],
+    [ CEPC_tautau_Afb_365GeV, "https://arxiv.org" ],
+    [ CEPC_vvh_WW_365GeV, "https://arxiv.org" ],
+    [ CEPC_vvh_ZZ_365GeV, "https://arxiv.org" ],
+    [ CEPC_vvh_aa_365GeV, "https://arxiv.org" ],
+    [ CEPC_vvh_bb_240GeV, "https://arxiv.org" ],
+    [ CEPC_vvh_bb_365GeV, "https://arxiv.org" ],
+    [ CEPC_vvh_cc_365GeV, "https://arxiv.org" ],
+    [ CEPC_vvh_gg_365GeV, "https://arxiv.org" ],
+    [ CEPC_vvh_tautau_365GeV, "https://arxiv.org" ],
+    [ CEPC_ww_161GeV, "https://arxiv.org" ],
+    [ CEPC_ww_240GeV, "https://arxiv.org" ],
+    [ CEPC_ww_365GeV, "https://arxiv.org" ],
+    [ CEPC_zh_240GeV, "https://arxiv.org" ],
+    [ CEPC_zh_365GeV, "https://arxiv.org" ],
+    [ CEPC_zh_WW_240GeV, "https://arxiv.org" ],
+    [ CEPC_zh_WW_365GeV, "https://arxiv.org" ],
+    [ CEPC_zh_ZZ_240GeV, "https://arxiv.org" ],
+    [ CEPC_zh_ZZ_365GeV, "https://arxiv.org" ],
+    [ CEPC_zh_aZ_240GeV, "https://arxiv.org" ],
+    [ CEPC_zh_aa_240GeV, "https://arxiv.org" ],
+    [ CEPC_zh_aa_365GeV, "https://arxiv.org" ],
+    [ CEPC_zh_bb_240GeV, "https://arxiv.org" ],
+    [ CEPC_zh_bb_365GeV, "https://arxiv.org" ],
+    [ CEPC_zh_cc_240GeV, "https://arxiv.org" ],
+    [ CEPC_zh_cc_365GeV, "https://arxiv.org" ],
+    [ CEPC_zh_gg_240GeV, "https://arxiv.org" ],
+    [ CEPC_zh_gg_365GeV, "https://arxiv.org" ],
+    [ CEPC_zh_tautau_240GeV, "https://arxiv.org" ],
+    [ CEPC_zh_tautau_365GeV, "https://arxiv.org" ],
+  ]
