@@ -625,6 +625,7 @@ def get_dataset(datasets, data_name):
         data_name,
         ndata,
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],
+        datasets.ThCovMat[posix_in:posix_out].T[posix_in:posix_out],
         lumi,
         datasets.Replica[posix_in:posix_out],
     )
