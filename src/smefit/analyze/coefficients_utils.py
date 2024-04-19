@@ -731,10 +731,13 @@ class CoefficientsPlotter:
         dofs_show: list, optional
             List of coefficients to include in the cornerplot, set to ``None`` by default, i.e. all fitted coefficients
             are included.
+        double_solution: dict, optional
+            Dictionary of operators with double (disjoint) solution per fit
         """
 
         if double_solution is None:
             double_solution = {"fit1": [], "fit2": []}
+
         if dofs_show is not None:
             posteriors = [
                 (posterior[0][dofs_show], posterior[1]) for posterior in posteriors
@@ -745,7 +748,7 @@ class CoefficientsPlotter:
             coeff = self.coeff_info.index.levels[1]
             n_par = self.npar
 
-        n_cols = n_par - 1 if n_par != 2 else 2
+        n_cols = n_par - 1
         n_rows = n_cols
         if n_par > 2:
             fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
@@ -777,6 +780,8 @@ class CoefficientsPlotter:
             fit_number = -1
             for clr_idx, (posterior, kde) in enumerate(posteriors):
                 fit_number = fit_number + 1
+
+                # case when confidence levels = [cl1, cl2]
                 if isinstance(confidence_level, list):
                     colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
                     # plot the first one dashed
@@ -790,7 +795,7 @@ class CoefficientsPlotter:
                             linestyles="dashed",
                             linewidths=2,
                             color=colors[clr_idx],
-                            label=confidence_level[0],
+                            label=None,
                         )
                     else:
                         confidence_ellipse(
@@ -806,7 +811,6 @@ class CoefficientsPlotter:
                 else:
                     cl = confidence_level
 
-                # TODO why double solution commented out?
                 hndls_contours = plot_contours(
                     ax,
                     posterior,
@@ -819,7 +823,9 @@ class CoefficientsPlotter:
                     kde=kde,
                     clr_idx=clr_idx,
                     confidence_level=cl,
-                    double_solution=None,  # list(double_solution.values())[clr_idx],
+                    double_solution=list(double_solution.values())[clr_idx]
+                    if kde
+                    else None,
                 )
                 hndls_all.append(hndls_contours)
 
@@ -837,46 +843,7 @@ class CoefficientsPlotter:
                         which="both",  # both major and minor ticks are affected
                         labelleft=False,
                     )
-                if isinstance(confidence_level, list):
-                    hndls_all.append(
-                        mlines.Line2D(
-                            [],
-                            [],
-                            linestyle="--",
-                            linewidth=2,
-                            alpha=1,
-                            color=colors[clr_idx],
-                        )
-                    )
-                    hndls_all.append(
-                        mlines.Line2D(
-                            [],
-                            [],
-                            linestyle="-",
-                            linewidth=2,
-                            alpha=1,
-                            color=colors[clr_idx],
-                        )
-                    )
-                    hndls_all.append(
-                        mlines.Line2D(
-                            [],
-                            [],
-                            color=colors[clr_idx],
-                            marker="o",
-                            linestyle="None",
-                            markersize=8,
-                            label="Best fit",
-                        )
-                    )
-                    labels.insert(
-                        1 + 4 * fit_number, str(confidence_level[0]) + r"\% C.L."
-                    )
-                    labels.insert(
-                        2 + 4 * fit_number, str(confidence_level[1]) + r"\% C.L."
-                    )
-                    labels.insert(3 + 4 * fit_number, "Best fit")
-                    # labels already contain all fit name, so for each fit we need to insert C.L. contours at right pos
+
             hndls_sm_point = ax.scatter(0, 0, c="k", marker="+", s=50, zorder=10)
             hndls_all.append(hndls_sm_point)
 
@@ -886,9 +853,11 @@ class CoefficientsPlotter:
             ax.minorticks_on()
             ax.grid(linestyle="dotted", linewidth=0.5)
 
-        # TODO keep option in runcard to have legend inside plot
-        # ax = fig.add_subplot(grid[0, -1])
-        # ax.axis("off")
+        # in case n_par > 2, put legend outside subplot
+        if n_par > 2:
+            ax = fig.add_subplot(grid[0, -1])
+            ax.axis("off")
+
         ax.legend(
             labels=labels + [r"$\mathrm{SM}$"],
             handles=hndls_all,
@@ -902,7 +871,7 @@ class CoefficientsPlotter:
         )
 
         ax.set_title(
-            r"$\mathrm{Marginalised}\:95\:\%\:\mathrm{C.L.\:intervals}$",
+            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.L.\:intervals}}$",
             fontsize=18,
         )
         grid.tight_layout(fig)

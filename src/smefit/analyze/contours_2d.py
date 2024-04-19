@@ -127,6 +127,8 @@ def plot_contours(
         Color index that makes sure each fit gets associated a different color
     confidence_level: int, optional
         Confidence level interval, set to 95% by default
+    double_solution: dict, optional
+        Dictionary of operators with double (disjoint) solution per fit
 
     Returns
     -------
