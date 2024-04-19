@@ -1,0 +1,653 @@
+Model name: Varphi
+UV Collection: 1LoopMatching
+UV model: Varphi
+coefficients:
+  O11qq:
+    constrain:
+    - lamvarphi:
+      - -2.409316390101726e-08
+      - 0
+    - lamvarphi:
+      - -2.1925119531248212e-05
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O13qq:
+    constrain:
+    - lamvarphi:
+      - -2.3973893314051245e-06
+      - 0
+    - lamvarphi:
+      - 1.8746385635798607e-05
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O1dt:
+    constrain:
+    - lamvarphi:
+      - 3.8549062241627617e-07
+      - 0
+    - lamvarphi:
+      - 2.536146245894137e-05
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O1qd:
+    constrain:
+    - lamvarphi:
+      - 9.637265560406904e-08
+      - 0
+    - lamvarphi:
+      - 8.770047812499286e-05
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O1qt:
+    constrain:
+    - lamvarphi:
+      - -1.9274531120813808e-07
+      - 0
+    - lamvarphi:
+      - -1.2528639732141836e-05
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O1qu:
+    constrain:
+    - lamvarphi:
+      - -1.9274531120813808e-07
+      - 0
+    - lamvarphi:
+      - -0.00017540095624998572
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O1ut:
+    constrain:
+    - lamvarphi:
+      - -3.8549062241627617e-07
+      - 0
+    - lamvarphi:
+      - -2.5057279464283672e-05
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O3pQ3:
+    constrain:
+    - lamvarphi:
+      - -4.794778662810249e-06
+      - 0
+    - lamvarphi:
+      - -0.0004821067692708801
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O3pl1:
+    constrain:
+    - lamvarphi:
+      - -4.794778662810249e-06
+      - 0
+    max: 100
+    min: -100
+  O3pl2:
+    constrain:
+    - lamvarphi:
+      - -4.794778662810249e-06
+      - 0
+    max: 100
+    min: -100
+  O3pl3:
+    constrain:
+    - lamvarphi:
+      - -4.794778662810249e-06
+      - 0
+    max: 100
+    min: -100
+  O3pq:
+    constrain:
+    - lamvarphi:
+      - -4.794778662810249e-06
+      - 0
+    max: 100
+    min: -100
+  O81qq:
+    constrain:
+    - lamvarphi:
+      - -0.0020849297545038293
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O8dt:
+    constrain:
+    - lamvarphi:
+      - -0.00833789392004737
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O8qd:
+    constrain:
+    - lamvarphi:
+      - -0.004169859509007659
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O8qt:
+    constrain:
+    - lamvarphi:
+      - -0.008339719018015317
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O8qu:
+    constrain:
+    - lamvarphi:
+      - -0.004169859509007659
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  O8ut:
+    constrain:
+    - lamvarphi:
+      - -0.004169859509007659
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  OQQ1:
+    constrain:
+    - lamvarphi:
+      - 1.5500732264680482e-06
+      - 0
+    - lamvarphi:
+      - 0.00040690388156975303
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    - lamvarphi:
+      - -0.0005277144981371759
+      - 0
+      yVarphiuf33:
+      - 1
+      - 4
+    max: 100
+    min: -100
+  OQQ8:
+    constrain:
+    - lamvarphi:
+      - -1.9179114651240996e-05
+      - 0
+    - lamvarphi:
+      - -0.0049221796045876755
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    - lamvarphi:
+      - -0.0031662869888230555
+      - 0
+      yVarphiuf33:
+      - 1
+      - 4
+    max: 100
+    min: -100
+  OQt1:
+    constrain:
+    - lamvarphi:
+      - -1.9274531120813808e-07
+      - 0
+    - lamvarphi:
+      - -0.17591655150625646
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    - lamvarphi:
+      - 0.0023747152416172916
+      - 0
+      yVarphiuf33:
+      - 1
+      - 4
+    max: 100
+    min: -100
+  OQt8:
+    constrain:
+    - lamvarphi:
+      - -0.9919707996540444
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    - lamvarphi:
+      - 0.004749430483234583
+      - 0
+      yVarphiuf33:
+      - 1
+      - 4
+    max: 100
+    min: -100
+  OWWW:
+    constrain:
+    - lamvarphi:
+      - 4.895842313673639e-06
+      - 0
+    max: 100
+    min: -100
+  Obp:
+    constrain:
+    - lamvarphi:
+      - -1.1511621897704396e-07
+      - 0
+    - lamvarphi:
+      - -3.741736578242873e-05
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    - lamvarphi:
+      - 0.00011314734148650149
+      - 1
+      yVarphiuf33:
+      - 1
+      - 1
+    - lamvarphi:
+      - 0.0001520366264981623
+      - 2
+    max: 100
+    min: -100
+  Oll:
+    constrain:
+    - lamvarphi:
+      - -4.794778662810249e-06
+      - 0
+    max: 100
+    min: -100
+  Oll1111:
+    constrain:
+    - lamvarphi:
+      - -2.61422780651428e-06
+      - 0
+    max: 100
+    min: -100
+  OpD:
+    constrain:
+    - lamvarphi:
+      - -8.673539004366214e-07
+      - 0
+    max: 100
+    min: -100
+  OpQM:
+    constrain:
+    - lamvarphi:
+      - 4.6502196794041456e-06
+      - 0
+    - lamvarphi:
+      - 0.0039877528358807325
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  Opd:
+    constrain:
+    - lamvarphi:
+      - -7.409006469324528e-06
+      - 0
+    - lamvarphi:
+      - -0.009498860966469166
+      - 2
+    max: 100
+    min: -100
+  Opdi:
+    constrain:
+    - lamvarphi:
+      - 2.891179668122071e-07
+      - 0
+    max: 100
+    min: -100
+  Ope:
+    constrain:
+    - lamvarphi:
+      - 8.673539004366214e-07
+      - 0
+    max: 100
+    min: -100
+  Opl1:
+    constrain:
+    - lamvarphi:
+      - 4.336769502183107e-07
+      - 0
+    max: 100
+    min: -100
+  Opl2:
+    constrain:
+    - lamvarphi:
+      - 4.336769502183107e-07
+      - 0
+    max: 100
+    min: -100
+  Opl3:
+    constrain:
+    - lamvarphi:
+      - 4.336769502183107e-07
+      - 0
+    max: 100
+    min: -100
+  Opmu:
+    constrain:
+    - lamvarphi:
+      - 8.673539004366214e-07
+      - 0
+    max: 100
+    min: -100
+  OpqMi:
+    constrain:
+    - lamvarphi:
+      - 4.6502196794041456e-06
+      - 0
+    max: 100
+    min: -100
+  Opt:
+    constrain:
+    - lamvarphi:
+      - -5.782359336244142e-07
+      - 0
+    - lamvarphi:
+      - -0.0036729576050258212
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  Opta:
+    constrain:
+    - lamvarphi:
+      - 8.673539004366214e-07
+      - 0
+    max: 100
+    min: -100
+  Opui:
+    constrain:
+    - lamvarphi:
+      - -5.782359336244142e-07
+      - 0
+    max: 100
+    min: -100
+  OtG:
+    constrain:
+    - lamvarphi:
+      - 0.0019121280895770068
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  OtW:
+    constrain:
+    - lamvarphi:
+      - -0.0016239676930544275
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  OtZ:
+    constrain:
+    - lamvarphi:
+      - -0.0005011207226640796
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    max: 100
+    min: -100
+  Otap:
+    constrain:
+    - lamvarphi:
+      - -4.902078224381298e-08
+      - 0
+    - lamvarphi:
+      - 6.474286965711216e-05
+      - 2
+    max: 100
+    min: -100
+  Otp:
+    constrain:
+    - lamvarphi:
+      - -4.757769854180409e-06
+      - 0
+    - lamvarphi:
+      - 0.014574511604595554
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    - lamvarphi:
+      - -1.0202607318852208
+      - 1
+      yVarphiuf33:
+      - 1
+      - 1
+    - lamvarphi:
+      - 0.0023747152416172916
+      - 1
+      yVarphiuf33:
+      - 1
+      - 3
+    - lamvarphi:
+      - 0.006283695596608257
+      - 2
+    max: 100
+    min: -100
+  Ott1:
+    constrain:
+    - lamvarphi:
+      - -3.8549062241627617e-07
+      - 0
+    - lamvarphi:
+      - -0.001271222276639574
+      - 0
+      yVarphiuf33:
+      - 1
+      - 2
+    - lamvarphi:
+      - -0.0015831434944115277
+      - 0
+      yVarphiuf33:
+      - 1
+      - 4
+    max: 100
+    min: -100
+  lamvarphi:
+    max: 100
+    min: -100
+  yVarphiuf33:
+    max: 100
+    min: -100
+data_path: /data/theorie/jthoeve/smefit_database/commondata_projections_t0
+datasets:
+- ATLAS_CMS_SSinc_RunI
+- ATLAS_CMS_tt_AC_8TeV
+- ATLAS_SSinc_RunII
+- ATLAS_SSinc_RunII_proj
+- ATLAS_STXS_runII_13TeV
+- ATLAS_STXS_runII_13TeV_uncor_proj
+- ATLAS_WH_Hbb_13TeV
+- ATLAS_WH_Hbb_13TeV_proj
+- ATLAS_WW_13TeV_2016_memu
+- ATLAS_WW_13TeV_2016_memu_proj
+- ATLAS_WZ_13TeV_2016_mTWZ
+- ATLAS_WZ_13TeV_2016_mTWZ_proj
+- ATLAS_WhelF_8TeV
+- ATLAS_Whel_13TeV
+- ATLAS_Whel_13TeV_uncor_proj
+- ATLAS_ZH_Hbb_13TeV
+- ATLAS_ZH_Hbb_13TeV_proj
+- ATLAS_ggF_13TeV_2015
+- ATLAS_ggF_13TeV_2015_proj
+- ATLAS_ggF_ZZ_13TeV
+- ATLAS_ggF_ZZ_13TeV_proj
+- ATLAS_tW_13TeV_inc
+- ATLAS_tW_13TeV_inc_proj
+- ATLAS_tW_8TeV_inc
+- ATLAS_tW_slep_8TeV_inc
+- ATLAS_tZ_13TeV_inc
+- ATLAS_tZ_13TeV_run2_inc
+- ATLAS_tZ_13TeV_run2_inc_proj
+- ATLAS_t_sch_13TeV_inc
+- ATLAS_t_sch_13TeV_inc_proj
+- ATLAS_t_sch_8TeV
+- ATLAS_t_tch_13TeV_inc
+- ATLAS_t_tch_13TeV_inc_proj
+- ATLAS_t_tch_8TeV_diff_Yt
+- ATLAS_ttW_13TeV
+- ATLAS_ttW_13TeV_2016
+- ATLAS_ttW_13TeV_2016_proj
+- ATLAS_ttW_8TeV
+- ATLAS_ttZ_13TeV
+- ATLAS_ttZ_13TeV_2016
+- ATLAS_ttZ_13TeV_pTZ
+- ATLAS_ttZ_13TeV_pTZ_uncor_proj
+- ATLAS_ttZ_8TeV
+- ATLAS_tt_13TeV_asy_2022
+- ATLAS_tt_13TeV_asy_2022_uncor_proj
+- ATLAS_tt_13TeV_ljets_2016_Mtt
+- ATLAS_tt_13TeV_ljets_2016_Mtt_proj
+- ATLAS_tt_8TeV_dilep_Mtt
+- ATLAS_tt_8TeV_ljets_Mtt
+- ATLAS_tta_8TeV
+- ATLAS_ttbb_13TeV_2016
+- ATLAS_ttbb_13TeV_2016_proj
+- ATLAS_tttt_13TeV_2023
+- ATLAS_tttt_13TeV_2023_proj
+- ATLAS_tttt_13TeV_run2
+- ATLAS_tttt_13TeV_run2_proj
+- ATLAS_tttt_13TeV_slep_inc
+- ATLAS_tttt_13TeV_slep_inc_proj
+- CMS_H_13TeV_2015_pTH
+- CMS_H_13TeV_2015_pTH_proj
+- CMS_SSinc_RunII
+- CMS_SSinc_RunII_proj
+- CMS_WZ_13TeV_2016_pTZ
+- CMS_WZ_13TeV_2016_pTZ_proj
+- CMS_WZ_13TeV_2022_pTZ
+- CMS_WZ_13TeV_2022_pTZ_proj
+- CMS_WhelF_8TeV
+- CMS_ggF_aa_13TeV
+- CMS_ggF_aa_13TeV_proj
+- CMS_tW_13TeV_inc
+- CMS_tW_13TeV_inc_proj
+- CMS_tW_13TeV_slep_inc
+- CMS_tW_13TeV_slep_inc_proj
+- CMS_tW_8TeV_inc
+- CMS_tZ_13TeV_2016_inc
+- CMS_tZ_13TeV_inc
+- CMS_tZ_13TeV_pTt
+- CMS_tZ_13TeV_pTt_uncor_proj
+- CMS_t_sch_8TeV
+- CMS_t_tch_13TeV_2016_diff_Yt
+- CMS_t_tch_13TeV_2019_diff_Yt
+- CMS_t_tch_13TeV_2019_diff_Yt_proj
+- CMS_t_tch_13TeV_inc
+- CMS_t_tch_8TeV_diff_Yt
+- CMS_t_tch_8TeV_inc
+- CMS_tt2D_8TeV_dilep_MttYtt
+- CMS_ttW_13TeV
+- CMS_ttW_13TeV_proj
+- CMS_ttW_8TeV
+- CMS_ttZ_13TeV
+- CMS_ttZ_13TeV_pTZ
+- CMS_ttZ_13TeV_pTZ_proj
+- CMS_ttZ_8TeV
+- CMS_tt_13TeV_Mtt
+- CMS_tt_13TeV_Mtt_proj
+- CMS_tt_13TeV_asy
+- CMS_tt_13TeV_asy_proj
+- CMS_tt_13TeV_dilep_2015_Mtt
+- CMS_tt_13TeV_dilep_2016_Mtt
+- CMS_tt_13TeV_dilep_2016_Mtt_proj
+- CMS_tt_13TeV_ljets_2015_Mtt
+- CMS_tt_13TeV_ljets_2016_Mtt
+- CMS_tt_13TeV_ljets_inc
+- CMS_tt_13TeV_ljets_inc_proj
+- CMS_tt_8TeV_ljets_Ytt
+- CMS_tta_8TeV
+- CMS_ttbb_13TeV
+- CMS_ttbb_13TeV_2016
+- CMS_ttbb_13TeV_2016_proj
+- CMS_ttbb_13TeV_dilepton_inc
+- CMS_ttbb_13TeV_dilepton_inc_proj
+- CMS_ttbb_13TeV_ljets_inc
+- CMS_ttbb_13TeV_ljets_inc_proj
+- CMS_tttt_13TeV
+- CMS_tttt_13TeV_2023
+- CMS_tttt_13TeV_2023_proj
+- CMS_tttt_13TeV_run2
+- CMS_tttt_13TeV_run2_proj
+- CMS_tttt_13TeV_slep_inc
+- CMS_tttt_13TeV_slep_inc_proj
+- LEP1_EWPOs_2006
+- LEP_Bhabha_2013
+- LEP_Brw_2013
+- LEP_alphaEW
+- LEP_eeWW_182GeV
+- LEP_eeWW_189GeV
+- LEP_eeWW_198GeV
+- LEP_eeWW_206GeV
+frac_remain: 0.001
+lepsilon: 0.001
+nlive: 1000
+order: NLO
+result_path: /data/theorie/jthoeve/smefit_release/results/smefit_fcc_uv_spider
+target_evidence_unc: 0.5
+target_post_unc: 0.5
+theory_path: /data/theorie/jthoeve/smefit_database/theory
+use_quad: true
+use_t0: false
+use_theory_covmat: true
+uv_couplings: true

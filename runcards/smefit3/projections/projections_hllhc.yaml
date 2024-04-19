@@ -90,5 +90,3 @@ use_t0: True
 
 fred_sys: 0.5 # systematics get reduced by 1/2
 fred_tot: 0.333 # total errors get reduced by 1/3
-
-
