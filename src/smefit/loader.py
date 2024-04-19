@@ -562,6 +562,7 @@ def load_datasets(
     # At the moment it does not account for correlation between different datasets
     theory_covariance = la.block_diag(*th_cov)
     exp_covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
+
     # replicas always generated using the experimental covmat, no t0
     replica = np.random.multivariate_normal(exp_data, exp_covmat)
     if use_t0:

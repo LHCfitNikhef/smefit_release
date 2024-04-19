@@ -444,6 +444,8 @@ class Report:
                 links_list.append((f"pca_table_{fit.name}", f"Table {fit.label}"))
             if plot is not None:
                 title = fit.name
+
+                # TODO: check why **fit_plot got removed (see PR)
                 pca_cal.plot_heatmap(
                     f"{self.report}/pca_heatmap_{fit.name}", title=title
                 )

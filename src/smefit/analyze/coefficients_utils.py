@@ -806,6 +806,7 @@ class CoefficientsPlotter:
                 else:
                     cl = confidence_level
 
+                # TODO why double solution commented out?
                 hndls_contours = plot_contours(
                     ax,
                     posterior,
@@ -885,6 +886,7 @@ class CoefficientsPlotter:
             ax.minorticks_on()
             ax.grid(linestyle="dotted", linewidth=0.5)
 
+        # TODO keep option in runcard to have legend inside plot
         # ax = fig.add_subplot(grid[0, -1])
         # ax.axis("off")
         ax.legend(
@@ -900,7 +902,7 @@ class CoefficientsPlotter:
         )
 
         ax.set_title(
-            r"$\mathrm{Marginalised}\:95\:\%\:\mathrm{C.L.\:intervals,\:NLO}\:\mathcal{O}\left(\Lambda^{-2}\right)$",
+            r"$\mathrm{Marginalised}\:95\:\%\:\mathrm{C.L.\:intervals}$",
             fontsize=18,
         )
         grid.tight_layout(fig)

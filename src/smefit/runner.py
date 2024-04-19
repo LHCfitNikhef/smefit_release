@@ -136,15 +136,15 @@ class Runner:
     def ultranest(self, config):
         """Run a fit with Ultra Nest."""
 
-        if run_parallel:
+        # add external modules to paths
+        if "external_chi2" in config:
+            external_chi2 = config["external_chi2"]
+            for class_name, module_path in external_chi2.items():
+                path = pathlib.Path(module_path)
+                base_path, stem = path.parent, path.stem
+                sys.path = [str(base_path)] + sys.path
 
-            # dynamical import of all external modules on all processors
-            if "external_chi2" in config:
-                external_chi2 = config["external_chi2"]
-                for class_name, module_path in external_chi2.items():
-                    path = pathlib.Path(module_path)
-                    base_path, stem = path.parent, path.stem
-                    sys.path = [str(base_path)] + sys.path
+        if run_parallel:
 
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
