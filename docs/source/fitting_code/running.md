@@ -219,6 +219,9 @@ containing the posterior distribution of the coefficients specified in the runca
 .. _mc:
 ```
 ## Running a fit with MC
+
+**Disclaimer**: the MC mode is only supported for linear fits.
+
 The basic command to run a fit using Monte Carlo is
 
 ```bash
@@ -269,10 +272,3 @@ The command
 ```
 will produce in the results folder a series of pdf files containing plots for
 1-dimensional scans of the chi2 with respect to each parameter in the runcard.
-
-
-## Projections
-
-```bash
-    smefit proj /path/to/the/projection_runcard/runcard.yaml
-```
