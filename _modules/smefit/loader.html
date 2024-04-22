@@ -76,6 +76,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit20.html">SMEFiT2.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit30.html">SMEFiT3.0</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
 <ul>
@@ -613,6 +614,7 @@
     <span class="n">theory_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">rot_to_fit_basis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">has_uv_couplings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">has_external_chi2</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads experimental data, theory and |SMEFT| corrections into a namedtuple</span>
@@ -636,6 +638,10 @@
 <span class="sd">            Default it assumes to be the same as commondata_path</span>
 <span class="sd">        rot_to_fit_basis: dict, optional</span>
 <span class="sd">            matrix rotation to fit basis or None</span>
+<span class="sd">        has_uv_couplings: bool, optional</span>
+<span class="sd">            True for UV fits</span>
+<span class="sd">        has_external_chi2: bool, optional</span>
+<span class="sd">            True in the presence of external chi2 modules</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">exp_data</span> <span class="o">=</span> <span class="p">[]</span>
@@ -684,7 +690,7 @@
     <span class="n">sorted_keys</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1"># if uv couplings are present allow for op which are not in the</span>
     <span class="c1"># theory files</span>
-    <span class="k">if</span> <span class="n">has_uv_couplings</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">has_uv_couplings</span> <span class="ow">or</span> <span class="n">has_external_chi2</span><span class="p">:</span>
         <span class="n">sorted_keys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">((</span><span class="o">*</span><span class="n">operators_to_keep</span><span class="p">,))</span>
     <span class="n">operators_names</span><span class="p">,</span> <span class="n">lin_corr_values</span> <span class="o">=</span> <span class="n">construct_corrections_matrix</span><span class="p">(</span>
         <span class="n">lin_corr_list</span><span class="p">,</span> <span class="n">n_data_tot</span><span class="p">,</span> <span class="n">sorted_keys</span>
@@ -711,6 +717,7 @@
     <span class="c1"># At the moment it does not account for correlation between different datasets</span>
     <span class="n">theory_covariance</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">block_diag</span><span class="p">(</span><span class="o">*</span><span class="n">th_cov</span><span class="p">)</span>
     <span class="n">exp_covmat</span> <span class="o">=</span> <span class="n">covmat_from_systematics</span><span class="p">(</span><span class="n">stat_error</span><span class="p">,</span> <span class="n">sys_error</span><span class="p">)</span> <span class="o">+</span> <span class="n">theory_covariance</span>
+
     <span class="c1"># replicas always generated using the experimental covmat, no t0</span>
     <span class="n">replica</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">exp_data</span><span class="p">,</span> <span class="n">exp_covmat</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">use_t0</span><span class="p">:</span>
@@ -757,6 +764,7 @@
         <span class="n">data_name</span><span class="p">,</span>
         <span class="n">ndata</span><span class="p">,</span>
         <span class="n">datasets</span><span class="o">.</span><span class="n">InvCovMat</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">],</span>
+        <span class="n">datasets</span><span class="o">.</span><span class="n">ThCovMat</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">],</span>
         <span class="n">lumi</span><span class="p">,</span>
         <span class="n">datasets</span><span class="o">.</span><span class="n">Replica</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">],</span>
     <span class="p">)</span></div>

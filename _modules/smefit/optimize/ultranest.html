@@ -76,6 +76,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit20.html">SMEFiT2.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit30.html">SMEFiT3.0</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
 <ul>
@@ -114,7 +115,8 @@
            <div itemprop="articleBody">
              
   <h1>Source code for smefit.optimize.ultranest</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Fitting the Wilson coefficients with |NS|&quot;&quot;&quot;</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Fitting the Wilson coefficients with |NS|&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
 <span class="kn">import</span> <span class="nn">ultranest</span>
@@ -195,6 +197,7 @@
         <span class="n">target_post_unc</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">frac_remain</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
         <span class="n">store_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">external_chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -203,6 +206,7 @@
             <span class="n">use_quad</span><span class="p">,</span>
             <span class="n">single_parameter_fits</span><span class="p">,</span>
             <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
+            <span class="n">external_chi2</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">live_points</span> <span class="o">=</span> <span class="n">live_points</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lepsilon</span> <span class="o">=</span> <span class="n">lepsilon</span>
@@ -231,19 +235,23 @@
 <span class="sd">            created object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">loaded_datasets</span> <span class="o">=</span> <span class="n">load_datasets</span><span class="p">(</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;data_path&quot;</span><span class="p">],</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;datasets&quot;</span><span class="p">],</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">],</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">],</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">],</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_theory_covmat&quot;</span><span class="p">],</span>
-            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_t0&quot;</span><span class="p">],</span>
-            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;use_multiplicative_prescription&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;theory_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rot_to_fit_basis&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-            <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uv_couplings&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;datasets&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">loaded_datasets</span> <span class="o">=</span> <span class="n">load_datasets</span><span class="p">(</span>
+                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;data_path&quot;</span><span class="p">],</span>
+                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;datasets&quot;</span><span class="p">],</span>
+                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">],</span>
+                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">],</span>
+                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">],</span>
+                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_theory_covmat&quot;</span><span class="p">],</span>
+                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_t0&quot;</span><span class="p">],</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;use_multiplicative_prescription&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;theory_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rot_to_fit_basis&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uv_couplings&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;external_chi2&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;external_chi2&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">loaded_datasets</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="n">coefficients</span> <span class="o">=</span> <span class="n">CoefficientManager</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">])</span>
 
@@ -285,6 +293,9 @@
         <span class="n">use_multiplicative_prescription</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="s2">&quot;use_multiplicative_prescription&quot;</span><span class="p">,</span> <span class="kc">False</span>
         <span class="p">)</span>
+
+        <span class="n">external_chi2</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;external_chi2&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">loaded_datasets</span><span class="p">,</span>
             <span class="n">coefficients</span><span class="p">,</span>
@@ -300,6 +311,7 @@
             <span class="n">target_post_unc</span><span class="o">=</span><span class="n">target_post_unc</span><span class="p">,</span>
             <span class="n">frac_remain</span><span class="o">=</span><span class="n">frac_remain</span><span class="p">,</span>
             <span class="n">store_raw</span><span class="o">=</span><span class="n">store_raw</span><span class="p">,</span>
+            <span class="n">external_chi2</span><span class="o">=</span><span class="n">external_chi2</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 

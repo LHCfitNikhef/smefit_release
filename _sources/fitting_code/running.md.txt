@@ -162,6 +162,50 @@ smefit NS --rotate_to_pca path/to/the/runcard/runcard.yaml
 ```eval_rst
 .. _ns:
 ```
+
+### Adding custom likelihoods
+SMEFiT supports the addition of customised likelihoods. This can be relevant when an external likelihood is already at hand
+and one would like to combine it with the one constructed internally in SMEFiT. To make use of this feature, one should add
+the following to the runcard:
+
+```yaml
+external_chi2:
+  'ExternalChi2': /path/to/external/chi2.py
+```
+Here, ``ExternalChi2`` is the name of the class that must be defined in the referenced python file as follows:
+
+```python
+import numpy as np
+
+
+class ExternalChi2:
+    def __init__(self, coefficients):
+        """
+        Constructor that allows one to set attributes that can be called in the compute_chi2 method
+        Parameters
+        ----------
+        coefficients:  smefit.coefficients.CoefficientManager
+            attributes: name, value
+        """
+        self.example_attribute = coefficients.name
+
+    def compute_chi2(self, coefficient_values):
+        """
+        Parameters
+        ----------
+         coefficients_values : numpy.ndarray
+            |EFT| coefficients values
+
+        """
+
+        # example
+        chi2_value = np.sum(coefficient_values**2)
+        return chi2_value
+```
+One is free to set custom attributes in the constructor. The coefficient values during optimisation
+are accesible via ``coefficient_values`` in the ``compute_chi2`` method. In order for the external chi2
+to work, it is important one does not change the name of the ``compute_chi2`` method!
+
 ## Running a fit with NS
 To run a fiy using Nested Sampling use the command
 ```bash
@@ -175,6 +219,9 @@ containing the posterior distribution of the coefficients specified in the runca
 .. _mc:
 ```
 ## Running a fit with MC
+
+**Disclaimer**: the MC mode is only supported for linear fits.
+
 The basic command to run a fit using Monte Carlo is
 
 ```bash
@@ -225,10 +272,3 @@ The command
 ```
 will produce in the results folder a series of pdf files containing plots for
 1-dimensional scans of the chi2 with respect to each parameter in the runcard.
-
-
-## Projections
-
-```bash
-    smefit proj /path/to/the/projection_runcard/runcard.yaml
-```

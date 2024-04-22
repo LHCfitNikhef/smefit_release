@@ -83,6 +83,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit20.html">SMEFiT2.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit30.html">SMEFiT3.0</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
 <ul>
@@ -122,8 +123,8 @@
   <section id="standard-model-effective-field-theory">
 <h1>Standard Model Effective Field Theory<a class="headerlink" href="#standard-model-effective-field-theory" title="Link to this heading"></a></h1>
 <p>Here we present a brief description of the theoretical formalism
-underlying the <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> framework <span id="id1">[<a class="reference internal" href="../zzz-refs.html#id7" title="Steven Weinberg. Phenomenological Lagrangians. Physica, A96:327, 1979. URL: http://www.slac.stanford.edu/spires/find/hep/www?j=PHYSA,A96,327.">Wei79b</a>]</span>  <span id="id2">[<a class="reference internal" href="../zzz-refs.html#id9" title="W. Buchmuller and D. Wyler. Effective Lagrangian Analysis of New Interactions and Flavor Conservation. Nucl. Phys., B268:621-653, 1986. doi:10.1016/0550-3213(86)90262-2.">BW86</a>]</span> and its application
-to the analysis of particle physics data, see also <span id="id3">[<a class="reference internal" href="../zzz-refs.html#id19" title="Ilaria Brivio and Michael Trott. The Standard Model as an Effective Field Theory. Phys. Rept., 793:1-98, 2019. arXiv:1706.08945, doi:10.1016/j.physrep.2018.11.002.">BT19</a>]</span> for a review.</p>
+underlying the <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> framework <span id="id1">[<a class="reference internal" href="../zzz-refs.html#id8" title="Steven Weinberg. Phenomenological Lagrangians. Physica, A96:327, 1979. URL: http://www.slac.stanford.edu/spires/find/hep/www?j=PHYSA,A96,327.">Wei79b</a>]</span>  <span id="id2">[<a class="reference internal" href="../zzz-refs.html#id10" title="W. Buchmuller and D. Wyler. Effective Lagrangian Analysis of New Interactions and Flavor Conservation. Nucl. Phys., B268:621-653, 1986. doi:10.1016/0550-3213(86)90262-2.">BW86</a>]</span> and its application
+to the analysis of particle physics data, see also <span id="id3">[<a class="reference internal" href="../zzz-refs.html#id20" title="Ilaria Brivio and Michael Trott. The Standard Model as an Effective Field Theory. Phys. Rept., 793:1-98, 2019. arXiv:1706.08945, doi:10.1016/j.physrep.2018.11.002.">BT19</a>]</span> for a review.</p>
 <section id="the-smeft-framework">
 <h2>The SMEFT framework<a class="headerlink" href="#the-smeft-framework" title="Link to this heading"></a></h2>
 <p>The effects of new heavy BSM particles with
@@ -139,11 +140,11 @@ The resulting effective Lagrangian then admits the following power expansion</p>
 the elements of the
 operator basis of mass-dimension d=6 and d=8,
 respectively. Operators with d=5 and d=7, which violate lepton and/or baryon number
-conservation <span id="id4">[<a class="reference internal" href="../zzz-refs.html#id4" title="Celine Degrande, Nicolas Greiner, Wolfgang Kilian, Olivier Mattelaer, Harrison Mebane, Tim Stelzer, Scott Willenbrock, and Cen Zhang. Effective Field Theory: A Modern Approach to Anomalous Couplings. Annals Phys., 335:21-32, 2013. arXiv:1205.4231, doi:10.1016/j.aop.2013.04.016.">DGK+13</a>]</span>, are not considered here.
+conservation <span id="id4">[<a class="reference internal" href="../zzz-refs.html#id5" title="Celine Degrande, Nicolas Greiner, Wolfgang Kilian, Olivier Mattelaer, Harrison Mebane, Tim Stelzer, Scott Willenbrock, and Cen Zhang. Effective Field Theory: A Modern Approach to Anomalous Couplings. Annals Phys., 335:21-32, 2013. arXiv:1205.4231, doi:10.1016/j.aop.2013.04.016.">DGK+13</a>]</span>, are not considered here.
 Whilst the choice of operator basis used in this expression is
 not unique, it is possible to relate the results obtained in different
-bases <span id="id5">[<a class="reference internal" href="../zzz-refs.html#id20" title="Adam Falkowski, Benjamin Fuks, Kentarou Mawatari, Ken Mimasu, Francesco Riva, and Verónica Sanz. Rosetta: an operator basis translator for Standard Model effective field theory. Eur. Phys. J., C75(12):583, 2015. arXiv:1508.05895, doi:10.1140/epjc/s10052-015-3806-x.">FFM+15</a>]</span>.
-In our approach we adopt the Warsaw basis for <span class="math notranslate nohighlight">\(\mathcal{O}_i^{(6)}\)</span>  <span id="id6">[<a class="reference internal" href="../zzz-refs.html#id5" title="B. Grzadkowski, M. Iskrzynski, M. Misiak, and J. Rosiek. Dimension-Six Terms in the Standard Model Lagrangian. JHEP, 10:085, 2010. arXiv:1008.4884, doi:10.1007/JHEP10(2010)085.">GIMR10</a>]</span>, and neglect effects arising from operators with mass dimension <span class="math notranslate nohighlight">\(d\ge 8\)</span> .</p>
+bases <span id="id5">[<a class="reference internal" href="../zzz-refs.html#id21" title="Adam Falkowski, Benjamin Fuks, Kentarou Mawatari, Ken Mimasu, Francesco Riva, and Verónica Sanz. Rosetta: an operator basis translator for Standard Model effective field theory. Eur. Phys. J., C75(12):583, 2015. arXiv:1508.05895, doi:10.1140/epjc/s10052-015-3806-x.">FFM+15</a>]</span>.
+In our approach we adopt the Warsaw basis for <span class="math notranslate nohighlight">\(\mathcal{O}_i^{(6)}\)</span>  <span id="id6">[<a class="reference internal" href="../zzz-refs.html#id6" title="B. Grzadkowski, M. Iskrzynski, M. Misiak, and J. Rosiek. Dimension-Six Terms in the Standard Model Lagrangian. JHEP, 10:085, 2010. arXiv:1008.4884, doi:10.1007/JHEP10(2010)085.">GIMR10</a>]</span>, and neglect effects arising from operators with mass dimension <span class="math notranslate nohighlight">\(d\ge 8\)</span> .</p>
 <p>For specific UV completions, the Wilson coefficients <span class="math notranslate nohighlight">\(_i\)</span> in
 can be evaluated in terms of the parameters of
 the BSM theory, such as its coupling constants and masses.
@@ -180,8 +181,8 @@ Only in this way can the <abbr title="Standard Model Effective Field Theory">SME
 model and basis independence.
 However, unless specific scenarios are adopted, the number of
 non-redundant operators <span class="math notranslate nohighlight">\(N_{d6}\)</span> becomes unfeasibly large:
-59 for one generation of fermions <span id="id7">[<a class="reference internal" href="../zzz-refs.html#id5" title="B. Grzadkowski, M. Iskrzynski, M. Misiak, and J. Rosiek. Dimension-Six Terms in the Standard Model Lagrangian. JHEP, 10:085, 2010. arXiv:1008.4884, doi:10.1007/JHEP10(2010)085.">GIMR10</a>]</span> and 2499 for
-three <span id="id8">[<a class="reference internal" href="../zzz-refs.html#id6" title="Rodrigo Alonso, Elizabeth E. Jenkins, Aneesh V. Manohar, and Michael Trott. Renormalization Group Evolution of the Standard Model Dimension Six Operators III: Gauge Coupling Dependence and Phenomenology. JHEP, 04:159, 2014. arXiv:1312.2014, doi:10.1007/JHEP04(2014)159.">AJMT14</a>]</span>.
+59 for one generation of fermions <span id="id7">[<a class="reference internal" href="../zzz-refs.html#id6" title="B. Grzadkowski, M. Iskrzynski, M. Misiak, and J. Rosiek. Dimension-Six Terms in the Standard Model Lagrangian. JHEP, 10:085, 2010. arXiv:1008.4884, doi:10.1007/JHEP10(2010)085.">GIMR10</a>]</span> and 2499 for
+three <span id="id8">[<a class="reference internal" href="../zzz-refs.html#id7" title="Rodrigo Alonso, Elizabeth E. Jenkins, Aneesh V. Manohar, and Michael Trott. Renormalization Group Evolution of the Standard Model Dimension Six Operators III: Gauge Coupling Dependence and Phenomenology. JHEP, 04:159, 2014. arXiv:1312.2014, doi:10.1007/JHEP04(2014)159.">AJMT14</a>]</span>.
 This implies that a global <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> fit, even if
 restricted to dimension-6 operators, will have to explore a huge
 parameter space with potentially a large number of flat (degenerate) directions.</p>

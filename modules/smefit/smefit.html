@@ -80,6 +80,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit20.html">SMEFiT2.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../previous_releases/smefit30.html">SMEFiT3.0</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
 <ul>
@@ -284,6 +285,8 @@
 <li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs_bar"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_coeffs_bar()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_contours_2d"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_contours_2d()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_posteriors"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_posteriors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_pull"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_pull()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_spider"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.plot_spider()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.write_cl_table"><code class="docutils literal notranslate"><span class="pre">CoefficientsPlotter.write_cl_table()</span></code></a></li>
 </ul>
 </li>
@@ -363,6 +366,10 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.spider">smefit.analyze.spider module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.spider.radar_factory"><code class="docutils literal notranslate"><span class="pre">radar_factory()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="smefit.analyze.html#module-smefit.analyze.summary">smefit.analyze.summary module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.SummaryWriter"><code class="docutils literal notranslate"><span class="pre">SummaryWriter</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="smefit.analyze.html#smefit.analyze.summary.SummaryWriter.fit_settings"><code class="docutils literal notranslate"><span class="pre">SummaryWriter.fit_settings()</span></code></a></li>
@@ -389,6 +396,7 @@
 <li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.dump_posterior"><code class="docutils literal notranslate"><span class="pre">Optimizer.dump_posterior()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.free_parameters"><code class="docutils literal notranslate"><span class="pre">Optimizer.free_parameters</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.generate_chi2_table"><code class="docutils literal notranslate"><span class="pre">Optimizer.generate_chi2_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.load_external_chi2"><code class="docutils literal notranslate"><span class="pre">Optimizer.load_external_chi2()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.print_rate"><code class="docutils literal notranslate"><span class="pre">Optimizer.print_rate</span></code></a></li>
 </ul>
 </li>
@@ -1303,7 +1311,7 @@ with corresponding values.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.loader.load_datasets">
-<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commondata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theory_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_to_fit_basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_uv_couplings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#load_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.load_datasets" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commondata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theory_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_to_fit_basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_uv_couplings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_external_chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#load_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.load_datasets" title="Link to this definition"></a></dt>
 <dd><p>Loads experimental data, theory and <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> corrections into a namedtuple</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1317,6 +1325,8 @@ with corresponding values.</p>
 <li><p><strong>theory_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a><em>, </em><em>optional</em>) – path to theory folder, theory excluded.
 Default it assumes to be the same as commondata_path</p></li>
 <li><p><strong>rot_to_fit_basis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – matrix rotation to fit basis or None</p></li>
+<li><p><strong>has_uv_couplings</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – True for UV fits</p></li>
+<li><p><strong>has_external_chi2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – True in the presence of external chi2 modules</p></li>
 </ul>
 </dd>
 </dl>

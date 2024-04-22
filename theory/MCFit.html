@@ -85,6 +85,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit20.html">SMEFiT2.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit30.html">SMEFiT3.0</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
 <ul>
@@ -168,7 +169,7 @@ the covariance matrix in <span class="math notranslate nohighlight">\(\chi^2\)</
 In other words, the replicas are sampled according to a multi-Gaussian distribution
 defined by the total covariance matrix which receives contributions both of experimental and of theoretical origin.
 We therefore account for such errors in the generation of Monte Carlo replicas <span class="math notranslate nohighlight">\(\sigma_{i}^{(\mathrm{art})(k)}\)</span>,
-<span id="id1">[<a class="reference internal" href="../zzz-refs.html#id29" title="The NNPDF Collaboration, Rabah Abdul Khalek, Richard D. Ball, Stefano Carrazza, Stefano Forte, Tommaso Giani, Zahari Kassabov, Rosalyn L. Pearson, Emanuele R. Nocera, Juan Rojo, Luca Rottoli, Maria Ubiali, Cameron Voisey, and Michael Wilson. Parton distributions with theory uncertainties: general formalism and first phenomenological studies. 2019. arXiv:1906.10698.">CKB+19</a>]</span>.</p>
+<span id="id1">[<a class="reference internal" href="../zzz-refs.html#id30" title="The NNPDF Collaboration, Rabah Abdul Khalek, Richard D. Ball, Stefano Carrazza, Stefano Forte, Tommaso Giani, Zahari Kassabov, Rosalyn L. Pearson, Emanuele R. Nocera, Juan Rojo, Luca Rottoli, Maria Ubiali, Cameron Voisey, and Michael Wilson. Parton distributions with theory uncertainties: general formalism and first phenomenological studies. 2019. arXiv:1906.10698.">CKB+19</a>]</span>.</p>
 <p>There are numerous advantages of using the MCfit method for global EFT analyses:</p>
 <blockquote>
 <div><ul class="simple">
@@ -180,15 +181,16 @@ of the fit parameters, and in particular does not rely on the Gaussian approxima
 with the Bayesian reweighting formalism.</p></li>
 </ul>
 </div></blockquote>
+<p>However, it only works for linear EFT fits, as first explained in <span id="id2">[<a class="reference internal" href="../zzz-refs.html#id4" title="Zahari Kassabov, Maeve Madigan, Luca Mantani, James Moore, Manuel Morales Alvarado, Juan Rojo, and Maria Ubiali. The top quark legacy of the LHC Run II for PDF and SMEFT analyses. JHEP, 05:205, 2023. arXiv:2303.06159, doi:10.1007/JHEP05(2023)205.">KMM+23</a>]</span>.</p>
 </section>
 <section id="optimisation">
 <h2>Optimisation<a class="headerlink" href="#optimisation" title="Link to this heading"></a></h2>
-<p>In the top quark sector analysis of <span id="id2">[<a class="reference internal" href="../zzz-refs.html#id27" title="Nathan P. Hartland, Fabio Maltoni, Emanuele R. Nocera, Juan Rojo, Emma Slade, Eleni Vryonidou, and Cen Zhang. A Monte Carlo global analysis of the Standard Model Effective Field Theory: the top quark sector. JHEP, 04:100, 2019. arXiv:1901.05965, doi:10.1007/JHEP04(2019)100.">HMN+19</a>]</span>, the minimisation of
+<p>In the top quark sector analysis of <span id="id3">[<a class="reference internal" href="../zzz-refs.html#id28" title="Nathan P. Hartland, Fabio Maltoni, Emanuele R. Nocera, Juan Rojo, Emma Slade, Eleni Vryonidou, and Cen Zhang. A Monte Carlo global analysis of the Standard Model Effective Field Theory: the top quark sector. JHEP, 04:100, 2019. arXiv:1901.05965, doi:10.1007/JHEP04(2019)100.">HMN+19</a>]</span>, the minimisation of
 Eq.~eqref{eq:chi2definition} was achieved by a gradient descent method which relies
 on local variations of the error function.
 This choice is advantageous since <span class="math notranslate nohighlight">\(E^{(k)}\)</span> is at most a quartic form
 of the fit parameters, and therefore evaluating its gradient is computationally efficient.</p>
-<p>In the current version of the code ( see <span id="id3">[<a class="reference internal" href="../zzz-refs.html#id30" title="Jacob J. Ethier, Giacomo Magni, Fabio Maltoni, Luca Mantani, Emanuele R. Nocera, Juan Rojo, Emma Slade, Eleni Vryonidou, and Cen Zhang. Combined smeft interpretation of higgs, diboson, and top quark data from the lhc. 2021. arXiv:2105.00006.">EMM+21</a>]</span> analysis) we allow for a more complex parameter space,
+<p>In the current version of the code ( see <span id="id4">[<a class="reference internal" href="../zzz-refs.html#id31" title="Jacob J. Ethier, Giacomo Magni, Fabio Maltoni, Luca Mantani, Emanuele R. Nocera, Juan Rojo, Emma Slade, Eleni Vryonidou, and Cen Zhang. Combined smeft interpretation of higgs, diboson, and top quark data from the lhc. 2021. arXiv:2105.00006.">EMM+21</a>]</span> analysis) we allow for a more complex parameter space,
 using as optimiser a trust-region algorithm <code class="docutils literal notranslate"><span class="pre">trust-constr</span></code> available in the <code class="docutils literal notranslate"><span class="pre">SciPy</span></code> package.
 An advantage of this method is that it allows one to provide the optimiser with any combination of constraints on the
 coefficients, including existing bounds.

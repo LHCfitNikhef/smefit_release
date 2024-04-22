@@ -81,6 +81,14 @@ smefit.analyze.report module
    :undoc-members:
    :show-inheritance:
 
+smefit.analyze.spider module
+----------------------------
+
+.. automodule:: smefit.analyze.spider
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smefit.analyze.summary module
 -----------------------------
 

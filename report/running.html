@@ -82,6 +82,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit20.html">SMEFiT2.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit30.html">SMEFiT3.0</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
 <ul>
@@ -185,6 +186,24 @@ be skipped.</p>
 <span class="w">    </span><span class="nt">x_min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.01</span><span class="w"> </span><span class="c1"># x min value</span>
 <span class="w">    </span><span class="nt">x_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span><span class="w"> </span><span class="c1"># x max value</span>
 <span class="w">    </span><span class="nt">x_log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># use log scale on x axis ?</span>
+
+<span class="w">  </span><span class="c1"># spider plot that displays the ratio of uncertainties to a baseline fit</span>
+<span class="w">  </span><span class="nt">spider_plot</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">confidence_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">95</span><span class="w">  </span><span class="c1"># confidence level in percentage</span>
+<span class="w">    </span><span class="nt">log_scale</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w">  </span><span class="c1"># use radial log scale</span>
+<span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;title&quot;</span>
+<span class="w">    </span><span class="nt">fontsize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">17</span>
+<span class="w">    </span><span class="nt">ncol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span><span class="w">  </span><span class="c1"># number of columns in the legend</span>
+<span class="w">    </span><span class="nt">legend_loc</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;upper</span><span class="nv"> </span><span class="s">center&#39;</span>
+<span class="w">    </span><span class="nt">radial_lines</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">20</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">40</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">60</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">80</span><span class="w"> </span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># where to draw radial lines</span>
+<span class="w">    </span><span class="nt">marker_styles</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;*&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;o&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;P&#39;</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># markers for the legend</span>
+<span class="w">    </span><span class="nt">class_order</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;4H&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;2L2H&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;2FB&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;4l&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;B&quot;</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># order of operator classes (optional)</span>
+
+<span class="w">  </span><span class="c1"># bar plot of pulls (one-sigma fit residuals) per coefficient</span>
+<span class="w">  </span><span class="nt">pull_bar</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span><span class="nv">18</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span>
+<span class="w">    </span><span class="nt">x_min</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-3</span><span class="w"> </span><span class="c1"># minimum number of sigmas to display</span>
+<span class="w">    </span><span class="nt">x_max</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"> </span><span class="c1"># maximum number of sigmas to display</span>
 
 <span class="w">  </span><span class="c1"># 2 dimensional contour plot</span>
 <span class="w">  </span><span class="nt">contours_2d</span><span class="p">:</span>

@@ -76,6 +76,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit20.html">SMEFiT2.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../previous_releases/smefit30.html">SMEFiT3.0</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
 <ul>
@@ -310,6 +311,8 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">scatter_plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">confidence_level_bar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pull_bar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">spider_plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">posterior_histograms</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">contours_2d</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">hide_dofs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -371,7 +374,7 @@
             <span class="n">coeff_plt</span><span class="o">.</span><span class="n">plot_coeffs</span><span class="p">(</span><span class="n">bounds_dict</span><span class="p">,</span> <span class="o">**</span><span class="n">scatter_plot</span><span class="p">)</span>
             <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;coefficient_central&quot;</span><span class="p">)</span>
 
-        <span class="c1"># when we plot the 95% CL we show 95% CL for null solutions.</span>
+        <span class="c1"># when we plot the 95% CL we show the 95% CL for null solutions.</span>
         <span class="c1"># the error coming from a degenerate solution is not taken into account.</span>
         <span class="k">if</span> <span class="n">confidence_level_bar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting : Confidence Level error bars&quot;</span><span class="p">)</span>
@@ -387,6 +390,61 @@
                 <span class="o">**</span><span class="n">confidence_level_bar</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;coefficient_bar&quot;</span><span class="p">)</span>
+
+        <span class="c1"># when we plot the 95% CL we show the 95% CL for null solutions.</span>
+        <span class="c1"># the error coming from a degenerate solution is not taken into account.</span>
+        <span class="k">if</span> <span class="n">pull_bar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting : Pull &quot;</span><span class="p">)</span>
+            <span class="n">zero_sol</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">coeff_plt</span><span class="o">.</span><span class="n">plot_pull</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="n">name</span><span class="p">:</span> <span class="n">bound_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">zero_sol</span><span class="p">,</span> <span class="s2">&quot;pull&quot;</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">bound_df</span> <span class="ow">in</span> <span class="n">bounds_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="p">},</span>
+                <span class="o">**</span><span class="n">pull_bar</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;pull_bar&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">spider_plot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting : spider plot&quot;</span><span class="p">)</span>
+
+            <span class="n">spider_cl</span> <span class="o">=</span> <span class="n">spider_plot</span><span class="p">[</span><span class="s2">&quot;confidence_level&quot;</span><span class="p">]</span>
+            <span class="n">spider_plot</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;confidence_level&quot;</span><span class="p">)</span>
+
+            <span class="n">spider_bounds</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">bound_df</span> <span class="ow">in</span> <span class="n">bounds_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">dbl_solution</span> <span class="o">=</span> <span class="n">bound_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_level_values</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="c1"># if dbl solution requested, add the confidence intervals, otherwise just</span>
+                <span class="c1"># use the sum of the hdi intervals</span>
+                <span class="k">if</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">dbl_solution</span><span class="p">:</span>
+
+                    <span class="n">dbl_op</span> <span class="o">=</span> <span class="n">double_solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_level_values</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">op</span>
+                        <span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">dbl_op</span>
+                    <span class="p">]</span>
+                    <span class="n">bound_df_dbl</span> <span class="o">=</span> <span class="n">bound_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]</span>
+
+                    <span class="n">width_0</span> <span class="o">=</span> <span class="n">bound_df_dbl</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;hdi_</span><span class="si">{</span><span class="n">spider_cl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+                    <span class="n">width_1</span> <span class="o">=</span> <span class="n">bound_df_dbl</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;hdi_</span><span class="si">{</span><span class="n">spider_cl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+                    <span class="n">width_tot</span> <span class="o">=</span> <span class="n">width_0</span> <span class="o">+</span> <span class="n">width_1</span>
+
+                    <span class="c1"># update bound df</span>
+                    <span class="n">bound_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;hdi_</span><span class="si">{</span><span class="n">spider_cl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">width_tot</span>
+
+                    <span class="n">spider_bounds</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">bound_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;hdi_</span><span class="si">{</span><span class="n">spider_cl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">spider_bounds</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">bound_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;hdi_</span><span class="si">{</span><span class="n">spider_cl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+
+            <span class="n">coeff_plt</span><span class="o">.</span><span class="n">plot_spider</span><span class="p">(</span>
+                <span class="n">spider_bounds</span><span class="p">,</span>
+                <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">],</span>
+                <span class="o">**</span><span class="n">spider_plot</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;spider_plot&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">posterior_histograms</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Plotting : Posterior histograms&quot;</span><span class="p">)</span>
@@ -431,7 +489,9 @@
 
 <div class="viewcode-block" id="Report.correlations">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.correlations">[docs]</a>
-    <span class="k">def</span> <span class="nf">correlations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hide_dofs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">thr_show</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">correlations</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">hide_dofs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">thr_show</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fit_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot coefficients correlation matrix.</span>
 
 <span class="sd">        Parameters</span>
@@ -443,10 +503,18 @@
 <span class="sd">            If None the full correlation matrix is displayed.</span>
 <span class="sd">        title: bool</span>
 <span class="sd">            if True display fit label name as title</span>
-
+<span class="sd">        fit_list: list, optional</span>
+<span class="sd">            list of fit names for which the correlation is computed.</span>
+<span class="sd">            By default all the fits included in the report</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">figs_list</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">fit_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fit_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">fit</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="k">if</span> <span class="n">fit</span> <span class="ow">in</span> <span class="n">fit_list</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fit_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span>
+
+        <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="n">fit_list</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plotting correlations for: </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">coeff_to_keep</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">index</span>
             <span class="n">plot_correlations</span><span class="p">(</span>
@@ -456,6 +524,7 @@
                 <span class="n">title</span><span class="o">=</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="n">title</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">hide_dofs</span><span class="o">=</span><span class="n">hide_dofs</span><span class="p">,</span>
                 <span class="n">thr_show</span><span class="o">=</span><span class="n">thr_show</span><span class="p">,</span>
+                <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;correlations_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -487,7 +556,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">figs_list</span><span class="p">,</span> <span class="n">links_list</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">fit_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">fit_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="o">==</span> <span class="n">fit_list</span><span class="p">]</span>
+            <span class="n">fit_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">fit</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="k">if</span> <span class="n">fit</span> <span class="ow">in</span> <span class="n">fit_list</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fit_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span>
         <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="n">fit_list</span><span class="p">:</span>
@@ -507,10 +576,11 @@
                 <span class="p">)</span>
                 <span class="n">links_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="sa">f</span><span class="s2">&quot;pca_table_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Table </span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">plot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">fit_plot</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
-                <span class="n">title</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">label</span> <span class="k">if</span> <span class="n">fit_plot</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">name</span>
+
+                <span class="c1"># TODO: check why **fit_plot got removed (see PR)</span>
                 <span class="n">pca_cal</span><span class="o">.</span><span class="n">plot_heatmap</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/pca_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_plot</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="si">}</span><span class="s2">/pca_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span>
                 <span class="p">)</span>
                 <span class="n">figs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pca_heatmap_</span><span class="si">{</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_append_section</span><span class="p">(</span><span class="s2">&quot;PCA&quot;</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="n">figs_list</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="n">links_list</span><span class="p">)</span></div>
@@ -548,7 +618,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">figs_list</span><span class="p">,</span> <span class="n">links_list</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">fit_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">fit_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="o">==</span> <span class="n">fit_list</span><span class="p">]</span>
+            <span class="n">fit_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">fit</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="k">if</span> <span class="n">fit</span> <span class="ow">in</span> <span class="n">fit_list</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fit_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span>
 

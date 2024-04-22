@@ -72,6 +72,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#datasets-to-consider-and-coefficients-to-fit">Datasets to consider and coefficients to fit</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#constrains-between-coefficients">Constrains between coefficients</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fit-in-different-basis">Fit in different basis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-custom-likelihoods">Adding custom likelihoods</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#running-a-fit-with-ns">Running a fit with NS</a></li>
@@ -79,7 +80,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#solving-the-linear-problem">Solving the linear problem</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#single-parameter-fits">Single parameter fits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#individual-parameter-scan">Individual parameter scan</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#projections">Projections</a></li>
 </ul>
 </li>
 </ul>
@@ -96,6 +96,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit20.html">SMEFiT2.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit30.html">SMEFiT3.0</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
 <ul>
@@ -279,9 +280,51 @@ add the following flag</p>
 </pre></div>
 </div>
 </section>
+<section id="adding-custom-likelihoods">
+<span id="ns"></span><h3>Adding custom likelihoods<a class="headerlink" href="#adding-custom-likelihoods" title="Link to this heading"></a></h3>
+<p>SMEFiT supports the addition of customised likelihoods. This can be relevant when an external likelihood is already at hand
+and one would like to combine it with the one constructed internally in SMEFiT. To make use of this feature, one should add
+the following to the runcard:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">external_chi2</span><span class="p">:</span>
+<span class="w">  </span><span class="s">&#39;ExternalChi2&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/external/chi2.py</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">ExternalChi2</span></code> is the name of the class that must be defined in the referenced python file as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="k">class</span> <span class="nc">ExternalChi2</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor that allows one to set attributes that can be called in the compute_chi2 method</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        coefficients:  smefit.coefficients.CoefficientManager</span>
+<span class="sd">            attributes: name, value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">example_attribute</span> <span class="o">=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">compute_chi2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficient_values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">         coefficients_values : numpy.ndarray</span>
+<span class="sd">            |EFT| coefficients values</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># example</span>
+        <span class="n">chi2_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">coefficient_values</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">chi2_value</span>
+</pre></div>
+</div>
+<p>One is free to set custom attributes in the constructor. The coefficient values during optimisation
+are accesible via <code class="docutils literal notranslate"><span class="pre">coefficient_values</span></code> in the <code class="docutils literal notranslate"><span class="pre">compute_chi2</span></code> method. In order for the external chi2
+to work, it is important one does not change the name of the <code class="docutils literal notranslate"><span class="pre">compute_chi2</span></code> method!</p>
+</section>
 </section>
 <section id="running-a-fit-with-ns">
-<span id="ns"></span><h2>Running a fit with NS<a class="headerlink" href="#running-a-fit-with-ns" title="Link to this heading"></a></h2>
+<h2>Running a fit with NS<a class="headerlink" href="#running-a-fit-with-ns" title="Link to this heading"></a></h2>
 <p>To run a fiy using Nested Sampling use the command</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>smefit<span class="w"> </span>NS<span class="w"> </span>path/to/the/runcard/runcard.yaml
 </pre></div>
@@ -291,6 +334,7 @@ containing the posterior distribution of the coefficients specified in the runca
 </section>
 <section id="running-a-fit-with-mc">
 <span id="mc"></span><h2>Running a fit with MC<a class="headerlink" href="#running-a-fit-with-mc" title="Link to this heading"></a></h2>
+<p><strong>Disclaimer</strong>: the MC mode is only supported for linear fits.</p>
 <p>The basic command to run a fit using Monte Carlo is</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>MC<span class="w"> </span>path/to/the/runcard/runcard.yaml<span class="w"> </span>-n<span class="w"> </span>replica_number
 </pre></div>
@@ -337,12 +381,6 @@ The command</p>
 </div>
 <p>will produce in the results folder a series of pdf files containing plots for
 1-dimensional scans of the chi2 with respect to each parameter in the runcard.</p>
-</section>
-<section id="projections">
-<h2>Projections<a class="headerlink" href="#projections" title="Link to this heading"></a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>proj<span class="w"> </span>/path/to/the/projection_runcard/runcard.yaml
-</pre></div>
-</div>
 </section>
 </section>
 
