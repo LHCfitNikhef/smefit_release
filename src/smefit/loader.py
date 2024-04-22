@@ -478,6 +478,7 @@ def load_datasets(
     theory_path=None,
     rot_to_fit_basis=None,
     has_uv_couplings=False,
+    has_external_chi2=False,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
@@ -501,6 +502,10 @@ def load_datasets(
             Default it assumes to be the same as commondata_path
         rot_to_fit_basis: dict, optional
             matrix rotation to fit basis or None
+        has_uv_couplings: bool, optional
+            True for UV fits
+        has_external_chi2: bool, optional
+            True in the presence of external chi2 modules
     """
 
     exp_data = []
@@ -549,7 +554,7 @@ def load_datasets(
     sorted_keys = None
     # if uv couplings are present allow for op which are not in the
     # theory files
-    if has_uv_couplings:
+    if has_uv_couplings or has_external_chi2:
         sorted_keys = np.unique((*operators_to_keep,))
     operators_names, lin_corr_values = construct_corrections_matrix(
         lin_corr_list, n_data_tot, sorted_keys
@@ -576,6 +581,7 @@ def load_datasets(
     # At the moment it does not account for correlation between different datasets
     theory_covariance = la.block_diag(*th_cov)
     exp_covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
+
     # replicas always generated using the experimental covmat, no t0
     replica = np.random.multivariate_normal(exp_data, exp_covmat)
     if use_t0:
@@ -619,6 +625,7 @@ def get_dataset(datasets, data_name):
         data_name,
         ndata,
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],
+        datasets.ThCovMat[posix_in:posix_out].T[posix_in:posix_out],
         lumi,
         datasets.Replica[posix_in:posix_out],
     )

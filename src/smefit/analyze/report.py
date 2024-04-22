@@ -184,6 +184,8 @@ class Report:
         self,
         scatter_plot=None,
         confidence_level_bar=None,
+        pull_bar=None,
+        spider_plot=None,
         posterior_histograms=True,
         contours_2d=None,
         hide_dofs=None,
@@ -245,7 +247,7 @@ class Report:
             coeff_plt.plot_coeffs(bounds_dict, **scatter_plot)
             figs_list.append("coefficient_central")
 
-        # when we plot the 95% CL we show 95% CL for null solutions.
+        # when we plot the 95% CL we show the 95% CL for null solutions.
         # the error coming from a degenerate solution is not taken into account.
         if confidence_level_bar is not None:
             _logger.info("Plotting : Confidence Level error bars")
@@ -261,6 +263,61 @@ class Report:
                 **confidence_level_bar,
             )
             figs_list.append("coefficient_bar")
+
+        # when we plot the 95% CL we show the 95% CL for null solutions.
+        # the error coming from a degenerate solution is not taken into account.
+        if pull_bar is not None:
+            _logger.info("Plotting : Pull ")
+            zero_sol = 0
+            coeff_plt.plot_pull(
+                {
+                    name: bound_df.loc[zero_sol, "pull"]
+                    for name, bound_df in bounds_dict.items()
+                },
+                **pull_bar,
+            )
+            figs_list.append("pull_bar")
+
+        if spider_plot is not None:
+            _logger.info("Plotting : spider plot")
+
+            spider_cl = spider_plot["confidence_level"]
+            spider_plot.pop("confidence_level")
+
+            spider_bounds = {}
+            for name, bound_df in bounds_dict.items():
+                dbl_solution = bound_df.index.get_level_values(0)
+                # if dbl solution requested, add the confidence intervals, otherwise just
+                # use the sum of the hdi intervals
+                if 1 in dbl_solution:
+
+                    dbl_op = double_solution.get(fit.name, None)
+                    idx = [
+                        np.argwhere(
+                            self.coeff_info.index.get_level_values(1) == op
+                        ).flatten()[0]
+                        for op in dbl_op
+                    ]
+                    bound_df_dbl = bound_df.iloc[:, idx]
+
+                    width_0 = bound_df_dbl.loc[0, f"hdi_{spider_cl}"]
+                    width_1 = bound_df_dbl.loc[1, f"hdi_{spider_cl}"]
+                    width_tot = width_0 + width_1
+
+                    # update bound df
+                    bound_df.loc[0, f"hdi_{spider_cl}"].iloc[idx] = width_tot
+
+                    spider_bounds[name] = bound_df.loc[0, f"hdi_{spider_cl}"]
+
+                else:
+                    spider_bounds[name] = bound_df.loc[0, f"hdi_{spider_cl}"]
+
+            coeff_plt.plot_spider(
+                spider_bounds,
+                labels=[fit.label for fit in self.fits],
+                **spider_plot,
+            )
+            figs_list.append("spider_plot")
 
         if posterior_histograms:
             _logger.info("Plotting : Posterior histograms")
@@ -302,7 +359,9 @@ class Report:
 
         self._append_section("Coefficients", links=links_list, figs=figs_list)
 
-    def correlations(self, hide_dofs=None, thr_show=0.1, title=True):
+    def correlations(
+        self, hide_dofs=None, thr_show=0.1, title=True, fit_list=None, figsize=(10, 10)
+    ):
         """Plot coefficients correlation matrix.
 
         Parameters
@@ -314,10 +373,18 @@ class Report:
             If None the full correlation matrix is displayed.
         title: bool
             if True display fit label name as title
-
+        fit_list: list, optional
+            list of fit names for which the correlation is computed.
+            By default all the fits included in the report
         """
         figs_list = []
-        for fit in self.fits:
+
+        if fit_list is not None:
+            fit_list = [fit for fit in self.fits if fit in fit_list]
+        else:
+            fit_list = self.fits
+
+        for fit in fit_list:
             _logger.info(f"Plotting correlations for: {fit.name}")
             coeff_to_keep = fit.coefficients.free_parameters.index
             plot_correlations(
@@ -327,6 +394,7 @@ class Report:
                 title=fit.label if title else None,
                 hide_dofs=hide_dofs,
                 thr_show=thr_show,
+                figsize=figsize,
             )
             figs_list.append(f"correlations_{fit.name}")
 
@@ -355,7 +423,7 @@ class Report:
         """
         figs_list, links_list = [], []
         if fit_list is not None:
-            fit_list = self.fits[self.fits == fit_list]
+            fit_list = [fit for fit in self.fits if fit in fit_list]
         else:
             fit_list = self.fits
         for fit in fit_list:
@@ -375,10 +443,11 @@ class Report:
                 )
                 links_list.append((f"pca_table_{fit.name}", f"Table {fit.label}"))
             if plot is not None:
-                fit_plot = copy.deepcopy(plot)
-                title = fit.label if fit_plot.pop("title") else None
+                title = fit.name
+
+                # TODO: check why **fit_plot got removed (see PR)
                 pca_cal.plot_heatmap(
-                    f"{self.report}/pca_heatmap_{fit.name}", title=title, **fit_plot
+                    f"{self.report}/pca_heatmap_{fit.name}", title=title
                 )
                 figs_list.append(f"pca_heatmap_{fit.name}")
         self._append_section("PCA", figs=figs_list, links=links_list)
@@ -413,7 +482,7 @@ class Report:
         """
         figs_list, links_list = [], []
         if fit_list is not None:
-            fit_list = self.fits[self.fits == fit_list]
+            fit_list = [fit for fit in self.fits if fit in fit_list]
         else:
             fit_list = self.fits
 

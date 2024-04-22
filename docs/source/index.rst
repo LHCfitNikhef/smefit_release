@@ -81,6 +81,7 @@ When using the code please cite:
     previous_releases/smefit_vbs
     previous_releases/smefit20
     previous_releases/smefit_uv
+    previous_releases/smefit30
 
 .. toctree::
     :maxdepth: 1

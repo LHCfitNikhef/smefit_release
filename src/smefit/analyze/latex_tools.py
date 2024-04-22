@@ -19,6 +19,7 @@ def latex_packages():
         r"\usepackage{xcolor}",
         r"\usepackage{multirow}",
         r"\usepackage{pdflscape}",
+        r"\usepackage{longtable}",
         r"\allowdisplaybreaks",
         r"\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}",
         r"\usepackage{graphicx}",
