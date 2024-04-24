@@ -1,6 +1,6 @@
 
 <p align="center">
-  <a href="https://lhcfitnikhef.github.io/smefit_release/"><img alt="SMEFiT" src=https://github.com/LHCfitNikhef/SMEFT/blob/master/docs/sphinx/_assets/logo.png/>
+  <a href="https://lhcfitnikhef.github.io/smefit_release/"><img alt="SMEFiT" src=https://github.com/LHCfitNikhef/SMEFT/blob/master/docs/sphinx/_assets/logo.png/ width=300>
 </a>
 </p>
 
