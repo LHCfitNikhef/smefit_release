@@ -208,6 +208,9 @@ class USOptimizer(Optimizer):
         params : jnp.ndarray
             Wilson coefficients
         """
+        # TODO: this currently not working
+        # self.coefficients.set_free_parameters(params)
+        # self.coefficients.set_constraints()
 
         if self.loaded_datasets is not None:
             chi2_tot = chi2.compute_chi2(
