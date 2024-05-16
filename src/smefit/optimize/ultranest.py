@@ -11,6 +11,12 @@ from .. import log
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
+from .. import chi2
+
+import jax
+from functools import partial
+
+jax.config.update("jax_enable_x64", True)
 
 try:
     from mpi4py import MPI
@@ -194,24 +200,34 @@ class USOptimizer(Optimizer):
         )
 
     def chi2_func_ns(self, params):
-        """Wrap the chi2 in a function for the optimizer. Pass noise and
-        data info as args. Log the chi2 value and values of the coefficients.
-
+        """Compute the chi2 function for |NS|.
+        It is simplified with respect to the one in the Optimizer class,
+        so that it can be compiled with jax.jit.
         Parameters
         ----------
-        params : np.ndarray
-            noise and data info
-
-        Returns
-        -------
-        current_chi2 : np.ndarray
-            chi2 function
+        params : jnp.ndarray
+            Wilson coefficients
         """
-        self.coefficients.set_free_parameters(params)
-        self.coefficients.set_constraints()
 
-        return self.chi2_func()
+        if self.loaded_datasets is not None:
+            chi2_tot = chi2.compute_chi2(
+                self.loaded_datasets,
+                params,
+                self.use_quad,
+                self.use_multiplicative_prescription,
+                use_replica=False,
+            )
+        else:
+            chi2_tot = 0
 
+        if self.chi2_ext is not None:
+            for chi2_ext in self.chi2_ext:
+                chi2_ext_i = chi2_ext(params)
+                chi2_tot += chi2_ext_i
+
+        return chi2_tot
+
+    @partial(jax.jit, static_argnames=["self"])
     def gaussian_loglikelihood(self, hypercube):
         """Multi gaussian log likelihood function.
 
@@ -228,6 +244,7 @@ class USOptimizer(Optimizer):
 
         return -0.5 * self.chi2_func_ns(hypercube)
 
+    @partial(jax.jit, static_argnames=["self"])
     def flat_prior(self, hypercube):
         """Update the prior function.
 

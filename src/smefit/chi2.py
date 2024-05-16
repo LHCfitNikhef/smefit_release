@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.optimize as opt
 from rich.progress import track
+import jax.numpy as jnp
 
 from . import compute_theory as pr
 from .coefficients import CoefficientManager
@@ -55,7 +56,7 @@ def compute_chi2(
 
     invcovmat = dataset.InvCovMat
     # note @ is slower when running with mpiexec
-    return np.einsum("i,ij,j->", diff, invcovmat, diff)
+    return jnp.einsum("i,ij,j->", diff, invcovmat, diff)
 
 
 class Scanner:
