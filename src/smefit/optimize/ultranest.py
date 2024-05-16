@@ -84,6 +84,7 @@ class USOptimizer(Optimizer):
         target_post_unc=0.5,
         frac_remain=0.01,
         store_raw=False,
+        vectorized=False,
         external_chi2=None,
     ):
         super().__init__(
@@ -100,6 +101,7 @@ class USOptimizer(Optimizer):
         self.target_evidence_unc = target_evidence_unc
         self.target_post_unc = target_post_unc
         self.frac_remain = frac_remain
+        self.vectorized = vectorized
         self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
         self.pairwise_fits = pairwise_fits
@@ -174,6 +176,7 @@ class USOptimizer(Optimizer):
             )
 
         store_raw = config.get("store_raw", False)
+        vectorized = config.get("vectorized", False)
 
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
@@ -196,6 +199,7 @@ class USOptimizer(Optimizer):
             target_post_unc=target_post_unc,
             frac_remain=frac_remain,
             store_raw=store_raw,
+            vectorized=vectorized,
             external_chi2=external_chi2,
         )
 
@@ -272,6 +276,9 @@ class USOptimizer(Optimizer):
         if self.store_raw:
             log_dir = self.results_path
 
+        if self.vectorized:
+            self.gaussian_loglikelihood = jax.vmap(self.gaussian_loglikelihood)
+
         t1 = time.time()
         sampler = ultranest.ReactiveNestedSampler(
             self.free_parameters.index.tolist(),
@@ -279,6 +286,7 @@ class USOptimizer(Optimizer):
             self.flat_prior,
             log_dir=log_dir,
             resume=True,
+            vectorized=self.vectorized,
         )
         if self.npar > 10:
             # set up step sampler. Here, we use a differential evolution slice sampler:
