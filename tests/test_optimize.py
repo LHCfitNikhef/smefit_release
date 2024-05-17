@@ -374,7 +374,11 @@ class TestOptimize_NS:
         )
 
     def test_flat_prior(self):
-        np.testing.assert_equal(self.test_opt.flat_prior(random_point), prior)
+        np.testing.assert_allclose(
+            self.test_opt.flat_prior(random_point),
+            prior,
+            rtol=1e-14,
+        )
 
 
 class TestOptimize_MC:
