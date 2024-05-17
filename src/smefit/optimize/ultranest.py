@@ -14,6 +14,7 @@ from . import Optimizer
 from .. import chi2
 
 import jax
+import jax.numpy as jnp
 from functools import partial
 
 jax.config.update("jax_enable_x64", True)
@@ -106,6 +107,9 @@ class USOptimizer(Optimizer):
         self.result_ID = result_ID
         self.pairwise_fits = pairwise_fits
         self.store_raw = store_raw
+
+        # Set the fixed coefficients
+        self.fixed_coeffs = self.coefficients._objlist[~self.coefficients.is_free]
 
     @classmethod
     def from_dict(cls, config):
@@ -234,14 +238,66 @@ class USOptimizer(Optimizer):
 
         return chi2_tot
 
+    def produce_all_params(self, params):
+        """Produce all parameters from the free parameters.
+
+        Parameters
+        ----------
+        params : jnp.ndarray
+            free parameters
+
+        Returns
+        -------
+        all_params : jnp.ndarray
+            all parameters
+        """
+        is_free = self.coefficients.is_free
+
+        if all(is_free):
+            return params
+
+        all_params = jnp.zeros(self.coefficients.size)
+        all_params = all_params.at[is_free].set(params)
+
+        param_dict = {
+            name: value
+            for name, value in zip(self.coefficients._table.index, all_params)
+        }
+
+        # Loop over fixed coefficients
+        for coefficient_fixed in self.fixed_coeffs:
+            # Skip coefficients fixed to a single value
+            if coefficient_fixed.constrain is None:
+                continue
+
+            temp = 0.0
+            for add_factor_dict in coefficient_fixed.constrain:
+                free_dofs = jnp.array(
+                    [param_dict[fixed_name] for fixed_name in add_factor_dict]
+                )
+
+                # Matrix with multiplicative factors and exponents
+                fact_exp = jnp.array(list(add_factor_dict.values()), dtype=float)
+
+                temp += jnp.prod(fact_exp[:, 0] * jnp.power(free_dofs, fact_exp[:, 1]))
+
+                # Find the index of the fixed coefficient
+                fixed_index = self.coefficients._table.index.get_loc(
+                    coefficient_fixed.name
+                )
+                # Update all_params at the fixed index
+                all_params = all_params.at[fixed_index].set(temp)
+
+        return all_params
+
     @partial(jax.jit, static_argnames=["self"])
-    def gaussian_loglikelihood(self, hypercube):
+    def gaussian_loglikelihood(self, params):
         """Multi gaussian log likelihood function.
 
         Parameters
         ----------
-        hypercube :  np.ndarray
-            hypercube prior
+        params :  np.ndarray
+            params prior
 
         Returns
         -------
@@ -249,7 +305,9 @@ class USOptimizer(Optimizer):
             multi gaussian log likelihood
         """
 
-        return -0.5 * self.chi2_func_ns(hypercube)
+        all_params = self.produce_all_params(params)
+
+        return -0.5 * self.chi2_func_ns(all_params)
 
     @partial(jax.jit, static_argnames=["self"])
     def flat_prior(self, hypercube):
