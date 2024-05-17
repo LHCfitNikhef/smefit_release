@@ -44,6 +44,8 @@ def make_predictions(
             SM + EFT theory predictions
     """
 
+    coefficients_values = jnp.array(coefficients_values)
+
     # Compute total linear correction
     # note @ is slower when running with mpiexec
     summed_corrections = jnp.einsum(
