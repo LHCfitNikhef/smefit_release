@@ -11,7 +11,6 @@ from .pca import impose_constrain
 
 
 class FisherCalculator:
-
     """Computes and writes the Fisher information table, and plots heat map.
 
     Linear Fisher information depends only on the theoretical corrections,
@@ -161,6 +160,8 @@ class FisherCalculator:
             axis_sum, axis_div = 1, 0
         elif norm == "coeff":
             axis_sum, axis_div = 0, 1
+        else:
+            raise ValueError(f"Invalid norm value: {norm}. Must be 'data' or 'coeff'.")
 
         table = table.div(table.sum(axis=axis_sum), axis=axis_div) * 100
         if log:

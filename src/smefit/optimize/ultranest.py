@@ -145,6 +145,9 @@ class USOptimizer(Optimizer):
         elif config.get("external_chi2") is not None:
             loaded_datasets = None
 
+        else:
+            raise ValueError("No datasets or external chi2 provided")
+
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
         single_parameter_fits = config.get("single_parameter_fits", False)
