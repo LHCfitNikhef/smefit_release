@@ -2,6 +2,7 @@
 """Fitting the Wilson coefficients with |NS|"""
 import time
 
+from functools import partial
 import ultranest
 from rich.style import Style
 from rich.table import Table
@@ -9,7 +10,6 @@ from ultranest import stepsampler
 
 import jax
 import jax.numpy as jnp
-from functools import partial
 
 from .. import log
 from ..coefficients import CoefficientManager
