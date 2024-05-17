@@ -238,6 +238,17 @@ class USOptimizer(Optimizer):
 
         return chi2_tot
 
+    def compute_fixed_coeff(self, constrain, param_dict):
+        """Compute the fixed coefficient."""
+        temp = 0.0
+        for add_factor_dict in constrain:
+            free_dofs = jnp.array(
+                [param_dict[fixed_name] for fixed_name in add_factor_dict]
+            )
+            fact_exp = jnp.array(list(add_factor_dict.values()), dtype=float)
+            temp += jnp.prod(fact_exp[:, 0] * jnp.power(free_dofs, fact_exp[:, 1]))
+        return temp
+
     def produce_all_params(self, params):
         """Produce all parameters from the free parameters.
 
@@ -252,41 +263,26 @@ class USOptimizer(Optimizer):
             all parameters
         """
         is_free = self.coefficients.is_free
+        num_params = self.coefficients.size
 
         if all(is_free):
             return params
 
-        all_params = jnp.zeros(self.coefficients.size)
+        all_params = jnp.zeros(num_params)
         all_params = all_params.at[is_free].set(params)
 
-        param_dict = {
-            name: value
-            for name, value in zip(self.coefficients._table.index, all_params)
-        }
+        param_dict = dict(zip(self.coefficients._table.index, all_params))
 
-        # Loop over fixed coefficients
-        for coefficient_fixed in self.fixed_coeffs:
-            # Skip coefficients fixed to a single value
-            if coefficient_fixed.constrain is None:
-                continue
+        fixed_coefficients = [
+            coeff for coeff in self.fixed_coeffs if coeff.constrain is not None
+        ]
 
-            temp = 0.0
-            for add_factor_dict in coefficient_fixed.constrain:
-                free_dofs = jnp.array(
-                    [param_dict[fixed_name] for fixed_name in add_factor_dict]
-                )
-
-                # Matrix with multiplicative factors and exponents
-                fact_exp = jnp.array(list(add_factor_dict.values()), dtype=float)
-
-                temp += jnp.prod(fact_exp[:, 0] * jnp.power(free_dofs, fact_exp[:, 1]))
-
-                # Find the index of the fixed coefficient
-                fixed_index = self.coefficients._table.index.get_loc(
-                    coefficient_fixed.name
-                )
-                # Update all_params at the fixed index
-                all_params = all_params.at[fixed_index].set(temp)
+        for coefficient_fixed in fixed_coefficients:
+            fixed_coeff = self.compute_fixed_coeff(
+                coefficient_fixed.constrain, param_dict
+            )
+            fixed_index = self.coefficients._table.index.get_loc(coefficient_fixed.name)
+            all_params = all_params.at[fixed_index].set(fixed_coeff)
 
         return all_params
 
