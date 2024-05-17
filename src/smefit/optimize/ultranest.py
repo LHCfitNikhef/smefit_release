@@ -328,13 +328,17 @@ class USOptimizer(Optimizer):
             log_dir = self.results_path
 
         if self.vectorized:
-            self.gaussian_loglikelihood = jax.vmap(self.gaussian_loglikelihood)
+            loglikelihood = jax.vmap(self.gaussian_loglikelihood)
+            flat_prior = jax.vmap(self.flat_prior)
+        else:
+            loglikelihood = self.gaussian_loglikelihood
+            flat_prior = self.flat_prior
 
         t1 = time.time()
         sampler = ultranest.ReactiveNestedSampler(
             self.free_parameters.index.tolist(),
-            self.gaussian_loglikelihood,
-            self.flat_prior,
+            loglikelihood,
+            flat_prior,
             log_dir=log_dir,
             resume=True,
             vectorized=self.vectorized,
