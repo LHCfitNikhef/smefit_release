@@ -7,15 +7,15 @@ from rich.style import Style
 from rich.table import Table
 from ultranest import stepsampler
 
+import jax
+import jax.numpy as jnp
+from functools import partial
+
 from .. import log
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
 from .. import chi2
-
-import jax
-import jax.numpy as jnp
-from functools import partial
 
 jax.config.update("jax_enable_x64", True)
 
@@ -108,8 +108,9 @@ class USOptimizer(Optimizer):
         self.pairwise_fits = pairwise_fits
         self.store_raw = store_raw
 
-        # Set the fixed coefficients
+        # Set coefficients relevant quantities
         self.fixed_coeffs = self.coefficients._objlist[~self.coefficients.is_free]
+        self.coeffs_index = self.coefficients._table.index
 
     @classmethod
     def from_dict(cls, config):
@@ -268,7 +269,7 @@ class USOptimizer(Optimizer):
         all_params = jnp.zeros(num_params)
         all_params = all_params.at[is_free].set(params)
 
-        param_dict = dict(zip(self.coefficients._table.index, all_params))
+        param_dict = dict(zip(self.coeffs_index, all_params))
 
         fixed_coefficients = [
             coeff for coeff in self.fixed_coeffs if coeff.constrain is not None
@@ -278,7 +279,7 @@ class USOptimizer(Optimizer):
             fixed_coeff = self.compute_fixed_coeff(
                 coefficient_fixed.constrain, param_dict
             )
-            fixed_index = self.coefficients._table.index.get_loc(coefficient_fixed.name)
+            fixed_index = self.coeffs_index.get_loc(coefficient_fixed.name)
             all_params = all_params.at[fixed_index].set(fixed_coeff)
 
         return all_params
