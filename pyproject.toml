@@ -40,6 +40,7 @@ seaborn="^0.11.2"
 mpi4py-mpich="^3.1.5"
 arviz="^0.18.0"
 jax="*"
+jaxlib="*"
 
 [tool.poetry.group.docs]
 optional = true
