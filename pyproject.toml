@@ -39,8 +39,8 @@ cma="^3.2.2"
 seaborn="^0.13.2"
 mpi4py-mpich="^3.1.5"
 arviz="^0.18.0"
-jax="*"
-jaxlib="*"
+jax="^0.4.28"
+jaxlib="^0.4.28"
 
 [tool.poetry.group.docs]
 optional = true
