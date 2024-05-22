@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy
 import wilson
+import eos
 
 import smefit.log as log
 from smefit.chi2 import Scanner
@@ -38,8 +39,11 @@ class EOSLikelihood:
 
         self.id = id
         self.likelihood = likelihood
-
         eos_dataset = eos.DataSets()
+
+        import pdb;
+        pdb.set_trace()
+
         self.varied_parameters, self.neg_log_pdf, self.chi2 = eos_dataset.likelihood(
             id, likelihood
         )

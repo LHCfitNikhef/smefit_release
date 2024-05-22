@@ -53,10 +53,14 @@ coefficients:
 #external_chi2:
 #  'EOSLikelihood': /data/theorie/jthoeve/smefit_release/smefit_flavour/run_fit.py
 
-external_chi2:
+external_likelihoods:
+
   - likelihood_type: 'EOSLikelihood'
     id: "2023-01v2"
     likelihood: "WET-ublnu"
+    path: '/data/theorie/jthoeve/smefit_release/smefit_flavour/EOSLikelihood.py'
+
+
 
 
 #uv_couplings: True

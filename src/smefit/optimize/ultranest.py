@@ -78,7 +78,7 @@ class USOptimizer(Optimizer):
         target_post_unc=0.5,
         frac_remain=0.01,
         store_raw=False,
-        external_chi2=None,
+        external_likelihoods=None,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -87,7 +87,7 @@ class USOptimizer(Optimizer):
             use_quad,
             single_parameter_fits,
             use_multiplicative_prescription,
-            external_chi2,
+            external_likelihoods,
         )
         self.live_points = live_points
         self.lepsilon = lepsilon
@@ -127,13 +127,13 @@ class USOptimizer(Optimizer):
                 config.get("theory_path", None),
                 config.get("rot_to_fit_basis", None),
                 config.get("uv_couplings", False),
-                config.get("external_chi2", False),
+                config.get("external_likelihoods", False),
             )
-        elif config.get("external_chi2") is not None:
+        elif config.get("external_likelihoods") is not None:
             loaded_datasets = None
 
         else:
-            raise ValueError("No datasets or external chi2 provided")
+            raise ValueError("No datasets or external likelihoods provided")
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
 
@@ -176,7 +176,7 @@ class USOptimizer(Optimizer):
             "use_multiplicative_prescription", False
         )
 
-        external_chi2 = config.get("external_chi2", None)
+        external_likelihoods = config.get("external_likelihoods", None)
 
         return cls(
             loaded_datasets,
@@ -193,7 +193,7 @@ class USOptimizer(Optimizer):
             target_post_unc=target_post_unc,
             frac_remain=frac_remain,
             store_raw=store_raw,
-            external_chi2=external_chi2,
+            external_likelihoods=external_likelihoods,
         )
 
     def chi2_func_ns(self, params):

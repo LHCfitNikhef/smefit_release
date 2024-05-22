@@ -156,10 +156,9 @@ class Runner:
         # else:
         #     ns_opt = USOptimizer.from_dict(config)
 
-        if "external_chi2" in config:
-            external_chi2 = config["external_chi2"]
-            for class_name, module_path in external_chi2.items():
-                path = pathlib.Path(module_path)
+        if "external_likelihoods" in config:
+            for external_likelihood in config["external_likelihoods"]:
+                path = pathlib.Path(external_likelihood['path'])
                 base_path, stem = path.parent, path.stem
                 sys.path = [str(base_path)] + sys.path
         ns_opt = USOptimizer.from_dict(config)

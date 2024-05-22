@@ -48,7 +48,7 @@ class Optimizer:
         use_quad,
         single_parameter_fits,
         use_multiplicative_prescription,
-        external_chi2=None,
+        external_likelihoods=None,
     ):
         self.results_path = pathlib.Path(results_path)
         self.loaded_datasets = loaded_datasets
@@ -63,12 +63,12 @@ class Optimizer:
         self.use_multiplicative_prescription = use_multiplicative_prescription
         self.counter = 0
 
-        # load external chi2 modules as amortized objects (fast to evaluate)
-        self.chi2_ext = (
-            self.load_external_chi2(external_chi2) if external_chi2 else None
+        # load external likelihood modules as amortized objects (fast to evaluate)
+        self.external_likelihoods = (
+            self.load_external_likelihoods(external_likelihoods) if external_likelihoods else None
         )
 
-    def load_external_chi2(self, external_chi2):
+    def load_external_likelihoods(self, external_likelihoods):
         """
         Loads the external chi2 modules
 
@@ -84,19 +84,20 @@ class Optimizer:
              List of external chi2 objects that can be evaluated by passing a coefficients instance
         """
         # dynamical import
-        ext_chi2_modules = []
+        ext_likelihood_modules = []
+        for external_likelihood in external_likelihoods:
 
-        for class_name, module_path in external_chi2.items():
+            likelihood_type = external_likelihood['likelihood_type']
+            likelihood_module = importlib.import_module(likelihood_type)
+            my_likelihood_class = getattr(likelihood_module, likelihood_type)
 
-            path = pathlib.Path(module_path)
-            base_path, stem = path.parent, path.stem
-            chi2_module = importlib.import_module(stem)
+            # initialise external likelihood object
+            del external_likelihood['likelihood_type']
+            del external_likelihood['path']
+            likelihood_ext = my_likelihood_class(self.coefficients, **external_likelihood)
 
-            my_chi2_class = getattr(chi2_module, class_name)
-            chi2_ext = my_chi2_class(self.coefficients)
-
-            ext_chi2_modules.append(chi2_ext.compute_chi2)
-
+            ext_likelihood_modules.append(likelihood_ext.compute_neg_log_likelihood)
+        import pdb; pdb.set_trace()
         return ext_chi2_modules
 
     @property
@@ -150,10 +151,10 @@ class Optimizer:
         else:
             chi2_tot = 0
 
-        if self.chi2_ext is not None:
-            for chi2_ext in self.chi2_ext:
-                chi2_ext_i = chi2_ext(self.coefficients.value)
-                chi2_tot += chi2_ext_i
+        if self.external_likelihoods is not None:
+            for external_likelihood in self.external_likelihoods:
+                external_likelihood_i = external_likelihood(self.coefficients.value)
+                external_likelihood_tot += external_likelihood_i
 
         if print_log:
             chi2_dict = {}
