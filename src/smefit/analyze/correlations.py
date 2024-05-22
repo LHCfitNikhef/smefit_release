@@ -13,6 +13,7 @@ def plot_correlations(
     thr_show=None,
     hide_dofs=None,
     title=None,
+    figsize=(10, 10),
 ):
     """
     Computes and displays the correlation coefficients
@@ -32,7 +33,8 @@ def plot_correlations(
         coefficients to hide
     title: str, None
         plot title
-
+    figsize: tuple, (10, 10)
+        Figure size
     """
     if hide_dofs is not None:
         posterior_df = posterior_df.drop(hide_dofs, axis=1)
@@ -55,7 +57,7 @@ def plot_correlations(
     else:
         coeff_to_keep = correlations.index
 
-    fig = plt.figure(figsize=(10, 10))
+    fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111)
 
     cmap = cm.get_cmap("coolwarm")
@@ -67,16 +69,18 @@ def plot_correlations(
 
     for i, row in enumerate(correlations.values):
         for j, cij in enumerate(row):
-            if thr_show is None or np.abs(cij) < thr_show:
+            if thr_show is None or np.abs(cij) >= thr_show:
+                ax.text(
+                    i,
+                    j,
+                    f"{cij:.1f}",
+                    va="center",
+                    ha="center",
+                    fontsize=10,
+                )
+            else:
                 continue
-            ax.text(
-                i,
-                j,
-                f"{cij:.1f}",
-                va="center",
-                ha="center",
-                fontsize=10,
-            )
+
     labels = latex_names[coeff_to_keep].values
     ticks = np.arange(labels.shape[0])
     ax.set_yticks(ticks, labels=labels, fontsize=15)

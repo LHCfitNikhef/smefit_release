@@ -1,44 +1,36 @@
 # -*- coding: utf-8 -*-
 import importlib
+import itertools
 import json
+import math
 import pathlib
 import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
-from latex_dicts import mod_dict
-from latex_dicts import uv_param_dict
-from latex_dicts import inv_param_dict
+
 import arviz as az
-import math
-from sigfig import round
-import pandas as pd
-import matplotlib.patches as patches
-
-import itertools
-
-import numpy as np
 import matplotlib
-
+import matplotlib.patches as patches
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from histogram_tools import find_xrange
+from latex_dicts import inv_param_dict, mod_dict, uv_param_dict
+from matplotlib import rc, use
 from matplotlib.patches import Circle, RegularPolygon
 from matplotlib.path import Path
 from matplotlib.projections import register_projection
 from matplotlib.projections.polar import PolarAxes
 from matplotlib.spines import Spine
 from matplotlib.transforms import Affine2D
+from sigfig import round
+
+rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"], "size": 22})
+rc("text", usetex=True)
 
 
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib import rc, use
-from histogram_tools import find_xrange
-
-from matplotlib import rc
-rc('font', **{'family': 'sans-serif', 'sans-serif': ['Helvetica'], 'size': 22})
-rc('text', usetex=True)
-
-
-def radar_factory(num_vars, frame='circle'):
+def radar_factory(num_vars, frame="circle"):
     """
     Create a radar chart with `num_vars` axes.
 
@@ -56,7 +48,6 @@ def radar_factory(num_vars, frame='circle'):
     theta = np.linspace(0, 2 * np.pi, num_vars, endpoint=False)
 
     class RadarTransform(PolarAxes.PolarTransform):
-
         def transform_path_non_affine(self, path):
             # Paths with non-unit interpolation steps correspond to gridlines,
             # in which case we force interpolation (to defeat PolarTransform's
@@ -67,14 +58,14 @@ def radar_factory(num_vars, frame='circle'):
 
     class RadarAxes(PolarAxes):
 
-        name = 'radar'
+        name = "radar"
         PolarTransform = RadarTransform
 
         def __init__(self, *args, **kwargs):
 
-            super().__init__(*args, aspect='equal', **kwargs)
+            super().__init__(*args, aspect="equal", **kwargs)
             # rotate plot such that the first axis is at the top
-            self.set_theta_zero_location('N')
+            self.set_theta_zero_location("N")
 
         def fill(self, *args, closed=True, **kwargs):
             """Override fill so that line is closed by default"""
@@ -101,43 +92,46 @@ def radar_factory(num_vars, frame='circle'):
         def _gen_axes_patch(self):
             # The Axes patch must be centered at (0.5, 0.5) and of radius 0.5
             # in axes coordinates.
-            if frame == 'circle':
+            if frame == "circle":
                 return Circle((0.5, 0.5), 0.5)
-            elif frame == 'polygon':
-                return RegularPolygon((0.5, 0.5), num_vars,
-                                      radius=.5, edgecolor="k")
+            elif frame == "polygon":
+                return RegularPolygon((0.5, 0.5), num_vars, radius=0.5, edgecolor="k")
             else:
                 raise ValueError("Unknown value for 'frame': %s" % frame)
 
         def _gen_axes_spines(self):
-            if frame == 'circle':
+            if frame == "circle":
                 return super()._gen_axes_spines()
-            elif frame == 'polygon':
+            elif frame == "polygon":
                 # spine_type must be 'left'/'right'/'top'/'bottom'/'circle'.
-                spine = Spine(axes=self,
-                              spine_type='circle',
-                              path=Path.unit_regular_polygon(num_vars))
+                spine = Spine(
+                    axes=self,
+                    spine_type="circle",
+                    path=Path.unit_regular_polygon(num_vars),
+                )
                 # unit_regular_polygon gives a polygon of radius 1 centered at
                 # (0, 0) but we want a polygon of radius 0.5 centered at (0.5,
                 # 0.5) in axes coordinates.
-                spine.set_transform(Affine2D().scale(.5).translate(.5, .5)
-                                    + self.transAxes)
-                return {'polar': spine}
+                spine.set_transform(
+                    Affine2D().scale(0.5).translate(0.5, 0.5) + self.transAxes
+                )
+                return {"polar": spine}
             else:
                 raise ValueError("Unknown value for 'frame': %s" % frame)
 
     register_projection(RadarAxes)
     return theta
 
+
 def plot_spider(
-        df,
-        labels,
-        title,
-        ymax=100,
-        log_scale=True,
-        fontsize=12,
-        figsize=(9, 9),
-        legend_loc="best",
+    df,
+    labels,
+    title,
+    ymax=100,
+    log_scale=True,
+    fontsize=12,
+    figsize=(9, 9),
+    legend_loc="best",
 ):
     """
     Plot error bars at given confidence level
@@ -159,11 +153,11 @@ def plot_spider(
 
     # normalise to first fit
     data = df.values
-    
+
     y_log_min = math.floor(np.log10(df.values.min()))
     y_log_max = math.ceil(np.log10(df.values.max()))
 
-    delta = - y_log_min
+    delta = -y_log_min
 
     if log_scale:
         data = log_transform(data, delta)
@@ -178,15 +172,16 @@ def plot_spider(
     n_axis = 3
     axes = [fig.add_axes(rect, projection="radar") for i in range(n_axis)]
 
-    radial_lines = [i + np.log10(j) for i in range(y_log_max - y_log_min) for j in range(1, 10)] + [y_log_max - y_log_min]
+    radial_lines = [
+        i + np.log10(j) for i in range(y_log_max - y_log_min) for j in range(1, 10)
+    ] + [y_log_max - y_log_min]
 
     radial_labels = []
     for i in range(y_log_min, y_log_max + 1):
         if i < y_log_max:
-            radial_labels += [rf"$\mathbf{{10^{{{int(i)}}}}}$"] + 8*['']
+            radial_labels += [rf"$\mathbf{{10^{{{int(i)}}}}}$"] + 8 * [""]
         else:
             radial_labels += [rf"$\mathbf{{10^{{{int(i)}}}}}$"]
-
 
     # take first axis as main, the rest only serve to show the remaining percentage axes
     ax = axes[0]
@@ -200,7 +195,7 @@ def plot_spider(
     prop_cycle = plt.rcParams["axes.prop_cycle"]
     colors = prop_cycle.by_key()["color"]
 
-    markers = itertools.cycle(['*', 'o', 'P'])
+    markers = itertools.cycle(["*", "o", "P"])
 
     for i, data_fit_i in enumerate(data.T):
 
@@ -216,7 +211,6 @@ def plot_spider(
             color=colors[i],
             zorder=1,
         )
-        
 
     for i, axis in enumerate(axes):
         if i > 0:
@@ -227,7 +221,6 @@ def plot_spider(
         text_alignment = "right" if angle % 360 > 180 else "left"
 
         axis.yaxis.set_tick_params(labelsize=11, zorder=100)
-
 
         if i == 0:
             axis.set_rgrids(
@@ -261,7 +254,7 @@ def plot_spider(
     delta_disk = 0
     radius = outer_ax_width / 2 + (1 + delta_disk) * width_disk
 
-    #ax2.set_title(title, fontsize=18)
+    # ax2.set_title(title, fontsize=18)
 
     class_names = df.index.get_level_values(0)
     angle_sweep = 360 * class_names.value_counts(sort=False) / len(class_names)
@@ -270,16 +263,13 @@ def plot_spider(
     prop_cycle = plt.rcParams["axes.prop_cycle"]
     colors = prop_cycle.by_key()["color"]
 
-    filled_start_angle = 0 # 12'o clock
-
+    filled_start_angle = 0  # 12'o clock
 
     for i, (idx, angle) in enumerate(angle_sweep.items()):
 
         filled_end_angle = angle + filled_start_angle  #  End angle in degrees
 
         center = (0.5, 0.5)  # Coordinates relative to the figure
-
-
 
         alpha = 0.3
 
@@ -301,14 +291,26 @@ def plot_spider(
 
         shift = [0.6, 0.5, 0.7, 0.7, 0.7, 1.5, 1.5]
 
-        mid_angle = filled_start_angle - shift[i] * angle_sweep.iloc[0] + (filled_end_angle - filled_start_angle)
+        mid_angle = (
+            filled_start_angle
+            - shift[i] * angle_sweep.iloc[0]
+            + (filled_end_angle - filled_start_angle)
+        )
 
         # if angle_sweep.iloc[i] > angle_sweep.min():
         #     mid_angle = filled_start_angle - 1.5 * angle_sweep.iloc[0] + (filled_end_angle - filled_start_angle)
 
         print(i, mid_angle)
-        ax.text(mid_angle * (np.pi / 180), 1.25 * (y_log_max + delta), mod_dict[idx], color='black', fontsize=12, ha='center', va='bottom',
-                bbox=dict(facecolor='none', edgecolor=colors[i], boxstyle='round'))
+        ax.text(
+            mid_angle * (np.pi / 180),
+            1.25 * (y_log_max + delta),
+            mod_dict[idx],
+            color="black",
+            fontsize=12,
+            ha="center",
+            va="bottom",
+            bbox=dict(facecolor="none", edgecolor=colors[i], boxstyle="round"),
+        )
 
         filled_start_angle = filled_end_angle
 
@@ -335,7 +337,9 @@ def plot_spider(
         bbox_transform=fig.transFigure,
     )
 
-    logo = plt.imread("/data/theorie/jthoeve/smefit_release/src/smefit/analyze/logo.png")
+    logo = plt.imread(
+        "/data/theorie/jthoeve/smefit_release/src/smefit/analyze/logo.png"
+    )
 
     ax2.imshow(
         logo,
@@ -345,10 +349,14 @@ def plot_spider(
         zorder=10,
     )
 
-    #self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
+    # self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
 
-    plt.savefig("/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv.pdf", bbox_inches="tight")
+    plt.savefig(
+        "/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv_test.pdf",
+        bbox_inches="tight",
+    )
+
 
 
 collections = ["OneLoop"]
@@ -375,7 +383,8 @@ use("PDF")
 rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"]})
 rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 #
-#compute the invariants
+
+# compute the invariants
 # pQCD = ['NLO']
 # EFT = ['NHO']
 #
@@ -399,14 +408,13 @@ rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 posterior_path = f"{here.parent}/results/smefit_fcc_uv_spider/{{}}_{{}}_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
 
 
-
 def get_bounds(collection, mod_nrs):
 
     n_cols = 4
     n_rows = 4
     fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
     plot_nr = 1
-    
+
     lhc_bounds = {}
     hllhc_bounds = {}
     fcc_bounds = {}
@@ -414,10 +422,15 @@ def get_bounds(collection, mod_nrs):
 
     for col, mod in zip(collection, mod_nrs):
 
-
-        posterior_path_mod_1 = pathlib.Path(posterior_path.format(col, "lhc", mod, "NLO", "HO"))
-        posterior_path_mod_2 = pathlib.Path(posterior_path.format(col, "hllhc", mod, "NLO", "HO"))
-        posterior_path_mod_3 = pathlib.Path(posterior_path.format(col, "fcc", mod, "NLO", "HO"))
+        posterior_path_mod_1 = pathlib.Path(
+            posterior_path.format(col, "lhc", mod, "NLO", "HO")
+        )
+        posterior_path_mod_2 = pathlib.Path(
+            posterior_path.format(col, "hllhc", mod, "NLO", "HO")
+        )
+        posterior_path_mod_3 = pathlib.Path(
+            posterior_path.format(col, "fcc", mod, "NLO", "HO")
+        )
 
         if posterior_path_mod_1.exists():
             # Open the JSON file and load its contents
@@ -435,11 +448,11 @@ def get_bounds(collection, mod_nrs):
 
             n_invariants = 0
             for key in posterior_1.keys():
-                if key.startswith('inv'):
+                if key.startswith("inv"):
                     n_invariants += 1
 
             for (key, samples_1_list), (_, samples_2_list), (_, samples_3_list) in zip(
-                    posterior_1.items(), posterior_2.items(), posterior_3.items()
+                posterior_1.items(), posterior_2.items(), posterior_3.items()
             ):
                 if not key.startswith("inv"):
                     continue
@@ -448,12 +461,13 @@ def get_bounds(collection, mod_nrs):
                     samples_2 = np.array(samples_2_list)
                     samples_3 = np.array(samples_3_list)
 
-
                     ax = plt.subplot(n_rows, n_cols, plot_nr)
-                    plot_settings = {"bins": "fd",
-                        "density":True,
+                    plot_settings = {
+                        "bins": "fd",
+                        "density": True,
                         "edgecolor": "black",
-                        "alpha": 0.4}
+                        "alpha": 0.4,
+                    }
                     ax.hist(samples_1, **plot_settings)
                     ax.hist(samples_2, **plot_settings)
                     ax.hist(samples_3, **plot_settings)
@@ -467,7 +481,7 @@ def get_bounds(collection, mod_nrs):
                         fontsize=12,
                         ha="left",
                         va="top",
-                        transform=ax.transAxes
+                        transform=ax.transAxes,
                     )
 
                     ax.text(
@@ -477,7 +491,7 @@ def get_bounds(collection, mod_nrs):
                         fontsize=12,
                         ha="right",
                         va="top",
-                        transform=ax.transAxes
+                        transform=ax.transAxes,
                     )
 
                     plot_nr += 1
@@ -485,15 +499,15 @@ def get_bounds(collection, mod_nrs):
                     if min(samples_1) > 0:
                         lhc_width = np.percentile(samples_1, 95)
                     else:
-                        lhc_width = np.diff(az.hdi(samples_1, hdi=.95).flatten())[0]
+                        lhc_width = np.diff(az.hdi(samples_1, hdi=0.95).flatten())[0]
                     if min(samples_2) > 0:
                         hllhc_width = np.percentile(samples_2, 95)
                     else:
-                        hllhc_width = np.diff(az.hdi(samples_2, hdi=.95).flatten())[0]
+                        hllhc_width = np.diff(az.hdi(samples_2, hdi=0.95).flatten())[0]
                     if min(samples_3) > 0:
                         fcc_width = np.percentile(samples_3, 95)
                     else:
-                        fcc_width = np.diff(az.hdi(samples_3, hdi=.95).flatten())[0]
+                        fcc_width = np.diff(az.hdi(samples_3, hdi=0.95).flatten())[0]
 
                     # lhc_width = np.percentile(samples_1, 97.5) - np.percentile(samples_1, 2.5)
                     # hllhc_width = np.percentile(samples_2, 97.5) - np.percentile(samples_2, 2.5)
@@ -505,24 +519,40 @@ def get_bounds(collection, mod_nrs):
 
                     x_labels.append(mod_dict[mod])
 
-    fig.savefig('/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/posteriors_phi_5.png')
+
+    fig.savefig(
+        "/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/posteriors_phi_5.png"
+    )
+
     lhc_bounds = pd.DataFrame(lhc_bounds, index=[r"${\rm LHC}$"]).T
     hllhc_bounds = pd.DataFrame(hllhc_bounds, index=[r"${\rm HL-LHC}$"]).T
     fcc_bounds = pd.DataFrame(fcc_bounds, index=[r"${\rm FCC}$"]).T
 
     bounds = pd.concat([lhc_bounds, hllhc_bounds, fcc_bounds], axis=1)
 
+    bounds.drop(("5_5", "inv1"), inplace=True)
+    bounds.drop(("Q1_Q7_W_NoDegen", "inv3"), inplace=True)
 
-    bounds.drop( ("5_5", 'inv1'), inplace=True)
-    bounds.drop(("Q1_Q7_W_NoDegen", 'inv3'), inplace=True)
+    plot_spider(
+        bounds,
+        title=r"${\rm UV\:couplings}$",
+        labels=[r"$\rm{LEP+LHC_{Run\:II}}$", r"$\rm{+\:HL-LHC}$", r"$\rm{+\:FCC-ee}$"],
+        legend_loc="upper center",
+        log_scale=True,
+        figsize=[10, 10],
+    )
 
-    plot_spider(bounds, title=r'${\rm UV\:couplings}$',
-                labels=[ r'$\rm{LEP+LHC_{Run-2}}$', r'$\rm{+\:HL-LHC}$',
-  r'$\rm{+\:FCC-ee}$'],
-                legend_loc='upper center', log_scale=True, figsize=[10, 10])
 
-
-get_bounds(["Granada", "OneLoop", "Granada" , "OneLoop", "Granada","OneLoop", "Multiparticle_v2"],
-           ['48_10',  "T1_10", '49_10', "T2_10", '5_5', "Varphi_5", "Q1_Q7_W_NoDegen"])
-
+get_bounds(
+    [
+        "Granada",
+        "OneLoop",
+        "Granada",
+        "OneLoop",
+        "Granada",
+        "OneLoop",
+        "Multiparticle_v2",
+    ],
+    ["48_10", "T1_10", "49_10", "T2_10", "5_5", "Varphi_5", "Q1_Q7_W_NoDegen"],
+)
 

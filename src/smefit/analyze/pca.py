@@ -256,7 +256,6 @@ class PcaCalculator:
         _, W, Vt = np.linalg.svd(X)
 
         pca_labels = [f"PC{i:02d}" for i in range(W.size)]
-
         self.pc_matrix = pd.DataFrame(Vt.T, index=free_parameters, columns=pca_labels)
         self.SVs = pd.Series(W, index=pca_labels)
 

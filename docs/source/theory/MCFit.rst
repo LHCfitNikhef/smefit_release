@@ -72,7 +72,7 @@ There are numerous advantages of using the MCfit method for global EFT analyses:
     *   Thirdly, it can be used to assess the impact of new datasets in the fit `a posteriori`
         with the Bayesian reweighting formalism.
 
-
+However, it only works for linear EFT fits, as first explained in :cite:`Kassabov:2023hbm`.
 
 Optimisation
 ~~~~~~~~~~~~

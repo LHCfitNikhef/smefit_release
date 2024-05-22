@@ -1,0 +1,277 @@
+result_ID: Multiparticle_lhc_UV_Q1_Q7_W_NoDegen_NLO_HO_NS_v2
+Model name: Q1_Q7_W_NoDegen
+UV Collection: MultiParticleCollection
+UV model: Q1_Q7_W_NoDegen
+ceff: true
+coefficients:
+  O3pQ3:
+    constrain:
+    - gWqf33:
+      - 1
+      - 1
+      gWtiH:
+      - -0.04
+      - 1
+    max: 1000
+    min: -1000
+  O3pl1:
+    constrain:
+    - gWLf11:
+      - 1
+      - 1
+      gWtiH:
+      - -0.04
+      - 1
+    max: 1000
+    min: -1000
+  O3pl2:
+    constrain:
+    - gWLf22:
+      - 1
+      - 1
+      gWtiH:
+      - -0.04
+      - 1
+    max: 1000
+    min: -1000
+  O3pl3:
+    constrain:
+    - gWLf33:
+      - 1
+      - 1
+      gWtiH:
+      - -0.04
+      - 1
+    max: 1000
+    min: -1000
+  OQQ1:
+    constrain:
+    - gWqf33:
+      - 1
+      - 2
+      gWtiH:
+      - 0.013333333333333332
+      - 0
+    max: 1000
+    min: -1000
+  OQQ8:
+    constrain:
+    - gWqf33:
+      - 1
+      - 2
+      gWtiH:
+      - -0.16
+      - 0
+    max: 1000
+    min: -1000
+  Obp:
+    constrain:
+    - gWtiH:
+      - -0.0009603464691283466
+      - 2
+    max: 1000
+    min: -1000
+  Oll:
+    constrain:
+    - gWLf11:
+      - 1
+      - 1
+      gWLf22:
+      - 1
+      - 1
+      gWtiH:
+      - -0.04
+      - 0
+    max: 1000
+    min: -1000
+  Oll1111:
+    constrain:
+    - gWLf11:
+      - 1
+      - 2
+      gWtiH:
+      - -0.02
+      - 0
+    max: 1000
+    min: -1000
+  OpQM:
+    constrain:
+    - gWqf33:
+      - 1
+      - 1
+      gWtiH:
+      - 0.04
+      - 1
+    max: 1000
+    min: -1000
+  Opd:
+    constrain:
+    - gWtiH:
+      - -0.06
+      - 2
+    max: 1000
+    min: -1000
+  Opt:
+    constrain:
+    - gWtiH:
+      - 0.024691358024691357
+      - 0
+      lamQ7f33:
+      - 1
+      - 2
+    - gWtiH:
+      - -0.05555555555555555
+      - 0
+      lamQ1uf3:
+      - 1
+      - 2
+    max: 1000
+    min: -1000
+  Otap:
+    constrain:
+    - gWtiH:
+      - -0.00040895136723647296
+      - 2
+    max: 1000
+    min: -1000
+  Otp:
+    constrain:
+    - gWtiH:
+      - 0.02450077618385805
+      - 0
+      lamQ7f33:
+      - 1
+      - 2
+    - gWtiH:
+      - 0.0551267464136806
+      - 0
+      lamQ1uf3:
+      - 1
+      - 2
+    - gWtiH:
+      - -0.03969125741785003
+      - 2
+    max: 1000
+    min: -1000
+  gWLf11:
+    max: 3
+    min: -3
+  gWLf22:
+    max: 300
+    min: -300
+  gWLf33:
+    constrain: true
+    value: 0.0
+    min: -1
+    max: 1
+  gWqf33:
+    max: 15
+    min: -15
+  gWtiH:
+    max: 1
+    min: -1
+  lamQ1uf3:
+    max: 7
+    min: -7
+  lamQ7f33:
+    max: 7
+    min: -7
+data_path: /data/theorie/jthoeve/smefit_database/commondata_projections_t0
+datasets:
+- ATLAS_CMS_SSinc_RunI
+- ATLAS_CMS_tt_AC_8TeV
+- ATLAS_SSinc_RunII
+- ATLAS_STXS_runII_13TeV
+- ATLAS_WH_Hbb_13TeV
+- ATLAS_WW_13TeV_2016_memu
+- ATLAS_WZ_13TeV_2016_mTWZ
+- ATLAS_WhelF_8TeV
+- ATLAS_Whel_13TeV
+- ATLAS_ZH_Hbb_13TeV
+- ATLAS_ggF_13TeV_2015
+- ATLAS_ggF_ZZ_13TeV
+- ATLAS_tW_13TeV_inc
+- ATLAS_tW_8TeV_inc
+- ATLAS_tW_slep_8TeV_inc
+- ATLAS_tZ_13TeV_inc
+- ATLAS_tZ_13TeV_run2_inc
+- ATLAS_t_sch_13TeV_inc
+- ATLAS_t_sch_8TeV
+- ATLAS_t_tch_13TeV_inc
+- ATLAS_t_tch_8TeV_diff_Yt
+- ATLAS_ttW_13TeV
+- ATLAS_ttW_13TeV_2016
+- ATLAS_ttW_8TeV
+- ATLAS_ttZ_13TeV
+- ATLAS_ttZ_13TeV_2016
+- ATLAS_ttZ_13TeV_pTZ
+- ATLAS_ttZ_8TeV
+- ATLAS_tt_13TeV_asy_2022
+- ATLAS_tt_13TeV_ljets_2016_Mtt
+- ATLAS_tt_8TeV_dilep_Mtt
+- ATLAS_tt_8TeV_ljets_Mtt
+- ATLAS_tta_8TeV
+- ATLAS_ttbb_13TeV_2016
+- ATLAS_tttt_13TeV_run2
+- ATLAS_tttt_13TeV_slep_inc
+- ATLAS_tttt_13TeV_2023
+- CMS_H_13TeV_2015_pTH
+- CMS_SSinc_RunII
+- CMS_WZ_13TeV_2016_pTZ
+- CMS_WZ_13TeV_2022_pTZ
+- CMS_WhelF_8TeV
+- CMS_ggF_aa_13TeV
+- CMS_tW_13TeV_inc
+- CMS_tW_13TeV_slep_inc
+- CMS_tW_8TeV_inc
+- CMS_tZ_13TeV_2016_inc
+- CMS_tZ_13TeV_inc
+- CMS_tZ_13TeV_pTt
+- CMS_t_sch_8TeV
+- CMS_t_tch_13TeV_2016_diff_Yt
+- CMS_t_tch_13TeV_2019_diff_Yt
+- CMS_t_tch_13TeV_inc
+- CMS_t_tch_8TeV_diff_Yt
+- CMS_t_tch_8TeV_inc
+- CMS_tt2D_8TeV_dilep_MttYtt
+- CMS_ttW_13TeV
+- CMS_ttW_8TeV
+- CMS_ttZ_13TeV
+- CMS_ttZ_13TeV_pTZ
+- CMS_ttZ_8TeV
+- CMS_tt_13TeV_Mtt
+- CMS_tt_13TeV_asy
+- CMS_tt_13TeV_dilep_2015_Mtt
+- CMS_tt_13TeV_dilep_2016_Mtt
+- CMS_tt_13TeV_ljets_2015_Mtt
+- CMS_tt_13TeV_ljets_2016_Mtt
+- CMS_tt_13TeV_ljets_inc
+- CMS_tt_8TeV_ljets_Ytt
+- CMS_tta_8TeV
+- CMS_ttbb_13TeV
+- CMS_ttbb_13TeV_2016
+- CMS_ttbb_13TeV_dilepton_inc
+- CMS_ttbb_13TeV_ljets_inc
+- CMS_tttt_13TeV
+- CMS_tttt_13TeV_run2
+- CMS_tttt_13TeV_slep_inc
+- CMS_tttt_13TeV_2023
+- LEP1_EWPOs_2006
+- LEP_alphaEW
+- LEP_Bhabha_2013
+- LEP_Brw_2013
+- LEP_eeWW_182GeV
+- LEP_eeWW_189GeV
+- LEP_eeWW_198GeV
+- LEP_eeWW_206GeV
+efr: 0.005
+maxiter: 10000
+nlive: 50
+order: NLO
+result_path: /data/theorie/jthoeve/smefit_release/results/smefit_fcc_uv_spider
+theory_path: /data/theorie/jthoeve/smefit_database/theory
+toll: 0.5
+use_quad: true
+use_t0: true
+use_theory_covmat: true
+uv_couplings: true

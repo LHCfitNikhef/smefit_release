@@ -63,6 +63,18 @@ class Projection:
 
     @classmethod
     def from_config(cls, projection_card):
+        """
+        Returns the class Projection
+
+        Parameters
+        ----------
+        projection_card: pathlib.Path
+            path to projection runcard
+
+        Returns
+        -------
+        Projection class
+        """
         with open(projection_card, encoding="utf-8") as f:
             projection_config = yaml.safe_load(f)
 
@@ -125,16 +137,18 @@ class Projection:
 
         Parameters
         ----------
-        sys: asystematics
-        fred: reduction factor
+        sys: numpy.ndarray
+            systematics
+        fred: float
+            Systematics reduction factor
 
         Returns
         -------
-
+        Projected systematic uncertainties
         """
 
         # check whether the systematics are artificial (i.e. no breakdown of separate systematic sources),
-        # characterised by a square matrix and negative values
+        # characterised by a square matrix and negative entries
         is_square = sys.shape[0] == sys.shape[1]
         is_artificial = is_square & np.any(sys < 0)
 
@@ -158,7 +172,7 @@ class Projection:
 
         Parameters
         ----------
-        stat: array_like
+        stat: numpy.ndarray
             old statistical uncertainties
         lumi_old: float
             Old luminosity
@@ -174,12 +188,16 @@ class Projection:
 
     def build_projection(self, lumi_new, closure):
         """
-        Constructs runcard for projection by updating the central value and statistical uncertainties
+        Constructs runcard for projection by updating the central value and statistical and
+        systematic uncertainties
 
         Parameters
         ----------
         lumi_new: float
             Adjusts the statistical uncertainties according to the specified luminosity
+        closure: bool
+            Set to true for a L1 closure test (no rescaling, only cv gets fluctuated according to
+            original uncertainties)
         """
 
         # compute central values under projection
@@ -250,7 +268,6 @@ class Projection:
             sys = pd.DataFrame(data=sys_t0.T, columns=name_sys)
             n_sys = data_dict["num_sys"]
 
-
             th_covmat = self.datasets.ThCovMat[idxs, idxs]
 
             if not closure:
@@ -299,10 +316,7 @@ class Projection:
                 newcov += th_covmat
 
             # add L1 noise to cv
-            #cv_projection = np.random.multivariate_normal(cv[idxs], newcov)
-
-            # L0
-            cv_projection = cv[idxs]
+            cv_projection = np.random.multivariate_normal(cv[idxs], newcov)
 
             # replace cv with updated central values
             if len(cv_projection) > 1:

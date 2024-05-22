@@ -247,7 +247,7 @@ class Report:
             coeff_plt.plot_coeffs(bounds_dict, **scatter_plot)
             figs_list.append("coefficient_central")
 
-        # when we plot the 95% CL we show 95% CL for null solutions.
+        # when we plot the 95% CL we show the 95% CL for null solutions.
         # the error coming from a degenerate solution is not taken into account.
         if confidence_level_bar is not None:
             _logger.info("Plotting : Confidence Level error bars")
@@ -264,6 +264,8 @@ class Report:
             )
             figs_list.append("coefficient_bar")
 
+        # when we plot the 95% CL we show the 95% CL for null solutions.
+        # the error coming from a degenerate solution is not taken into account.
         if pull_bar is not None:
             _logger.info("Plotting : Pull ")
             zero_sol = 0
@@ -290,7 +292,12 @@ class Report:
                 if 1 in dbl_solution:
 
                     dbl_op = double_solution.get(fit.name, None)
-                    idx = [np.argwhere(self.coeff_info.index.get_level_values(1) == op).flatten()[0] for op in dbl_op]
+                    idx = [
+                        np.argwhere(
+                            self.coeff_info.index.get_level_values(1) == op
+                        ).flatten()[0]
+                        for op in dbl_op
+                    ]
                     bound_df_dbl = bound_df.iloc[:, idx]
 
                     width_0 = bound_df_dbl.loc[0, f"hdi_{spider_cl}"]
@@ -352,7 +359,9 @@ class Report:
 
         self._append_section("Coefficients", links=links_list, figs=figs_list)
 
-    def correlations(self, hide_dofs=None, thr_show=0.1, title=True):
+    def correlations(
+        self, hide_dofs=None, thr_show=0.1, title=True, fit_list=None, figsize=(10, 10)
+    ):
         """Plot coefficients correlation matrix.
 
         Parameters
@@ -364,10 +373,18 @@ class Report:
             If None the full correlation matrix is displayed.
         title: bool
             if True display fit label name as title
-
+        fit_list: list, optional
+            list of fit names for which the correlation is computed.
+            By default all the fits included in the report
         """
         figs_list = []
-        for fit in self.fits:
+
+        if fit_list is not None:
+            fit_list = [fit for fit in self.fits if fit in fit_list]
+        else:
+            fit_list = self.fits
+
+        for fit in fit_list:
             _logger.info(f"Plotting correlations for: {fit.name}")
             coeff_to_keep = fit.coefficients.free_parameters.index
             plot_correlations(
@@ -377,6 +394,7 @@ class Report:
                 title=fit.label if title else None,
                 hide_dofs=hide_dofs,
                 thr_show=thr_show,
+                figsize=figsize,
             )
             figs_list.append(f"correlations_{fit.name}")
 
@@ -405,7 +423,7 @@ class Report:
         """
         figs_list, links_list = [], []
         if fit_list is not None:
-            fit_list = self.fits[self.fits == fit_list]
+            fit_list = [fit for fit in self.fits if fit in fit_list]
         else:
             fit_list = self.fits
         for fit in fit_list:
@@ -426,6 +444,8 @@ class Report:
                 links_list.append((f"pca_table_{fit.name}", f"Table {fit.label}"))
             if plot is not None:
                 title = fit.name
+
+                # TODO: check why **fit_plot got removed (see PR)
                 pca_cal.plot_heatmap(
                     f"{self.report}/pca_heatmap_{fit.name}", title=title
                 )
@@ -462,7 +482,7 @@ class Report:
         """
         figs_list, links_list = [], []
         if fit_list is not None:
-            fit_list = self.fits[self.fits == fit_list]
+            fit_list = [fit for fit in self.fits if fit in fit_list]
         else:
             fit_list = self.fits
 

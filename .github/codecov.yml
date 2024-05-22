@@ -3,6 +3,7 @@
 
 codecov:
   require_ci_to_pass: yes
+  token: e6f3c93a-e6da-4771-9144-61a40ea029ff
 
 coverage:
   precision: 2
@@ -38,6 +39,9 @@ comment:
   #- master
   #- "feature/*"
   #- "release/*"
+
+
+
 
 github_checks:
   annotations: false
