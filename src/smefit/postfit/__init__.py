@@ -48,6 +48,7 @@ class Postfit:
 
         postfit_res = []
         chi2_list = []
+        coeffs = None  # Initialize coeffs to None
 
         if nrep > self.finished_replicas:
             raise ValueError(f"Only {self.finished_replicas} available")
