@@ -39,14 +39,15 @@ class EOSLikelihood:
 
         self.id = id
         self.likelihood = likelihood
-        eos_dataset = eos.DataSets()
 
-        import pdb;
-        pdb.set_trace()
+        # TODO: make path relative, not hardcoded
+        eos_dataset = eos.DataSets(storage_directory='/data/theorie/jthoeve/smefit_release/smefit_flavour/datasets')
 
-        self.varied_parameters, self.neg_log_pdf, self.chi2 = eos_dataset.likelihood(
-            id, likelihood
-        )
+        # uncomment to download dataset, make automatic
+        #eos_dataset.download(id)
+
+        # TODO: 3rd return value is still None
+        self.varied_parameters, self.neg_log_pdf, self.chi2 = eos_dataset.likelihood(id, likelihood)
 
         self.wet_ops = [p["name"] for p in self.varied_parameters]
 
