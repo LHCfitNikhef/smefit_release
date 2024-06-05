@@ -1,6 +1,6 @@
 # Input YAML configurations for SMEFiT code
 
-result_ID: LHC_NLO_QUAD_GLOB
+result_ID: TEST
 
 # absolute path where results are stored
 result_path: /data/theorie/jthoeve/smefit_release/results/smefit_real

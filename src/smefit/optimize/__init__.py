@@ -97,8 +97,8 @@ class Optimizer:
             likelihood_ext = my_likelihood_class(self.coefficients, **external_likelihood)
 
             ext_likelihood_modules.append(likelihood_ext.compute_neg_log_likelihood)
-        import pdb; pdb.set_trace()
-        return ext_chi2_modules
+
+        return ext_likelihood_modules
 
     @property
     def free_parameters(self):
@@ -154,7 +154,7 @@ class Optimizer:
         if self.external_likelihoods is not None:
             for external_likelihood in self.external_likelihoods:
                 external_likelihood_i = external_likelihood(self.coefficients.value)
-                external_likelihood_tot += external_likelihood_i
+                chi2_tot += external_likelihood_i
 
         if print_log:
             chi2_dict = {}
