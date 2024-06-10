@@ -101,3 +101,23 @@ class RGE:
     @property
     def all_ops(self):
         return sorted(wcxf_translate.keys())
+
+    def RGEevolve(self, wcs, scale):
+        wc_wilson = {}
+        for op, values in self.RGEbasis.items():
+            for key in values:
+                if key not in wc_wilson:
+                    wc_wilson[key] = values[key] * wcs[op]
+                else:
+                    wc_wilson[key] += values[key] * wcs[op]
+
+        wc_init = wilson.Wilson(
+            wc_wilson, scale=self.init_scale, eft="SMEFT", basis="Warsaw"
+        )
+        wc_init.set_option("smeft_accuracy", self.accuracy)
+        wc_final = wc_init.match_run(scale=scale, eft="SMEFT", basis="Warsaw").dict
+
+        # remove small values
+        wc_final = {key: value for key, value in wc_final.items() if abs(value) > 1e-10}
+
+        return self.map_to_smefit(wc_final)
