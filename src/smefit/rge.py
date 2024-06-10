@@ -4,10 +4,11 @@ import pandas as pd
 
 
 class RGE:
-    def __init__(self, wc_names, init_scale):
+    def __init__(self, wc_names, init_scale, accuracy="integrate"):
         # order the Wilson coefficients alphabetically
         self.wc_names = sorted(wc_names)
         self.init_scale = init_scale
+        self.accuracy = accuracy
 
     def RGEmatrix(self, scale):
         # compute the RGE matrix at the scale `scale`
@@ -17,6 +18,7 @@ class RGE:
             wc_init = wilson.Wilson(
                 wc_val, scale=self.init_scale, eft="SMEFT", basis="Warsaw"
             )
+            wc_init.set_option("smeft_accuracy", self.accuracy)
 
             wc_final = wc_init.match_run(scale=scale, eft="SMEFT", basis="Warsaw")
 
