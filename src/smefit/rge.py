@@ -10,19 +10,19 @@ class RGE:
         self.init_scale = init_scale
         self.accuracy = accuracy
 
-    def RGEmatrix(self, scale):
+    def RGEmatrix_dict(self, scale):
         # compute the RGE matrix at the scale `scale`
         rge_matrix_dict = {}
-        for wc_name, wc_val in self.RGEbasis.items():
+        for wc_name, wc_vals in self.RGEbasis.items():
             print(f"Computing RGE for {wc_name}")
             wc_init = wilson.Wilson(
-                wc_val, scale=self.init_scale, eft="SMEFT", basis="Warsaw"
+                wc_vals, scale=self.init_scale, eft="SMEFT", basis="Warsaw"
             )
             wc_init.set_option("smeft_accuracy", self.accuracy)
 
             wc_final = wc_init.match_run(scale=scale, eft="SMEFT", basis="Warsaw")
 
-            # Assuming wc_final is a dictionary
+            # Remove small values
             wc_final_vals = {
                 key: value for key, value in wc_final.dict.items() if abs(value) > 1e-10
             }
@@ -33,14 +33,13 @@ class RGE:
                     f"Imaginary values in Wilson coefficient for operator {wc_name}."
                 )
 
-            rge_matrix_dict[wc_name] = self.from_wcxf_to_smefit(wc_final_vals)
+            rge_matrix_dict[wc_name] = self.map_to_smefit(wc_final_vals)
 
-        # determine the union of the keys in rge_matrix_dict
-        all_ops = set()
-        for wc_dict in rge_matrix_dict.values():
-            all_ops = all_ops.union(wc_dict.keys())
-        # convert to a list, order alphabetically
-        self.all_ops = sorted(list(all_ops))
+        return rge_matrix_dict
+
+    def RGEmatrix(self, scale):
+        # compute the RGE matrix dict at the scale `scale`
+        rge_matrix_dict = self.RGEmatrix_dict(scale)
 
         # create the RGE matrix as pandas dataframe
         rge_matrix = pd.DataFrame(
@@ -50,12 +49,15 @@ class RGE:
         for wc_name, wc_dict in rge_matrix_dict.items():
             for op in self.all_ops:
                 rge_matrix.loc[op, wc_name] = wc_dict.get(op, 0.0)
+        # if there are rows with all zeros, remove them
+        rge_matrix = rge_matrix.loc[(rge_matrix != 0).any(axis=1)]
 
         return rge_matrix
 
     @property
     def RGEbasis(self):
-        # compute the basis in the Warsaw basis expected by wilson
+        # computes the translation from the smefit basis to the Warsaw basis
+        # as expected by the Wilson package
         wc_basis = {}
         for wc_name in self.wc_names:
             try:
@@ -78,9 +80,9 @@ class RGE:
 
         return wc_basis
 
-    def from_wcxf_to_smefit(self, wc_final_vals):
+    def map_to_smefit(self, wc_final_vals):
         # TODO: missing a check that flavour structure is the one expected
-        wc_final_dict = {}
+        wc_dict = {}
         for wc_basis, wc_inv_dict in inverse_wcxf_translate.items():
             wc_warsaw_name = wc_inv_dict["wc"]
             if "value" not in wc_inv_dict:
@@ -93,5 +95,9 @@ class RGE:
                 if wc in wc_final_vals:
                     # 1e6 is to transform from GeV^-2 to TeV^2
                     value += 1e6 * wc_final_vals[wc].real * val
-            wc_final_dict[wc_basis] = value
-        return wc_final_dict
+            wc_dict[wc_basis] = value
+        return wc_dict
+
+    @property
+    def all_ops(self):
+        return sorted(wcxf_translate.keys())
