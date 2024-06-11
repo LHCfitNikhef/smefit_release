@@ -16,6 +16,7 @@ from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
 from .. import chi2
+from smefit.rge import RGE
 
 jax.config.update("jax_enable_x64", True)
 
@@ -87,6 +88,7 @@ class USOptimizer(Optimizer):
         store_raw=False,
         vectorized=False,
         external_chi2=None,
+        rgemat=None,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -112,6 +114,9 @@ class USOptimizer(Optimizer):
         self.fixed_coeffs = self.coefficients._objlist[~self.coefficients.is_free]
         self.coeffs_index = self.coefficients._table.index
 
+        # set RGE matrix
+        self.rgemat = rgemat
+
     @classmethod
     def from_dict(cls, config):
         """Create object from theory dictionary.
@@ -127,11 +132,24 @@ class USOptimizer(Optimizer):
             created object
         """
 
+        rge = config.get("rge", None)
+        operators_to_keep = config["coefficients"]
+        rgemat = None
+
+        if rge is not None:
+            init_scale = rge.get("init_scale", 1e3)
+            obs_scale = rge.get("obs_scale", 91.1876)
+            coeff_list = list(operators_to_keep.keys())
+            rge_runner = RGE(coeff_list, init_scale)
+            rgemat = rge_runner.RGEmatrix(obs_scale)
+            gen_operators = list(rgemat.index)
+            operators_to_keep = {k: {"max": None, "min": None} for k in gen_operators}
+
         if config.get("datasets") is not None:
             loaded_datasets = load_datasets(
                 config["data_path"],
                 config["datasets"],
-                config["coefficients"],
+                operators_to_keep,
                 config["order"],
                 config["use_quad"],
                 config["use_theory_covmat"],
@@ -209,6 +227,7 @@ class USOptimizer(Optimizer):
             store_raw=store_raw,
             vectorized=vectorized,
             external_chi2=external_chi2,
+            rgemat=rgemat,
         )
 
     def chi2_func_ns(self, params):
@@ -228,6 +247,7 @@ class USOptimizer(Optimizer):
                 self.use_quad,
                 self.use_multiplicative_prescription,
                 use_replica=False,
+                rgemat=self.rgemat,
             )
         else:
             chi2_tot = 0

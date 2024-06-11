@@ -24,7 +24,7 @@ def flatten(quad_mat, axis=0):
 
 
 def make_predictions(
-    dataset, coefficients_values, use_quad, use_multiplicative_prescription
+    dataset, coefficients_values, use_quad, use_multiplicative_prescription, rgemat=None
 ):
     """
     Generate the corrected theory predictions for dataset
@@ -48,9 +48,16 @@ def make_predictions(
 
     # Compute total linear correction
     # note @ is slower when running with mpiexec
-    summed_corrections = jnp.einsum(
-        "ij,j->i", dataset.LinearCorrections, coefficients_values
-    )
+    if rgemat is not None:
+        # filter rge mat so as to keep only the operators that are present in the dataset
+        rgemat = rgemat.loc[dataset.OperatorsNames]
+        summed_corrections = jnp.einsum(
+            "ij,jk,k->i", dataset.LinearCorrections, rgemat.values, coefficients_values
+        )
+    else:
+        summed_corrections = jnp.einsum(
+            "ij,j->i", dataset.LinearCorrections, coefficients_values
+        )
 
     # Compute total quadratic correction
     if use_quad:

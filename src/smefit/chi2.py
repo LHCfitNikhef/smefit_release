@@ -22,6 +22,7 @@ def compute_chi2(
     use_quad,
     use_multiplicative_prescription,
     use_replica=False,
+    rgemat=None,
 ):
     r"""
     Compute the :math:`\chi^2`.
@@ -45,7 +46,7 @@ def compute_chi2(
 
     # compute theory prediction for each point in the dataset
     theory_predictions = pr.make_predictions(
-        dataset, coefficients_values, use_quad, use_multiplicative_prescription
+        dataset, coefficients_values, use_quad, use_multiplicative_prescription, rgemat
     )
 
     # compute experimental central values - theory

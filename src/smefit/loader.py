@@ -524,7 +524,7 @@ def load_datasets(
     if theory_path is not None:
         Loader.theory_path = pathlib.Path(theory_path)
     else:
-        Loader.theory_path = pathlib.Path(commondata_path)
+        Loader.theory_path = pathlib.Path(commondata_path)      
 
     for sset in np.unique(datasets):
         dataset = Loader(
@@ -559,7 +559,7 @@ def load_datasets(
     operators_names, lin_corr_values = construct_corrections_matrix(
         lin_corr_list, n_data_tot, sorted_keys
     )
-    check_missing_oparators(operators_names, operators_to_keep)
+    # check_missing_oparators(operators_names, operators_to_keep)
 
     if use_quad:
         quad_corrections_names = []
