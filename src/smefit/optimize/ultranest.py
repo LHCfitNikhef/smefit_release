@@ -135,6 +135,7 @@ class USOptimizer(Optimizer):
         rge = config.get("rge", None)
         operators_to_keep = config["coefficients"]
         rgemat = None
+        has_rge = False
 
         if rge is not None:
             has_rge = True

@@ -555,13 +555,12 @@ def load_datasets(
     sorted_keys = None
     # if uv couplings are present allow for op which are not in the
     # theory files
-    if has_uv_couplings or has_external_chi2:
+    if has_uv_couplings or has_external_chi2 or has_rge:
         sorted_keys = np.unique((*operators_to_keep,))
     operators_names, lin_corr_values = construct_corrections_matrix(
         lin_corr_list, n_data_tot, sorted_keys
     )
-    if not has_rge:
-        check_missing_operators(operators_names, operators_to_keep)
+    check_missing_operators(operators_names, operators_to_keep)
 
     if use_quad:
         quad_corrections_names = []

@@ -61,7 +61,12 @@ def make_predictions(
 
     # Compute total quadratic correction
     if use_quad:
-        coeff_outer_coeff = jnp.outer(coefficients_values, coefficients_values)
+        if rgemat is not None:
+            rgemat = rgemat.loc[dataset.OperatorsNames]
+            ext_coeffs = jnp.einsum("ij,j->i", rgemat.values, coefficients_values)
+            coeff_outer_coeff = jnp.outer(ext_coeffs, ext_coeffs)
+        else:
+            coeff_outer_coeff = jnp.outer(coefficients_values, coefficients_values)
         # note @ is slower when running with mpiexec
         summed_quad_corrections = jnp.einsum(
             "ij,j->i", dataset.QuadraticCorrections, flatten(coeff_outer_coeff)
