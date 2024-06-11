@@ -49,8 +49,6 @@ def make_predictions(
     # Compute total linear correction
     # note @ is slower when running with mpiexec
     if rgemat is not None:
-        # filter rge mat so as to keep only the operators that are present in the dataset
-        rgemat = rgemat.loc[dataset.OperatorsNames]
         summed_corrections = jnp.einsum(
             "ij,jk,k->i", dataset.LinearCorrections, rgemat.values, coefficients_values
         )
@@ -62,7 +60,6 @@ def make_predictions(
     # Compute total quadratic correction
     if use_quad:
         if rgemat is not None:
-            rgemat = rgemat.loc[dataset.OperatorsNames]
             ext_coeffs = jnp.einsum("ij,j->i", rgemat.values, coefficients_values)
             coeff_outer_coeff = jnp.outer(ext_coeffs, ext_coeffs)
         else:
