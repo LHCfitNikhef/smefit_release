@@ -141,8 +141,9 @@ class USOptimizer(Optimizer):
             has_rge = True
             init_scale = rge.get("init_scale", 1e3)
             obs_scale = rge.get("obs_scale", 91.1876)
+            smeft_accuracy = rge.get("smeft_accuracy", "integrate")
             coeff_list = list(operators_to_keep.keys())
-            rge_runner = RGE(coeff_list, init_scale)
+            rge_runner = RGE(coeff_list, init_scale, smeft_accuracy)
             rgemat = rge_runner.RGEmatrix(obs_scale)
             gen_operators = list(rgemat.index)
             operators_to_keep = {k: {"max": None, "min": None} for k in gen_operators}

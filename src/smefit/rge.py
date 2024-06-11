@@ -66,9 +66,15 @@ class RGE:
             try:
                 wcxf_dict = wcxf_translate[wc_name]
             except KeyError:
-                raise ValueError(
-                    f"Wilson coefficient {wc_name} not present in the WCxf translation dictionary"
+                _logger.warning(
+                    f"Wilson coefficient {wc_name} not present in the WCxf translation dictionary."
                 )
+                _logger.warning(
+                    "Assuming it is a UV coupling and associating it to the null vector."
+                )
+                wc_basis[wc_name] = {}
+                continue
+            
             wc_warsaw_name = wcxf_dict["wc"]
             if "value" not in wcxf_dict:
                 wc_warsaw_value = [1] * len(wcxf_dict["wc"])
