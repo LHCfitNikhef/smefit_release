@@ -1,6 +1,9 @@
 import wilson
 from smefit.wcxf import wcxf_translate, inverse_wcxf_translate
 import pandas as pd
+import smefit.log as log
+
+_logger = log.logging.getLogger(__name__)
 
 
 class RGE:
@@ -14,7 +17,7 @@ class RGE:
         # compute the RGE matrix at the scale `scale`
         rge_matrix_dict = {}
         for wc_name, wc_vals in self.RGEbasis.items():
-            print(f"Computing RGE for {wc_name}")
+            _logger.info(f"Computing RGE for {wc_name}")
             wc_init = wilson.Wilson(
                 wc_vals, scale=self.init_scale, eft="SMEFT", basis="Warsaw"
             )
