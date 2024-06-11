@@ -18,7 +18,7 @@ wcxf_translate = {
     # Bosonic
     "OWWW": {"wc": ["W"]},
     "Opd": {"wc": ["phiBox"], "value": [-1.0]},
-    "OpDC": {"wc": ["phiD"]},
+    "OpD": {"wc": ["phiD"]},
     "OpWB": {"wc": ["phiWB"]},
     "OpG": {"wc": ["phiG"]},
     "OpW": {"wc": ["phiW"]},
@@ -96,7 +96,7 @@ inverse_wcxf_translate = {
     # Bosonic
     "OWWW": {"wc": ["W"]},
     "Opd": {"wc": ["phiBox"], "value": [-1.0]},
-    "OpDC": {"wc": ["phiD"]},
+    "OpD": {"wc": ["phiD"]},
     "OpWB": {"wc": ["phiWB"]},
     "OpG": {"wc": ["phiG"]},
     "OpW": {"wc": ["phiW"]},
