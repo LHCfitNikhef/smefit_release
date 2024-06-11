@@ -9,6 +9,7 @@ from rich.table import Table
 
 from .. import chi2, log
 from ..loader import get_dataset
+from ..coefficients import CoefficientManager
 
 try:
     from mpi4py import MPI
@@ -49,6 +50,7 @@ class Optimizer:
         single_parameter_fits,
         use_multiplicative_prescription,
         external_chi2=None,
+        rgemat=None,
     ):
         self.results_path = pathlib.Path(results_path)
         self.loaded_datasets = loaded_datasets
@@ -65,10 +67,10 @@ class Optimizer:
 
         # load external chi2 modules as amortized objects (fast to evaluate)
         self.chi2_ext = (
-            self.load_external_chi2(external_chi2) if external_chi2 else None
+            self.load_external_chi2(external_chi2, rgemat) if external_chi2 else None
         )
 
-    def load_external_chi2(self, external_chi2):
+    def load_external_chi2(self, external_chi2, rgemat):
         """
         Loads the external chi2 modules
 
@@ -93,7 +95,14 @@ class Optimizer:
             chi2_module = importlib.import_module(stem)
 
             my_chi2_class = getattr(chi2_module, class_name)
-            chi2_ext = my_chi2_class(self.coefficients)
+            if rgemat is not None:
+                gen_operators = list(rgemat.index)
+                # Create dummy coefficients
+                operators_dict = {k: {"max": 0.0, "min": 0.0} for k in gen_operators}
+                new_coeffs = CoefficientManager.from_dict(operators_dict)
+                chi2_ext = my_chi2_class(new_coeffs, rgemat.values)
+            else:
+                chi2_ext = my_chi2_class(self.coefficients)
 
             ext_chi2_modules.append(chi2_ext.compute_chi2)
 

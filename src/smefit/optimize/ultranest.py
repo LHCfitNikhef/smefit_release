@@ -98,6 +98,7 @@ class USOptimizer(Optimizer):
             single_parameter_fits,
             use_multiplicative_prescription,
             external_chi2,
+            rgemat,
         )
         self.live_points = live_points
         self.lepsilon = lepsilon
