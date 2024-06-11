@@ -137,6 +137,7 @@ class USOptimizer(Optimizer):
         rgemat = None
 
         if rge is not None:
+            has_rge = True
             init_scale = rge.get("init_scale", 1e3)
             obs_scale = rge.get("obs_scale", 91.1876)
             coeff_list = list(operators_to_keep.keys())
@@ -159,6 +160,7 @@ class USOptimizer(Optimizer):
                 config.get("rot_to_fit_basis", None),
                 config.get("uv_couplings", False),
                 config.get("external_chi2", False),
+                has_rge,
             )
         elif config.get("external_chi2") is not None:
             loaded_datasets = None
