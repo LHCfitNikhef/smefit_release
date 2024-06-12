@@ -1,15 +1,15 @@
 # Input YAML file for a report
 
-name: "smefit_tutorial_report"
+name: "report_higgs"
 
 title: "smefit"
 
 result_IDs: [
-"LHC_NLO_LIN_GLOB"
+"HIGGS"
 ]
 
 fit_labels: [
- '$\mathrm{NLO}\:\mathcal{O}\left(\Lambda^{-2}\right)$'
+ '$\mathrm{Higgs}\:\mathcal{O}\left(\Lambda^{-2}\right)$'
 ]
 
 # absolute path where results are stored
@@ -20,44 +20,12 @@ result_path: ./results
 
 summary: True
 
-#coefficients_plots:
-#
-#  scatter_plot:
-#    figsize: [10,20]
-#    x_min: -50
-#    x_max: 50
-#    lin_thr: .01
-#    x_log: True
-#
-#  confidence_level_bar:
-#    confidence_level: 95
-#    figsize: [10,20]
-#    plot_cutoff: 400
-#    x_min: 0.001
-#    x_max: 300
-#    x_log: True
-#
-#  pull_bar:
-#    figsize: [ 10,18 ]
-#    x_min: -3
-#    x_max: 3
+coefficients_plots:
 
-#
-##  spider_plot:
-##    confidence_level: 95
-##    figsize: [ 10,15 ]
-##    plot_cutoff: 400
-##    x_min: 0.001
-##    x_max: 500
-##    x_log: True
-##    log_scale: False
-##    title: $\mathrm{Ratio\:of\:Uncertainties\:to\:Global\:Fit\:Baseline,\:NLO\:}\mathcal{O}\left(\Lambda^{-2}\right)$
-#
-#
-##  contours_2d:
-##    show: True
-##    confidence_level: 95
-##    dofs_show: ["O3pQ3", "OpQM"] # Null or list of op per fit to be displayed
+  contours_2d:
+    show: True
+    confidence_level: 95
+    dofs_show: # Null or list of op per fit to be displayed
 #
 #  posterior_histograms: True
 #

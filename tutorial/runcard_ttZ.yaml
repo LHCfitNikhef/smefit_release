@@ -1,0 +1,52 @@
+# Input YAML configurations for SMEFiT code
+
+result_ID: ttZ
+
+# absolute path where results are stored
+result_path: ./results
+
+# path to common data
+data_path: ./downloads/smefit_database-main/commondata
+
+# path to theory tables, default same as data path
+theory_path: ./downloads/smefit_database-main/theory
+
+# pQCD order (LO or NLO)
+order: NLO
+
+use_theory_covmat: True
+
+use_t0: True
+
+# SMEFT Expansion Order (NHO = Lambda^-2 , HO = Lambda^-4)
+use_quad: False
+
+# Set parameter bounds to previous SCAN result
+bounds: Null
+
+# NS settings
+
+n_samples: 20000
+
+
+# Datasets to include
+datasets:
+
+
+  - ATLAS_ttZ_13TeV
+  - ATLAS_ttZ_13TeV_2016
+  - ATLAS_ttZ_13TeV_pTZ
+  - ATLAS_ttZ_8TeV
+  - CMS_ttZ_13TeV
+  - CMS_ttZ_13TeV_pTZ
+  - CMS_ttZ_8TeV
+
+
+# Coefficients to fit
+coefficients:
+
+  OtG: { 'min': -2, 'max': 2 }
+  Opt: { 'min': -2, 'max': 2.0 }
+
+
+rot_to_fit_basis: null
