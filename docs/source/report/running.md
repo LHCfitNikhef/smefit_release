@@ -77,9 +77,27 @@ coefficients_plots:
     x_max: 500 # x max value
     x_log: True # use log scale on x axis ?
 
+  # spider plot that displays the ratio of uncertainties to a baseline fit
+  spider_plot:
+    confidence_level: 95  # confidence level in percentage
+    log_scale: True  # use radial log scale
+    title: "title"
+    fontsize: 17
+    ncol: 2  # number of columns in the legend
+    legend_loc: 'upper center'
+    radial_lines: [0.5, 1, 5, 10, 20, 40, 60, 80 ]  # where to draw radial lines
+    marker_styles: ['*', 'o', 'P']  # markers for the legend
+    class_order: ["4H", "2L2H", "2FB", "4l", "B"]  # order of operator classes (optional)
+
+  # bar plot of pulls (one-sigma fit residuals) per coefficient
+  pull_bar:
+    figsize: [10,18] # figure size
+    x_min: -3 # minimum number of sigmas to display
+    x_max: 3 # maximum number of sigmas to display
+
   # 2 dimensional contour plot
   contours_2d:
-    confidence_level: 95 # Avalable CL are 95% or 68%
+    confidence_level: 95 # Avalable CL are 95% or 68%, as a list both are plotted
     dofs_show: ["Op1", "Op2"] # list of operator to be displayed (will include all the possible pairs), default is Null
 
   # show the posterior histograms

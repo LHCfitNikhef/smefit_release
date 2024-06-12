@@ -1,0 +1,676 @@
+Model name: T1
+UV Collection: OneLoop
+UV model: T1
+coefficients:
+  O11qq:
+    constrain:
+    - lambdaT13:
+      - -3.854906224162762e-09
+      - 0
+    - lambdaT13:
+      - -1.1040863763949994e-07
+      - 2
+    max: 100
+    min: -100
+  O13qq:
+    constrain:
+    - lambdaT13:
+      - -2.3014937581489197e-06
+      - 0
+    - lambdaT13:
+      - 9.138862997451822e-07
+      - 2
+    max: 100
+    min: -100
+  O1dt:
+    constrain:
+    - lambdaT13:
+      - 6.167849958660419e-08
+      - 0
+    max: 100
+    min: -100
+  O1qd:
+    constrain:
+    - lambdaT13:
+      - 1.5419624896651046e-08
+      - 0
+    - lambdaT13:
+      - 4.2680562956843695e-07
+      - 2
+    max: 100
+    min: -100
+  O1qt:
+    constrain:
+    - lambdaT13:
+      - -3.083924979330209e-08
+      - 0
+    max: 100
+    min: -100
+  O1qu:
+    constrain:
+    - lambdaT13:
+      - -3.083924979330209e-08
+      - 0
+    - lambdaT13:
+      - -8.832691011159995e-07
+      - 2
+    max: 100
+    min: -100
+  O1ut:
+    constrain:
+    - lambdaT13:
+      - -6.167849958660419e-08
+      - 0
+    max: 100
+    min: -100
+  O3pQ3:
+    constrain:
+    - lambdaT13:
+      - -4.6029875162978395e-06
+      - 0
+    - lambdaT13:
+      - 0.0006397793513538202
+      - 2
+    - lambdaT13:
+      - -1.0636396101573334e-05
+      - 4
+    max: 100
+    min: -100
+  O3pl1:
+    constrain:
+    - lambdaT13:
+      - -4.6029875162978395e-06
+      - 0
+    - lambdaT13:
+      - 5.905111475276562e-06
+      - 2
+    max: 100
+    min: -100
+  O3pl2:
+    constrain:
+    - lambdaT13:
+      - -4.6029875162978395e-06
+      - 0
+    - lambdaT13:
+      - 5.905111475276562e-06
+      - 2
+    max: 100
+    min: -100
+  O3pl3:
+    constrain:
+    - lambdaT13:
+      - -4.6029875162978395e-06
+      - 0
+    - lambdaT13:
+      - 5.905111475276562e-06
+      - 2
+    max: 100
+    min: -100
+  O3pq:
+    constrain:
+    - lambdaT13:
+      - -4.6029875162978395e-06
+      - 0
+    - lambdaT13:
+      - 5.905111475276562e-06
+      - 2
+    max: 100
+    min: -100
+  O81qq:
+    constrain:
+    - lambdaT13:
+      - -2.780082e-05
+      - 0
+    - lambdaT13:
+      - 6.841175756965689e-06
+      - 2
+    max: 100
+    min: -100
+  O8dt:
+    constrain:
+    - lambdaT13:
+      - -5.560164e-05
+      - 0
+    max: 100
+    min: -100
+  O8qd:
+    constrain:
+    - lambdaT13:
+      - -5.560164e-05
+      - 0
+    - lambdaT13:
+      - 1.3654975044412186e-05
+      - 2
+    max: 100
+    min: -100
+  O8qt:
+    constrain:
+    - lambdaT13:
+      - -5.560164e-05
+      - 0
+    max: 100
+    min: -100
+  O8qu:
+    constrain:
+    - lambdaT13:
+      - -5.560164e-05
+      - 0
+    - lambdaT13:
+      - 1.3682351513931378e-05
+      - 2
+    max: 100
+    min: -100
+  O8ut:
+    constrain:
+    - lambdaT13:
+      - -2.780082e-05
+      - 0
+    max: 100
+    min: -100
+  OQQ1:
+    constrain:
+    - lambdaT13:
+      - 1.5266193596509543e-06
+      - 0
+    - lambdaT13:
+      - -1.7236728970859566e-05
+      - 2
+    - lambdaT13:
+      - -4.287680297364554e-06
+      - 4
+    max: 100
+    min: -100
+  OQQ8:
+    constrain:
+    - lambdaT13:
+      - -7.401359006519135e-05
+      - 0
+    - lambdaT13:
+      - 1.8591216264614593e-05
+      - 2
+    - lambdaT13:
+      - -1.9789293680144098e-06
+      - 4
+    max: 100
+    min: -100
+  OQt1:
+    constrain:
+    - lambdaT13:
+      - -3.083924979330209e-08
+      - 0
+    - lambdaT13:
+      - 1.0652291759182905e-06
+      - 2
+    max: 100
+    min: -100
+  OQt8:
+    constrain:
+    - lambdaT13:
+      - -5.560164e-05
+      - 0
+    - lambdaT13:
+      - -7.984556578371455e-05
+      - 2
+    max: 100
+    min: -100
+  OWWW:
+    constrain:
+    - lambdaT13:
+      - -1.1750021552816732e-06
+      - 0
+    max: 100
+    min: -100
+  Obp:
+    constrain:
+    - lambdaT13:
+      - -1.105115702179622e-07
+      - 0
+    - lambdaT13:
+      - 2.8106750848090546e-05
+      - 2
+    - lambdaT13:
+      - -1.122457906568464e-06
+      - 4
+    max: 100
+    min: -100
+  Oll:
+    constrain:
+    - lambdaT13:
+      - -4.6029875162978395e-06
+      - 0
+    max: 100
+    min: -100
+  Oll1111:
+    constrain:
+    - lambdaT13:
+      - -2.3361879141663845e-06
+      - 0
+    max: 100
+    min: -100
+  OpB:
+    constrain:
+    - lambdaT13:
+      - -8.456831819195738e-08
+      - 2
+    max: 100
+    min: -100
+  OpD:
+    constrain:
+    - lambdaT13:
+      - -1.3877662406985942e-07
+      - 0
+    - lambdaT13:
+      - -0.00025603638216786724
+      - 2
+    - lambdaT13:
+      - -3.759965799227378e-05
+      - 4
+    max: 100
+    min: -100
+  OpG:
+    constrain:
+    - lambdaT13:
+      - 1.1727729869084038e-05
+      - 2
+    max: 100
+    min: -100
+  OpQM:
+    constrain:
+    - lambdaT13:
+      - 4.5798580789528635e-06
+      - 0
+    - lambdaT13:
+      - -0.0025292894268506877
+      - 2
+    - lambdaT13:
+      - 3.660879630225011e-05
+      - 4
+    max: 100
+    min: -100
+  OpW:
+    constrain:
+    - lambdaT13:
+      - 5.905111475276562e-06
+      - 2
+    max: 100
+    min: -100
+  OpWB:
+    constrain:
+    - lambdaT13:
+      - -6.168339106237314e-07
+      - 2
+    max: 100
+    min: -100
+  Opd:
+    constrain:
+    - lambdaT13:
+      - -6.939175430464224e-06
+      - 0
+    - lambdaT13:
+      - -0.00011065922337337679
+      - 2
+    - lambdaT13:
+      - -1.5831434944115278e-05
+      - 4
+    max: 100
+    min: -100
+  Opdi:
+    constrain:
+    - lambdaT13:
+      - 4.625887468995314e-08
+      - 0
+    - lambdaT13:
+      - -1.6913663638391476e-07
+      - 2
+    max: 100
+    min: -100
+  Ope:
+    constrain:
+    - lambdaT13:
+      - 1.3877662406985942e-07
+      - 0
+    - lambdaT13:
+      - -5.074099091517444e-07
+      - 2
+    max: 100
+    min: -100
+  Opl1:
+    constrain:
+    - lambdaT13:
+      - 6.938831203492971e-08
+      - 0
+    - lambdaT13:
+      - -2.537049545758722e-07
+      - 2
+    max: 100
+    min: -100
+  Opl2:
+    constrain:
+    - lambdaT13:
+      - 6.938831203492971e-08
+      - 0
+    - lambdaT13:
+      - -2.537049545758722e-07
+      - 2
+    max: 100
+    min: -100
+  Opl3:
+    constrain:
+    - lambdaT13:
+      - 6.938831203492971e-08
+      - 0
+    - lambdaT13:
+      - -2.537049545758722e-07
+      - 2
+    max: 100
+    min: -100
+  Opmu:
+    constrain:
+    - lambdaT13:
+      - 1.3877662406985942e-07
+      - 0
+    - lambdaT13:
+      - -5.074099091517444e-07
+      - 2
+    max: 100
+    min: -100
+  OpqMi:
+    constrain:
+    - lambdaT13:
+      - 4.5798580789528635e-06
+      - 0
+    - lambdaT13:
+      - -5.820543157084604e-06
+      - 2
+    max: 100
+    min: -100
+  Opt:
+    constrain:
+    - lambdaT13:
+      - -9.251774937990628e-08
+      - 0
+    - lambdaT13:
+      - -3.668319399088369e-05
+      - 2
+    max: 100
+    min: -100
+  Opta:
+    constrain:
+    - lambdaT13:
+      - 1.3877662406985942e-07
+      - 0
+    - lambdaT13:
+      - -5.074099091517444e-07
+      - 2
+    max: 100
+    min: -100
+  Opui:
+    constrain:
+    - lambdaT13:
+      - -9.251774937990628e-08
+      - 0
+    - lambdaT13:
+      - 3.382732727678295e-07
+      - 2
+    max: 100
+    min: -100
+  OtG:
+    constrain:
+    - lambdaT13:
+      - 1.6731120783798808e-05
+      - 2
+    max: 100
+    min: -100
+  OtW:
+    constrain:
+    - lambdaT13:
+      - 3.846239273023644e-06
+      - 2
+    max: 100
+    min: -100
+  OtZ:
+    constrain:
+    - lambdaT13:
+      - -9.280013382668142e-07
+      - 2
+    max: 100
+    min: -100
+  Otap:
+    constrain:
+    - lambdaT13:
+      - -4.705995095406047e-08
+      - 0
+    - lambdaT13:
+      - -5.908478336037928e-07
+      - 2
+    - lambdaT13:
+      - -2.630179079820182e-07
+      - 4
+    max: 100
+    min: -100
+  Otp:
+    constrain:
+    - lambdaT13:
+      - -4.567459060013194e-06
+      - 0
+    - lambdaT13:
+      - 0.002528882555626293
+      - 2
+    - lambdaT13:
+      - -0.00010161613624293922
+      - 4
+    max: 100
+    min: -100
+  Ott1:
+    constrain:
+    - lambdaT13:
+      - -9.328618499586604e-06
+      - 0
+    max: 100
+    min: -100
+  lambdaT13:
+    max: 100
+    min: -100
+data_path: /data/theorie/jthoeve/smefit_database/commondata_projections_t0
+datasets:
+- ATLAS_CMS_SSinc_RunI
+- ATLAS_CMS_tt_AC_8TeV
+- ATLAS_SSinc_RunII
+- ATLAS_SSinc_RunII_proj
+- ATLAS_STXS_runII_13TeV
+- ATLAS_STXS_runII_13TeV_uncor_proj
+- ATLAS_WH_Hbb_13TeV
+- ATLAS_WH_Hbb_13TeV_proj
+- ATLAS_WW_13TeV_2016_memu
+- ATLAS_WW_13TeV_2016_memu_proj
+- ATLAS_WZ_13TeV_2016_mTWZ
+- ATLAS_WZ_13TeV_2016_mTWZ_proj
+- ATLAS_WhelF_8TeV
+- ATLAS_Whel_13TeV
+- ATLAS_Whel_13TeV_uncor_proj
+- ATLAS_ZH_Hbb_13TeV
+- ATLAS_ZH_Hbb_13TeV_proj
+- ATLAS_ggF_13TeV_2015
+- ATLAS_ggF_13TeV_2015_proj
+- ATLAS_ggF_ZZ_13TeV
+- ATLAS_ggF_ZZ_13TeV_proj
+- ATLAS_tW_13TeV_inc
+- ATLAS_tW_13TeV_inc_proj
+- ATLAS_tW_8TeV_inc
+- ATLAS_tW_slep_8TeV_inc
+- ATLAS_tZ_13TeV_inc
+- ATLAS_tZ_13TeV_run2_inc
+- ATLAS_tZ_13TeV_run2_inc_proj
+- ATLAS_t_sch_13TeV_inc
+- ATLAS_t_sch_13TeV_inc_proj
+- ATLAS_t_sch_8TeV
+- ATLAS_t_tch_13TeV_inc
+- ATLAS_t_tch_13TeV_inc_proj
+- ATLAS_t_tch_8TeV_diff_Yt
+- ATLAS_ttW_13TeV
+- ATLAS_ttW_13TeV_2016
+- ATLAS_ttW_13TeV_2016_proj
+- ATLAS_ttW_8TeV
+- ATLAS_ttZ_13TeV
+- ATLAS_ttZ_13TeV_2016
+- ATLAS_ttZ_13TeV_pTZ
+- ATLAS_ttZ_13TeV_pTZ_uncor_proj
+- ATLAS_ttZ_8TeV
+- ATLAS_tt_13TeV_asy_2022
+- ATLAS_tt_13TeV_asy_2022_uncor_proj
+- ATLAS_tt_13TeV_ljets_2016_Mtt
+- ATLAS_tt_13TeV_ljets_2016_Mtt_proj
+- ATLAS_tt_8TeV_dilep_Mtt
+- ATLAS_tt_8TeV_ljets_Mtt
+- ATLAS_tta_8TeV
+- ATLAS_ttbb_13TeV_2016
+- ATLAS_ttbb_13TeV_2016_proj
+- ATLAS_tttt_13TeV_2023
+- ATLAS_tttt_13TeV_2023_proj
+- ATLAS_tttt_13TeV_run2
+- ATLAS_tttt_13TeV_run2_proj
+- ATLAS_tttt_13TeV_slep_inc
+- ATLAS_tttt_13TeV_slep_inc_proj
+- CMS_H_13TeV_2015_pTH
+- CMS_H_13TeV_2015_pTH_proj
+- CMS_SSinc_RunII
+- CMS_SSinc_RunII_proj
+- CMS_WZ_13TeV_2016_pTZ
+- CMS_WZ_13TeV_2016_pTZ_proj
+- CMS_WZ_13TeV_2022_pTZ
+- CMS_WZ_13TeV_2022_pTZ_proj
+- CMS_WhelF_8TeV
+- CMS_ggF_aa_13TeV
+- CMS_ggF_aa_13TeV_proj
+- CMS_tW_13TeV_inc
+- CMS_tW_13TeV_inc_proj
+- CMS_tW_13TeV_slep_inc
+- CMS_tW_13TeV_slep_inc_proj
+- CMS_tW_8TeV_inc
+- CMS_tZ_13TeV_2016_inc
+- CMS_tZ_13TeV_inc
+- CMS_tZ_13TeV_pTt
+- CMS_tZ_13TeV_pTt_uncor_proj
+- CMS_t_sch_8TeV
+- CMS_t_tch_13TeV_2016_diff_Yt
+- CMS_t_tch_13TeV_2019_diff_Yt
+- CMS_t_tch_13TeV_2019_diff_Yt_proj
+- CMS_t_tch_13TeV_inc
+- CMS_t_tch_8TeV_diff_Yt
+- CMS_t_tch_8TeV_inc
+- CMS_tt2D_8TeV_dilep_MttYtt
+- CMS_ttW_13TeV
+- CMS_ttW_13TeV_proj
+- CMS_ttW_8TeV
+- CMS_ttZ_13TeV
+- CMS_ttZ_13TeV_pTZ
+- CMS_ttZ_13TeV_pTZ_proj
+- CMS_ttZ_8TeV
+- CMS_tt_13TeV_Mtt
+- CMS_tt_13TeV_Mtt_proj
+- CMS_tt_13TeV_asy
+- CMS_tt_13TeV_asy_proj
+- CMS_tt_13TeV_dilep_2015_Mtt
+- CMS_tt_13TeV_dilep_2016_Mtt
+- CMS_tt_13TeV_dilep_2016_Mtt_proj
+- CMS_tt_13TeV_ljets_2015_Mtt
+- CMS_tt_13TeV_ljets_2016_Mtt
+- CMS_tt_13TeV_ljets_inc
+- CMS_tt_13TeV_ljets_inc_proj
+- CMS_tt_8TeV_ljets_Ytt
+- CMS_tta_8TeV
+- CMS_ttbb_13TeV
+- CMS_ttbb_13TeV_2016
+- CMS_ttbb_13TeV_2016_proj
+- CMS_ttbb_13TeV_dilepton_inc
+- CMS_ttbb_13TeV_dilepton_inc_proj
+- CMS_ttbb_13TeV_ljets_inc
+- CMS_ttbb_13TeV_ljets_inc_proj
+- CMS_tttt_13TeV
+- CMS_tttt_13TeV_2023
+- CMS_tttt_13TeV_2023_proj
+- CMS_tttt_13TeV_run2
+- CMS_tttt_13TeV_run2_proj
+- CMS_tttt_13TeV_slep_inc
+- CMS_tttt_13TeV_slep_inc_proj
+- FCCee_Brw_161GeV
+- FCCee_Brw_240GeV
+- FCCee_Brw_365GeV
+- FCCee_Wwidth
+- FCCee_Zdata
+- FCCee_alphaEW
+- FCCee_bb_240GeV
+- FCCee_bb_365GeV
+- FCCee_bb_Afb_240GeV
+- FCCee_bb_Afb_365GeV
+- FCCee_cc_240GeV
+- FCCee_cc_365GeV
+- FCCee_cc_Afb_240GeV
+- FCCee_cc_Afb_365GeV
+- FCCee_ee_240GeV
+- FCCee_ee_365GeV
+- FCCee_ee_Afb_240GeV
+- FCCee_ee_Afb_365GeV
+- FCCee_mumu_240GeV
+- FCCee_mumu_365GeV
+- FCCee_mumu_Afb_240GeV
+- FCCee_mumu_Afb_365GeV
+- FCCee_tautau_240GeV
+- FCCee_tautau_365GeV
+- FCCee_tautau_Afb_240GeV
+- FCCee_tautau_Afb_365GeV
+- FCCee_vvh_WW_365GeV
+- FCCee_vvh_ZZ_365GeV
+- FCCee_vvh_aa_365GeV
+- FCCee_vvh_bb_240GeV
+- FCCee_vvh_bb_365GeV
+- FCCee_vvh_cc_365GeV
+- FCCee_vvh_gg_365GeV
+- FCCee_vvh_tautau_365GeV
+- FCCee_ww_161GeV
+- FCCee_ww_240GeV
+- FCCee_ww_365GeV
+- FCCee_zh_240GeV
+- FCCee_zh_365GeV
+- FCCee_zh_WW_240GeV
+- FCCee_zh_WW_365GeV
+- FCCee_zh_ZZ_240GeV
+- FCCee_zh_ZZ_365GeV
+- FCCee_zh_aZ_240GeV
+- FCCee_zh_aa_240GeV
+- FCCee_zh_aa_365GeV
+- FCCee_zh_bb_240GeV
+- FCCee_zh_bb_365GeV
+- FCCee_zh_cc_240GeV
+- FCCee_zh_cc_365GeV
+- FCCee_zh_gg_240GeV
+- FCCee_zh_gg_365GeV
+- FCCee_zh_tautau_240GeV
+- FCCee_zh_tautau_365GeV
+- FCCee_161_ww_leptonic_optim_obs
+- FCCee_161_ww_semilep_optim_obs
+- FCCee_240_ww_leptonic_optim_obs
+- FCCee_240_ww_semilep_optim_obs
+- FCCee_365_ww_leptonic_optim_obs
+- FCCee_365_ww_semilep_optim_obs
+- FCCee_365_tt_optim_obs
+- LEP1_EWPOs_2006
+- LEP_Bhabha_2013
+- LEP_Brw_2013
+- LEP_alphaEW
+- LEP_eeWW_182GeV
+- LEP_eeWW_189GeV
+- LEP_eeWW_198GeV
+- LEP_eeWW_206GeV
+frac_remain: 0.001
+lepsilon: 0.001
+nlive: 1000
+order: NLO
+result_path: /data/theorie/jthoeve/smefit_release/results/smefit_fcc_uv_spider
+target_evidence_unc: 0.5
+target_post_unc: 0.5
+theory_path: /data/theorie/jthoeve/smefit_database/theory
+use_quad: true
+use_t0: false
+use_theory_covmat: true
+uv_couplings: true

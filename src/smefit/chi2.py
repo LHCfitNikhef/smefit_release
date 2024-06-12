@@ -74,8 +74,8 @@ class Scanner:
         self.n_replica = n_replica
         self.use_quad = run_card["use_quad"]
         self.result_path = f"{run_card['result_path']}/{run_card['result_ID']}"
-        self.use_multiplicative_prescription = (
-            run_card.get("use_multiplicative_prescription", False),
+        self.use_multiplicative_prescription = run_card.get(
+            "use_multiplicative_prescription", False
         )
         self.datasets = load_datasets(
             run_card["data_path"],
@@ -88,7 +88,8 @@ class Scanner:
             self.use_multiplicative_prescription,
             run_card.get("theory_path", None),
             run_card.get("rot_to_fit_basis", None),
-            run_card.get("uv_coupligs", False),
+            run_card.get("uv_couplings", False),
+            run_card.get("external_chi2", False),
         )
 
         # set all the coefficients to 0

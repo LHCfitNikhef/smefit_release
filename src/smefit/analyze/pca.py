@@ -56,7 +56,8 @@ class RotateToPca:
             config.get("use_multiplicative_prescription", False),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
-            config.get("uv_coupligs", False),
+            config.get("uv_couplings", False),
+            config.get("external_chi2", False),
         )
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
@@ -252,8 +253,7 @@ class PcaCalculator:
         new_LinearCorrections = impose_constrain(self.datasets, self.coefficients)
         X = new_LinearCorrections @ self.datasets.InvCovMat @ new_LinearCorrections.T
         # Decompose matrix with SVD and identify PCs
-        X_centered = X - X.mean(axis=0)
-        _, W, Vt = np.linalg.svd(X_centered)
+        _, W, Vt = np.linalg.svd(X)
 
         pca_labels = [f"PC{i:02d}" for i in range(W.size)]
         self.pc_matrix = pd.DataFrame(Vt.T, index=free_parameters, columns=pca_labels)

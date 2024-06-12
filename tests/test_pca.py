@@ -115,8 +115,7 @@ def test_pca_eig():
 
     new_LinearCorrections = pca.impose_constrain(dataset, coefficients)
     X = new_LinearCorrections @ dataset.InvCovMat @ new_LinearCorrections.T
-    X_center = X - X.mean(axis=0)
-    D, N = np.linalg.eig(X_center.T @ X_center)
+    D, N = np.linalg.eig(X.T @ X)
     S = pca_cal.SVs.values
     V = pca_cal.pc_matrix.values
 

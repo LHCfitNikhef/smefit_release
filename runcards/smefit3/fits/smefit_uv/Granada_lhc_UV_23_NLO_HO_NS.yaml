@@ -1,0 +1,236 @@
+Model name: W
+UV Collection: Granada
+UV model: 23
+coefficients:
+  O3pQ3:
+    constrain:
+    - gWH:
+      - -0.25
+      - 1
+      gWqf33:
+      - 1
+      - 1
+    max: 10
+    min: -10
+  O3pl1:
+    constrain:
+    - gWH:
+      - -0.25
+      - 1
+      gWLf11:
+      - 1
+      - 1
+    max: 10
+    min: -10
+  O3pl2:
+    constrain:
+    - gWH:
+      - -0.25
+      - 1
+      gWLf22:
+      - 1
+      - 1
+    max: 10
+    min: -10
+  O3pl3:
+    constrain:
+    - gWH:
+      - -0.25
+      - 1
+      gWLf33:
+      - 1
+      - 1
+    max: 10
+    min: -10
+  OQQ1:
+    constrain:
+    - gWH:
+      - 0.08333333333333333
+      - 0
+      gWqf33:
+      - 1
+      - 2
+    max: 10
+    min: -10
+  OQQ8:
+    constrain:
+    - gWH:
+      - -1.0
+      - 0
+      gWqf33:
+      - 1
+      - 2
+    max: 10
+    min: -10
+  Obp:
+    constrain:
+    - gWH:
+      - -0.006002165432052166
+      - 2
+    max: 10
+    min: -10
+  Oll:
+    constrain:
+    - gWH:
+      - -0.25
+      - 0
+      gWLf11:
+      - 1
+      - 1
+      gWLf22:
+      - 1
+      - 1
+    max: 10
+    min: -10
+  Oll1111:
+    constrain:
+    - gWH:
+      - -0.125
+      - 0
+      gWLf11:
+      - 1
+      - 2
+    max: 10
+    min: -10
+  OpQM:
+    constrain:
+    - gWH:
+      - 0.25
+      - 1
+      gWqf33:
+      - 1
+      - 1
+    max: 10
+    min: -10
+  Opd:
+    constrain:
+    - gWH:
+      - 0.375
+      - 2
+    max: 10
+    min: -10
+  Otap:
+    constrain:
+    - gWH:
+      - -0.0025559460452279554
+      - 2
+    max: 10
+    min: -10
+  Otp:
+    constrain:
+    - gWH:
+      - -0.2480703588615627
+      - 2
+    max: 10
+    min: -10
+  gWH:
+    max: 10
+    min: -10
+  gWLf11:
+    max: 10
+    min: -10
+  gWLf22:
+    max: 10
+    min: -10
+  gWLf33:
+    max: 10
+    min: -10
+  gWqf33:
+    max: 10
+    min: -10
+data_path: /data/theorie/jthoeve/smefit_database/commondata_projections_t0
+datasets:
+- ATLAS_CMS_SSinc_RunI
+- ATLAS_CMS_tt_AC_8TeV
+- ATLAS_SSinc_RunII
+- ATLAS_STXS_runII_13TeV
+- ATLAS_WH_Hbb_13TeV
+- ATLAS_WW_13TeV_2016_memu
+- ATLAS_WZ_13TeV_2016_mTWZ
+- ATLAS_WhelF_8TeV
+- ATLAS_Whel_13TeV
+- ATLAS_ZH_Hbb_13TeV
+- ATLAS_ggF_13TeV_2015
+- ATLAS_ggF_ZZ_13TeV
+- ATLAS_tW_13TeV_inc
+- ATLAS_tW_8TeV_inc
+- ATLAS_tW_slep_8TeV_inc
+- ATLAS_tZ_13TeV_inc
+- ATLAS_tZ_13TeV_run2_inc
+- ATLAS_t_sch_13TeV_inc
+- ATLAS_t_sch_8TeV
+- ATLAS_t_tch_13TeV_inc
+- ATLAS_t_tch_8TeV_diff_Yt
+- ATLAS_ttW_13TeV
+- ATLAS_ttW_13TeV_2016
+- ATLAS_ttW_8TeV
+- ATLAS_ttZ_13TeV
+- ATLAS_ttZ_13TeV_2016
+- ATLAS_ttZ_13TeV_pTZ
+- ATLAS_ttZ_8TeV
+- ATLAS_tt_13TeV_asy_2022
+- ATLAS_tt_13TeV_ljets_2016_Mtt
+- ATLAS_tt_8TeV_dilep_Mtt
+- ATLAS_tt_8TeV_ljets_Mtt
+- ATLAS_tta_8TeV
+- ATLAS_ttbb_13TeV_2016
+- ATLAS_tttt_13TeV_run2
+- ATLAS_tttt_13TeV_slep_inc
+- ATLAS_tttt_13TeV_2023
+- CMS_H_13TeV_2015_pTH
+- CMS_SSinc_RunII
+- CMS_WZ_13TeV_2016_pTZ
+- CMS_WZ_13TeV_2022_pTZ
+- CMS_WhelF_8TeV
+- CMS_ggF_aa_13TeV
+- CMS_tW_13TeV_inc
+- CMS_tW_13TeV_slep_inc
+- CMS_tW_8TeV_inc
+- CMS_tZ_13TeV_2016_inc
+- CMS_tZ_13TeV_inc
+- CMS_tZ_13TeV_pTt
+- CMS_t_sch_8TeV
+- CMS_t_tch_13TeV_2016_diff_Yt
+- CMS_t_tch_13TeV_2019_diff_Yt
+- CMS_t_tch_13TeV_inc
+- CMS_t_tch_8TeV_diff_Yt
+- CMS_t_tch_8TeV_inc
+- CMS_tt2D_8TeV_dilep_MttYtt
+- CMS_ttW_13TeV
+- CMS_ttW_8TeV
+- CMS_ttZ_13TeV
+- CMS_ttZ_13TeV_pTZ
+- CMS_ttZ_8TeV
+- CMS_tt_13TeV_Mtt
+- CMS_tt_13TeV_asy
+- CMS_tt_13TeV_dilep_2015_Mtt
+- CMS_tt_13TeV_dilep_2016_Mtt
+- CMS_tt_13TeV_ljets_2015_Mtt
+- CMS_tt_13TeV_ljets_2016_Mtt
+- CMS_tt_13TeV_ljets_inc
+- CMS_tt_8TeV_ljets_Ytt
+- CMS_tta_8TeV
+- CMS_ttbb_13TeV
+- CMS_ttbb_13TeV_2016
+- CMS_ttbb_13TeV_dilepton_inc
+- CMS_ttbb_13TeV_ljets_inc
+- CMS_tttt_13TeV
+- CMS_tttt_13TeV_run2
+- CMS_tttt_13TeV_slep_inc
+- CMS_tttt_13TeV_2023
+- LEP1_EWPOs_2006
+- LEP_alphaEW
+- LEP_Bhabha_2013
+- LEP_Brw_2013
+- LEP_eeWW_182GeV
+- LEP_eeWW_189GeV
+- LEP_eeWW_198GeV
+- LEP_eeWW_206GeV
+nlive: 50
+order: NLO
+result_path: /data/theorie/jthoeve/smefit_release/results/smefit_fcc_uv
+theory_path: /data/theorie/jthoeve/smefit_database/theory
+use_quad: true
+use_t0: false
+use_theory_covmat: true
+uv_couplings: true

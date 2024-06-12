@@ -1,15 +1,24 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import sys
 
 import click
-from mpi4py import MPI
 
 from .. import log
 from ..analyze import run_report
 from ..log import print_banner, setup_console
 from ..postfit import Postfit
+from ..prefit import Prefit
+from ..projections import Projection
 from ..runner import Runner
-from .base import base_command, root_path
+from .base import base_command
+
+try:
+    from mpi4py import MPI
+
+    run_parallel = True
+except ModuleNotFoundError:
+    run_parallel = False
 
 fit_card = click.argument(
     "fit_card",
@@ -50,12 +59,14 @@ rotate_to_pca = click.option(
 def nested_sampling(
     fit_card: pathlib.Path, log_file: pathlib.Path, rotate_to_pca: bool
 ):
-    """Run a fit with |NS|.
+    """Run a fit with |NS| (Ultra Nest).
 
     Usage: smefit NS [OPTIONS] path_to_runcard
     """
-    comm = MPI.COMM_WORLD
-    rank = comm.Get_rank()
+    rank = 0
+    if run_parallel:
+        comm = MPI.COMM_WORLD
+        rank = comm.Get_rank()
 
     if rank == 0:
         setup_console(log_file)
@@ -67,8 +78,29 @@ def nested_sampling(
     else:
         runner = None
 
-    runner = comm.bcast(runner, root=0)
+    if run_parallel:
+        runner = comm.bcast(runner, root=0)
     runner.run_analysis("NS")
+
+
+@base_command.command("A")
+@fit_card
+@log_file
+@rotate_to_pca
+def analytic_linear(
+    fit_card: pathlib.Path, log_file: pathlib.Path, rotate_to_pca: bool
+):
+    """Get the analytic solution of the linear problem.
+
+    Usage: smefit A [OPTIONS] path_to_runcard
+    """
+    setup_console(log_file)
+    print_banner()
+    runner = Runner.from_file(fit_card.absolute())
+    if rotate_to_pca:
+        runner.rotate_to_pca()
+    log.console.log("Running : analytic solution.")
+    runner.run_analysis("A")
 
 
 @base_command.command("MC")
@@ -92,7 +124,19 @@ def monte_carlo_fit(
     runner.run_analysis("MC")
 
 
-@base_command.command("PF")
+@base_command.command("PREFIT")
+@fit_card
+def pre_fit(fit_card: pathlib.Path):
+    """Run prefit: computes the SM chi2 as a check before fitting.
+
+    Usage: smefit PREFIT [OPTIONS] path_to_runcard
+    """
+    runner = Runner.from_file(fit_card.absolute())
+    prefit = Prefit(runner.run_card)
+    prefit.chi2_sm()
+
+
+@base_command.command("POSTFIT")
 @click.argument(
     "result_folder",
     type=click.Path(path_type=pathlib.Path, exists=True),
@@ -115,7 +159,7 @@ def monte_carlo_fit(
 def post_fit(result_folder: pathlib.Path, n_replica: int, clean_rep: bool):
     """Run postfit selection over |MC| replicas.
 
-    Usage: smefit PF [OPTIONS] path_to_result_folder
+    Usage: smefit POSTFIT [OPTIONS] path_to_result_folder
     """
     postfit = Postfit.from_file(result_folder.absolute())
     postfit.save(n_replica)
@@ -161,3 +205,36 @@ def report(report_card: pathlib.Path):
     Usage: smefit R path_to_runcard
     """
     run_report(report_card.absolute())
+
+
+@base_command.command("PROJ")
+@click.argument(
+    "projection_card",
+    type=click.Path(path_type=pathlib.Path, exists=True),
+)
+@click.option(
+    "--lumi",
+    type=float,
+    default=None,
+    required=False,
+    help="Adjusts the statistical uncertainties according to the specified luminosity",
+)
+@click.option(
+    "--closure",
+    type=bool,
+    is_flag=True,
+    default=False,
+    help="Produces datasets under the SM",
+)
+def projection(projection_card: pathlib.Path, lumi: float, closure: bool):
+    r"""Compute projection for specified dataset"""
+
+    if (lumi is not None) ^ closure:
+        projection_setup = Projection.from_config(projection_card)
+        projection_setup.build_projection(lumi, closure)
+    else:
+        print(lumi, closure)
+        print(
+            "Usage: specify exclusively either a luminosity in fb-1 after --lumi or run a SM closure test with --closure"
+        )
+        sys.exit()

@@ -26,6 +26,8 @@ DataTuple = namedtuple(
         "ExpNames",
         "NdataExp",
         "InvCovMat",
+        "ThCovMat",
+        "Luminosity",
         "Replica",
     ),
 )
@@ -82,7 +84,6 @@ class Loader:
         use_multiplicative_prescription,
         rot_to_fit_basis,
     ):
-
         self._data_folder = self.commondata_path
         self._sys_folder = self.commondata_path / "systypes"
         self._theory_folder = self.theory_path
@@ -109,6 +110,7 @@ class Loader:
             self.dataspec["sys_error"],
             self.dataspec["sys_error_t0"],
             self.dataspec["stat_error"],
+            self.dataspec["luminosity"],
         ) = self.load_experimental_data()
 
         if len(self.dataspec["central_values"]) != len(self.dataspec["SM_predictions"]):
@@ -136,6 +138,7 @@ class Loader:
 
         central_values = np.array(data_dict["data_central"])
         stat_error = np.array(data_dict["statistical_error"])
+        luminosity = data_dict.get("luminosity", None)
 
         num_sys = data_dict["num_sys"]
         num_data = data_dict["num_data"]
@@ -186,7 +189,7 @@ class Loader:
             central_values = np.asarray([central_values])
 
         # here return both exp sys and t0 modified sys
-        return central_values, df, df_t0, stat_error
+        return central_values, df, df_t0, stat_error, luminosity
 
     def load_theory(
         self,
@@ -236,7 +239,6 @@ class Loader:
 
         # split corrections into a linear and quadratic dict
         for key, value in raw_th_data[order].items():
-
             # quadratic terms
             if "*" in key and use_quad:
                 quad_dict[key] = np.array(value)
@@ -257,9 +259,18 @@ class Loader:
 
         # rotate corrections to fitting basis
         if rotation_matrix is not None:
-            lin_dict_to_keep, quad_dict_to_keep = rotate_to_fit_basis(
+            lin_dict_fit_basis, quad_dict_fit_basis = rotate_to_fit_basis(
                 lin_dict, quad_dict, rotation_matrix
             )
+
+            lin_dict_to_keep = {
+                k: val for k, val in lin_dict_fit_basis.items() if is_to_keep(k)
+            }
+            quad_dict_to_keep = {
+                k: val
+                for k, val in quad_dict_fit_basis.items()
+                if is_to_keep(k.split("*")[0], k.split("*")[1])
+            }
         else:
             lin_dict_to_keep = {k: val for k, val in lin_dict.items() if is_to_keep(k)}
             quad_dict_to_keep = {
@@ -267,7 +278,6 @@ class Loader:
                 for k, val in quad_dict.items()
                 if is_to_keep(k.split("*")[0], k.split("*")[1])
             }
-
         best_sm = np.array(raw_th_data["best_sm"])
         th_cov = np.zeros((best_sm.size, best_sm.size))
         if use_theory_covmat:
@@ -285,6 +295,19 @@ class Loader:
                 number of experimental data
         """
         return self.dataspec["central_values"].size
+
+    @property
+    def lumi(self):
+        """
+        Integrated luminosity of the dataset in fb^-1
+
+        Returns
+        -------
+            lumi: float
+                Integrated luminosity of the dataset in fb^-1
+
+        """
+        return self.dataspec["luminosity"]
 
     @property
     def central_values(self):
@@ -418,7 +441,12 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
     """
 
     if sorted_keys is None:
-        tmp = [[*c,] for _, c in corrections_list]
+        tmp = [
+            [
+                *c,
+            ]
+            for _, c in corrections_list
+        ]
         sorted_keys = np.unique([item for sublist in tmp for item in sublist])
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
     cnt = 0
@@ -426,7 +454,6 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
     for n_dat, correction_dict in corrections_list:
         # loop on corrections
         for key, values in correction_dict.items():
-
             if "*" in key:
                 op1, op2 = key.split("*")
                 if op2 < op1:
@@ -450,7 +477,8 @@ def load_datasets(
     use_multiplicative_prescription,
     theory_path=None,
     rot_to_fit_basis=None,
-    has_uv_coupligs=False,
+    has_uv_couplings=False,
+    has_external_chi2=False,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
@@ -474,6 +502,10 @@ def load_datasets(
             Default it assumes to be the same as commondata_path
         rot_to_fit_basis: dict, optional
             matrix rotation to fit basis or None
+        has_uv_couplings: bool, optional
+            True for UV fits
+        has_external_chi2: bool, optional
+            True in the presence of external chi2 modules
     """
 
     exp_data = []
@@ -484,6 +516,7 @@ def load_datasets(
     lin_corr_list = []
     quad_corr_list = []
     n_data_exp = []
+    lumi_exp = []
     exp_name = []
     th_cov = []
 
@@ -494,7 +527,6 @@ def load_datasets(
         Loader.theory_path = pathlib.Path(commondata_path)
 
     for sset in np.unique(datasets):
-
         dataset = Loader(
             sset,
             operators_to_keep,
@@ -506,6 +538,7 @@ def load_datasets(
         )
         exp_name.append(sset)
         n_data_exp.append(dataset.n_data)
+        lumi_exp.append(dataset.lumi)
         exp_data.extend(dataset.central_values)
         sm_theory.extend(dataset.sm_prediction)
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
@@ -521,7 +554,7 @@ def load_datasets(
     sorted_keys = None
     # if uv couplings are present allow for op which are not in the
     # theory files
-    if has_uv_coupligs:
+    if has_uv_couplings or has_external_chi2:
         sorted_keys = np.unique((*operators_to_keep,))
     operators_names, lin_corr_values = construct_corrections_matrix(
         lin_corr_list, n_data_tot, sorted_keys
@@ -548,6 +581,7 @@ def load_datasets(
     # At the moment it does not account for correlation between different datasets
     theory_covariance = la.block_diag(*th_cov)
     exp_covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
+
     # replicas always generated using the experimental covmat, no t0
     replica = np.random.multivariate_normal(exp_data, exp_covmat)
     if use_t0:
@@ -567,14 +601,16 @@ def load_datasets(
         np.array(exp_name),
         np.array(n_data_exp),
         np.linalg.inv(fit_covmat),
+        theory_covariance,
+        np.array(lumi_exp),
         replica,
     )
 
 
 def get_dataset(datasets, data_name):
-
     idx = np.where(datasets.ExpNames == data_name)[0][0]
     ndata = datasets.NdataExp[idx]
+    lumi = datasets.Luminosity[idx]
     posix_in = datasets.NdataExp[:idx].sum()
     posix_out = posix_in + ndata
 
@@ -589,5 +625,7 @@ def get_dataset(datasets, data_name):
         data_name,
         ndata,
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],
+        datasets.ThCovMat[posix_in:posix_out].T[posix_in:posix_out],
+        lumi,
         datasets.Replica[posix_in:posix_out],
     )

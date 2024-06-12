@@ -12,7 +12,7 @@ PCA
 The Principal Components Analysis (|PCA|) is the singular values decomposition of the matrix defined as:
 
 .. math ::
-    X_{ij} = \kappa_{i,k} \text{Cov}_{k,l}^{-1} \kappa_{j,l} \quad i,j=\{1,\dots N_{op}\}, \quad l,l=\{1,\dots N_{dat}\}
+    X_{ij} = \kappa_{i,k} \text{Cov}_{k,l}^{-1} \kappa_{j,l} \quad i,j=\{1,\dots N_{op}\}, \quad k,l=\{1,\dots N_{dat}\}
 
 where :math:`\kappa_{i,k}` are the linear |EFT| contibution for each operator and datapoint,
 :math:`\text{Cov}_{k,l}^{-1}` is the inverse of the total covariance matrix.
@@ -116,5 +116,10 @@ are two points in this model space.
 Coefficient bounds
 ------------------
 
- * Describe how the CL tables are produced
- * Describe the 2d plots
+Confidence level intervals are reported at the 68% and 95% level by taking suitable percentiles from the posterior samples
+in case of Nested Sampling, or best fit parameters in case of the Monte Carlo replica method.
+
+The code has the additional feature to provide two-dimensional confidence level contours at either the 68% or 95% level.
+Since the EFT parameters are Gaussianly distributed in case of only linear EFT corrections, their confidence level contours
+are described by ellipses, while quadratic EFT corrections introduce non Gaussian effects. In the latter case, we perform
+a Kernel Density Estimate on the set of posterior samples to properly account for this.

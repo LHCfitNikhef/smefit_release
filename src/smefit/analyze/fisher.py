@@ -11,7 +11,6 @@ from .pca import impose_constrain
 
 
 class FisherCalculator:
-
     """Computes and writes the Fisher information table, and plots heat map.
 
     Linear Fisher information depends only on the theoretical corrections,
@@ -56,7 +55,7 @@ class FisherCalculator:
         cnt = 0
         for ndat in self.datasets.NdataExp:
             fisher_row = np.zeros(self.free_parameters.size)
-            idxs = slice(cnt, cnt + ndat + 1)
+            idxs = slice(cnt, cnt + ndat)
             sigma = self.new_LinearCorrections[:, idxs]
             fisher_row = np.diag(sigma @ self.datasets.InvCovMat[idxs, idxs] @ sigma.T)
             fisher_tab.append(fisher_row)
@@ -101,7 +100,7 @@ class FisherCalculator:
             description="[green]Computing quadratic Fisher information per dataset...",
         ):
             # slice the big matrices
-            idxs = slice(cnt, cnt + ndat + 1)
+            idxs = slice(cnt, cnt + ndat)
             quad_corr = diag_corr[idxs, :].T
             lin_corr = self.new_LinearCorrections[:, idxs]
             inv_corr = self.datasets.InvCovMat[idxs, idxs]
@@ -161,6 +160,8 @@ class FisherCalculator:
             axis_sum, axis_div = 1, 0
         elif norm == "coeff":
             axis_sum, axis_div = 0, 1
+        else:
+            raise ValueError(f"Invalid norm value: {norm}. Must be 'data' or 'coeff'.")
 
         table = table.div(table.sum(axis=axis_sum), axis=axis_div) * 100
         if log:
@@ -174,6 +175,7 @@ class FisherCalculator:
         )
         summary_table = summary_table.groupby("level_0").sum(numeric_only=True)
         summary_table.index.name = "data_group"
+
         return self.normalize(summary_table, norm, log)
 
     def write_grouped(self, coeff_config, data_groups, summary_only):
@@ -353,7 +355,7 @@ class FisherCalculator:
         else:
             ax = plt.gca()
 
-        # clolor map
+        # colour map
         cmap_full = cm.get_cmap("Blues")
         cmap = colors.LinearSegmentedColormap.from_list(
             f"trunc({{{cmap_full.name}}},{{0}},{{0.8}})",
@@ -361,7 +363,7 @@ class FisherCalculator:
         )
         norm = colors.BoundaryNorm(np.arange(110, step=10), cmap.N)
 
-        # thicks
+        # ticks
         yticks = np.arange(fisher_df.shape[1])
         xticks = np.arange(fisher_df.shape[0])
         x_labels = [f"\\rm{{{name}}}".replace("_", "\\_") for name in fisher_df.index]
@@ -384,7 +386,7 @@ class FisherCalculator:
         def plot_values(ax, df):
             for i, row in enumerate(df.values.T):
                 for j, elem in enumerate(row):
-                    if elem > 10:
+                    if elem > 0:
                         ax.text(
                             j,
                             i,
@@ -398,7 +400,7 @@ class FisherCalculator:
         plot_values(ax, fisher_df)
         set_ticks(ax)
         ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
-        cax1 = make_axes_locatable(ax).append_axes("right", size="10%", pad=0.1)
+        cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
         colour_bar = fig.colorbar(cax, cax=cax1)
 
         if quad_fisher_df is not None:
@@ -410,14 +412,16 @@ class FisherCalculator:
             cax1 = make_axes_locatable(ax).append_axes("right", size="10%", pad=0.1)
             colour_bar = fig.colorbar(cax, cax=cax1)
 
+        fig.subplots_adjust(top=0.85)
+
         colour_bar.set_label(
             r"${\rm Normalized\ Value}$",
             fontsize=25,
             labelpad=30,
             rotation=270,
         )
-        if title is not None:
-            plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25)
-        plt.tight_layout()
+
+        plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25, y=0.98)
+
         plt.savefig(f"{fig_name}.pdf")
         plt.savefig(f"{fig_name}.png")

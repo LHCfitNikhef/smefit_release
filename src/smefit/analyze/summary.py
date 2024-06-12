@@ -89,11 +89,9 @@ class SummaryWriter:
             [
                 r"\usepackage{underscore}",
                 r"\begin{document}",
-                r"\begin{table}[H]",
-                r"\footnotesize",
-                r"\centering",
-                r"\begin{tabular}{|c|l|" + "c|" * self.nfits + "}",
+                r"\begin{longtable}{|c|l|" + "c|" * self.nfits + "}",
                 r"\hline",
+                r"\footnotesize",
             ]
         )
         temp = " Type & Datasets "
@@ -124,7 +122,7 @@ class SummaryWriter:
         # L.extend(
         #     [temp, r"\end{tabular}", r"\caption{Dataset comparison}", r"\end{table}"]
         # )
-        L.extend([r"\end{tabular}", r"\caption{Dataset comparison}", r"\end{table}"])
+        L.extend([r"\caption{Dataset comparison}", r"\end{longtable}"])
         return L
 
     def write_coefficients_table(self):
