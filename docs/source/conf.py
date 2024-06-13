@@ -26,7 +26,7 @@ project = "SMEFiT"
 copyright = "2024, the SMEFiT developers' team"
 author = "Tommaso Giani, Jaco ter Hoeve, Giacomo Magni and Juan Rojo"
 # The full version, including alpha/beta/rc tags
-release = "3.0.0"
+release = "3.0.1"
 
 
 # -- General configuration ---------------------------------------------------
