@@ -3,6 +3,12 @@ from smefit.wcxf import wcxf_translate, inverse_wcxf_translate
 import pandas as pd
 import smefit.log as log
 
+import warnings
+from numpy import ComplexWarning
+
+# Suppress the ComplexWarning
+warnings.filterwarnings("ignore", category=ComplexWarning)
+
 _logger = log.logging.getLogger(__name__)
 
 
@@ -13,11 +19,13 @@ class RGE:
         self.init_scale = init_scale
         self.accuracy = accuracy
 
+        _logger.info(f"Initializing RGE runner with initial scale {init_scale} GeV and accuracy {accuracy}.")
+
     def RGEmatrix_dict(self, scale):
         # compute the RGE matrix at the scale `scale`
         rge_matrix_dict = {}
         for wc_name, wc_vals in self.RGEbasis.items():
-            _logger.info(f"Computing RGE for {wc_name}")
+            _logger.info(f"Computing RGE for {wc_name} at {scale} GeV.")
             wc_init = wilson.Wilson(
                 wc_vals, scale=self.init_scale, eft="SMEFT", basis="Warsaw"
             )
