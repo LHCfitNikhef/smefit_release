@@ -65,9 +65,12 @@ class Optimizer:
         self.use_multiplicative_prescription = use_multiplicative_prescription
         self.counter = 0
 
+        # set RGE matrix
+        self.rgemat = rgemat
+
         # load external chi2 modules as amortized objects (fast to evaluate)
         self.chi2_ext = (
-            self.load_external_chi2(external_chi2, rgemat) if external_chi2 else None
+            self.load_external_chi2(external_chi2, self.rgemat) if external_chi2 else None
         )
 
     def load_external_chi2(self, external_chi2, rgemat):

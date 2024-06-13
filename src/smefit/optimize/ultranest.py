@@ -115,9 +115,6 @@ class USOptimizer(Optimizer):
         self.fixed_coeffs = self.coefficients._objlist[~self.coefficients.is_free]
         self.coeffs_index = self.coefficients._table.index
 
-        # set RGE matrix
-        self.rgemat = rgemat
-
     @classmethod
     def from_dict(cls, config):
         """Create object from theory dictionary.
