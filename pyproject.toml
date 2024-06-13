@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "smefit"
-version = "3.0.0"
+version = "3.0.1"
 description = "Standard Model Effective Field Theory Fitter"
 authors = [
     "Tommaso Giani <tgiani@nikhef.nl>",
