@@ -1,15 +1,16 @@
 # Input YAML file for a report
 
-name: "report_ttZ"
+name: "report_combined"
 
 title: "smefit"
 
 result_IDs: [
-"ttZ"
+"sym", "asy", "combined"
 ]
 
 fit_labels: [
- '$t\bar{t}Z\:\mathcal{O}\left(\Lambda^{-2}\right)$'
+ '$t\bar{t} + t\bar{t}V$', '$t\bar{t}\:\mathrm{asymmetries}$',
+ '$\mathrm{Combined}$'
 ]
 
 # absolute path where results are stored

@@ -1,15 +1,15 @@
 # Input YAML file for a report
 
-name: "report_higgs"
+name: "report_sym"
 
 title: "smefit"
 
 result_IDs: [
-"HIGGS"
+"sym"
 ]
 
 fit_labels: [
- '$\mathrm{Higgs}\:\mathcal{O}\left(\Lambda^{-2}\right)$'
+ '$t\bar{t} + t\bar{t}V$'
 ]
 
 # absolute path where results are stored

@@ -1,6 +1,6 @@
 # Input YAML configurations for SMEFiT code
 
-result_ID: HIGGS
+result_ID: asy
 
 # absolute path where results are stored
 result_path: ./results
@@ -32,22 +32,16 @@ n_samples: 20000
 # Datasets to include
 datasets:
 
-  - ATLAS_CMS_SSinc_RunI
-  - ATLAS_SSinc_RunII
-  - ATLAS_STXS_runII_13TeV
-  - ATLAS_WH_Hbb_13TeV
-  - ATLAS_ZH_Hbb_13TeV
-  - ATLAS_ggF_13TeV_2015
-  - ATLAS_ggF_ZZ_13TeV
-  - CMS_H_13TeV_2015_pTH
-  - CMS_SSinc_RunII
-  - CMS_ggF_aa_13TeV
+  - CMS_tt_13TeV_asy
+  - ATLAS_CMS_tt_AC_8TeV
+  - ATLAS_tt_13TeV_asy_2022
+  - ATLAS_tt_13TeV_asy_2022
 
 
 coefficients:
 
-  OtG: { 'min': -2, 'max': 2 }
-  Opt: { 'min': -2, 'max': 2.0 }
+  O8qt: { 'min': -2, 'max': 2 }
+  O81qq: { 'min': -2, 'max': 2.0 }
 
 
 

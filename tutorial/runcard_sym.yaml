@@ -1,6 +1,6 @@
 # Input YAML configurations for SMEFiT code
 
-result_ID: ttZ
+result_ID: sym
 
 # absolute path where results are stored
 result_path: ./results
@@ -41,12 +41,35 @@ datasets:
   - CMS_ttZ_13TeV_pTZ
   - CMS_ttZ_8TeV
 
+  - ATLAS_ttW_13TeV
+  - ATLAS_ttW_13TeV_2016
+  - ATLAS_ttW_8TeV
+
+  - ATLAS_tt_13TeV_ljets_2016_Mtt
+  - ATLAS_tt_8TeV_dilep_Mtt
+  - ATLAS_tt_8TeV_ljets_Mtt
+
+  - CMS_tt2D_8TeV_dilep_MttYtt
+  - CMS_ttW_13TeV
+  - CMS_ttW_8TeV
+  - CMS_ttZ_13TeV
+  - CMS_ttZ_13TeV_pTZ
+  - CMS_ttZ_8TeV
+  - CMS_tt_13TeV_Mtt
+
+  - CMS_tt_13TeV_dilep_2015_Mtt
+  - CMS_tt_13TeV_dilep_2016_Mtt
+  - CMS_tt_13TeV_ljets_2015_Mtt
+  - CMS_tt_13TeV_ljets_2016_Mtt
+  - CMS_tt_13TeV_ljets_inc
+  - CMS_tt_8TeV_ljets_Ytt
+
 
 # Coefficients to fit
 coefficients:
 
-  OtG: { 'min': -2, 'max': 2 }
-  Opt: { 'min': -2, 'max': 2.0 }
+  O8qt: { 'min': -2, 'max': 2 }
+  O81qq: { 'min': -2, 'max': 2.0 }
 
 
 rot_to_fit_basis: null

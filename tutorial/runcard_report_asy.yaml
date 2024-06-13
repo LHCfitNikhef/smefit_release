@@ -1,16 +1,15 @@
 # Input YAML file for a report
 
-name: "report_ewpo_higgs"
+name: "report_asy"
 
 title: "smefit"
 
 result_IDs: [
-"ttZ", "HIGGS", "ttZ_HIGGS"
+"asy"
 ]
 
 fit_labels: [
- '$t\bar{t}Z\:\mathcal{O}\left(\Lambda^{-2}\right)$', '$\mathrm{Higgs}\:\mathcal{O}\left(\Lambda^{-2}\right)$',
- '$t\bar{t}Z + \mathrm{Higgs}\:\mathcal{O}\left(\Lambda^{-2}\right)$'
+ '$t\bar{t}\:\mathrm{asymmetries}$'
 ]
 
 # absolute path where results are stored
