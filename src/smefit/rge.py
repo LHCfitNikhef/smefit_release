@@ -130,3 +130,16 @@ class RGE:
         wc_final = {key: value for key, value in wc_final.items() if abs(value) > 1e-10}
 
         return self.map_to_smefit(wc_final)
+
+
+def load_rge_matrix(rge_dict, operators_to_keep):
+    init_scale = rge_dict.get("init_scale", 1e3)
+    obs_scale = rge_dict.get("obs_scale", 91.1876)
+    smeft_accuracy = rge_dict.get("smeft_accuracy", "integrate")
+    coeff_list = list(operators_to_keep.keys())
+    rge_runner = RGE(coeff_list, init_scale, smeft_accuracy)
+    rgemat = rge_runner.RGEmatrix(obs_scale)
+    gen_operators = list(rgemat.index)
+    operators_to_keep = {k: {} for k in gen_operators}
+
+    return rgemat, operators_to_keep

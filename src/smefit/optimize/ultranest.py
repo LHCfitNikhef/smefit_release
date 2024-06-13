@@ -16,7 +16,7 @@ from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
 from .. import chi2
-from smefit.rge import RGE
+from smefit.rge import RGE, load_rge_matrix
 
 jax.config.update("jax_enable_x64", True)
 
@@ -133,21 +133,15 @@ class USOptimizer(Optimizer):
             created object
         """
 
-        rge = config.get("rge", None)
+        rge_dict = config.get("rge", None)
         operators_to_keep = config["coefficients"]
-        rgemat = None
-        has_rge = False
 
-        if rge is not None:
+        if rge_dict is not None:
             has_rge = True
-            init_scale = rge.get("init_scale", 1e3)
-            obs_scale = rge.get("obs_scale", 91.1876)
-            smeft_accuracy = rge.get("smeft_accuracy", "integrate")
-            coeff_list = list(operators_to_keep.keys())
-            rge_runner = RGE(coeff_list, init_scale, smeft_accuracy)
-            rgemat = rge_runner.RGEmatrix(obs_scale)
-            gen_operators = list(rgemat.index)
-            operators_to_keep = {k: {"max": None, "min": None} for k in gen_operators}
+            rgemat, operators_to_keep = load_rge_matrix(rge_dict, operators_to_keep)
+        else:
+            has_rge = False
+            rgemat = None
 
         if config.get("datasets") is not None:
             loaded_datasets = load_datasets(
