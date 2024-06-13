@@ -89,6 +89,7 @@ class USOptimizer(Optimizer):
         vectorized=False,
         external_chi2=None,
         rgemat=None,
+        rge_dict=None,
     ):
         super().__init__(
             f"{result_path}/{result_ID}",
@@ -99,6 +100,7 @@ class USOptimizer(Optimizer):
             use_multiplicative_prescription,
             external_chi2,
             rgemat,
+            rge_dict,
         )
         self.live_points = live_points
         self.lepsilon = lepsilon
@@ -229,6 +231,7 @@ class USOptimizer(Optimizer):
             vectorized=vectorized,
             external_chi2=external_chi2,
             rgemat=rgemat,
+            rge_dict=rge_dict,
         )
 
     def chi2_func_ns(self, params):
