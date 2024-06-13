@@ -135,7 +135,7 @@ class USOptimizer(Optimizer):
         rge_dict = config.get("rge", None)
         operators_to_keep = config["coefficients"]
 
-        if rge_dict is not None:
+        if rge_dict is not None and config.get("datasets") is not None:
             _logger.info("Loading RGE matrix")
             has_rge = True
             rgemat, operators_to_keep = load_rge_matrix(

@@ -109,6 +109,10 @@ class Optimizer:
                 if self.rge_dict["obs_scale"] == "dynamic":
                     _logger.info(f"Computing RGE matrix for {class_name} with initial scale {self.rge_dict['init_scale']}.")
                     # compute RGE matrix
+                    if "scale" not in module:
+                        raise ValueError(
+                            "Dynamic scale requested but no scale provided in the external chi2"
+                        )
                     scale = module["scale"]
                     rge_runner = RGE(
                         self.coefficients.name,
