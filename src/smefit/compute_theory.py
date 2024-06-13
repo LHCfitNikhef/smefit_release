@@ -49,9 +49,22 @@ def make_predictions(
     # Compute total linear correction
     # note @ is slower when running with mpiexec
     if rgemat is not None:
-        summed_corrections = jnp.einsum(
-            "ij,jk,k->i", dataset.LinearCorrections, rgemat.values, coefficients_values
-        )
+        # Check if rgemat comes from a dynamic scale
+        # otherwise it is a single RGEmatrix
+        if type(rgemat) == list:    
+            wcs = []
+            for mat in rgemat:
+                wcs.append(jnp.einsum("ij,j->i", mat.values, coefficients_values))
+
+            wcs = jnp.array(wcs)
+            summed_corrections = jnp.einsum(
+                "ij,ij->i", dataset.LinearCorrections, wcs
+            )
+
+        else:
+            summed_corrections = jnp.einsum(
+                "ij,jk,k->i", dataset.LinearCorrections, rgemat.values, coefficients_values
+            )
     else:
         summed_corrections = jnp.einsum(
             "ij,j->i", dataset.LinearCorrections, coefficients_values
@@ -60,14 +73,32 @@ def make_predictions(
     # Compute total quadratic correction
     if use_quad:
         if rgemat is not None:
-            ext_coeffs = jnp.einsum("ij,j->i", rgemat.values, coefficients_values)
-            coeff_outer_coeff = jnp.outer(ext_coeffs, ext_coeffs)
+            if type(rgemat) == list:
+                wcs = []
+                for mat in rgemat:
+                    wcs.append(jnp.einsum("ij,j->i", mat.values, coefficients_values))
+
+                coeff_outer_coeffs = []
+                for wc in wcs:
+                    coeff_outer_coeffs.append(flatten(jnp.outer(wc, wc)))
+                coeff_outer_coeff = jnp.array(coeff_outer_coeffs)
+
+                summed_quad_corrections = jnp.einsum(
+                    "ij,ij->i", dataset.QuadraticCorrections, coeff_outer_coeff
+                )
+
+            else:
+                ext_coeffs = jnp.einsum("ij,j->i", rgemat.values, coefficients_values)
+                coeff_outer_coeff = jnp.outer(ext_coeffs, ext_coeffs)
+                summed_quad_corrections = jnp.einsum(
+                    "ij,j->i", dataset.QuadraticCorrections, flatten(coeff_outer_coeff)
+                )
         else:
             coeff_outer_coeff = jnp.outer(coefficients_values, coefficients_values)
-        # note @ is slower when running with mpiexec
-        summed_quad_corrections = jnp.einsum(
-            "ij,j->i", dataset.QuadraticCorrections, flatten(coeff_outer_coeff)
-        )
+            # note @ is slower when running with mpiexec
+            summed_quad_corrections = jnp.einsum(
+                "ij,j->i", dataset.QuadraticCorrections, flatten(coeff_outer_coeff)
+            )
         summed_corrections += summed_quad_corrections
 
     # Sum of SM theory + SMEFT corrections

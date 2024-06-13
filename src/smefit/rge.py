@@ -1,10 +1,13 @@
 import wilson
 from smefit.wcxf import wcxf_translate, inverse_wcxf_translate
-import pandas as pd
 import smefit.log as log
+from smefit.loader import Loader
 
 import warnings
+import pandas as pd
+import numpy as np
 from numpy import ComplexWarning
+import pathlib
 
 # Suppress the ComplexWarning
 warnings.filterwarnings("ignore", category=ComplexWarning)
@@ -19,7 +22,9 @@ class RGE:
         self.init_scale = init_scale
         self.accuracy = accuracy
 
-        _logger.info(f"Initializing RGE runner with initial scale {init_scale} GeV and accuracy {accuracy}.")
+        _logger.info(
+            f"Initializing RGE runner with initial scale {init_scale} GeV and accuracy {accuracy}."
+        )
 
     def RGEmatrix_dict(self, scale):
         # compute the RGE matrix at the scale `scale`
@@ -82,7 +87,7 @@ class RGE:
                 )
                 wc_basis[wc_name] = {}
                 continue
-            
+
             wc_warsaw_name = wcxf_dict["wc"]
             if "value" not in wcxf_dict:
                 wc_warsaw_value = [1] * len(wcxf_dict["wc"])
@@ -140,14 +145,69 @@ class RGE:
         return self.map_to_smefit(wc_final)
 
 
-def load_rge_matrix(rge_dict, operators_to_keep):
+def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None):
     init_scale = rge_dict.get("init_scale", 1e3)
     obs_scale = rge_dict.get("obs_scale", 91.1876)
     smeft_accuracy = rge_dict.get("smeft_accuracy", "integrate")
     coeff_list = list(operators_to_keep.keys())
     rge_runner = RGE(coeff_list, init_scale, smeft_accuracy)
-    rgemat = rge_runner.RGEmatrix(obs_scale)
-    gen_operators = list(rgemat.index)
-    operators_to_keep = {k: {} for k in gen_operators}
+    # if it is a float, it is a static scale
+    if type(obs_scale) is float:
+        rgemat = rge_runner.RGEmatrix(obs_scale)
+        gen_operators = list(rgemat.index)
+        operators_to_keep = {k: {} for k in gen_operators}
+
+    elif obs_scale == "dynamic":
+        scales = []
+        for dataset in np.unique(datasets):
+            Loader.theory_path = pathlib.Path(theory_path)
+            # dummy call just to get the scales
+            _, _, _, _, dataset_scales = Loader.load_theory(
+                dataset,
+                operators_to_keep={},
+                order="LO",
+                use_quad=False,
+                use_theory_covmat=False,
+                use_multiplicative_prescription=False,
+            )
+            # check that dataset_scales is not a list filled with None
+            # otherwise, assume the initial scale
+            if not all([scale is None for scale in dataset_scales]):
+                scales.extend(dataset_scales)
+            else:
+                scales.extend([init_scale] * len(dataset_scales))
+
+        operators_to_keep = {}
+        rgemat = []
+        rge_cache = {}
+        for scale in scales:
+            # Check if the RGE matrix has already been computed
+            if scale in rge_cache:
+                rgemat_scale = rge_cache[scale]
+            else:
+                rgemat_scale = rge_runner.RGEmatrix(scale)
+                gen_operators = list(rgemat_scale.index)
+                # Fill with the operators if not already present in the dictionary
+                for op in gen_operators:
+                    if op not in operators_to_keep:
+                        operators_to_keep[op] = {}
+                rge_cache[scale] = rgemat_scale
+
+            rgemat.append(rgemat_scale)
+
+        # now loop through the rgemat and if there are operators that are not present in the matrix, fill them with zeros
+        for mat in rgemat:
+            for op in operators_to_keep:
+                if op not in mat.index:
+                    mat.loc[op] = np.zeros(len(mat.columns))
+            # order the rows alphabetically in the index
+            mat.sort_index(inplace=True)
+
+        return rgemat, operators_to_keep
+
+    else:
+        raise ValueError(
+            "obs_scale must be either a float or 'dynamic'. Passed: {obs_scale}"
+        )
 
     return rgemat, operators_to_keep

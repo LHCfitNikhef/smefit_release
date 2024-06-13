@@ -96,7 +96,9 @@ class Loader:
             self.dataspec["theory_covmat"],
             self.dataspec["lin_corrections"],
             self.dataspec["quad_corrections"],
+            self.dataspec["scales"],
         ) = self.load_theory(
+            self.setname,
             operators_to_keep,
             order,
             use_quad,
@@ -191,8 +193,9 @@ class Loader:
         # here return both exp sys and t0 modified sys
         return central_values, df, df_t0, stat_error, luminosity
 
+    @staticmethod
     def load_theory(
-        self,
+        setname,
         operators_to_keep,
         order,
         use_quad,
@@ -225,7 +228,7 @@ class Loader:
             quad_dict: dict
                 dictionary with |HO| corrections, empty if not use_quad
         """
-        theory_file = self._theory_folder / f"{self.setname}.json"
+        theory_file = Loader.theory_path / f"{setname}.json"
         check_file(theory_file)
         # load theory predictions
         with open(theory_file, encoding="utf-8") as f:
@@ -282,7 +285,12 @@ class Loader:
         th_cov = np.zeros((best_sm.size, best_sm.size))
         if use_theory_covmat:
             th_cov = raw_th_data["theory_cov"]
-        return raw_th_data["best_sm"], th_cov, lin_dict_to_keep, quad_dict_to_keep
+        
+        scales = [None] * len(best_sm)
+        # check if scales are present in the theory file
+        if "scales" in raw_th_data:
+            scales = raw_th_data["scales"]
+        return raw_th_data["best_sm"], th_cov, lin_dict_to_keep, quad_dict_to_keep, scales
 
     @property
     def n_data(self):
