@@ -4,7 +4,7 @@ People
 - Eugenia Celada
 - Hesham El Faham
 - Tommaso Giani
-- Jaco ter Hove
+- Jaco ter Hoeve
 - Fabio Maltoni
 - Luca Mantani
 - Giacomo Magni
@@ -21,7 +21,3 @@ Former members
 - Jacob J. Ethier
 - Nathan P. Hartland
 - Emma Slade
-
-
-
-

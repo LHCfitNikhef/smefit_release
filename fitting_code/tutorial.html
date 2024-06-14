@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMEFiT Tutorial &mdash; SMEFiT 3.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f74d80cf" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=08bfcbec"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Report functions" href="../report/tools.html" />
+    <link rel="prev" title="How to run the code" href="running.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SMEFiT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/general.html">Fitting assumptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/NS.html">Nested Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/Analytic.html">Analytic solution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../theory/MCFit.html">The Monte Carlo replica method</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/data.html">Experimental data format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/theory.html">Theory tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/rotation.html">Basis rotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_theory/projections.html">Projections</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="code_struct.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">How to run the code</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SMEFiT Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#What-is-SMEFiT?">What is SMEFiT?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Exercise-0---Installing-SMEFiT">Exercise 0 - Installing SMEFiT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Exercise-1---Our-first-fit-with-SMEFiT">Exercise 1 - Our first fit with SMEFiT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Exercise-2---Adding-more-measurements">Exercise 2 - Adding more measurements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Exercise-3---quadratic-fits-(optional)">Exercise 3 - quadratic fits (optional)</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reports:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../report/tools.html">Report functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../report/running.html">Produce a report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../report/links.html">Link to reports</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_rw.html">SMEFiT RW</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_top.html">SMEFiT Top</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit20.html">SMEFiT2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit30.html">SMEFiT3.0</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../people/people.html">People</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../people/people.html#former-members">Former members</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References &amp; API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules/smefit/smefit.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zzz-refs.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SMEFiT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SMEFiT Tutorial</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/fitting_code/tutorial.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="SMEFiT-Tutorial">
+<h1>SMEFiT Tutorial<a class="headerlink" href="#SMEFiT-Tutorial" title="Link to this heading"></a></h1>
+<p>Author: Jaco ter Hoeve</p>
+<p>To run this notebook remotely in Google Colab, click the button below</p>
+<p><a class="reference external" href="https://colab.research.google.com/github/LHCfitNikhef/smefit_release/blob/tutorial/tutorial/tutorial.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>and make sure to click “Copy to drive” at the top to create a copy that you may edit.</p>
+<section id="What-is-SMEFiT?">
+<h2>What is SMEFiT?<a class="headerlink" href="#What-is-SMEFiT?" title="Link to this heading"></a></h2>
+<p>SMEFiT is a Python package for global analyses of particle physics data in the framework of the Standard Model Effective Field Theory (SMEFT). The SMEFT represents a powerful model-independent framework to constrain, identify, and parametrize potential deviations with respect to the predictions of the Standard Model (SM). A particularly attractive feature of the SMEFT is its capability to systematically correlate deviations from the SM between different processes. The full exploitation of the
+SMEFT potential for indirect New Physics searches from precision measurements requires combining the information provided by the broadest possible dataset, namely carrying out extensive global analysis which is the main purpose of SMEFiT.</p>
+<p>In case you would like a recap on the basic ideas underlying the SMEFT, see <a class="reference external" href="https://lhcfitnikhef.github.io/smefit_release/theory/SMEFT.html">https://lhcfitnikhef.github.io/smefit_release/theory/SMEFT.html</a></p>
+<p>SMEFiT has been used in the following publications</p>
+<ul class="simple">
+<li><p><em>A Monte Carlo global analysis of the Standard Model Effective Field Theory: the top quark sector</em>, N. P. Hartland, F. Maltoni, E. R. Nocera, J. Rojo, E. Slade, E. Vryonidou, C. Zhang.</p></li>
+<li><p><em>Constraining the SMEFT with Bayesian reweighting</em>, S. van Beek, E. R. Nocera, J. Rojo, and E. Slade.</p></li>
+<li><p><em>SMEFT analysis of vector boson scattering and diboson data from the LHC Run II</em> , J. Ethier, R. Gomez-Ambrosio, G. Magni, J. Rojo.</p></li>
+<li><p><em>Combined SMEFT interpretation of Higgs, diboson, and top quark data from the LHC</em>, J. Ethier, G.Magni, F. Maltoni, L. Mantani, E. R. Nocera, J. Rojo, E. Slade, E. Vryonidou, C. Zhang .</p></li>
+<li><p><em>The automation of SMEFT-assisted constraints on UV-complete models</em>, J. ter Hoeve, G. Magni, J. Rojo, A. N. Rossia, E. Vryonidou .</p></li>
+<li><p><em>Mapping the SMEFT at High-Energy Colliders: from LEP and the (HL-)LHC to the FCC-ee</em>, E.Celada, T. Giani, J. ter Hoeve, L. Mantani, J. Rojo, A. N. Rossia, M. O. A. Thomas, E. Vryonidou.</p></li>
+</ul>
+</section>
+<section id="Exercise-0---Installing-SMEFiT">
+<h2>Exercise 0 - Installing SMEFiT<a class="headerlink" href="#Exercise-0---Installing-SMEFiT" title="Link to this heading"></a></h2>
+<p>First things first, let us install SMEFiT:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>smefit
+</pre></div>
+</div>
+</div>
+<p>Note to google colab users, you may ignore the error related to pandas in case it shows up.</p>
+<p>For the purpose of this tutorial, we also need the following additional packages</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>wget
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">wget</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParamsDefault</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">smefit</span>
+<span class="kn">import</span> <span class="nn">smefit.runner</span>
+<span class="kn">from</span> <span class="nn">smefit.analyze.report</span> <span class="kn">import</span> <span class="n">Report</span>
+
+<span class="n">smefit</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">setup_console</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Download the smefit datasets and runcards</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">file_downloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">download_dir</span><span class="o">=</span><span class="s1">&#39;./downloads&#39;</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">download_dir</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">download_dir</span><span class="p">)</span>
+
+    <span class="n">file</span> <span class="o">=</span> <span class="n">wget</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">download_dir</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">file</span>
+
+<span class="n">smefit_database</span> <span class="o">=</span> <span class="n">file_downloader</span><span class="p">(</span><span class="s1">&#39;https://github.com/LHCfitNikhef/smefit_database/archive/refs/heads/main.zip&#39;</span><span class="p">)</span>
+<span class="n">runcards</span> <span class="o">=</span> <span class="n">file_downloader</span><span class="p">(</span><span class="s1">&#39;https://github.com/LHCfitNikhef/smefit_release/raw/tutorial/tutorial/runcards.zip&#39;</span><span class="p">)</span>
+
+<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;unzip </span><span class="si">{</span><span class="n">smefit_database</span><span class="si">}</span><span class="s2"> -d ./downloads&quot;</span><span class="p">],</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;unzip </span><span class="si">{</span><span class="n">runcards</span><span class="si">}</span><span class="s2"> -d ./downloads&quot;</span><span class="p">],</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Exercise-1---Our-first-fit-with-SMEFiT">
+<h2>Exercise 1 - Our first fit with SMEFiT<a class="headerlink" href="#Exercise-1---Our-first-fit-with-SMEFiT" title="Link to this heading"></a></h2>
+<p>In this first exercise, we will study the relative impact of various datasets on a two-dimensional SMEFT parameter space. Consider the four-fermion Wilson coefficients <span class="math notranslate nohighlight">\(c_{Qq}^{1, 8}\)</span> and <span class="math notranslate nohighlight">\(c_{Qq}^{3,8}\)</span>, defined as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+c_{Qq}^{1,8} &amp;= c_{qq}^{1(i33i)} + 3 c_{qq}^{3(i33i)} \\
+c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
+\end{align}\end{split}\]</div>
+<p>with the corresponding operators on the RHS given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\mathcal{O}_{qq}^{1(i33i)} &amp;= \left(\bar{q}_i\gamma^\mu Q \right)\left(\bar{Q} \gamma_\mu q_i\right) \\
+\mathcal{O}_{qq}^{3(i33i)} &amp;= \left(\bar{q}_i\gamma^\mu \tau^I Q \right)\left(\bar{Q} \gamma_\mu \tau^I q_l\right) \, .
+\end{align}\end{split}\]</div>
+<p>Here the fields <span class="math notranslate nohighlight">\(q_i\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> constitute respectively the light (<span class="math notranslate nohighlight">\(i=1,2\)</span>) and heavy quark <span class="math notranslate nohighlight">\(SU(2)\)</span> doublets, while the <span class="math notranslate nohighlight">\(\tau^I\)</span> are the usual Pauli matrices.</p>
+<p><strong>Question 1A</strong> - Do <span class="math notranslate nohighlight">\(\mathcal{O}_{qq}^{1(ijkl)}\)</span> and <span class="math notranslate nohighlight">\(\mathcal{O}_{qq}^{3(ijkl)}\)</span> define valid SMEFT operators at dimension-six? If so, why?</p>
+<p>These operators modify SM processes measured at the LHC, and hence provide a probe to study possible new physics beyond the SM. The goal of the rest of this exercise is to set bounds on the corresponding Wilson coefficients to check whether current data is compatible with the SM or not.</p>
+<p><strong>Question 1B</strong> - Consider top-pair production in association with a Z or W boson. Convince yourself by drawing a representative Feynman diagram that the operators defined above modify <span class="math notranslate nohighlight">\(ttV\)</span> (<span class="math notranslate nohighlight">\(V=W, Z)\)</span> production.</p>
+<p>To run the fit, we need a runcard. An example is given below. In this first exercise we will provide all runcards, so no need to write them yourself.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># smefit_runcard.yaml</span>
+
+<span class="c1"># name to give to fit</span>
+<span class="nt">result_ID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ttV</span>
+
+<span class="c1"># path where results are stored</span>
+<span class="nt">result_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./results</span>
+
+<span class="c1"># path to data</span>
+<span class="nt">data_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./downloads/smefit_database-main/commondata</span>
+
+<span class="c1"># path to theory tables</span>
+<span class="nt">theory_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./downloads/smefit_database-main/theory</span>
+
+<span class="c1"># perturbatve QCD order (LO or NLO)</span>
+<span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO</span>
+
+<span class="c1"># include theory uncertainties</span>
+<span class="nt">use_theory_covmat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">use_t0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="c1"># SMEFT Expansion Order (NHO = Lambda^-2 , HO = Lambda^-4)</span>
+<span class="nt">use_quad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+
+<span class="c1"># number of samples</span>
+<span class="nt">n_samples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20000</span>
+
+
+<span class="c1"># Datasets to include</span>
+<span class="nt">datasets</span><span class="p">:</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_ttZ_13TeV</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_ttZ_13TeV_pTZ</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_ttZ_8TeV</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttZ_13TeV</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttZ_13TeV_2016</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttZ_13TeV_pTZ</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttZ_8TeV</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_ttW_13TeV</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_ttW_8TeV</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttW_13TeV</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttW_13TeV_2016</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttW_8TeV</span>
+
+
+<span class="c1"># Coefficients to fit</span>
+<span class="nt">coefficients</span><span class="p">:</span>
+
+<span class="w">  </span><span class="nt">O81qq</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">2</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">O83qq</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">2</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>The datasets entry shows which datasets enter the fit, and the coefficients to be fitted are the four-fermion operators we defined earlier. We are now ready to run our first linear fit.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runner_ttV</span> <span class="o">=</span> <span class="n">smefit</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">Runner</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./downloads/runcards/runcard_ttV.yaml&quot;</span><span class="p">))</span>
+<span class="n">runner_ttV</span><span class="o">.</span><span class="n">global_analysis</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The fit should have finished, and the 95% exclusion contour can now be displayed by</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_report</span><span class="p">(</span><span class="n">runcard_report</span><span class="p">):</span>
+
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParamsDefault</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">runcard_report</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">report_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="n">report_name</span> <span class="o">=</span> <span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+    <span class="n">report_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;report_path&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+    <span class="n">report_folder</span> <span class="o">=</span> <span class="n">report_path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">report_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">report_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span><span class="n">report_path</span><span class="p">,</span> <span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;result_path&quot;</span><span class="p">],</span> <span class="n">report_config</span><span class="p">)</span>
+
+    <span class="n">report</span><span class="o">.</span><span class="n">coefficients</span><span class="p">(</span><span class="o">**</span><span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;coefficients_plots&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">make_report</span><span class="p">(</span><span class="s2">&quot;./downloads/runcards/runcard_report_ttV.yaml&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the exclusion contour</span>
+<span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./reports/report_ttV/contours_2d.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/fitting_code_tutorial_26_0.png" src="../_images/fitting_code_tutorial_26_0.png" />
+</div>
+</div>
+<p><strong>Question 1C</strong></p>
+<ul class="simple">
+<li><p>What special behaviour do you observe between the two operators?</p></li>
+<li><p>What options do we have to further constrain this 2-dim parameters space? Name at least three.</p></li>
+</ul>
+</section>
+<section id="Exercise-2---Adding-more-measurements">
+<h2>Exercise 2 - Adding more measurements<a class="headerlink" href="#Exercise-2---Adding-more-measurements" title="Link to this heading"></a></h2>
+<p>The two operators from exercise 1 modify more than just <span class="math notranslate nohighlight">\(ttZ\)</span>. In this exercise we want to assess the additional impact on the SMEFT parameter space coming from top-quark pair production differential measurements. We consider bins differential in the invariant mass of the top pair.</p>
+<p>Let’s proceed as before in exercise 1.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runner_tt_mtt</span> <span class="o">=</span> <span class="n">smefit</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">Runner</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./downloads/runcards/runcard_tt_mtt.yaml&quot;</span><span class="p">))</span>
+<span class="n">runner_tt_mtt</span><span class="o">.</span><span class="n">global_analysis</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The report can be produced again with</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">make_report</span><span class="p">(</span><span class="s2">&quot;./downloads/runcards/runcard_report_tt_mtt.yaml&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the exclusion contour</span>
+<span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./reports/report_tt_mtt/contours_2d.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/fitting_code_tutorial_33_0.png" src="../_images/fitting_code_tutorial_33_0.png" />
+</div>
+</div>
+<p><strong>Question 2A</strong></p>
+<ul class="simple">
+<li><p>Can we exclude the SM?</p></li>
+<li><p>What special behaviour do you observe between the two operators and how does this compare to exercise 1?</p></li>
+</ul>
+<p>Ultimately we should perform a combined fit of <span class="math notranslate nohighlight">\(ttV\)</span> and <span class="math notranslate nohighlight">\(t\bar{t}\:(m_{t\bar{t}})\)</span> data. Both are affected by the same four-fermion operators considered in this tutorial after all.</p>
+<p><strong>Question 2B</strong></p>
+<ul class="simple">
+<li><p>Modify the runcards yourself this time to run the combined fit</p></li>
+<li><p>Produce the exclusion contour</p></li>
+</ul>
+<p>Hint: you should find</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the exclusion contour</span>
+<span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./reports/report_combined/contours_2d.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/fitting_code_tutorial_37_0.png" src="../_images/fitting_code_tutorial_37_0.png" />
+</div>
+</div>
+<p><strong>Question 2C</strong></p>
+<ul class="simple">
+<li><p>Comment on the interplay between the two classes of measurements</p></li>
+<li><p>What lesson do you take from this?</p></li>
+</ul>
+</section>
+<section id="Exercise-3---quadratic-fits-(optional)">
+<h2>Exercise 3 - quadratic fits (optional)<a class="headerlink" href="#Exercise-3---quadratic-fits-(optional)" title="Link to this heading"></a></h2>
+<p>So far all the fits have been linear in the EFT expansion. In this last exercise you will study how the previous results change under the effect of quadratic EFT corrections. For this, you should set <code class="docutils literal notranslate"><span class="pre">use_quad:</span> <span class="pre">False</span></code> in the fit runcard and run the fit with <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code> replaced by <code class="docutils literal notranslate"><span class="pre">&quot;NS&quot;</span></code>:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#runner_ttV_quad = smefit.runner.Runner.from_file(pathlib.Path(&quot;./downloads/runcards/runcard_ttV_quadratic.yaml&quot;))</span>
+<span class="c1">#runner_ttV_quad.global_analysis(&quot;NS&quot;)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="running.html" class="btn btn-neutral float-left" title="How to run the code" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../report/tools.html" class="btn btn-neutral float-right" title="Report functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, the SMEFiT developers&#39; team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
