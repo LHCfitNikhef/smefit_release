@@ -214,7 +214,7 @@ def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None
 
     else:
         raise ValueError(
-            "obs_scale must be either a float or 'dynamic'. Passed: {obs_scale}"
+            f"obs_scale must be either a float or 'dynamic'. Passed: {obs_scale}"
         )
 
     return rgemat, operators_to_keep
