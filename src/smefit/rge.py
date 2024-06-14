@@ -165,6 +165,8 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         else:
             scales.extend([default_scale] * len(dataset_scales))
 
+        _logger.info(f"Loaded scales for dataset {dataset}: {dataset_scales}")
+
     return scales
 
 
