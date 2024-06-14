@@ -145,6 +145,29 @@ class RGE:
         return self.map_to_smefit(wc_final)
 
 
+def load_scales(datasets, theory_path, default_scale=1e3):
+    scales = []
+    for dataset in np.unique(datasets):
+        Loader.theory_path = pathlib.Path(theory_path)
+        # dummy call just to get the scales
+        _, _, _, _, dataset_scales = Loader.load_theory(
+            dataset,
+            operators_to_keep={},
+            order="LO",
+            use_quad=False,
+            use_theory_covmat=False,
+            use_multiplicative_prescription=False,
+        )
+        # check that dataset_scales is not a list filled with None
+        # otherwise, assume the initial scale
+        if not all([scale is None for scale in dataset_scales]):
+            scales.extend(dataset_scales)
+        else:
+            scales.extend([default_scale] * len(dataset_scales))
+
+    return scales
+
+
 def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None):
     init_scale = rge_dict.get("init_scale", 1e3)
     obs_scale = rge_dict.get("obs_scale", 91.1876)
@@ -158,24 +181,7 @@ def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None
         operators_to_keep = {k: {} for k in gen_operators}
 
     elif obs_scale == "dynamic":
-        scales = []
-        for dataset in np.unique(datasets):
-            Loader.theory_path = pathlib.Path(theory_path)
-            # dummy call just to get the scales
-            _, _, _, _, dataset_scales = Loader.load_theory(
-                dataset,
-                operators_to_keep={},
-                order="LO",
-                use_quad=False,
-                use_theory_covmat=False,
-                use_multiplicative_prescription=False,
-            )
-            # check that dataset_scales is not a list filled with None
-            # otherwise, assume the initial scale
-            if not all([scale is None for scale in dataset_scales]):
-                scales.extend(dataset_scales)
-            else:
-                scales.extend([init_scale] * len(dataset_scales))
+        scales = load_scales(datasets, theory_path, default_scale=init_scale)
 
         operators_to_keep = {}
         rgemat = []
@@ -195,7 +201,8 @@ def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None
 
             rgemat.append(rgemat_scale)
 
-        # now loop through the rgemat and if there are operators that are not present in the matrix, fill them with zeros
+        # now loop through the rgemat and if there are operators
+        # that are not present in the matrix, fill them with zeros
         for mat in rgemat:
             for op in operators_to_keep:
                 if op not in mat.index:
