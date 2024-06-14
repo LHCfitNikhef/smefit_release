@@ -1,6 +1,6 @@
 # Input YAML configurations for SMEFiT code
 
-result_ID: asy
+result_ID: tt_mtt
 
 # absolute path where results are stored
 result_path: ./results
@@ -32,17 +32,21 @@ n_samples: 20000
 # Datasets to include
 datasets:
 
-  - CMS_tt_13TeV_asy
-  - ATLAS_CMS_tt_AC_8TeV
-  - ATLAS_tt_13TeV_asy_2022
-  - ATLAS_tt_13TeV_asy_2022
+  - ATLAS_tt_13TeV_ljets_2016_Mtt
+  - ATLAS_tt_8TeV_dilep_Mtt
+  - ATLAS_tt_8TeV_ljets_Mtt
+  - CMS_tt_13TeV_Mtt
+  - CMS_tt_13TeV_dilep_2015_Mtt
+  - CMS_tt_13TeV_dilep_2016_Mtt
+  - CMS_tt_13TeV_ljets_2015_Mtt
+  - CMS_tt_13TeV_ljets_2016_Mtt
 
 
+# Coefficients to fit
 coefficients:
 
-  O8qt: { 'min': -2, 'max': 2 }
-  O81qq: { 'min': -2, 'max': 2.0 }
-
+  O81qq: { 'min': -2, 'max': 2 }
+  O83qq: { 'min': -2, 'max': 2.0 }
 
 
 rot_to_fit_basis: null

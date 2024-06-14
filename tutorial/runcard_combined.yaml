@@ -32,41 +32,53 @@ n_samples: 20000
 # Datasets to include
 datasets:
 
-  - CMS_tt_13TeV_asy
-  - ATLAS_CMS_tt_AC_8TeV
-  - ATLAS_tt_13TeV_asy_2022
-  - ATLAS_tt_13TeV_asy_2022
-
-  - ATLAS_ttZ_13TeV
-  - ATLAS_ttZ_13TeV_2016
-  - ATLAS_ttZ_13TeV_pTZ
-  - ATLAS_ttZ_8TeV
-  - CMS_ttZ_13TeV
-  - CMS_ttZ_13TeV_pTZ
-  - CMS_ttZ_8TeV
-
-  - ATLAS_ttW_13TeV
-  - ATLAS_ttW_13TeV_2016
-  - ATLAS_ttW_8TeV
-
+  #  - ATLAS_ttZ_13TeV
+  #  - ATLAS_ttZ_13TeV_2016
+  #  - ATLAS_ttZ_13TeV_pTZ
+  #  - ATLAS_ttZ_8TeV
+  #  - CMS_ttZ_13TeV
+  #  - CMS_ttZ_13TeV_pTZ
+  #  - CMS_ttZ_8TeV
+  #
+  #  - ATLAS_ttW_13TeV
+  #  - ATLAS_ttW_13TeV_2016
+  #  - ATLAS_ttW_8TeV
+  #
   - ATLAS_tt_13TeV_ljets_2016_Mtt
   - ATLAS_tt_8TeV_dilep_Mtt
   - ATLAS_tt_8TeV_ljets_Mtt
 
-  - CMS_tt2D_8TeV_dilep_MttYtt
-  - CMS_ttW_13TeV
-  - CMS_ttW_8TeV
-  - CMS_ttZ_13TeV
-  - CMS_ttZ_13TeV_pTZ
-  - CMS_ttZ_8TeV
+  #  - CMS_tt2D_8TeV_dilep_MttYtt
+  #  - CMS_ttW_13TeV
+  #  - CMS_ttW_8TeV
+  #  - CMS_ttZ_13TeV
+  #  - CMS_ttZ_13TeV_pTZ
+  #  - CMS_ttZ_8TeV
   - CMS_tt_13TeV_Mtt
 
   - CMS_tt_13TeV_dilep_2015_Mtt
   - CMS_tt_13TeV_dilep_2016_Mtt
   - CMS_tt_13TeV_ljets_2015_Mtt
   - CMS_tt_13TeV_ljets_2016_Mtt
-  - CMS_tt_13TeV_ljets_inc
-  - CMS_tt_8TeV_ljets_Ytt
+  #  - CMS_tt_13TeV_ljets_inc
+  #  - CMS_tt_8TeV_ljets_Ytt
+
+  - CMS_ttZ_13TeV
+  - CMS_ttZ_13TeV_pTZ
+  - CMS_ttZ_8TeV
+
+  - ATLAS_ttZ_13TeV
+  - ATLAS_ttZ_13TeV_2016
+  - ATLAS_ttZ_13TeV_pTZ
+  - ATLAS_ttZ_8TeV
+
+  - CMS_ttW_13TeV
+  - CMS_ttW_8TeV
+
+  - ATLAS_ttW_13TeV
+  - ATLAS_ttW_13TeV_2016
+  - ATLAS_ttW_8TeV
+
 
 
 
@@ -74,8 +86,8 @@ datasets:
 # Coefficients to fit
 coefficients:
 
-  O8qt: { 'min': -2, 'max': 2 }
-  O81qq: { 'min': -2, 'max': 2.0 }
+  O81qq: { 'min': -2, 'max': 2 }
+  O83qq: { 'min': -2, 'max': 2.0 }
 
 
 

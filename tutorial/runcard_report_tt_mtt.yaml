@@ -1,15 +1,15 @@
 # Input YAML file for a report
 
-name: "report_asy"
+name: "report_tt_mtt"
 
 title: "smefit"
 
 result_IDs: [
-"asy"
+"tt_mtt"
 ]
 
 fit_labels: [
- '$t\bar{t}\:\mathrm{asymmetries}$'
+ '$t\bar{t}\:m_{t\bar{t}}$'
 ]
 
 # absolute path where results are stored
@@ -25,7 +25,7 @@ coefficients_plots:
   contours_2d:
     show: True
     confidence_level: 95
-    dofs_show:  # Null or list of op per fit to be displayed
+    dofs_show: # Null or list of op per fit to be displayed
 #
 #  posterior_histograms: True
 #

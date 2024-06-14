@@ -5,13 +5,13 @@ name: "report_combined"
 title: "smefit"
 
 result_IDs: [
-"sym", "asy", "combined"
+"ttV", "tt_mtt", "combined"
 ]
 
 fit_labels: [
- '$t\bar{t} + t\bar{t}V$', '$t\bar{t}\:\mathrm{asymmetries}$',
- '$\mathrm{Combined}$'
+ '$t\bar{t}V$', '$t\bar{t}\:m_{t\bar{t}}$', '$\mathrm{combined}$'
 ]
+
 
 # absolute path where results are stored
 report_path: ./reports/
