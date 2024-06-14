@@ -51,19 +51,22 @@ def make_predictions(
     if rgemat is not None:
         # Check if rgemat comes from a dynamic scale
         # otherwise it is a single RGEmatrix
-        if type(rgemat) == list:    
+        if type(rgemat) == list:
             wcs = []
+            # this is inefficient, but if jax.jit compiled
+            # it is fast as jax automatically optimises the loop
             for mat in rgemat:
                 wcs.append(jnp.einsum("ij,j->i", mat.values, coefficients_values))
 
             wcs = jnp.array(wcs)
-            summed_corrections = jnp.einsum(
-                "ij,ij->i", dataset.LinearCorrections, wcs
-            )
+            summed_corrections = jnp.einsum("ij,ij->i", dataset.LinearCorrections, wcs)
 
         else:
             summed_corrections = jnp.einsum(
-                "ij,jk,k->i", dataset.LinearCorrections, rgemat.values, coefficients_values
+                "ij,jk,k->i",
+                dataset.LinearCorrections,
+                rgemat.values,
+                coefficients_values,
             )
     else:
         summed_corrections = jnp.einsum(
@@ -75,6 +78,8 @@ def make_predictions(
         if rgemat is not None:
             if type(rgemat) == list:
                 wcs = []
+                # this is inefficient, but if jax.jit compiled
+                # it is fast as jax automatically optimises the loop
                 for mat in rgemat:
                     wcs.append(jnp.einsum("ij,j->i", mat.values, coefficients_values))
 
