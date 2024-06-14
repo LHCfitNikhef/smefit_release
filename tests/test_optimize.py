@@ -300,12 +300,13 @@ class TestOptimize_NS:
 
     # external chi2
     config_corr["external_chi2"] = {
-        "ExternalChi2": path_abs / "fake_external_chi2/test_ext_chi2.py"
+        "ExternalChi2": {"path": path_abs / "fake_external_chi2/test_ext_chi2.py"}
     }
 
     # add external chi2 to paths
     external_chi2 = config_corr["external_chi2"]
-    for class_name, module_path in external_chi2.items():
+    for class_name, module in external_chi2.items():
+        module_path = module["path"]
         path = pathlib.Path(module_path)
         base_path, stem = path.parent, path.stem
         sys.path = [str(base_path)] + sys.path
