@@ -5,6 +5,7 @@ Module for the generation of theory predictions
 """
 import numpy as np
 import jax.numpy as jnp
+import jax
 
 
 def flatten(quad_mat, axis=0):
@@ -52,13 +53,9 @@ def make_predictions(
         # Check if rgemat comes from a dynamic scale
         # otherwise it is a single RGEmatrix
         if type(rgemat) == list:
-            wcs = []
-            # this is inefficient, but if jax.jit compiled
-            # it is fast as jax automatically optimises the loop
-            for mat in rgemat:
-                wcs.append(jnp.einsum("ij,j->i", mat.values, coefficients_values))
-
-            wcs = jnp.array(wcs)
+            # stack all the matrices in the list
+            stacked_mats = jnp.stack([mat.values for mat in rgemat])
+            wcs = jnp.einsum("nij,j->ni", stacked_mats, coefficients_values)
             summed_corrections = jnp.einsum("ij,ij->i", dataset.LinearCorrections, wcs)
 
         else:
@@ -77,19 +74,11 @@ def make_predictions(
     if use_quad:
         if rgemat is not None:
             if type(rgemat) == list:
-                wcs = []
-                # this is inefficient, but if jax.jit compiled
-                # it is fast as jax automatically optimises the loop
-                for mat in rgemat:
-                    wcs.append(jnp.einsum("ij,j->i", mat.values, coefficients_values))
-
-                coeff_outer_coeffs = []
-                for wc in wcs:
-                    coeff_outer_coeffs.append(flatten(jnp.outer(wc, wc)))
-                coeff_outer_coeff = jnp.array(coeff_outer_coeffs)
-
+                # do outer product on previously computed wcs
+                coeff_outer_coeff = jnp.einsum("ni,nj->nij", wcs, wcs)
+                coeff_outer_coeff_flat = jax.vmap(flatten)(coeff_outer_coeff)
                 summed_quad_corrections = jnp.einsum(
-                    "ij,ij->i", dataset.QuadraticCorrections, coeff_outer_coeff
+                    "ij,ij->i", dataset.QuadraticCorrections, coeff_outer_coeff_flat
                 )
 
             else:
