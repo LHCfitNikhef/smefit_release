@@ -6,6 +6,7 @@ from smefit.loader import Loader
 import warnings
 import pandas as pd
 import numpy as np
+import jax.numpy as jnp
 from numpy import ComplexWarning
 import pathlib
 
@@ -181,6 +182,7 @@ def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None
         rgemat = rge_runner.RGEmatrix(obs_scale)
         gen_operators = list(rgemat.index)
         operators_to_keep = {k: {} for k in gen_operators}
+        return rgemat.values, operators_to_keep
 
     elif obs_scale == "dynamic":
         scales = load_scales(datasets, theory_path, default_scale=init_scale)
@@ -220,11 +222,11 @@ def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None
             # order the rows alphabetically in the index
             mat.sort_index(inplace=True)
 
-        return rgemat, operators_to_keep
+        # now stack the matrices in a 3D array
+        stacked_mats = jnp.stack([mat.values for mat in rgemat])
+        return stacked_mats, operators_to_keep
 
     else:
         raise ValueError(
             f"obs_scale must be either a float or 'dynamic'. Passed: {obs_scale}"
         )
-
-    return rgemat, operators_to_keep

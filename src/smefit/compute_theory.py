@@ -52,17 +52,15 @@ def make_predictions(
     if rgemat is not None:
         # Check if rgemat comes from a dynamic scale
         # otherwise it is a single RGEmatrix
-        if type(rgemat) == list:
-            # stack all the matrices in the list
-            stacked_mats = jnp.stack([mat.values for mat in rgemat])
-            wcs = jnp.einsum("nij,j->ni", stacked_mats, coefficients_values)
+        if len(rgemat.shape) == 3:
+            wcs = jnp.einsum("nij,j->ni", rgemat, coefficients_values)
             summed_corrections = jnp.einsum("ij,ij->i", dataset.LinearCorrections, wcs)
 
         else:
             summed_corrections = jnp.einsum(
                 "ij,jk,k->i",
                 dataset.LinearCorrections,
-                rgemat.values,
+                rgemat,
                 coefficients_values,
             )
     else:
@@ -73,7 +71,8 @@ def make_predictions(
     # Compute total quadratic correction
     if use_quad:
         if rgemat is not None:
-            if type(rgemat) == list:
+            # check that rgemat is a 3D array
+            if len(rgemat.shape) == 3:
                 # do outer product on previously computed wcs
                 coeff_outer_coeff = jnp.einsum("ni,nj->nij", wcs, wcs)
                 coeff_outer_coeff_flat = jax.vmap(flatten)(coeff_outer_coeff)
@@ -82,7 +81,7 @@ def make_predictions(
                 )
 
             else:
-                ext_coeffs = jnp.einsum("ij,j->i", rgemat.values, coefficients_values)
+                ext_coeffs = jnp.einsum("ij,j->i", rgemat, coefficients_values)
                 coeff_outer_coeff = jnp.outer(ext_coeffs, ext_coeffs)
                 summed_quad_corrections = jnp.einsum(
                     "ij,j->i", dataset.QuadraticCorrections, flatten(coeff_outer_coeff)
