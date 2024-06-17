@@ -111,8 +111,8 @@ inverse_wcxf_translate = {
     "O3pQ3": {"wc": ["phiq3_33"]},
     "OpQM": {"wc": ["phiq1_33", "phiq3_33"], "value": [1.0, -1.0]},
     "Opt": {"wc": ["phiu_33"]},
-    "Opui": {"wc": ["phiu_11", "phiu_22"]},
-    "Opdi": {"wc": ["phid_11", "phid_22", "phid_33"]},
+    "Opui": {"wc": ["phiu_11"]},
+    "Opdi": {"wc": ["phid_11"]},
     # Lepton Currents
     "Opl1": {"wc": ["phil1_11"]},
     "Opl2": {"wc": ["phil1_22"]},
