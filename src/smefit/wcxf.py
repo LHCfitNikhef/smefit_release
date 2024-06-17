@@ -89,7 +89,7 @@ wcxf_translate = {
 # In particular, given a point in the coefficient space of the Warsaw basis,
 # it tells you how to combine them to get the coefficients in the SMEFiT basis.
 # These are basically the equations between Wilson coefficients.
-# C_{SMEFiT} = sum_i value_i * C_{Warsaw, i}
+# C_{SMEFiT} = sum_i coeff_i * C_{Warsaw, i}
 # Note that the flavour structure is assumed to hold and therefore the values
 # are inferred only from the 11 components.
 inverse_wcxf_translate = {
