@@ -108,16 +108,16 @@ class RGE:
         wc_dict = {}
         for wc_basis, wc_inv_dict in inverse_wcxf_translate.items():
             wc_warsaw_name = wc_inv_dict["wc"]
-            if "value" not in wc_inv_dict:
-                wc_warsaw_value = [1] * len(wc_warsaw_name)
+            if "coeff" not in wc_inv_dict:
+                wc_warsaw_coeff = [1] * len(wc_warsaw_name)
             else:
-                wc_warsaw_value = wc_inv_dict["value"]
+                wc_warsaw_coeff = wc_inv_dict["coeff"]
 
             value = 0.0
-            for wc, val in zip(wc_warsaw_name, wc_warsaw_value):
+            for wc, coeff in zip(wc_warsaw_name, wc_warsaw_coeff):
                 if wc in wc_final_vals:
                     # 1e6 is to transform from GeV^-2 to TeV^2
-                    value += 1e6 * wc_final_vals[wc].real * val
+                    value += 1e6 * wc_final_vals[wc].real * coeff
             wc_dict[wc_basis] = value
         return wc_dict
 
