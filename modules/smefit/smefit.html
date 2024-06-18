@@ -569,7 +569,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<a class="reference internal" href="#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a>) – dataset tuple</p></li>
-<li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
+<li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
 <li><p><strong>use_multiplicative_prescription</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True add the <abbr title="Effective Field Theory">EFT</abbr> contribution as a key factor</p></li>
 <li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
 </ul>
@@ -735,7 +735,7 @@ and flatten it into an array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>quad_mat</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – tensor to flatten</p></li>
+<li><p><strong>quad_mat</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – tensor to flatten</p></li>
 <li><p><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – axis along which the triangular part is selected</p></li>
 </ul>
 </dd>
@@ -751,7 +751,7 @@ given a set of <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> 
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<a class="reference internal" href="#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a>) – dataset tuple</p></li>
-<li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
+<li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
 <li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
 </ul>
 </dd>
@@ -759,7 +759,7 @@ given a set of <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> 
 <dd class="field-even"><p><strong>corrected_theory</strong> – SM + EFT theory predictions</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -783,7 +783,7 @@ found by multiplying them by their transpose.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>stat_errors</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – a 1-D array of statistical uncertainties</p></li>
+<li><p><strong>stat_errors</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – a 1-D array of statistical uncertainties</p></li>
 <li><p><strong>sys_errors</strong> (<em>pandas.DataFrame</em>) – a dataframe with shape (N_data * N_sys) and systematic name as the
 column headers. The uncertainties should be in the same units as the
 data.</p></li>
@@ -793,7 +793,7 @@ data.</p></li>
 <dd class="field-even"><p><strong>cov_mat</strong> – Covariance matrix</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)">numpy.ndarray</a></p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -1073,7 +1073,7 @@ the results. Results are stored in a class attribute</p>
 <dd class="field-odd"><p><strong>central_values</strong> – experimental central values</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1093,7 +1093,7 @@ the results. Results are stored in a class attribute</p>
 <dd class="field-odd"><p><strong>covmat</strong> – experimental covariance matrix of a single dataset</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1138,7 +1138,7 @@ the results. Results are stored in a class attribute</p>
 <li><p><strong>order</strong> (<em>&quot;LO&quot;</em><em>, </em><em>&quot;NLO&quot;</em>) – EFT perturbative order</p></li>
 <li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True returns also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
 <li><p><strong>use_theory_covmat</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – if True add the theory covariance matrix to the experimental one</p></li>
-<li><p><strong>rotation_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – rotation matrix from tables basis to fitting basis</p></li>
+<li><p><strong>rotation_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – rotation matrix from tables basis to fitting basis</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1203,7 +1203,7 @@ the results. Results are stored in a class attribute</p>
 <dd class="field-odd"><p><strong>SM_predictions</strong> – best <abbr title="Standard Model">SM</abbr> prediction</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1259,7 +1259,7 @@ the results. Results are stored in a class attribute</p>
 <dd class="field-odd"><p><strong>theory covmat</strong> – theory covariance matrix of a single dataset</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)">numpy.ndarray</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1294,7 +1294,7 @@ with corresponding values.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>corrections_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>)</em>) – list containing corrections per experiment</p></li>
 <li><p><strong>n_data_tot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – total number of experimental data points</p></li>
-<li><p><strong>sorted_keys</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><em>numpy.ndarray</em></a>) – list of sorted operator corrections</p></li>
+<li><p><strong>sorted_keys</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.0)"><em>numpy.ndarray</em></a>) – list of sorted operator corrections</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

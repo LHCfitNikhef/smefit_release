@@ -162,11 +162,12 @@ SMEFT potential for indirect New Physics searches from precision measurements re
 </div>
 <p>Note to google colab users, you may ignore the error related to pandas in case it shows up.</p>
 <p>For the purpose of this tutorial, we also need the following additional packages</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>wget
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>ipywidgets
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">wget</span>
@@ -180,8 +181,16 @@ SMEFT potential for indirect New Physics searches from precision measurements re
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Requirement already satisfied: wget in /Users/jaco/opt/anaconda3/envs/smefit_tutorial/lib/python3.12/site-packages (3.2)
+</pre></div></div>
+</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">smefit</span>
@@ -297,7 +306,7 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 </div>
 <p>The fit should have finished, and the 95% exclusion contour can now be displayed by</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_report</span><span class="p">(</span><span class="n">runcard_report</span><span class="p">):</span>
@@ -328,7 +337,7 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the exclusion contour</span>
@@ -337,7 +346,7 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -373,7 +382,7 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the exclusion contour</span>
@@ -382,7 +391,7 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -426,13 +435,13 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 </section>
 <section id="Exercise-3---quadratic-fits-(optional)">
 <h2>Exercise 3 - quadratic fits (optional)<a class="headerlink" href="#Exercise-3---quadratic-fits-(optional)" title="Link to this heading"></a></h2>
-<p>So far all the fits have been linear in the EFT expansion. In this last exercise you will study how the previous results change under the effect of quadratic EFT corrections. For this, you should set <code class="docutils literal notranslate"><span class="pre">use_quad:</span> <span class="pre">False</span></code> in the fit runcard and run the fit with <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code> replaced by <code class="docutils literal notranslate"><span class="pre">&quot;NS&quot;</span></code>:</p>
+<p>So far all the fits have been linear in the EFT expansion. In this last exercise you will study how the previous results change under the effect of quadratic EFT corrections. For this, you should set <code class="docutils literal notranslate"><span class="pre">use_quad:</span> <span class="pre">True</span></code> in the fit runcard and run the fit with <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code> replaced by <code class="docutils literal notranslate"><span class="pre">&quot;NS&quot;</span></code>:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#runner_ttV_quad = smefit.runner.Runner.from_file(pathlib.Path(&quot;./downloads/runcards/runcard_ttV_quadratic.yaml&quot;))</span>
-<span class="c1">#runner_ttV_quad.global_analysis(&quot;NS&quot;)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runner_tt_mtt_quad</span> <span class="o">=</span> <span class="n">smefit</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">Runner</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./downloads/runcards/runcard_tt_mtt_quad.yaml&quot;</span><span class="p">))</span>
+<span class="n">runner_tt_mtt_quad</span><span class="o">.</span><span class="n">global_analysis</span><span class="p">(</span><span class="s2">&quot;NS&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
