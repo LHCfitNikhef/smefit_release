@@ -178,7 +178,7 @@ def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None
     coeff_list = list(operators_to_keep.keys())
     rge_runner = RGE(coeff_list, init_scale, smeft_accuracy)
     # if it is a float, it is a static scale
-    if type(obs_scale) is float:
+    if type(obs_scale) is float or type(obs_scale) is int:
         rgemat = rge_runner.RGEmatrix(obs_scale)
         gen_operators = list(rgemat.index)
         operators_to_keep = {k: {} for k in gen_operators}
@@ -228,5 +228,5 @@ def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None
 
     else:
         raise ValueError(
-            f"obs_scale must be either a float or 'dynamic'. Passed: {obs_scale}"
+            f"obs_scale must be either a float/int or 'dynamic'. Passed: {obs_scale}"
         )
