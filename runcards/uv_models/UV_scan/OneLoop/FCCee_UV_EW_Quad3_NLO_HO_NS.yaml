@@ -1,0 +1,347 @@
+Model name: Phi_4_32
+UV Collection: 1LoopMatching
+UV model: Phi_4_32
+coefficients:
+  O11qq:
+    constrain:
+    - lamPhi:
+      - -2.7104809388644417e-08
+      - 0
+    max: 1000
+    min: -1000
+  O13qq:
+    constrain:
+    - lamPhi:
+      - -1.498368332128203e-06
+      - 0
+    max: 1000
+    min: -1000
+  O1dt:
+    constrain:
+    - lamPhi:
+      - 4.336769502183107e-07
+      - 0
+    max: 1000
+    min: -1000
+  O1qd:
+    constrain:
+    - lamPhi:
+      - 1.0841923755457767e-07
+      - 0
+    max: 1000
+    min: -1000
+  O1qt:
+    constrain:
+    - lamPhi:
+      - -2.1683847510915534e-07
+      - 0
+    max: 1000
+    min: -1000
+  O1qu:
+    constrain:
+    - lamPhi:
+      - -2.1683847510915534e-07
+      - 0
+    max: 1000
+    min: -1000
+  O1ut:
+    constrain:
+    - lamPhi:
+      - -4.336769502183107e-07
+      - 0
+    max: 1000
+    min: -1000
+  O3pQ3:
+    constrain:
+    - lamPhi:
+      - -2.996736664256406e-06
+      - 0
+    max: 1000
+    min: -1000
+  O3pl1:
+    constrain:
+    - lamPhi:
+      - -2.996736664256406e-06
+      - 0
+    max: 1000
+    min: -1000
+  O3pl2:
+    constrain:
+    - lamPhi:
+      - -2.996736664256406e-06
+      - 0
+    max: 1000
+    min: -1000
+  O3pl3:
+    constrain:
+    - lamPhi:
+      - -2.996736664256406e-06
+      - 0
+    max: 1000
+    min: -1000
+  O3pq:
+    constrain:
+    - lamPhi:
+      - -2.996736664256406e-06
+      - 0
+    max: 1000
+    min: -1000
+  OQQ1:
+    constrain:
+    - lamPhi:
+      - 9.447026026415131e-07
+      - 0
+    max: 1000
+    min: -1000
+  OQQ8:
+    constrain:
+    - lamPhi:
+      - -1.1986946657025623e-05
+      - 0
+    max: 1000
+    min: -1000
+  OQt1:
+    constrain:
+    - lamPhi:
+      - -2.1683847510915534e-07
+      - 0
+    max: 1000
+    min: -1000
+  OWWW:
+    constrain:
+    - lamPhi:
+      - 3.059901446046024e-06
+      - 0
+    max: 1000
+    min: -1000
+  Obp:
+    constrain:
+    - lamPhi:
+      - -7.194763686065248e-08
+      - 0
+    - lamPhi:
+      - 1.9004578312270288e-05
+      - 2
+    max: 1000
+    min: -1000
+  Oll:
+    constrain:
+    - lamPhi:
+      - -2.996736664256406e-06
+      - 0
+    max: 1000
+    min: -1000
+  Oll1111:
+    constrain:
+    - lamPhi:
+      - -1.7423116166260027e-06
+      - 0
+    max: 1000
+    min: -1000
+  OpD:
+    constrain:
+    - lamPhi:
+      - -9.757731379911991e-07
+      - 0
+    - lamPhi:
+      - 0.0015831434944115277
+      - 2
+    max: 1000
+    min: -1000
+  OpQM:
+    constrain:
+    - lamPhi:
+      - 2.834107807924539e-06
+      - 0
+    max: 1000
+    min: -1000
+  Opd:
+    constrain:
+    - lamPhi:
+      - -4.739048280882408e-06
+      - 0
+    - lamPhi:
+      - 0.0007915717472057639
+      - 2
+    max: 1000
+    min: -1000
+  Opdi:
+    constrain:
+    - lamPhi:
+      - 3.25257712663733e-07
+      - 0
+    max: 1000
+    min: -1000
+  Ope:
+    constrain:
+    - lamPhi:
+      - 9.757731379911991e-07
+      - 0
+    max: 1000
+    min: -1000
+  Opl1:
+    constrain:
+    - lamPhi:
+      - 4.878865689955996e-07
+      - 0
+    max: 1000
+    min: -1000
+  Opl2:
+    constrain:
+    - lamPhi:
+      - 4.878865689955996e-07
+      - 0
+    max: 1000
+    min: -1000
+  Opl3:
+    constrain:
+    - lamPhi:
+      - 4.878865689955996e-07
+      - 0
+    max: 1000
+    min: -1000
+  Opmu:
+    constrain:
+    - lamPhi:
+      - 9.757731379911991e-07
+      - 0
+    max: 1000
+    min: -1000
+  OpqMi:
+    constrain:
+    - lamPhi:
+      - 2.834107807924539e-06
+      - 0
+    max: 1000
+    min: -1000
+  Opt:
+    constrain:
+    - lamPhi:
+      - -6.50515425327466e-07
+      - 0
+    max: 1000
+    min: -1000
+  Opta:
+    constrain:
+    - lamPhi:
+      - 9.757731379911991e-07
+      - 0
+    max: 1000
+    min: -1000
+  Opui:
+    constrain:
+    - lamPhi:
+      - -6.50515425327466e-07
+      - 0
+    max: 1000
+    min: -1000
+  Otap:
+    constrain:
+    - lamPhi:
+      - -3.063798890238311e-08
+      - 0
+    - lamPhi:
+      - 8.09285870713902e-06
+      - 2
+    max: 1000
+    min: -1000
+  Otp:
+    constrain:
+    - lamPhi:
+      - -2.9736061588627563e-06
+      - 0
+    - lamPhi:
+      - 0.0007854619495760322
+      - 2
+    max: 1000
+    min: -1000
+  Ott1:
+    constrain:
+    - lamPhi:
+      - -4.336769502183107e-07
+      - 0
+    max: 1000
+    min: -1000
+  lamPhi:
+    max: 1000
+    min: -1000
+data_path: /data/theorie/jthoeve/smefit30_database/commondata
+datasets:
+- ATLAS_tt_8TeV_ljets_Mtt
+- ATLAS_tt_8TeV_dilep_Mtt
+- CMS_tt_8TeV_ljets_Ytt
+- CMS_tt2D_8TeV_dilep_MttYtt
+- CMS_tt_13TeV_ljets_2015_Mtt
+- CMS_tt_13TeV_dilep_2015_Mtt
+- CMS_tt_13TeV_ljets_2016_Mtt
+- CMS_tt_13TeV_dilep_2016_Mtt
+- ATLAS_tt_13TeV_ljets_2016_Mtt
+- ATLAS_CMS_tt_AC_8TeV
+- ATLAS_tt_AC_13TeV
+- CMS_ttbb_13TeV
+- CMS_ttbb_13TeV_2016
+- ATLAS_ttbb_13TeV_2016
+- CMS_tttt_13TeV
+- CMS_tttt_13TeV_run2
+- ATLAS_tttt_13TeV_run2
+- CMS_ttZ_8TeV
+- CMS_ttZ_13TeV
+- CMS_ttZ_13TeV_pTZ
+- ATLAS_ttZ_8TeV
+- ATLAS_ttZ_13TeV
+- ATLAS_ttZ_13TeV_2016
+- CMS_ttW_8TeV
+- CMS_ttW_13TeV
+- ATLAS_ttW_8TeV
+- ATLAS_ttW_13TeV
+- ATLAS_ttW_13TeV_2016
+- CMS_t_tch_8TeV_inc
+- ATLAS_t_tch_8TeV_diff_Yt
+- CMS_t_tch_8TeV_diff_Yt
+- CMS_t_sch_8TeV
+- ATLAS_t_sch_8TeV
+- ATLAS_t_tch_13TeV_inc
+- CMS_t_tch_13TeV_inc
+- CMS_t_tch_13TeV_2016_diff_Yt
+- CMS_t_tch_13TeV_2019_diff_Yt
+- ATLAS_tW_8TeV_inc
+- ATLAS_tW_slep_8TeV_inc
+- CMS_tW_8TeV_inc
+- ATLAS_tW_13TeV_inc
+- CMS_tW_13TeV_inc
+- ATLAS_tZ_13TeV_inc
+- ATLAS_tZ_13TeV_run2_inc
+- CMS_tZ_13TeV_inc
+- CMS_tZ_13TeV_2016_inc
+- ATLAS_CMS_SSinc_RunI
+- ATLAS_SSinc_RunII
+- CMS_SSinc_RunII
+- CMS_H_13TeV_2015_pTH
+- ATLAS_H_13TeV_2015_pTH
+- ATLAS_WH_Hbb_13TeV
+- ATLAS_ZH_Hbb_13TeV
+- ATLAS_WhelF_8TeV
+- ATLAS_ggF_ZZ_13TeV
+- CMS_ggF_aa_13TeV
+- ATLAS_WW_13TeV_2016_memu
+- ATLAS_WZ_13TeV_2016_mTWZ
+- CMS_WhelF_8TeV
+- CMS_WZ_13TeV_2016_pTZ
+- LEP_eeWW_182GeV
+- LEP_eeWW_189GeV
+- LEP_eeWW_198GeV
+- LEP_eeWW_206GeV
+- LEP_Zdata
+- LEP_alphaEW
+- LEP_Bhabha
+- LEP_BrW
+maxiter: 10000
+nlive: 500
+order: NLO
+resultID: Model_UV_9_NLO_HO
+result_path: /data/theorie/jthoeve/smefit_release/results
+theory_path: /data/theorie/jthoeve/smefit30_database/theory
+use_quad: true
+use_t0: true
+use_theory_covmat: true
+uv_couplings: true
