@@ -62,6 +62,7 @@ When using the code please cite:
 
     fitting_code/code_struct.md
     fitting_code/running.md
+    fitting_code/tutorial
 
 .. toctree::
     :maxdepth: 2
