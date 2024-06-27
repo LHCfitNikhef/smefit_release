@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib import cm, colors
+from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from rich.progress import track
 

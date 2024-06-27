@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from matplotlib import cm
 
 from .contours_2d import confidence_ellipse, plot_contours, split_solution
 from .latex_tools import latex_packages, multicolum_table_header
@@ -698,11 +697,10 @@ class CoefficientsPlotter:
             frameon=False,
         )
 
-        last_subplot_nr = idx + 1
-        if last_subplot_nr % grid_size == 0:
-            ax_logo_nr = last_subplot_nr + grid_size
+        if self.npar % grid_size == 0:
+            ax_logo_nr = self.npar + grid_size
         else:
-            ax_logo_nr = last_subplot_nr + last_subplot_nr % grid_size + 1
+            ax_logo_nr = self.npar + self.npar % grid_size + 1
 
         ax_logo = plt.subplot(grid_size, grid_size, ax_logo_nr)
 
