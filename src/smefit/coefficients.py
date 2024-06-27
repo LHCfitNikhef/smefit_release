@@ -213,7 +213,7 @@ class CoefficientManager:
 
     def set_free_parameters(self, value):
         """Set the values of the free parmaters"""
-        self._table.iloc[self.is_free, 0] = value.astype("float64")
+        self._table.iloc[self.is_free, 0] = value
 
     def set_constraints(self):
         r"""
