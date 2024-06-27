@@ -60,7 +60,7 @@ def plot_correlations(
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111)
 
-    cmap = cm.get_cmap("coolwarm")
+    cmap = plt.get_cmap("coolwarm")
     norm = colors.BoundaryNorm(np.arange(-1, 1.1, step=0.1), cmap.N)
 
     divider = make_axes_locatable(ax)
