@@ -122,6 +122,7 @@
 <span class="sd">Module for the generation of theory predictions</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 
 
 <div class="viewcode-block" id="flatten">
@@ -166,17 +167,19 @@
 <span class="sd">            SM + EFT theory predictions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">coefficients_values</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coefficients_values</span><span class="p">)</span>
+
     <span class="c1"># Compute total linear correction</span>
     <span class="c1"># note @ is slower when running with mpiexec</span>
-    <span class="n">summed_corrections</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+    <span class="n">summed_corrections</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
         <span class="s2">&quot;ij,j-&gt;i&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">LinearCorrections</span><span class="p">,</span> <span class="n">coefficients_values</span>
     <span class="p">)</span>
 
     <span class="c1"># Compute total quadratic correction</span>
     <span class="k">if</span> <span class="n">use_quad</span><span class="p">:</span>
-        <span class="n">coeff_outer_coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">coefficients_values</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">)</span>
+        <span class="n">coeff_outer_coeff</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">coefficients_values</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">)</span>
         <span class="c1"># note @ is slower when running with mpiexec</span>
-        <span class="n">summed_quad_corrections</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+        <span class="n">summed_quad_corrections</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
             <span class="s2">&quot;ij,j-&gt;i&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">QuadraticCorrections</span><span class="p">,</span> <span class="n">flatten</span><span class="p">(</span><span class="n">coeff_outer_coeff</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">summed_corrections</span> <span class="o">+=</span> <span class="n">summed_quad_corrections</span>

@@ -120,13 +120,16 @@
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Fitting the Wilson coefficients with |NS|&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 
+<span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">ultranest</span>
 <span class="kn">from</span> <span class="nn">rich.style</span> <span class="kn">import</span> <span class="n">Style</span>
 <span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
 <span class="kn">from</span> <span class="nn">ultranest</span> <span class="kn">import</span> <span class="n">stepsampler</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">log</span>
 <span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
 <span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">load_datasets</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Optimizer</span>
@@ -199,6 +202,8 @@
         <span class="n">target_post_unc</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">frac_remain</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
         <span class="n">store_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">vectorized</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">float64</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">external_chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -215,10 +220,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">target_evidence_unc</span> <span class="o">=</span> <span class="n">target_evidence_unc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target_post_unc</span> <span class="o">=</span> <span class="n">target_post_unc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frac_remain</span> <span class="o">=</span> <span class="n">frac_remain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vectorized</span> <span class="o">=</span> <span class="n">vectorized</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result_ID</span> <span class="o">=</span> <span class="n">result_ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pairwise_fits</span> <span class="o">=</span> <span class="n">pairwise_fits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">store_raw</span> <span class="o">=</span> <span class="n">store_raw</span>
+
+        <span class="c1"># Set coefficients relevant quantities</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_coeffs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">_objlist</span><span class="p">[</span><span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">is_free</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeffs_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">_table</span><span class="o">.</span><span class="n">index</span>
+
+        <span class="c1"># Ultranest requires float64 below 11 dof</span>
+        <span class="k">if</span> <span class="n">float64</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">npar</span> <span class="o">&lt;</span> <span class="mi">11</span><span class="p">:</span>
+            <span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;jax_enable_x64&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="USOptimizer.from_dict">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.from_dict">[docs]</a>
@@ -294,6 +308,8 @@
             <span class="p">)</span>
 
         <span class="n">store_raw</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;store_raw&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">vectorized</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vectorized&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">float64</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;float64&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="n">use_multiplicative_prescription</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="s2">&quot;use_multiplicative_prescription&quot;</span><span class="p">,</span> <span class="kc">False</span>
@@ -316,6 +332,8 @@
             <span class="n">target_post_unc</span><span class="o">=</span><span class="n">target_post_unc</span><span class="p">,</span>
             <span class="n">frac_remain</span><span class="o">=</span><span class="n">frac_remain</span><span class="p">,</span>
             <span class="n">store_raw</span><span class="o">=</span><span class="n">store_raw</span><span class="p">,</span>
+            <span class="n">vectorized</span><span class="o">=</span><span class="n">vectorized</span><span class="p">,</span>
+            <span class="n">float64</span><span class="o">=</span><span class="n">float64</span><span class="p">,</span>
             <span class="n">external_chi2</span><span class="o">=</span><span class="n">external_chi2</span><span class="p">,</span>
         <span class="p">)</span></div>
 
@@ -323,34 +341,98 @@
 <div class="viewcode-block" id="USOptimizer.chi2_func_ns">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.chi2_func_ns">[docs]</a>
     <span class="k">def</span> <span class="nf">chi2_func_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wrap the chi2 in a function for the optimizer. Pass noise and</span>
-<span class="sd">        data info as args. Log the chi2 value and values of the coefficients.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the chi2 function for |NS|.</span>
+<span class="sd">        It is simplified with respect to the one in the Optimizer class,</span>
+<span class="sd">        so that it can be compiled with jax.jit.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        params : jnp.ndarray</span>
+<span class="sd">            Wilson coefficients</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">chi2_tot</span> <span class="o">=</span> <span class="n">chi2</span><span class="o">.</span><span class="n">compute_chi2</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span><span class="p">,</span>
+                <span class="n">params</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">use_quad</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">use_multiplicative_prescription</span><span class="p">,</span>
+                <span class="n">use_replica</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">chi2_tot</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_ext</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chi2_ext</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_ext</span><span class="p">:</span>
+                <span class="n">chi2_ext_i</span> <span class="o">=</span> <span class="n">chi2_ext</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+                <span class="n">chi2_tot</span> <span class="o">+=</span> <span class="n">chi2_ext_i</span>
+
+        <span class="k">return</span> <span class="n">chi2_tot</span></div>
+
+
+<div class="viewcode-block" id="USOptimizer.compute_fixed_coeff">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.compute_fixed_coeff">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_fixed_coeff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constrain</span><span class="p">,</span> <span class="n">param_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the fixed coefficient.&quot;&quot;&quot;</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">add_factor_dict</span> <span class="ow">in</span> <span class="n">constrain</span><span class="p">:</span>
+            <span class="n">free_dofs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">param_dict</span><span class="p">[</span><span class="n">fixed_name</span><span class="p">]</span> <span class="k">for</span> <span class="n">fixed_name</span> <span class="ow">in</span> <span class="n">add_factor_dict</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">fact_exp</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">add_factor_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">temp</span> <span class="o">+=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">fact_exp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">free_dofs</span><span class="p">,</span> <span class="n">fact_exp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">temp</span></div>
+
+
+<div class="viewcode-block" id="USOptimizer.produce_all_params">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.produce_all_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">produce_all_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Produce all parameters from the free parameters.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        params : np.ndarray</span>
-<span class="sd">            noise and data info</span>
+<span class="sd">        params : jnp.ndarray</span>
+<span class="sd">            free parameters</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        current_chi2 : np.ndarray</span>
-<span class="sd">            chi2 function</span>
+<span class="sd">        all_params : jnp.ndarray</span>
+<span class="sd">            all parameters</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
+        <span class="n">is_free</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">is_free</span>
+        <span class="n">num_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">size</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func</span><span class="p">()</span></div>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">is_free</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">params</span>
+
+        <span class="n">all_params</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_params</span><span class="p">)</span>
+        <span class="n">all_params</span> <span class="o">=</span> <span class="n">all_params</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">is_free</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="n">param_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coeffs_index</span><span class="p">,</span> <span class="n">all_params</span><span class="p">))</span>
+
+        <span class="n">fixed_coefficients</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">coeff</span> <span class="k">for</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_coeffs</span> <span class="k">if</span> <span class="n">coeff</span><span class="o">.</span><span class="n">constrain</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">coefficient_fixed</span> <span class="ow">in</span> <span class="n">fixed_coefficients</span><span class="p">:</span>
+            <span class="n">fixed_coeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_fixed_coeff</span><span class="p">(</span>
+                <span class="n">coefficient_fixed</span><span class="o">.</span><span class="n">constrain</span><span class="p">,</span> <span class="n">param_dict</span>
+            <span class="p">)</span>
+            <span class="n">fixed_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs_index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">coefficient_fixed</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">all_params</span> <span class="o">=</span> <span class="n">all_params</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">fixed_index</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">fixed_coeff</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">all_params</span></div>
 
 
 <div class="viewcode-block" id="USOptimizer.gaussian_loglikelihood">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.gaussian_loglikelihood">[docs]</a>
-    <span class="k">def</span> <span class="nf">gaussian_loglikelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypercube</span><span class="p">):</span>
+    <span class="nd">@partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;self&quot;</span><span class="p">])</span>
+    <span class="k">def</span> <span class="nf">gaussian_loglikelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Multi gaussian log likelihood function.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        hypercube :  np.ndarray</span>
-<span class="sd">            hypercube prior</span>
+<span class="sd">        params :  np.ndarray</span>
+<span class="sd">            params prior</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -358,11 +440,14 @@
 <span class="sd">            multi gaussian log likelihood</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func_ns</span><span class="p">(</span><span class="n">hypercube</span><span class="p">)</span></div>
+        <span class="n">all_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">produce_all_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">chi2_func_ns</span><span class="p">(</span><span class="n">all_params</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="USOptimizer.flat_prior">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.flat_prior">[docs]</a>
+    <span class="nd">@partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;self&quot;</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">flat_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypercube</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the prior function.</span>
 
@@ -390,13 +475,21 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_raw</span><span class="p">:</span>
             <span class="n">log_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span>
 
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorized</span><span class="p">:</span>
+            <span class="n">loglikelihood</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gaussian_loglikelihood</span><span class="p">)</span>
+            <span class="n">flat_prior</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flat_prior</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">loglikelihood</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gaussian_loglikelihood</span>
+            <span class="n">flat_prior</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flat_prior</span>
+
         <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">sampler</span> <span class="o">=</span> <span class="n">ultranest</span><span class="o">.</span><span class="n">ReactiveNestedSampler</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gaussian_loglikelihood</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">flat_prior</span><span class="p">,</span>
+            <span class="n">loglikelihood</span><span class="p">,</span>
+            <span class="n">flat_prior</span><span class="p">,</span>
             <span class="n">log_dir</span><span class="o">=</span><span class="n">log_dir</span><span class="p">,</span>
             <span class="n">resume</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">vectorized</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vectorized</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">npar</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
             <span class="c1"># set up step sampler. Here, we use a differential evolution slice sampler:</span>
