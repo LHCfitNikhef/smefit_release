@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import yaml
-from matplotlib import cm, colors
+from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from ..coefficients import CoefficientManager
@@ -324,7 +324,7 @@ class PcaCalculator:
         fig = plt.figure(figsize=figsize)
         ax = fig.add_subplot(111)
 
-        cmap = cm.get_cmap("Blues")
+        cmap = plt.get_cmap("Blues")
         norm = colors.BoundaryNorm(np.arange(1.1, step=0.1), cmap.N)
 
         cax = ax.matshow(pc_norm, cmap=cmap, norm=norm)

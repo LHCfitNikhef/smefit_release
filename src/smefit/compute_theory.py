@@ -4,6 +4,7 @@
 Module for the generation of theory predictions
 """
 import numpy as np
+import jax.numpy as jnp
 
 
 def flatten(quad_mat, axis=0):
@@ -43,17 +44,19 @@ def make_predictions(
             SM + EFT theory predictions
     """
 
+    coefficients_values = jnp.array(coefficients_values)
+
     # Compute total linear correction
     # note @ is slower when running with mpiexec
-    summed_corrections = np.einsum(
+    summed_corrections = jnp.einsum(
         "ij,j->i", dataset.LinearCorrections, coefficients_values
     )
 
     # Compute total quadratic correction
     if use_quad:
-        coeff_outer_coeff = np.outer(coefficients_values, coefficients_values)
+        coeff_outer_coeff = jnp.outer(coefficients_values, coefficients_values)
         # note @ is slower when running with mpiexec
-        summed_quad_corrections = np.einsum(
+        summed_quad_corrections = jnp.einsum(
             "ij,j->i", dataset.QuadraticCorrections, flatten(coeff_outer_coeff)
         )
         summed_corrections += summed_quad_corrections

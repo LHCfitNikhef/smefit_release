@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 """Fitting the Wilson coefficients with |NS|"""
 import time
+from functools import partial
 
+import jax
+import jax.numpy as jnp
 import ultranest
 from rich.style import Style
 from rich.table import Table
 from ultranest import stepsampler
 
-from .. import log
+from .. import chi2, log
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
@@ -78,6 +81,8 @@ class USOptimizer(Optimizer):
         target_post_unc=0.5,
         frac_remain=0.01,
         store_raw=False,
+        vectorized=False,
+        float64=False,
         external_chi2=None,
     ):
         super().__init__(
@@ -94,10 +99,19 @@ class USOptimizer(Optimizer):
         self.target_evidence_unc = target_evidence_unc
         self.target_post_unc = target_post_unc
         self.frac_remain = frac_remain
+        self.vectorized = vectorized
         self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
         self.pairwise_fits = pairwise_fits
         self.store_raw = store_raw
+
+        # Set coefficients relevant quantities
+        self.fixed_coeffs = self.coefficients._objlist[~self.coefficients.is_free]
+        self.coeffs_index = self.coefficients._table.index
+
+        # Ultranest requires float64 below 11 dof
+        if float64 or self.npar < 11:
+            jax.config.update("jax_enable_x64", True)
 
     @classmethod
     def from_dict(cls, config):
@@ -171,6 +185,8 @@ class USOptimizer(Optimizer):
             )
 
         store_raw = config.get("store_raw", False)
+        vectorized = config.get("vectorized", False)
+        float64 = config.get("float64", False)
 
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
@@ -193,35 +209,95 @@ class USOptimizer(Optimizer):
             target_post_unc=target_post_unc,
             frac_remain=frac_remain,
             store_raw=store_raw,
+            vectorized=vectorized,
+            float64=float64,
             external_chi2=external_chi2,
         )
 
     def chi2_func_ns(self, params):
-        """Wrap the chi2 in a function for the optimizer. Pass noise and
-        data info as args. Log the chi2 value and values of the coefficients.
+        """Compute the chi2 function for |NS|.
+        It is simplified with respect to the one in the Optimizer class,
+        so that it can be compiled with jax.jit.
+        Parameters
+        ----------
+        params : jnp.ndarray
+            Wilson coefficients
+        """
+
+        if self.loaded_datasets is not None:
+            chi2_tot = chi2.compute_chi2(
+                self.loaded_datasets,
+                params,
+                self.use_quad,
+                self.use_multiplicative_prescription,
+                use_replica=False,
+            )
+        else:
+            chi2_tot = 0
+
+        if self.chi2_ext is not None:
+            for chi2_ext in self.chi2_ext:
+                chi2_ext_i = chi2_ext(params)
+                chi2_tot += chi2_ext_i
+
+        return chi2_tot
+
+    def compute_fixed_coeff(self, constrain, param_dict):
+        """Compute the fixed coefficient."""
+        temp = 0.0
+        for add_factor_dict in constrain:
+            free_dofs = jnp.array(
+                [param_dict[fixed_name] for fixed_name in add_factor_dict]
+            )
+            fact_exp = jnp.array(list(add_factor_dict.values()), dtype=float)
+            temp += jnp.prod(fact_exp[:, 0] * jnp.power(free_dofs, fact_exp[:, 1]))
+        return temp
+
+    def produce_all_params(self, params):
+        """Produce all parameters from the free parameters.
 
         Parameters
         ----------
-        params : np.ndarray
-            noise and data info
+        params : jnp.ndarray
+            free parameters
 
         Returns
         -------
-        current_chi2 : np.ndarray
-            chi2 function
+        all_params : jnp.ndarray
+            all parameters
         """
-        self.coefficients.set_free_parameters(params)
-        self.coefficients.set_constraints()
+        is_free = self.coefficients.is_free
+        num_params = self.coefficients.size
 
-        return self.chi2_func()
+        if all(is_free):
+            return params
 
-    def gaussian_loglikelihood(self, hypercube):
+        all_params = jnp.zeros(num_params)
+        all_params = all_params.at[is_free].set(params)
+
+        param_dict = dict(zip(self.coeffs_index, all_params))
+
+        fixed_coefficients = [
+            coeff for coeff in self.fixed_coeffs if coeff.constrain is not None
+        ]
+
+        for coefficient_fixed in fixed_coefficients:
+            fixed_coeff = self.compute_fixed_coeff(
+                coefficient_fixed.constrain, param_dict
+            )
+            fixed_index = self.coeffs_index.get_loc(coefficient_fixed.name)
+            all_params = all_params.at[fixed_index].set(fixed_coeff)
+
+        return all_params
+
+    @partial(jax.jit, static_argnames=["self"])
+    def gaussian_loglikelihood(self, params):
         """Multi gaussian log likelihood function.
 
         Parameters
         ----------
-        hypercube :  np.ndarray
-            hypercube prior
+        params :  np.ndarray
+            params prior
 
         Returns
         -------
@@ -229,8 +305,11 @@ class USOptimizer(Optimizer):
             multi gaussian log likelihood
         """
 
-        return -0.5 * self.chi2_func_ns(hypercube)
+        all_params = self.produce_all_params(params)
 
+        return -0.5 * self.chi2_func_ns(all_params)
+
+    @partial(jax.jit, static_argnames=["self"])
     def flat_prior(self, hypercube):
         """Update the prior function.
 
@@ -255,13 +334,21 @@ class USOptimizer(Optimizer):
         if self.store_raw:
             log_dir = self.results_path
 
+        if self.vectorized:
+            loglikelihood = jax.vmap(self.gaussian_loglikelihood)
+            flat_prior = jax.vmap(self.flat_prior)
+        else:
+            loglikelihood = self.gaussian_loglikelihood
+            flat_prior = self.flat_prior
+
         t1 = time.time()
         sampler = ultranest.ReactiveNestedSampler(
             self.free_parameters.index.tolist(),
-            self.gaussian_loglikelihood,
-            self.flat_prior,
+            loglikelihood,
+            flat_prior,
             log_dir=log_dir,
             resume=True,
+            vectorized=self.vectorized,
         )
         if self.npar > 10:
             # set up step sampler. Here, we use a differential evolution slice sampler:

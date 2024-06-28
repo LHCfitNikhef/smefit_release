@@ -72,7 +72,9 @@ lepsilon: 0.05 #  Terminate when live point likelihoods are all the same, within
 target_evidence_unc: 0.5 # target evidence uncertanty
 target_post_unc: 0.5 # target posterior uncertanty
 frac_remain: 0.01 # Set to a higher number (0.5) if you know the posterior is simple.
-store_raw: false # if true strare the raw result and enable resuming the job.
+store_raw: false # if true, store the raw result and enable resuming the job.
+vectorized: false # if true, ultranest samples a vector from the prior (recommended for large scale problems)
+float64: false # double precision
 
 
 #MC settings

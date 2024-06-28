@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib import cm, colors
+from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from rich.progress import track
 
@@ -356,7 +356,7 @@ class FisherCalculator:
             ax = plt.gca()
 
         # colour map
-        cmap_full = cm.get_cmap("Blues")
+        cmap_full = plt.get_cmap("Blues")
         cmap = colors.LinearSegmentedColormap.from_list(
             f"trunc({{{cmap_full.name}}},{{0}},{{0.8}})",
             cmap_full(np.linspace(0, 0.8, 100)),

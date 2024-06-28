@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from matplotlib import cm
 
 from .contours_2d import confidence_ellipse, plot_contours, split_solution
 from .latex_tools import latex_packages, multicolum_table_header
@@ -178,7 +177,7 @@ class CoefficientsPlotter:
         # Spacing between fit results
         nfits = len(bounds)
         y_shift = np.linspace(-0.2 * nfits, 0.2 * nfits, nfits)
-        colors = cm.get_cmap("tab20")
+        colors = plt.get_cmap("tab20")
 
         def plot_error_bars(ax, vals, cnt, i, label=None):
             ax.errorbar(
@@ -640,7 +639,7 @@ class CoefficientsPlotter:
         grid_size = int(np.sqrt(self.npar)) + 1
         fig = plt.figure(figsize=(grid_size * 4, grid_size * 4))
         # loop on coefficients
-        cnt = 0
+
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
             try:
                 ax = plt.subplot(grid_size, grid_size, idx + 1)
@@ -682,7 +681,6 @@ class CoefficientsPlotter:
                 )
                 ax.tick_params(which="both", direction="in", labelsize=22.5)
                 ax.tick_params(labelleft=False)
-            cnt += 1
 
         lines, labels = fig.axes[0].get_legend_handles_labels()
         for axes in fig.axes:
@@ -699,11 +697,15 @@ class CoefficientsPlotter:
             frameon=False,
         )
 
-        ax_logo_nr = int(np.ceil(cnt / grid_size)) * grid_size
+        if self.npar % grid_size == 0:
+            ax_logo_nr = self.npar + grid_size
+        else:
+            ax_logo_nr = self.npar + self.npar % grid_size + 1
+
         ax_logo = plt.subplot(grid_size, grid_size, ax_logo_nr)
 
         plt.axis("off")
-        self._plot_logo(ax_logo, [0, 1, 0.001, 0.4])
+        self._plot_logo(ax_logo, [0, 1, 0.6, 1])
 
         fig.tight_layout(
             rect=[0, 0.05 * (5.0 / grid_size), 1, 1 - 0.08 * (5.0 / grid_size)]
