@@ -39,7 +39,7 @@ def check_file(path):
         raise FileNotFoundError(f"File {path} does not exist.")
 
 
-def check_missing_oparators(loaded_corrections, coeff_config):
+def check_missing_operators(loaded_corrections, coeff_config):
     """Check if all the coefficient in the runcard are also present inside the theory tables."""
     loaded_corrections = set(loaded_corrections)
     missing_operators = [k for k in coeff_config if k not in loaded_corrections]
@@ -96,7 +96,9 @@ class Loader:
             self.dataspec["theory_covmat"],
             self.dataspec["lin_corrections"],
             self.dataspec["quad_corrections"],
+            self.dataspec["scales"],
         ) = self.load_theory(
+            self.setname,
             operators_to_keep,
             order,
             use_quad,
@@ -191,8 +193,9 @@ class Loader:
         # here return both exp sys and t0 modified sys
         return central_values, df, df_t0, stat_error, luminosity
 
+    @staticmethod
     def load_theory(
-        self,
+        setname,
         operators_to_keep,
         order,
         use_quad,
@@ -225,7 +228,7 @@ class Loader:
             quad_dict: dict
                 dictionary with |HO| corrections, empty if not use_quad
         """
-        theory_file = self._theory_folder / f"{self.setname}.json"
+        theory_file = Loader.theory_path / f"{setname}.json"
         check_file(theory_file)
         # load theory predictions
         with open(theory_file, encoding="utf-8") as f:
@@ -282,7 +285,12 @@ class Loader:
         th_cov = np.zeros((best_sm.size, best_sm.size))
         if use_theory_covmat:
             th_cov = raw_th_data["theory_cov"]
-        return raw_th_data["best_sm"], th_cov, lin_dict_to_keep, quad_dict_to_keep
+        
+        scales = [None] * len(best_sm)
+        # check if scales are present in the theory file
+        if "scales" in raw_th_data:
+            scales = raw_th_data["scales"]
+        return raw_th_data["best_sm"], th_cov, lin_dict_to_keep, quad_dict_to_keep, scales
 
     @property
     def n_data(self):
@@ -479,6 +487,7 @@ def load_datasets(
     rot_to_fit_basis=None,
     has_uv_couplings=False,
     has_external_chi2=False,
+    has_rge=False,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
@@ -524,7 +533,7 @@ def load_datasets(
     if theory_path is not None:
         Loader.theory_path = pathlib.Path(theory_path)
     else:
-        Loader.theory_path = pathlib.Path(commondata_path)
+        Loader.theory_path = pathlib.Path(commondata_path)      
 
     for sset in np.unique(datasets):
         dataset = Loader(
@@ -554,12 +563,12 @@ def load_datasets(
     sorted_keys = None
     # if uv couplings are present allow for op which are not in the
     # theory files
-    if has_uv_couplings or has_external_chi2:
+    if has_uv_couplings or has_external_chi2 or has_rge:
         sorted_keys = np.unique((*operators_to_keep,))
     operators_names, lin_corr_values = construct_corrections_matrix(
         lin_corr_list, n_data_tot, sorted_keys
     )
-    check_missing_oparators(operators_names, operators_to_keep)
+    check_missing_operators(operators_names, operators_to_keep)
 
     if use_quad:
         quad_corrections_names = []
