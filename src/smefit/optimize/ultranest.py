@@ -109,9 +109,8 @@ class USOptimizer(Optimizer):
         self.fixed_coeffs = self.coefficients._objlist[~self.coefficients.is_free]
         self.coeffs_index = self.coefficients._table.index
 
-        if float64:
-            jax.config.update("jax_enable_x64", True)
-        elif self.npar < 11:  # Ultranest requires float64 below 11 dof
+        # Ultranest requires float64 below 11 dof
+        if float64 or self.npar < 11:
             jax.config.update("jax_enable_x64", True)
 
     @classmethod
