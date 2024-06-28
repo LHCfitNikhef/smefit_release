@@ -1,23 +1,19 @@
 # -*- coding: utf-8 -*-
 """Fitting the Wilson coefficients with |NS|"""
 import time
-
 from functools import partial
+
+import jax
+import jax.numpy as jnp
 import ultranest
 from rich.style import Style
 from rich.table import Table
 from ultranest import stepsampler
 
-import jax
-import jax.numpy as jnp
-
-from .. import log
+from .. import chi2, log
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
-from .. import chi2
-
-jax.config.update("jax_enable_x64", True)
 
 try:
     from mpi4py import MPI
@@ -86,6 +82,7 @@ class USOptimizer(Optimizer):
         frac_remain=0.01,
         store_raw=False,
         vectorized=False,
+        float64=False,
         external_chi2=None,
     ):
         super().__init__(
@@ -111,6 +108,11 @@ class USOptimizer(Optimizer):
         # Set coefficients relevant quantities
         self.fixed_coeffs = self.coefficients._objlist[~self.coefficients.is_free]
         self.coeffs_index = self.coefficients._table.index
+
+        if float64:
+            jax.config.update("jax_enable_x64", True)
+        elif self.npar < 11:  # Ultranest requires float64 below 11 dof
+            jax.config.update("jax_enable_x64", True)
 
     @classmethod
     def from_dict(cls, config):
@@ -185,6 +187,7 @@ class USOptimizer(Optimizer):
 
         store_raw = config.get("store_raw", False)
         vectorized = config.get("vectorized", False)
+        float64 = config.get("float64", False)
 
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
@@ -208,6 +211,7 @@ class USOptimizer(Optimizer):
             frac_remain=frac_remain,
             store_raw=store_raw,
             vectorized=vectorized,
+            float64=float64,
             external_chi2=external_chi2,
         )
 
