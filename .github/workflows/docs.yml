@@ -35,6 +35,7 @@ jobs:
           pip install sphinxcontrib-bibtex
           pip install nbsphinx
           pip install recommonmark
+          conda install pandoc
           cd docs
           mkdir -p source/development
           make html

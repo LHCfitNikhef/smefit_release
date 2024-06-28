@@ -329,9 +329,7 @@ class TestOptimize_NS:
 
     def test_chi2_func_ns(self):
         # set free parameters and constrain to random values generated above
-        self.test_opt.coefficients.set_free_parameters(wilson_coeff)
-        self.test_opt.coefficients.set_constraints()
-        params = self.test_opt.coefficients.value
+        params = self.test_opt.produce_all_params(wilson_coeff)
 
         # test experimental chi2 in case of no cross correlations between dataset
         np.testing.assert_allclose(
