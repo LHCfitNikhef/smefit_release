@@ -323,9 +323,21 @@ class USOptimizer(Optimizer):
         flat_prior : np.ndarray
             updated hypercube prior
         """
+
         min_val = self.free_parameters.minimum.values
         max_val = self.free_parameters.maximum.values
-        return hypercube * (max_val - min_val) + min_val
+        transformed = hypercube * (max_val - min_val) + min_val
+
+        idx_Obp = self.free_parameters.index.get_loc("Obp")
+        value_Obp = hypercube[idx_Obp]
+
+        transformed_Obp = jnp.where(value_Obp > 0.5,
+                         value_Obp * (-0.35 + 0.38) - 0.38,
+                         value_Obp * (0.004 + 0.004) - 0.004)
+
+        hypercube_disjoint = transformed.at[idx_Obp].set(transformed_Obp)
+
+        return hypercube_disjoint
 
     def run_sampling(self):
         """Run the minimization with Ultra nest."""
