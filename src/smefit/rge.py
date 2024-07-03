@@ -23,6 +23,22 @@ import jax.numpy as jnp
 from numpy import ComplexWarning
 import pathlib
 
+
+# switch off the SM - EFT mixing, since SMEFiT assumes that the
+# RGE solution is linearised
+# Keep a reference to the original beta function
+original_beta = wilson.run.smeft.beta.beta
+
+
+def beta_wrapper(C, HIGHSCALE=np.inf, *args, **kwargs):
+    return original_beta(C, HIGHSCALE, *args, **kwargs)
+
+
+wilson.run.smeft.beta.beta = beta_wrapper
+wilson.run.smeft.beta.beta_array = partial(
+    wilson.run.smeft.beta.beta_array, HIGHSCALE=np.inf
+)
+
 # Suppress the ComplexWarning
 warnings.filterwarnings("ignore", category=ComplexWarning)
 
@@ -71,7 +87,12 @@ QCD_only = {
 
 class RGE:
     def __init__(
-        self, wc_names, init_scale, accuracy="integrate", adm_order="full", ckm="top"
+        self,
+        wc_names,
+        init_scale,
+        accuracy="integrate",
+        adm_order="full",
+        ckm="top",
     ):
         # order the Wilson coefficients alphabetically
         self.wc_names = sorted(wc_names)
