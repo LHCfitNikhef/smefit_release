@@ -1,3 +1,16 @@
+### Patch of a CKM function, so that the CP violating
+### phase is set to gamma and not computed explicitly
+### See https://github.com/wilson-eft/wilson/issues/113#issuecomment-2179273979
+### This needs to be done before the import of wilson
+import ckmutil.ckm
+from copy import deepcopy
+from functools import partial
+
+# copying so we keep the original function
+ckm_tree = deepcopy(ckmutil.ckm.ckm_tree)
+ckmutil.ckm.ckm_tree = partial(ckm_tree, delta_expansion_order=0)
+### End of patch
+
 import wilson
 from smefit.wcxf import wcxf_translate, inverse_wcxf_translate
 import smefit.log as log
@@ -15,17 +28,74 @@ warnings.filterwarnings("ignore", category=ComplexWarning)
 
 _logger = log.logging.getLogger(__name__)
 
+# copying so we could use the default parameters later
+default_params = wilson.run.smeft.smpar.p.copy()
+
+top_CKM = {
+    "Vus": 0.0,
+    "Vub": 0.0,
+    "Vcb": 0.0,
+    "gamma": 0.0,
+    "m_b": 0.0,
+    "m_s": 0.0,
+    "m_c": 0.0,
+    "m_u": 0.0,
+    "m_d": 0.0,
+    "m_e": 0.0,
+    "m_mu": 0.0,
+    "m_tau": 0.0,
+}
+
+no_CKM = {
+    "Vus": 0.0,
+    "Vub": 0.0,
+    "Vcb": 0.0,
+    "gamma": 0.0,
+    "m_b": 0.0,
+    "m_s": 0.0,
+    "m_c": 0.0,
+    "m_u": 0.0,
+    "m_d": 0.0,
+    "m_e": 0.0,
+    "m_mu": 0.0,
+    "m_tau": 0.0,
+    "m_t": 0.0,
+}
+
+QCD_only = {
+    "alpha_e": 0.0,
+    "m_W": 1e-20,
+    "m_h": 1e-20,
+}
+
 
 class RGE:
-    def __init__(self, wc_names, init_scale, accuracy="integrate"):
+    def __init__(
+        self, wc_names, init_scale, accuracy="integrate", adm_order="full", ckm="top"
+    ):
         # order the Wilson coefficients alphabetically
         self.wc_names = sorted(wc_names)
         self.init_scale = init_scale
         self.accuracy = accuracy
 
+        # set the anomalous dimension matrix parameters
+        if ckm == "top":
+            wilson.run.smeft.smpar.p.update(**top_CKM)
+        elif ckm == "none":
+            wilson.run.smeft.smpar.p.update(**no_CKM)
+        elif ckm == "full":
+            wilson.run.smeft.smpar.p.update(**default_params)
+        else:
+            raise ValueError(f"CKM parameter not supported: {ckm}")
+
+        if adm_order == "QCD":
+            wilson.run.smeft.smpar.p.update(**QCD_only)
+
         _logger.info(
             f"Initializing RGE runner with initial scale {init_scale} GeV and accuracy {accuracy}."
         )
+        _logger.info(f"Using CKM parameterization: {ckm}.")
+        _logger.info(f"Using anomalous dimension order: {adm_order}.")
 
     def RGEmatrix_dict(self, scale):
         # compute the RGE matrix at the scale `scale`
@@ -175,8 +245,10 @@ def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None
     init_scale = rge_dict.get("init_scale", 1e3)
     obs_scale = rge_dict.get("obs_scale", 91.1876)
     smeft_accuracy = rge_dict.get("smeft_accuracy", "integrate")
+    adm_order = rge_dict.get("adm_order", "full")
+    ckm = rge_dict.get("ckm", "top")
     coeff_list = list(operators_to_keep.keys())
-    rge_runner = RGE(coeff_list, init_scale, smeft_accuracy)
+    rge_runner = RGE(coeff_list, init_scale, smeft_accuracy, adm_order, ckm)
     # if it is a float, it is a static scale
     if type(obs_scale) is float or type(obs_scale) is int:
         rgemat = rge_runner.RGEmatrix(obs_scale)
