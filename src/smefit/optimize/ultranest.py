@@ -326,18 +326,47 @@ class USOptimizer(Optimizer):
 
         min_val = self.free_parameters.minimum.values
         max_val = self.free_parameters.maximum.values
-        transformed = hypercube * (max_val - min_val) + min_val
+        hypercube_transformed = hypercube * (max_val - min_val) + min_val
+
+        idx_Ocp = self.free_parameters.index.get_loc("Ocp")
+        value_Ocp = hypercube[idx_Ocp]  # between 0 and 1
 
         idx_Obp = self.free_parameters.index.get_loc("Obp")
         value_Obp = hypercube[idx_Obp]
 
-        transformed_Obp = jnp.where(value_Obp > 0.5,
-                         value_Obp * (-0.35 + 0.38) - 0.38,
-                         value_Obp * (0.004 + 0.004) - 0.004)
+        idx_Otap = self.free_parameters.index.get_loc("Otap")
+        value_Otap = hypercube[idx_Otap]
 
-        hypercube_disjoint = transformed.at[idx_Obp].set(transformed_Obp)
+        Ocp_min_1, Ocp_max_1 = -0.2, 0.2
+        Ocp_min_2, Ocp_max_2 = 0.25, 0.50
 
-        return hypercube_disjoint
+        Obp_min_1, Obp_max_1 = -0.4, -0.35
+        Obp_min_2, Obp_max_2 = -0.05, 0.05
+
+        Otap_min_1, Otap_max_1 = -0.05, 0.05
+        Otap_min_2, Otap_max_2 = 0.4, 0.6
+
+        threshold_Ocp = (Ocp_max_1 - Ocp_min_1) / ((Ocp_max_1 - Ocp_min_1) + (Ocp_max_2 - Ocp_min_2))
+        threshold_Obp = (Obp_max_1 - Obp_min_1) / ((Obp_max_1 - Obp_min_1) + (Obp_max_2 - Obp_min_2))
+        threshold_Otap = (Otap_max_1 - Otap_min_1) / ((Otap_max_1 - Otap_min_1) + (Otap_max_2 - Otap_min_2))
+
+        transformed_Ocp = jnp.where(value_Ocp > threshold_Ocp,
+                                    ((value_Ocp - threshold_Ocp) / (1 - threshold_Ocp)) * (Ocp_max_2 - Ocp_min_2) + Ocp_min_2,
+                                    (value_Ocp / threshold_Ocp) * (Ocp_max_1 - Ocp_min_1) + Ocp_min_1)
+
+        transformed_Obp = jnp.where(value_Obp > threshold_Obp,
+                                    ((value_Obp - threshold_Obp) / (1 - threshold_Obp)) * (Obp_max_2 - Obp_min_2) + Obp_min_2,
+                                    (value_Obp / threshold_Obp) * (Obp_max_1 - Obp_min_1) + Obp_min_1)
+
+        transformed_Otap = jnp.where(value_Otap > threshold_Otap,
+                                    ((value_Otap - threshold_Otap) / (1 - threshold_Otap)) * (Otap_max_2 - Otap_min_2) + Otap_min_2,
+                                    (value_Otap / threshold_Otap) * (Otap_max_1 - Otap_min_1) + Otap_min_1)
+
+        hypercube_transformed = hypercube_transformed.at[idx_Ocp].set(transformed_Ocp)
+        hypercube_transformed = hypercube_transformed.at[idx_Obp].set(transformed_Obp)
+        hypercube_transformed = hypercube_transformed.at[idx_Otap].set(transformed_Otap)
+
+        return hypercube_transformed
 
     def run_sampling(self):
         """Run the minimization with Ultra nest."""
