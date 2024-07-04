@@ -91,7 +91,7 @@ class RGE:
         wc_names,
         init_scale,
         accuracy="integrate",
-        adm_order="full",
+        adm_QCD=False,
         ckm="top",
     ):
         # order the Wilson coefficients alphabetically
@@ -109,14 +109,17 @@ class RGE:
         else:
             raise ValueError(f"CKM parameter not supported: {ckm}")
 
-        if adm_order == "QCD":
+        _logger.info(f"Using CKM parameterization: {ckm}.")
+
+        if adm_QCD:
             wilson.run.smeft.smpar.p.update(**QCD_only)
+            _logger.info(f"Using anomalous dimension order: QCD.")
+        else:
+            _logger.info(f"Using anomalous dimension order: full.")
 
         _logger.info(
             f"Initializing RGE runner with initial scale {init_scale} GeV and accuracy {accuracy}."
         )
-        _logger.info(f"Using CKM parameterization: {ckm}.")
-        _logger.info(f"Using anomalous dimension order: {adm_order}.")
 
     def RGEmatrix_dict(self, scale):
         # compute the RGE matrix at the scale `scale`
@@ -266,10 +269,10 @@ def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None
     init_scale = rge_dict.get("init_scale", 1e3)
     obs_scale = rge_dict.get("obs_scale", 91.1876)
     smeft_accuracy = rge_dict.get("smeft_accuracy", "integrate")
-    adm_order = rge_dict.get("adm_order", "full")
+    adm_QCD = rge_dict.get("adm_QCD", "full")
     ckm = rge_dict.get("ckm", "top")
     coeff_list = list(operators_to_keep.keys())
-    rge_runner = RGE(coeff_list, init_scale, smeft_accuracy, adm_order, ckm)
+    rge_runner = RGE(coeff_list, init_scale, smeft_accuracy, adm_QCD, ckm)
     # if it is a float, it is a static scale
     if type(obs_scale) is float or type(obs_scale) is int:
         rgemat = rge_runner.RGEmatrix(obs_scale)
