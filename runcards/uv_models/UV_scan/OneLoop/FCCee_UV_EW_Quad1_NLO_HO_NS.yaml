@@ -265,7 +265,7 @@ coefficients:
   lamPhi:
     max: 1000
     min: -1000
-data_path: /home/alejo/smefit_ewpo/smefit30_database/commondata_projections_L0
+data_path: /home/alejo/smefit_database/commondata_projections_L0
 datasets:
 - ATLAS_CMS_SSinc_RunI
 - ATLAS_CMS_tt_AC_8TeV
@@ -456,13 +456,15 @@ datasets:
 - FCCee_365_ww_leptonic_optim_obs
 - FCCee_365_ww_semilep_optim_obs
 - FCCee_365_tt_optim_obs
-
+external_chi2:
+  OptimalWW: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
+  Optimaltt: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
 maxiter: 10000
 nlive: 100
 order: NLO
 resultID: Model_EW_Quad_12_NLO_HO_FCC
 result_path: /home/alejo/smefit_results/smefit_fcc_uv
-theory_path: /home/alejo/smefit_ewpo/smefit30_database/theory
+theory_path: /home/alejo/smefit_database/theory
 use_quad: true
 use_t0: false
 use_theory_covmat: true
