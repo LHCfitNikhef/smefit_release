@@ -658,7 +658,7 @@ class CoefficientsPlotter:
                     ax.hist(
                         solution2,
                         bins="fd",
-                        density=True,
+                        density=False,
                         color=colors[clr_idx],
                         edgecolor="black",
                         alpha=0.3,
@@ -666,7 +666,7 @@ class CoefficientsPlotter:
                 ax.hist(
                     solution,
                     bins="fd",
-                    density=True,
+                    density=False,
                     color=colors[clr_idx],
                     edgecolor="black",
                     alpha=0.3,
@@ -700,7 +700,7 @@ class CoefficientsPlotter:
         if self.npar % grid_size == 0:
             ax_logo_nr = self.npar + grid_size
         else:
-            ax_logo_nr = self.npar + self.npar % grid_size + 1
+            ax_logo_nr = self.npar + (grid_size - self.npar % grid_size)
 
         ax_logo = plt.subplot(grid_size, grid_size, ax_logo_nr)
 
