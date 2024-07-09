@@ -657,11 +657,10 @@ class CoefficientsPlotter:
                     solution1, solution2 = split_solution(posterior[l])
                     bins_solution1 = np.histogram_bin_edges(solution1, bins='fd')
                     bins_solution2 = np.histogram_bin_edges(solution2, bins='fd')
-                    bins_dbl_soln = np.sort(np.concatenate((bins_solution1, bins_solution2)))
 
                     ax.hist(
                         solution,
-                        bins=bins_dbl_soln,
+                        bins=np.sort(np.concatenate((bins_solution1, bins_solution2))),
                         density=True,
                         color=colors[clr_idx],
                         edgecolor="black",
