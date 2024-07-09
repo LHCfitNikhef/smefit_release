@@ -391,10 +391,10 @@ datasets:
 - LEP_eeWW_189GeV
 - LEP_eeWW_198GeV
 - LEP_eeWW_206GeV
-- LEP_Zdata
+- LEP1_EWPOs_2006
 - LEP_alphaEW
-- LEP_Bhabha
-- LEP_BrW
+- LEP_Bhabha_2013
+- LEP_Brw_2013
 - FCCee_Brw_161GeV
 - FCCee_Brw_240GeV
 - FCCee_Brw_365GeV
@@ -449,13 +449,6 @@ datasets:
 - FCCee_zh_gg_365GeV
 - FCCee_zh_tautau_240GeV
 - FCCee_zh_tautau_365GeV
-- FCCee_161_ww_leptonic_optim_obs
-- FCCee_161_ww_semilep_optim_obs
-- FCCee_240_ww_leptonic_optim_obs
-- FCCee_240_ww_semilep_optim_obs
-- FCCee_365_ww_leptonic_optim_obs
-- FCCee_365_ww_semilep_optim_obs
-- FCCee_365_tt_optim_obs
 external_chi2:
   OptimalWW: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
   Optimaltt: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
