@@ -651,27 +651,30 @@ class CoefficientsPlotter:
                     continue
                 solution = posterior[l]
 
-                if disjointed_lists[clr_idx] is None:
-                    pass
-                elif l in disjointed_lists[clr_idx]:
-                    solution, solution2 = split_solution(posterior[l])
+                if disjointed_lists[clr_idx] is not None and l in disjointed_lists[clr_idx]:
+                    solution1, solution2 = split_solution(posterior[l])
+                    bins_solution1 = np.histogram_bin_edges(solution1, bins='fd')
+                    bins_solution2 = np.histogram_bin_edges(solution2, bins='fd')
+
                     ax.hist(
-                        solution2,
+                        solution,
+                        bins=np.sort(np.concatenate((bins_solution1, bins_solution2))),
+                        density=True,
+                        color=colors[clr_idx],
+                        edgecolor="black",
+                        alpha=0.3,
+                        label=labels[clr_idx],
+                    )
+                else:
+                    ax.hist(
+                        solution,
                         bins="fd",
                         density=True,
                         color=colors[clr_idx],
                         edgecolor="black",
                         alpha=0.3,
+                        label=labels[clr_idx],
                     )
-                ax.hist(
-                    solution,
-                    bins="fd",
-                    density=True,
-                    color=colors[clr_idx],
-                    edgecolor="black",
-                    alpha=0.3,
-                    label=labels[clr_idx],
-                )
                 ax.text(
                     0.05,
                     0.85,
@@ -700,7 +703,7 @@ class CoefficientsPlotter:
         if self.npar % grid_size == 0:
             ax_logo_nr = self.npar + grid_size
         else:
-            ax_logo_nr = self.npar + self.npar % grid_size + 1
+            ax_logo_nr = self.npar + (grid_size - self.npar % grid_size)
 
         ax_logo = plt.subplot(grid_size, grid_size, ax_logo_nr)
 
