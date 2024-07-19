@@ -84,6 +84,18 @@ QCD_only = {
     "m_h": 1e-20,
 }
 
+# gs at MZ
+alpha_s = 0.118
+gs = np.sqrt(4 * np.pi * alpha_s)
+
+
+def evolve_gs(scale):
+    # evolve gs from MZ to scale
+    beta0 = 11 - 2 / 3 * 6
+    return gs / np.sqrt(
+        1 + 2 * beta0 * gs**2 / (4 * np.pi) ** 2 * np.log(scale / 91.1876)
+    )
+
 
 class RGE:
     def __init__(
@@ -144,7 +156,7 @@ class RGE:
                     f"Imaginary values in Wilson coefficient for operator {wc_name}."
                 )
 
-            rge_matrix_dict[wc_name] = self.map_to_smefit(wc_final_vals)
+            rge_matrix_dict[wc_name] = self.map_to_smefit(wc_final_vals, scale)
 
         return rge_matrix_dict
 
@@ -187,7 +199,12 @@ class RGE:
             if "value" not in wcxf_dict:
                 wc_warsaw_value = [1] * len(wcxf_dict["wc"])
             else:
-                wc_warsaw_value = wcxf_dict["value"]
+                # check if value is gs
+                # (this is a special case for OtG)
+                if wcxf_dict["value"] == ["gs"]:
+                    wc_warsaw_value = [evolve_gs(self.init_scale)]
+                else:
+                    wc_warsaw_value = wcxf_dict["value"]
 
             # 1e-6 is because the Warsaw basis is in GeV^-2
             wc_value = {
@@ -197,7 +214,7 @@ class RGE:
 
         return wc_basis
 
-    def map_to_smefit(self, wc_final_vals):
+    def map_to_smefit(self, wc_final_vals, scale):
         # TODO: missing a check that flavour structure is the one expected
         wc_dict = {}
         for wc_basis, wc_inv_dict in inverse_wcxf_translate.items():
@@ -205,7 +222,12 @@ class RGE:
             if "coeff" not in wc_inv_dict:
                 wc_warsaw_coeff = [1] * len(wc_warsaw_name)
             else:
-                wc_warsaw_coeff = wc_inv_dict["coeff"]
+                # check if coeff is 1/gs
+                # (this is a special case for OtG)
+                if wc_inv_dict["coeff"] == ["1/gs"]:
+                    wc_warsaw_coeff = [1 / evolve_gs(scale)]
+                else:
+                    wc_warsaw_coeff = wc_inv_dict["coeff"]
 
             value = 0.0
             for wc, coeff in zip(wc_warsaw_name, wc_warsaw_coeff):
@@ -237,7 +259,7 @@ class RGE:
         # remove small values
         wc_final = {key: value for key, value in wc_final.items() if abs(value) > 1e-10}
 
-        return self.map_to_smefit(wc_final)
+        return self.map_to_smefit(wc_final, scale)
 
 
 def load_scales(datasets, theory_path, default_scale=1e3):

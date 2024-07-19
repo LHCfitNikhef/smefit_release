@@ -1,6 +1,7 @@
 # Dictionary translating from the smefit basis to the Warsaw basis in the WCxf
 import numpy as np
 
+# Values at MZ
 alpha_s = 0.118
 mw = 80.387
 mz = 91.1876
@@ -24,7 +25,7 @@ wcxf_translate = {
     "OpW": {"wc": ["phiW"]},
     "OpB": {"wc": ["phiB"]},
     # Dipoles
-    "OtG": {"wc": ["uG_33"], "value": [gs]},
+    "OtG": {"wc": ["uG_33"], "value": ["gs"]},
     "OtW": {"wc": ["uB_33", "uW_33"], "value": [cw / sw, 1.0]},
     "OtZ": {"wc": ["uB_33"], "value": [-1.0 / sw]},
     # Quark Currents
@@ -102,7 +103,7 @@ inverse_wcxf_translate = {
     "OpW": {"wc": ["phiW"]},
     "OpB": {"wc": ["phiB"]},
     # Dipoles
-    "OtG": {"wc": ["uG_33"], "coeff": [1.0 / gs]},
+    "OtG": {"wc": ["uG_33"], "coeff": ["1/gs"]},
     "OtW": {"wc": ["uW_33"], "coeff": [1.0]},
     "OtZ": {"wc": ["uB_33", "uW_33"], "coeff": [-sw, cw]},
     # Quark Currents
