@@ -446,9 +446,13 @@ datasets:
 - FCCee_zh_gg_365GeV
 - FCCee_zh_tautau_240GeV
 - FCCee_zh_tautau_365GeV
-  #external_chi2:
-  #OptimalWW: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
-  #Optimaltt: /data/theorie/jthoeve/smefit_database/external_chi2/optimal_observables/interface_oos.py
+external_chi2:
+  OptimalWW: 
+    path: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
+    scale: 91.1876
+  Optimaltt: 
+    path: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
+    scale: 91.1876
 maxiter: 10000
 nlive: 500
 order: NLO
@@ -463,5 +467,5 @@ rge:
     init_scale: 4000.0
     obs_scale: 91.1876
     smeft_accuracy: integrate 
-    ckm: none
+    yukawa: top
     adm_QCD: False
