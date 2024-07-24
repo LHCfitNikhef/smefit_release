@@ -47,7 +47,7 @@ _logger = log.logging.getLogger(__name__)
 # copying so we could use the default parameters later
 default_params = wilson.run.smeft.smpar.p.copy()
 
-top_CKM = {
+top_yukawa = {
     "Vus": 0.0,
     "Vub": 0.0,
     "Vcb": 0.0,
@@ -62,7 +62,7 @@ top_CKM = {
     "m_tau": 0.0,
 }
 
-no_CKM = {
+no_yukawa = {
     "Vus": 0.0,
     "Vub": 0.0,
     "Vcb": 0.0,
@@ -104,7 +104,7 @@ class RGE:
         init_scale,
         accuracy="integrate",
         adm_QCD=False,
-        ckm="top",
+        yukawa="top",
     ):
         # order the Wilson coefficients alphabetically
         self.wc_names = sorted(wc_names)
@@ -112,16 +112,16 @@ class RGE:
         self.accuracy = accuracy
 
         # set the anomalous dimension matrix parameters
-        if ckm == "top":
-            wilson.run.smeft.smpar.p.update(**top_CKM)
-        elif ckm == "none":
-            wilson.run.smeft.smpar.p.update(**no_CKM)
-        elif ckm == "full":
+        if yukawa == "top":
+            wilson.run.smeft.smpar.p.update(**top_yukawa)
+        elif yukawa == "none":
+            wilson.run.smeft.smpar.p.update(**no_yukawa)
+        elif yukawa == "full":
             wilson.run.smeft.smpar.p.update(**default_params)
         else:
-            raise ValueError(f"CKM parameter not supported: {ckm}")
+            raise ValueError(f"Yukawa parameter not supported: {yukawa}")
 
-        _logger.info(f"Using CKM parameterization: {ckm}.")
+        _logger.info(f"Using Yukawa parameterization: {yukawa}.")
 
         if adm_QCD:
             wilson.run.smeft.smpar.p.update(**QCD_only)
@@ -292,9 +292,9 @@ def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None
     obs_scale = rge_dict.get("obs_scale", 91.1876)
     smeft_accuracy = rge_dict.get("smeft_accuracy", "integrate")
     adm_QCD = rge_dict.get("adm_QCD", "full")
-    ckm = rge_dict.get("ckm", "top")
+    yukawa = rge_dict.get("yukawa", "top")
     coeff_list = list(operators_to_keep.keys())
-    rge_runner = RGE(coeff_list, init_scale, smeft_accuracy, adm_QCD, ckm)
+    rge_runner = RGE(coeff_list, init_scale, smeft_accuracy, adm_QCD, yukawa)
     # if it is a float, it is a static scale
     if type(obs_scale) is float or type(obs_scale) is int:
         rgemat = rge_runner.RGEmatrix(obs_scale)
