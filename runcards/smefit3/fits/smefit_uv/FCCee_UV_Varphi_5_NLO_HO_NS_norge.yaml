@@ -702,13 +702,18 @@ datasets:
 #- FCCee_365_tt_optim_obs
 #frac_remain: 0.001
 #lepsilon: 0.001
+external_chi2:
+  OptimalWW: 
+    path: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
+    scale: 91.1876
+  Optimaltt: 
+    path: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
+    scale: 91.1876
 maxiter: 10000
 nlive: 500
 order: NLO
 result_ID: FCCee_UV_Varphi_5_NLO_HO_FCC_norge
 result_path: /home/alejo/smefit_results/smefit_fcc_uv
-#target_evidence_unc: 0.5
-#target_post_unc: 0.5
 theory_path: /home/alejo/smefit_database/theory
 use_quad: true
 use_t0: false

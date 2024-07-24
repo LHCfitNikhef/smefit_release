@@ -222,22 +222,18 @@ datasets:
 - FCCee_zh_gg_365GeV
 - FCCee_zh_tautau_240GeV
 - FCCee_zh_tautau_365GeV
-#- FCCee_161_ww_leptonic_optim_obs
-#- FCCee_161_ww_semilep_optim_obs
-#- FCCee_240_ww_leptonic_optim_obs
-#- FCCee_240_ww_semilep_optim_obs
-#- FCCee_365_ww_leptonic_optim_obs
-#- FCCee_365_ww_semilep_optim_obs
-#- FCCee_365_tt_optim_obs
-#frac_remain: 0.001
-#lepsilon: 0.001
+external_chi2:
+  OptimalWW: 
+    path: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
+    scale: 91.1876
+  Optimaltt: 
+    path: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
+    scale: 91.1876
 maxiter: 10000
 nlive: 500
 order: NLO
 result_ID: FCCee_UV_Varphi_5_NLO_HO_FCC_leadinglog
 result_path: /home/alejo/smefit_results/smefit_fcc_uv
-#target_evidence_unc: 0.5
-#target_post_unc: 0.5
 theory_path: /home/alejo/smefit_database/theory
 use_quad: true
 use_t0: false
@@ -247,5 +243,5 @@ rge:
     init_scale: 5000.0
     obs_scale: 91.1876
     smeft_accuracy: leadinglog
-    ckm: none
+    yukawa: top
     adm_QCD: False

@@ -702,6 +702,13 @@ datasets:
 #- FCCee_365_tt_optim_obs
 #frac_remain: 0.001
 #lepsilon: 0.001
+external_chi2:
+  OptimalWW: 
+    path: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
+    scale: 91.1876
+  Optimaltt: 
+    path: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
+    scale: 91.1876
 maxiter: 10000
 nlive: 500
 order: NLO
@@ -718,5 +725,5 @@ rge:
     init_scale: 5000.0
     obs_scale: 91.1876
     smeft_accuracy: leadinglog
-    ckm: none
+    yukawa: top
     adm_QCD: False
