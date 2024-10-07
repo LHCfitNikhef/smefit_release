@@ -6,8 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.optimize as opt
 from rich.progress import track
-import jax.numpy as jnp
-
+from . import compute_theory_kappa as prk
 from . import compute_theory as pr
 from .coefficients import CoefficientManager
 from .loader import DataTuple, load_datasets
@@ -44,9 +43,10 @@ def compute_chi2(
     """
 
     # compute theory prediction for each point in the dataset
-    theory_predictions = pr.make_predictions(
+    
+    theory_predictions = prk.make_predictions(
         dataset, coefficients_values, use_quad, use_multiplicative_prescription
-    )
+    ) #SIMONE: Here I chagned the imported library callinkg prk.make_predictions. I would add a label kappa_frm in the run_card that is going to be read here, is it is true make prediction will make them in the kappa-framework, as explained in the compute_theory_kappa.py file
 
     # compute experimental central values - theory
     if use_replica:
@@ -56,7 +56,7 @@ def compute_chi2(
 
     invcovmat = dataset.InvCovMat
     # note @ is slower when running with mpiexec
-    return jnp.einsum("i,ij,j->", diff, invcovmat, diff)
+    return np.einsum("i,ij,j->", diff, invcovmat, diff)
 
 
 class Scanner:
