@@ -1,24 +1,18 @@
 import json 
 import kappa
-#function to combine the different kappas labels
-"""def kappa_combiner(arr):
-    #arr is an array of string of kappas
-    mult_array=[]
-    len_=len(arr)
-    for i in range(len_):
-        for j in range(i,len_):
-            mult_array.append(kappas0[i]+"*"+kappas0[j])
-    return mult_array"""
-n=16 #number of point in the dataset
-EMPTY=[0. for _ in range(n)]
+import sys
+
 
 #create the different kappas combination
 kappas0 = ["kb2","ktau2","kc2","kW2","kZ2","kg2","kgamma2","kZgamma2","kmu2","kt2"]
 #kappas0_combination=kappa_combiner(kappas0)
 
 #We read the array from an external file, is a dictionary with I (initial) and F (final) states.
-dict_dataset=kappa.ATLAS_SSinc_RunII #change this line for different database
+dict_dataset=kappa.Exp[str(sys.argv[1])]
 
+n=len((dict_dataset["I"])["kb2"]) #number of point in the dataset
+print(f"Found {n} point")
+EMPTY=[0. for _ in range(n)]
 
 kappacombination_dict={}
 I=dict_dataset["I"]
@@ -45,5 +39,5 @@ for k in kappas0:
      LO_dict[k]=EMPTY
 LO_dict.update(kappacombination_dict)
 kappa_dict["LO"]=LO_dict
-with open("ATLAS_SSinc_RunII.json", "w") as outfile: 
+with open(str(sys.argv[1])+".json", "w") as outfile: 
     json.dump(kappa_dict, outfile,indent="")
