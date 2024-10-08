@@ -24,6 +24,7 @@ wcxf_translate = {
     "OpG": {"wc": ["phiG"]},
     "OpW": {"wc": ["phiW"]},
     "OpB": {"wc": ["phiB"]},
+    "Op": {"wc": ["phi"]},
     # Dipoles
     "OtG": {"wc": ["uG_33"], "value": ["gs"]},
     "OtW": {"wc": ["uB_33", "uW_33"], "value": [cw / sw, 1.0]},
@@ -102,6 +103,7 @@ inverse_wcxf_translate = {
     "OpG": {"wc": ["phiG"]},
     "OpW": {"wc": ["phiW"]},
     "OpB": {"wc": ["phiB"]},
+    "Op": {"wc": ["phi"]},
     # Dipoles
     "OtG": {"wc": ["uG_33"], "coeff": ["1/gs"]},
     "OtW": {"wc": ["uW_33"], "coeff": [1.0]},
