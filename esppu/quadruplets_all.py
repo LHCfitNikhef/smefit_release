@@ -19,14 +19,14 @@ collections = ["Granada"]
 here = pathlib.Path("/Users/jaco/Documents/smefit_release/results/esppu")
 
 # result dir
-result_dir = here / "FCCee-HLLHC-Custo-EWquad"
-# result_dir = here / "FCCee-HLLHC-Quad1-EW"
+result_dir_cus = here / "FCCee-HLLHC-Custo-EWquad"
+result_dir_non_cus = here / "FCCee-HLLHC-Quad1-EW"
 
-# ncols, nrows = 4, 4
-# fig, ax = plt.subplots(figsize=(4 * ncols, 4 * nrows))
+ncols, nrows = 4, 4
+fig, ax = plt.subplots(figsize=(4 * ncols, 4 * nrows))
 
 
-def get_bounds():
+def get_bounds(result_dir):
 
     bound_dict = {}
     i = 0
@@ -55,27 +55,55 @@ def get_bounds():
             # i += 1
             #
             # plt.tight_layout()
-            # plt.savefig('./results/posterior.pdf')
+            # plt.savefig('./results/posterior_non_custodial.pdf')
 
     return bound_dict
 
 
-bounds_uv = get_bounds()
+bounds_uv_non_cus = get_bounds(result_dir_non_cus)
+bounds_uv_cus = get_bounds(result_dir_cus)
 
-bounds_uv_fcc_hllhc = {}
-for key, val in bounds_uv.items():
-    if key == "FCCee_UV_EW_Quad13_Custo_tree_4_NLO_HO_NS_noHH":
+bounds_uv_non_cus_fcc_hllhc = {}
+for key, val in bounds_uv_non_cus.items():
+    if key == "HLLHC_UV_EW_Quad1_tree_4_NLO_HO_NS_noHH":
         continue
     if key.startswith("HLLHC"):
         suffix = key.split("_", 1)[1]
-        bounds_uv_fcc_hllhc[suffix] = [val, bounds_uv["FCCee_" + suffix]]
+        bounds_uv_non_cus_fcc_hllhc[suffix] = [
+            val,
+            bounds_uv_non_cus["FCCee_" + suffix],
+        ]
+
+bounds_uv_cus_fcc_hllhc = {}
+for key, val in bounds_uv_cus.items():
+    if key == "HLLHC_UV_EW_Quad13_Custo_tree_4_NLO_HO_NS_noHH":
+        continue
+    if key.startswith("HLLHC"):
+        suffix = key.split("_", 1)[1]
+        bounds_uv_cus_fcc_hllhc[suffix] = [val, bounds_uv_cus["FCCee_" + suffix]]
 
 
-df_uv = pd.DataFrame.from_dict(
-    bounds_uv_fcc_hllhc, columns=["FCCee", "HLLHC"], orient="index"
+df_uv_non_cus = pd.DataFrame.from_dict(
+    bounds_uv_non_cus_fcc_hllhc, columns=["FCCee", "HLLHC"], orient="index"
 )
 
-df_uv = df_uv.reindex(
+df_uv_cus = pd.DataFrame.from_dict(
+    bounds_uv_cus_fcc_hllhc, columns=["FCCee", "HLLHC"], orient="index"
+)
+
+
+df_uv_non_cus = df_uv_non_cus.reindex(
+    index=[
+        "UV_EW_Quad1_tree_4_NLO_HO_NS_norge",
+        "UV_EW_Quad1_tree_4_NLO_HO_NS",
+        "UV_EW_Quad1_1loop_4_NLO_HO_NS_norgenoHH",
+        "UV_EW_Quad1_1loop_4_NLO_HO_NS_noHH",
+        "UV_EW_Quad1_1loop_4_NLO_HO_NS_norge",
+        "UV_EW_Quad1_1loop_4_NLO_HO_NS",
+    ]
+)
+
+df_uv_cus = df_uv_cus.reindex(
     index=[
         "UV_EW_Quad13_Custo_tree_4_NLO_HO_NS_norge",
         "UV_EW_Quad13_Custo_tree_4_NLO_HO_NS",
@@ -86,6 +114,8 @@ df_uv = df_uv.reindex(
     ]
 )
 
+df_uv = pd.concat([df_uv_cus, df_uv_non_cus])
+
 
 x_labels = [
     r"$\mathrm{tree,\:no\:RG,\:HH}$",
@@ -94,7 +124,15 @@ x_labels = [
     r"$\mathrm{1L,\:RG,\:no\:HH}$",
     r"$\mathrm{1L,\:no\:RG,\:HH}$",
     r"$\mathrm{1L,\:RG,\:HH}$",
+    r"$\mathrm{tree,\:no\:RG,\:HH}$",
+    r"$\mathrm{tree,\:RG,\:HH}$",
+    r"$\mathrm{1L,\:no\:RG,\:no\:HH}$",
+    r"$\mathrm{1L,\:RG,\:no\:HH}$",
+    r"$\mathrm{1L,\:no\:RG,\:HH}$",
+    r"$\mathrm{1L,\:RG,\:HH}$",
 ]
+
+
 df_uv["xlabel"] = x_labels
 # drop flat direction: no sensitivity to H6 with diHiggs data removed
 # bounds_uv = bounds_uv.drop("FCCee_UV_EW_Quad13_Custo_tree_4_NLO_HO_NS_noHH")
@@ -113,17 +151,43 @@ df_uv["xlabel"] = x_labels
 # bounds_hllhc = bounds_uv[hllhc_index]
 
 
-fig, ax = plt.subplots(figsize=(17, 13))
+fig, ax = plt.subplots(figsize=(20, 13))
 df_uv.plot(kind="bar", ax=ax, x="xlabel", xlabel="", rot=45)
-ax.legend(
+# ax.legend([r'$\rm{LEP+LHC_{Run-2}+\:HL-LHC}$', r"$\rm{LEP+LHC_{Run-2}+\:HL-LHC+\:FCC-ee}$"], frameon=False)
+ax.set_ylabel(r"$|\lambda_\phi|$")
+fig.legend(
     [r"$\rm{LEP+LHC_{Run-2}+\:HL-LHC}$", r"$\rm{LEP+LHC_{Run-2}+\:HL-LHC+\:FCC-ee}$"],
+    loc="upper center",
+    ncol=2,
+    prop={"size": 25},
+    bbox_to_anchor=(0.5, 1.0),
     frameon=False,
 )
-ax.set_ylabel(r"$|\lambda_\phi|$")
-ax.set_title(
-    r"$\mathrm{95\:\%\:CL\:bounds,\:NLO\:}\mathcal{O}\left(\Lambda^{-4}\right)$", y=1.05
+ax.axvline(5.5, 0, 1, color="k", ls="--")
+
+legend = ax.legend()
+legend.remove()
+
+ax.text(
+    0.02,
+    0.95,
+    r"$\mathrm{Custodial}$",
+    horizontalalignment="left",
+    verticalalignment="center",
+    transform=ax.transAxes,
 )
-plt.tight_layout()
+
+ax.text(
+    0.98,
+    0.95,
+    r"$\mathrm{Non-custodial}$",
+    horizontalalignment="right",
+    verticalalignment="center",
+    transform=ax.transAxes,
+)
+
+# ax.set_title(r"$\mathrm{95\:\%\:CL\:bounds,\:NLO\:}\mathcal{O}\left(\Lambda^{-4}\right)$", y=1.05)
+plt.tight_layout(rect=[0, 0.05, 1, 1 - 0.05])
 
 # plt.legend(loc='upper right')
-plt.savefig("./results/barplot_quadruplet.pdf")
+plt.savefig("./results/barplot_quadruplet_all.pdf")
