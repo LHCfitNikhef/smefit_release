@@ -72,6 +72,7 @@ for key, val in bounds_uv_non_cus.items():
         bounds_uv_non_cus_fcc_hllhc[suffix] = [
             val,
             bounds_uv_non_cus["FCCee_" + suffix],
+            bounds_uv_non_cus["FCCee_OpNLO_" + suffix],
         ]
 
 bounds_uv_cus_fcc_hllhc = {}
@@ -80,15 +81,21 @@ for key, val in bounds_uv_cus.items():
         continue
     if key.startswith("HLLHC"):
         suffix = key.split("_", 1)[1]
-        bounds_uv_cus_fcc_hllhc[suffix] = [val, bounds_uv_cus["FCCee_" + suffix]]
+        bounds_uv_cus_fcc_hllhc[suffix] = [
+            val,
+            bounds_uv_cus["FCCee_" + suffix],
+            bounds_uv_cus["FCCee_OpNLO_" + suffix],
+        ]
 
 
 df_uv_non_cus = pd.DataFrame.from_dict(
-    bounds_uv_non_cus_fcc_hllhc, columns=["FCCee", "HLLHC"], orient="index"
+    bounds_uv_non_cus_fcc_hllhc,
+    columns=["HLLHC", "FCCee", "FCCee_OpNLO"],
+    orient="index",
 )
 
 df_uv_cus = pd.DataFrame.from_dict(
-    bounds_uv_cus_fcc_hllhc, columns=["FCCee", "HLLHC"], orient="index"
+    bounds_uv_cus_fcc_hllhc, columns=["HLLHC", "FCCee", "FCCee_OpNLO"], orient="index"
 )
 
 
@@ -134,31 +141,19 @@ x_labels = [
 
 
 df_uv["xlabel"] = x_labels
-# drop flat direction: no sensitivity to H6 with diHiggs data removed
-# bounds_uv = bounds_uv.drop("FCCee_UV_EW_Quad13_Custo_tree_4_NLO_HO_NS_noHH")
-
-# hllhc_index = bounds_uv.index.str.contains('HLLHC')
-# fcc_index = bounds_uv.index.str.contains('FCCee')
-#
-# bounds_hllhc = bounds_uv[hllhc_index]
-# bounds_fcc = bounds_uv[fcc_index]
-
-
-# for bound_fcc in bounds_fcc.index:
-#     import pdb; pdb.set_trace()
-#     suffix = bound_fcc.split("FCCee")[1]
-#     if "HLLHC" + suffix in bounds_hl
-# bounds_hllhc = bounds_uv[hllhc_index]
 
 
 fig, ax = plt.subplots(figsize=(20, 13))
 df_uv.plot(kind="bar", ax=ax, x="xlabel", xlabel="", rot=45)
-# ax.legend([r'$\rm{LEP+LHC_{Run-2}+\:HL-LHC}$', r"$\rm{LEP+LHC_{Run-2}+\:HL-LHC+\:FCC-ee}$"], frameon=False)
-ax.set_ylabel(r"$|\lambda_\phi|$")
+ax.set_ylabel(r"$|\lambda_\Phi|$")
 fig.legend(
-    [r"$\rm{LEP+LHC_{Run-2}+\:HL-LHC}$", r"$\rm{LEP+LHC_{Run-2}+\:HL-LHC+\:FCC-ee}$"],
+    [
+        r"$\rm{LEP+LHC_{Run-2}+\:HL-LHC}$",
+        r"$\rm{+\:FCC-ee}$",
+        r"$\rm{+\:FCC-ee\:w/}\:\mathrm{1\textnormal{-}loop}\:\mathcal{O}_{\varphi}$",
+    ],
     loc="upper center",
-    ncol=2,
+    ncol=3,
     prop={"size": 25},
     bbox_to_anchor=(0.5, 1.0),
     frameon=False,
@@ -190,4 +185,4 @@ ax.text(
 plt.tight_layout(rect=[0, 0.05, 1, 1 - 0.05])
 
 # plt.legend(loc='upper right')
-plt.savefig("./results/barplot_quadruplet_all.pdf")
+plt.savefig("./results/barplot_quadruplet_all_three.pdf")
