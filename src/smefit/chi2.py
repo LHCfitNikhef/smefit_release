@@ -37,6 +37,8 @@ def compute_chi2(
         if True add the |EFT| contribution as a key factor
     use_quad: bool
         if True include also |HO| corrections
+    rgemat: numpy.ndarray
+        solution matrix of the RGE
 
     Returns
     -------

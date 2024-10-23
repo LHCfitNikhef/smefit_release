@@ -39,6 +39,10 @@ def make_predictions(
             |EFT| coefficients values
         use_quad: bool
             if True include also |HO| corrections
+        use_multiplicative_prescription: bool
+            if True add the |EFT| contribution as a k-factor
+        rgemat: numpy.ndarray
+            solution matrix of the RGE
     Returns
     -------
         corrected_theory : numpy.ndarray
@@ -48,7 +52,6 @@ def make_predictions(
     coefficients_values = jnp.array(coefficients_values)
 
     # Compute total linear correction
-    # note @ is slower when running with mpiexec
     if rgemat is not None:
         # Check if rgemat comes from a dynamic scale
         # otherwise it is a single RGEmatrix

@@ -40,6 +40,12 @@ class Optimizer:
             True for single parameter fits
         use_multiplicative_prescription:
             if True uses the multiplicative prescription for the |EFT| corrections.
+        external_chi2: dict
+            dict of external chi2
+        rgemat: numpy.ndarray
+            solution matrix of the RGE
+        rge_dict: dict
+            dictionary with the RGE input parameter options
     """
 
     print_rate = 500

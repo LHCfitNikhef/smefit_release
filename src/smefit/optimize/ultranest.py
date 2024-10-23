@@ -61,7 +61,16 @@ class USOptimizer(Optimizer):
         Set to a higher number (0.5) if you know the posterior is simple.
     store_raw: bool
         if True store the result to eventually resume the job
-
+    vectorized: bool
+        if True use jax vectorization
+    float64: bool
+        if True use float64 precision
+    external_chi2: dict
+        dict of external chi2
+    rgemat: numpy.ndarray
+        solution matrix of the RGE
+    rge_dict: dict
+        dictionary with the RGE input parameter options
     """
 
     print_rate = 5000
@@ -141,7 +150,7 @@ class USOptimizer(Optimizer):
             has_rge = True
             rgemat, operators_to_keep = load_rge_matrix(
                 rge_dict,
-                operators_to_keep,
+                list(operators_to_keep.keys()),
                 config["datasets"],
                 config.get("theory_path", None),
             )

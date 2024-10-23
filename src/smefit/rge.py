@@ -44,6 +44,10 @@ warnings.filterwarnings("ignore", category=ComplexWarning)
 
 _logger = log.logging.getLogger(__name__)
 
+###########################
+# Input parameter options #
+###########################
+
 # copying so we could use the default parameters later
 default_params = wilson.run.smeft.smpar.p.copy()
 
@@ -98,6 +102,26 @@ def evolve_gs(scale):
 
 
 class RGE:
+    """
+    Class to compute the RGE matrix for the SMEFT Wilson coefficients.
+    The RGE matrix is computed at the initial scale `init_scale` and
+    evolved to the scale of interest.
+
+    Parameters
+    ----------
+    wc_names: list
+        list of Wilson coefficient names to be included in the RGE matrix
+    init_scale: float
+        initial scale of the Wilson coefficients
+    accuracy: str
+        accuracy of the RGE integration. Options: "leadinglog" or "integrate". 
+        Default is 'integrate'. Inherited behaviour from wilson package.
+    adm_QCD: bool
+        if True, only the QCD anomalous dimension is used. Default is False.
+    yukawa: str
+        Yukawa parameterization to be used. Options: "top", "none" or "full".
+        Default is "top".
+    """
     def __init__(
         self,
         wc_names,
@@ -134,6 +158,9 @@ class RGE:
         )
 
     def RGEmatrix_dict(self, scale):
+        """
+        Compute the RGE solution at the scale `scale` and return it as a dictionary.
+        """
         # compute the RGE matrix at the scale `scale`
         rge_matrix_dict = {}
         for wc_name, wc_vals in self.RGEbasis.items():
@@ -161,6 +188,9 @@ class RGE:
         return rge_matrix_dict
 
     def RGEmatrix(self, scale):
+        """
+        Compute the RGE solution at the scale `scale` and return it as a pandas DataFrame.
+        """
         # compute the RGE matrix dict at the scale `scale`
         rge_matrix_dict = self.RGEmatrix_dict(scale)
 
@@ -179,6 +209,9 @@ class RGE:
 
     @property
     def RGEbasis(self):
+        """
+        Returns the RGE basis translated from smefit to Warsaw.
+        """
         # computes the translation from the smefit basis to the Warsaw basis
         # as expected by the Wilson package
         wc_basis = {}
@@ -215,6 +248,9 @@ class RGE:
         return wc_basis
 
     def map_to_smefit(self, wc_final_vals, scale):
+        """ 
+        Map the Wilson coefficients from the Warsaw basis to the SMEFiT basis.
+        """
         # TODO: missing a check that flavour structure is the one expected
         wc_dict = {}
         for wc_basis, wc_inv_dict in inverse_wcxf_translate.items():
@@ -242,6 +278,9 @@ class RGE:
         return sorted(wcxf_translate.keys())
 
     def RGEevolve(self, wcs, scale):
+        """
+        Evolve the Wilson coefficients from the initial scale to the scale of interest.
+        """
         wc_wilson = {}
         for op, values in self.RGEbasis.items():
             for key in values:
@@ -263,6 +302,23 @@ class RGE:
 
 
 def load_scales(datasets, theory_path, default_scale=1e3):
+    """ 
+    Load the energy scales for the datasets.
+
+    Parameters
+    ----------
+    datasets: list
+        list of datasets
+    theory_path: str
+        path to the theory files
+    default_scale: float
+        default scale to use if the dataset does not have a scale
+    
+    Returns
+    -------
+    scales: list
+        list of scales for the datasets
+    """
     scales = []
     for dataset in np.unique(datasets):
         Loader.theory_path = pathlib.Path(theory_path)
@@ -287,13 +343,31 @@ def load_scales(datasets, theory_path, default_scale=1e3):
     return scales
 
 
-def load_rge_matrix(rge_dict, operators_to_keep, datasets=None, theory_path=None):
+def load_rge_matrix(rge_dict, coeff_list, datasets=None, theory_path=None):
+    """
+    Load the RGE matrix for the SMEFT Wilson coefficients.
+
+    Parameters
+    ----------
+    rge_dict: dict
+        dictionary with the RGE input parameter options
+    coeff_list: list
+        list of Wilson coefficients to be included in the RGE matrix
+    datasets: list
+        list of datasets
+    theory_path: str
+        path to the theory files
+    
+    Returns
+    -------
+    rgemat: numpy.ndarray
+        RGE matrix
+    """
     init_scale = rge_dict.get("init_scale", 1e3)
     obs_scale = rge_dict.get("obs_scale", 91.1876)
     smeft_accuracy = rge_dict.get("smeft_accuracy", "integrate")
     adm_QCD = rge_dict.get("adm_QCD", "full")
     yukawa = rge_dict.get("yukawa", "top")
-    coeff_list = list(operators_to_keep.keys())
     rge_runner = RGE(coeff_list, init_scale, smeft_accuracy, adm_QCD, yukawa)
     # if it is a float, it is a static scale
     if type(obs_scale) is float or type(obs_scale) is int:

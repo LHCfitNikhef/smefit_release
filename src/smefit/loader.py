@@ -227,6 +227,8 @@ class Loader:
                 dictionary with |NHO| corrections
             quad_dict: dict
                 dictionary with |HO| corrections, empty if not use_quad
+            scales: list
+                list of energy scales for the theory predictions
         """
         theory_file = Loader.theory_path / f"{setname}.json"
         check_file(theory_file)
@@ -515,6 +517,8 @@ def load_datasets(
             True for UV fits
         has_external_chi2: bool, optional
             True in the presence of external chi2 modules
+        has_rge: bool, optional
+            True in the presence of RGE matrix
     """
 
     exp_data = []
@@ -562,7 +566,7 @@ def load_datasets(
 
     sorted_keys = None
     # if uv couplings are present allow for op which are not in the
-    # theory files
+    # theory files (same for external chi2 and rge)
     if has_uv_couplings or has_external_chi2 or has_rge:
         sorted_keys = np.unique((*operators_to_keep,))
     operators_names, lin_corr_values = construct_corrections_matrix(
