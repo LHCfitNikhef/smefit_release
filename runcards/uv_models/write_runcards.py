@@ -69,15 +69,19 @@ def dump_runcard(
     pto: str,
     fitting_mode: str,
     mass: str,
-    collider: str
+    collider: str,
+    path: str
 ) -> None:
     """Parse a model card to a SMEFiT runcard."""
-    if "OneLoop" in collection:
-        file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Loop.yaml"
-    elif "Multiparticle" in collection:
-        file_path = f"UV_scan/{collection}/out_UV_dict_Coll_MultiParticleCollection_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
+    if path =="--":
+        if "OneLoop" in collection:
+            file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Loop.yaml"
+        elif "Multiparticle" in collection:
+            file_path = f"UV_scan/{collection}/out_UV_dict_Coll_MultiParticleCollection_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
+        else:
+            file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
     else:
-        file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
+        file_path = path
 
     with open(here / file_path, "r", encoding="utf-8") as f:
         model_dict = yaml.safe_load(f)
@@ -100,7 +104,7 @@ def dump_runcard(
 
     runcard["coefficients"] = coeff_dict
     with open(
-        f"{here.parent}/smefit_fcc_uv_spider/{collection}_{collider}_{flag}_{idx_model}_{mass}_{pto}_{eft_order}_{fitting_mode}.yaml",
+        f"{here.parent}/{collection}_{collider}_{flag}_{idx_model}_{mass}_{pto}_{eft_order}_{fitting_mode}.yaml",
         "w",
         encoding="utf-8",
     ) as f:
@@ -131,7 +135,8 @@ if __name__ == "__main__":
         required=True,
     )
     parser.add_argument("-m", "--mass", help="Particle masses", type=str, default="1")
-    parser.add_argument("-d", "--collider", help="collider", type=str, required=True)
+    parser.add_argument("-d", "--collider", help="Collider to pick base runcard", type=str, required=True)
+    parser.add_argument("-p", "--path", help="Path of the Match2Fit output to convert.", type=str,default="--")
     args = parser.parse_args()
 
     dump_runcard(
@@ -141,5 +146,6 @@ if __name__ == "__main__":
         args.qcd_order,
         args.mode,
         args.mass,
-        args.collider
+        args.collider,
+        args.path
     )
