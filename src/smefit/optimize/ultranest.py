@@ -10,11 +10,12 @@ from rich.style import Style
 from rich.table import Table
 from ultranest import stepsampler
 
+from smefit.rge import RGE, load_rge_matrix
+
 from .. import chi2, log
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
-from smefit.rge import RGE, load_rge_matrix
 
 try:
     from mpi4py import MPI
@@ -175,6 +176,7 @@ class USOptimizer(Optimizer):
                 config.get("uv_couplings", False),
                 config.get("external_chi2", False),
                 has_rge,
+                config.get("cutoff_scale", None),
             )
         elif config.get("external_chi2") is not None:
             loaded_datasets = None

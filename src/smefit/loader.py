@@ -83,6 +83,7 @@ class Loader:
         use_theory_covmat,
         use_multiplicative_prescription,
         rot_to_fit_basis,
+        cutoff_scale,
     ):
         self._data_folder = self.commondata_path
         self._sys_folder = self.commondata_path / "systypes"
@@ -97,6 +98,7 @@ class Loader:
             self.dataspec["lin_corrections"],
             self.dataspec["quad_corrections"],
             self.dataspec["scales"],
+            self.dataspec["mask"],
         ) = self.load_theory(
             self.setname,
             operators_to_keep,
@@ -105,6 +107,7 @@ class Loader:
             use_theory_covmat,
             use_multiplicative_prescription,
             rot_to_fit_basis,
+            cutoff_scale,
         )
 
         (
@@ -113,14 +116,14 @@ class Loader:
             self.dataspec["sys_error_t0"],
             self.dataspec["stat_error"],
             self.dataspec["luminosity"],
-        ) = self.load_experimental_data()
+        ) = self.load_experimental_data(cutoff_scale)
 
         if len(self.dataspec["central_values"]) != len(self.dataspec["SM_predictions"]):
             raise ValueError(
                 f"Number of experimental data points and theory predictions does not match in dataset {self.setname}."
             )
 
-    def load_experimental_data(self):
+    def load_experimental_data(self, cutoff_scale):
         """
         Load experimental data with corresponding uncertainties
 
@@ -149,6 +152,18 @@ class Loader:
         # Read values of sys first
 
         sys_add = np.array(data_dict["systematics"])
+
+        mask = self.dataspec["mask"]
+
+        # apply mask
+        if cutoff_scale is not None:
+            sys_add = sys_add[mask, :][:, mask]
+            central_values = central_values[mask]
+            stat_error = stat_error[mask]
+            num_data = sum(mask)
+
+            # TODO update num_sys
+            # TODO: is this the best place to apply this mask??
 
         # Read systype file
         if num_sys != 0:
@@ -202,6 +217,7 @@ class Loader:
         use_theory_covmat,
         use_multiplicative_prescription,
         rotation_matrix=None,
+        cutoff_scale=None,
     ):
         """
         Load theory predictions
@@ -241,6 +257,9 @@ class Loader:
 
         # save sm prediction at the chosen perturbative order
         sm = np.array(raw_th_data[order]["SM"])
+
+        # check if scales are present in the theory file
+        scales = np.array(raw_th_data.get("scales", [None] * len(sm)))
 
         # split corrections into a linear and quadratic dict
         for key, value in raw_th_data[order].items():
@@ -286,13 +305,18 @@ class Loader:
         best_sm = np.array(raw_th_data["best_sm"])
         th_cov = np.zeros((best_sm.size, best_sm.size))
         if use_theory_covmat:
-            th_cov = raw_th_data["theory_cov"]
-        
-        scales = [None] * len(best_sm)
-        # check if scales are present in the theory file
-        if "scales" in raw_th_data:
-            scales = raw_th_data["scales"]
-        return raw_th_data["best_sm"], th_cov, lin_dict_to_keep, quad_dict_to_keep, scales
+            th_cov = np.array(raw_th_data["theory_cov"])
+
+        # apply mask
+        if cutoff_scale is not None:
+            mask = scales < cutoff_scale
+            best_sm = best_sm[mask]
+            th_cov = th_cov[mask, :][:, mask]
+            lin_dict_to_keep = {k: v[mask] for k, v in lin_dict_to_keep.items()}
+            quad_dict_to_keep = {k: v[mask] for k, v in quad_dict_to_keep.items()}
+            scales = scales[mask]
+
+        return best_sm, th_cov, lin_dict_to_keep, quad_dict_to_keep, scales, mask
 
     @property
     def n_data(self):
@@ -490,6 +514,7 @@ def load_datasets(
     has_uv_couplings=False,
     has_external_chi2=False,
     has_rge=False,
+    cutoff_scale=None,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
@@ -537,7 +562,7 @@ def load_datasets(
     if theory_path is not None:
         Loader.theory_path = pathlib.Path(theory_path)
     else:
-        Loader.theory_path = pathlib.Path(commondata_path)      
+        Loader.theory_path = pathlib.Path(commondata_path)
 
     for sset in np.unique(datasets):
         dataset = Loader(
@@ -548,6 +573,7 @@ def load_datasets(
             use_theory_covmat,
             use_multiplicative_prescription,
             rot_to_fit_basis,
+            cutoff_scale,
         )
         exp_name.append(sset)
         n_data_exp.append(dataset.n_data)
