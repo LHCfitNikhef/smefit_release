@@ -333,7 +333,7 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         )
         # check that dataset_scales is not a list filled with None
         # otherwise, assume the initial scale
-        if not all([scale is None for scale in dataset_scales]):
+        if not all(scale is None for scale in dataset_scales):
             scales.extend(dataset_scales)
         else:
             scales.extend([default_scale] * len(dataset_scales))

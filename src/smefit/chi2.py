@@ -2,8 +2,8 @@
 """Module for the computation of chi-squared values."""
 import json
 
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 import scipy.optimize as opt
 from rich.progress import track
 import jax.numpy as jnp

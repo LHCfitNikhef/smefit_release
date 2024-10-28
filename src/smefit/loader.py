@@ -284,14 +284,16 @@ class Loader:
                 if is_to_keep(k.split("*")[0], k.split("*")[1])
             }
         best_sm = np.array(raw_th_data["best_sm"])
-        th_cov = np.zeros((best_sm.size, best_sm.size))
         if use_theory_covmat:
             th_cov = raw_th_data["theory_cov"]
+        else:
+            th_cov = np.zeros((best_sm.size, best_sm.size))
 
-        scales = [None] * len(best_sm)
         # check if scales are present in the theory file
         if "scales" in raw_th_data:
             scales = raw_th_data["scales"]
+        else:
+            scales = [None] * len(best_sm)
         return (
             raw_th_data["best_sm"],
             th_cov,
