@@ -287,12 +287,18 @@ class Loader:
         th_cov = np.zeros((best_sm.size, best_sm.size))
         if use_theory_covmat:
             th_cov = raw_th_data["theory_cov"]
-        
+
         scales = [None] * len(best_sm)
         # check if scales are present in the theory file
         if "scales" in raw_th_data:
             scales = raw_th_data["scales"]
-        return raw_th_data["best_sm"], th_cov, lin_dict_to_keep, quad_dict_to_keep, scales
+        return (
+            raw_th_data["best_sm"],
+            th_cov,
+            lin_dict_to_keep,
+            quad_dict_to_keep,
+            scales,
+        )
 
     @property
     def n_data(self):
@@ -537,7 +543,7 @@ def load_datasets(
     if theory_path is not None:
         Loader.theory_path = pathlib.Path(theory_path)
     else:
-        Loader.theory_path = pathlib.Path(commondata_path)      
+        Loader.theory_path = pathlib.Path(commondata_path)
 
     for sset in np.unique(datasets):
         dataset = Loader(
@@ -632,9 +638,11 @@ def get_dataset(datasets, data_name):
         datasets.SMTheory[posix_in:posix_out],
         datasets.OperatorsNames,
         datasets.LinearCorrections[posix_in:posix_out],
-        datasets.QuadraticCorrections[posix_in:posix_out]
-        if datasets.QuadraticCorrections is not None
-        else None,
+        (
+            datasets.QuadraticCorrections[posix_in:posix_out]
+            if datasets.QuadraticCorrections is not None
+            else None
+        ),
         data_name,
         ndata,
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],

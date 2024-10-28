@@ -9,12 +9,12 @@ import ultranest
 from rich.style import Style
 from rich.table import Table
 from ultranest import stepsampler
+from smefit.rge import load_rge_matrix
 
 from .. import chi2, log
 from ..coefficients import CoefficientManager
 from ..loader import load_datasets
 from . import Optimizer
-from smefit.rge import RGE, load_rge_matrix
 
 try:
     from mpi4py import MPI

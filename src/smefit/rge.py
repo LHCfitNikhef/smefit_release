@@ -2,27 +2,26 @@
 ### phase is set to gamma and not computed explicitly
 ### See https://github.com/wilson-eft/wilson/issues/113#issuecomment-2179273979
 ### This needs to be done before the import of wilson
-import ckmutil.ckm
+import pathlib
+import warnings
 from copy import deepcopy
 from functools import partial
+
+import ckmutil.ckm
 
 # copying so we keep the original function
 ckm_tree = deepcopy(ckmutil.ckm.ckm_tree)
 ckmutil.ckm.ckm_tree = partial(ckm_tree, delta_expansion_order=0)
 ### End of patch
 
-import wilson
-from smefit.wcxf import wcxf_translate, inverse_wcxf_translate
-import smefit.log as log
-from smefit.loader import Loader
-
-import warnings
-import pandas as pd
-import numpy as np
 import jax.numpy as jnp
+import numpy as np
+import pandas as pd
+import wilson
 from numpy import ComplexWarning
-import pathlib
-
+from smefit import log
+from smefit.loader import Loader
+from smefit.wcxf import inverse_wcxf_translate, wcxf_translate
 
 # switch off the SM - EFT mixing, since SMEFiT assumes that the
 # RGE solution is linearised
@@ -114,7 +113,7 @@ class RGE:
     init_scale: float
         initial scale of the Wilson coefficients
     accuracy: str
-        accuracy of the RGE integration. Options: "leadinglog" or "integrate". 
+        accuracy of the RGE integration. Options: "leadinglog" or "integrate".
         Default is 'integrate'. Inherited behaviour from wilson package.
     adm_QCD: bool
         if True, only the QCD anomalous dimension is used. Default is False.
@@ -122,6 +121,7 @@ class RGE:
         Yukawa parameterization to be used. Options: "top", "none" or "full".
         Default is "top".
     """
+
     def __init__(
         self,
         wc_names,
@@ -248,7 +248,7 @@ class RGE:
         return wc_basis
 
     def map_to_smefit(self, wc_final_vals, scale):
-        """ 
+        """
         Map the Wilson coefficients from the Warsaw basis to the SMEFiT basis.
         """
         # TODO: missing a check that flavour structure is the one expected
@@ -302,7 +302,7 @@ class RGE:
 
 
 def load_scales(datasets, theory_path, default_scale=1e3):
-    """ 
+    """
     Load the energy scales for the datasets.
 
     Parameters
@@ -313,7 +313,7 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         path to the theory files
     default_scale: float
         default scale to use if the dataset does not have a scale
-    
+
     Returns
     -------
     scales: list
@@ -357,7 +357,7 @@ def load_rge_matrix(rge_dict, coeff_list, datasets=None, theory_path=None):
         list of datasets
     theory_path: str
         path to the theory files
-    
+
     Returns
     -------
     rgemat: numpy.ndarray

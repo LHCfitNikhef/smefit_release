@@ -6,11 +6,11 @@ import sys
 
 from rich.style import Style
 from rich.table import Table
+from smefit.rge import RGE
 
 from .. import chi2, log
 from ..loader import get_dataset
 from ..coefficients import CoefficientManager
-from smefit.rge import RGE
 
 try:
     from mpi4py import MPI
