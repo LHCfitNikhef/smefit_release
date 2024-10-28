@@ -1,18 +1,9 @@
-### Patch of a CKM function, so that the CP violating
-### phase is set to gamma and not computed explicitly
-### See https://github.com/wilson-eft/wilson/issues/113#issuecomment-2179273979
-### This needs to be done before the import of wilson
 import pathlib
 import warnings
 from copy import deepcopy
 from functools import partial
 
 import ckmutil.ckm
-
-# copying so we keep the original function
-ckm_tree = deepcopy(ckmutil.ckm.ckm_tree)
-ckmutil.ckm.ckm_tree = partial(ckm_tree, delta_expansion_order=0)
-### End of patch
 
 import jax.numpy as jnp
 import numpy as np
@@ -22,6 +13,16 @@ from numpy import ComplexWarning
 from smefit import log
 from smefit.loader import Loader
 from smefit.wcxf import inverse_wcxf_translate, wcxf_translate
+
+### Patch of a CKM function, so that the CP violating
+### phase is set to gamma and not computed explicitly
+### See https://github.com/wilson-eft/wilson/issues/113#issuecomment-2179273979
+### This needs to be done before the import of wilson
+
+# copying so we keep the original function
+ckm_tree = deepcopy(ckmutil.ckm.ckm_tree)
+ckmutil.ckm.ckm_tree = partial(ckm_tree, delta_expansion_order=0)
+### End of patch
 
 # switch off the SM - EFT mixing, since SMEFiT assumes that the
 # RGE solution is linearised
@@ -149,9 +150,9 @@ class RGE:
 
         if adm_QCD:
             wilson.run.smeft.smpar.p.update(**QCD_only)
-            _logger.info(f"Using anomalous dimension order: QCD.")
+            _logger.info("Using anomalous dimension order: QCD.")
         else:
-            _logger.info(f"Using anomalous dimension order: full.")
+            _logger.info("Using anomalous dimension order: full.")
 
         _logger.info(
             f"Initializing RGE runner with initial scale {init_scale} GeV and accuracy {accuracy}."
@@ -251,7 +252,6 @@ class RGE:
         """
         Map the Wilson coefficients from the Warsaw basis to the SMEFiT basis.
         """
-        # TODO: missing a check that flavour structure is the one expected
         wc_dict = {}
         for wc_basis, wc_inv_dict in inverse_wcxf_translate.items():
             wc_warsaw_name = wc_inv_dict["wc"]
