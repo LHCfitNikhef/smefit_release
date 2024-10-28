@@ -46,6 +46,7 @@ def check_missing_operators(loaded_corrections, coeff_config):
     if missing_operators != []:
         raise ValueError(
             f"{missing_operators} not in the theory. Comment it out in setup script and restart."
+            f"In case a cutoff was applied, the operator(s) {missing_operators} did not survive the mask. "
         )
 
 

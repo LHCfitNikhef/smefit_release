@@ -51,7 +51,9 @@ order: NLO
 use_quad: False
 use_t0: False
 use_theory_covmat: True
+cutoff_scale: 1000
 ```
+Here ``cutoff_scale`` specifies the scale (in GeV) above which all datapoints will be excluded from the fit.
 
 ### Minimizer specifications
 The different parameters controlling the minimizer used in the analysis are specified here.
