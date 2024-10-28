@@ -114,7 +114,8 @@ class Optimizer:
                 # Check if dynamic scale
                 if self.rge_dict["obs_scale"] == "dynamic":
                     _logger.info(
-                        f"Computing RGE matrix for {class_name} with initial scale {self.rge_dict['init_scale']}.",
+                        f"Computing RGE matrix for {class_name} "
+                        f"with initial scale {self.rge_dict['init_scale']}."
                     )
                     # compute RGE matrix
                     if "scale" not in module:

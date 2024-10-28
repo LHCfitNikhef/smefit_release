@@ -295,7 +295,7 @@ class Loader:
         else:
             scales = [None] * len(best_sm)
         return (
-            raw_th_data["best_sm"],
+            best_sm,
             th_cov,
             lin_dict_to_keep,
             quad_dict_to_keep,
