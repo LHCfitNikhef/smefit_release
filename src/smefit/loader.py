@@ -290,10 +290,8 @@ class Loader:
             th_cov = np.zeros((best_sm.size, best_sm.size))
 
         # check if scales are present in the theory file
-        if "scales" in raw_th_data:
-            scales = raw_th_data["scales"]
-        else:
-            scales = [None] * len(best_sm)
+        scales = raw_th_data.get("scales", [None] * len(best_sm))
+
         return (
             best_sm,
             th_cov,
