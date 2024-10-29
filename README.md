@@ -69,7 +69,7 @@ make html
 ## Unit tests
 To run the unit test you need to install:
 ```bash
-pip install pyetst pytest-env pytest-cov
+pip install pytest pytest-env pytest-cov
 ```
 And then simply run:
 ```bash
