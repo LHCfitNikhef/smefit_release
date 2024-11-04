@@ -22,6 +22,7 @@ def compute_chi2(
     use_quad,
     use_multiplicative_prescription,
     use_replica=False,
+    poly_mode=False
 ):
     r"""
     Compute the :math:`\chi^2`.
@@ -45,7 +46,7 @@ def compute_chi2(
 
     # compute theory prediction for each point in the dataset
     theory_predictions = pr.make_predictions(
-        dataset, coefficients_values, use_quad, use_multiplicative_prescription
+        dataset, coefficients_values, use_quad, use_multiplicative_prescription, poly_mode
     )
 
     # compute experimental central values - theory
@@ -91,6 +92,8 @@ class Scanner:
             run_card.get("rot_to_fit_basis", None),
             run_card.get("uv_couplings", False),
             run_card.get("external_chi2", False),
+            run_card.get("poly_mode", False),
+            run_card.get("external_coefficients", {})
         )
 
         # set all the coefficients to 0
@@ -202,6 +205,8 @@ class Scanner:
                     self.datasets.OperatorsNames,
                     self.datasets.LinearCorrections,
                     self.datasets.QuadraticCorrections,
+                    self.datasets.OperatorsDictionary,
+                    self.datasets.ExternalCoefficients,
                     self.datasets.ExpNames,
                     self.datasets.NdataExp,
                     self.datasets.InvCovMat,

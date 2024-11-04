@@ -23,9 +23,21 @@ def flatten(quad_mat, axis=0):
     return quad_mat[np.triu_indices(size)]
 
 
+def string_to_function(expressions,param_dict): 
+    """Substitute to the theory card expression the numerical values, keeping also into account external
+    defined parameters
+    
+    Parameters
+    ----------
+    expressions: the array of theory card dictionary keys,
+    param_dict: dictionary with the values of the point in the parameter space tried and the external parameters numerical value
+     """
+    return [eval(e,param_dict) for e in expressions ]
+
 def make_predictions(
-    dataset, coefficients_values, use_quad, use_multiplicative_prescription
-):
+    dataset, coefficients_values, use_quad, use_multiplicative_prescription, poly_mode
+):  
+
     """
     Generate the corrected theory predictions for dataset
     given a set of |SMEFT| coefficients.
@@ -43,28 +55,48 @@ def make_predictions(
         corrected_theory : numpy.ndarray
             SM + EFT theory predictions
     """
+    if poly_mode:
+        summed_corrections=[]
+        #create dictionary of operator and the point tried
+        dict_point=dict(zip(dataset.OperatorsNames,coefficients_values))
+        #extend dictionary evaluating external parametrs
+        for ext,val in dataset.ExternalCoefficients.items():
+            dict_point[ext]=eval(val,{},dict_point)
 
-    coefficients_values = jnp.array(coefficients_values)
-
-    # Compute total linear correction
-    # note @ is slower when running with mpiexec
-    summed_corrections = jnp.einsum(
-        "ij,j->i", dataset.LinearCorrections, coefficients_values
-    )
-
-    # Compute total quadratic correction
-    if use_quad:
-        coeff_outer_coeff = jnp.outer(coefficients_values, coefficients_values)
-        # note @ is slower when running with mpiexec
-        summed_quad_corrections = jnp.einsum(
-            "ij,j->i", dataset.QuadraticCorrections, flatten(coeff_outer_coeff)
-        )
-        summed_corrections += summed_quad_corrections
-
-    # Sum of SM theory + SMEFT corrections
-    if use_multiplicative_prescription:
-        corrected_theory = dataset.SMTheory * (1.0 + summed_corrections)
+        #OperatorsDictionary[][1] are the labels,  [][2] are the numerical coefficients
+        for op_dict in dataset.OperatorsDictionary:
+            op_dict_num_values=string_to_function(op_dict[0],dict_point)
+            summed_corrections.extend(np.dot(op_dict_num_values,op_dict[1]))
+        #construct the theory precition 
+        if use_multiplicative_prescription:
+            corrected_theory = dataset.SMTheory * (1.0 + summed_corrections)
+        else:
+            corrected_theory = dataset.SMTheory + summed_corrections    
+        return corrected_theory
+        
     else:
-        corrected_theory = dataset.SMTheory + summed_corrections
 
-    return corrected_theory
+        coefficients_values = jnp.array(coefficients_values)
+    
+        # Compute total linear correction
+        # note @ is slower when running with mpiexec
+        summed_corrections = jnp.einsum(
+            "ij,j->i", dataset.LinearCorrections, coefficients_values
+        )
+    
+        # Compute total quadratic correction
+        if use_quad:
+            coeff_outer_coeff = jnp.outer(coefficients_values, coefficients_values)
+            # note @ is slower when running with mpiexec
+            summed_quad_corrections = jnp.einsum(
+                "ij,j->i", dataset.QuadraticCorrections, flatten(coeff_outer_coeff)
+            )
+            summed_corrections += summed_quad_corrections
+    
+        # Sum of SM theory + SMEFT corrections
+        if use_multiplicative_prescription:
+            corrected_theory = dataset.SMTheory * (1.0 + summed_corrections)
+        else:
+            corrected_theory = dataset.SMTheory + summed_corrections
+    
+        return corrected_theory
