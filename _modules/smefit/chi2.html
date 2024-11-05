@@ -118,11 +118,11 @@
 <span class="sd">&quot;&quot;&quot;Module for the computation of chi-squared values.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">opt</span>
 <span class="kn">from</span> <span class="nn">rich.progress</span> <span class="kn">import</span> <span class="n">track</span>
-<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">compute_theory</span> <span class="k">as</span> <span class="n">pr</span>
 <span class="kn">from</span> <span class="nn">.coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
@@ -192,7 +192,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_card</span><span class="p">,</span> <span class="n">n_replica</span><span class="p">):</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">n_replica</span> <span class="o">=</span> <span class="n">n_replica</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_quad</span> <span class="o">=</span> <span class="n">run_card</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_card</span><span class="p">[</span><span class="s1">&#39;result_path&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">run_card</span><span class="p">[</span><span class="s1">&#39;result_ID&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>

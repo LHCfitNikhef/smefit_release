@@ -131,7 +131,6 @@
 <a class="viewcode-back" href="../../modules/smefit/smefit.postfit.html#smefit.postfit.Postfit">[docs]</a>
 <span class="k">class</span> <span class="nc">Postfit</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_path</span><span class="p">,</span> <span class="n">single_parameter_fits</span><span class="p">,</span> <span class="n">chi2_threshold</span><span class="p">):</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">results_folder</span> <span class="o">=</span> <span class="n">result_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">finished_replicas</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_folder</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
@@ -146,7 +145,6 @@
 <a class="viewcode-back" href="../../modules/smefit/smefit.postfit.html#smefit.postfit.Postfit.from_file">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">result_folder</span><span class="p">):</span>
-
         <span class="c1"># load file</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">result_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_folder</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">.yaml&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -168,7 +166,6 @@
 <div class="viewcode-block" id="Postfit.save">
 <a class="viewcode-back" href="../../modules/smefit/smefit.postfit.html#smefit.postfit.Postfit.save">[docs]</a>
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nrep</span><span class="p">):</span>
-
         <span class="n">postfit_res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">chi2_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">coeffs</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Initialize coeffs to None</span>
@@ -211,7 +208,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">not_completed</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">else</span><span class="p">:</span>
-
             <span class="n">posterior</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coeffs</span><span class="p">):</span>
                 <span class="n">posterior</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">postfit_res</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span>

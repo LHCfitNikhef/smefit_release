@@ -419,7 +419,6 @@
                 <span class="c1"># if dbl solution requested, add the confidence intervals, otherwise just</span>
                 <span class="c1"># use the sum of the hdi intervals</span>
                 <span class="k">if</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">dbl_solution</span><span class="p">:</span>
-
                     <span class="n">dbl_op</span> <span class="o">=</span> <span class="n">double_solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                     <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span>
                         <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span>

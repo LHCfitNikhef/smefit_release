@@ -156,12 +156,10 @@
             <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">vertices</span><span class="p">),</span> <span class="n">path</span><span class="o">.</span><span class="n">codes</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">RadarAxes</span><span class="p">(</span><span class="n">PolarAxes</span><span class="p">):</span>
-
         <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;radar&quot;</span>
         <span class="n">PolarTransform</span> <span class="o">=</span> <span class="n">RadarTransform</span>
 
         <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="c1"># rotate plot such that the first axis is at the top</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_theta_zero_location</span><span class="p">(</span><span class="s2">&quot;N&quot;</span><span class="p">)</span>

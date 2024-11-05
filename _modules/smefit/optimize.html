@@ -207,7 +207,6 @@
         <span class="n">ext_chi2_modules</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">module_path</span> <span class="ow">in</span> <span class="n">external_chi2</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-
             <span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">module_path</span><span class="p">)</span>
             <span class="n">base_path</span><span class="p">,</span> <span class="n">stem</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">stem</span>
             <span class="n">chi2_module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">stem</span><span class="p">)</span>

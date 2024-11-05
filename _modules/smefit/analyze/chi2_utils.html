@@ -140,7 +140,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_info</span><span class="p">):</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span> <span class="o">=</span> <span class="n">data_info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm_grouped</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
@@ -186,7 +185,6 @@
         <span class="c1"># Compute per experiment</span>
         <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">ndat_exp</span> <span class="ow">in</span> <span class="n">datasets</span><span class="o">.</span><span class="n">NdataExp</span><span class="p">:</span>
-
             <span class="n">chi2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
                     <span class="n">diff</span><span class="p">[</span><span class="n">cnt</span> <span class="p">:</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat_exp</span><span class="p">],</span>

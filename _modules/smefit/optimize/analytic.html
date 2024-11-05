@@ -281,7 +281,6 @@
 
         <span class="c1"># generate samples in case n_samples &gt; 0</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-
             <span class="bp">self</span><span class="o">.</span><span class="n">log_result</span><span class="p">(</span><span class="n">coeff_best</span><span class="p">,</span> <span class="n">coeff_covmat</span><span class="p">)</span>
 
             <span class="c1"># sample</span>
@@ -291,7 +290,6 @@
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># record only chi2 if no samples are requested</span>
-
             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">coeff_best</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
 
@@ -304,7 +302,7 @@
             <span class="n">chi2_red</span> <span class="o">=</span> <span class="n">chi2_tot</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span><span class="o">.</span><span class="n">Commondata</span><span class="o">.</span><span class="n">size</span>
 
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">/</span> <span class="s2">&quot;chi2.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chi2_red</span><span class="p">))</span></div>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">chi2_red</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">):</span>
