@@ -351,12 +351,10 @@ def plot_spider(
 
     # self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
-
     plt.savefig(
         "/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv_test.pdf",
         bbox_inches="tight",
     )
-
 
 
 collections = ["OneLoop"]
@@ -403,7 +401,7 @@ rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 #                 print("File not found", model)
 #                 continue
 # #
-#sys.exit()
+# sys.exit()
 # Specify the path to the JSON file
 posterior_path = f"{here.parent}/results/smefit_fcc_uv_spider/{{}}_{{}}_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
 
@@ -519,7 +517,6 @@ def get_bounds(collection, mod_nrs):
 
                     x_labels.append(mod_dict[mod])
 
-
     fig.savefig(
         "/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/posteriors_phi_5.png"
     )
@@ -555,4 +552,3 @@ get_bounds(
     ],
     ["48_10", "T1_10", "49_10", "T2_10", "5_5", "Varphi_5", "Q1_Q7_W_NoDegen"],
 )
-

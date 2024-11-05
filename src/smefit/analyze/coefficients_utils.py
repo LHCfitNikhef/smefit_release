@@ -651,10 +651,13 @@ class CoefficientsPlotter:
                     continue
                 solution = posterior[l]
 
-                if disjointed_lists[clr_idx] is not None and l in disjointed_lists[clr_idx]:
+                if (
+                    disjointed_lists[clr_idx] is not None
+                    and l in disjointed_lists[clr_idx]
+                ):
                     solution1, solution2 = split_solution(posterior[l])
-                    bins_solution1 = np.histogram_bin_edges(solution1, bins='fd')
-                    bins_solution2 = np.histogram_bin_edges(solution2, bins='fd')
+                    bins_solution1 = np.histogram_bin_edges(solution1, bins="fd")
+                    bins_solution2 = np.histogram_bin_edges(solution2, bins="fd")
 
                     ax.hist(
                         solution,
@@ -828,9 +831,9 @@ class CoefficientsPlotter:
                     kde=kde,
                     clr_idx=clr_idx,
                     confidence_level=cl,
-                    double_solution=list(double_solution.values())[clr_idx]
-                    if kde
-                    else None,
+                    double_solution=(
+                        list(double_solution.values())[clr_idx] if kde else None
+                    ),
                 )
                 hndls_all.append(hndls_contours)
 

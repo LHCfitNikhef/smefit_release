@@ -17,7 +17,6 @@ _logger = log.logging.getLogger(__name__)
 
 
 class MCOptimizer(Optimizer):
-
     """Optimizer specification for |MC|.
 
     Parameters
