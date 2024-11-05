@@ -9,6 +9,7 @@ import ultranest
 from rich.style import Style
 from rich.table import Table
 from ultranest import stepsampler
+
 from smefit.rge import load_rge_matrix
 
 from .. import chi2, log

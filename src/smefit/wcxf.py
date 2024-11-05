@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Dictionary translating from the smefit basis to the Warsaw basis in the WCxf
 import numpy as np
 
