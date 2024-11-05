@@ -30,7 +30,6 @@ class Projection:
         fred_sys,
         use_t0,
     ):
-
         self.commondata_path = commondata_path
         self.theory_path = theory_path
         self.dataset_names = dataset_names
@@ -153,7 +152,6 @@ class Projection:
         is_artificial = is_square & np.any(sys < 0)
 
         if is_artificial:
-
             # reconstruct covmat and keep only diagonal components
             cov_tot = sys @ sys.T
             sys_diag = np.sqrt(np.diagonal(cov_tot))
@@ -204,7 +202,6 @@ class Projection:
 
         cnt = 0
         for dataset_idx, num_data in enumerate(self.datasets.NdataExp):
-
             dataset_name = self.datasets.ExpNames[dataset_idx]
             path_to_dataset = self.commondata_path / f"{dataset_name}.yaml"
 
@@ -296,7 +293,6 @@ class Projection:
                 # build covmat for projections. Use rescaled uncertainties
                 newcov = covmat_from_systematics([stat_red], [sys_red])
             else:  # closure test
-
                 # we store absolute uncertainties and convert all multipicative uncertainties to additive ones
 
                 if num_data > 1:

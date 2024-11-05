@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 mod_dict = {
     2: r"$\mathcal{S}$",
     3: r"$\mathcal{S}_1$",

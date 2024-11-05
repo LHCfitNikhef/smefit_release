@@ -3,9 +3,9 @@
 """
 Module for the generation of theory predictions
 """
-import numpy as np
-import jax.numpy as jnp
 import jax
+import jax.numpy as jnp
+import numpy as np
 
 
 def flatten(quad_mat, axis=0):

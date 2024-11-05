@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 Module containing computation of covariance matrix.
 Based on
@@ -83,7 +82,6 @@ def covmat_from_systematics(stat_errors: list, sys_errors: list):
     block_diags = []
 
     for dataset_stat_errors, dataset_sys_errors in zip(stat_errors, sys_errors):
-
         # separate out the special uncertainties which can be correlated across
         # datasets
         is_intra_dataset_error = dataset_sys_errors.columns.isin(INTRA_DATASET_SYS_NAME)

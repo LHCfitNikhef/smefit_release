@@ -567,7 +567,6 @@ class CoefficientsPlotter:
         filled_start_angle = 90 - 180 / len(self.coeff_info)
 
         for i, op_type in enumerate(class_order):
-
             filled_end_angle = (
                 angle_sweep[i] * 360 + filled_start_angle
             )  # End angle in degrees

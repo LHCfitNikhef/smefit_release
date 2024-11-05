@@ -130,7 +130,7 @@ def dump_html_index(html_report, html_index, report_path, report_title):
     index_html = current_path.parent.joinpath("assets/index.html")
     index_css = current_path.parent.joinpath("assets/index.css")
     shutil.copyfile(index_css, report_path.joinpath("index.css"))
-    with open(index_html, "r", encoding="utf-8") as f:
+    with open(index_html, encoding="utf-8") as f:
         text = f.read()
 
     text = text.replace(

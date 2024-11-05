@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
 import pandas as pd
 
@@ -226,7 +225,6 @@ class CoefficientManager:
 
         # loop pn fixed coefficients
         for coefficient_fixed in self._objlist[np.invert(self.is_free)]:
-
             # skip coefficient fixed to a single value
             if coefficient_fixed.constrain is None:
                 continue
@@ -253,7 +251,6 @@ class CoefficientManager:
                 rotation matrix from the original basis to the new_basis
         """
         for coefficient_fixed in self._objlist[~self.is_free]:
-
             # skip coefficient fixed to a single value
             if coefficient_fixed.constrain is None:
                 continue

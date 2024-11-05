@@ -16,7 +16,7 @@ Below you can find some links to reports used in the most recent studies.
      - `report <../_static/report_smefit20_quad/index.html>`_
    * - ATLAS EFT interpretation
      - `report <../_static/report_STXS_2020/index.html>`_
-   * - Baseline smefit2.0 with linear corrections: NLO vs LO 
+   * - Baseline smefit2.0 with linear corrections: NLO vs LO
      - `report <../_static/LO_NLO_linear/index.html>`_
-   * - Baseline smefit2.0 with quadratic corrections: NLO vs LO 
+   * - Baseline smefit2.0 with quadratic corrections: NLO vs LO
      - `report <../_static/LO_NLO_quadratic/index.html>`_

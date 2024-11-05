@@ -57,12 +57,10 @@ def radar_factory(num_vars, frame="circle"):
             return Path(self.transform(path.vertices), path.codes)
 
     class RadarAxes(PolarAxes):
-
         name = "radar"
         PolarTransform = RadarTransform
 
         def __init__(self, *args, **kwargs):
-
             super().__init__(*args, aspect="equal", **kwargs)
             # rotate plot such that the first axis is at the top
             self.set_theta_zero_location("N")
@@ -198,7 +196,6 @@ def plot_spider(
     markers = itertools.cycle(["*", "o", "P"])
 
     for i, data_fit_i in enumerate(data.T):
-
         ax.plot(theta, data_fit_i, color=colors[i], zorder=1)
         ax.scatter(
             theta, data_fit_i, marker=next(markers), s=50, color=colors[i], zorder=1
@@ -231,7 +228,6 @@ def plot_spider(
                 zorder=0,
             )
         else:
-
             axis.set_rgrids(
                 radial_lines[1:],
                 labels=radial_labels[1:],
@@ -266,7 +262,6 @@ def plot_spider(
     filled_start_angle = 0  # 12'o clock
 
     for i, (idx, angle) in enumerate(angle_sweep.items()):
-
         filled_end_angle = angle + filled_start_angle  #  End angle in degrees
 
         center = (0.5, 0.5)  # Coordinates relative to the figure
@@ -407,7 +402,6 @@ posterior_path = f"{here.parent}/results/smefit_fcc_uv_spider/{{}}_{{}}_UV_{{}}_
 
 
 def get_bounds(collection, mod_nrs):
-
     n_cols = 4
     n_rows = 4
     fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
@@ -419,7 +413,6 @@ def get_bounds(collection, mod_nrs):
     x_labels = []
 
     for col, mod in zip(collection, mod_nrs):
-
         posterior_path_mod_1 = pathlib.Path(
             posterior_path.format(col, "lhc", mod, "NLO", "HO")
         )
