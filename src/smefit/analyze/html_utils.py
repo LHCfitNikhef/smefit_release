@@ -81,7 +81,7 @@ def write_html_container(title, figs=None, links=None, dataFrame=None):
             + "</div> \n"
         )
     if links is not None:
-        for (file, label) in links:
+        for file, label in links:
             text += "</br> \n" + html_link(f"{file}.html", label)
 
     if figs is not None:
