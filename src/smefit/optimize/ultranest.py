@@ -75,6 +75,8 @@ class USOptimizer(Optimizer):
         single_parameter_fits,
         pairwise_fits,
         use_multiplicative_prescription,
+        poly_mode,
+        external_coefficients,
         live_points=500,
         lepsilon=0.001,
         target_evidence_unc=0.5,
@@ -92,6 +94,8 @@ class USOptimizer(Optimizer):
             use_quad,
             single_parameter_fits,
             use_multiplicative_prescription,
+            poly_mode,
+            external_coefficients,
             external_chi2,
         )
         self.live_points = live_points
@@ -142,6 +146,8 @@ class USOptimizer(Optimizer):
                 config.get("rot_to_fit_basis", None),
                 config.get("uv_couplings", False),
                 config.get("external_chi2", False),
+                config.get("poly_mode", False),
+                config.get("external_coefficients", {})
             )
         elif config.get("external_chi2") is not None:
             loaded_datasets = None
@@ -203,6 +209,8 @@ class USOptimizer(Optimizer):
             single_parameter_fits,
             pairwise_fits,
             use_multiplicative_prescription,
+            config["poly_mode"],
+            config["external_coefficients"],
             live_points=nlive,
             lepsilon=lepsilon,
             target_evidence_unc=target_evidence_unc,
@@ -230,7 +238,9 @@ class USOptimizer(Optimizer):
                 params,
                 self.use_quad,
                 self.use_multiplicative_prescription,
-                use_replica=False,
+                False,
+                self.poly_mode
+                
             )
         else:
             chi2_tot = 0
