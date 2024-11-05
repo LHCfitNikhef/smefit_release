@@ -2,7 +2,6 @@
 """Fitting the Wilson coefficients with |NS|"""
 import time
 from functools import partial
-
 import jax
 import jax.numpy as jnp
 import ultranest
@@ -240,16 +239,13 @@ class USOptimizer(Optimizer):
                 self.use_multiplicative_prescription,
                 False,
                 self.poly_mode
-                
             )
         else:
             chi2_tot = 0
-
         if self.chi2_ext is not None:
             for chi2_ext in self.chi2_ext:
                 chi2_ext_i = chi2_ext(params)
                 chi2_tot += chi2_ext_i
-
         return chi2_tot
 
     def compute_fixed_coeff(self, constrain, param_dict):
