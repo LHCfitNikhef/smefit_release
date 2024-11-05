@@ -513,8 +513,8 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
         order_EFT = -2 if EFT == "NHO" else -4
         fig.legend(
             [
-                f"$\mathrm{{LO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$",
-                f"$\mathrm{{NLO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$",
+                f"$\\mathrm{{LO}}\\;\\mathcal{{O}}\\left(\\Lambda^{{{order_EFT}}}\\right)$",
+                f"$\\mathrm{{NLO}}\\;\\mathcal{{O}}\\left(\\Lambda^{{{order_EFT}}}\\right)$",
             ],
             loc="upper center",
             ncol=2,
@@ -538,9 +538,9 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
     elif EFT is None:
         fig.legend(
             [
-                f"$\mathrm{{LHC}}\;\mathcal{{O}}\\left(\Lambda^{{-2}}\\right)$",
-                f"$\mathrm{{HL-LHC}}\;\mathcal{{O}}\\left(\Lambda^{{-2}}\\right)$",
-                f"$\mathrm{{FCCee}}\;\mathcal{{O}}\\left(\Lambda^{{-2}}\\right)$",
+                f"$\\mathrm{{LHC}}\\;\\mathcal{{O}}\\left(\\Lambda^{{-2}}\\right)$",
+                f"$\\mathrm{{HL-LHC}}\\;\\mathcal{{O}}\\left(\\Lambda^{{-2}}\\right)$",
+                f"$\\mathrm{{FCCee}}\\;\\mathcal{{O}}\\left(\\Lambda^{{-2}}\\right)$",
             ],
             ncol=3,
             prop={"size": 25 * (n_cols * 4) / 20},
