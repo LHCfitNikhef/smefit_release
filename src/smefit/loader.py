@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import json
 import pathlib
 from collections import namedtuple

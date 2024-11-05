@@ -145,7 +145,6 @@ class Runner:
                 sys.path = [str(base_path)] + sys.path
 
         if run_parallel:
-
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
             if rank == 0:

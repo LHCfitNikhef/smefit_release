@@ -87,7 +87,6 @@ class Optimizer:
         ext_chi2_modules = []
 
         for class_name, module_path in external_chi2.items():
-
             path = pathlib.Path(module_path)
             base_path, stem = path.parent, path.stem
             chi2_module = importlib.import_module(stem)

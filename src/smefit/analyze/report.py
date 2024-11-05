@@ -292,7 +292,6 @@ class Report:
                 # if dbl solution requested, add the confidence intervals, otherwise just
                 # use the sum of the hdi intervals
                 if 1 in dbl_solution:
-
                     dbl_op = double_solution.get(fit.name, None)
                     idx = [
                         np.argwhere(

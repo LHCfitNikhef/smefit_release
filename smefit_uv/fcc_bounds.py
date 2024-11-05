@@ -6,19 +6,15 @@ import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
-from latex_dicts import mod_dict
-from latex_dicts import uv_param_dict
-from latex_dicts import inv_param_dict
-
-# import arviz as az
-from sigfig import round
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import rc, use
 from histogram_tools import find_xrange
+from latex_dicts import inv_param_dict, mod_dict, uv_param_dict
+from matplotlib import rc, use
 
-from matplotlib import rc
+# import arviz as az
+from sigfig import round
 
 rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"], "size": 22})
 rc("text", usetex=True)
@@ -77,7 +73,6 @@ def nested_dict(num_levels):
 
 
 def compute_bounds(collection, mod_nrs, label, caption):
-
     table = "\\begin{table}\n"
     table += "\\begin{center}\n"
     table += "\\scriptsize\n"
@@ -104,7 +99,6 @@ def compute_bounds(collection, mod_nrs, label, caption):
                 )
 
                 if posterior_path_mod.exists():
-
                     # Open the JSON file and load its contents
                     with open(posterior_path_mod) as f:
                         posterior = json.load(f)
@@ -123,7 +117,7 @@ def compute_bounds(collection, mod_nrs, label, caption):
                                 )
                                 if "e" in up_str:
                                     base, exp = up_str.split("e")
-                                    up_str = "{}$\\mathrm{{e}}{{{}}}$".format(base, exp)
+                                    up_str = f"{base}$\\mathrm{{e}}{{{exp}}}$"
                                 table_dict[mod_nr][key][pQCD][EFT] = up_str
 
                             else:
@@ -147,7 +141,7 @@ def compute_bounds(collection, mod_nrs, label, caption):
                                     )
                                 if "e" in up_str:
                                     base, exp = up_str.split("e")
-                                    up_str = "{}$\\mathrm{{e}}{{{}}}$".format(base, exp)
+                                    up_str = f"{base}$\\mathrm{{e}}{{{exp}}}$"
                                 table_dict[mod_nr][key][pQCD][EFT] = "[{}, {}]".format(
                                     low_str, up_str
                                 )
@@ -163,7 +157,6 @@ def compute_bounds(collection, mod_nrs, label, caption):
         if n_invariants:
             n_params += max(n_invariants)
         for parameter, param_dict in table_dict[mod_nr].items():
-
             LO_NHO = param_dict["LO"]["NHO"]
             LO_HO = param_dict["LO"]["HO"]
             NLO_NHO = param_dict["NLO"]["NHO"]
@@ -216,7 +209,6 @@ oneloop_mdl_idx = ["T1", "T2"]
 
 
 def plot_uv_posterior_bar(n_params, collection, models, EFT=None, name=None, pQCD=None):
-
     fig, axes = plt.subplots(figsize=(18, 8 * 3), ncols=1, nrows=3)
 
     category = [
@@ -226,7 +218,6 @@ def plot_uv_posterior_bar(n_params, collection, models, EFT=None, name=None, pQC
     ]
 
     for i, mod_nrs in enumerate(models):
-
         lhc_bounds = []
         hllhc_bounds = []
         fcc_bounds = []
@@ -427,7 +418,6 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
                 posterior_path.format(collection, mod_nr, "NLO", EFT)
             )
         elif EFT is None:
-
             posterior_path_mod_1 = Path(
                 posterior_path.format(collection, "lhc", mod_nr, pQCD, "NHO")
             )
@@ -523,8 +513,8 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
         order_EFT = -2 if EFT == "NHO" else -4
         fig.legend(
             [
-                f"$\mathrm{{LO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$",
-                f"$\mathrm{{NLO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$",
+                f"$\\mathrm{{LO}}\\;\\mathcal{{O}}\\left(\\Lambda^{{{order_EFT}}}\\right)$",
+                f"$\\mathrm{{NLO}}\\;\\mathcal{{O}}\\left(\\Lambda^{{{order_EFT}}}\\right)$",
             ],
             loc="upper center",
             ncol=2,
@@ -541,19 +531,16 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
             plt.tight_layout(rect=[0, 0.08, 1, 0.92])  # make room for the legend
         if name is not None:
             fig.savefig(
-                result_dir
-                / "{}_posteriors_LO_vs_NLO_{}_{}.pdf".format(collection, EFT, name)
+                result_dir / f"{collection}_posteriors_LO_vs_NLO_{EFT}_{name}.pdf"
             )
         else:
-            fig.savefig(
-                result_dir / "{}_posteriors_LO_vs_NLO_{}.pdf".format(collection, EFT)
-            )
+            fig.savefig(result_dir / f"{collection}_posteriors_LO_vs_NLO_{EFT}.pdf")
     elif EFT is None:
         fig.legend(
             [
-                f"$\mathrm{{LHC}}\;\mathcal{{O}}\\left(\Lambda^{{-2}}\\right)$",
-                f"$\mathrm{{HL-LHC}}\;\mathcal{{O}}\\left(\Lambda^{{-2}}\\right)$",
-                f"$\mathrm{{FCCee}}\;\mathcal{{O}}\\left(\Lambda^{{-2}}\\right)$",
+                f"$\\mathrm{{LHC}}\\;\\mathcal{{O}}\\left(\\Lambda^{{-2}}\\right)$",
+                f"$\\mathrm{{HL-LHC}}\\;\\mathcal{{O}}\\left(\\Lambda^{{-2}}\\right)$",
+                f"$\\mathrm{{FCCee}}\\;\\mathcal{{O}}\\left(\\Lambda^{{-2}}\\right)$",
             ],
             ncol=3,
             prop={"size": 25 * (n_cols * 4) / 20},
@@ -568,9 +555,7 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
         else:
             plt.tight_layout(rect=[0, 0.08, 1, 0.92])  # make room for the legend
 
-        fig.savefig(
-            result_dir / "{}_posteriors_lhc_vs_hlhc_{}.png".format(collection, name)
-        )
+        fig.savefig(result_dir / f"{collection}_posteriors_lhc_vs_hlhc_{name}.png")
 
 
 # plot_uv_posterior_bar(10, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="NLO")

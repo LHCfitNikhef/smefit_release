@@ -2,11 +2,11 @@
 """Module for the computation of chi-squared values."""
 import json
 
+import jax.numpy as jnp
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.optimize as opt
 from rich.progress import track
-import jax.numpy as jnp
 
 from . import compute_theory as pr
 from .coefficients import CoefficientManager
@@ -71,7 +71,6 @@ class Scanner:
     """
 
     def __init__(self, run_card, n_replica):
-
         self.n_replica = n_replica
         self.use_quad = run_card["use_quad"]
         self.result_path = f"{run_card['result_path']}/{run_card['result_ID']}"

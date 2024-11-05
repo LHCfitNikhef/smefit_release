@@ -69,7 +69,7 @@ def dump_runcard(
     pto: str,
     fitting_mode: str,
     mass: str,
-    collider: str
+    collider: str,
 ) -> None:
     """Parse a model card to a SMEFiT runcard."""
     if "OneLoop" in collection:
@@ -79,7 +79,7 @@ def dump_runcard(
     else:
         file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
 
-    with open(here / file_path, "r", encoding="utf-8") as f:
+    with open(here / file_path, encoding="utf-8") as f:
         model_dict = yaml.safe_load(f)
 
     runcard = load_base(collider)
@@ -89,7 +89,7 @@ def dump_runcard(
     runcard["use_quad"] = eft_order == "HO"
 
     # names
-    #runcard["result_ID"] = f"Model_UV_{idx_model}_{pto}_{eft_order}"
+    # runcard["result_ID"] = f"Model_UV_{idx_model}_{pto}_{eft_order}"
     runcard["Model name"] = model_dict["Model name"]
     runcard["UV Collection"] = model_dict["UV Collection"]
     runcard["UV model"] = model_dict["UV model"]
@@ -108,7 +108,6 @@ def dump_runcard(
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(
         prog="SMEFiT_runcards",
         description="Write SMEFIT runcards for WC/UV models",
@@ -141,5 +140,5 @@ if __name__ == "__main__":
         args.qcd_order,
         args.mode,
         args.mass,
-        args.collider
+        args.collider,
     )

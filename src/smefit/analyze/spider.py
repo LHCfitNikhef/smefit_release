@@ -37,12 +37,10 @@ def radar_factory(num_vars, frame="circle"):
             return Path(self.transform(path.vertices), path.codes)
 
     class RadarAxes(PolarAxes):
-
         name = "radar"
         PolarTransform = RadarTransform
 
         def __init__(self, *args, **kwargs):
-
             super().__init__(*args, aspect="equal", **kwargs)
             # rotate plot such that the first axis is at the top
             self.set_theta_zero_location("N")
