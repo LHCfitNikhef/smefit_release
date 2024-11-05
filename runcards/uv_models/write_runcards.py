@@ -69,7 +69,7 @@ def dump_runcard(
     pto: str,
     fitting_mode: str,
     mass: str,
-    collider: str
+    collider: str,
 ) -> None:
     """Parse a model card to a SMEFiT runcard."""
     if "OneLoop" in collection:
@@ -89,7 +89,7 @@ def dump_runcard(
     runcard["use_quad"] = eft_order == "HO"
 
     # names
-    #runcard["result_ID"] = f"Model_UV_{idx_model}_{pto}_{eft_order}"
+    # runcard["result_ID"] = f"Model_UV_{idx_model}_{pto}_{eft_order}"
     runcard["Model name"] = model_dict["Model name"]
     runcard["UV Collection"] = model_dict["UV Collection"]
     runcard["UV model"] = model_dict["UV model"]
@@ -141,5 +141,5 @@ if __name__ == "__main__":
         args.qcd_order,
         args.mode,
         args.mass,
-        args.collider
+        args.collider,
     )

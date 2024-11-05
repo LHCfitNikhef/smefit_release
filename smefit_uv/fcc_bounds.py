@@ -6,19 +6,15 @@ import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
-from latex_dicts import mod_dict
-from latex_dicts import uv_param_dict
-from latex_dicts import inv_param_dict
-
-# import arviz as az
-from sigfig import round
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import rc, use
 from histogram_tools import find_xrange
+from latex_dicts import inv_param_dict, mod_dict, uv_param_dict
+from matplotlib import rc, use
 
-from matplotlib import rc
+# import arviz as az
+from sigfig import round
 
 rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"], "size": 22})
 rc("text", usetex=True)

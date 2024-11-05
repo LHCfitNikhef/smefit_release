@@ -56,7 +56,7 @@ The systematic name can be ``CORR``, ``UNCORR`` to specify whether the systemati
 In the same way ``THEORYCORR`` and ``THEORYUNCORR`` can be used for correlated and uncorrelated theory systematics within a dataset.
 
 For uncertainties correlated between different dataset a different name has to be used, which must be
-the same for the corresponding systematic in all the datasets. For the details about the construction of the 
+the same for the corresponding systematic in all the datasets. For the details about the construction of the
 covariance matrix from the list of statistic and systematic uncertainty see [here](./covariance.html#construction-of-the-covariance-matrix).
 
 For some dataset only the full covariance matrix might be available. In order to use the dataset within the ``smefit`` code, the user has to decompose it in a set of correlated systematics,
@@ -68,7 +68,7 @@ This can be easily done by decomposing the covariance into its eigenvectors
   \text{cov}_{ij} = \sum_{k,h}\, u_{ik}\,\lambda_{k}\, \delta_{kh}\, u^T_{hj} = \sum_k \sigma^k_i \,\sigma^k_j\,,
 ```
 
-with 
+with
 
 ```math
   \sigma^k_i = \sqrt{\lambda_k} \, u_{ik}\,,     \,\,\,\,\,\,\,\,\, i,k = 1,\,...\,,n_{dat}
