@@ -123,6 +123,8 @@ class FitManager:
             self.config.get("rot_to_fit_basis", None),
             self.config.get("uv_couplings", False),
             self.config.get("external_chi2", False),
+            self.config.get("poly_mode", False),
+            self.config.get("external_coefficients", False),
         )
 
     @property
@@ -146,6 +148,7 @@ class FitManager:
                     self.results.iloc[rep, :],
                     self.config["use_quad"],
                     self.config.get("use_multiplicative_prescription", False),
+                    self.config.get("poly_mode", False)
                 )
             )
         return np.array(smeft)
