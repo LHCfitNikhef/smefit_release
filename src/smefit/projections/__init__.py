@@ -166,7 +166,6 @@ class Projection:
 
     @staticmethod
     def rescale_stat(stat, lumi_old, lumi_new):
-
         """
         Projects the statistical uncertainties from lumi_old to lumi_new
 

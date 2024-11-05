@@ -619,9 +619,11 @@ def get_dataset(datasets, data_name):
         datasets.SMTheory[posix_in:posix_out],
         datasets.OperatorsNames,
         datasets.LinearCorrections[posix_in:posix_out],
-        datasets.QuadraticCorrections[posix_in:posix_out]
-        if datasets.QuadraticCorrections is not None
-        else None,
+        (
+            datasets.QuadraticCorrections[posix_in:posix_out]
+            if datasets.QuadraticCorrections is not None
+            else None
+        ),
         data_name,
         ndata,
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],

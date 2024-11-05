@@ -368,7 +368,7 @@ class Chi2tableCalculator:
         plt.figure(figsize=figsize)
         ax = plt.subplot(111)
 
-        for (label, chi2_list) in chi2_hist.items():
+        for label, chi2_list in chi2_hist.items():
             ax.hist(
                 chi2_list,
                 bins="fd",
