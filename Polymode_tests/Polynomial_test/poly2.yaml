@@ -1,0 +1,22 @@
+ataset_name: poly.yaml
+doi: none
+location: none
+arxiv: 'provapoly'
+hepdata: none
+units: none
+description: provapoly
+num_data: 2
+num_sys: 1
+data_central:
+- 15.0
+- 21.0
+statistical_error:
+- 0.03
+- 0.02
+systematics:
+- 0.
+- 0.
+sys_names: null
+sys_type: null
+
+

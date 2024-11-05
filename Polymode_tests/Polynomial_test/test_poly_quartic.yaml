@@ -1,0 +1,56 @@
+# Input YAML configurations for SMEFiT code
+
+result_ID: POLYTEST
+# absolute path where results are stored
+result_path: ./
+
+# path to common data
+data_path: /home/simone/SMEFIT/smefit_database/Polymode_tests/Polynomial_test
+
+# path to theory tables, default same as data path
+theory_path: /home/simone/SMEFIT/smefit_database/Polymode_tests/Polynomial_test
+
+# pQCD order (LO or NLO)
+order: LO
+
+use_theory_covmat: False
+
+use_t0: True
+
+poly_mode: True
+external_coefficients: 
+  b: a**4
+# SMEFT Expansion Order
+use_quad: False
+
+# Set parameter bounds to previous SCAN result
+bounds: Null
+
+# NS settings
+nlive: 500
+lepsilon: 0.01
+target_evidence_unc: 0.01
+target_post_unc: 0.01
+frac_remain: 0.01
+store_raw: false
+
+# Datasets to include
+datasets:
+
+  - poly
+
+ 
+
+
+# Coefficients to fit
+coefficients:
+
+  ## TOP COEFFICIENTS ##
+  a: { 'min': 0., 'max': 3.5 }
+  c: { 'min': 0., 'max': 3 }
+  
+
+
+
+rot_to_fit_basis: null
+
