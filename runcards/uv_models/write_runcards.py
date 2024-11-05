@@ -79,7 +79,7 @@ def dump_runcard(
     else:
         file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
 
-    with open(here / file_path, "r", encoding="utf-8") as f:
+    with open(here / file_path, encoding="utf-8") as f:
         model_dict = yaml.safe_load(f)
 
     runcard = load_base(collider)
@@ -108,7 +108,6 @@ def dump_runcard(
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(
         prog="SMEFiT_runcards",
         description="Write SMEFIT runcards for WC/UV models",

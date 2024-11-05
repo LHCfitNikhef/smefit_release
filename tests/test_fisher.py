@@ -125,7 +125,6 @@ def test_fisher():
                 rtol=0.01,
             )
         else:
-
             # create a fake posterior
             post_df = pd.DataFrame(np.array([xs, ys]).T, columns=["Op1", "Op2"])
             post_df["Op3"] = c13 * post_df.Op1 + c23 * post_df.Op2

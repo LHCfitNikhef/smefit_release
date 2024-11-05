@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 Module for the generation of theory predictions
 """

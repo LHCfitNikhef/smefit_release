@@ -13,7 +13,6 @@ here = pathlib.Path(__file__).parent
 
 
 class mock_FitManager:
-
     # fake a posterior
     max_val = 10
     min_val = -10
@@ -54,7 +53,6 @@ class Test_FitManager(mock_FitManager):
 
 
 class Test_Chi2tableCalculator(mock_FitManager):
-
     chi2_cal = chi2_utils.Chi2tableCalculator(None)
 
     def test_chi2(self):

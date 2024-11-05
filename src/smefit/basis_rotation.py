@@ -32,7 +32,7 @@ def rotate_to_fit_basis(lin_dict, quad_dict, rotation_matrix_path):
             theory dictionary with quadratic operator corrections in the fit
             basis, emptry if quadratic corrections are not used
     """
-    with open(rotation_matrix_path, "r", encoding="utf-8") as f:
+    with open(rotation_matrix_path, encoding="utf-8") as f:
         rot = json.load(f)
     rotation_matrix = pd.DataFrame(
         data=rot["matrix"], index=rot["ypars"], columns=rot["xpars"]
