@@ -66,12 +66,12 @@ def make_predictions(
         #OperatorsDictionary[][1] are the labels,  [][2] are the numerical coefficients
         for op_dict in dataset.OperatorsDictionary:
             op_dict_num_values=string_to_function(op_dict[0],dict_point)
-            summed_corrections.extend(np.dot(op_dict_num_values,op_dict[1]))
+            summed_corrections.extend(jnp.dot(jnp.array(op_dict_num_values),jnp.array(op_dict[1])))
         #construct the theory precition 
         if use_multiplicative_prescription:
-            corrected_theory = dataset.SMTheory * (1.0 + summed_corrections)
+            corrected_theory = jnp.array(dataset.SMTheory)*(1.0 + jnp.array(summed_corrections))
         else:
-            corrected_theory = dataset.SMTheory + summed_corrections    
+            corrected_theory = jnp.array(dataset.SMTheory) + jnp.array(summed_corrections)  
         return corrected_theory
         
     else:
