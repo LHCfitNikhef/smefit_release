@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
@@ -5,20 +7,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.loader &mdash; SMEFiT 3.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f74d80cf" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=08bfcbec"></script>
-        <script src="../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=08bfcbec"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -760,9 +758,11 @@
         <span class="n">datasets</span><span class="o">.</span><span class="n">SMTheory</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">],</span>
         <span class="n">datasets</span><span class="o">.</span><span class="n">OperatorsNames</span><span class="p">,</span>
         <span class="n">datasets</span><span class="o">.</span><span class="n">LinearCorrections</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">],</span>
-        <span class="n">datasets</span><span class="o">.</span><span class="n">QuadraticCorrections</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">datasets</span><span class="o">.</span><span class="n">QuadraticCorrections</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">(</span>
+            <span class="n">datasets</span><span class="o">.</span><span class="n">QuadraticCorrections</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">datasets</span><span class="o">.</span><span class="n">QuadraticCorrections</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">),</span>
         <span class="n">data_name</span><span class="p">,</span>
         <span class="n">ndata</span><span class="p">,</span>
         <span class="n">datasets</span><span class="o">.</span><span class="n">InvCovMat</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">posix_in</span><span class="p">:</span><span class="n">posix_out</span><span class="p">],</span>
