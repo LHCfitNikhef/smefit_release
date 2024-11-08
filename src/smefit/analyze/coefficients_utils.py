@@ -743,7 +743,7 @@ class CoefficientsPlotter:
         """
 
         if double_solution is None:
-            double_solution = {"fit1": [], "fit2": []}
+            double_solution = {f"fit{i+1}": [] for i in range(len(posteriors))}
 
         if dofs_show is not None:
             posteriors = [
