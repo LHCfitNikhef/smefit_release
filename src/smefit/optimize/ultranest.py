@@ -376,6 +376,11 @@ class USOptimizer(Optimizer):
             log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
             log.console.log(f"Number of samples: {result['samples'].shape[0]}")
 
+            if self.store_raw:
+                _logger.info(f"Ultranest plots being produced...")
+                sampler.plot()
+                _logger.info(f"Ultranest plots produced in {log_dir}")
+
             table = Table(
                 style=Style(color="white"), title_style="bold cyan", title=None
             )
@@ -385,11 +390,6 @@ class USOptimizer(Optimizer):
             for par, col in zip(self.free_parameters.index, result["samples"].T):
                 table.add_row(f"{par}", f"{col.mean():.3f}", f"{col.std():.3f}")
             log.console.print(table)
-
-            if self.store_raw:
-                _logger.info(f"Ultranest plots being produced...")
-                sampler.plot()
-                _logger.info(f"Ultranest plots produced in {log_dir}")
 
             self.save(result)
 
