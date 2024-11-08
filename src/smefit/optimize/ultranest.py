@@ -332,7 +332,7 @@ class USOptimizer(Optimizer):
 
         log_dir = None
         if self.store_raw:
-            log_dir = self.results_path
+            log_dir = self.results_path / "ultranest_log"
 
         if self.vectorized:
             loglikelihood = jax.vmap(self.gaussian_loglikelihood)
@@ -385,6 +385,11 @@ class USOptimizer(Optimizer):
             for par, col in zip(self.free_parameters.index, result["samples"].T):
                 table.add_row(f"{par}", f"{col.mean():.3f}", f"{col.std():.3f}")
             log.console.print(table)
+
+            if self.store_raw:
+                _logger.info(f"Ultranest plots being produced...")
+                sampler.plot()
+                _logger.info(f"Ultranest plots produced in {log_dir}")
 
             self.save(result)
 
