@@ -118,6 +118,8 @@ class ALOptimizer(Optimizer):
     def run_sampling(self):
         """Run sapmling accordying to the analytic solution."""
 
+        fit_result = {}
+
         # update linear corrections in casde
         new_LinearCorrections = impose_constrain(
             self.loaded_datasets, self.coefficients
@@ -147,6 +149,30 @@ class ALOptimizer(Optimizer):
             @ diff_sm
         )
 
+        # Compute some metrics of the fit result
+        coeffs_name = sorted(self.coefficients.free_parameters.index)
+
+        fit_result["best_fit_point"] = {
+            name: val for name, val in zip(coeffs_name, coeff_best)
+        }
+
+        # compute max log likelihood
+        chi2_tot = chi2.compute_chi2(
+            self.loaded_datasets,
+            coeff_best,
+            self.use_quad,
+            self.use_multiplicative_prescription,
+        )
+        max_logl = float(-0.5 * chi2_tot)
+
+        fit_result["max_log_likelihood"] = max_logl
+
+        gaussian_integral = np.log(np.sqrt(np.linalg.det(2 * np.pi * coeff_covmat)))
+        # NOTE: current formula for logz is not inluding the prior penalty
+        logz = gaussian_integral + max_logl
+        fit_result["logz"] = logz
+        _logger.warning("The logZ computation is not including the prior penalty.")
+
         # generate samples in case n_samples > 0
         if self.n_samples > 0:
             self.log_result(coeff_best, coeff_covmat)
@@ -156,7 +182,7 @@ class ALOptimizer(Optimizer):
             samples = np.random.multivariate_normal(
                 coeff_best, coeff_covmat, size=(self.n_samples,)
             )
-            self.save(samples)
+            self.save(samples, fit_result)
         else:  # record only chi2 if no samples are requested
             self.coefficients.set_free_parameters(coeff_best)
             self.coefficients.set_constraints()
@@ -172,8 +198,9 @@ class ALOptimizer(Optimizer):
             with open(self.results_path / "chi2.dat", "a") as f:
                 f.write(f"{chi2_red} \n")
 
-    def save(self, samples):
+    def save(self, samples, fit_result):
         """Save samples to json inside a dictionary: {coff: [replicas values]}.
+        Saving also some basic information about the fit.
 
         Parameters
         ----------
@@ -195,3 +222,6 @@ class ALOptimizer(Optimizer):
 
         posterior_file = self.results_path / "posterior.json"
         self.dump_posterior(posterior_file, values)
+
+        # save fit result
+        self.dump_fit_result(self.results_path / "fit_result.json", fit_result)
