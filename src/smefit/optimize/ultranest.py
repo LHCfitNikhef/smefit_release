@@ -396,6 +396,7 @@ class USOptimizer(Optimizer):
 
     def save(self, result):
         """Save |NS| replicas to json inside a dictionary: {coff: [replicas values]}.
+        Saving also some basic information about the fit.
 
         Parameters
         ----------
@@ -437,6 +438,4 @@ class USOptimizer(Optimizer):
             "best_fit_point": best_fit_point,
         }
 
-        # write json with results
-        with open(self.results_path / "fit_result.json", "w") as f:
-            json.dump(fit_result, f, indent=4)
+        self.dump_fit_result(self.results_path / "fit_result.json", fit_result)
