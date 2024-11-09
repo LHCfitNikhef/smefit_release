@@ -153,13 +153,19 @@ class Report:
         chi2_dict_group = {}
         chi2_replica = {}
         for fit in self.fits:
-            chi2_df, chi2_total_rep = chi2_cal.compute(
+            # This computes the chi2 by taking the mean of the replicas
+            chi2_df_mean, chi2_total_rep = chi2_cal.compute(
                 fit.datasets,
                 fit.smeft_predictions,
             )
+
+            chi2_df_best, chi2_total_best = chi2_cal.compute(
+                fit.datasets, fit.smeft_predictions_best_fit
+            )
+
             chi2_replica[fit.label] = chi2_total_rep
-            chi2_dict[fit.label] = chi2_cal.add_normalized_chi2(chi2_df)
-            chi2_dict_group[fit.label] = chi2_cal.group_chi2_df(chi2_df)
+            chi2_dict[fit.label] = chi2_cal.add_normalized_chi2(chi2_df_best)
+            chi2_dict_group[fit.label] = chi2_cal.group_chi2_df(chi2_df_best)
 
         if table:
             lines = chi2_cal.write(chi2_dict, chi2_dict_group)

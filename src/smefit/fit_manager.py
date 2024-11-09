@@ -73,6 +73,10 @@ class FitManager:
         with open(f"{self.path}/{self.name}/{file}.json", encoding="utf-8") as f:
             results = json.load(f)
 
+        # load the bayesian results
+        with open(f"{self.path}/{self.name}/bayes_result.json", encoding="utf-8") as f:
+            bayes_result = json.load(f)
+
         # if the posterior is from single parameter fits
         # then each distribution might have a different number of samples
         is_single_param = results.get("single_parameter_fits", False)
@@ -93,6 +97,7 @@ class FitManager:
 
         # Be sure columns are sorted, otherwise can't compute theory...
         self.results = pd.DataFrame(results).sort_index(axis=1)
+        self.bayes_result = bayes_result
 
     def load_configuration(self):
         """Load configuration yaml card.
@@ -148,6 +153,33 @@ class FitManager:
                 )
             )
         return np.array(smeft)
+
+    @property
+    def smeft_predictions_best_fit(self):
+        """Compute |SMEFT| predictions for the best fit point.
+
+        Returns
+        -------
+        np.ndarray:
+            |SMEFT| predictions for the best fit
+        """
+
+        best_fit_point = np.array(
+            [
+                self.bayes_result["best_fit_point"][key]
+                for key in sorted(self.bayes_result["best_fit_point"].keys())
+            ]
+        )
+
+        predictions = make_predictions(
+            self.datasets,
+            best_fit_point,
+            self.config["use_quad"],
+            self.config.get("use_multiplicative_prescription", False),
+        )
+
+        # Add a dimension to match the shape of the replica predictions
+        return np.array([predictions])
 
     @property
     def coefficients(self):

@@ -91,6 +91,9 @@ class Chi2tableCalculator:
             )
             cnt += ndat_exp
 
+        # compute chi2 for the whole dataset
+        total_chi2_rep = np.einsum("ij,ji->i", diff_rep, covmat_diff_rep)
+
         return (
             pd.DataFrame(
                 {
@@ -101,7 +104,7 @@ class Chi2tableCalculator:
                 },
                 index=datasets.ExpNames,
             ),
-            np.sum(chi2_rep, axis=0) / datasets.Commondata.size,
+            total_chi2_rep / datasets.Commondata.size,
         )
 
     @staticmethod
