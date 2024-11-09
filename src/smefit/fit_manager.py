@@ -73,9 +73,9 @@ class FitManager:
         with open(f"{self.path}/{self.name}/{file}.json", encoding="utf-8") as f:
             results = json.load(f)
 
-        # load the bayesian results
-        with open(f"{self.path}/{self.name}/bayes_result.json", encoding="utf-8") as f:
-            bayes_result = json.load(f)
+        # load the fit results
+        with open(f"{self.path}/{self.name}/fit_result.json", encoding="utf-8") as f:
+            fit_result = json.load(f)
 
         # if the posterior is from single parameter fits
         # then each distribution might have a different number of samples
@@ -97,7 +97,7 @@ class FitManager:
 
         # Be sure columns are sorted, otherwise can't compute theory...
         self.results = pd.DataFrame(results).sort_index(axis=1)
-        self.bayes_result = bayes_result
+        self.fit_result = fit_result
 
     def load_configuration(self):
         """Load configuration yaml card.
@@ -166,8 +166,8 @@ class FitManager:
 
         best_fit_point = np.array(
             [
-                self.bayes_result["best_fit_point"][key]
-                for key in sorted(self.bayes_result["best_fit_point"].keys())
+                self.fit_result["best_fit_point"][key]
+                for key in sorted(self.fit_result["best_fit_point"].keys())
             ]
         )
 

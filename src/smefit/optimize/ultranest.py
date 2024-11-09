@@ -382,23 +382,6 @@ class USOptimizer(Optimizer):
                 sampler.plot()
                 _logger.info(f"Ultranest plots produced in {log_dir}")
 
-            _logger.info("Writing bayes results...")
-            logz = result["logz"]
-            max_loglikelihood = result["maximum_likelihood"]["logl"]
-            best_fit_point = dict(
-                zip(self.free_parameters.index, result["maximum_likelihood"]["point"])
-            )
-
-            bayes_result = {
-                "logz": logz,
-                "max_loglikelihood": max_loglikelihood,
-                "best_fit_point": best_fit_point,
-            }
-
-            # write json with results
-            with open(self.results_path / "bayes_result.json", "w") as f:
-                json.dump(bayes_result, f, indent=4)
-
             table = Table(
                 style=Style(color="white"), title_style="bold cyan", title=None
             )
@@ -440,3 +423,20 @@ class USOptimizer(Optimizer):
             posterior_file = self.results_path / "posterior.json"
 
         self.dump_posterior(posterior_file, values)
+
+        # Writing the fit summary results
+        logz = result["logz"]
+        max_loglikelihood = result["maximum_likelihood"]["logl"]
+        best_fit_point = dict(
+            zip(self.free_parameters.index, result["maximum_likelihood"]["point"])
+        )
+
+        fit_result = {
+            "logz": logz,
+            "max_loglikelihood": max_loglikelihood,
+            "best_fit_point": best_fit_point,
+        }
+
+        # write json with results
+        with open(self.results_path / "fit_result.json", "w") as f:
+            json.dump(fit_result, f, indent=4)
