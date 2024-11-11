@@ -154,12 +154,12 @@ class Report:
         chi2_replica = {}
         for fit in self.fits:
             # This computes the chi2 by taking the mean of the replicas
-            chi2_df_mean, chi2_total_rep = chi2_cal.compute(
+            _, chi2_total_rep = chi2_cal.compute(
                 fit.datasets,
                 fit.smeft_predictions,
             )
 
-            chi2_df_best, chi2_total_best = chi2_cal.compute(
+            chi2_df_best, _ = chi2_cal.compute(
                 fit.datasets, fit.smeft_predictions_best_fit
             )
 
