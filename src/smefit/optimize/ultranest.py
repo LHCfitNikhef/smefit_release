@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Fitting the Wilson coefficients with |NS|"""
-import json
 import time
 from functools import partial
 
@@ -378,7 +377,7 @@ class USOptimizer(Optimizer):
             log.console.log(f"Number of samples: {result['samples'].shape[0]}")
 
             if self.store_raw:
-                _logger.info(f"Ultranest plots being produced...")
+                _logger.info("Ultranest plots being produced...")
                 sampler.plot()
                 _logger.info(f"Ultranest plots produced in {log_dir}")
 

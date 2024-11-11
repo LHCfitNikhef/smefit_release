@@ -54,6 +54,7 @@ class FitManager:
         self.has_posterior = self.config.get("has_posterior", True)
         self.results = None
         self.datasets = None
+        self.fit_result = None
 
     def __repr__(self):
         return self.name

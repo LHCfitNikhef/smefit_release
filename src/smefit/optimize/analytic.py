@@ -152,9 +152,7 @@ class ALOptimizer(Optimizer):
         # Compute some metrics of the fit result
         coeffs_name = sorted(self.coefficients.free_parameters.index)
 
-        fit_result["best_fit_point"] = {
-            name: val for name, val in zip(coeffs_name, coeff_best)
-        }
+        fit_result["best_fit_point"] = dict(zip(coeffs_name, coeff_best))
 
         # compute max log likelihood
         chi2_tot = chi2.compute_chi2(
