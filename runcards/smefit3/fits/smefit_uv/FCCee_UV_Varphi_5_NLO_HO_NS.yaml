@@ -700,10 +700,10 @@ datasets:
 #- FCCee_365_ww_leptonic_optim_obs
 #- FCCee_365_ww_semilep_optim_obs
 external_chi2:
-  OptimalWW: 
+  OptimalWW:
     path: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
     scale: 91.1876
-  Optimaltt: 
+  Optimaltt:
     path: /home/alejo/smefit_database/external_chi2/optimal_observables/interface_oos.py
     scale: 91.1876
 maxiter: 10000

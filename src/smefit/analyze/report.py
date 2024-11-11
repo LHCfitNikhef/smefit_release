@@ -237,9 +237,11 @@ class Report:
                 fit.results,
                 coeff_plt.coeff_info,
                 fit.has_posterior,
-                double_solution.get(fit.name, None)
-                if double_solution is not None
-                else None,
+                (
+                    double_solution.get(fit.name, None)
+                    if double_solution is not None
+                    else None
+                ),
             )
 
         if scatter_plot is not None:
@@ -290,7 +292,6 @@ class Report:
                 # if dbl solution requested, add the confidence intervals, otherwise just
                 # use the sum of the hdi intervals
                 if 1 in dbl_solution:
-
                     dbl_op = double_solution.get(fit.name, None)
                     idx = [
                         np.argwhere(
@@ -322,9 +323,11 @@ class Report:
         if posterior_histograms:
             _logger.info("Plotting : Posterior histograms")
             disjointed_lists = [
-                double_solution.get(fit.name, None)
-                if double_solution is not None
-                else None
+                (
+                    double_solution.get(fit.name, None)
+                    if double_solution is not None
+                    else None
+                )
                 for fit in self.fits
             ]
             coeff_plt.plot_posteriors(

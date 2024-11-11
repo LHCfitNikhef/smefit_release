@@ -300,12 +300,13 @@ class TestOptimize_NS:
 
     # external chi2
     config_corr["external_chi2"] = {
-        "ExternalChi2": path_abs / "fake_external_chi2/test_ext_chi2.py"
+        "ExternalChi2": {"path": path_abs / "fake_external_chi2/test_ext_chi2.py"}
     }
 
     # add external chi2 to paths
     external_chi2 = config_corr["external_chi2"]
-    for class_name, module_path in external_chi2.items():
+    for class_name, module in external_chi2.items():
+        module_path = module["path"]
         path = pathlib.Path(module_path)
         base_path, stem = path.parent, path.stem
         sys.path = [str(base_path)] + sys.path
@@ -327,8 +328,8 @@ class TestOptimize_NS:
         )
 
     def test_chi2_func_ns(self):
-        # set free parameters to random values generated above
-        params = wilson_coeff
+        # set free parameters and constrain to random values generated above
+        params = self.test_opt.produce_all_params(wilson_coeff)
 
         # test experimental chi2 in case of no cross correlations between dataset
         np.testing.assert_allclose(
@@ -374,7 +375,11 @@ class TestOptimize_NS:
         )
 
     def test_flat_prior(self):
-        np.testing.assert_equal(self.test_opt.flat_prior(random_point), prior)
+        np.testing.assert_allclose(
+            self.test_opt.flat_prior(random_point),
+            prior,
+            rtol=1e-14,
+        )
 
 
 class TestOptimize_MC:

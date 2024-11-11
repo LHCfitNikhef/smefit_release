@@ -57,12 +57,10 @@ def radar_factory(num_vars, frame="circle"):
             return Path(self.transform(path.vertices), path.codes)
 
     class RadarAxes(PolarAxes):
-
         name = "radar"
         PolarTransform = RadarTransform
 
         def __init__(self, *args, **kwargs):
-
             super().__init__(*args, aspect="equal", **kwargs)
             # rotate plot such that the first axis is at the top
             self.set_theta_zero_location("N")
@@ -198,7 +196,6 @@ def plot_spider(
     markers = itertools.cycle(["*", "o", "P"])
 
     for i, data_fit_i in enumerate(data.T):
-
         ax.plot(theta, data_fit_i, color=colors[i], zorder=1)
         ax.scatter(
             theta, data_fit_i, marker=next(markers), s=50, color=colors[i], zorder=1
@@ -231,7 +228,6 @@ def plot_spider(
                 zorder=0,
             )
         else:
-
             axis.set_rgrids(
                 radial_lines[1:],
                 labels=radial_labels[1:],
@@ -266,7 +262,6 @@ def plot_spider(
     filled_start_angle = 0  # 12'o clock
 
     for i, (idx, angle) in enumerate(angle_sweep.items()):
-
         filled_end_angle = angle + filled_start_angle  #  End angle in degrees
 
         center = (0.5, 0.5)  # Coordinates relative to the figure
@@ -351,12 +346,10 @@ def plot_spider(
 
     # self._plot_logo(ax2, [0.75, 0.95, 0.001, 0.07])
 
-
     plt.savefig(
         "/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/spider_plot_uv_test.pdf",
         bbox_inches="tight",
     )
-
 
 
 collections = ["OneLoop"]
@@ -403,13 +396,12 @@ rc("text", **{"usetex": True, "latex.preamble": r"\usepackage{amssymb}"})
 #                 print("File not found", model)
 #                 continue
 # #
-#sys.exit()
+# sys.exit()
 # Specify the path to the JSON file
 posterior_path = f"{here.parent}/results/smefit_fcc_uv_spider/{{}}_{{}}_UV_{{}}_{{}}_{{}}_NS/inv_posterior.json"
 
 
 def get_bounds(collection, mod_nrs):
-
     n_cols = 4
     n_rows = 4
     fig = plt.figure(figsize=(n_cols * 4, n_rows * 4))
@@ -421,7 +413,6 @@ def get_bounds(collection, mod_nrs):
     x_labels = []
 
     for col, mod in zip(collection, mod_nrs):
-
         posterior_path_mod_1 = pathlib.Path(
             posterior_path.format(col, "lhc", mod, "NLO", "HO")
         )
@@ -519,7 +510,6 @@ def get_bounds(collection, mod_nrs):
 
                     x_labels.append(mod_dict[mod])
 
-
     fig.savefig(
         "/data/theorie/jthoeve/smefit_release/smefit_uv/results_uv_param/posteriors_phi_5.png"
     )
@@ -555,4 +545,3 @@ get_bounds(
     ],
     ["48_10", "T1_10", "49_10", "T2_10", "5_5", "Varphi_5", "Q1_Q7_W_NoDegen"],
 )
-

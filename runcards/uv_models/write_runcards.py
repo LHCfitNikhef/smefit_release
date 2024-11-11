@@ -70,10 +70,10 @@ def dump_runcard(
     fitting_mode: str,
     mass: str,
     collider: str,
-    path: str
+    path: str,
 ) -> None:
     """Parse a model card to a SMEFiT runcard."""
-    if path =="--":
+    if path == "--":
         if "OneLoop" in collection:
             file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Loop.yaml"
         elif "Multiparticle" in collection:
@@ -93,7 +93,7 @@ def dump_runcard(
     runcard["use_quad"] = eft_order == "HO"
 
     # names
-    #runcard["result_ID"] = f"Model_UV_{idx_model}_{pto}_{eft_order}"
+    # runcard["result_ID"] = f"Model_UV_{idx_model}_{pto}_{eft_order}"
     runcard["Model name"] = model_dict["Model name"]
     runcard["UV Collection"] = model_dict["UV Collection"]
     runcard["UV model"] = model_dict["UV model"]
@@ -135,8 +135,20 @@ if __name__ == "__main__":
         required=True,
     )
     parser.add_argument("-m", "--mass", help="Particle masses", type=str, default="1")
-    parser.add_argument("-d", "--collider", help="Collider to pick base runcard", type=str, required=True)
-    parser.add_argument("-p", "--path", help="Path of the Match2Fit output to convert.", type=str,default="--")
+    parser.add_argument(
+        "-d",
+        "--collider",
+        help="Collider to pick base runcard",
+        type=str,
+        required=True,
+    )
+    parser.add_argument(
+        "-p",
+        "--path",
+        help="Path of the Match2Fit output to convert.",
+        type=str,
+        default="--",
+    )
     args = parser.parse_args()
 
     dump_runcard(
@@ -147,5 +159,5 @@ if __name__ == "__main__":
         args.mode,
         args.mass,
         args.collider,
-        args.path
+        args.path,
     )

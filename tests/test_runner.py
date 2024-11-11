@@ -8,7 +8,6 @@ runcard_folder = commondata_path = pathlib.Path(__file__).parents[0]
 
 
 class TestRunner:
-
     test_runner = smefit.runner.Runner.from_file(runcard_folder / "fake_runcard.yaml")
 
     def test_init(self):

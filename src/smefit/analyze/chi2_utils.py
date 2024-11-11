@@ -21,7 +21,6 @@ class Chi2tableCalculator:
     """
 
     def __init__(self, data_info):
-
         self.data_info = data_info
         self.chi2_df_sm = pd.DataFrame()
         self.chi2_df_sm_grouped = pd.DataFrame()
@@ -65,7 +64,6 @@ class Chi2tableCalculator:
         # Compute per experiment
         cnt = 0
         for ndat_exp in datasets.NdataExp:
-
             chi2.append(
                 np.dot(
                     diff[cnt : cnt + ndat_exp],
@@ -368,7 +366,7 @@ class Chi2tableCalculator:
         plt.figure(figsize=figsize)
         ax = plt.subplot(111)
 
-        for (label, chi2_list) in chi2_hist.items():
+        for label, chi2_list in chi2_hist.items():
             ax.hist(
                 chi2_list,
                 bins="fd",

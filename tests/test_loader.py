@@ -120,7 +120,6 @@ def test_load_datasets():
             np.testing.assert_equal(loaded_tuple.LinearCorrections, lin_corr)
 
             if use_quad:
-
                 # construct expected quad corr tables
                 quad_corr_1 = np.asarray(
                     [

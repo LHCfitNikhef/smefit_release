@@ -58,7 +58,6 @@ class TestPredictions:
     wilson_coeff = np.array([0.5, 0.6])
 
     def test_make_predictions(self):
-
         lin_corr = [
             # data0
             self.sm_theory[0]
