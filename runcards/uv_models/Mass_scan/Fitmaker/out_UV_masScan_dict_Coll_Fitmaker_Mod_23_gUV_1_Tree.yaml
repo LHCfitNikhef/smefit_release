@@ -4,9 +4,11 @@ UV Collection : Fitmaker
 UV model : 23
 Model name : W
 # ~~~~~~~~~~~~~~~~~~~~~~
-UV couplings : [gWH]
+UV couplings : { m }
 # ~~~~~~~~~~~~~~~~~~~~~~
-UV coupling value: 1
+Fixed couplings: [gWH]
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings value: 1
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Loop level of the results : Tree (0)
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -66,4 +68,4 @@ cp : [{m : [-0.12938347743146458,-2]},{m : [0.003921890625,-4]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
 # Tree-level dictionary: /home/alejorossia/Documents/UVcomp-GlobalFits/dict_all_SMEFTsim_FitMakerModels_YukaFitMaker_8Nov24.wxf
-# Export date: Mon 11 Nov 2024 12:22:01
+# Export date: Mon 11 Nov 2024 14:14:42

@@ -4,9 +4,11 @@ UV Collection : Fitmaker
 UV model : 51
 Model name : \text{SpTB}
 # ~~~~~~~~~~~~~~~~~~~~~~
-UV couplings : [sRt]
+UV couplings : { m }
 # ~~~~~~~~~~~~~~~~~~~~~~
-UV coupling value: 1
+Fixed couplings: [sRt]
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings value: 1
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Loop level of the results : Tree (0)
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -66,4 +68,4 @@ cp : [{m : [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
 # Tree-level dictionary: /home/alejorossia/Documents/UVcomp-GlobalFits/dict_all_SMEFTsim_FitMakerModels_YukaFitMaker_8Nov24.wxf
-# Export date: Mon 11 Nov 2024 12:22:02
+# Export date: Mon 11 Nov 2024 14:14:42
