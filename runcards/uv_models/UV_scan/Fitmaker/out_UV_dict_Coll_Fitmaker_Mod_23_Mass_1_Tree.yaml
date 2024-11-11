@@ -63,7 +63,8 @@ ccp : [{gWH: [0.,0]}]
 ctap : [{gWH: [-0.0025559460452279554,2]}]
 ctW : [{gWH: [0.,0]}]
 ctZ : [{gWH: [0.,0]}]
+cp : [{gWH: [-0.12938347743146458,2]},{gWH: [0.003921890625,4]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_1Sep23.wxf
-# Export date: Fri 1 Sep 2023 13:14:25
+# Tree-level dictionary: /home/alejorossia/Documents/UVcomp-GlobalFits/dict_all_SMEFTsim_FitMakerModels_YukaFitMaker_8Nov24.wxf
+# Export date: Mon 11 Nov 2024 10:59:56
