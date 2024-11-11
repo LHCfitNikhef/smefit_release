@@ -1,0 +1,69 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Fitmaker
+UV model : 47
+Model name : \text{Q7}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lamQ7f1]
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV coupling value: 1
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : Tree (0)
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{m : [0.,0]}]
+cpB : [{m : [0.,0]}]
+cpW : [{m : [0.,0]}]
+cpWB : [{m : [0.,0]}]
+cpd : [{m : [0.,0]}]
+cpD : [{m : [0.,0]}]
+cWWW : [{m : [0.,0]}]
+cpqMi : [{m : [0.,0]}]
+cpQM : [{m : [0.,0]}]
+c3pq : [{m : [0.,0]}]
+c3pQ3 : [{m : [0.,0]}]
+cpl1 : [{m : [0.,0]}]
+cpl2 : [{m : [0.,0]}]
+cpl3 : [{m : [0.,0]}]
+c3pl1 : [{m : [0.,0]}]
+c3pl2 : [{m : [0.,0]}]
+c3pl3 : [{m : [0.,0]}]
+cpui : [{m : [0.5,-2]}]
+cpdi : [{m : [0.,0]}]
+cpt : [{m : [0.5,-2]}]
+cpe : [{m : [0.,0]}]
+cpmu : [{m : [0.,0]}]
+cpta : [{m : [0.,0]}]
+c81qq : [{m : [0.,0]}]
+c11qq : [{m : [0.,0]}]
+c83qq : [{m : [0.,0]}]
+c13qq : [{m : [0.,0]}]
+c8qt : [{m : [0.,0]}]
+c1qt : [{m : [0.,0]}]
+c8ut : [{m : [0.,0]}]
+c1ut : [{m : [0.,0]}]
+c8qu : [{m : [0.,0]}]
+c1qu : [{m : [0.,0]}]
+c8dt : [{m : [0.,0]}]
+c1dt : [{m : [0.,0]}]
+c8qd : [{m : [0.,0]}]
+c1qd : [{m : [0.,0]}]
+cQQ1 : [{m : [0.,0]}]
+cQQ8 : [{m : [0.,0]}]
+cQt1 : [{m : [0.,0]}]
+cQt8 : [{m : [0.,0]}]
+ctt1 : [{m : [0.,0]}]
+cll : [{m : [0.,0]}]
+cll1111 : [{m : [0.,0]}]
+cbp : [{m : [0.,0]}]
+ctp : [{m : [0.4961407177231255,-2]}]
+ctG : [{m : [0.,0]}]
+ccp : [{m : [0.,0]}]
+ctap : [{m : [0.,0]}]
+ctW : [{m : [0.,0]}]
+ctZ : [{m : [0.,0]}]
+cp : [{m : [0.,0]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+# Tree-level dictionary: /home/alejorossia/Documents/UVcomp-GlobalFits/dict_all_SMEFTsim_FitMakerModels_YukaFitMaker_8Nov24.wxf
+# Export date: Mon 11 Nov 2024 12:22:01
