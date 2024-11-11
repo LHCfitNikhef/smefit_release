@@ -4,9 +4,11 @@ UV Collection : Granada
 UV model : 6
 Model name : \Xi
 # ~~~~~~~~~~~~~~~~~~~~~~
-UV couplings : [kXi, lamXi]
+UV couplings : { m }
 # ~~~~~~~~~~~~~~~~~~~~~~
-UV coupling value: 1
+Fixed couplings: [kXi, lamXi]
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings value: 1
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Loop level of the results : Tree (0)
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -66,4 +68,4 @@ cp : [{m : [-0.48246609027414167,-4]},{m : [-2.,-6]},{m : [0.06275025,-8]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
 # Tree-level dictionary: /home/alejorossia/Documents/UVcomp-GlobalFits/dict_all_SMEFiT_Local_New_Yukas_indepcll1111_UpTo48_02_11_2024.wxf
-# Export date: Mon 11 Nov 2024 12:22:01
+# Export date: Mon 11 Nov 2024 14:14:42

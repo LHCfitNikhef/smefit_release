@@ -4,9 +4,11 @@ UV Collection : Granada
 UV model : 41
 Model name : \Sigma
 # ~~~~~~~~~~~~~~~~~~~~~~
-UV couplings : [lamSigmaf3]
+UV couplings : { m }
 # ~~~~~~~~~~~~~~~~~~~~~~
-UV coupling value: 1
+Fixed couplings: [lamSigmaf3]
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings value: 1
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Loop level of the results : Tree (0)
 # ~~~~~~~~~~~~~~~~~~~~~~
@@ -66,4 +68,4 @@ cp : [{m : [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
 # Tree-level dictionary: /home/alejorossia/Documents/UVcomp-GlobalFits/dict_all_SMEFiT_Local_New_Yukas_indepcll1111_UpTo48_02_11_2024.wxf
-# Export date: Mon 11 Nov 2024 12:22:01
+# Export date: Mon 11 Nov 2024 14:14:42
