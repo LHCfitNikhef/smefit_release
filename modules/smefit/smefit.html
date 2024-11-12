@@ -199,7 +199,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.loader.check_file"><code class="docutils literal notranslate"><span class="pre">check_file()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.check_missing_oparators"><code class="docutils literal notranslate"><span class="pre">check_missing_oparators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.loader.check_missing_operators"><code class="docutils literal notranslate"><span class="pre">check_missing_operators()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.loader.construct_corrections_matrix"><code class="docutils literal notranslate"><span class="pre">construct_corrections_matrix()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.loader.get_dataset"><code class="docutils literal notranslate"><span class="pre">get_dataset()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.loader.load_datasets"><code class="docutils literal notranslate"><span class="pre">load_datasets()</span></code></a></li>
@@ -208,6 +208,22 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-smefit.log">smefit.log module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.log.print_banner"><code class="docutils literal notranslate"><span class="pre">print_banner()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#smefit.log.setup_console"><code class="docutils literal notranslate"><span class="pre">setup_console()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.rge">smefit.rge module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.rge.RGE"><code class="docutils literal notranslate"><span class="pre">RGE</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.rge.RGE.RGEbasis"><code class="docutils literal notranslate"><span class="pre">RGE.RGEbasis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.rge.RGE.RGEevolve"><code class="docutils literal notranslate"><span class="pre">RGE.RGEevolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.rge.RGE.RGEmatrix"><code class="docutils literal notranslate"><span class="pre">RGE.RGEmatrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.rge.RGE.RGEmatrix_dict"><code class="docutils literal notranslate"><span class="pre">RGE.RGEmatrix_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.rge.RGE.all_ops"><code class="docutils literal notranslate"><span class="pre">RGE.all_ops</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.rge.RGE.map_to_smefit"><code class="docutils literal notranslate"><span class="pre">RGE.map_to_smefit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.rge.beta_wrapper"><code class="docutils literal notranslate"><span class="pre">beta_wrapper()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.rge.evolve_gs"><code class="docutils literal notranslate"><span class="pre">evolve_gs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.rge.load_rge_matrix"><code class="docutils literal notranslate"><span class="pre">load_rge_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smefit.rge.load_scales"><code class="docutils literal notranslate"><span class="pre">load_scales()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-smefit.runner">smefit.runner module</a><ul>
@@ -228,6 +244,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#module-smefit.wcxf">smefit.wcxf module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../zzz-refs.html">References</a></li>
@@ -563,7 +580,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.chi2.compute_chi2">
-<span class="sig-prename descclassname"><span class="pre">smefit.chi2.</span></span><span class="sig-name descname"><span class="pre">compute_chi2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_replica</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/chi2.html#compute_chi2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.chi2.compute_chi2" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">smefit.chi2.</span></span><span class="sig-name descname"><span class="pre">compute_chi2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_replica</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rgemat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/chi2.html#compute_chi2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.chi2.compute_chi2" title="Link to this definition"></a></dt>
 <dd><p>Compute the <span class="math notranslate nohighlight">\(\chi^2\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -572,6 +589,7 @@ basis, emptry if quadratic corrections are not used</p></li>
 <li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
 <li><p><strong>use_multiplicative_prescription</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True add the <abbr title="Effective Field Theory">EFT</abbr> contribution as a key factor</p></li>
 <li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>rgemat</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><em>numpy.ndarray</em></a>) – solution matrix of the RGE</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -744,7 +762,7 @@ and flatten it into an array</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.compute_theory.make_predictions">
-<span class="sig-prename descclassname"><span class="pre">smefit.compute_theory.</span></span><span class="sig-name descname"><span class="pre">make_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/compute_theory.html#make_predictions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.compute_theory.make_predictions" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">smefit.compute_theory.</span></span><span class="sig-name descname"><span class="pre">make_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rgemat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/compute_theory.html#make_predictions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.compute_theory.make_predictions" title="Link to this definition"></a></dt>
 <dd><p>Generate the corrected theory predictions for dataset
 given a set of <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> coefficients.</p>
 <dl class="field-list simple">
@@ -753,6 +771,8 @@ given a set of <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> 
 <li><p><strong>dataset</strong> (<a class="reference internal" href="#smefit.loader.DataTuple" title="smefit.loader.DataTuple"><em>DataTuple</em></a>) – dataset tuple</p></li>
 <li><p><strong>coefficients_values</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><em>numpy.ndarray</em></a>) – <abbr title="Effective Field Theory">EFT</abbr> coefficients values</p></li>
 <li><p><strong>use_quad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True include also <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections</p></li>
+<li><p><strong>use_multiplicative_prescription</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True add the <abbr title="Effective Field Theory">EFT</abbr> contribution as a k-factor</p></li>
+<li><p><strong>rgemat</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)"><em>numpy.ndarray</em></a>) – solution matrix of the RGE</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1129,7 +1149,7 @@ the results. Results are stored in a class attribute</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.loader.Loader.load_theory">
-<span class="sig-name descname"><span class="pre">load_theory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#Loader.load_theory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.Loader.load_theory" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_theory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#Loader.load_theory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.Loader.load_theory" title="Link to this definition"></a></dt>
 <dd><p>Load theory predictions</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1146,6 +1166,7 @@ the results. Results are stored in a class attribute</p>
 <li><p><strong>sm</strong> (<em>numpy.ndarray</em>) – <abbr title="Standard Model">SM</abbr> predictions</p></li>
 <li><p><strong>lin_dict</strong> (<em>dict</em>) – dictionary with <abbr title="Not Higher Order corrections, linear">NHO</abbr> corrections</p></li>
 <li><p><strong>quad_dict</strong> (<em>dict</em>) – dictionary with <abbr title="Higher Order corrections, quadratics">HO</abbr> corrections, empty if not use_quad</p></li>
+<li><p><strong>scales</strong> (<em>list</em>) – list of energy scales for the theory predictions</p></li>
 </ul>
 </p>
 </dd>
@@ -1279,8 +1300,8 @@ the results. Results are stored in a class attribute</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="smefit.loader.check_missing_oparators">
-<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">check_missing_oparators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loaded_corrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#check_missing_oparators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.check_missing_oparators" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="smefit.loader.check_missing_operators">
+<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">check_missing_operators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loaded_corrections</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#check_missing_operators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.check_missing_operators" title="Link to this definition"></a></dt>
 <dd><p>Check if all the coefficient in the runcard are also present inside the theory tables.</p>
 </dd></dl>
 
@@ -1314,7 +1335,7 @@ with corresponding values.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="smefit.loader.load_datasets">
-<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commondata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theory_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_to_fit_basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_uv_couplings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_external_chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#load_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.load_datasets" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">smefit.loader.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commondata_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operators_to_keep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_quad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_theory_covmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_t0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_multiplicative_prescription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theory_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot_to_fit_basis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_uv_couplings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_external_chi2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_rge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/loader.html#load_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.loader.load_datasets" title="Link to this definition"></a></dt>
 <dd><p>Loads experimental data, theory and <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> corrections into a namedtuple</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1330,6 +1351,7 @@ Default it assumes to be the same as commondata_path</p></li>
 <li><p><strong>rot_to_fit_basis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>, </em><em>optional</em>) – matrix rotation to fit basis or None</p></li>
 <li><p><strong>has_uv_couplings</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – True for UV fits</p></li>
 <li><p><strong>has_external_chi2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – True in the presence of external chi2 modules</p></li>
+<li><p><strong>has_rge</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – True in the presence of RGE matrix</p></li>
 </ul>
 </dd>
 </dl>
@@ -1347,6 +1369,119 @@ Default it assumes to be the same as commondata_path</p></li>
 <dt class="sig sig-object py" id="smefit.log.setup_console">
 <span class="sig-prename descclassname"><span class="pre">smefit.log.</span></span><span class="sig-name descname"><span class="pre">setup_console</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/log.html#setup_console"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.log.setup_console" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+</section>
+<section id="module-smefit.rge">
+<span id="smefit-rge-module"></span><h2>smefit.rge module<a class="headerlink" href="#module-smefit.rge" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.rge.RGE">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.rge.</span></span><span class="sig-name descname"><span class="pre">RGE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wc_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accuracy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'integrate'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adm_QCD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yukawa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/rge.html#RGE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.rge.RGE" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Class to compute the RGE matrix for the SMEFT Wilson coefficients.
+The RGE matrix is computed at the initial scale <cite>init_scale</cite> and
+evolved to the scale of interest.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wc_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – list of Wilson coefficient names to be included in the RGE matrix</p></li>
+<li><p><strong>init_scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – initial scale of the Wilson coefficients</p></li>
+<li><p><strong>accuracy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – accuracy of the RGE integration. Options: “leadinglog” or “integrate”.
+Default is ‘integrate’. Inherited behaviour from wilson package.</p></li>
+<li><p><strong>adm_QCD</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – if True, only the QCD anomalous dimension is used. Default is False.</p></li>
+<li><p><strong>yukawa</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Yukawa parameterization to be used. Options: “top”, “none” or “full”.
+Default is “top”.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.rge.RGE.RGEbasis">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RGEbasis</span></span><a class="headerlink" href="#smefit.rge.RGE.RGEbasis" title="Link to this definition"></a></dt>
+<dd><p>Returns the RGE basis translated from smefit to Warsaw.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.rge.RGE.RGEevolve">
+<span class="sig-name descname"><span class="pre">RGEevolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/rge.html#RGE.RGEevolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.rge.RGE.RGEevolve" title="Link to this definition"></a></dt>
+<dd><p>Evolve the Wilson coefficients from the initial scale to the scale of interest.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.rge.RGE.RGEmatrix">
+<span class="sig-name descname"><span class="pre">RGEmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/rge.html#RGE.RGEmatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.rge.RGE.RGEmatrix" title="Link to this definition"></a></dt>
+<dd><p>Compute the RGE solution at the scale <cite>scale</cite> and return it as a pandas DataFrame.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.rge.RGE.RGEmatrix_dict">
+<span class="sig-name descname"><span class="pre">RGEmatrix_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/rge.html#RGE.RGEmatrix_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.rge.RGE.RGEmatrix_dict" title="Link to this definition"></a></dt>
+<dd><p>Compute the RGE solution at the scale <cite>scale</cite> and return it as a dictionary.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.rge.RGE.all_ops">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">all_ops</span></span><a class="headerlink" href="#smefit.rge.RGE.all_ops" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.rge.RGE.map_to_smefit">
+<span class="sig-name descname"><span class="pre">map_to_smefit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wc_final_vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/rge.html#RGE.map_to_smefit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.rge.RGE.map_to_smefit" title="Link to this definition"></a></dt>
+<dd><p>Map the Wilson coefficients from the Warsaw basis to the SMEFiT basis.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.rge.beta_wrapper">
+<span class="sig-prename descclassname"><span class="pre">smefit.rge.</span></span><span class="sig-name descname"><span class="pre">beta_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">HIGHSCALE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/rge.html#beta_wrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.rge.beta_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.rge.evolve_gs">
+<span class="sig-prename descclassname"><span class="pre">smefit.rge.</span></span><span class="sig-name descname"><span class="pre">evolve_gs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/rge.html#evolve_gs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.rge.evolve_gs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.rge.load_rge_matrix">
+<span class="sig-prename descclassname"><span class="pre">smefit.rge.</span></span><span class="sig-name descname"><span class="pre">load_rge_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rge_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theory_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/rge.html#load_rge_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.rge.load_rge_matrix" title="Link to this definition"></a></dt>
+<dd><p>Load the RGE matrix for the SMEFT Wilson coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rge_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – dictionary with the RGE input parameter options</p></li>
+<li><p><strong>coeff_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – list of Wilson coefficients to be included in the RGE matrix</p></li>
+<li><p><strong>datasets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – list of datasets</p></li>
+<li><p><strong>theory_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – path to the theory files</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>rgemat</strong> – RGE matrix</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.1)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="smefit.rge.load_scales">
+<span class="sig-prename descclassname"><span class="pre">smefit.rge.</span></span><span class="sig-name descname"><span class="pre">load_scales</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datasets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theory_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/rge.html#load_scales"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.rge.load_scales" title="Link to this definition"></a></dt>
+<dd><p>Load the energy scales for the datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datasets</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – list of datasets</p></li>
+<li><p><strong>theory_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – path to the theory files</p></li>
+<li><p><strong>default_scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – default scale to use if the dataset does not have a scale</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>scales</strong> – list of scales for the datasets</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-smefit.runner">
@@ -1485,6 +1620,9 @@ will be computed.</p></li>
 
 </dd></dl>
 
+</section>
+<section id="module-smefit.wcxf">
+<span id="smefit-wcxf-module"></span><h2>smefit.wcxf module<a class="headerlink" href="#module-smefit.wcxf" title="Link to this heading"></a></h2>
 </section>
 </section>
 

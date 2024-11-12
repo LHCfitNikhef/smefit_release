@@ -123,7 +123,10 @@
 <span class="kn">from</span> <span class="nn">rich.style</span> <span class="kn">import</span> <span class="n">Style</span>
 <span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
 
+<span class="kn">from</span> <span class="nn">smefit.rge</span> <span class="kn">import</span> <span class="n">RGE</span>
+
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
 <span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">get_dataset</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -132,6 +135,8 @@
     <span class="n">run_parallel</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
     <span class="n">run_parallel</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">_logger</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Optimizer">
@@ -154,6 +159,12 @@
 <span class="sd">            True for single parameter fits</span>
 <span class="sd">        use_multiplicative_prescription:</span>
 <span class="sd">            if True uses the multiplicative prescription for the |EFT| corrections.</span>
+<span class="sd">        external_chi2: dict</span>
+<span class="sd">            dict of external chi2</span>
+<span class="sd">        rgemat: numpy.ndarray</span>
+<span class="sd">            solution matrix of the RGE</span>
+<span class="sd">        rge_dict: dict</span>
+<span class="sd">            dictionary with the RGE input parameter options</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">print_rate</span> <span class="o">=</span> <span class="mi">500</span>
@@ -167,6 +178,8 @@
         <span class="n">single_parameter_fits</span><span class="p">,</span>
         <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
         <span class="n">external_chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rgemat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rge_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">results_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span> <span class="o">=</span> <span class="n">loaded_datasets</span>
@@ -180,6 +193,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">single_parameter_fits</span> <span class="o">=</span> <span class="n">single_parameter_fits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_multiplicative_prescription</span> <span class="o">=</span> <span class="n">use_multiplicative_prescription</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># set RGE matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rgemat</span> <span class="o">=</span> <span class="n">rgemat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rge_dict</span> <span class="o">=</span> <span class="n">rge_dict</span>
 
         <span class="c1"># load external chi2 modules as amortized objects (fast to evaluate)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chi2_ext</span> <span class="o">=</span> <span class="p">(</span>
@@ -206,13 +223,51 @@
         <span class="c1"># dynamical import</span>
         <span class="n">ext_chi2_modules</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">module_path</span> <span class="ow">in</span> <span class="n">external_chi2</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">external_chi2</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">module_path</span> <span class="o">=</span> <span class="n">module</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">module_path</span><span class="p">)</span>
             <span class="n">base_path</span><span class="p">,</span> <span class="n">stem</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">stem</span>
             <span class="n">chi2_module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">stem</span><span class="p">)</span>
 
             <span class="n">my_chi2_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">chi2_module</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
-            <span class="n">chi2_ext</span> <span class="o">=</span> <span class="n">my_chi2_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rge_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Check if dynamic scale</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rge_dict</span><span class="p">[</span><span class="s2">&quot;obs_scale&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;dynamic&quot;</span><span class="p">:</span>
+                    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Computing RGE matrix for </span><span class="si">{</span><span class="n">class_name</span><span class="si">}</span><span class="s2"> &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;with initial scale </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rge_dict</span><span class="p">[</span><span class="s1">&#39;init_scale&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+                    <span class="p">)</span>
+                    <span class="c1"># compute RGE matrix</span>
+                    <span class="k">if</span> <span class="s2">&quot;scale&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">module</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="s2">&quot;Dynamic scale requested but no scale provided in the external chi2&quot;</span>
+                        <span class="p">)</span>
+                    <span class="n">scale</span> <span class="o">=</span> <span class="n">module</span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span>
+                    <span class="n">rge_runner</span> <span class="o">=</span> <span class="n">RGE</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">rge_dict</span><span class="p">[</span><span class="s2">&quot;init_scale&quot;</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">rge_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;smeft_accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;integrate&quot;</span><span class="p">),</span>
+                    <span class="p">)</span>
+                    <span class="n">rge_df</span> <span class="o">=</span> <span class="n">rge_runner</span><span class="o">.</span><span class="n">RGEmatrix</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span>
+                    <span class="n">gen_operators</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">rge_df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+                    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;The operators generated by the RGE are: &quot;</span><span class="p">)</span>
+                    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">gen_operators</span><span class="p">)</span>
+                    <span class="n">operators_dict</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="n">k</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">gen_operators</span>
+                    <span class="p">}</span>
+                    <span class="n">new_coeffs</span> <span class="o">=</span> <span class="n">CoefficientManager</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">operators_dict</span><span class="p">)</span>
+                    <span class="n">chi2_ext</span> <span class="o">=</span> <span class="n">my_chi2_class</span><span class="p">(</span><span class="n">new_coeffs</span><span class="p">,</span> <span class="n">rge_df</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">gen_operators</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span><span class="o">.</span><span class="n">OperatorsNames</span><span class="p">)</span>
+                    <span class="c1"># Create dummy coefficients</span>
+                    <span class="n">operators_dict</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="n">k</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">gen_operators</span>
+                    <span class="p">}</span>
+                    <span class="n">new_coeffs</span> <span class="o">=</span> <span class="n">CoefficientManager</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">operators_dict</span><span class="p">)</span>
+                    <span class="n">chi2_ext</span> <span class="o">=</span> <span class="n">my_chi2_class</span><span class="p">(</span><span class="n">new_coeffs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgemat</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">chi2_ext</span> <span class="o">=</span> <span class="n">my_chi2_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">)</span>
 
             <span class="n">ext_chi2_modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chi2_ext</span><span class="o">.</span><span class="n">compute_chi2</span><span class="p">)</span>
 

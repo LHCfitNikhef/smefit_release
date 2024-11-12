@@ -115,9 +115,11 @@
              
   <h1>Source code for smefit.compute_theory</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Module for the generation of theory predictions</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -144,7 +146,7 @@
 <div class="viewcode-block" id="make_predictions">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.compute_theory.make_predictions">[docs]</a>
 <span class="k">def</span> <span class="nf">make_predictions</span><span class="p">(</span>
-    <span class="n">dataset</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">,</span> <span class="n">use_quad</span><span class="p">,</span> <span class="n">use_multiplicative_prescription</span>
+    <span class="n">dataset</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">,</span> <span class="n">use_quad</span><span class="p">,</span> <span class="n">use_multiplicative_prescription</span><span class="p">,</span> <span class="n">rgemat</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate the corrected theory predictions for dataset</span>
@@ -158,6 +160,10 @@
 <span class="sd">            |EFT| coefficients values</span>
 <span class="sd">        use_quad: bool</span>
 <span class="sd">            if True include also |HO| corrections</span>
+<span class="sd">        use_multiplicative_prescription: bool</span>
+<span class="sd">            if True add the |EFT| contribution as a k-factor</span>
+<span class="sd">        rgemat: numpy.ndarray</span>
+<span class="sd">            solution matrix of the RGE</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">        corrected_theory : numpy.ndarray</span>
@@ -167,18 +173,49 @@
     <span class="n">coefficients_values</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coefficients_values</span><span class="p">)</span>
 
     <span class="c1"># Compute total linear correction</span>
-    <span class="c1"># note @ is slower when running with mpiexec</span>
-    <span class="n">summed_corrections</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
-        <span class="s2">&quot;ij,j-&gt;i&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">LinearCorrections</span><span class="p">,</span> <span class="n">coefficients_values</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">rgemat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Check if rgemat comes from a dynamic scale</span>
+        <span class="c1"># otherwise it is a single RGEmatrix</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rgemat</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">wcs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;nij,j-&gt;ni&quot;</span><span class="p">,</span> <span class="n">rgemat</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">)</span>
+            <span class="n">summed_corrections</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij,ij-&gt;i&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">LinearCorrections</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">summed_corrections</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+                <span class="s2">&quot;ij,jk,k-&gt;i&quot;</span><span class="p">,</span>
+                <span class="n">dataset</span><span class="o">.</span><span class="n">LinearCorrections</span><span class="p">,</span>
+                <span class="n">rgemat</span><span class="p">,</span>
+                <span class="n">coefficients_values</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">summed_corrections</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+            <span class="s2">&quot;ij,j-&gt;i&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">LinearCorrections</span><span class="p">,</span> <span class="n">coefficients_values</span>
+        <span class="p">)</span>
 
     <span class="c1"># Compute total quadratic correction</span>
     <span class="k">if</span> <span class="n">use_quad</span><span class="p">:</span>
-        <span class="n">coeff_outer_coeff</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">coefficients_values</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">)</span>
-        <span class="c1"># note @ is slower when running with mpiexec</span>
-        <span class="n">summed_quad_corrections</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
-            <span class="s2">&quot;ij,j-&gt;i&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">QuadraticCorrections</span><span class="p">,</span> <span class="n">flatten</span><span class="p">(</span><span class="n">coeff_outer_coeff</span><span class="p">)</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">rgemat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># check that rgemat is a 3D array</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rgemat</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="c1"># do outer product on previously computed wcs</span>
+                <span class="n">coeff_outer_coeff</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ni,nj-&gt;nij&quot;</span><span class="p">,</span> <span class="n">wcs</span><span class="p">,</span> <span class="n">wcs</span><span class="p">)</span>
+                <span class="n">coeff_outer_coeff_flat</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">flatten</span><span class="p">)(</span><span class="n">coeff_outer_coeff</span><span class="p">)</span>
+                <span class="n">summed_quad_corrections</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+                    <span class="s2">&quot;ij,ij-&gt;i&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">QuadraticCorrections</span><span class="p">,</span> <span class="n">coeff_outer_coeff_flat</span>
+                <span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ext_coeffs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij,j-&gt;i&quot;</span><span class="p">,</span> <span class="n">rgemat</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">)</span>
+                <span class="n">coeff_outer_coeff</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">ext_coeffs</span><span class="p">,</span> <span class="n">ext_coeffs</span><span class="p">)</span>
+                <span class="n">summed_quad_corrections</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+                    <span class="s2">&quot;ij,j-&gt;i&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">QuadraticCorrections</span><span class="p">,</span> <span class="n">flatten</span><span class="p">(</span><span class="n">coeff_outer_coeff</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">coeff_outer_coeff</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">coefficients_values</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">)</span>
+            <span class="c1"># note @ is slower when running with mpiexec</span>
+            <span class="n">summed_quad_corrections</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+                <span class="s2">&quot;ij,j-&gt;i&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="o">.</span><span class="n">QuadraticCorrections</span><span class="p">,</span> <span class="n">flatten</span><span class="p">(</span><span class="n">coeff_outer_coeff</span><span class="p">)</span>
+            <span class="p">)</span>
         <span class="n">summed_corrections</span> <span class="o">+=</span> <span class="n">summed_quad_corrections</span>
 
     <span class="c1"># Sum of SM theory + SMEFT corrections</span>

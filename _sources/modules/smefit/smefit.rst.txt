@@ -86,10 +86,26 @@ smefit.log module
    :undoc-members:
    :show-inheritance:
 
+smefit.rge module
+-----------------
+
+.. automodule:: smefit.rge
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smefit.runner module
 --------------------
 
 .. automodule:: smefit.runner
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+smefit.wcxf module
+------------------
+
+.. automodule:: smefit.wcxf
    :members:
    :undoc-members:
    :show-inheritance:

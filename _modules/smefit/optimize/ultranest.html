@@ -127,6 +127,8 @@
 <span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
 <span class="kn">from</span> <span class="nn">ultranest</span> <span class="kn">import</span> <span class="n">stepsampler</span>
 
+<span class="kn">from</span> <span class="nn">smefit.rge</span> <span class="kn">import</span> <span class="n">load_rge_matrix</span>
+
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">log</span>
 <span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
 <span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">load_datasets</span>
@@ -179,7 +181,16 @@
 <span class="sd">        Set to a higher number (0.5) if you know the posterior is simple.</span>
 <span class="sd">    store_raw: bool</span>
 <span class="sd">        if True store the result to eventually resume the job</span>
-
+<span class="sd">    vectorized: bool</span>
+<span class="sd">        if True use jax vectorization</span>
+<span class="sd">    float64: bool</span>
+<span class="sd">        if True use float64 precision</span>
+<span class="sd">    external_chi2: dict</span>
+<span class="sd">        dict of external chi2</span>
+<span class="sd">    rgemat: numpy.ndarray</span>
+<span class="sd">        solution matrix of the RGE</span>
+<span class="sd">    rge_dict: dict</span>
+<span class="sd">        dictionary with the RGE input parameter options</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">print_rate</span> <span class="o">=</span> <span class="mi">5000</span>
@@ -203,6 +214,8 @@
         <span class="n">vectorized</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">float64</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">external_chi2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rgemat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rge_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -212,6 +225,8 @@
             <span class="n">single_parameter_fits</span><span class="p">,</span>
             <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
             <span class="n">external_chi2</span><span class="p">,</span>
+            <span class="n">rgemat</span><span class="p">,</span>
+            <span class="n">rge_dict</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">live_points</span> <span class="o">=</span> <span class="n">live_points</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lepsilon</span> <span class="o">=</span> <span class="n">lepsilon</span>
@@ -249,11 +264,29 @@
 <span class="sd">            created object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="n">rge_dict</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rge&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">operators_to_keep</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">rge_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;datasets&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Loading RGE matrix&quot;</span><span class="p">)</span>
+            <span class="n">has_rge</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">rgemat</span><span class="p">,</span> <span class="n">operators_to_keep</span> <span class="o">=</span> <span class="n">load_rge_matrix</span><span class="p">(</span>
+                <span class="n">rge_dict</span><span class="p">,</span>
+                <span class="nb">list</span><span class="p">(</span><span class="n">operators_to_keep</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;datasets&quot;</span><span class="p">],</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;theory_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;The operators generated by the RGE are: &quot;</span><span class="p">)</span>
+            <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">operators_to_keep</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">has_rge</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">rgemat</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;datasets&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">loaded_datasets</span> <span class="o">=</span> <span class="n">load_datasets</span><span class="p">(</span>
                 <span class="n">config</span><span class="p">[</span><span class="s2">&quot;data_path&quot;</span><span class="p">],</span>
                 <span class="n">config</span><span class="p">[</span><span class="s2">&quot;datasets&quot;</span><span class="p">],</span>
-                <span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">],</span>
+                <span class="n">operators_to_keep</span><span class="p">,</span>
                 <span class="n">config</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">],</span>
                 <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_quad&quot;</span><span class="p">],</span>
                 <span class="n">config</span><span class="p">[</span><span class="s2">&quot;use_theory_covmat&quot;</span><span class="p">],</span>
@@ -263,6 +296,7 @@
                 <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rot_to_fit_basis&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
                 <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uv_couplings&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
                 <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;external_chi2&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+                <span class="n">has_rge</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;external_chi2&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">loaded_datasets</span> <span class="o">=</span> <span class="kc">None</span>
@@ -333,6 +367,8 @@
             <span class="n">vectorized</span><span class="o">=</span><span class="n">vectorized</span><span class="p">,</span>
             <span class="n">float64</span><span class="o">=</span><span class="n">float64</span><span class="p">,</span>
             <span class="n">external_chi2</span><span class="o">=</span><span class="n">external_chi2</span><span class="p">,</span>
+            <span class="n">rgemat</span><span class="o">=</span><span class="n">rgemat</span><span class="p">,</span>
+            <span class="n">rge_dict</span><span class="o">=</span><span class="n">rge_dict</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 
@@ -355,6 +391,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">use_quad</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">use_multiplicative_prescription</span><span class="p">,</span>
                 <span class="n">use_replica</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">rgemat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rgemat</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">chi2_tot</span> <span class="o">=</span> <span class="mi">0</span>
