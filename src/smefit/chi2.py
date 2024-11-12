@@ -22,6 +22,7 @@ def compute_chi2(
     use_quad,
     use_multiplicative_prescription,
     use_replica=False,
+    rgemat=None,
 ):
     r"""
     Compute the :math:`\chi^2`.
@@ -36,6 +37,8 @@ def compute_chi2(
         if True add the |EFT| contribution as a key factor
     use_quad: bool
         if True include also |HO| corrections
+    rgemat: numpy.ndarray
+        solution matrix of the RGE
 
     Returns
     -------
@@ -45,7 +48,7 @@ def compute_chi2(
 
     # compute theory prediction for each point in the dataset
     theory_predictions = pr.make_predictions(
-        dataset, coefficients_values, use_quad, use_multiplicative_prescription
+        dataset, coefficients_values, use_quad, use_multiplicative_prescription, rgemat
     )
 
     # compute experimental central values - theory
@@ -71,6 +74,7 @@ class Scanner:
     """
 
     def __init__(self, run_card, n_replica):
+
         self.n_replica = n_replica
         self.use_quad = run_card["use_quad"]
         self.result_path = f"{run_card['result_path']}/{run_card['result_ID']}"
