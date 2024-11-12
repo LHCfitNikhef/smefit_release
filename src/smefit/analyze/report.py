@@ -462,6 +462,7 @@ class Report:
         plot=None,
         fit_list=None,
         log=False,
+        test_cramer_rao_bound=False,
     ):
         """Fisher information table and plots runner.
 
@@ -481,6 +482,8 @@ class Report:
             By default all the fits included in the report
         log: bool, optional
             if True shows the log of the Fisher informaltion
+        test_cramer_rao_bound: bool, optinal
+            if True test the Cramer Rao bound
 
         """
         figs_list, links_list = [], []
@@ -490,9 +493,14 @@ class Report:
             fit_list = self.fits
 
         for fit in fit_list:
+            _logger.info(f"Computing Fisher for fit {fit.name}")
+
             compute_quad = fit.config["use_quad"]
             fisher_cal = FisherCalculator(fit.coefficients, fit.datasets, compute_quad)
             fisher_cal.compute_linear()
+            if test_cramer_rao_bound and not compute_quad:
+                fisher_cal.test_cramer_rao_bound(fit.results)
+
             fisher_cal.lin_fisher = fisher_cal.normalize(
                 fisher_cal.lin_fisher, norm=norm, log=log
             )
@@ -503,6 +511,9 @@ class Report:
             # if necessary compute the quadratic Fisher
             if compute_quad:
                 fisher_cal.compute_quadratic(fit.results, fit.smeft_predictions)
+                # if test_cramer_rao_bound:
+                #     fisher_cal.test_cramer_rao_bound(fit.results)
+
                 fisher_cal.quad_fisher = fisher_cal.normalize(
                     fisher_cal.quad_fisher, norm=norm, log=log
                 )
