@@ -314,10 +314,9 @@ class Projection:
                 newcov += th_covmat
 
             # add Gaussian noise to central values in case of L1 and leave them unchanged in case of L0
+            cv_projection = cv[idxs]
             if noise == "L1":
                 cv_projection = np.random.multivariate_normal(cv[idxs], newcov)
-            elif noise == "L0":
-                cv_projection = cv[idxs]
 
             # replace cv with updated central values
             if len(cv_projection) > 1:
