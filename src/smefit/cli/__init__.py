@@ -217,24 +217,18 @@ def report(report_card: pathlib.Path):
     type=float,
     default=None,
     required=False,
-    help="Adjusts the statistical uncertainties according to the specified luminosity",
+    help="Adjusts the statistical uncertainties according to the specified luminosity. If not specified, the original "
+    "uncertainties are kept and the central values are fluctuates according to the specified noise level.",
 )
 @click.option(
-    "--closure",
-    type=bool,
-    is_flag=True,
-    default=False,
-    help="Produces datasets under the SM",
+    "--noise",
+    type=str,
+    default="L0",
+    required=False,
+    help="Noise level for the projection, choose between L0 or L1. Assumes L0 by default.",
 )
-def projection(projection_card: pathlib.Path, lumi: float, closure: bool):
+def projection(projection_card: pathlib.Path, lumi: float, noise: str):
     r"""Compute projection for specified dataset"""
 
-    if (lumi is not None) ^ closure:
-        projection_setup = Projection.from_config(projection_card)
-        projection_setup.build_projection(lumi, closure)
-    else:
-        print(lumi, closure)
-        print(
-            "Usage: specify exclusively either a luminosity in fb-1 after --lumi or run a SM closure test with --closure"
-        )
-        sys.exit()
+    projection_setup = Projection.from_config(projection_card)
+    projection_setup.build_projection(lumi, noise)

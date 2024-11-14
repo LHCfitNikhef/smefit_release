@@ -183,15 +183,18 @@ class Projection:
         fred_stat = np.sqrt(lumi_old / lumi_new)
         return stat * fred_stat
 
-    def build_projection(self, lumi_new, closure):
+    def build_projection(self, lumi_new=None, noise="L0"):
         """
         Constructs runcard for projection by updating the central value and statistical and
         systematic uncertainties
 
         Parameters
         ----------
-        lumi_new: float
-            Adjusts the statistical uncertainties according to the specified luminosity
+        lumi_new: float, optional
+            Adjusts the statistical uncertainties according to the specified luminosity lumi_new. If not specified,
+            the uncertainties are left unchanged and the central values are fluctuated according to the noise level
+        noise: str
+            Noise level for the projection, choose between L0 or L1
         closure: bool
             Set to true for a L1 closure test (no rescaling, only cv gets fluctuated according to
             original uncertainties)
@@ -266,7 +269,7 @@ class Projection:
 
             th_covmat = self.datasets.ThCovMat[idxs, idxs]
 
-            if not closure:
+            if lumi_new is not None:
                 # if all stats are zero, we only have access to the total error which we rescale by 1/3 (compromise)
                 no_stats = not np.any(stat)
                 if no_stats:
@@ -310,8 +313,11 @@ class Projection:
             if self.use_theory_covmat:
                 newcov += th_covmat
 
-            # add L1 noise to cv
-            cv_projection = np.random.multivariate_normal(cv[idxs], newcov)
+            # add Gaussian noise to central values in case of L1 and leave them unchanged in case of L0
+            if noise == "L1":
+                cv_projection = np.random.multivariate_normal(cv[idxs], newcov)
+            elif noise == "L0":
+                cv_projection = cv[idxs]
 
             # replace cv with updated central values
             if len(cv_projection) > 1:
@@ -323,7 +329,7 @@ class Projection:
             projection_folder.mkdir(exist_ok=True)
 
             if projection_folder != self.commondata_path:
-                if not closure:
+                if lumi_new is not None:
                     with open(
                         f"{projection_folder}/{dataset_name}_proj.yaml", "w"
                     ) as file:
@@ -338,7 +344,7 @@ class Projection:
                 sys.exit()
 
             # copy corresponding theory predictions with _proj appended to filename
-            if not closure:
+            if lumi_new is not None:
                 shutil.copy(
                     self.theory_path / f"{dataset_name}.json",
                     self.theory_path / f"{dataset_name}_proj.json",
