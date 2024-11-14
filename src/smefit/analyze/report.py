@@ -462,6 +462,7 @@ class Report:
         plot=None,
         fit_list=None,
         log=False,
+        rgemat=None,
     ):
         """Fisher information table and plots runner.
 
@@ -491,7 +492,9 @@ class Report:
 
         for fit in fit_list:
             compute_quad = fit.config["use_quad"]
-            fisher_cal = FisherCalculator(fit.coefficients, fit.datasets, compute_quad)
+            fisher_cal = FisherCalculator(
+                fit.coefficients, fit.datasets, compute_quad, fit.rgemat
+            )
             fisher_cal.compute_linear()
             fisher_cal.lin_fisher = fisher_cal.normalize(
                 fisher_cal.lin_fisher, norm=norm, log=log

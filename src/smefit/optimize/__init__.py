@@ -2,12 +2,11 @@
 import importlib
 import json
 import pathlib
-import sys
 
 from rich.style import Style
 from rich.table import Table
 
-from smefit.rge import RGE
+from smefit.rge.rge import RGE
 
 from .. import chi2, log
 from ..coefficients import CoefficientManager

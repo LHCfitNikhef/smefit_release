@@ -54,6 +54,7 @@ class FitManager:
         self.has_posterior = self.config.get("has_posterior", True)
         self.results = None
         self.datasets = None
+        self.rgemat = None
 
     def __repr__(self):
         return self.name
@@ -72,6 +73,11 @@ class FitManager:
             file = "posterior"
         with open(f"{self.path}/{self.name}/{file}.json", encoding="utf-8") as f:
             results = json.load(f)
+        # load the rge matrix in the result dir if it exists
+        try:
+            self.rgemat = np.load(f"{self.path}/{self.name}/rge_matrix.npy")
+        except FileNotFoundError:
+            print("No RGE matrix found in the result folder, skipping...")
 
         # if the posterior is from single parameter fits
         # then each distribution might have a different number of samples

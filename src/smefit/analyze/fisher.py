@@ -27,10 +27,11 @@ class FisherCalculator:
 
     """
 
-    def __init__(self, coefficients, datasets, compute_quad):
+    def __init__(self, coefficients, datasets, compute_quad, rgemat):
         self.coefficients = coefficients
         self.free_parameters = self.coefficients.free_parameters.index
         self.datasets = datasets
+        self.rgemat = rgemat
 
         # update eft corrections with the constraints
         if compute_quad:
@@ -56,6 +57,10 @@ class FisherCalculator:
             fisher_row = np.zeros(self.free_parameters.size)
             idxs = slice(cnt, cnt + ndat)
             sigma = self.new_LinearCorrections[:, idxs]
+            if self.rgemat is not None:
+                # select the relevant part of the RGE matrix for this dataset
+                rgemat_dataset = self.rgemat[idxs, :, :]
+                sigma = np.einsum("kli,lk->ik", rgemat_dataset, sigma)
             fisher_row = np.diag(sigma @ self.datasets.InvCovMat[idxs, idxs] @ sigma.T)
             fisher_tab.append(fisher_row)
             cnt += ndat

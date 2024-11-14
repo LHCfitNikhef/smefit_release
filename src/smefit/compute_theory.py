@@ -42,7 +42,8 @@ def make_predictions(
         use_multiplicative_prescription: bool
             if True add the |EFT| contribution as a k-factor
         rgemat: numpy.ndarray
-            solution matrix of the RGE
+            solution matrix of the RGE, shape (k, l, m) with k the number of datapoints, l the number of generated
+            coefficients and m the number of original |EFT| coefficients specified in the runcard
     Returns
     -------
         corrected_theory : numpy.ndarray
