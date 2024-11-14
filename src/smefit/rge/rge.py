@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import pickle
 import warnings
 from copy import deepcopy
 from functools import partial
@@ -427,8 +428,9 @@ def load_rge_matrix(
 
         # save RGE matrix to result_path
         if result_path is not None:
-            result_path = pathlib.Path(result_path) / result_ID / "rge_matrix.npy"
-            np.save(result_path, stacked_mats)
+            result_path = pathlib.Path(result_path) / result_ID
+            with open(result_path / "rge_matrix.pkl", "wb") as f:
+                pickle.dump(rgemat, f)
         return stacked_mats, operators_to_keep
 
     else:
