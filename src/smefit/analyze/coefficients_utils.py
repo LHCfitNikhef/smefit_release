@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from matplotlib import cm
 
 from .contours_2d import confidence_ellipse, plot_contours, split_solution
 from .latex_tools import latex_packages, multicolum_table_header
@@ -178,7 +177,7 @@ class CoefficientsPlotter:
         # Spacing between fit results
         nfits = len(bounds)
         y_shift = np.linspace(-0.2 * nfits, 0.2 * nfits, nfits)
-        colors = cm.get_cmap("tab20")
+        colors = plt.get_cmap("tab20")
 
         def plot_error_bars(ax, vals, cnt, i, label=None):
             ax.errorbar(
@@ -568,7 +567,6 @@ class CoefficientsPlotter:
         filled_start_angle = 90 - 180 / len(self.coeff_info)
 
         for i, op_type in enumerate(class_order):
-
             filled_end_angle = (
                 angle_sweep[i] * 360 + filled_start_angle
             )  # End angle in degrees
@@ -640,7 +638,7 @@ class CoefficientsPlotter:
         grid_size = int(np.sqrt(self.npar)) + 1
         fig = plt.figure(figsize=(grid_size * 4, grid_size * 4))
         # loop on coefficients
-        cnt = 0
+
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
             try:
                 ax = plt.subplot(grid_size, grid_size, idx + 1)
@@ -652,27 +650,33 @@ class CoefficientsPlotter:
                     continue
                 solution = posterior[l]
 
-                if disjointed_lists[clr_idx] is None:
-                    pass
-                elif l in disjointed_lists[clr_idx]:
-                    solution, solution2 = split_solution(posterior[l])
+                if (
+                    disjointed_lists[clr_idx] is not None
+                    and l in disjointed_lists[clr_idx]
+                ):
+                    solution1, solution2 = split_solution(posterior[l])
+                    bins_solution1 = np.histogram_bin_edges(solution1, bins="fd")
+                    bins_solution2 = np.histogram_bin_edges(solution2, bins="fd")
+
                     ax.hist(
-                        solution2,
+                        solution,
+                        bins=np.sort(np.concatenate((bins_solution1, bins_solution2))),
+                        density=True,
+                        color=colors[clr_idx],
+                        edgecolor="black",
+                        alpha=0.3,
+                        label=labels[clr_idx],
+                    )
+                else:
+                    ax.hist(
+                        solution,
                         bins="fd",
                         density=True,
                         color=colors[clr_idx],
                         edgecolor="black",
                         alpha=0.3,
+                        label=labels[clr_idx],
                     )
-                ax.hist(
-                    solution,
-                    bins="fd",
-                    density=True,
-                    color=colors[clr_idx],
-                    edgecolor="black",
-                    alpha=0.3,
-                    label=labels[clr_idx],
-                )
                 ax.text(
                     0.05,
                     0.85,
@@ -682,7 +686,6 @@ class CoefficientsPlotter:
                 )
                 ax.tick_params(which="both", direction="in", labelsize=22.5)
                 ax.tick_params(labelleft=False)
-            cnt += 1
 
         lines, labels = fig.axes[0].get_legend_handles_labels()
         for axes in fig.axes:
@@ -699,11 +702,15 @@ class CoefficientsPlotter:
             frameon=False,
         )
 
-        ax_logo_nr = int(np.ceil(cnt / grid_size)) * grid_size
+        if self.npar % grid_size == 0:
+            ax_logo_nr = self.npar + grid_size
+        else:
+            ax_logo_nr = self.npar + (grid_size - self.npar % grid_size)
+
         ax_logo = plt.subplot(grid_size, grid_size, ax_logo_nr)
 
         plt.axis("off")
-        self._plot_logo(ax_logo, [0, 1, 0.001, 0.4])
+        self._plot_logo(ax_logo, [0, 1, 0.6, 1])
 
         fig.tight_layout(
             rect=[0, 0.05 * (5.0 / grid_size), 1, 1 - 0.08 * (5.0 / grid_size)]
@@ -736,7 +743,7 @@ class CoefficientsPlotter:
         """
 
         if double_solution is None:
-            double_solution = {"fit1": [], "fit2": []}
+            double_solution = {f"fit{i+1}": [] for i in range(len(posteriors))}
 
         if dofs_show is not None:
             posteriors = [
@@ -823,9 +830,9 @@ class CoefficientsPlotter:
                     kde=kde,
                     clr_idx=clr_idx,
                     confidence_level=cl,
-                    double_solution=list(double_solution.values())[clr_idx]
-                    if kde
-                    else None,
+                    double_solution=(
+                        list(double_solution.values())[clr_idx] if kde else None
+                    ),
                 )
                 hndls_all.append(hndls_contours)
 

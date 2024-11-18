@@ -17,7 +17,6 @@ _logger = log.logging.getLogger(__name__)
 
 
 class MCOptimizer(Optimizer):
-
     """Optimizer specification for |MC|.
 
     Parameters
@@ -184,7 +183,6 @@ class MCOptimizer(Optimizer):
         )
 
     def get_status(self, chi2):
-
         if len(self.chi2_values) == 0:
             self.chi2_values.append(chi2)
 

@@ -77,7 +77,6 @@ class FitManager:
         # then each distribution might have a different number of samples
         is_single_param = results.get("single_parameter_fits", False)
         if is_single_param:
-
             del results["single_parameter_fits"]
 
             num_samples = []

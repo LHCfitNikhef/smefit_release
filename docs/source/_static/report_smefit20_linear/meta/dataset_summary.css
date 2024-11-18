@@ -1,4 +1,4 @@
- 
+
 /* start css.sty */
 .cmr-8{font-size:80%;}
 .msam-10x-x-80{font-size:80%;}
@@ -76,7 +76,7 @@ div.figure img {text-align:center;}
 .reversemarginpar{float:left;}
 table.equation {width:100%;}
 .equation td{text-align:center; }
-td.equation { margin-top:1em; margin-bottom:1em; } 
+td.equation { margin-top:1em; margin-bottom:1em; }
 td.equation-label { width:5%; text-align:center; }
 td.eqnarray4 { width:5%; white-space: normal; }
 td.eqnarray2 { width:5%; }
@@ -158,4 +158,3 @@ div.array {text-align:center;}
 #TBL-1 colgroup{border-left: 1px solid black;border-right:1px solid black;}
 #TBL-1{border-collapse:collapse;}
 /* end css.sty */
-

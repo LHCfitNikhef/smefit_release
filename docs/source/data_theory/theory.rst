@@ -8,15 +8,15 @@ Theory tables are json files containing the following information:
 * theory covariance matrix for the specific dataset considered: provided as a ``N x N`` matrix like ``[[th_cov_11, ... ,th_cov_1N], ... , [th_cov_N1, ... ,th_cov_NN]]`` with ``N`` being the number of data points
 
 * LO and NLO predictions with linear and quadratic SMEFT corrections: provided as two independent dictionaries ``LO: {}`` and ``NLO: {}`` each containing
-  
+
   * SM predictions obtained at that specific order ``SM: [sm_prediction_1, ... , sm_prediction_N]``
   * linear terms for each operator involved in the computation ``Opi: [linear_term_Opi_1, ..., linear_term_Opi_N]``
   * quadratic terms for each couple of operators (when present) ``Opi*Opj: [quad_term_Opi*Opj_1, ..., quad_term_Opi*Opj_N]``
- 
+
 The EFT corrections should always be provided in the Warsaw basis. In order to produce a fit with a different basis,
 the corresponding rotation matrix has to be provided externally, see :ref:`here<rotation>` for more details.
 
-The above information are used to build the theory predictions for the different observables 
+The above information are used to build the theory predictions for the different observables
 entering the :math:`\chi^2`. As default theory predictions are expressed as
 
 .. math::
@@ -34,5 +34,5 @@ The user can also choose to use the relation
 
 instead by setting in the runcard ``use_multiplicative_prescription: True``.
 The reason to take the ratios :math:`\frac{{\kappa_i}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}}` and :math:`\frac{\widetilde{\kappa}_{ij}^{\rm LO/NLO}}{\sigma_{\rm SM}^{\rm LO/NLO}}`
-is to reduce the dependence on the specific set of parton distribution functions used to computed the 
+is to reduce the dependence on the specific set of parton distribution functions used to computed the
 LO and NLO predictions.
