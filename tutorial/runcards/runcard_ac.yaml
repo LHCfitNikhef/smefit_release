@@ -6,10 +6,10 @@ result_ID: tt_ac
 result_path: ./results
 
 # path to common data
-data_path: ./downloads/smefit_database-main/commondata
+data_path: ./smefit_database-main/commondata
 
 # path to theory tables, default same as data path
-theory_path: ./downloads/smefit_database-main/theory
+theory_path: ./smefit_database-main/theory
 
 # pQCD order (LO or NLO)
 order: NLO
