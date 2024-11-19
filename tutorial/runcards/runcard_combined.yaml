@@ -6,10 +6,10 @@ result_ID: combined
 result_path: ./results
 
 # path to common data
-data_path: ./smefit_database-main/commondata
+data_path: ./smefit_database/commondata
 
 # path to theory tables, default same as data path
-theory_path: ./smefit_database-main/theory
+theory_path: ./smefit_database/theory
 
 
 # pQCD order (LO or NLO)
