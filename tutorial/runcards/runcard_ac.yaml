@@ -1,6 +1,6 @@
 # Input YAML configurations for SMEFiT code
 
-result_ID: ttV
+result_ID: tt_ac
 
 # absolute path where results are stored
 result_path: ./results
@@ -32,25 +32,15 @@ n_samples: 20000
 # Datasets to include
 datasets:
 
-
-  - CMS_ttZ_13TeV
-  - CMS_ttZ_13TeV_pTZ
-  - CMS_ttZ_8TeV
-  - ATLAS_ttZ_13TeV
-  - ATLAS_ttZ_13TeV_2016
-  - ATLAS_ttZ_13TeV_pTZ
-  - ATLAS_ttZ_8TeV
-  - CMS_ttW_13TeV
-  - CMS_ttW_8TeV
-  - ATLAS_ttW_13TeV
-  - ATLAS_ttW_13TeV_2016
-  - ATLAS_ttW_8TeV
+  - ATLAS_CMS_tt_AC_8TeV
+  - ATLAS_tt_13TeV_asy_2022
+  - CMS_tt_13TeV_asy
 
 
 coefficients:
 
   O81qq: { 'min': -2, 'max': 2 }
-  O83qq: { 'min': -2, 'max': 2.0 }
+  O8qt: { 'min': -2, 'max': 2.0 }
 
 
 
