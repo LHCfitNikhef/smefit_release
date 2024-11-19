@@ -1,5 +1,4 @@
 # Input YAML configurations for SMEFiT code
-
 result_ID: tt_mtt
 
 # absolute path where results are stored
@@ -18,16 +17,10 @@ use_theory_covmat: True
 
 use_t0: True
 
-# SMEFT Expansion Order (NHO = Lambda^-2 , HO = Lambda^-4)
+# SMEFT Expansion Order
 use_quad: False
 
-# Set parameter bounds to previous SCAN result
-bounds: Null
-
-# NS settings
-
 n_samples: 20000
-
 
 # Datasets to include
 datasets:
@@ -45,8 +38,5 @@ datasets:
 # Coefficients to fit
 coefficients:
 
-  O81qq: { 'min': -2, 'max': 2 }
-  O83qq: { 'min': -2, 'max': 2.0 }
-
-
-rot_to_fit_basis: null
+  O81qq: { 'min': -10, 'max': 10}
+  O8qt: { 'min': -10, 'max': 10}

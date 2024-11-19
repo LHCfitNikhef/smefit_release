@@ -18,7 +18,6 @@ use_theory_covmat: True
 
 use_t0: True
 
-# SMEFT Expansion Order (NHO = Lambda^-2 , HO = Lambda^-4)
 use_quad: False
 
 # Set parameter bounds to previous SCAN result
@@ -40,27 +39,14 @@ datasets:
   - CMS_tt_13TeV_dilep_2016_Mtt
   - CMS_tt_13TeV_ljets_2015_Mtt
   - CMS_tt_13TeV_ljets_2016_Mtt
-  - CMS_ttZ_13TeV
-  - CMS_ttZ_13TeV_pTZ
-  - CMS_ttZ_8TeV
-  - ATLAS_ttZ_13TeV
-  - ATLAS_ttZ_13TeV_2016
-  - ATLAS_ttZ_13TeV_pTZ
-  - ATLAS_ttZ_8TeV
-  - CMS_ttW_13TeV
-  - CMS_ttW_8TeV
-  - ATLAS_ttW_13TeV
-  - ATLAS_ttW_13TeV_2016
-  - ATLAS_ttW_8TeV
+  - ATLAS_CMS_tt_AC_8TeV
+  - ATLAS_tt_13TeV_asy_2022
+  - CMS_tt_13TeV_asy
 
 # Coefficients to fit
 coefficients:
 
-  O81qq: { 'min': -2, 'max': 2 }
-  O83qq: { 'min': -2, 'max': 2.0 }
-
-
-
-
+  O81qq: { 'min': -10, 'max': 10 }
+  O8qt: { 'min': -10, 'max': 10 }
 
 rot_to_fit_basis: null

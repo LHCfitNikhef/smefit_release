@@ -1,17 +1,17 @@
 # Input YAML file for a report
 
-name: "report_combined"
+name: "LHC_NLO_LIN"
 
-title: "smefit"
+title: "smefit3.0 "
 
 result_IDs: [
-"ttV", "tt_mtt", "combined"
+  "LHC_NLO_LIN_GLOB"
 ]
 
 fit_labels: [
- '$t\bar{t}V$', '$t\bar{t}\:m_{t\bar{t}}$', '$\mathrm{combined}$'
+  '$\mathrm{SMEFiT}3.0$',
 ]
-
+# Input YAML file for a report
 
 # absolute path where results are stored
 report_path: ./reports/
@@ -23,54 +23,22 @@ summary: True
 
 coefficients_plots:
 
-  contours_2d:
-    show: True
-    confidence_level: 95
-    dofs_show:  # Null or list of op per fit to be displayed
-#
-#  posterior_histograms: True
-#
-#  table:
-#    round_val: 3
-#
-#  logo: True
-#  show_only: Null
-#  hide_dofs: Null #[Oll] # or list
-#
-#  double_solution:  # List of op per fit with double solution
-#
-#
-#correlations:
-#   hide_dofs: Null # Null or list of op not be displayed
-#   thr_show: 0.1 # Min value to show, if Null show the full matrix
-
-#PCA:
-#  table: True # display the list of PC decomposition
-#  thr_show: 1.e-2
-#  #sv_min: 1.e-4
-#  plot: True
-#  fit_list: # or list of fits to include by name
-
-chi2_plots:
-  table: True # bool, chi2 table
-  plot_experiment:  # chi2 plot per experiment
+  scatter_plot:
     figsize: [10,15]
-  plot_distribution: #  chi2 distribution per replica
-    figsize: [7,5]
+    x_min: -50
+    x_max: 50
+    lin_thr: .01
+    x_log: True
 
-# fisher information options
-#fisher:
-#
-#  norm: "coeff" # normalize per "coeff" or "data"
-#  summary_only: True # if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset
-#  log: False # show values in log scale ?
-#  fit_list: # list of fit for which fisher is compued, by default all the fits will be included
-#
-#  # heatmap plot
-#  plot:
-#    summary_only: True # if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset
-#    figsize: [11, 15] # figure size
-#    title: true # if True display the fit label as title
+  confidence_level_bar:
+    confidence_level: 95
+    figsize: [10,15]
+    plot_cutoff: 400
+    x_min: 0.001
+    x_max: 500
+    x_log: True
+
+
 
 coeff_info:
   4H: [
@@ -153,57 +121,83 @@ coeff_info:
     [OGtil, "$c_{\\widetilde{G}}$"],  # Non SMEFiT2.0
   ]
 
+
 data_info:
-  tt: [
+  tt8: [
     [ ATLAS_tt_8TeV_dilep_Mtt, "https://arxiv.org" ],
     [ ATLAS_tt_8TeV_ljets_Mtt, "https://arxiv.org" ],
     [ CMS_tt2D_8TeV_dilep_MttYtt, "https://arxiv.org" ],
     [ CMS_tt_8TeV_ljets_Ytt, "https://arxiv.org" ],
+  ]
+  tt13: [
     [ ATLAS_tt_13TeV_ljets_2016_Mtt, "https://arxiv.org" ],
+    [ ATLAS_tt_13TeV_ljets_2016_Mtt_proj, "https://arxiv.org" ],
     [ CMS_tt_13TeV_Mtt, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_Mtt_proj, "https://arxiv.org" ],
     [ CMS_tt_13TeV_dilep_2015_Mtt, "https://arxiv.org" ],
     [ CMS_tt_13TeV_dilep_2016_Mtt, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_dilep_2016_Mtt_proj, "https://arxiv.org" ],
     [ CMS_tt_13TeV_ljets_2015_Mtt, "https://arxiv.org" ],
     [ CMS_tt_13TeV_ljets_2016_Mtt, "https://arxiv.org" ],
     [ CMS_tt_13TeV_ljets_inc, "https://arxiv.org" ],
-    [ ATLAS_WhelF_8TeV, "https://arxiv.org" ],
-    [ ATLAS_Whel_13TeV, "https://arxiv.org" ],
-    [ CMS_WhelF_8TeV, "https://arxiv.org" ],
-    [ ATLAS_CMS_tt_AC_8TeV, "https://arxiv.org" ],
-    [ ATLAS_tt_13TeV_asy_2022, "https://arxiv.org" ],
-    [ CMS_tt_13TeV_asy, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_ljets_inc_proj, "https://arxiv.org" ],
   ]
   tta: [
     [ ATLAS_tta_8TeV, "https://arxiv.org" ],
-    [ CMS_tta_8TeV, "https://arxiv.org" ]
+    [ CMS_tta_8TeV, "https://arxiv.org" ],
+  ]
+  WhelF: [
+    [ ATLAS_WhelF_8TeV, "https://arxiv.org" ],
+    [ ATLAS_Whel_13TeV, "https://arxiv.org" ],
+    [ ATLAS_Whel_13TeV_uncor_proj, "https://arxiv.org" ],
+    [ CMS_WhelF_8TeV, "https://arxiv.org" ],
+  ]
+  AC: [
+    [ ATLAS_CMS_tt_AC_8TeV, "https://arxiv.org" ],
+    [ ATLAS_tt_13TeV_asy_2022, "https://arxiv.org" ],
+    [ ATLAS_tt_13TeV_asy_2022_uncor_proj, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_asy, "https://arxiv.org" ],
+    [ CMS_tt_13TeV_asy_proj, "https://arxiv.org" ],
   ]
   4H: [
     [ ATLAS_ttbb_13TeV_2016, "https://arxiv.org" ],
+    [ ATLAS_ttbb_13TeV_2016_proj, "https://arxiv.org" ],
     [ ATLAS_tttt_13TeV_run2, "https://arxiv.org" ],
+    [ ATLAS_tttt_13TeV_run2_proj, "https://arxiv.org" ],
     [ ATLAS_tttt_13TeV_slep_inc, "https://arxiv.org" ],
-    [ ATLAS_tttt_13TeV_2023, "https://arxiv.org"],
+    [ ATLAS_tttt_13TeV_slep_inc_proj, "https://arxiv.org" ],
     [ CMS_ttbb_13TeV, "https://arxiv.org" ],
     [ CMS_ttbb_13TeV_2016, "https://arxiv.org" ],
+    [ CMS_ttbb_13TeV_2016_proj, "https://arxiv.org" ],
     [ CMS_ttbb_13TeV_dilepton_inc, "https://arxiv.org" ],
+    [ CMS_ttbb_13TeV_dilepton_inc_proj, "https://arxiv.org" ],
     [ CMS_ttbb_13TeV_ljets_inc, "https://arxiv.org" ],
+    [ CMS_ttbb_13TeV_ljets_inc_proj, "https://arxiv.org" ],
     [ CMS_tttt_13TeV, "https://arxiv.org" ],
     [ CMS_tttt_13TeV_run2, "https://arxiv.org" ],
+    [ CMS_tttt_13TeV_run2_proj, "https://arxiv.org" ],
     [ CMS_tttt_13TeV_slep_inc, "https://arxiv.org" ],
-    [ CMS_tttt_13TeV_2023, "https://arxiv.org" ]
+    [ CMS_tttt_13TeV_slep_inc_proj, "https://arxiv.org" ],
   ]
-  ttV: [
+  ttZ: [
     [ ATLAS_ttZ_13TeV, "https://arxiv.org" ],
     [ ATLAS_ttZ_13TeV_2016, "https://arxiv.org" ],
     [ ATLAS_ttZ_13TeV_pTZ, "https://arxiv.org" ],
+    [ ATLAS_ttZ_13TeV_pTZ_uncor_proj, "https://arxiv.org" ],
     [ ATLAS_ttZ_8TeV, "https://arxiv.org" ],
     [ CMS_ttZ_13TeV, "https://arxiv.org" ],
     [ CMS_ttZ_13TeV_pTZ, "https://arxiv.org" ],
+    [ CMS_ttZ_13TeV_pTZ_proj, "https://arxiv.org" ],
     [ CMS_ttZ_8TeV, "https://arxiv.org" ],
+  ]
+  ttW: [
     [ ATLAS_ttW_13TeV, "https://arxiv.org" ],
     [ ATLAS_ttW_13TeV_2016, "https://arxiv.org" ],
+    [ ATLAS_ttW_13TeV_2016_proj, "https://arxiv.org" ],
     [ ATLAS_ttW_8TeV, "https://arxiv.org" ],
     [ CMS_ttW_13TeV, "https://arxiv.org" ],
-    [ CMS_ttW_8TeV, "https://arxiv.org" ]
+    [ CMS_ttW_13TeV_proj, "https://arxiv.org" ],
+    [ CMS_ttW_8TeV, "https://arxiv.org" ],
   ]
   t8: [
     [ ATLAS_t_sch_8TeV, "https://arxiv.org" ],
@@ -211,50 +205,79 @@ data_info:
     [ CMS_t_sch_8TeV, "https://arxiv.org" ],
     [ CMS_t_tch_8TeV_diff_Yt, "https://arxiv.org" ],
     [ CMS_t_tch_8TeV_inc, "https://arxiv.org" ],
+  ]
+  t13: [
     [ ATLAS_t_sch_13TeV_inc, "https://arxiv.org" ],
+    [ ATLAS_t_sch_13TeV_inc_proj, "https://arxiv.org" ],
     [ ATLAS_t_tch_13TeV_inc, "https://arxiv.org" ],
+    [ ATLAS_t_tch_13TeV_inc_proj, "https://arxiv.org" ],
     [ CMS_t_tch_13TeV_2016_diff_Yt, "https://arxiv.org" ],
     [ CMS_t_tch_13TeV_2019_diff_Yt, "https://arxiv.org" ],
+    [ CMS_t_tch_13TeV_2019_diff_Yt_proj, "https://arxiv.org" ],
     [ CMS_t_tch_13TeV_inc, "https://arxiv.org" ],
   ]
   tW: [
     [ ATLAS_tW_13TeV_inc, "https://arxiv.org" ],
+    [ ATLAS_tW_13TeV_inc_proj, "https://arxiv.org" ],
     [ ATLAS_tW_8TeV_inc, "https://arxiv.org" ],
     [ ATLAS_tW_slep_8TeV_inc, "https://arxiv.org" ],
     [ CMS_tW_13TeV_inc, "https://arxiv.org" ],
+    [ CMS_tW_13TeV_inc_proj, "https://arxiv.org" ],
     [ CMS_tW_13TeV_slep_inc, "https://arxiv.org" ],
+    [ CMS_tW_13TeV_slep_inc_proj, "https://arxiv.org" ],
     [ CMS_tW_8TeV_inc, "https://arxiv.org" ],
+  ]
+  tZ: [
     [ ATLAS_tZ_13TeV_inc, "https://arxiv.org" ],
     [ ATLAS_tZ_13TeV_run2_inc, "https://arxiv.org" ],
+    [ ATLAS_tZ_13TeV_run2_inc_proj, "https://arxiv.org" ],
     [ CMS_tZ_13TeV_2016_inc, "https://arxiv.org" ],
     [ CMS_tZ_13TeV_inc, "https://arxiv.org" ],
     [ CMS_tZ_13TeV_pTt, "https://arxiv.org" ],
+    [ CMS_tZ_13TeV_pTt_uncor_proj, "https://arxiv.org" ],
   ]
   HrunI: [
     [ ATLAS_CMS_SSinc_RunI, "https://arxiv.org" ],
+  ]
+  HrunII: [
     [ ATLAS_SSinc_RunII, "https://arxiv.org" ],
+    [ ATLAS_SSinc_RunII_proj.yaml, "https://arxiv.org" ],
     [ CMS_SSinc_RunII, "https://arxiv.org" ],
+    [ CMS_SSinc_RunII_proj.yaml,  "https://arxiv.org" ]
+  ]
+  Hdiff: [
     [ ATLAS_WH_Hbb_13TeV, "https://arxiv.org" ],
+    [ ATLAS_WH_Hbb_13TeV_proj, "https://arxiv.org" ],
     [ ATLAS_ZH_Hbb_13TeV, "https://arxiv.org" ],
+    [ ATLAS_ZH_Hbb_13TeV_proj, "https://arxiv.org" ],
     [ ATLAS_ggF_13TeV_2015, "https://arxiv.org" ],
+    [ ATLAS_ggF_13TeV_2015_proj, "https://arxiv.org" ],
     [ ATLAS_ggF_ZZ_13TeV, "https://arxiv.org" ],
+    [ ATLAS_ggF_ZZ_13TeV_proj, "https://arxiv.org" ],
     [ CMS_H_13TeV_2015_pTH, "https://arxiv.org" ],
+    [ CMS_H_13TeV_2015_pTH_proj, "https://arxiv.org" ],
     [ CMS_ggF_aa_13TeV, "https://arxiv.org" ],
+    [ CMS_ggF_aa_13TeV_proj, "https://arxiv.org" ],
     [ ATLAS_STXS_runII_13TeV, "https://arxiv.org" ],
+    [ ATLAS_STXS_runII_13TeV_uncor_proj, "https://arxiv.org" ],
   ]
   VV: [
     [ ATLAS_WW_13TeV_2016_memu, "https://arxiv.org" ],
+    [ ATLAS_WW_13TeV_2016_memu_proj, "https://arxiv.org" ],
     [ ATLAS_WZ_13TeV_2016_mTWZ, "https://arxiv.org" ],
+    [ ATLAS_WZ_13TeV_2016_mTWZ_proj, "https://arxiv.org" ],
     [ CMS_WZ_13TeV_2016_pTZ, "https://arxiv.org" ],
+    [ CMS_WZ_13TeV_2016_pTZ_proj, "https://arxiv.org" ],
     [ CMS_WZ_13TeV_2022_pTZ, "https://arxiv.org" ],
-    [ LEP_eeWW_182GeV, "https://arxiv.org" ],
-    [ LEP_eeWW_189GeV, "https://arxiv.org" ],
-    [ LEP_eeWW_198GeV, "https://arxiv.org" ],
-    [ LEP_eeWW_206GeV, "https://arxiv.org" ],
+    [ CMS_WZ_13TeV_2022_pTZ_proj, "https://arxiv.org" ],
   ]
   LEP: [
     [ LEP1_EWPOs_2006, "https://arxiv.org" ],
     [ LEP_Bhabha_2013, "https://arxiv.org" ],
     [ LEP_Brw_2013, "https://arxiv.org" ],
     [ LEP_alphaEW, "https://arxiv.org" ],
+    [ LEP_eeWW_182GeV, "https://arxiv.org" ],
+    [ LEP_eeWW_189GeV, "https://arxiv.org" ],
+    [ LEP_eeWW_198GeV, "https://arxiv.org" ],
+    [ LEP_eeWW_206GeV, "https://arxiv.org" ],
   ]
