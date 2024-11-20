@@ -154,10 +154,13 @@ class ALOptimizer(Optimizer):
 
         fit_result["best_fit_point"] = dict(zip(coeffs_name, coeff_best))
 
+        self.coefficients.set_free_parameters(coeff_best)
+        self.coefficients.set_constraints()
+
         # compute max log likelihood
         chi2_tot = chi2.compute_chi2(
             self.loaded_datasets,
-            coeff_best,
+            self.coefficients.value,
             self.use_quad,
             self.use_multiplicative_prescription,
         )
