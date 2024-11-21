@@ -403,26 +403,26 @@ class USOptimizer(Optimizer):
             result dictionary
 
         """
-        values = {}
+        posterior_samples = {}
         for c in self.coefficients.name:
-            values[c] = []
+            posterior_samples[c] = []
 
         for sample in result["samples"]:
             self.coefficients.set_free_parameters(sample)
             self.coefficients.set_constraints()
 
             for c in self.coefficients.name:
-                values[c].append(self.coefficients[c].value)
+                posterior_samples[c].append(self.coefficients[c].value)
 
         if self.pairwise_fits:
-            posterior_file = (
+            fit_results_file = (
                 self.results_path
-                / f"posterior_{self.coefficients.name[0]}_{self.coefficients.name[1]}.json"
+                / f"fit_results_{self.coefficients.name[0]}_{self.coefficients.name[1]}.json"
             )
         else:
-            posterior_file = self.results_path / "posterior.json"
+            fit_results_file = self.results_path / "fit_results.json"
 
-        self.dump_posterior(posterior_file, values)
+        # self.dump_posterior(posterior_file, values)
 
         # Writing the fit summary results
         logz = result["logz"]
@@ -433,9 +433,10 @@ class USOptimizer(Optimizer):
         best_fit_point = dict(zip(self.coefficients.name, self.coefficients.value))
 
         fit_result = {
+            "samples": posterior_samples,
             "logz": logz,
             "max_loglikelihood": max_loglikelihood,
             "best_fit_point": best_fit_point,
         }
 
-        self.dump_fit_result(self.results_path / "fit_result.json", fit_result)
+        self.dump_fit_result(fit_results_file, fit_result)

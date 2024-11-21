@@ -98,6 +98,9 @@ class FitManager:
 
         # Be sure columns are sorted, otherwise can't compute theory...
         self.results = pd.DataFrame(results).sort_index(axis=1)
+        fit_result["best_fit_point"] = pd.DataFrame(
+            [fit_result["best_fit_point"]]
+        ).sort_index(axis=1)
         self.fit_result = fit_result
 
     def load_configuration(self):
@@ -165,16 +168,9 @@ class FitManager:
             |SMEFT| predictions for the best fit
         """
 
-        best_fit_point = np.array(
-            [
-                self.fit_result["best_fit_point"][key]
-                for key in sorted(self.fit_result["best_fit_point"].keys())
-            ]
-        )
-
         predictions = make_predictions(
             self.datasets,
-            best_fit_point,
+            self.fit_result["best_fit_point"],
             self.config["use_quad"],
             self.config.get("use_multiplicative_prescription", False),
         )
