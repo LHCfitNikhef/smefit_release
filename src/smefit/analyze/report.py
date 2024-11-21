@@ -240,7 +240,7 @@ class Report:
         bounds_dict = {}
         for fit in self.fits:
             bounds_dict[fit.label] = compute_confidence_level(
-                fit.results,
+                fit.results["samples"],
                 coeff_plt.coeff_info,
                 fit.has_posterior,
                 (
