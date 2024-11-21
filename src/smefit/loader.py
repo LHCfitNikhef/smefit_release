@@ -435,7 +435,7 @@ class Loader:
 
 
 def construct_corrections_matrix_linear(
-    corrections_list, n_data_tot, sorted_keys=None, rgemat=None
+    corrections_list, n_data_tot, sorted_keys, rgemat=None
 ):
     """
     Construct a unique list of correction name,
@@ -452,19 +452,9 @@ def construct_corrections_matrix_linear(
 
     Returns
     -------
-        sorted_keys : np.ndarray
-            unique list of operators for which at least one correction is present
         corr_values : np.ndarray
             matrix with correction values (n_data_tot, sorted_keys.size)
     """
-    if sorted_keys is None:
-        tmp = [
-            [
-                *c,
-            ]
-            for _, c in corrections_list
-        ]
-        sorted_keys = np.unique([item for sublist in tmp for item in sublist])
 
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
     cnt = 0
@@ -482,7 +472,7 @@ def construct_corrections_matrix_linear(
         else:
             corr_values = jnp.einsum("ij, jk -> ik", corr_values, rgemat)
 
-    return sorted_keys, corr_values
+    return corr_values
 
 
 def construct_corrections_matrix_quadratic(
@@ -503,10 +493,8 @@ def construct_corrections_matrix_quadratic(
 
     Returns
     -------
-        sorted_keys : np.ndarray
-            unique list of operators for which at least one correction is present
         corr_values : np.ndarray
-            matrix with correction values (n_data_tot, sorted_keys.size)
+            matrix with correction values (n_data_tot, sorted_keys.size, sorted_keys.size)
     """
 
     corr_values = np.zeros((n_data_tot, sorted_keys.size, sorted_keys.size))
@@ -535,7 +523,7 @@ def construct_corrections_matrix_quadratic(
         else:
             corr_values = jnp.einsum("ijk, jl, kr -> ilr", corr_values, rgemat, rgemat)
 
-    return sorted_keys, corr_values
+    return corr_values
 
 
 def load_datasets(
@@ -626,20 +614,26 @@ def load_datasets(
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
-    sorted_keys = None
+    # Construct unique list of operator names entering lin_corr_list
+    operator_names = []
+    for i in range(len(lin_corr_list)):
+        operator_names.extend(list(lin_corr_list[i][1].keys()))
+    sorted_keys = np.unique(operator_names)
+
     # if uv couplings are present allow for op which are not in the
     # theory files (same for external chi2 and rge)
     if has_uv_couplings or has_external_chi2 or rgemat is not None:
         sorted_keys = np.unique((*operators_to_keep,))
+    else:
+        check_missing_operators(sorted_keys, operators_to_keep)
 
-    operators_names, lin_corr_values = construct_corrections_matrix_linear(
+    lin_corr_values = construct_corrections_matrix_linear(
         lin_corr_list, n_data_tot, sorted_keys, rgemat
     )
-    check_missing_operators(operators_names, operators_to_keep)
 
     if use_quad:
-        _, quad_corr_values = construct_corrections_matrix_quadratic(
-            quad_corr_list, n_data_tot, operators_names, rgemat
+        quad_corr_values = construct_corrections_matrix_quadratic(
+            quad_corr_list, n_data_tot, sorted_keys, rgemat
         )
     else:
         quad_corr_values = None
@@ -663,7 +657,7 @@ def load_datasets(
     return DataTuple(
         exp_data,
         np.array(sm_theory),
-        operators_names,
+        sorted_keys,
         lin_corr_values,
         quad_corr_values,
         np.array(exp_name),
