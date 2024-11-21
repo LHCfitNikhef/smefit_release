@@ -23,7 +23,7 @@ class mock_FitManager:
 
     fit.config["use_quad"] = False
     fit.load_datasets()
-    fit.results = post_df
+    fit.results = {"samples": post_df}
 
 
 class Test_FitManager(mock_FitManager):
@@ -42,10 +42,10 @@ class Test_FitManager(mock_FitManager):
         self.fit.config["use_quad"] = True
         self.fit.load_datasets()
         pr_tesr = np.zeros_like(self.fit.smeft_predictions)
-        for rep in range(self.fit.results.shape[0]):
+        for rep in range(self.fit.results["samples"].shape[0]):
             pr_tesr[rep] = make_predictions(
                 self.fit.datasets,
-                self.fit.results.iloc[rep, :],
+                self.fit.results["samples"].iloc[rep, :],
                 self.fit.config["use_quad"],
                 False,
             )
@@ -74,11 +74,11 @@ class Test_Chi2tableCalculator(mock_FitManager):
         _, chi2_rep = self.chi2_cal.compute(
             self.fit.datasets, self.fit.smeft_predictions
         )
-        chi2_rep_test = np.zeros(self.fit.results.shape[0])
-        for rep in range(self.fit.results.shape[0]):
+        chi2_rep_test = np.zeros(self.fit.results["samples"].shape[0])
+        for rep in range(self.fit.results["samples"].shape[0]):
             chi2_rep_test[rep] = compute_chi2(
                 self.fit.datasets,
-                self.fit.results.iloc[rep, :],
+                self.fit.results["samples"].iloc[rep, :],
                 self.fit.config["use_quad"],
                 False,
             )

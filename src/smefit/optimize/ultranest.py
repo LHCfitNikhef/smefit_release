@@ -99,15 +99,15 @@ class USOptimizer(Optimizer):
         rge_dict=None,
     ):
         super().__init__(
-            f"{result_path}/{result_ID}",
-            loaded_datasets,
-            coefficients,
-            use_quad,
-            single_parameter_fits,
-            use_multiplicative_prescription,
-            external_chi2,
-            rgemat,
-            rge_dict,
+            results_path=f"{result_path}/{result_ID}",
+            loaded_datasets=loaded_datasets,
+            coefficients=coefficients,
+            use_quad=use_quad,
+            single_parameter_fits=single_parameter_fits,
+            use_multiplicative_prescription=use_multiplicative_prescription,
+            external_chi2=external_chi2,
+            rgemat=rgemat,
+            rge_dict=rge_dict,
         )
         self.live_points = live_points
         self.lepsilon = lepsilon
@@ -369,7 +369,7 @@ class USOptimizer(Optimizer):
 
         log_dir = None
         if self.store_raw:
-            log_dir = self.results_path
+            log_dir = self.results_path / "ultranest_log"
 
         if self.vectorized:
             loglikelihood = jax.vmap(self.gaussian_loglikelihood)
@@ -413,6 +413,11 @@ class USOptimizer(Optimizer):
             log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
             log.console.log(f"Number of samples: {result['samples'].shape[0]}")
 
+            if self.store_raw:
+                _logger.info("Ultranest plots being produced...")
+                sampler.plot()
+                _logger.info(f"Ultranest plots produced in {log_dir}")
+
             table = Table(
                 style=Style(color="white"), title_style="bold cyan", title=None
             )
@@ -427,6 +432,7 @@ class USOptimizer(Optimizer):
 
     def save(self, result):
         """Save |NS| replicas to json inside a dictionary: {coff: [replicas values]}.
+        Saving also some basic information about the fit.
 
         Parameters
         ----------
@@ -434,23 +440,40 @@ class USOptimizer(Optimizer):
             result dictionary
 
         """
-        values = {}
+        posterior_samples = {}
         for c in self.coefficients.name:
-            values[c] = []
+            posterior_samples[c] = []
 
         for sample in result["samples"]:
             self.coefficients.set_free_parameters(sample)
             self.coefficients.set_constraints()
 
             for c in self.coefficients.name:
-                values[c].append(self.coefficients[c].value)
+                posterior_samples[c].append(self.coefficients[c].value)
 
         if self.pairwise_fits:
-            posterior_file = (
+            fit_results_file = (
                 self.results_path
-                / f"posterior_{self.coefficients.name[0]}_{self.coefficients.name[1]}.json"
+                / f"fit_results_{self.coefficients.name[0]}_{self.coefficients.name[1]}.json"
             )
         else:
-            posterior_file = self.results_path / "posterior.json"
+            fit_results_file = self.results_path / "fit_results.json"
 
-        self.dump_posterior(posterior_file, values)
+        # self.dump_posterior(posterior_file, values)
+
+        # Writing the fit summary results
+        logz = result["logz"]
+        max_loglikelihood = result["maximum_likelihood"]["logl"]
+        # get the best fit point, including the constrained coefficients
+        self.coefficients.set_free_parameters(result["maximum_likelihood"]["point"])
+        self.coefficients.set_constraints()
+        best_fit_point = dict(zip(self.coefficients.name, self.coefficients.value))
+
+        fit_result = {
+            "samples": posterior_samples,
+            "logz": logz,
+            "max_loglikelihood": max_loglikelihood,
+            "best_fit_point": best_fit_point,
+        }
+
+        self.dump_fit_result(fit_results_file, fit_result)
