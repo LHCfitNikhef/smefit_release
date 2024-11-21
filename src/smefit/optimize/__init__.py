@@ -24,10 +24,10 @@ _logger = log.logging.getLogger(__name__)
 
 
 class NumpyEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, (np.float32, np.float64, np.int32, np.int64)):
-            return obj.item()  # Convert to native Python type
-        return super().default(obj)
+    def default(self, o):
+        if isinstance(o, (np.float32, np.float64, np.int32, np.int64)):
+            return o.item()  # Convert to native Python type
+        return super().default(o)
 
 
 class Optimizer:
