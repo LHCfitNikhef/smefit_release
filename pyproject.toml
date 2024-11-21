@@ -40,7 +40,7 @@ seaborn="^0.13.2"
 arviz="^0.18.0"
 jax="^0.4.28"
 jaxlib="^0.4.28"
-
+wilson="^2.4"
 [tool.poetry.group.docs]
 optional = true
 
