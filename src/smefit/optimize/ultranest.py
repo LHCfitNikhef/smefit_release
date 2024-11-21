@@ -86,7 +86,7 @@ class USOptimizer(Optimizer):
         external_chi2=None,
     ):
         super().__init__(
-            result_path=f"{result_path}/{result_ID}",
+            results_path=f"{result_path}/{result_ID}",
             loaded_datasets=loaded_datasets,
             coefficients=coefficients,
             use_quad=use_quad,
