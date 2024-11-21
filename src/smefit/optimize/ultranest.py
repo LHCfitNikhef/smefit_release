@@ -265,7 +265,6 @@ class USOptimizer(Optimizer):
                 self.use_quad,
                 self.use_multiplicative_prescription,
                 use_replica=False,
-                rgemat=self.rgemat,
             )
         else:
             chi2_tot = 0
