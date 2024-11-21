@@ -198,9 +198,13 @@ def impose_constrain(dataset, coefficients, update_quad=False):
                 params[idx] = 1.0
                 temp_coeffs.set_free_parameters(params)
                 temp_coeffs.set_constraints()
-                coeff_outer_coeff = np.outer(temp_coeffs.value, temp_coeffs.value)
                 new_quad_corrections.append(
-                    flatten(coeff_outer_coeff) @ dataset.QuadraticCorrections.T
+                    np.einsum(
+                        "ijk,j,k -> i",
+                        dataset.QuadraticCorrections,
+                        temp_coeffs.value,
+                        temp_coeffs.value,
+                    )
                 )
 
     if update_quad:
