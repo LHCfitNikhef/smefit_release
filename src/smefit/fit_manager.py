@@ -73,10 +73,6 @@ class FitManager:
         with open(f"{self.path}/{self.name}/{file}.json", encoding="utf-8") as f:
             results = json.load(f)
 
-        # load the fit results
-        with open(f"{self.path}/{self.name}/fit_result.json", encoding="utf-8") as f:
-            fit_result = json.load(f)
-
         # if the posterior is from single parameter fits
         # then each distribution might have a different number of samples
         is_single_param = results.get("single_parameter_fits", False)
@@ -97,7 +93,7 @@ class FitManager:
 
         # Be sure columns are sorted, otherwise can't compute theory...
         results["samples"] = pd.DataFrame(results["samples"]).sort_index(axis=1)
-        fit_result["best_fit_point"] = pd.DataFrame(
+        results["best_fit_point"] = pd.DataFrame(
             [results["best_fit_point"]]
         ).sort_index(axis=1)
         self.results = results
@@ -166,10 +162,9 @@ class FitManager:
         np.ndarray:
             |SMEFT| predictions for the best fit
         """
-
         predictions = make_predictions(
             self.datasets,
-            self.results["best_fit_point"],
+            self.results["best_fit_point"].iloc[0, :],
             self.config["use_quad"],
             self.config.get("use_multiplicative_prescription", False),
         )
