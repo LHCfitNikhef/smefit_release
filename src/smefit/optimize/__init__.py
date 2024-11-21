@@ -2,8 +2,8 @@
 import importlib
 import json
 import pathlib
-import sys
 
+import numpy as np
 from rich.style import Style
 from rich.table import Table
 
@@ -21,6 +21,13 @@ except ModuleNotFoundError:
     run_parallel = False
 
 _logger = log.logging.getLogger(__name__)
+
+
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (np.float32, np.float64, np.int32, np.int64)):
+            return obj.item()  # Convert to native Python type
+        return super().default(obj)
 
 
 class Optimizer:
@@ -257,7 +264,7 @@ class Optimizer:
                     tmp["samples"][coeff] = values["samples"][coeff]
                     # update the file with the new values
                     with open(fit_result_file, "w", encoding="utf-8") as f:
-                        json.dump(tmp, f, indent=4)
+                        json.dump(tmp, f, indent=4, cls=NumpyEncoder)
 
             else:
                 values["single_parameter_fits"] = True
@@ -266,8 +273,8 @@ class Optimizer:
                     coeff = list(values["best_fit_point"].keys())[0]
                     values["logz"] = {coeff: values["logz"]}
                     values["max_loglikelihood"] = {coeff: values["max_loglikelihood"]}
-                    json.dump(values, f, indent=4)
+                    json.dump(values, f, indent=4, cls=NumpyEncoder)
 
         else:
             with open(fit_result_file, "w", encoding="utf-8") as f:
-                json.dump(values, f, indent=4)
+                json.dump(values, f, indent=4, cls=NumpyEncoder)
