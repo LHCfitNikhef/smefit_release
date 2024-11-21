@@ -435,7 +435,7 @@ class Loader:
 
 
 def construct_corrections_matrix_linear(
-    corrections_list, n_data_tot, sorted_keys, rgemat=None
+    corrections_list, n_data_tot, sorted_keys=None, rgemat=None
 ):
     """
     Construct a unique list of correction name,
@@ -457,6 +457,14 @@ def construct_corrections_matrix_linear(
         corr_values : np.ndarray
             matrix with correction values (n_data_tot, sorted_keys.size)
     """
+    if sorted_keys is None:
+        tmp = [
+            [
+                *c,
+            ]
+            for _, c in corrections_list
+        ]
+        sorted_keys = np.unique([item for sublist in tmp for item in sublist])
 
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
     cnt = 0
@@ -618,7 +626,11 @@ def load_datasets(
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
-    sorted_keys = np.unique((*operators_to_keep,))
+    sorted_keys = None
+    # if uv couplings are present allow for op which are not in the
+    # theory files (same for external chi2 and rge)
+    if has_uv_couplings or has_external_chi2 or rgemat is not None:
+        sorted_keys = np.unique((*operators_to_keep,))
 
     operators_names, lin_corr_values = construct_corrections_matrix_linear(
         lin_corr_list, n_data_tot, sorted_keys, rgemat
@@ -627,7 +639,7 @@ def load_datasets(
 
     if use_quad:
         _, quad_corr_values = construct_corrections_matrix_quadratic(
-            quad_corr_list, n_data_tot, sorted_keys, rgemat
+            quad_corr_list, n_data_tot, operators_names, rgemat
         )
     else:
         quad_corr_values = None
