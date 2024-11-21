@@ -427,9 +427,10 @@ class USOptimizer(Optimizer):
         # Writing the fit summary results
         logz = result["logz"]
         max_loglikelihood = result["maximum_likelihood"]["logl"]
-        best_fit_point = dict(
-            zip(self.free_parameters.index, result["maximum_likelihood"]["point"])
-        )
+        # get the best fit point, including the constrained coefficients
+        self.coefficients.set_free_parameters(result["maximum_likelihood"]["point"])
+        self.coefficients.set_constraints()
+        best_fit_point = dict(zip(self.coefficients.name, self.coefficients.value))
 
         fit_result = {
             "logz": logz,
