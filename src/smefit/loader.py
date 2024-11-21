@@ -434,12 +434,12 @@ class Loader:
         return self.dataspec["quad_corrections"]
 
 
-def construct_corrections_matrix(
-    corrections_list, n_data_tot, sorted_keys=None, rgemat=None
+def construct_corrections_matrix_linear(
+    corrections_list, n_data_tot, sorted_keys, rgemat=None
 ):
     """
     Construct a unique list of correction name,
-    with corresponding values.
+    with corresponding values for linear EFT corrections.
 
     Parameters
     ----------
@@ -458,25 +458,12 @@ def construct_corrections_matrix(
             matrix with correction values (n_data_tot, sorted_keys.size)
     """
 
-    if sorted_keys is None:
-        tmp = [
-            [
-                *c,
-            ]
-            for _, c in corrections_list
-        ]
-        sorted_keys = np.unique([item for sublist in tmp for item in sublist])
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
     cnt = 0
     # loop on experiments
     for n_dat, correction_dict in corrections_list:
         # loop on corrections
         for key, values in correction_dict.items():
-            if "*" in key:
-                op1, op2 = key.split("*")
-                if op2 < op1:
-                    key = f"{op2}*{op1}"
-
             idx = np.where(sorted_keys == key)[0][0]
             corr_values[cnt : cnt + n_dat, idx] = values
         cnt += n_dat
@@ -486,6 +473,59 @@ def construct_corrections_matrix(
             corr_values = jnp.einsum("ij, ijk -> ik", corr_values, rgemat)
         else:
             corr_values = jnp.einsum("ij, jk -> ik", corr_values, rgemat)
+
+    return sorted_keys, corr_values
+
+
+def construct_corrections_matrix_quadratic(
+    corrections_list, n_data_tot, sorted_keys, rgemat=None
+):
+    """
+    Construct a unique list of correction name,
+    with corresponding values for quadratic EFT corrections.
+
+    Parameters
+    ----------
+        corrections_list : list(dict)
+            list containing corrections per experiment
+        n_data_tot : int
+            total number of experimental data points
+        sorted_keys: numpy.ndarray
+            list of sorted operator corrections
+
+    Returns
+    -------
+        sorted_keys : np.ndarray
+            unique list of operators for which at least one correction is present
+        corr_values : np.ndarray
+            matrix with correction values (n_data_tot, sorted_keys.size)
+    """
+
+    corr_values = np.zeros((n_data_tot, sorted_keys.size, sorted_keys.size))
+    cnt = 0
+
+    # loop on experiments
+    for n_dat, correction_dict in corrections_list:
+        # loop on corrections
+        for key, values in correction_dict.items():
+            op1, op2 = key.split("*")
+            idx1 = np.where(sorted_keys == op1)[0][0]
+            idx2 = np.where(sorted_keys == op2)[0][0]
+
+            # we want to store the values in the upper triangular part of the matrix
+            if idx1 > idx2:
+                idx1, idx2 = idx2, idx1
+
+            corr_values[cnt : cnt + n_dat, idx1, idx2] = values
+        cnt += n_dat
+
+    if rgemat is not None:
+        if len(rgemat.shape) == 3:
+            corr_values = jnp.einsum(
+                "ijk, ijl, ikr -> ilr", corr_values, rgemat, rgemat
+            )
+        else:
+            corr_values = jnp.einsum("ijk, jl, kr -> ilr", corr_values, rgemat, rgemat)
 
     return sorted_keys, corr_values
 
@@ -578,27 +618,16 @@ def load_datasets(
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
-    sorted_keys = None
-    # if uv couplings are present allow for op which are not in the
-    # theory files (same for external chi2 and rge)
-    if has_uv_couplings or has_external_chi2 or rgemat is not None:
-        sorted_keys = np.unique((*operators_to_keep,))
-    operators_names, lin_corr_values = construct_corrections_matrix(
+    sorted_keys = np.unique((*operators_to_keep,))
+
+    operators_names, lin_corr_values = construct_corrections_matrix_linear(
         lin_corr_list, n_data_tot, sorted_keys, rgemat
     )
     check_missing_operators(operators_names, operators_to_keep)
 
     if use_quad:
-        quad_corrections_names = []
-        for op1 in operators_names:
-            for op2 in operators_names:
-                if (
-                    f"{op1}*{op2}" not in quad_corrections_names
-                    and f"{op2}*{op1}" not in quad_corrections_names
-                ):
-                    quad_corrections_names.append(f"{op1}*{op2}")
-        _, quad_corr_values = construct_corrections_matrix(
-            quad_corr_list, n_data_tot, np.array(quad_corrections_names)
+        _, quad_corr_values = construct_corrections_matrix_quadratic(
+            quad_corr_list, n_data_tot, sorted_keys, rgemat
         )
     else:
         quad_corr_values = None
