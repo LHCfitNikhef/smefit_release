@@ -3,6 +3,7 @@ import json
 import pathlib
 from collections import namedtuple
 
+import jax.numpy as jnp
 import numpy as np
 import pandas as pd
 import scipy.linalg as la
@@ -433,7 +434,9 @@ class Loader:
         return self.dataspec["quad_corrections"]
 
 
-def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None):
+def construct_corrections_matrix(
+    corrections_list, n_data_tot, sorted_keys=None, rgemat=None
+):
     """
     Construct a unique list of correction name,
     with corresponding values.
@@ -478,6 +481,12 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
             corr_values[cnt : cnt + n_dat, idx] = values
         cnt += n_dat
 
+    if rgemat is not None:
+        if len(rgemat.shape) == 3:
+            corr_values = jnp.einsum("ij, ijk -> ik", corr_values, rgemat)
+        else:
+            corr_values = jnp.einsum("ij, jk -> ik", corr_values, rgemat)
+
     return sorted_keys, corr_values
 
 
@@ -494,7 +503,7 @@ def load_datasets(
     rot_to_fit_basis=None,
     has_uv_couplings=False,
     has_external_chi2=False,
-    has_rge=False,
+    rgemat=None,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
@@ -522,8 +531,8 @@ def load_datasets(
             True for UV fits
         has_external_chi2: bool, optional
             True in the presence of external chi2 modules
-        has_rge: bool, optional
-            True in the presence of RGE matrix
+        rgemat: numpy.ndarray, optional
+            solution matrix of the RGE
     """
 
     exp_data = []
@@ -572,10 +581,10 @@ def load_datasets(
     sorted_keys = None
     # if uv couplings are present allow for op which are not in the
     # theory files (same for external chi2 and rge)
-    if has_uv_couplings or has_external_chi2 or has_rge:
+    if has_uv_couplings or has_external_chi2 or rgemat is not None:
         sorted_keys = np.unique((*operators_to_keep,))
     operators_names, lin_corr_values = construct_corrections_matrix(
-        lin_corr_list, n_data_tot, sorted_keys
+        lin_corr_list, n_data_tot, sorted_keys, rgemat
     )
     check_missing_operators(operators_names, operators_to_keep)
 
