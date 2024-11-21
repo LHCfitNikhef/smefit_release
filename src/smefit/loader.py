@@ -616,8 +616,8 @@ def load_datasets(
 
     # Construct unique list of operator names entering lin_corr_list
     operator_names = []
-    for i in range(len(lin_corr_list)):
-        operator_names.extend(list(lin_corr_list[i][1].keys()))
+    for item in lin_corr_list:
+        operator_names.extend(list(item[1].keys()))
     sorted_keys = np.unique(operator_names)
 
     # if uv couplings are present allow for op which are not in the
