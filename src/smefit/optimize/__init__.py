@@ -177,8 +177,9 @@ class Optimizer:
         Dumps the fit results to a json file.
 
         dump_fit_result gets called repeatedly for single parameter fits, once for each parameter.
-        `values` contains the samples of the current fit, while previous fit results get loaded into `tmp` and
-        updated with the current samples. The updated values are then written back to the file.
+        `values` contains the samples of the current fit, while previous fit results get loaded
+        into `tmp` and updated with the current samples. The updated values are then written back
+        to the file.
 
         Parameters
         ----------

@@ -47,9 +47,9 @@ class ALOptimizer(Optimizer):
         n_samples,
     ):
         super().__init__(
-            f"{result_path}/{result_ID}",
-            loaded_datasets,
-            coefficients,
+            results_path=f"{result_path}/{result_ID}",
+            loaded_datasets=loaded_datasets,
+            coefficients=coefficients,
             # disble quadratic corrections here
             use_quad=False,
             single_parameter_fits=single_parameter_fits,

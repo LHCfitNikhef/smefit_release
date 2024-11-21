@@ -86,13 +86,13 @@ class USOptimizer(Optimizer):
         external_chi2=None,
     ):
         super().__init__(
-            f"{result_path}/{result_ID}",
-            loaded_datasets,
-            coefficients,
-            use_quad,
-            single_parameter_fits,
-            use_multiplicative_prescription,
-            external_chi2,
+            result_path=f"{result_path}/{result_ID}",
+            loaded_datasets=loaded_datasets,
+            coefficients=coefficients,
+            use_quad=use_quad,
+            single_parameter_fits=single_parameter_fits,
+            use_multiplicative_prescription=use_multiplicative_prescription,
+            external_chi2=external_chi2,
         )
         self.live_points = live_points
         self.lepsilon = lepsilon
