@@ -187,9 +187,22 @@ data info as args. Log the math:<cite>chi^2</cite> value and values of the coeff
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.optimize.Optimizer.dump_posterior">
-<span class="sig-name descname"><span class="pre">dump_posterior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">posterior_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize.html#Optimizer.dump_posterior"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.Optimizer.dump_posterior" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="smefit.optimize.Optimizer.dump_fit_result">
+<span class="sig-name descname"><span class="pre">dump_fit_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fit_result_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize.html#Optimizer.dump_fit_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.Optimizer.dump_fit_result" title="Link to this definition"></a></dt>
+<dd><p>Dumps the fit results to a json file.</p>
+<p>dump_fit_result gets called repeatedly for single parameter fits, once for each parameter.
+<cite>values</cite> contains the samples of the current fit, while previous fit results get loaded
+into <cite>tmp</cite> and updated with the current samples. The updated values are then written back
+to the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fit_result_file</strong> (<em>PosixPath</em>) – path to the fit results file</p></li>
+<li><p><strong>values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – dictionary containing the current fit results</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="smefit.optimize.Optimizer.free_parameters">
@@ -282,8 +295,9 @@ as value</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.optimize.analytic.ALOptimizer.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/analytic.html#ALOptimizer.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.analytic.ALOptimizer.save" title="Link to this definition"></a></dt>
-<dd><p>Save samples to json inside a dictionary: {coff: [replicas values]}.</p>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/analytic.html#ALOptimizer.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.analytic.ALOptimizer.save" title="Link to this definition"></a></dt>
+<dd><p>Save samples to json inside a dictionary: {coff: [replicas values]}.
+Saving also some basic information about the fit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>samples</strong> (<em>np.array</em>) – raw samples with shape (n_samples, n_free_param)</p>
@@ -547,7 +561,8 @@ so that it can be compiled with jax.jit.
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.optimize.ultranest.USOptimizer.save">
 <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/optimize/ultranest.html#USOptimizer.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.optimize.ultranest.USOptimizer.save" title="Link to this definition"></a></dt>
-<dd><p>Save <abbr title="Nested Sampling">NS</abbr> replicas to json inside a dictionary: {coff: [replicas values]}.</p>
+<dd><p>Save <abbr title="Nested Sampling">NS</abbr> replicas to json inside a dictionary: {coff: [replicas values]}.
+Saving also some basic information about the fit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>result</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – result dictionary</p>

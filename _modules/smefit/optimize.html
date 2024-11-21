@@ -354,19 +354,52 @@
         <span class="k">return</span> <span class="n">chi2_tot</span></div>
 
 
-<div class="viewcode-block" id="Optimizer.dump_posterior">
-<a class="viewcode-back" href="../../modules/smefit/smefit.optimize.html#smefit.optimize.Optimizer.dump_posterior">[docs]</a>
-    <span class="k">def</span> <span class="nf">dump_posterior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">posterior_file</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<div class="viewcode-block" id="Optimizer.dump_fit_result">
+<a class="viewcode-back" href="../../modules/smefit/smefit.optimize.html#smefit.optimize.Optimizer.dump_fit_result">[docs]</a>
+    <span class="k">def</span> <span class="nf">dump_fit_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit_result_file</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dumps the fit results to a json file.</span>
+
+<span class="sd">        dump_fit_result gets called repeatedly for single parameter fits, once for each parameter.</span>
+<span class="sd">        `values` contains the samples of the current fit, while previous fit results get loaded</span>
+<span class="sd">        into `tmp` and updated with the current samples. The updated values are then written back</span>
+<span class="sd">        to the file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fit_result_file: PosixPath</span>
+<span class="sd">            path to the fit results file</span>
+<span class="sd">        values: dict</span>
+<span class="sd">            dictionary containing the current fit results</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">single_parameter_fits</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">posterior_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">posterior_file</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">fit_result_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fit_result_file</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="n">tmp</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-                    <span class="n">values</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+                    <span class="c1"># Get the operator name</span>
+                    <span class="n">coeff</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;samples&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="c1"># update the values</span>
+                    <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;logz&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;logz&quot;</span><span class="p">]</span>
+                    <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;max_loglikelihood&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;max_loglikelihood&quot;</span><span class="p">]</span>
+                    <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;best_fit_point&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;best_fit_point&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span>
+                    <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;samples&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;samples&quot;</span><span class="p">][</span><span class="n">coeff</span><span class="p">]</span>
+                    <span class="c1"># update the file with the new values</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fit_result_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">values</span><span class="p">[</span><span class="s2">&quot;single_parameter_fits&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fit_result_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="c1"># Get the operator name</span>
+                    <span class="n">coeff</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;best_fit_point&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">values</span><span class="p">[</span><span class="s2">&quot;logz&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">coeff</span><span class="p">:</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;logz&quot;</span><span class="p">]}</span>
+                    <span class="n">values</span><span class="p">[</span><span class="s2">&quot;max_loglikelihood&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">coeff</span><span class="p">:</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;max_loglikelihood&quot;</span><span class="p">]}</span>
+                    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">posterior_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fit_result_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

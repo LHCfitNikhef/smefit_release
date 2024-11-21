@@ -161,6 +161,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.load_results"><code class="docutils literal notranslate"><span class="pre">FitManager.load_results()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.n_replica"><code class="docutils literal notranslate"><span class="pre">FitManager.n_replica</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.smeft_predictions"><code class="docutils literal notranslate"><span class="pre">FitManager.smeft_predictions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#smefit.fit_manager.FitManager.smeft_predictions_best_fit"><code class="docutils literal notranslate"><span class="pre">FitManager.smeft_predictions_best_fit</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -411,7 +412,7 @@
 <li class="toctree-l1"><a class="reference internal" href="smefit.optimize.html">smefit.optimize package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer"><code class="docutils literal notranslate"><span class="pre">Optimizer</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.chi2_func"><code class="docutils literal notranslate"><span class="pre">Optimizer.chi2_func()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.dump_posterior"><code class="docutils literal notranslate"><span class="pre">Optimizer.dump_posterior()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.dump_fit_result"><code class="docutils literal notranslate"><span class="pre">Optimizer.dump_fit_result()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.free_parameters"><code class="docutils literal notranslate"><span class="pre">Optimizer.free_parameters</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.generate_chi2_table"><code class="docutils literal notranslate"><span class="pre">Optimizer.generate_chi2_table()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.optimize.html#smefit.optimize.Optimizer.load_external_chi2"><code class="docutils literal notranslate"><span class="pre">Optimizer.load_external_chi2()</span></code></a></li>
@@ -982,6 +983,20 @@ the results. Results are stored in a class attribute</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><abbr title="Standard Model Effective Field Theory">SMEFT</abbr> predictions for each replica</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="smefit.fit_manager.FitManager.smeft_predictions_best_fit">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">smeft_predictions_best_fit</span></span><a class="headerlink" href="#smefit.fit_manager.FitManager.smeft_predictions_best_fit" title="Link to this definition"></a></dt>
+<dd><p>Compute <abbr title="Standard Model Effective Field Theory">SMEFT</abbr> predictions for the best fit point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><abbr title="Standard Model Effective Field Theory">SMEFT</abbr> predictions for the best fit</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>np.ndarray</p>

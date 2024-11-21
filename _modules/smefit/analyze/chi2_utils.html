@@ -212,6 +212,9 @@
             <span class="p">)</span>
             <span class="n">cnt</span> <span class="o">+=</span> <span class="n">ndat_exp</span>
 
+        <span class="c1"># compute chi2 for the whole dataset</span>
+        <span class="n">total_chi2_rep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij,ji-&gt;i&quot;</span><span class="p">,</span> <span class="n">diff_rep</span><span class="p">,</span> <span class="n">covmat_diff_rep</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
                 <span class="p">{</span>
@@ -222,7 +225,7 @@
                 <span class="p">},</span>
                 <span class="n">index</span><span class="o">=</span><span class="n">datasets</span><span class="o">.</span><span class="n">ExpNames</span><span class="p">,</span>
             <span class="p">),</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">chi2_rep</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">datasets</span><span class="o">.</span><span class="n">Commondata</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+            <span class="n">total_chi2_rep</span> <span class="o">/</span> <span class="n">datasets</span><span class="o">.</span><span class="n">Commondata</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 

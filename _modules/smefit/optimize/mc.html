@@ -444,7 +444,14 @@
             <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;replica_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">replica</span><span class="si">}</span><span class="s2">/coefficients_rep_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">replica</span><span class="si">}</span><span class="s2">.json&quot;</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">dump_posterior</span><span class="p">(</span><span class="n">posterior_file</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div>
+        <span class="n">fit_result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="n">values</span><span class="p">,</span>
+            <span class="s2">&quot;logz&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;max_loglikelihood&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;best_fit_point&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump_fit_result</span><span class="p">(</span><span class="n">posterior_file</span><span class="p">,</span> <span class="n">fit_result</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

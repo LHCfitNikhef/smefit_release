@@ -218,15 +218,15 @@
         <span class="n">rge_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">loaded_datasets</span><span class="p">,</span>
-            <span class="n">coefficients</span><span class="p">,</span>
-            <span class="n">use_quad</span><span class="p">,</span>
-            <span class="n">single_parameter_fits</span><span class="p">,</span>
-            <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
-            <span class="n">external_chi2</span><span class="p">,</span>
-            <span class="n">rgemat</span><span class="p">,</span>
-            <span class="n">rge_dict</span><span class="p">,</span>
+            <span class="n">results_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">loaded_datasets</span><span class="o">=</span><span class="n">loaded_datasets</span><span class="p">,</span>
+            <span class="n">coefficients</span><span class="o">=</span><span class="n">coefficients</span><span class="p">,</span>
+            <span class="n">use_quad</span><span class="o">=</span><span class="n">use_quad</span><span class="p">,</span>
+            <span class="n">single_parameter_fits</span><span class="o">=</span><span class="n">single_parameter_fits</span><span class="p">,</span>
+            <span class="n">use_multiplicative_prescription</span><span class="o">=</span><span class="n">use_multiplicative_prescription</span><span class="p">,</span>
+            <span class="n">external_chi2</span><span class="o">=</span><span class="n">external_chi2</span><span class="p">,</span>
+            <span class="n">rgemat</span><span class="o">=</span><span class="n">rgemat</span><span class="p">,</span>
+            <span class="n">rge_dict</span><span class="o">=</span><span class="n">rge_dict</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">live_points</span> <span class="o">=</span> <span class="n">live_points</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lepsilon</span> <span class="o">=</span> <span class="n">lepsilon</span>
@@ -508,7 +508,7 @@
 
         <span class="n">log_dir</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_raw</span><span class="p">:</span>
-            <span class="n">log_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span>
+            <span class="n">log_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">/</span> <span class="s2">&quot;ultranest_log&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vectorized</span><span class="p">:</span>
             <span class="n">loglikelihood</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gaussian_loglikelihood</span><span class="p">)</span>
@@ -552,6 +552,11 @@
             <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time : </span><span class="si">{</span><span class="p">((</span><span class="n">t2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">60.0</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> minutes&quot;</span><span class="p">)</span>
             <span class="n">log</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of samples: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;samples&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">store_raw</span><span class="p">:</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Ultranest plots being produced...&quot;</span><span class="p">)</span>
+                <span class="n">sampler</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+                <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ultranest plots produced in </span><span class="si">{</span><span class="n">log_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
             <span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span>
                 <span class="n">style</span><span class="o">=</span><span class="n">Style</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">),</span> <span class="n">title_style</span><span class="o">=</span><span class="s2">&quot;bold cyan&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span>
             <span class="p">)</span>
@@ -569,6 +574,7 @@
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.save">[docs]</a>
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Save |NS| replicas to json inside a dictionary: {coff: [replicas values]}.</span>
+<span class="sd">        Saving also some basic information about the fit.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -576,26 +582,43 @@
 <span class="sd">            result dictionary</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">posterior_samples</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-            <span class="n">values</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">posterior_samples</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;samples&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
 
             <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-                <span class="n">values</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">posterior_samples</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pairwise_fits</span><span class="p">:</span>
-            <span class="n">posterior_file</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">fit_results_file</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span>
-                <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;posterior_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.json&quot;</span>
+                <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;fit_results_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.json&quot;</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">posterior_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">/</span> <span class="s2">&quot;posterior.json&quot;</span>
+            <span class="n">fit_results_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">/</span> <span class="s2">&quot;fit_results.json&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">dump_posterior</span><span class="p">(</span><span class="n">posterior_file</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div>
+        <span class="c1"># self.dump_posterior(posterior_file, values)</span>
+
+        <span class="c1"># Writing the fit summary results</span>
+        <span class="n">logz</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;logz&quot;</span><span class="p">]</span>
+        <span class="n">max_loglikelihood</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;maximum_likelihood&quot;</span><span class="p">][</span><span class="s2">&quot;logl&quot;</span><span class="p">]</span>
+        <span class="c1"># get the best fit point, including the constrained coefficients</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;maximum_likelihood&quot;</span><span class="p">][</span><span class="s2">&quot;point&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
+        <span class="n">best_fit_point</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+
+        <span class="n">fit_result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;samples&quot;</span><span class="p">:</span> <span class="n">posterior_samples</span><span class="p">,</span>
+            <span class="s2">&quot;logz&quot;</span><span class="p">:</span> <span class="n">logz</span><span class="p">,</span>
+            <span class="s2">&quot;max_loglikelihood&quot;</span><span class="p">:</span> <span class="n">max_loglikelihood</span><span class="p">,</span>
+            <span class="s2">&quot;best_fit_point&quot;</span><span class="p">:</span> <span class="n">best_fit_point</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump_fit_result</span><span class="p">(</span><span class="n">fit_results_file</span><span class="p">,</span> <span class="n">fit_result</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

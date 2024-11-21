@@ -169,9 +169,9 @@
         <span class="n">n_samples</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">loaded_datasets</span><span class="p">,</span>
-            <span class="n">coefficients</span><span class="p">,</span>
+            <span class="n">results_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result_ID</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">loaded_datasets</span><span class="o">=</span><span class="n">loaded_datasets</span><span class="p">,</span>
+            <span class="n">coefficients</span><span class="o">=</span><span class="n">coefficients</span><span class="p">,</span>
             <span class="c1"># disble quadratic corrections here</span>
             <span class="n">use_quad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">single_parameter_fits</span><span class="o">=</span><span class="n">single_parameter_fits</span><span class="p">,</span>
@@ -248,6 +248,8 @@
     <span class="k">def</span> <span class="nf">run_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run sapmling accordying to the analytic solution.&quot;&quot;&quot;</span>
 
+        <span class="n">fit_result</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="c1"># update linear corrections in casde</span>
         <span class="n">new_LinearCorrections</span> <span class="o">=</span> <span class="n">impose_constrain</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span>
@@ -279,16 +281,43 @@
             <span class="o">@</span> <span class="n">diff_sm</span>
         <span class="p">)</span>
 
+        <span class="c1"># Compute some metrics of the fit result</span>
+        <span class="c1"># Get names of coefficients, including the constrained ones</span>
+        <span class="n">coeffs_name</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># set the best fit point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">coeff_best</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
+
+        <span class="n">fit_result</span><span class="p">[</span><span class="s2">&quot;best_fit_point&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">coeffs_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+
+        <span class="c1"># compute max log likelihood</span>
+        <span class="n">chi2_tot</span> <span class="o">=</span> <span class="n">chi2</span><span class="o">.</span><span class="n">compute_chi2</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_quad</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_multiplicative_prescription</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">max_logl</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">chi2_tot</span><span class="p">)</span>
+
+        <span class="n">fit_result</span><span class="p">[</span><span class="s2">&quot;max_loglikelihood&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_logl</span>
+
+        <span class="n">gaussian_integral</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">coeff_covmat</span><span class="p">)))</span>
+        <span class="c1"># NOTE: current formula for logz is not inluding the prior penalty</span>
+        <span class="n">logz</span> <span class="o">=</span> <span class="n">gaussian_integral</span> <span class="o">+</span> <span class="n">max_logl</span>
+        <span class="n">fit_result</span><span class="p">[</span><span class="s2">&quot;logz&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">logz</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;The logZ computation is not including the prior penalty.&quot;</span><span class="p">)</span>
+
         <span class="c1"># generate samples in case n_samples &gt; 0</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">log_result</span><span class="p">(</span><span class="n">coeff_best</span><span class="p">,</span> <span class="n">coeff_covmat</span><span class="p">)</span>
 
             <span class="c1"># sample</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Sampling solutions ...&quot;</span><span class="p">)</span>
-            <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span>
+            <span class="n">fit_result</span><span class="p">[</span><span class="s2">&quot;samples&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span>
                 <span class="n">coeff_best</span><span class="p">,</span> <span class="n">coeff_covmat</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span><span class="p">,)</span>
             <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fit_result</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># record only chi2 if no samples are requested</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">coeff_best</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
@@ -305,8 +334,9 @@
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">chi2_red</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Save samples to json inside a dictionary: {coff: [replicas values]}.</span>
+<span class="sd">        Saving also some basic information about the fit.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -314,20 +344,21 @@
 <span class="sd">            raw samples with shape (n_samples, n_free_param)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">posterior_samples</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-            <span class="n">values</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">posterior_samples</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># propagate constrain</span>
-        <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;samples&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
 
             <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-                <span class="n">values</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">posterior_samples</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-        <span class="n">posterior_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">/</span> <span class="s2">&quot;posterior.json&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dump_posterior</span><span class="p">(</span><span class="n">posterior_file</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;samples&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">posterior_samples</span>
+        <span class="c1"># save fit result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump_fit_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_path</span> <span class="o">/</span> <span class="s2">&quot;fit_results.json&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span></div>
 </div>
 
 </pre></div>
