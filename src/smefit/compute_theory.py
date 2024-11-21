@@ -3,7 +3,6 @@
 """
 Module for the generation of theory predictions
 """
-import jax
 import jax.numpy as jnp
 import numpy as np
 

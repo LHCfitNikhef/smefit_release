@@ -22,7 +22,6 @@ def compute_chi2(
     use_quad,
     use_multiplicative_prescription,
     use_replica=False,
-    rgemat=None,
 ):
     r"""
     Compute the :math:`\chi^2`.

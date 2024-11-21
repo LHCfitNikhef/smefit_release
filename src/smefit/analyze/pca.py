@@ -11,7 +11,6 @@ from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from ..coefficients import CoefficientManager
-from ..compute_theory import flatten
 from ..loader import load_datasets
 from .latex_tools import latex_packages
 
