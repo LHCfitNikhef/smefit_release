@@ -225,4 +225,4 @@ class ALOptimizer(Optimizer):
 
         result["samples"] = posterior_samples
         # save fit result
-        self.dump_fit_result(self.results_path / "fit_result.json", result)
+        self.dump_fit_result(self.results_path / "fit_results.json", result)

@@ -70,7 +70,7 @@ class FitManager:
         """
         file = "results"
         if self.has_posterior:
-            file = "posterior"
+            file = "fit_results"
         with open(f"{self.path}/{self.name}/{file}.json", encoding="utf-8") as f:
             results = json.load(f)
 
@@ -85,23 +85,23 @@ class FitManager:
             del results["single_parameter_fits"]
 
             num_samples = []
-            for key in results.keys():
-                num_samples.append(len(results[key]))
+            for key in results["samples"].keys():
+                num_samples.append(len(results["samples"][key]))
             num_samples_min = min(num_samples)
 
-            for key in results.keys():
-                results[key] = np.random.choice(
-                    results[key], num_samples_min, replace=False
+            for key in results["samples"].keys():
+                results["samples"][key] = np.random.choice(
+                    results["samples"][key], num_samples_min, replace=False
                 )
 
         # TODO: support pariwise posteriors
 
         # Be sure columns are sorted, otherwise can't compute theory...
-        self.results = pd.DataFrame(results).sort_index(axis=1)
+        results["samples"] = pd.DataFrame(results["samples"]).sort_index(axis=1)
         fit_result["best_fit_point"] = pd.DataFrame(
-            [fit_result["best_fit_point"]]
+            [results["best_fit_point"]]
         ).sort_index(axis=1)
-        self.fit_result = fit_result
+        self.results = results
 
     def load_configuration(self):
         """Load configuration yaml card.
@@ -151,7 +151,7 @@ class FitManager:
             smeft.append(
                 make_predictions(
                     self.datasets,
-                    self.results.iloc[rep, :],
+                    self.results["samples"].iloc[rep, :],
                     self.config["use_quad"],
                     self.config.get("use_multiplicative_prescription", False),
                 )
@@ -170,7 +170,7 @@ class FitManager:
 
         predictions = make_predictions(
             self.datasets,
-            self.fit_result["best_fit_point"],
+            self.results["best_fit_point"],
             self.config["use_quad"],
             self.config.get("use_multiplicative_prescription", False),
         )
@@ -186,4 +186,4 @@ class FitManager:
     @property
     def n_replica(self):
         """Number of replicas"""
-        return self.results.shape[0]
+        return self.results["samples"].shape[0]

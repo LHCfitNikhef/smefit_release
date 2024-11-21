@@ -337,7 +337,7 @@ class Report:
                 for fit in self.fits
             ]
             coeff_plt.plot_posteriors(
-                [fit.results for fit in self.fits],
+                [fit.results["samples"] for fit in self.fits],
                 labels=[fit.label for fit in self.fits],
                 disjointed_lists=disjointed_lists,
             )
@@ -354,7 +354,7 @@ class Report:
             coeff_plt.plot_contours_2d(
                 [
                     (
-                        fit.results[fit.coefficients.free_parameters.index],
+                        fit.results["samples"][fit.coefficients.free_parameters.index],
                         fit.config["use_quad"],
                     )
                     for fit in self.fits
@@ -397,7 +397,7 @@ class Report:
             _logger.info(f"Plotting correlations for: {fit.name}")
             coeff_to_keep = fit.coefficients.free_parameters.index
             plot_correlations(
-                fit.results[coeff_to_keep],
+                fit.results["samples"][coeff_to_keep],
                 latex_names=self.coeff_info.droplevel(0),
                 fig_name=f"{self.report}/correlations_{fit.name}",
                 title=fit.label if title else None,
@@ -508,7 +508,9 @@ class Report:
 
             # if necessary compute the quadratic Fisher
             if compute_quad:
-                fisher_cal.compute_quadratic(fit.results, fit.smeft_predictions)
+                fisher_cal.compute_quadratic(
+                    fit.results["samples"], fit.smeft_predictions
+                )
                 fisher_cal.quad_fisher = fisher_cal.normalize(
                     fisher_cal.quad_fisher, norm=norm, log=log
                 )
