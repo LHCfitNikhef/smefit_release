@@ -311,4 +311,11 @@ class MCOptimizer(Optimizer):
             / f"replica_{self.replica}/coefficients_rep_{self.replica}.json"
         )
 
-        self.dump_posterior(posterior_file, values)
+        fit_result = {
+            "samples": values,
+            "logz": None,
+            "max_loglikelihood": None,
+            "best_fit_point": None,
+        }
+
+        self.dump_fit_result(posterior_file, fit_result)
