@@ -150,12 +150,14 @@ class ALOptimizer(Optimizer):
         )
 
         # Compute some metrics of the fit result
-        coeffs_name = sorted(self.coefficients.free_parameters.index)
+        # Get names of coefficients, including the constrained ones
+        coeffs_name = sorted(self.coefficients.name)
 
-        fit_result["best_fit_point"] = dict(zip(coeffs_name, coeff_best))
-
+        # set the best fit point
         self.coefficients.set_free_parameters(coeff_best)
         self.coefficients.set_constraints()
+
+        fit_result["best_fit_point"] = dict(zip(coeffs_name, self.coefficients.value))
 
         # compute max log likelihood
         chi2_tot = chi2.compute_chi2(
