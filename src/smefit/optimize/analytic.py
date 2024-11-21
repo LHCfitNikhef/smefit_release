@@ -168,7 +168,7 @@ class ALOptimizer(Optimizer):
         )
         max_logl = float(-0.5 * chi2_tot)
 
-        fit_result["max_log_likelihood"] = max_logl
+        fit_result["max_loglikelihood"] = max_logl
 
         gaussian_integral = np.log(np.sqrt(np.linalg.det(2 * np.pi * coeff_covmat)))
         # NOTE: current formula for logz is not inluding the prior penalty
@@ -182,10 +182,10 @@ class ALOptimizer(Optimizer):
 
             # sample
             _logger.info("Sampling solutions ...")
-            samples = np.random.multivariate_normal(
+            fit_result["samples"] = np.random.multivariate_normal(
                 coeff_best, coeff_covmat, size=(self.n_samples,)
             )
-            self.save(samples, fit_result)
+            self.save(fit_result)
         else:  # record only chi2 if no samples are requested
             self.coefficients.set_free_parameters(coeff_best)
             self.coefficients.set_constraints()
@@ -201,7 +201,7 @@ class ALOptimizer(Optimizer):
             with open(self.results_path / "chi2.dat", "a") as f:
                 f.write(f"{chi2_red} \n")
 
-    def save(self, samples, fit_result):
+    def save(self, result):
         """Save samples to json inside a dictionary: {coff: [replicas values]}.
         Saving also some basic information about the fit.
 
@@ -211,20 +211,18 @@ class ALOptimizer(Optimizer):
             raw samples with shape (n_samples, n_free_param)
 
         """
-        values = {}
+        posterior_samples = {}
         for c in self.coefficients.name:
-            values[c] = []
+            posterior_samples[c] = []
 
         # propagate constrain
-        for sample in samples:
+        for sample in result["samples"]:
             self.coefficients.set_free_parameters(sample)
             self.coefficients.set_constraints()
 
             for c in self.coefficients.name:
-                values[c].append(self.coefficients[c].value)
+                posterior_samples[c].append(self.coefficients[c].value)
 
-        posterior_file = self.results_path / "posterior.json"
-        self.dump_posterior(posterior_file, values)
-
+        result["samples"] = posterior_samples
         # save fit result
-        self.dump_fit_result(self.results_path / "fit_result.json", fit_result)
+        self.dump_fit_result(self.results_path / "fit_result.json", result)
