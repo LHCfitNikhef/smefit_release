@@ -614,17 +614,16 @@ def load_datasets(
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
-    # Construct unique list of operator names entering lin_corr_list
-    operator_names = []
-    for item in lin_corr_list:
-        operator_names.extend(list(item[1].keys()))
-    sorted_keys = np.unique(operator_names)
-
     # if uv couplings are present allow for op which are not in the
     # theory files (same for external chi2 and rge)
     if has_uv_couplings or has_external_chi2 or rgemat is not None:
         sorted_keys = np.unique((*operators_to_keep,))
     else:
+        # Construct unique list of operator names entering lin_corr_list
+        operator_names = []
+        for item in lin_corr_list:
+            operator_names.extend(list(item[1].keys()))
+        sorted_keys = np.unique(operator_names)
         check_missing_operators(sorted_keys, operators_to_keep)
 
     lin_corr_values = construct_corrections_matrix_linear(
