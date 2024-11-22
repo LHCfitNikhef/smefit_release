@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import jax.numpy as jnp
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -27,10 +28,11 @@ class FisherCalculator:
 
     """
 
-    def __init__(self, coefficients, datasets, compute_quad):
+    def __init__(self, coefficients, datasets, compute_quad, rgemat):
         self.coefficients = coefficients
         self.free_parameters = self.coefficients.free_parameters.index
         self.datasets = datasets
+        self.rgemat = rgemat
 
         # update eft corrections with the constraints
         if compute_quad:
@@ -39,9 +41,11 @@ class FisherCalculator:
                 self.new_QuadraticCorrections,
             ) = impose_constrain(self.datasets, self.coefficients, update_quad=True)
         else:
-            self.new_LinearCorrections = impose_constrain(
-                self.datasets, self.coefficients
-            )
+            # TODO: check if this is correct, what do the constraints do?
+            # self.new_LinearCorrections = impose_constrain(
+            #     self.datasets, self.coefficients
+            # )
+            self.new_LinearCorrections = self.datasets.LinearCorrections.T
 
         self.lin_fisher = None
         self.quad_fisher = None
@@ -56,6 +60,11 @@ class FisherCalculator:
             fisher_row = np.zeros(self.free_parameters.size)
             idxs = slice(cnt, cnt + ndat)
             sigma = self.new_LinearCorrections[:, idxs]
+            if self.rgemat is not None:
+                # select the relevant part of the RGE matrix for this dataset
+                rgemat_stacked = jnp.stack([mat.values for mat in self.rgemat])
+                rgemat_dataset = rgemat_stacked[idxs, :, :]
+                sigma = jnp.einsum("kli,lk->ik", rgemat_dataset, sigma)
             fisher_row = np.diag(sigma @ self.datasets.InvCovMat[idxs, idxs] @ sigma.T)
             fisher_tab.append(fisher_row)
             cnt += ndat

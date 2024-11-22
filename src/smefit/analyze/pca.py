@@ -188,6 +188,7 @@ def impose_constrain(dataset, coefficients, update_quad=False):
         temp_coeffs.set_constraints()
 
         # update linear corrections
+        # TODO: what do here with RG induced operators that don't appear in the runcard?
         new_linear_corrections.append(temp_coeffs.value @ dataset.LinearCorrections.T)
 
         # update quadratic corrections, this will include some double counting in the mixed corrections
