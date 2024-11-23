@@ -2,7 +2,7 @@
 import pathlib
 import warnings
 from copy import deepcopy
-from functools import partial
+from functools import partial, wraps
 
 import ckmutil.ckm
 import jax.numpy as jnp
@@ -39,6 +39,41 @@ wilson.run.smeft.beta.beta = beta_wrapper
 wilson.run.smeft.beta.beta_array = partial(
     wilson.run.smeft.beta.beta_array, HIGHSCALE=np.inf
 )
+
+# Patch smeftpar: we remove all dependence on SMEFT parameters
+# in SM paramaters, otherwise the linear approximation is not valid
+C_patch = {
+    "phi": 0.0,
+    "phiBox": 0.0,
+    "phiD": 0.0,
+    "phiWB": 0.0,
+    "phiG": 0.0,
+    "phiW": 0.0,
+    "phiB": 0.0,
+    "dphi": 0.0,
+    "uphi": 0.0,
+    "ephi": 0.0,
+}
+# Reference to the original smeftpar function
+original_smeftpar = wilson.run.smeft.smpar.smeftpar
+
+
+# Define the monkey-patched function
+@wraps(original_smeftpar)
+def patched_smeftpar(*args, **kwargs):
+    # check if C is passed as a keyword argument
+    if "C" in kwargs:
+        kwargs["C"] = C_patch
+    # otherwise, check if it is passed as a positional argument
+    else:
+        args = list(args)
+        args[1] = C_patch
+
+    return original_smeftpar(*args, **kwargs)
+
+
+# Apply the monkey patch
+wilson.run.smeft.smpar.smeftpar = patched_smeftpar
 
 # Suppress the ComplexWarning
 warnings.filterwarnings("ignore", category=ComplexWarning)
