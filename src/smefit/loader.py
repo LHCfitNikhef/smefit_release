@@ -541,9 +541,7 @@ def load_datasets(
     else:
         Loader.theory_path = pathlib.Path(commondata_path)
 
-    datasets_ordered = np.unique(list(datasets.keys()))
-
-    for sset in datasets_ordered:
+    for sset in np.unique(list(datasets.keys())):
         dataset = Loader(
             sset,
             operators_to_keep,

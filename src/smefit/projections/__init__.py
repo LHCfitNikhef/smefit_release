@@ -22,7 +22,6 @@ class Projection:
         dataset_names,
         projections_path,
         coefficients,
-        order,
         use_quad,
         use_theory_covmat,
         rot_to_fit_basis,
@@ -83,7 +82,6 @@ class Projection:
         dataset_names = projection_config["datasets"]
 
         coefficients = projection_config.get("coefficients", [])
-        order = projection_config.get("order", "LO")
         use_quad = projection_config.get("use_quad", False)
         use_theory_covmat = projection_config.get("use_theory_covmat", True)
         rot_to_fit_basis = projection_config.get("rot_to_fit_basis", None)
@@ -99,7 +97,6 @@ class Projection:
             dataset_names,
             projections_path,
             coefficients,
-            order,
             use_quad,
             use_theory_covmat,
             rot_to_fit_basis,
