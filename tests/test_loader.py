@@ -72,10 +72,13 @@ theory_test_2 = {
 
 def test_load_datasets():
     operators_to_keep = np.array(["Op1", "Op2", "Op4"])
-    datasets = ["data_test1", "data_test2"]
 
     for use_quad in [True, False]:
         for order in ["LO", "NLO"]:
+            datasets = {
+                "data_test1": {"order": f"{order}"},
+                "data_test2": {"order": f"{order}"},
+            }
             loaded_tuple = load_datasets(
                 commondata_path,
                 datasets=datasets,
@@ -151,7 +154,7 @@ def test_operator_correction_sorted():
     for order in ["LO", "NLO"]:
         loaded_tuple = load_datasets(
             commondata_path,
-            datasets=["data_test1"],
+            datasets={"data_test1": {"order": f"{order}"}},
             operators_to_keep=operators_to_keep,
             use_quad=True,
             use_theory_covmat=True,

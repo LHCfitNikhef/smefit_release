@@ -117,7 +117,6 @@ class FitManager:
             self.config["data_path"],
             self.config["datasets"],
             self.config["coefficients"],
-            self.config["order"],
             self.config["use_quad"],
             self.config["use_theory_covmat"],
             False,  # t0 is not used here because in the report we look at the experimental chi2

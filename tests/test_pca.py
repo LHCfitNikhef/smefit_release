@@ -17,7 +17,7 @@ here = pathlib.Path(__file__).parent
 
 dataset = load_datasets(
     commondata_path,
-    datasets=["data_test5"],
+    datasets={"data_test5": {"order": "NLO"}},
     operators_to_keep=operators_to_keep,
     use_quad=True,
     use_theory_covmat=True,
@@ -175,9 +175,8 @@ class TestRotateToPca:
         pca_coeffs = CoefficientManager.from_dict(pca_coeffs_dict)
         rotated_datasets = load_datasets(
             commondata_path,
-            datasets=["data_test5"],
+            datasets={"data_test5": {"order": "NLO"}},
             operators_to_keep=["PC00", "PC01", "PC02", "Op3"],
-            order="NLO",
             use_quad=True,
             use_theory_covmat=True,
             use_t0=False,

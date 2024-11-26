@@ -10,14 +10,13 @@ data_path:  ./tests/fake_data
 theory_path:  ./tests/fake_data
 
 use_quad: False
-order: NLO
 use_theory_covmat: True
 
 
 # Datasets to include
 datasets:
 
-  - data_test5
+  data_test5: {"order": "NLO"}
 
 # Coefficients to fit
 coefficients:
