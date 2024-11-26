@@ -118,7 +118,7 @@
 <span class="kn">import</span> <span class="nn">pathlib</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">wraps</span>
 
 <span class="kn">import</span> <span class="nn">ckmutil.ckm</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
@@ -141,6 +141,7 @@
 <span class="n">ckmutil</span><span class="o">.</span><span class="n">ckm</span><span class="o">.</span><span class="n">ckm_tree</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">ckm_tree</span><span class="p">,</span> <span class="n">delta_expansion_order</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="c1">### End of patch</span>
 
+<span class="c1">##################### MONKEY PATCH</span>
 <span class="c1"># switch off the SM - EFT mixing, since SMEFiT assumes that the</span>
 <span class="c1"># RGE solution is linearised</span>
 <span class="c1"># Keep a reference to the original beta function</span>
@@ -158,6 +159,61 @@
 <span class="n">wilson</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">beta_array</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span>
     <span class="n">wilson</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">beta_array</span><span class="p">,</span> <span class="n">HIGHSCALE</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
 <span class="p">)</span>
+<span class="c1">##################### END OF MONKEY PATCH</span>
+
+<span class="c1">##################### MONKEY PATCH</span>
+<span class="c1"># Patch smeftpar: we remove all dependence on SMEFT parameters</span>
+<span class="c1"># in SM paramaters, otherwise the linear approximation is not valid</span>
+<span class="n">C_patch</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;phi&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;phiBox&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;phiD&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;phiWB&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;phiG&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;phiW&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;phiB&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;dphi&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;uphi&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;ephi&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="c1"># Reference to the original smeftpar function</span>
+<span class="n">original_smeftpar</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">smpar</span><span class="o">.</span><span class="n">smeftpar</span>
+
+
+<span class="c1"># Define the monkey-patched function</span>
+<span class="nd">@wraps</span><span class="p">(</span><span class="n">original_smeftpar</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">patched_smeftpar</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># check if C is passed as a keyword argument</span>
+    <span class="k">if</span> <span class="s2">&quot;C&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">C_patch</span>
+    <span class="c1"># otherwise, check if it is passed as a positional argument</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">C_patch</span>
+
+    <span class="k">return</span> <span class="n">original_smeftpar</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="c1"># Apply the monkey patch</span>
+<span class="n">wilson</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">smpar</span><span class="o">.</span><span class="n">smeftpar</span> <span class="o">=</span> <span class="n">patched_smeftpar</span>
+<span class="c1">##################### END OF MONKEY PATCH</span>
+
+
+<span class="c1">##################### MONKEY PATCH</span>
+<span class="c1"># Monkey patch flavour rotation</span>
+<span class="c1"># Define the new method</span>
+<span class="k">def</span> <span class="nf">_to_wcxf_no_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C_out</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the Wilson coefficients `C_out` as a wcxf.WC instance, without rotation.&quot;&quot;&quot;</span>
+    <span class="c1"># Skip the self._rotate_defaultbasis line</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">smeftutil</span><span class="o">.</span><span class="n">arrays2wcxf_nonred</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="o">.</span><span class="n">dict2values</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">wc</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">wcxf</span><span class="o">.</span><span class="n">WC</span><span class="p">(</span><span class="s2">&quot;SMEFT&quot;</span><span class="p">,</span> <span class="s2">&quot;Warsaw&quot;</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wc</span>
+
+
+<span class="c1"># Monkey-patch the method</span>
+<span class="n">wilson</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">smeft</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">SMEFT</span><span class="o">.</span><span class="n">_to_wcxf</span> <span class="o">=</span> <span class="n">_to_wcxf_no_rotation</span>
+<span class="c1">##################### END OF MONKEY PATCH</span>
 
 <span class="c1"># Suppress the ComplexWarning</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">ComplexWarning</span><span class="p">)</span>
