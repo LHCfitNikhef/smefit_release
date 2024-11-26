@@ -19,7 +19,6 @@ dataset = load_datasets(
     commondata_path,
     datasets=["data_test5"],
     operators_to_keep=operators_to_keep,
-    order="NLO",
     use_quad=True,
     use_theory_covmat=True,
     use_t0=False,

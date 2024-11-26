@@ -485,7 +485,6 @@ def load_datasets(
     commondata_path,
     datasets,
     operators_to_keep,
-    order,
     use_quad,
     use_theory_covmat,
     use_t0,
@@ -507,8 +506,6 @@ def load_datasets(
             list of datasets to be loaded
         operators_to_keep: list
             list of operators for which corrections are loaded
-        order: "LO", "NLO"
-            EFT perturbative order
         use_quad: bool
             if True loads also |HO| corrections
         use_theory_covmat: bool
@@ -544,11 +541,13 @@ def load_datasets(
     else:
         Loader.theory_path = pathlib.Path(commondata_path)
 
-    for sset in np.unique(datasets):
+    datasets_ordered = np.unique(list(datasets.keys()))
+
+    for sset in datasets_ordered:
         dataset = Loader(
             sset,
             operators_to_keep,
-            order,
+            datasets[sset]["order"],
             use_quad,
             use_theory_covmat,
             use_multiplicative_prescription,

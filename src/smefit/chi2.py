@@ -85,7 +85,6 @@ class Scanner:
             run_card["data_path"],
             run_card["datasets"],
             run_card["coefficients"],
-            run_card["order"],
             run_card["use_quad"],
             run_card["use_theory_covmat"],
             False,

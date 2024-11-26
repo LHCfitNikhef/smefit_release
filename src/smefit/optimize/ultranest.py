@@ -166,7 +166,6 @@ class USOptimizer(Optimizer):
                 config["data_path"],
                 config["datasets"],
                 operators_to_keep,
-                config["order"],
                 config["use_quad"],
                 config["use_theory_covmat"],
                 config["use_t0"],

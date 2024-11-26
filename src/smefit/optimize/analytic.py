@@ -82,7 +82,6 @@ class ALOptimizer(Optimizer):
             config["data_path"],
             config["datasets"],
             config["coefficients"],
-            config["order"],
             False,
             config["use_theory_covmat"],
             config["use_t0"],

@@ -121,7 +121,6 @@ class MCOptimizer(Optimizer):
             config["data_path"],
             config["datasets"],
             config["coefficients"],
-            config["order"],
             config["use_quad"],
             config["use_theory_covmat"],
             config["use_t0"],

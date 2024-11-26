@@ -35,7 +35,6 @@ class Projection:
         self.dataset_names = dataset_names
         self.projections_path = projections_path
         self.coefficients = coefficients
-        self.order = order
         self.use_quad = use_quad
         self.use_theory_covmat = use_theory_covmat
         self.rot_to_fit_basis = rot_to_fit_basis
@@ -47,7 +46,6 @@ class Projection:
             self.commondata_path,
             self.dataset_names,
             self.coefficients,
-            self.order,
             self.use_quad,
             self.use_theory_covmat,
             self.use_t0,
