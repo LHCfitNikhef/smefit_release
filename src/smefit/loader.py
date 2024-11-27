@@ -502,8 +502,8 @@ def load_datasets(
     ----------
         commondata_path : str, pathlib.Path
             path to commondata folder, commondata excluded
-        datasets : dict
-            Dict of datasets to be loaded
+        datasets : List
+            List of datasets to be loaded
         operators_to_keep: list
             list of operators for which corrections are loaded
         use_quad: bool
@@ -536,22 +536,18 @@ def load_datasets(
     th_cov = []
 
     Loader.commondata_path = pathlib.Path(commondata_path)
-    if theory_path is not None:
-        Loader.theory_path = pathlib.Path(theory_path)
-    else:
-        Loader.theory_path = pathlib.Path(commondata_path)
+    Loader.theory_path = pathlib.Path(theory_path or commondata_path)
 
     for sset in datasets:
 
         # set theory accuracy to LO if not specified
-        if not isinstance(sset, dict):
-            sset = {sset: {"order": "LO"}}
+        sset_full = {sset: {"order": "LO"}} if not isinstance(sset, dict) else sset
         dataset_name = list(sset.keys())[0]
 
         dataset = Loader(
             dataset_name,
             operators_to_keep,
-            sset[dataset_name]["order"],
+            sset_full[dataset_name]["order"],
             use_quad,
             use_theory_covmat,
             use_multiplicative_prescription,
