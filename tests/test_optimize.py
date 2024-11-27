@@ -170,7 +170,10 @@ chi2_tot_mult = chi2_1_mult + chi2_2_mult
 path_abs = pathlib.Path(__file__).parent.resolve()
 
 
-datasets_no_corr = [{"data_test1": {"order": "LO"}}, {"data_test2": {"order": "LO"}}]
+datasets_no_corr = [
+    {"name": "data_test1", "order": "LO"},
+    {"name": "data_test2", "order": "LO"},
+]
 config_no_corr = {}
 config_no_corr["data_path"] = commondata_path
 config_no_corr["coefficients"] = coeffs_dict
@@ -269,7 +272,10 @@ chi2_corr_t0 = diff @ np.linalg.inv(tot_cov_corr_t0) @ diff.T
 chi2_corr_t0_ext = chi2_corr_t0 + chi2_ext
 
 
-datasets_corr = [{"data_test3": {"order": "LO"}}, {"data_test4": {"order": "LO"}}]
+datasets_corr = [
+    {"name": "data_test3", "order": "LO"},
+    {"name": "data_test4", "order": "LO"},
+]
 config_corr = {}
 config_corr["data_path"] = commondata_path
 config_corr["coefficients"] = coeffs_dict
@@ -316,7 +322,7 @@ class TestOptimize_NS:
 
         np.testing.assert_equal(
             self.test_opt.loaded_datasets.ExpNames,
-            [list(item.keys())[0] for item in datasets_no_corr],
+            [dataset.get("name") for dataset in datasets_no_corr],
         )
 
         np.testing.assert_equal(
@@ -390,7 +396,7 @@ class TestOptimize_MC:
         assert self.test_opt.results_path == commondata_path / "test"
         np.testing.assert_equal(
             self.test_opt.loaded_datasets.ExpNames,
-            [list(item.keys())[0] for item in datasets_no_corr],
+            [dataset.get("name") for dataset in datasets_no_corr],
         )
         np.testing.assert_equal(
             self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]
@@ -493,7 +499,7 @@ class TestOptimize_A:
         assert self.test_opt.results_path == commondata_path / "test"
         np.testing.assert_equal(
             self.test_opt.loaded_datasets.ExpNames,
-            [list(item.keys())[0] for item in datasets_no_corr],
+            [dataset.get("name") for dataset in datasets_no_corr],
         )
         np.testing.assert_equal(
             self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]

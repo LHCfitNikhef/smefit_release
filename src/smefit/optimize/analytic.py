@@ -86,6 +86,7 @@ class ALOptimizer(Optimizer):
             config["use_theory_covmat"],
             config["use_t0"],
             False,
+            config.get("default_order", "LO"),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),

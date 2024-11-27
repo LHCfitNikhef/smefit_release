@@ -489,6 +489,7 @@ def load_datasets(
     use_theory_covmat,
     use_t0,
     use_multiplicative_prescription,
+    default_order="LO",
     theory_path=None,
     rot_to_fit_basis=None,
     has_uv_couplings=False,
@@ -506,6 +507,8 @@ def load_datasets(
             List of datasets to be loaded
         operators_to_keep: list
             list of operators for which corrections are loaded
+        order: str
+            Default perturbative order of the theory predictions
         use_quad: bool
             if True loads also |HO| corrections
         use_theory_covmat: bool
@@ -539,15 +542,12 @@ def load_datasets(
     Loader.theory_path = pathlib.Path(theory_path or commondata_path)
 
     for sset in datasets:
-
-        # set theory accuracy to LO if not specified
-        sset_full = {sset: {"order": "LO"}} if not isinstance(sset, dict) else sset
-        dataset_name = list(sset_full.keys())[0]
+        dataset_name = sset.get("name")
 
         dataset = Loader(
             dataset_name,
             operators_to_keep,
-            sset_full[dataset_name]["order"],
+            sset.get("order", default_order),
             use_quad,
             use_theory_covmat,
             use_multiplicative_prescription,

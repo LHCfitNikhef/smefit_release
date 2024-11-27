@@ -379,13 +379,10 @@ def load_scales(datasets, theory_path, default_scale=1e3):
     scales = []
     for dataset in datasets:
 
-        # dataset can be either a string or a dictionary, extract name based on this
-        dataset_name = list(dataset.keys())[0] if isinstance(dataset, dict) else dataset
-
         Loader.theory_path = pathlib.Path(theory_path)
         # dummy call just to get the scales
         _, _, _, _, dataset_scales = Loader.load_theory(
-            dataset_name,
+            dataset.get("name"),
             operators_to_keep={},
             order="LO",
             use_quad=False,

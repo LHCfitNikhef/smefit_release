@@ -16,7 +16,8 @@ use_theory_covmat: True
 # Datasets to include
 datasets:
 
-  - data_test5: {"order": "NLO"}
+  - name: data_test5
+    order: "NLO"
 
 # Coefficients to fit
 coefficients:

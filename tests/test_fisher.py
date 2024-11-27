@@ -71,7 +71,7 @@ def test_fisher():
         operators_to_keep = np.array(["Op1", "Op2", "Op3"])
         dataset = load_datasets(
             commondata_path,
-            datasets=[{"data_test5": {"order": "NLO"}}],
+            datasets=[{"name": "data_test5", "order": "NLO"}],
             operators_to_keep=operators_to_keep,
             use_quad=use_quad,
             use_theory_covmat=True,
@@ -85,7 +85,7 @@ def test_fisher():
             "result_path": None,
             "result_ID": None,
             "data_path": commondata_path,
-            "datasets": [{"data_test5": {"order": "NLO"}}],
+            "datasets": [{"name": "data_test5", "order": "NLO"}],
             "coefficients": coefficients_dict,
             "use_theory_covmat": True,
             "theory_path": commondata_path,
