@@ -542,7 +542,7 @@ def load_datasets(
 
         # set theory accuracy to LO if not specified
         sset_full = {sset: {"order": "LO"}} if not isinstance(sset, dict) else sset
-        dataset_name = list(sset.keys())[0]
+        dataset_name = list(sset_full.keys())[0]
 
         dataset = Loader(
             dataset_name,
