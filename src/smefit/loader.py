@@ -502,8 +502,8 @@ def load_datasets(
     ----------
         commondata_path : str, pathlib.Path
             path to commondata folder, commondata excluded
-        datasets : list
-            list of datasets to be loaded
+        datasets : dict
+            Dict of datasets to be loaded
         operators_to_keep: list
             list of operators for which corrections are loaded
         use_quad: bool
@@ -541,11 +541,21 @@ def load_datasets(
     else:
         Loader.theory_path = pathlib.Path(commondata_path)
 
-    for sset in np.unique(list(datasets.keys())):
+    # assert that datasets is a dictionary
+    assert isinstance(datasets, dict), (
+        "The datasets in the runcard must be a nested dictionary with entries of the form dataset: {"
+        "order"
+        ": "
+        "<order>"
+        "}"
+    )
+
+    # load datasets and predictions for each dataset. Assume LO by default.
+    for sset, sset_details in datasets.items():
         dataset = Loader(
             sset,
             operators_to_keep,
-            datasets[sset]["order"],
+            sset_details.get("order", "LO"),
             use_quad,
             use_theory_covmat,
             use_multiplicative_prescription,
