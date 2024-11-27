@@ -542,6 +542,8 @@ def load_datasets(
         Loader.theory_path = pathlib.Path(commondata_path)
 
     for sset in datasets:
+
+        # set theory accuracy to LO if not specified
         if not isinstance(sset, dict):
             sset = {sset: {"order": "LO"}}
         dataset_name = list(sset.keys())[0]
@@ -555,7 +557,7 @@ def load_datasets(
             use_multiplicative_prescription,
             rot_to_fit_basis,
         )
-        exp_name.append(sset)
+        exp_name.append(dataset_name)
         n_data_exp.append(dataset.n_data)
         lumi_exp.append(dataset.lumi)
         exp_data.extend(dataset.central_values)

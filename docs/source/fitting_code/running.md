@@ -43,7 +43,7 @@ theory_path:
 ### Theory specifications
 The order in the EFT expansion should be specified by setting ``use_quad`` to either ``True`` or ``False`` to include quadratic or only linear corrections respectively. The option ``use_t0`` controls the use
 of the ``t0`` prescription and ``use_theory_covmat`` specifies whether or not to use the theory covariance matrix
-which can be specified in the theory files. The perturbative order of the theory prediction can be specified per dataset, see [here](./running.html#datasets-to-consider-and-coefficients-to-fit) for more details.
+which can be specified in the theory files. The perturbative order of the theory prediction can be specified per dataset, see [here](./example.html#datasets-to-consider-and-coefficients-to-fit) for more details.
 
 ```yaml
 use_quad: False
