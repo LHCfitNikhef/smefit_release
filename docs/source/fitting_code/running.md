@@ -41,13 +41,11 @@ theory_path:
 
 ```
 ### Theory specifications
-The perturbative order of the QCD theory prediction (LO or NLO) should be specified using ``order``.
-``use_quad`` should be set to ``True`` for a fit with quadratic corrections, ``use_t0`` controls the use
+The order in the EFT expansion should be specified by setting ``use_quad`` to either ``True`` or ``False`` to include quadratic or only linear corrections respectively. The option ``use_t0`` controls the use
 of the ``t0`` prescription and ``use_theory_covmat`` specifies whether or not to use the theory covariance matrix
-which can be specified in the theory files.
+which can be specified in the theory files. The perturbative order of the theory prediction can be specified per dataset, see [here](./running.html#datasets-to-consider-and-coefficients-to-fit) for more details.
 
 ```yaml
-order: NLO
 use_quad: False
 use_t0: False
 use_theory_covmat: True
@@ -89,22 +87,23 @@ n_samples: 1000 # number of the required samples of the posterior distribution
 
 ### Datasets to consider and coefficients to fit
 The datasets and Wilson coefficients to be included in the analysis must be listed under ``datasets``
-and ``coefficients`` respectively.
+and ``coefficients`` respectively. For each dataset, the perturbative order of the theory prediction can be specified
+provided it appears in the corresponding theory file. If not specified, the default order is ``LO``.
 
 ```yaml
 datasets:
 
-  - ATLAS_tt_8TeV_ljets_Mtt
-  - ATLAS_tt_8TeV_dilep_Mtt
-  - CMS_tt_8TeV_ljets_Ytt
-  - CMS_tt2D_8TeV_dilep_MttYtt
-  - CMS_tt_13TeV_ljets_2015_Mtt
-  - CMS_tt_13TeV_dilep_2015_Mtt
-  - CMS_tt_13TeV_ljets_2016_Mtt
-  - CMS_tt_13TeV_dilep_2016_Mtt
-  - ATLAS_tt_13TeV_ljets_2016_Mtt
-  - ATLAS_CMS_tt_AC_8TeV
-  - ATLAS_tt_AC_13TeV
+  - ATLAS_tt_8TeV_ljets_Mtt  # assumes LO
+  - ATLAS_tt_8TeV_dilep_Mtt: {"order": "NLO_QCD"}
+  - CMS_tt_8TeV_ljets_Ytt: {"order": "NLO_QCD"}
+  - CMS_tt2D_8TeV_dilep_MttYtt: {"order": "NLO_QCD"}
+  - CMS_tt_13TeV_ljets_2015_Mtt: {"order": "NLO_QCD"}
+  - CMS_tt_13TeV_dilep_2015_Mtt: {"order": "NLO_QCD"}
+  - CMS_tt_13TeV_ljets_2016_Mtt: {"order": "NLO_QCD"}
+  - CMS_tt_13TeV_dilep_2016_Mtt: {"order": "NLO_QCD"}
+  - ATLAS_tt_13TeV_ljets_2016_Mtt: {"order": "NLO_QCD"}
+  - ATLAS_CMS_tt_AC_8TeV: {"order": "NLO_QCD"}
+  - ATLAS_tt_AC_13TeV: {"order": "NLO_QCD"}
   ...
   ...
 

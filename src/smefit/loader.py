@@ -541,21 +541,15 @@ def load_datasets(
     else:
         Loader.theory_path = pathlib.Path(commondata_path)
 
-    # assert that datasets is a dictionary
-    assert isinstance(datasets, dict), (
-        "The datasets in the runcard must be a nested dictionary with entries of the form dataset: {"
-        "order"
-        ": "
-        "<order>"
-        "}"
-    )
+    for sset in datasets:
+        if not isinstance(sset, dict):
+            sset = {sset: {"order": "LO"}}
+        dataset_name = list(sset.keys())[0]
 
-    # load datasets and predictions for each dataset. Assume LO by default.
-    for sset, sset_details in datasets.items():
         dataset = Loader(
-            sset,
+            dataset_name,
             operators_to_keep,
-            sset_details.get("order", "LO"),
+            sset[dataset_name]["order"],
             use_quad,
             use_theory_covmat,
             use_multiplicative_prescription,

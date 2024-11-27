@@ -315,7 +315,7 @@ class TestOptimize_NS:
         assert self.test_opt.results_path == commondata_path / "test"
         np.testing.assert_equal(
             self.test_opt.loaded_datasets.ExpNames,
-            np.unique(list(datasets_no_corr.keys())),
+            sorted(list(datasets_no_corr.keys())),
         )
         np.testing.assert_equal(
             self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]
@@ -388,7 +388,7 @@ class TestOptimize_MC:
         assert self.test_opt.results_path == commondata_path / "test"
         np.testing.assert_equal(
             self.test_opt.loaded_datasets.ExpNames,
-            np.unique(list(datasets_no_corr.keys())),
+            sorted(list(datasets_no_corr.keys())),
         )
         np.testing.assert_equal(
             self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]
@@ -491,7 +491,7 @@ class TestOptimize_A:
         assert self.test_opt.results_path == commondata_path / "test"
         np.testing.assert_equal(
             self.test_opt.loaded_datasets.ExpNames,
-            np.unique(list(datasets_no_corr.keys())),
+            sorted(list(datasets_no_corr.keys())),
         )
         np.testing.assert_equal(
             self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]
