@@ -69,7 +69,6 @@ class Optimizer:
         external_chi2=None,
         rgemat=None,
         rge_dict=None,
-        cutoff_scale=None,
     ):
         self.results_path = pathlib.Path(results_path)
         self.loaded_datasets = loaded_datasets
@@ -87,7 +86,6 @@ class Optimizer:
         # set RGE matrix
         self.rgemat = rgemat
         self.rge_dict = rge_dict
-        self.cutoff_scale = cutoff_scale
 
         # load external chi2 modules as amortized objects (fast to evaluate)
         self.chi2_ext = (
