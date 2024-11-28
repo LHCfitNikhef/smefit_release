@@ -153,13 +153,19 @@ class Report:
         chi2_dict_group = {}
         chi2_replica = {}
         for fit in self.fits:
-            chi2_df, chi2_total_rep = chi2_cal.compute(
+            # This computes the chi2 by taking the mean of the replicas
+            _, chi2_total_rep = chi2_cal.compute(
                 fit.datasets,
                 fit.smeft_predictions,
             )
+
+            chi2_df_best, _ = chi2_cal.compute(
+                fit.datasets, fit.smeft_predictions_best_fit
+            )
+
             chi2_replica[fit.label] = chi2_total_rep
-            chi2_dict[fit.label] = chi2_cal.add_normalized_chi2(chi2_df)
-            chi2_dict_group[fit.label] = chi2_cal.group_chi2_df(chi2_df)
+            chi2_dict[fit.label] = chi2_cal.add_normalized_chi2(chi2_df_best)
+            chi2_dict_group[fit.label] = chi2_cal.group_chi2_df(chi2_df_best)
 
         if table:
             lines = chi2_cal.write(chi2_dict, chi2_dict_group)
@@ -234,12 +240,14 @@ class Report:
         bounds_dict = {}
         for fit in self.fits:
             bounds_dict[fit.label] = compute_confidence_level(
-                fit.results,
+                fit.results["samples"],
                 coeff_plt.coeff_info,
                 fit.has_posterior,
-                double_solution.get(fit.name, None)
-                if double_solution is not None
-                else None,
+                (
+                    double_solution.get(fit.name, None)
+                    if double_solution is not None
+                    else None
+                ),
             )
 
         if scatter_plot is not None:
@@ -290,7 +298,6 @@ class Report:
                 # if dbl solution requested, add the confidence intervals, otherwise just
                 # use the sum of the hdi intervals
                 if 1 in dbl_solution:
-
                     dbl_op = double_solution.get(fit.name, None)
                     idx = [
                         np.argwhere(
@@ -322,13 +329,15 @@ class Report:
         if posterior_histograms:
             _logger.info("Plotting : Posterior histograms")
             disjointed_lists = [
-                double_solution.get(fit.name, None)
-                if double_solution is not None
-                else None
+                (
+                    double_solution.get(fit.name, None)
+                    if double_solution is not None
+                    else None
+                )
                 for fit in self.fits
             ]
             coeff_plt.plot_posteriors(
-                [fit.results for fit in self.fits],
+                [fit.results["samples"] for fit in self.fits],
                 labels=[fit.label for fit in self.fits],
                 disjointed_lists=disjointed_lists,
             )
@@ -345,7 +354,7 @@ class Report:
             coeff_plt.plot_contours_2d(
                 [
                     (
-                        fit.results[fit.coefficients.free_parameters.index],
+                        fit.results["samples"][fit.coefficients.free_parameters.index],
                         fit.config["use_quad"],
                     )
                     for fit in self.fits
@@ -388,7 +397,7 @@ class Report:
             _logger.info(f"Plotting correlations for: {fit.name}")
             coeff_to_keep = fit.coefficients.free_parameters.index
             plot_correlations(
-                fit.results[coeff_to_keep],
+                fit.results["samples"][coeff_to_keep],
                 latex_names=self.coeff_info.droplevel(0),
                 fig_name=f"{self.report}/correlations_{fit.name}",
                 title=fit.label if title else None,
@@ -499,7 +508,9 @@ class Report:
 
             # if necessary compute the quadratic Fisher
             if compute_quad:
-                fisher_cal.compute_quadratic(fit.results, fit.smeft_predictions)
+                fisher_cal.compute_quadratic(
+                    fit.results["samples"], fit.smeft_predictions
+                )
                 fisher_cal.quad_fisher = fisher_cal.normalize(
                     fisher_cal.quad_fisher, norm=norm, log=log
                 )

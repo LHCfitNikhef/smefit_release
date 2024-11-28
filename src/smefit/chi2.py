@@ -2,11 +2,11 @@
 """Module for the computation of chi-squared values."""
 import json
 
+import jax.numpy as jnp
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.optimize as opt
 from rich.progress import track
-import jax.numpy as jnp
 
 from . import compute_theory as pr
 from .coefficients import CoefficientManager

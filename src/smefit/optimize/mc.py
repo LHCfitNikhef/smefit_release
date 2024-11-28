@@ -17,7 +17,6 @@ _logger = log.logging.getLogger(__name__)
 
 
 class MCOptimizer(Optimizer):
-
     """Optimizer specification for |MC|.
 
     Parameters
@@ -184,7 +183,6 @@ class MCOptimizer(Optimizer):
         )
 
     def get_status(self, chi2):
-
         if len(self.chi2_values) == 0:
             self.chi2_values.append(chi2)
 
@@ -313,4 +311,11 @@ class MCOptimizer(Optimizer):
             / f"replica_{self.replica}/coefficients_rep_{self.replica}.json"
         )
 
-        self.dump_posterior(posterior_file, values)
+        fit_result = {
+            "samples": values,
+            "logz": None,
+            "max_loglikelihood": None,
+            "best_fit_point": None,
+        }
+
+        self.dump_fit_result(posterior_file, fit_result)

@@ -2,8 +2,8 @@
 import importlib
 import json
 import pathlib
-import sys
 
+import numpy as np
 from rich.style import Style
 from rich.table import Table
 
@@ -21,6 +21,13 @@ except ModuleNotFoundError:
     run_parallel = False
 
 _logger = log.logging.getLogger(__name__)
+
+
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, (np.float32, np.float64, np.int32, np.int64)):
+            return o.item()  # Convert to native Python type
+        return super().default(o)
 
 
 class Optimizer:
@@ -117,7 +124,8 @@ class Optimizer:
                 # Check if dynamic scale
                 if self.rge_dict["obs_scale"] == "dynamic":
                     _logger.info(
-                        f"Computing RGE matrix for {class_name} with initial scale {self.rge_dict['init_scale']}."
+                        f"Computing RGE matrix for {class_name} "
+                        f"with initial scale {self.rge_dict['init_scale']}."
                     )
                     # compute RGE matrix
                     if "scale" not in module:
@@ -228,14 +236,47 @@ class Optimizer:
 
         return chi2_tot
 
-    def dump_posterior(self, posterior_file, values):
+    def dump_fit_result(self, fit_result_file, values):
+        """
+        Dumps the fit results to a json file.
+
+        dump_fit_result gets called repeatedly for single parameter fits, once for each parameter.
+        `values` contains the samples of the current fit, while previous fit results get loaded
+        into `tmp` and updated with the current samples. The updated values are then written back
+        to the file.
+
+        Parameters
+        ----------
+        fit_result_file: PosixPath
+            path to the fit results file
+        values: dict
+            dictionary containing the current fit results
+        """
+
         if self.single_parameter_fits:
-            if posterior_file.is_file():
-                with open(posterior_file, encoding="utf-8") as f:
+            if fit_result_file.is_file():
+                with open(fit_result_file, encoding="utf-8") as f:
                     tmp = json.load(f)
-                    values.update(tmp)
+                    # Get the operator name
+                    coeff = list(values["samples"].keys())[0]
+                    # update the values
+                    tmp["logz"][coeff] = values["logz"]
+                    tmp["max_loglikelihood"][coeff] = values["max_loglikelihood"]
+                    tmp["best_fit_point"][coeff] = values["best_fit_point"][coeff]
+                    tmp["samples"][coeff] = values["samples"][coeff]
+                    # update the file with the new values
+                    with open(fit_result_file, "w", encoding="utf-8") as f:
+                        json.dump(tmp, f, indent=4, cls=NumpyEncoder)
+
             else:
                 values["single_parameter_fits"] = True
+                with open(fit_result_file, "w", encoding="utf-8") as f:
+                    # Get the operator name
+                    coeff = list(values["best_fit_point"].keys())[0]
+                    values["logz"] = {coeff: values["logz"]}
+                    values["max_loglikelihood"] = {coeff: values["max_loglikelihood"]}
+                    json.dump(values, f, indent=4, cls=NumpyEncoder)
 
-        with open(posterior_file, "w", encoding="utf-8") as f:
-            json.dump(values, f)
+        else:
+            with open(fit_result_file, "w", encoding="utf-8") as f:
+                json.dump(values, f, indent=4, cls=NumpyEncoder)

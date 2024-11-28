@@ -1,29 +1,31 @@
+# -*- coding: utf-8 -*-
+import pathlib
+import warnings
+from copy import deepcopy
+from functools import partial, wraps
+
+import ckmutil.ckm
+import jax.numpy as jnp
+import numpy as np
+import pandas as pd
+import wilson
+from numpy import ComplexWarning
+
+from smefit import log
+from smefit.loader import Loader
+from smefit.wcxf import inverse_wcxf_translate, wcxf_translate
+
 ### Patch of a CKM function, so that the CP violating
 ### phase is set to gamma and not computed explicitly
 ### See https://github.com/wilson-eft/wilson/issues/113#issuecomment-2179273979
 ### This needs to be done before the import of wilson
-import ckmutil.ckm
-from copy import deepcopy
-from functools import partial
 
 # copying so we keep the original function
 ckm_tree = deepcopy(ckmutil.ckm.ckm_tree)
 ckmutil.ckm.ckm_tree = partial(ckm_tree, delta_expansion_order=0)
 ### End of patch
 
-import wilson
-from smefit.wcxf import wcxf_translate, inverse_wcxf_translate
-import smefit.log as log
-from smefit.loader import Loader
-
-import warnings
-import pandas as pd
-import numpy as np
-import jax.numpy as jnp
-from numpy import ComplexWarning
-import pathlib
-
-
+##################### MONKEY PATCH
 # switch off the SM - EFT mixing, since SMEFiT assumes that the
 # RGE solution is linearised
 # Keep a reference to the original beta function
@@ -38,6 +40,61 @@ wilson.run.smeft.beta.beta = beta_wrapper
 wilson.run.smeft.beta.beta_array = partial(
     wilson.run.smeft.beta.beta_array, HIGHSCALE=np.inf
 )
+##################### END OF MONKEY PATCH
+
+##################### MONKEY PATCH
+# Patch smeftpar: we remove all dependence on SMEFT parameters
+# in SM paramaters, otherwise the linear approximation is not valid
+C_patch = {
+    "phi": 0.0,
+    "phiBox": 0.0,
+    "phiD": 0.0,
+    "phiWB": 0.0,
+    "phiG": 0.0,
+    "phiW": 0.0,
+    "phiB": 0.0,
+    "dphi": 0.0,
+    "uphi": 0.0,
+    "ephi": 0.0,
+}
+# Reference to the original smeftpar function
+original_smeftpar = wilson.run.smeft.smpar.smeftpar
+
+
+# Define the monkey-patched function
+@wraps(original_smeftpar)
+def patched_smeftpar(*args, **kwargs):
+    # check if C is passed as a keyword argument
+    if "C" in kwargs:
+        kwargs["C"] = C_patch
+    # otherwise, check if it is passed as a positional argument
+    else:
+        args = list(args)
+        args[1] = C_patch
+
+    return original_smeftpar(*args, **kwargs)
+
+
+# Apply the monkey patch
+wilson.run.smeft.smpar.smeftpar = patched_smeftpar
+##################### END OF MONKEY PATCH
+
+
+##################### MONKEY PATCH
+# Monkey patch flavour rotation
+# Define the new method
+def _to_wcxf_no_rotation(self, C_out, scale_out):
+    """Return the Wilson coefficients `C_out` as a wcxf.WC instance, without rotation."""
+    # Skip the self._rotate_defaultbasis line
+    d = wilson.util.smeftutil.arrays2wcxf_nonred(C_out)
+    d = wilson.wcxf.WC.dict2values(d)
+    wc = wilson.wcxf.WC("SMEFT", "Warsaw", scale_out, d)
+    return wc
+
+
+# Monkey-patch the method
+wilson.run.smeft.classes.SMEFT._to_wcxf = _to_wcxf_no_rotation
+##################### END OF MONKEY PATCH
 
 # Suppress the ComplexWarning
 warnings.filterwarnings("ignore", category=ComplexWarning)
@@ -114,7 +171,7 @@ class RGE:
     init_scale: float
         initial scale of the Wilson coefficients
     accuracy: str
-        accuracy of the RGE integration. Options: "leadinglog" or "integrate". 
+        accuracy of the RGE integration. Options: "leadinglog" or "integrate".
         Default is 'integrate'. Inherited behaviour from wilson package.
     adm_QCD: bool
         if True, only the QCD anomalous dimension is used. Default is False.
@@ -122,6 +179,7 @@ class RGE:
         Yukawa parameterization to be used. Options: "top", "none" or "full".
         Default is "top".
     """
+
     def __init__(
         self,
         wc_names,
@@ -149,9 +207,9 @@ class RGE:
 
         if adm_QCD:
             wilson.run.smeft.smpar.p.update(**QCD_only)
-            _logger.info(f"Using anomalous dimension order: QCD.")
+            _logger.info("Using anomalous dimension order: QCD.")
         else:
-            _logger.info(f"Using anomalous dimension order: full.")
+            _logger.info("Using anomalous dimension order: full.")
 
         _logger.info(
             f"Initializing RGE runner with initial scale {init_scale} GeV and accuracy {accuracy}."
@@ -248,10 +306,9 @@ class RGE:
         return wc_basis
 
     def map_to_smefit(self, wc_final_vals, scale):
-        """ 
+        """
         Map the Wilson coefficients from the Warsaw basis to the SMEFiT basis.
         """
-        # TODO: missing a check that flavour structure is the one expected
         wc_dict = {}
         for wc_basis, wc_inv_dict in inverse_wcxf_translate.items():
             wc_warsaw_name = wc_inv_dict["wc"]
@@ -302,7 +359,7 @@ class RGE:
 
 
 def load_scales(datasets, theory_path, default_scale=1e3):
-    """ 
+    """
     Load the energy scales for the datasets.
 
     Parameters
@@ -313,7 +370,7 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         path to the theory files
     default_scale: float
         default scale to use if the dataset does not have a scale
-    
+
     Returns
     -------
     scales: list
@@ -333,7 +390,7 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         )
         # check that dataset_scales is not a list filled with None
         # otherwise, assume the initial scale
-        if not all([scale is None for scale in dataset_scales]):
+        if not all(scale is None for scale in dataset_scales):
             scales.extend(dataset_scales)
         else:
             scales.extend([default_scale] * len(dataset_scales))
@@ -357,7 +414,7 @@ def load_rge_matrix(rge_dict, coeff_list, datasets=None, theory_path=None):
         list of datasets
     theory_path: str
         path to the theory files
-    
+
     Returns
     -------
     rgemat: numpy.ndarray

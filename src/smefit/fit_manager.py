@@ -69,7 +69,7 @@ class FitManager:
         """
         file = "results"
         if self.has_posterior:
-            file = "posterior"
+            file = "fit_results"
         with open(f"{self.path}/{self.name}/{file}.json", encoding="utf-8") as f:
             results = json.load(f)
 
@@ -77,23 +77,26 @@ class FitManager:
         # then each distribution might have a different number of samples
         is_single_param = results.get("single_parameter_fits", False)
         if is_single_param:
-
             del results["single_parameter_fits"]
 
             num_samples = []
-            for key in results.keys():
-                num_samples.append(len(results[key]))
+            for key in results["samples"].keys():
+                num_samples.append(len(results["samples"][key]))
             num_samples_min = min(num_samples)
 
-            for key in results.keys():
-                results[key] = np.random.choice(
-                    results[key], num_samples_min, replace=False
+            for key in results["samples"].keys():
+                results["samples"][key] = np.random.choice(
+                    results["samples"][key], num_samples_min, replace=False
                 )
 
         # TODO: support pariwise posteriors
 
         # Be sure columns are sorted, otherwise can't compute theory...
-        self.results = pd.DataFrame(results).sort_index(axis=1)
+        results["samples"] = pd.DataFrame(results["samples"]).sort_index(axis=1)
+        results["best_fit_point"] = pd.DataFrame(
+            [results["best_fit_point"]]
+        ).sort_index(axis=1)
+        self.results = results
 
     def load_configuration(self):
         """Load configuration yaml card.
@@ -143,12 +146,31 @@ class FitManager:
             smeft.append(
                 make_predictions(
                     self.datasets,
-                    self.results.iloc[rep, :],
+                    self.results["samples"].iloc[rep, :],
                     self.config["use_quad"],
                     self.config.get("use_multiplicative_prescription", False),
                 )
             )
         return np.array(smeft)
+
+    @property
+    def smeft_predictions_best_fit(self):
+        """Compute |SMEFT| predictions for the best fit point.
+
+        Returns
+        -------
+        np.ndarray:
+            |SMEFT| predictions for the best fit
+        """
+        predictions = make_predictions(
+            self.datasets,
+            self.results["best_fit_point"].iloc[0, :],
+            self.config["use_quad"],
+            self.config.get("use_multiplicative_prescription", False),
+        )
+
+        # Add a dimension to match the shape of the replica predictions
+        return np.array([predictions])
 
     @property
     def coefficients(self):
@@ -158,4 +180,4 @@ class FitManager:
     @property
     def n_replica(self):
         """Number of replicas"""
-        return self.results.shape[0]
+        return self.results["samples"].shape[0]

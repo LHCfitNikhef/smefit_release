@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import json
 import pathlib
 from collections import namedtuple
@@ -300,9 +299,6 @@ class Loader:
         # save sm prediction at the chosen perturbative order
         sm = np.array(raw_th_data[order]["SM"])
 
-        # check if scales are present in the theory file
-        scales = np.array(raw_th_data.get("scales", [None] * len(sm)))
-
         # split corrections into a linear and quadratic dict
         for key, value in raw_th_data[order].items():
             # quadratic terms
@@ -345,11 +341,21 @@ class Loader:
                 if is_to_keep(k.split("*")[0], k.split("*")[1])
             }
         best_sm = np.array(raw_th_data["best_sm"])
-        th_cov = np.zeros((best_sm.size, best_sm.size))
         if use_theory_covmat:
-            th_cov = np.array(raw_th_data["theory_cov"])
+            th_cov = raw_th_data["theory_cov"]
+        else:
+            th_cov = np.zeros((best_sm.size, best_sm.size))
 
-        return best_sm, th_cov, lin_dict_to_keep, quad_dict_to_keep, scales
+        # check if scales are present in the theory file
+        scales = raw_th_data.get("scales", [None] * len(best_sm))
+
+        return (
+            best_sm,
+            th_cov,
+            lin_dict_to_keep,
+            quad_dict_to_keep,
+            scales,
+        )
 
     @property
     def n_data(self):
@@ -697,9 +703,11 @@ def get_dataset(datasets, data_name):
         datasets.SMTheory[posix_in:posix_out],
         datasets.OperatorsNames,
         datasets.LinearCorrections[posix_in:posix_out],
-        datasets.QuadraticCorrections[posix_in:posix_out]
-        if datasets.QuadraticCorrections is not None
-        else None,
+        (
+            datasets.QuadraticCorrections[posix_in:posix_out]
+            if datasets.QuadraticCorrections is not None
+            else None
+        ),
         data_name,
         ndata,
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],

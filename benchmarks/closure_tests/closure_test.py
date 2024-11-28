@@ -11,7 +11,6 @@ fit_runcard = "./run_closure.yaml"
 # run fits repeatedly on different pseudo datasets
 n_exp = 1
 for i in range(n_exp):
-
     # run projection module
     subprocess.run(["smefit", "PROJ", "--closure", projection_runcard])
 
