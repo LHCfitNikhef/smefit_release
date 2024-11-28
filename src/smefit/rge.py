@@ -398,7 +398,7 @@ def load_scales(datasets, theory_path, default_scale=1e3, cutoff_scale=None):
         else:
             scales.extend([default_scale] * len(dataset_scales))
 
-        _logger.info(f"Loaded scales for dataset {dataset}: {dataset_scales}")
+        _logger.info(f"Loaded scales for dataset {dataset['name']}: {dataset_scales}")
 
     if cutoff_scale is not None:
         scales = [scale for scale in scales if scale < cutoff_scale]
