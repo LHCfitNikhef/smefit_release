@@ -344,12 +344,12 @@ class Loader:
             }
         best_sm = np.array(raw_th_data["best_sm"])
         if use_theory_covmat:
-            th_cov = raw_th_data["theory_cov"]
+            th_cov = np.array(raw_th_data["theory_cov"])
         else:
             th_cov = np.zeros((best_sm.size, best_sm.size))
 
         # check if scales are present in the theory file
-        scales = raw_th_data.get("scales", [None] * len(best_sm))
+        scales = np.array(raw_th_data.get("scales", [None] * len(best_sm)))
 
         return (
             best_sm,
