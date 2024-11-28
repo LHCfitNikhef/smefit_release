@@ -45,7 +45,8 @@ def check_missing_operators(loaded_corrections, coeff_config):
     if missing_operators != []:
         raise ValueError(
             f"{missing_operators} not in the theory. Comment it out in setup script and restart."
-            f"In case a cutoff was applied, the operator(s) {missing_operators} did not survive the mask. "
+            "In case a cutoff was applied"
+            f"the operator(s) {missing_operators} did not survive the mask."
         )
 
 
@@ -130,7 +131,8 @@ class Loader:
 
     def apply_cutoff_mask(self, cutoff_scale):
         """
-        Updates previously loaded theory and datasets by filtering out points with scales above the cutoff scale
+        Updates previously loaded theory and datasets by filtering out
+        points with scales above the cutoff scale
 
         Parameters
         ----------
