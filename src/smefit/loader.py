@@ -604,11 +604,9 @@ def load_datasets(
     Loader.commondata_path = pathlib.Path(commondata_path)
     Loader.theory_path = pathlib.Path(theory_path or commondata_path)
 
+    _logger.info(f"Applying cutoff scale: {cutoff_scale} GeV.")
     for sset in datasets:
         dataset_name = sset.get("name")
-
-    _logger.info(f"Applying cutoff scale: {cutoff_scale} GeV.")
-    for sset in np.unique(datasets):
 
         dataset = Loader(
             dataset_name,
