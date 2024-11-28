@@ -118,6 +118,9 @@ class Loader:
         ) = self.load_experimental_data()
 
         # mask theory and data to ensure only data below the specified cutoff scale is included
+        self.mask = np.array(
+            [True] * self.n_data
+        )  # initial mask retains all datapoints
         if cutoff_scale is not None:
             self.apply_cutoff_mask(cutoff_scale)
 
@@ -602,6 +605,7 @@ def load_datasets(
     else:
         Loader.theory_path = pathlib.Path(commondata_path)
 
+    _logger.info(f"Applying cutoff scale: {cutoff_scale} GeV.")
     for sset in np.unique(datasets):
 
         dataset = Loader(
@@ -633,8 +637,6 @@ def load_datasets(
 
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
-    print(n_data_tot)
-    raise
 
     sorted_keys = None
     # if uv couplings are present allow for op which are not in the

@@ -400,7 +400,9 @@ def load_scales(datasets, theory_path, default_scale=1e3):
     return scales
 
 
-def load_rge_matrix(rge_dict, coeff_list, datasets=None, theory_path=None):
+def load_rge_matrix(
+    rge_dict, coeff_list, datasets=None, theory_path=None, cutoff_scale=None
+):
     """
     Load the RGE matrix for the SMEFT Wilson coefficients.
 
@@ -435,6 +437,8 @@ def load_rge_matrix(rge_dict, coeff_list, datasets=None, theory_path=None):
 
     elif obs_scale == "dynamic":
         scales = load_scales(datasets, theory_path, default_scale=init_scale)
+        if cutoff_scale is not None:
+            scales = [scale for scale in scales if scale < cutoff_scale]
 
         operators_to_keep = {}
         rgemat = []
