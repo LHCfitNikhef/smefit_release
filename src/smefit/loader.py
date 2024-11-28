@@ -568,7 +568,7 @@ def load_datasets(
             List of datasets to be loaded
         operators_to_keep: list
             list of operators for which corrections are loaded
-        order: str
+        default_order: str
             Default perturbative order of the theory predictions
         use_quad: bool
             if True loads also |HO| corrections
