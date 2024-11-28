@@ -585,6 +585,8 @@ def load_datasets(
             True in the presence of external chi2 modules
         has_rge: bool, optional
             True in the presence of RGE matrix
+        cutoff_scale: float, optional
+            kinematic cutoff scale
     """
 
     exp_data = []
