@@ -92,7 +92,6 @@ class ALOptimizer(Optimizer):
             config.get("uv_couplings", False),
             cutoff_scale=config.get("cutoff_scale", None),
         )
-        # TODO: no has_rge is passed
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
         single_parameter_fits = config.get("single_parameter_fits", False)
