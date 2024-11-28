@@ -358,7 +358,7 @@ class RGE:
         return self.map_to_smefit(wc_final, scale)
 
 
-def load_scales(datasets, theory_path, default_scale=1e3):
+def load_scales(datasets, theory_path, default_scale=1e3, cutoff_scale=None):
     """
     Load the energy scales for the datasets.
 
@@ -370,6 +370,8 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         path to the theory files
     default_scale: float
         default scale to use if the dataset does not have a scale
+    cutoff_scale: float
+        cutoff scale to use for the scales
 
     Returns
     -------
@@ -396,6 +398,9 @@ def load_scales(datasets, theory_path, default_scale=1e3):
             scales.extend([default_scale] * len(dataset_scales))
 
         _logger.info(f"Loaded scales for dataset {dataset}: {dataset_scales}")
+
+    if cutoff_scale is not None:
+        scales = [scale for scale in scales if scale < cutoff_scale]
 
     return scales
 
@@ -436,9 +441,9 @@ def load_rge_matrix(
         return rgemat.values, operators_to_keep
 
     elif obs_scale == "dynamic":
-        scales = load_scales(datasets, theory_path, default_scale=init_scale)
-        if cutoff_scale is not None:
-            scales = [scale for scale in scales if scale < cutoff_scale]
+        scales = load_scales(
+            datasets, theory_path, default_scale=init_scale, cutoff_scale=cutoff_scale
+        )
 
         operators_to_keep = {}
         rgemat = []
