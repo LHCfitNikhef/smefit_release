@@ -497,7 +497,7 @@
 
 <div class="viewcode-block" id="load_scales">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.rge.load_scales">[docs]</a>
-<span class="k">def</span> <span class="nf">load_scales</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">theory_path</span><span class="p">,</span> <span class="n">default_scale</span><span class="o">=</span><span class="mf">1e3</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">load_scales</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">theory_path</span><span class="p">,</span> <span class="n">default_scale</span><span class="o">=</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">cutoff_scale</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load the energy scales for the datasets.</span>
 
@@ -509,6 +509,8 @@
 <span class="sd">        path to the theory files</span>
 <span class="sd">    default_scale: float</span>
 <span class="sd">        default scale to use if the dataset does not have a scale</span>
+<span class="sd">    cutoff_scale: float</span>
+<span class="sd">        cutoff scale to use for the scales</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -536,13 +538,18 @@
 
         <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded scales for dataset </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">dataset_scales</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">cutoff_scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">scales</span> <span class="o">=</span> <span class="p">[</span><span class="n">scale</span> <span class="k">for</span> <span class="n">scale</span> <span class="ow">in</span> <span class="n">scales</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">&lt;</span> <span class="n">cutoff_scale</span><span class="p">]</span>
+
     <span class="k">return</span> <span class="n">scales</span></div>
 
 
 
 <div class="viewcode-block" id="load_rge_matrix">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.rge.load_rge_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">load_rge_matrix</span><span class="p">(</span><span class="n">rge_dict</span><span class="p">,</span> <span class="n">coeff_list</span><span class="p">,</span> <span class="n">datasets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theory_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">load_rge_matrix</span><span class="p">(</span>
+    <span class="n">rge_dict</span><span class="p">,</span> <span class="n">coeff_list</span><span class="p">,</span> <span class="n">datasets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theory_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cutoff_scale</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load the RGE matrix for the SMEFT Wilson coefficients.</span>
 
@@ -576,7 +583,9 @@
         <span class="k">return</span> <span class="n">rgemat</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">operators_to_keep</span>
 
     <span class="k">elif</span> <span class="n">obs_scale</span> <span class="o">==</span> <span class="s2">&quot;dynamic&quot;</span><span class="p">:</span>
-        <span class="n">scales</span> <span class="o">=</span> <span class="n">load_scales</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">theory_path</span><span class="p">,</span> <span class="n">default_scale</span><span class="o">=</span><span class="n">init_scale</span><span class="p">)</span>
+        <span class="n">scales</span> <span class="o">=</span> <span class="n">load_scales</span><span class="p">(</span>
+            <span class="n">datasets</span><span class="p">,</span> <span class="n">theory_path</span><span class="p">,</span> <span class="n">default_scale</span><span class="o">=</span><span class="n">init_scale</span><span class="p">,</span> <span class="n">cutoff_scale</span><span class="o">=</span><span class="n">cutoff_scale</span>
+        <span class="p">)</span>
 
         <span class="n">operators_to_keep</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">rgemat</span> <span class="o">=</span> <span class="p">[]</span>

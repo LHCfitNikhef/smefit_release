@@ -165,7 +165,9 @@
     <span class="n">missing_operators</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">coeff_config</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">loaded_corrections</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">missing_operators</span> <span class="o">!=</span> <span class="p">[]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">missing_operators</span><span class="si">}</span><span class="s2"> not in the theory. Comment it out in setup script and restart.&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">missing_operators</span><span class="si">}</span><span class="s2"> not in the theory. Comment it out in setup script and restart.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;In case a cutoff was applied &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;the operator(s) </span><span class="si">{</span><span class="n">missing_operators</span><span class="si">}</span><span class="s2"> did not survive the mask.&quot;</span>
         <span class="p">)</span></div>
 
 
@@ -206,6 +208,7 @@
         <span class="n">use_theory_covmat</span><span class="p">,</span>
         <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
         <span class="n">rot_to_fit_basis</span><span class="p">,</span>
+        <span class="n">cutoff_scale</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data_folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">commondata_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sys_folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">commondata_path</span> <span class="o">/</span> <span class="s2">&quot;systypes&quot;</span>
@@ -238,10 +241,69 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;luminosity&quot;</span><span class="p">],</span>
         <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_experimental_data</span><span class="p">()</span>
 
+        <span class="c1"># mask theory and data to ensure only data below the specified cutoff scale is included</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_data</span>
+        <span class="p">)</span>  <span class="c1"># initial mask retains all datapoints</span>
+        <span class="k">if</span> <span class="n">cutoff_scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_cutoff_mask</span><span class="p">(</span><span class="n">cutoff_scale</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;central_values&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;SM_predictions&quot;</span><span class="p">]):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Number of experimental data points and theory predictions does not match in dataset </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">setname</span><span class="si">}</span><span class="s2">.&quot;</span>
             <span class="p">)</span>
+
+<div class="viewcode-block" id="Loader.apply_cutoff_mask">
+<a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.Loader.apply_cutoff_mask">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply_cutoff_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cutoff_scale</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates previously loaded theory and datasets by filtering out</span>
+<span class="sd">        points with scales above the cutoff scale</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cutoff_scale: flaot</span>
+<span class="sd">            Value of the cutoff scale as specified in the runcard</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;scales&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">cutoff_scale</span>
+
+        <span class="c1"># if all datapoints lie above the cutoff, return</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Apply mask to all relevant theory entries in dataspec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;SM_predictions&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;SM_predictions&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">],</span>
+                <span class="s2">&quot;theory_covmat&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;theory_covmat&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="p">:][</span>
+                    <span class="p">:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;lin_corrections&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;lin_corrections&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;quad_corrections&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;quad_corrections&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;scales&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;scales&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Single data points satisfy the mask already at this point</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_data</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">stat_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;stat_error&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">stat_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;stat_error&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;central_values&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;central_values&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">],</span>
+                <span class="s2">&quot;sys_error&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;sys_error&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">],</span>
+                <span class="s2">&quot;sys_error_t0&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;sys_error_t0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">],</span>
+                <span class="s2">&quot;stat_error&quot;</span><span class="p">:</span> <span class="n">stat_error</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="Loader.load_experimental_data">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.loader.Loader.load_experimental_data">[docs]</a>
@@ -290,6 +352,7 @@
             <span class="n">indx_mult</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">type_sys</span> <span class="o">==</span> <span class="s2">&quot;MULT&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">sys_t0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_sys</span><span class="p">,</span> <span class="n">num_data</span><span class="p">))</span>
             <span class="n">sys_t0</span><span class="p">[</span><span class="n">indx_add</span><span class="p">]</span> <span class="o">=</span> <span class="n">sys_add</span><span class="p">[</span><span class="n">indx_add</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sys_t0</span><span class="p">[</span><span class="n">indx_add</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
             <span class="n">sys_t0</span><span class="p">[</span><span class="n">indx_mult</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">sys_mult</span><span class="p">[</span><span class="n">indx_mult</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sys_t0</span><span class="p">[</span><span class="n">indx_mult</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
                 <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataspec</span><span class="p">[</span><span class="s2">&quot;SM_predictions&quot;</span><span class="p">]</span>
@@ -413,12 +476,12 @@
             <span class="p">}</span>
         <span class="n">best_sm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">raw_th_data</span><span class="p">[</span><span class="s2">&quot;best_sm&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">use_theory_covmat</span><span class="p">:</span>
-            <span class="n">th_cov</span> <span class="o">=</span> <span class="n">raw_th_data</span><span class="p">[</span><span class="s2">&quot;theory_cov&quot;</span><span class="p">]</span>
+            <span class="n">th_cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">raw_th_data</span><span class="p">[</span><span class="s2">&quot;theory_cov&quot;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">th_cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">best_sm</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">best_sm</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
 
         <span class="c1"># check if scales are present in the theory file</span>
-        <span class="n">scales</span> <span class="o">=</span> <span class="n">raw_th_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scales&quot;</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">best_sm</span><span class="p">))</span>
+        <span class="n">scales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">raw_th_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scales&quot;</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">best_sm</span><span class="p">)))</span>
 
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">best_sm</span><span class="p">,</span>
@@ -631,6 +694,7 @@
     <span class="n">has_uv_couplings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">has_external_chi2</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">has_rge</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">cutoff_scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads experimental data, theory and |SMEFT| corrections into a namedtuple</span>
@@ -660,6 +724,8 @@
 <span class="sd">            True in the presence of external chi2 modules</span>
 <span class="sd">        has_rge: bool, optional</span>
 <span class="sd">            True in the presence of RGE matrix</span>
+<span class="sd">        cutoff_scale: float, optional</span>
+<span class="sd">            kinematic cutoff scale</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">exp_data</span> <span class="o">=</span> <span class="p">[]</span>
@@ -680,7 +746,9 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">Loader</span><span class="o">.</span><span class="n">theory_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">commondata_path</span><span class="p">)</span>
 
+    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Applying cutoff scale: </span><span class="si">{</span><span class="n">cutoff_scale</span><span class="si">}</span><span class="s2"> GeV.&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">sset</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">datasets</span><span class="p">):</span>
+
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span>
             <span class="n">sset</span><span class="p">,</span>
             <span class="n">operators_to_keep</span><span class="p">,</span>
@@ -689,7 +757,13 @@
             <span class="n">use_theory_covmat</span><span class="p">,</span>
             <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
             <span class="n">rot_to_fit_basis</span><span class="p">,</span>
+            <span class="n">cutoff_scale</span><span class="p">,</span>
         <span class="p">)</span>
+
+        <span class="c1"># skip dataset if all datapoints are above the cutoff scale</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="o">~</span><span class="n">dataset</span><span class="o">.</span><span class="n">mask</span><span class="p">):</span>
+            <span class="k">continue</span>
+
         <span class="n">exp_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sset</span><span class="p">)</span>
         <span class="n">n_data_exp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">n_data</span><span class="p">)</span>
         <span class="n">lumi_exp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">lumi</span><span class="p">)</span>

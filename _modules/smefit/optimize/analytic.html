@@ -214,6 +214,7 @@
             <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;theory_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
             <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rot_to_fit_basis&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
             <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uv_couplings&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">cutoff_scale</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cutoff_scale&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="n">coefficients</span> <span class="o">=</span> <span class="n">CoefficientManager</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">])</span>
