@@ -358,7 +358,7 @@ class RGE:
         return self.map_to_smefit(wc_final, scale)
 
 
-def load_scales(datasets, theory_path, default_scale=1e3):
+def load_scales(datasets, theory_path, default_scale=1e3, cutoff_scale=None):
     """
     Load the energy scales for the datasets.
 
@@ -370,6 +370,8 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         path to the theory files
     default_scale: float
         default scale to use if the dataset does not have a scale
+    cutoff_scale: float
+        cutoff scale to use for the scales
 
     Returns
     -------
@@ -377,11 +379,12 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         list of scales for the datasets
     """
     scales = []
-    for dataset in np.unique(datasets):
+    for dataset in datasets:
+
         Loader.theory_path = pathlib.Path(theory_path)
         # dummy call just to get the scales
         _, _, _, _, dataset_scales = Loader.load_theory(
-            dataset,
+            dataset.get("name"),
             operators_to_keep={},
             order="LO",
             use_quad=False,
@@ -395,12 +398,17 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         else:
             scales.extend([default_scale] * len(dataset_scales))
 
-        _logger.info(f"Loaded scales for dataset {dataset}: {dataset_scales}")
+        _logger.info(f"Loaded scales for dataset {dataset['name']}: {dataset_scales}")
+
+    if cutoff_scale is not None:
+        scales = [scale for scale in scales if scale < cutoff_scale]
 
     return scales
 
 
-def load_rge_matrix(rge_dict, coeff_list, datasets=None, theory_path=None):
+def load_rge_matrix(
+    rge_dict, coeff_list, datasets=None, theory_path=None, cutoff_scale=None
+):
     """
     Load the RGE matrix for the SMEFT Wilson coefficients.
 
@@ -434,7 +442,9 @@ def load_rge_matrix(rge_dict, coeff_list, datasets=None, theory_path=None):
         return rgemat.values, operators_to_keep
 
     elif obs_scale == "dynamic":
-        scales = load_scales(datasets, theory_path, default_scale=init_scale)
+        scales = load_scales(
+            datasets, theory_path, default_scale=init_scale, cutoff_scale=cutoff_scale
+        )
 
         operators_to_keep = {}
         rgemat = []

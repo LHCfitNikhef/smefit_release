@@ -82,14 +82,15 @@ class ALOptimizer(Optimizer):
             config["data_path"],
             config["datasets"],
             config["coefficients"],
-            config["order"],
             False,
             config["use_theory_covmat"],
             config["use_t0"],
             False,
+            config.get("default_order", "LO"),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
+            cutoff_scale=config.get("cutoff_scale", None),
         )
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])

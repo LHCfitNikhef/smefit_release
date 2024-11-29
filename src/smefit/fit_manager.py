@@ -117,11 +117,11 @@ class FitManager:
             self.config["data_path"],
             self.config["datasets"],
             self.config["coefficients"],
-            self.config["order"],
             self.config["use_quad"],
             self.config["use_theory_covmat"],
             False,  # t0 is not used here because in the report we look at the experimental chi2
             self.config.get("use_multiplicative_prescription", False),
+            self.config.get("default_order", "LO"),
             self.config.get("theory_path", None),
             self.config.get("rot_to_fit_basis", None),
             self.config.get("uv_couplings", False),
