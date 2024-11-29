@@ -545,11 +545,11 @@ def load_datasets(
     commondata_path,
     datasets,
     operators_to_keep,
-    order,
     use_quad,
     use_theory_covmat,
     use_t0,
     use_multiplicative_prescription,
+    default_order="LO",
     theory_path=None,
     rot_to_fit_basis=None,
     has_uv_couplings=False,
@@ -565,11 +565,11 @@ def load_datasets(
         commondata_path : str, pathlib.Path
             path to commondata folder, commondata excluded
         datasets : list
-            list of datasets to be loaded
+            List of datasets to be loaded
         operators_to_keep: list
             list of operators for which corrections are loaded
-        order: "LO", "NLO"
-            EFT perturbative order
+        default_order: str
+            Default perturbative order of the theory predictions
         use_quad: bool
             if True loads also |HO| corrections
         use_theory_covmat: bool
@@ -602,18 +602,16 @@ def load_datasets(
     th_cov = []
 
     Loader.commondata_path = pathlib.Path(commondata_path)
-    if theory_path is not None:
-        Loader.theory_path = pathlib.Path(theory_path)
-    else:
-        Loader.theory_path = pathlib.Path(commondata_path)
+    Loader.theory_path = pathlib.Path(theory_path or commondata_path)
 
     _logger.info(f"Applying cutoff scale: {cutoff_scale} GeV.")
-    for sset in np.unique(datasets):
+    for sset in datasets:
+        dataset_name = sset.get("name")
 
         dataset = Loader(
-            sset,
+            dataset_name,
             operators_to_keep,
-            order,
+            sset.get("order", default_order),
             use_quad,
             use_theory_covmat,
             use_multiplicative_prescription,
@@ -625,7 +623,7 @@ def load_datasets(
         if np.all(~dataset.mask):
             continue
 
-        exp_name.append(sset)
+        exp_name.append(dataset_name)
         n_data_exp.append(dataset.n_data)
         lumi_exp.append(dataset.lumi)
         exp_data.extend(dataset.central_values)

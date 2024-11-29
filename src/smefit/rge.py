@@ -379,11 +379,12 @@ def load_scales(datasets, theory_path, default_scale=1e3, cutoff_scale=None):
         list of scales for the datasets
     """
     scales = []
-    for dataset in np.unique(datasets):
+    for dataset in datasets:
+
         Loader.theory_path = pathlib.Path(theory_path)
         # dummy call just to get the scales
         _, _, _, _, dataset_scales = Loader.load_theory(
-            dataset,
+            dataset.get("name"),
             operators_to_keep={},
             order="LO",
             use_quad=False,
@@ -397,7 +398,7 @@ def load_scales(datasets, theory_path, default_scale=1e3, cutoff_scale=None):
         else:
             scales.extend([default_scale] * len(dataset_scales))
 
-        _logger.info(f"Loaded scales for dataset {dataset}: {dataset_scales}")
+        _logger.info(f"Loaded scales for dataset {dataset['name']}: {dataset_scales}")
 
     if cutoff_scale is not None:
         scales = [scale for scale in scales if scale < cutoff_scale]
