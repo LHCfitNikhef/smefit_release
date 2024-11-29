@@ -509,8 +509,9 @@ def construct_corrections_matrix_linear(
         sorted_keys: numpy.ndarray
             list of sorted operator corrections
         rgemat: numpy.ndarray, optional
-            solution matrix of the RGE, shape (k, l, m) with k the number of datapoints, l the number of generated
-            coefficients and m the number of original |EFT| coefficients specified in the runcard.
+            solution matrix of the RGE, shape (k, l, m) with k the number of datapoints,
+            l the number of generated coefficients and m the number of
+            original |EFT| coefficients specified in the runcard.
 
     Returns
     -------
@@ -546,12 +547,12 @@ def construct_corrections_matrix_quadratic(
     Parameters
     ----------
         corrections_list : list(dict)
-            list containing per experiment the number of datapoints and the corresponding corrections
+            list containing per experiment the number of datapoints and corresponding corrections
         n_data_tot : int
             total number of experimental data points
         sorted_keys: numpy.ndarray
-            list of sorted operator corrections, shape=(n rg generated coeff,) or shape=(n original coeff,)
-            in the absence of rgemat
+            list of sorted operator corrections, shape=(n rg generated coeff,)
+            or shape=(n original coeff,) in the absence of rgemat
 
     Returns
     -------
@@ -631,8 +632,9 @@ def load_datasets(
         has_external_chi2: bool, optional
             True in the presence of external chi2 modules
         rgemat: numpy.ndarray, optional
-            solution matrix of the RGE, shape=(k, l, m) with k the number of datapoints, l the number of generated
-            coefficients under the RG and m the number of original |EFT| coefficients specified in the runcard.
+            solution matrix of the RGE, shape=(k, l, m) with k the number of datapoints,
+            l the number of generated coefficients under the RG and m the number of
+            original |EFT| coefficients specified in the runcard.
         cutoff_scale: float, optional
             kinematic cutoff scale
     """
