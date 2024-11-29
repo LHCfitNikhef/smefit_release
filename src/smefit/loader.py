@@ -498,8 +498,7 @@ def construct_corrections_matrix_linear(
     corrections_list, n_data_tot, sorted_keys, rgemat=None
 ):
     """
-    Construct a unique list of correction name,
-    with corresponding values for linear EFT corrections.
+    Constructs the linear EFT corrections.
 
     Parameters
     ----------
@@ -509,6 +508,9 @@ def construct_corrections_matrix_linear(
             total number of experimental data points
         sorted_keys: numpy.ndarray
             list of sorted operator corrections
+        rgemat: numpy.ndarray, optional
+            solution matrix of the RGE, shape (k, l, m) with k the number of datapoints, l the number of generated
+            coefficients and m the number of original |EFT| coefficients specified in the runcard.
 
     Returns
     -------
@@ -527,9 +529,9 @@ def construct_corrections_matrix_linear(
         cnt += n_dat
 
     if rgemat is not None:
-        if len(rgemat.shape) == 3:
+        if len(rgemat.shape) == 3:  # dynamic scale, scale is datapoint specific
             corr_values = jnp.einsum("ij, ijk -> ik", corr_values, rgemat)
-        else:
+        else:  # fixed scale so same rgemat for all datapoints
             corr_values = jnp.einsum("ij, jk -> ik", corr_values, rgemat)
 
     return corr_values
@@ -539,17 +541,17 @@ def construct_corrections_matrix_quadratic(
     corrections_list, n_data_tot, sorted_keys, rgemat=None
 ):
     """
-    Construct a unique list of correction name,
-    with corresponding values for quadratic EFT corrections.
+    Constructs quadratic EFT corrections.
 
     Parameters
     ----------
         corrections_list : list(dict)
-            list containing corrections per experiment
+            list containing per experiment the number of datapoints and the corresponding corrections
         n_data_tot : int
             total number of experimental data points
         sorted_keys: numpy.ndarray
-            list of sorted operator corrections
+            list of sorted operator corrections, shape=(n rg generated coeff,) or shape=(n original coeff,)
+            in the absence of rgemat
 
     Returns
     -------
@@ -576,11 +578,11 @@ def construct_corrections_matrix_quadratic(
         cnt += n_dat
 
     if rgemat is not None:
-        if len(rgemat.shape) == 3:
+        if len(rgemat.shape) == 3:  # dynamic scale, scale is datapoint specific
             corr_values = jnp.einsum(
                 "ijk, ijl, ikr -> ilr", corr_values, rgemat, rgemat
             )
-        else:
+        else:  # fixed scale so same rgemat for all datapoints
             corr_values = jnp.einsum("ijk, jl, kr -> ilr", corr_values, rgemat, rgemat)
 
     return corr_values
@@ -629,7 +631,8 @@ def load_datasets(
         has_external_chi2: bool, optional
             True in the presence of external chi2 modules
         rgemat: numpy.ndarray, optional
-            solution matrix of the RGE
+            solution matrix of the RGE, shape=(k, l, m) with k the number of datapoints, l the number of generated
+            coefficients under the RG and m the number of original |EFT| coefficients specified in the runcard.
         cutoff_scale: float, optional
             kinematic cutoff scale
     """
@@ -693,6 +696,10 @@ def load_datasets(
         for item in lin_corr_list:
             operator_names.extend(list(item[1].keys()))
         sorted_keys = np.unique(operator_names)
+
+        # operators to keep contains the operators that are present in the runcard
+        # sorted_keys contains the operators that are present in the theory files
+        # we need to check that all operators in the runcard are also present in the theory files
         check_missing_operators(sorted_keys, operators_to_keep)
 
     lin_corr_values = construct_corrections_matrix_linear(
