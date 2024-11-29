@@ -518,11 +518,12 @@
 <span class="sd">        list of scales for the datasets</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">scales</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">datasets</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
+
         <span class="n">Loader</span><span class="o">.</span><span class="n">theory_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">theory_path</span><span class="p">)</span>
         <span class="c1"># dummy call just to get the scales</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">dataset_scales</span> <span class="o">=</span> <span class="n">Loader</span><span class="o">.</span><span class="n">load_theory</span><span class="p">(</span>
-            <span class="n">dataset</span><span class="p">,</span>
+            <span class="n">dataset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
             <span class="n">operators_to_keep</span><span class="o">=</span><span class="p">{},</span>
             <span class="n">order</span><span class="o">=</span><span class="s2">&quot;LO&quot;</span><span class="p">,</span>
             <span class="n">use_quad</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -536,7 +537,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">scales</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">default_scale</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset_scales</span><span class="p">))</span>
 
-        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded scales for dataset </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">dataset_scales</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded scales for dataset </span><span class="si">{</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">dataset_scales</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">cutoff_scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">scales</span> <span class="o">=</span> <span class="p">[</span><span class="n">scale</span> <span class="k">for</span> <span class="n">scale</span> <span class="ow">in</span> <span class="n">scales</span> <span class="k">if</span> <span class="n">scale</span> <span class="o">&lt;</span> <span class="n">cutoff_scale</span><span class="p">]</span>

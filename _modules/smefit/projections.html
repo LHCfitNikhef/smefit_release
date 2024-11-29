@@ -137,10 +137,10 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">commondata_path</span><span class="p">,</span>
         <span class="n">theory_path</span><span class="p">,</span>
-        <span class="n">dataset_names</span><span class="p">,</span>
+        <span class="n">datasets</span><span class="p">,</span>
         <span class="n">projections_path</span><span class="p">,</span>
         <span class="n">coefficients</span><span class="p">,</span>
-        <span class="n">order</span><span class="p">,</span>
+        <span class="n">default_order</span><span class="p">,</span>
         <span class="n">use_quad</span><span class="p">,</span>
         <span class="n">use_theory_covmat</span><span class="p">,</span>
         <span class="n">rot_to_fit_basis</span><span class="p">,</span>
@@ -150,10 +150,10 @@
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commondata_path</span> <span class="o">=</span> <span class="n">commondata_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">theory_path</span> <span class="o">=</span> <span class="n">theory_path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_names</span> <span class="o">=</span> <span class="n">dataset_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="n">datasets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">projections_path</span> <span class="o">=</span> <span class="n">projections_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="n">coefficients</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_order</span> <span class="o">=</span> <span class="n">default_order</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_quad</span> <span class="o">=</span> <span class="n">use_quad</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_theory_covmat</span> <span class="o">=</span> <span class="n">use_theory_covmat</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rot_to_fit_basis</span> <span class="o">=</span> <span class="n">rot_to_fit_basis</span>
@@ -163,13 +163,13 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="n">load_datasets</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">commondata_path</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_names</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">use_quad</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">use_theory_covmat</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">use_t0</span><span class="p">,</span>
             <span class="kc">False</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">default_order</span><span class="p">,</span>
             <span class="n">theory_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">theory_path</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -202,10 +202,10 @@
         <span class="n">projections_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span>
             <span class="n">projection_config</span><span class="p">[</span><span class="s2">&quot;projections_path&quot;</span><span class="p">]</span>
         <span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
-        <span class="n">dataset_names</span> <span class="o">=</span> <span class="n">projection_config</span><span class="p">[</span><span class="s2">&quot;datasets&quot;</span><span class="p">]</span>
+        <span class="n">datasets</span> <span class="o">=</span> <span class="n">projection_config</span><span class="p">[</span><span class="s2">&quot;datasets&quot;</span><span class="p">]</span>
 
         <span class="n">coefficients</span> <span class="o">=</span> <span class="n">projection_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;coefficients&quot;</span><span class="p">,</span> <span class="p">[])</span>
-        <span class="n">order</span> <span class="o">=</span> <span class="n">projection_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;order&quot;</span><span class="p">,</span> <span class="s2">&quot;LO&quot;</span><span class="p">)</span>
+        <span class="n">default_order</span> <span class="o">=</span> <span class="n">projection_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;default_order&quot;</span><span class="p">,</span> <span class="s2">&quot;LO&quot;</span><span class="p">)</span>
         <span class="n">use_quad</span> <span class="o">=</span> <span class="n">projection_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;use_quad&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">use_theory_covmat</span> <span class="o">=</span> <span class="n">projection_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;use_theory_covmat&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">rot_to_fit_basis</span> <span class="o">=</span> <span class="n">projection_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rot_to_fit_basis&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -218,10 +218,10 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
             <span class="n">commondata_path</span><span class="p">,</span>
             <span class="n">theory_path</span><span class="p">,</span>
-            <span class="n">dataset_names</span><span class="p">,</span>
+            <span class="n">datasets</span><span class="p">,</span>
             <span class="n">projections_path</span><span class="p">,</span>
             <span class="n">coefficients</span><span class="p">,</span>
-            <span class="n">order</span><span class="p">,</span>
+            <span class="n">default_order</span><span class="p">,</span>
             <span class="n">use_quad</span><span class="p">,</span>
             <span class="n">use_theory_covmat</span><span class="p">,</span>
             <span class="n">rot_to_fit_basis</span><span class="p">,</span>

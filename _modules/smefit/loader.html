@@ -684,11 +684,11 @@
     <span class="n">commondata_path</span><span class="p">,</span>
     <span class="n">datasets</span><span class="p">,</span>
     <span class="n">operators_to_keep</span><span class="p">,</span>
-    <span class="n">order</span><span class="p">,</span>
     <span class="n">use_quad</span><span class="p">,</span>
     <span class="n">use_theory_covmat</span><span class="p">,</span>
     <span class="n">use_t0</span><span class="p">,</span>
     <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
+    <span class="n">default_order</span><span class="o">=</span><span class="s2">&quot;LO&quot;</span><span class="p">,</span>
     <span class="n">theory_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">rot_to_fit_basis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">has_uv_couplings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -704,11 +704,11 @@
 <span class="sd">        commondata_path : str, pathlib.Path</span>
 <span class="sd">            path to commondata folder, commondata excluded</span>
 <span class="sd">        datasets : list</span>
-<span class="sd">            list of datasets to be loaded</span>
+<span class="sd">            List of datasets to be loaded</span>
 <span class="sd">        operators_to_keep: list</span>
 <span class="sd">            list of operators for which corrections are loaded</span>
-<span class="sd">        order: &quot;LO&quot;, &quot;NLO&quot;</span>
-<span class="sd">            EFT perturbative order</span>
+<span class="sd">        default_order: str</span>
+<span class="sd">            Default perturbative order of the theory predictions</span>
 <span class="sd">        use_quad: bool</span>
 <span class="sd">            if True loads also |HO| corrections</span>
 <span class="sd">        use_theory_covmat: bool</span>
@@ -741,18 +741,16 @@
     <span class="n">th_cov</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="n">Loader</span><span class="o">.</span><span class="n">commondata_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">commondata_path</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">theory_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">Loader</span><span class="o">.</span><span class="n">theory_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">theory_path</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">Loader</span><span class="o">.</span><span class="n">theory_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">commondata_path</span><span class="p">)</span>
+    <span class="n">Loader</span><span class="o">.</span><span class="n">theory_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">theory_path</span> <span class="ow">or</span> <span class="n">commondata_path</span><span class="p">)</span>
 
     <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Applying cutoff scale: </span><span class="si">{</span><span class="n">cutoff_scale</span><span class="si">}</span><span class="s2"> GeV.&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">sset</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">datasets</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">sset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
+        <span class="n">dataset_name</span> <span class="o">=</span> <span class="n">sset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
 
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">Loader</span><span class="p">(</span>
-            <span class="n">sset</span><span class="p">,</span>
+            <span class="n">dataset_name</span><span class="p">,</span>
             <span class="n">operators_to_keep</span><span class="p">,</span>
-            <span class="n">order</span><span class="p">,</span>
+            <span class="n">sset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;order&quot;</span><span class="p">,</span> <span class="n">default_order</span><span class="p">),</span>
             <span class="n">use_quad</span><span class="p">,</span>
             <span class="n">use_theory_covmat</span><span class="p">,</span>
             <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
@@ -764,7 +762,7 @@
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="o">~</span><span class="n">dataset</span><span class="o">.</span><span class="n">mask</span><span class="p">):</span>
             <span class="k">continue</span>
 
-        <span class="n">exp_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sset</span><span class="p">)</span>
+        <span class="n">exp_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">)</span>
         <span class="n">n_data_exp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">n_data</span><span class="p">)</span>
         <span class="n">lumi_exp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">lumi</span><span class="p">)</span>
         <span class="n">exp_data</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">central_values</span><span class="p">)</span>

@@ -168,11 +168,12 @@ If <code class="docutils literal notranslate"><span class="pre">result_ID</span>
 </section>
 <section id="theory-specifications">
 <h3>Theory specifications<a class="headerlink" href="#theory-specifications" title="Link to this heading"></a></h3>
-<p>The perturbative order of the QCD theory prediction (LO or NLO) should be specified using <code class="docutils literal notranslate"><span class="pre">order</span></code>.
-<code class="docutils literal notranslate"><span class="pre">use_quad</span></code> should be set to <code class="docutils literal notranslate"><span class="pre">True</span></code> for a fit with quadratic corrections, <code class="docutils literal notranslate"><span class="pre">use_t0</span></code> controls the use
+<p>The default perturbative order of the theory prediction is set by the key <code class="docutils literal notranslate"><span class="pre">default_order</span></code>. Orders may also be specified
+per datset, see <a class="reference external" href="./example.html#datasets-to-consider-and-coefficients-to-fit">here</a> for more details.
+The order in the EFT expansion should be specified by setting <code class="docutils literal notranslate"><span class="pre">use_quad</span></code> to either <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code> to include quadratic or only linear corrections respectively. The option <code class="docutils literal notranslate"><span class="pre">use_t0</span></code> controls the use
 of the <code class="docutils literal notranslate"><span class="pre">t0</span></code> prescription and <code class="docutils literal notranslate"><span class="pre">use_theory_covmat</span></code> specifies whether or not to use the theory covariance matrix
 which can be specified in the theory files.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">default_order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LO</span>
 <span class="nt">use_quad</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
 <span class="nt">use_t0</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
 <span class="nt">use_theory_covmat</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
@@ -218,20 +219,30 @@ Pairwise fits are supported only with |NS|.</p>
 <section id="datasets-to-consider-and-coefficients-to-fit">
 <h3>Datasets to consider and coefficients to fit<a class="headerlink" href="#datasets-to-consider-and-coefficients-to-fit" title="Link to this heading"></a></h3>
 <p>The datasets and Wilson coefficients to be included in the analysis must be listed under <code class="docutils literal notranslate"><span class="pre">datasets</span></code>
-and <code class="docutils literal notranslate"><span class="pre">coefficients</span></code> respectively.</p>
+and <code class="docutils literal notranslate"><span class="pre">coefficients</span></code> respectively. The default order for each dataset is taken from  <code class="docutils literal notranslate"><span class="pre">default_order</span></code>. However, it is
+possible to specify specific orders per dataset. To do this, add the key <code class="docutils literal notranslate"><span class="pre">order</span></code> to the dataset entry as follows.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">datasets</span><span class="p">:</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_8TeV_ljets_Mtt</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_8TeV_dilep_Mtt</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_8TeV_ljets_Ytt</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt2D_8TeV_dilep_MttYtt</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_ljets_2015_Mtt</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_dilep_2015_Mtt</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_ljets_2016_Mtt</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_dilep_2016_Mtt</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_13TeV_ljets_2016_Mtt</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_CMS_tt_AC_8TeV</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_AC_13TeV</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_8TeV_ljets_Mtt</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_8TeV_dilep_Mtt</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO_QCD</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_8TeV_ljets_Ytt</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO_QCD</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt2D_8TeV_dilep_MttYtt</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO_QCD</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_ljets_2015_Mtt</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO_QCD</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_dilep_2015_Mtt</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO_QCD</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_ljets_2016_Mtt</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO_QCD</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_tt_13TeV_dilep_2016_Mtt</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO_QCD</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_13TeV_ljets_2016_Mtt</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO_QCD</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_CMS_tt_AC_8TeV</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO_QCD</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_AC_13TeV</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 
