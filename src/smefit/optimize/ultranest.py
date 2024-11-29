@@ -176,7 +176,7 @@ class USOptimizer(Optimizer):
                 config.get("uv_couplings", False),
                 config.get("external_chi2", False),
                 rgemat=rgemat,
-                cutoff_scale,
+                cutoff_scale=cutoff_scale,
             )
         elif config.get("external_chi2") is not None:
             loaded_datasets = None
