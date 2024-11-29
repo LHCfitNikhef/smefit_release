@@ -564,7 +564,7 @@ def load_datasets(
     ----------
         commondata_path : str, pathlib.Path
             path to commondata folder, commondata excluded
-        datasets : List
+        datasets : list
             List of datasets to be loaded
         operators_to_keep: list
             list of operators for which corrections are loaded
