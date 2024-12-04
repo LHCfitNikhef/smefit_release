@@ -381,6 +381,19 @@ class USOptimizer(Optimizer):
             loglikelihood = self.gaussian_loglikelihood
             flat_prior = self.flat_prior
 
+        ## Mod to get chi2 scan quickly - ANR
+        masses = jnp.linspace(
+            0.0, 200, 1000
+        )  # generate 1k points between 0 and 200 TeV
+        loglikes = jnp.array([loglikelihood(m) for m in masses])
+        # save to file
+        with open(self.result_ID + "_chi2massscan.txt", "w") as f:
+            f.write("mass loglike\n")
+            for m, l in zip(masses, loglikes):
+                f.write(f"{m} {l}\n")
+        raise
+        ## End Mod - ANR
+
         t1 = time.time()
         sampler = ultranest.ReactiveNestedSampler(
             self.free_parameters.index.tolist(),
