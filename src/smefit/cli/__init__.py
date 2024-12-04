@@ -185,13 +185,21 @@ def post_fit(result_folder: pathlib.Path, n_replica: int, clean_rep: bool):
     default=False,
     help="compute also the chi2 bounds",
 )
-def scan(fit_card: pathlib.Path, n_replica: int, bounds: bool):
+@click.option(
+    "-s",
+    "--scan_points",
+    type=int,
+    default=100,
+    required=False,
+    help="number of points to scan",
+)
+def scan(fit_card: pathlib.Path, n_replica: int, bounds: bool, scan_points: int):
     r"""Plot individual :math:`\chi^2` profiles for all the free parameters.
 
     Usage: smefit SCAN [OPTIONS] path_to_runcard
     """
     runner = Runner.from_file(fit_card.absolute())
-    runner.chi2_scan(n_replica, bounds)
+    runner.chi2_scan(n_replica, bounds, scan_points)
 
 
 @base_command.command("R")
