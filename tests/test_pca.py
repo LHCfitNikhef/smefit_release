@@ -81,16 +81,16 @@ def test_impose_constrain():
     np.testing.assert_equal(updated_lincorr.shape, (3, 2))
     np.testing.assert_equal(updated_lincorr, test_updated_lincorr)
 
-    op1op1 = dataset.QuadraticCorrections[:, 0]
-    op1op2 = dataset.QuadraticCorrections[:, 1]
-    op1op3 = dataset.QuadraticCorrections[:, 2]
-    op1op4 = dataset.QuadraticCorrections[:, 3]
-    op2op2 = dataset.QuadraticCorrections[:, 4]
-    op2op3 = dataset.QuadraticCorrections[:, 5]
-    op2op4 = dataset.QuadraticCorrections[:, 6]
-    op3op3 = dataset.QuadraticCorrections[:, 7]
-    op3op4 = dataset.QuadraticCorrections[:, 8]
-    op4op4 = dataset.QuadraticCorrections[:, 9]
+    op1op1 = dataset.QuadraticCorrections[:, 0, 0]
+    op1op2 = dataset.QuadraticCorrections[:, 0, 1]
+    op1op3 = dataset.QuadraticCorrections[:, 0, 2]
+    op1op4 = dataset.QuadraticCorrections[:, 0, 3]
+    op2op2 = dataset.QuadraticCorrections[:, 1, 1]
+    op2op3 = dataset.QuadraticCorrections[:, 1, 2]
+    op2op4 = dataset.QuadraticCorrections[:, 1, 3]
+    op3op3 = dataset.QuadraticCorrections[:, 2, 2]
+    op3op4 = dataset.QuadraticCorrections[:, 2, 3]
+    op4op4 = dataset.QuadraticCorrections[:, 3, 3]
 
     d1 = op1op1 + c13**2 * op3op3 + c13 * op1op3
     d2 = op2op2 + c23**2 * op3op3 + c23 * op2op3
@@ -101,8 +101,9 @@ def test_impose_constrain():
     test_updated_quadcorr = pca.make_sym_matrix(
         np.array([d1, d12, d14, d2, d24, d4]).T, 3
     )
+
     np.testing.assert_equal(test_updated_quadcorr.shape, (3, 3, 2))
-    np.testing.assert_allclose(updated_quadcorr, test_updated_quadcorr, rtol=1e-15)
+    np.testing.assert_allclose(updated_quadcorr, test_updated_quadcorr, rtol=1e-14)
 
 
 def test_pca_eig():

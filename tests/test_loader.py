@@ -126,25 +126,37 @@ def test_load_datasets():
                 # construct expected quad corr tables
                 quad_corr_1 = np.asarray(
                     [
-                        theory_test_1[order]["Op1*Op1"],
-                        theory_test_1[order]["Op2*Op1"],
-                        np.zeros(2),  # Op1*Op4
-                        theory_test_1[order]["Op2*Op2"],
-                        np.zeros(2),  # Op2*Op4
-                        np.zeros(2),  # Op4*Op4
+                        [
+                            theory_test_1[order]["Op1*Op1"],
+                            theory_test_1[order]["Op2*Op1"],
+                            np.zeros(2),
+                        ],
+                        [
+                            np.zeros(2),
+                            theory_test_1[order]["Op2*Op2"],
+                            np.zeros(2),
+                        ],
+                        [np.zeros(2), np.zeros(2), np.zeros(2)],
                     ]
-                ).T
+                )
+                quad_corr_1 = np.transpose(quad_corr_1, axes=(2, 0, 1))
 
                 quad_corr_2 = np.asarray(
                     [
-                        theory_test_2[order]["Op1*Op1"],
-                        theory_test_2[order]["Op2*Op1"],
-                        np.zeros(4),  # Op1*Op4
-                        theory_test_2[order]["Op2*Op2"],
-                        theory_test_2[order]["Op2*Op4"],
-                        np.zeros(4),  # Op4*Op4
+                        [
+                            theory_test_2[order]["Op1*Op1"],
+                            theory_test_2[order]["Op2*Op1"],
+                            np.zeros(4),
+                        ],
+                        [
+                            np.zeros(4),
+                            theory_test_2[order]["Op2*Op2"],
+                            theory_test_2[order]["Op2*Op4"],
+                        ],
+                        [np.zeros(4), np.zeros(4), np.zeros(4)],
                     ]
-                ).T
+                )
+                quad_corr_2 = np.transpose(quad_corr_2, axes=(2, 0, 1))
 
                 quad_corr = np.concatenate((quad_corr_1, quad_corr_2))
                 np.testing.assert_equal(loaded_tuple.QuadraticCorrections, quad_corr)
@@ -173,12 +185,21 @@ def test_operator_correction_sorted():
 
         np.testing.assert_equal(loaded_tuple.LinearCorrections.T, lin_corr)
 
-        quad_corr = [
-            theory_test_1[order]["Op1*Op1"],
-            theory_test_1[order]["Op2*Op1"],
-            np.zeros(2),  # Op1*Op3
-            theory_test_1[order]["Op2*Op2"],
-            theory_test_1[order]["Op2*Op3"],
-            np.zeros(2),  # Op3*Op3
-        ]
-        np.testing.assert_equal(loaded_tuple.QuadraticCorrections.T, quad_corr)
+        quad_corr = np.asarray(
+            [
+                [
+                    theory_test_1[order]["Op1*Op1"],
+                    theory_test_1[order]["Op2*Op1"],
+                    np.zeros(2),
+                ],
+                [
+                    np.zeros(2),
+                    theory_test_1[order]["Op2*Op2"],
+                    theory_test_1[order]["Op2*Op3"],
+                ],
+                [np.zeros(2), np.zeros(2), np.zeros(2)],
+            ]
+        )
+        quad_corr = np.transpose(quad_corr, axes=(2, 0, 1))
+
+        np.testing.assert_equal(loaded_tuple.QuadraticCorrections, quad_corr)
