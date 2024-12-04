@@ -8,6 +8,8 @@ import numpy as np
 import scipy.optimize as opt
 from rich.progress import track
 
+from smefit.utils import NumpyEncoder
+
 from . import compute_theory as pr
 from .coefficients import CoefficientManager
 from .loader import DataTuple, load_datasets
@@ -108,6 +110,7 @@ class Scanner:
             self.chi2_dict[name]["x"] = np.linspace(
                 row.minimum, row.maximum, scan_points
             )
+            self.chi2_dict[name]["n_datapoints"] = self.datasets.Commondata.size
 
     def regularized_chi2_func(self, coeff, xs, use_replica):
         r"""Individual :math:`\chi^2` wrappper over series of values.
@@ -127,7 +130,6 @@ class Scanner:
 
         """
         chi2_list = []
-        coeff.is_free = True
         for x in xs:
             coeff.value = x
             self.coefficients.set_constraints()
@@ -140,7 +142,7 @@ class Scanner:
                     use_replica,
                 )
             )
-        return np.array(chi2_list) / self.datasets.Commondata.size
+        return np.array(chi2_list)
 
     def compute_bounds(self):
         r"""Compute individual bounds solving.
@@ -222,8 +224,14 @@ class Scanner:
                 self.chi2_dict[coeff.name][rep] = self.regularized_chi2_func(
                     coeff, self.chi2_dict[coeff.name]["x"], use_replica
                 )
+                # Parameter is scanned,
+                # reset to 0 to not affect the next scan
                 coeff.value = 0.0
-                coeff.is_free = False
+
+    def write_scan(self):
+        r"""Write the :math:`\chi^2` scan to json file."""
+        with open(f"{self.result_path}/chi2_scan.json", "w", encoding="utf-8") as f:
+            json.dump(self.chi2_dict, f, cls=NumpyEncoder, indent=4)
 
     def plot_scan(self):
         r"""Plot and save the :math:`\chi^2` scan for each coefficient."""

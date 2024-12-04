@@ -308,4 +308,5 @@ class Runner:
         if compute_bounds:
             scan.compute_bounds()
         scan.compute_scan()
+        scan.write_scan()
         scan.plot_scan()

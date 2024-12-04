@@ -8,6 +8,7 @@ from rich.style import Style
 from rich.table import Table
 
 from smefit.rge import RGE
+from smefit.utils import NumpyEncoder
 
 from .. import chi2, log
 from ..coefficients import CoefficientManager
@@ -21,13 +22,6 @@ except ModuleNotFoundError:
     run_parallel = False
 
 _logger = log.logging.getLogger(__name__)
-
-
-class NumpyEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, (np.float32, np.float64, np.int32, np.int64)):
-            return o.item()  # Convert to native Python type
-        return super().default(o)
 
 
 class Optimizer:
