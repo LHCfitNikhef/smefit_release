@@ -72,7 +72,7 @@ class Scanner:
         number of replica to use
     """
 
-    def __init__(self, run_card, n_replica):
+    def __init__(self, run_card, n_replica, scan_points=100):
 
         self.n_replica = n_replica
         self.use_quad = run_card["use_quad"]
@@ -105,7 +105,9 @@ class Scanner:
         self.chi2_dict = {}
         for name, row in self.coefficients.free_parameters.iterrows():
             self.chi2_dict[name] = {}
-            self.chi2_dict[name]["x"] = np.linspace(row.minimum, row.maximum, 100)
+            self.chi2_dict[name]["x"] = np.linspace(
+                row.minimum, row.maximum, scan_points
+            )
 
     def regularized_chi2_func(self, coeff, xs, use_replica):
         r"""Individual :math:`\chi^2` wrappper over series of values.

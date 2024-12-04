@@ -292,7 +292,7 @@ class Runner:
         else:
             self.global_analysis(optimizer)
 
-    def chi2_scan(self, n_replica, compute_bounds):
+    def chi2_scan(self, n_replica, compute_bounds, scan_points=100):
         r"""Run an individual :math:`\chi^2` scan.
 
         Parameters
@@ -304,7 +304,7 @@ class Runner:
         compute_bounds: bool
             if True compute and save the :math:`\chi^2` bounds.
         """
-        scan = Scanner(self.run_card, n_replica)
+        scan = Scanner(self.run_card, n_replica, scan_points)
         if compute_bounds:
             scan.compute_bounds()
         scan.compute_scan()
