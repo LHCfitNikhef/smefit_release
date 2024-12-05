@@ -445,12 +445,18 @@ class TestOptimize_MC:
                     data.LinearCorrections @ temp_coeff.value
                 )
                 if self.test_opt.use_quad:
-                    # derivative of the outher product
-                    quad_coeff_mat = np.outer(temp_coeff.value, coeff_val)
-                    quad_coeff_mat = np.maximum(quad_coeff_mat, quad_coeff_mat.T)
-                    np.fill_diagonal(quad_coeff_mat, 2 * np.diag(quad_coeff_mat))
+                    # Update quadratic corrections
+                    # computing the Jacobian of the quadratic part
                     new_quad_corrections[:, idx] = np.einsum(
-                        "ij,j->i", data.QuadraticCorrections, flatten(quad_coeff_mat)
+                        "ijk,j,k->i",
+                        data.QuadraticCorrections,
+                        temp_coeff.value,
+                        coeff_val,
+                    ) + np.einsum(
+                        "ijk,j,k->i",
+                        data.QuadraticCorrections,
+                        coeff_val,
+                        temp_coeff.value,
                     )
 
             jac = -new_linear_corrections - new_quad_corrections
