@@ -450,16 +450,8 @@ def load_rge_matrix(
         rgemat = []
         rge_cache = {}
         for scale in scales:
-            if scale == init_scale:
-                # produce an identity matrix with row and columns coeff_list
-                rgemat_scale = pd.DataFrame(
-                    np.eye(len(coeff_list), len(coeff_list)),
-                    columns=sorted(coeff_list),
-                    index=sorted(coeff_list),
-                )
-
             # Check if the RGE matrix has already been computed
-            elif scale in rge_cache:
+            if scale in rge_cache:
                 rgemat_scale = rge_cache[scale]
             else:
                 rgemat_scale = rge_runner.RGEmatrix(scale)
