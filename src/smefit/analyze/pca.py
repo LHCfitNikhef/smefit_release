@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import yaml
-from matplotlib import cm, colors
+from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from ..coefficients import CoefficientManager
@@ -30,7 +30,6 @@ class RotateToPca:
     """
 
     def __init__(self, loaded_datasets, coefficients, config):
-
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.config = config
@@ -49,11 +48,11 @@ class RotateToPca:
             config["data_path"],
             config["datasets"],
             config["coefficients"],
-            config["order"],
             config["use_quad"],
             config["use_theory_covmat"],
             config["use_t0"],
             config.get("use_multiplicative_prescription", False),
+            config.get("default_order", "LO"),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
@@ -239,7 +238,6 @@ class PcaCalculator:
     """
 
     def __init__(self, datasets, coefficients, latex_names):
-
         self.coefficients = coefficients
         self.datasets = datasets
         self.latex_names = latex_names
@@ -324,7 +322,7 @@ class PcaCalculator:
         fig = plt.figure(figsize=figsize)
         ax = fig.add_subplot(111)
 
-        cmap = cm.get_cmap("Blues")
+        cmap = plt.get_cmap("Blues")
         norm = colors.BoundaryNorm(np.arange(1.1, step=0.1), cmap.N)
 
         cax = ax.matshow(pc_norm, cmap=cmap, norm=norm)

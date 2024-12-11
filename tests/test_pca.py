@@ -17,9 +17,8 @@ here = pathlib.Path(__file__).parent
 
 dataset = load_datasets(
     commondata_path,
-    datasets=["data_test5"],
+    datasets=[{"name": "data_test5", "order": "NLO"}],
     operators_to_keep=operators_to_keep,
-    order="NLO",
     use_quad=True,
     use_theory_covmat=True,
     use_t0=False,
@@ -55,7 +54,6 @@ coefficients = CoefficientManager.from_dict(coeff_dict)
 
 
 def test_make_sym_matrix():
-
     vals = np.array([[1, 2, 3, 4, 5, 6], [7, 8, 9, 10, 11, 12]])
     mat = pca.make_sym_matrix(vals, 3)
     np.testing.assert_equal(mat[:, :, 0], mat[:, :, 0].T)
@@ -71,7 +69,6 @@ def test_make_sym_matrix():
 
 
 def test_impose_constrain():
-
     updated_lincorr, updated_quadcorr = pca.impose_constrain(
         dataset, coefficients, update_quad=True
     )
@@ -125,7 +122,6 @@ def test_pca_eig():
 
 
 class TestRotateToPca:
-
     fake_result_path = here / "fake_results" / "test_fit"
     fake_result_path.mkdir(exist_ok=True)
     rot_to_pca = pca.RotateToPca(
@@ -179,9 +175,8 @@ class TestRotateToPca:
         pca_coeffs = CoefficientManager.from_dict(pca_coeffs_dict)
         rotated_datasets = load_datasets(
             commondata_path,
-            datasets=["data_test5"],
+            datasets=[{"name": "data_test5", "order": "NLO"}],
             operators_to_keep=["PC00", "PC01", "PC02", "Op3"],
-            order="NLO",
             use_quad=True,
             use_theory_covmat=True,
             use_t0=False,

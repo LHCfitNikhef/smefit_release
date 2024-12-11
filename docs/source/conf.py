@@ -26,7 +26,7 @@ project = "SMEFiT"
 copyright = "2024, the SMEFiT developers' team"
 author = "Tommaso Giani, Jaco ter Hoeve, Giacomo Magni and Juan Rojo"
 # The full version, including alpha/beta/rc tags
-release = "3.0.0"
+release = "3.0.1"
 
 
 # -- General configuration ---------------------------------------------------
@@ -48,6 +48,7 @@ extensions = [
     "sphinxcontrib.bibtex",
     "sphinx.ext.extlinks",
     "recommonmark",
+    "nbsphinx",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -127,6 +128,7 @@ intersphinx_mapping = {
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
 
 # https://github.com/readthedocs/readthedocs.org/issues/1139#issuecomment-312626491
 def run_apidoc(_):

@@ -6,20 +6,18 @@ import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
-from latex_dicts import mod_dict
-from latex_dicts import uv_param_dict
-from latex_dicts import inv_param_dict
-#import arviz as az
-from sigfig import round
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import rc, use
 from histogram_tools import find_xrange
+from latex_dicts import inv_param_dict, mod_dict, uv_param_dict
+from matplotlib import rc, use
 
-from matplotlib import rc
-rc('font', **{'family': 'sans-serif', 'sans-serif': ['Helvetica'], 'size': 22})
-rc('text', usetex=True)
+# import arviz as az
+from sigfig import round
+
+rc("font", **{"family": "sans-serif", "sans-serif": ["Helvetica"], "size": 22})
+rc("text", usetex=True)
 
 collections = ["Granada"]
 
@@ -75,7 +73,6 @@ def nested_dict(num_levels):
 
 
 def compute_bounds(collection, mod_nrs, label, caption):
-
     table = "\\begin{table}\n"
     table += "\\begin{center}\n"
     table += "\\scriptsize\n"
@@ -97,10 +94,11 @@ def compute_bounds(collection, mod_nrs, label, caption):
             for EFT in ["NHO", "HO"]:
                 n_inv = 0
                 # path to posterior with model number
-                posterior_path_mod = Path(posterior_path.format(collection, mod_nr, pQCD, EFT))
+                posterior_path_mod = Path(
+                    posterior_path.format(collection, mod_nr, pQCD, EFT)
+                )
 
                 if posterior_path_mod.exists():
-
                     # Open the JSON file and load its contents
                     with open(posterior_path_mod) as f:
                         posterior = json.load(f)
@@ -112,38 +110,53 @@ def compute_bounds(collection, mod_nrs, label, caption):
                             if min(samples) > 0:
                                 low = 0
                                 up = np.nanpercentile(samples, 95.0)
-                                up_str = "{}".format(round(up, sigfigs=4, notation='sci')).replace('E', 'e').replace('e0', '')
-                                if 'e' in up_str:
-                                    base, exp = up_str.split('e')
-                                    up_str = "{}$\\mathrm{{e}}{{{}}}$".format(base, exp)
+                                up_str = (
+                                    "{}".format(round(up, sigfigs=4, notation="sci"))
+                                    .replace("E", "e")
+                                    .replace("e0", "")
+                                )
+                                if "e" in up_str:
+                                    base, exp = up_str.split("e")
+                                    up_str = f"{base}$\\mathrm{{e}}{{{exp}}}$"
                                 table_dict[mod_nr][key][pQCD][EFT] = up_str
 
                             else:
-                                low, up = np.nanpercentile(samples, 2.5), np.nanpercentile(samples, 97.5)
-                                low_str = "{}".format(round(low, sigfigs=4, notation='sci')).replace('E', 'e').replace(
-                                    'e0', '')
-                                up_str = "{}".format(round(up, sigfigs=4, notation='sci')).replace('E', 'e').replace(
-                                    'e0', '')
-                                if 'e' in low_str:
-                                    base, exp = low_str.split('e')
-                                    low_str = "{}$\\mathrm{{e}}{{{}}}$".format(base, exp)
-                                if 'e' in up_str:
-                                    base, exp = up_str.split('e')
-                                    up_str = "{}$\\mathrm{{e}}{{{}}}$".format(base, exp)
-                                table_dict[mod_nr][key][pQCD][EFT] = "[{}, {}]".format(low_str, up_str)
+                                low, up = np.nanpercentile(
+                                    samples, 2.5
+                                ), np.nanpercentile(samples, 97.5)
+                                low_str = (
+                                    "{}".format(round(low, sigfigs=4, notation="sci"))
+                                    .replace("E", "e")
+                                    .replace("e0", "")
+                                )
+                                up_str = (
+                                    "{}".format(round(up, sigfigs=4, notation="sci"))
+                                    .replace("E", "e")
+                                    .replace("e0", "")
+                                )
+                                if "e" in low_str:
+                                    base, exp = low_str.split("e")
+                                    low_str = "{}$\\mathrm{{e}}{{{}}}$".format(
+                                        base, exp
+                                    )
+                                if "e" in up_str:
+                                    base, exp = up_str.split("e")
+                                    up_str = f"{base}$\\mathrm{{e}}{{{exp}}}$"
+                                table_dict[mod_nr][key][pQCD][EFT] = "[{}, {}]".format(
+                                    low_str, up_str
+                                )
 
                             if up > 200 or low < -200:
                                 table_dict[mod_nr][key][pQCD][EFT] = "$\\times$"
                             # hdi is two sides, so we cannot use it: |g| > 0 requires one sided test
                             # table_dict[mod_nr][key][pQCD][EFT] = az.hdi(np.array(samples), hdi_prob=.95)
-                            #table_dict[mod_nr][key][pQCD][EFT] = low, up
+                            # table_dict[mod_nr][key][pQCD][EFT] = low, up
                             n_inv += 1
                     n_invariants.append(n_inv)
         print("n_invariants:", n_invariants)
         if n_invariants:
             n_params += max(n_invariants)
         for parameter, param_dict in table_dict[mod_nr].items():
-
             LO_NHO = param_dict["LO"]["NHO"]
             LO_HO = param_dict["LO"]["HO"]
             NLO_NHO = param_dict["NLO"]["NHO"]
@@ -159,8 +172,6 @@ def compute_bounds(collection, mod_nrs, label, caption):
     table += f"\\caption{{{caption}}}\n"
     table += "\\end{center}\n"
     table += "\\end{table}\n"
-
-
 
     return table, n_params
 
@@ -181,7 +192,7 @@ oneloop_mdl_idx = ["T1", "T2"]
 #                                                   "95\\% CL intervals of the heavy vector fermion fields UV couplings.")
 #
 # latex_table_mp, n_mp = compute_bounds("MultiParticleCollection", mp_mdl_idx, "cl-mp-model-spl", "95\\% CL intervals of the UV couplings that enter in the multiparticle model.")
-#latex_table_1l, n_scalars_1L = compute_bounds("OneLoop", oneloop_mdl_idx, "cl-1l-model", "95\\% CL intervals of the UV couplings in \\varphi at one-loop.")
+# latex_table_1l, n_scalars_1L = compute_bounds("OneLoop", oneloop_mdl_idx, "cl-1l-model", "95\\% CL intervals of the UV couplings in \\varphi at one-loop.")
 
 
 # Save LaTeX code to a .tex file
@@ -196,14 +207,17 @@ oneloop_mdl_idx = ["T1", "T2"]
 # with open(result_dir / "table_1l.tex", "w") as file:
 #     file.write(latex_table_1l)
 
-def plot_uv_posterior_bar(n_params, collection, models, EFT=None, name=None, pQCD=None):
 
+def plot_uv_posterior_bar(n_params, collection, models, EFT=None, name=None, pQCD=None):
     fig, axes = plt.subplots(figsize=(18, 8 * 3), ncols=1, nrows=3)
 
-    category = [r'${\rm Heavy\:Scalar}$', r'${\rm Heavy\:Fermion}$', r'${\rm Heavy\:Vector\:Boson}$']
+    category = [
+        r"${\rm Heavy\:Scalar}$",
+        r"${\rm Heavy\:Fermion}$",
+        r"${\rm Heavy\:Vector\:Boson}$",
+    ]
 
     for i, mod_nrs in enumerate(models):
-
         lhc_bounds = []
         hllhc_bounds = []
         fcc_bounds = []
@@ -213,9 +227,15 @@ def plot_uv_posterior_bar(n_params, collection, models, EFT=None, name=None, pQC
                 continue
             print(mod_nr)
 
-            posterior_path_mod_1 = Path(posterior_path.format(collection, "lhc", mod_nr, pQCD, "HO"))
-            posterior_path_mod_2 = Path(posterior_path.format(collection, "hllhc", mod_nr, pQCD, "HO"))
-            posterior_path_mod_3 = Path(posterior_path.format(collection, "fcc", mod_nr, pQCD, "HO"))
+            posterior_path_mod_1 = Path(
+                posterior_path.format(collection, "lhc", mod_nr, pQCD, "HO")
+            )
+            posterior_path_mod_2 = Path(
+                posterior_path.format(collection, "hllhc", mod_nr, pQCD, "HO")
+            )
+            posterior_path_mod_3 = Path(
+                posterior_path.format(collection, "fcc", mod_nr, pQCD, "HO")
+            )
 
             if posterior_path_mod_1.exists():
                 # Open the JSON file and load its contents
@@ -233,15 +253,17 @@ def plot_uv_posterior_bar(n_params, collection, models, EFT=None, name=None, pQC
 
                 n_invariants = 0
                 for key in posterior_1.keys():
-                    if key.startswith('inv'):
+                    if key.startswith("inv"):
                         n_invariants += 1
 
                 if n_invariants > 1:
                     continue
 
-                for (key, samples_1_list), (_, samples_2_list), (_, samples_3_list) in zip(
-                        posterior_1.items(), posterior_2.items(), posterior_3.items()
-                ):
+                for (
+                    (key, samples_1_list),
+                    (_, samples_2_list),
+                    (_, samples_3_list),
+                ) in zip(posterior_1.items(), posterior_2.items(), posterior_3.items()):
                     if not key.startswith("inv"):
                         continue
                     else:
@@ -268,7 +290,9 @@ def plot_uv_posterior_bar(n_params, collection, models, EFT=None, name=None, pQC
         x = np.linspace(0, 200, len(lhc_bounds))
         dx = x[1] - x[0]
 
-        logo = plt.imread("/data/theorie/jthoeve/smefit_release/src/smefit/analyze/logo.png")
+        logo = plt.imread(
+            "/data/theorie/jthoeve/smefit_release/src/smefit/analyze/logo.png"
+        )
 
         axes[-1].imshow(
             logo,
@@ -278,35 +302,76 @@ def plot_uv_posterior_bar(n_params, collection, models, EFT=None, name=None, pQC
             zorder=10,
         )
 
-
-
         # Plot the bars
 
-        axes[i].bar(x - bar_width, lhc_bounds[:, 0], bar_width, align='center', label=r'$\rm{LEP+LHC_{Run-2}}, \:g_{{\rm UV}}=1$', color='C0')
+        axes[i].bar(
+            x - bar_width,
+            lhc_bounds[:, 0],
+            bar_width,
+            align="center",
+            label=r"$\rm{LEP+LHC_{Run-2}}, \:g_{{\rm UV}}=1$",
+            color="C0",
+        )
 
-        axes[i].bar(x - bar_width, lhc_bounds[:, 1], bar_width, align='center', edgecolor='C0',
-                    linestyle='--', alpha=0.3, label=r'$\rm{LEP+LHC_{Run-2}},\:g_{{\rm UV}}=4\pi$')
+        axes[i].bar(
+            x - bar_width,
+            lhc_bounds[:, 1],
+            bar_width,
+            align="center",
+            edgecolor="C0",
+            linestyle="--",
+            alpha=0.3,
+            label=r"$\rm{LEP+LHC_{Run-2}},\:g_{{\rm UV}}=4\pi$",
+        )
 
-        axes[i].bar(x, hllhc_bounds[:, 0], bar_width, align='center', label=r'$\rm{+\:HL-LHC}, \:g_{{\rm UV}}=1$',
-                    color='C1')
+        axes[i].bar(
+            x,
+            hllhc_bounds[:, 0],
+            bar_width,
+            align="center",
+            label=r"$\rm{+\:HL-LHC}, \:g_{{\rm UV}}=1$",
+            color="C1",
+        )
 
-        axes[i].bar(x, hllhc_bounds[:, 1], bar_width, align='center', edgecolor='C1',
-                    linestyle='--', alpha=0.3, label=r'$\rm{+\:HL-LHC}, \:g_{{\rm UV}}=4\pi$')
+        axes[i].bar(
+            x,
+            hllhc_bounds[:, 1],
+            bar_width,
+            align="center",
+            edgecolor="C1",
+            linestyle="--",
+            alpha=0.3,
+            label=r"$\rm{+\:HL-LHC}, \:g_{{\rm UV}}=4\pi$",
+        )
 
-        axes[i].bar(x + bar_width, fcc_bounds[:, 0], bar_width, align='center', label=r'$\rm{+\:FCC-ee}, \:g_{{\rm UV}}=1$',
-                    color='C2')
+        axes[i].bar(
+            x + bar_width,
+            fcc_bounds[:, 0],
+            bar_width,
+            align="center",
+            label=r"$\rm{+\:FCC-ee}, \:g_{{\rm UV}}=1$",
+            color="C2",
+        )
 
-        axes[i].bar(x + bar_width, fcc_bounds[:, 1], bar_width, align='center', edgecolor='C2',
-                    linestyle='--', alpha=0.3, label=r'$\rm{+\:FCC-ee}, \:g_{{\rm UV}}=4\pi$')
+        axes[i].bar(
+            x + bar_width,
+            fcc_bounds[:, 1],
+            bar_width,
+            align="center",
+            edgecolor="C2",
+            linestyle="--",
+            alpha=0.3,
+            label=r"$\rm{+\:FCC-ee}, \:g_{{\rm UV}}=4\pi$",
+        )
 
         axes[i].set_xticks(x, x_labels)
-        axes[i].set_ylabel(r'$M_{\mathrm{UV}}\:{\rm [TeV]}$')
-        axes[i].tick_params(axis='x', which='major', pad=15)
-        #axes[i].legend(frameon=False, ncol=3)
-        axes[i].set_yscale('log')
+        axes[i].set_ylabel(r"$M_{\mathrm{UV}}\:{\rm [TeV]}$")
+        axes[i].tick_params(axis="x", which="major", pad=15)
+        # axes[i].legend(frameon=False, ncol=3)
+        axes[i].set_yscale("log")
 
         if i == 2:
-            axes[i].set_ylim(0.08, 5 * 10 **3)
+            axes[i].set_ylim(0.08, 5 * 10**3)
 
         axes[i].text(
             0.02,
@@ -315,21 +380,12 @@ def plot_uv_posterior_bar(n_params, collection, models, EFT=None, name=None, pQC
             fontsize=24,
             ha="left",
             va="top",
-            transform=axes[i].transAxes
+            transform=axes[i].transAxes,
         )
 
+    axes[0].legend(frameon=False, ncol=3, loc="upper right", fontsize=18)
 
-
-
-    axes[0].legend(
-        frameon=False,
-        ncol=3,
-        loc='upper right',
-        fontsize=18
-    )
-
-
-    #axes[-1].set_xlim(x.min() - 2 * bar_width, x.max() + 2 * bar_width)
+    # axes[-1].set_xlim(x.min() - 2 * bar_width, x.max() + 2 * bar_width)
 
     fig.tight_layout()
 
@@ -353,17 +409,24 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
             continue
         print(mod_nr)
 
-
-
         # path to posterior with model number
         if pQCD is None:
-            posterior_path_mod_1 = Path(posterior_path.format(collection, mod_nr, "LO", EFT))
-            posterior_path_mod_2 = Path(posterior_path.format(collection, mod_nr, "NLO", EFT))
+            posterior_path_mod_1 = Path(
+                posterior_path.format(collection, mod_nr, "LO", EFT)
+            )
+            posterior_path_mod_2 = Path(
+                posterior_path.format(collection, mod_nr, "NLO", EFT)
+            )
         elif EFT is None:
-
-            posterior_path_mod_1 = Path(posterior_path.format(collection, "lhc", mod_nr, pQCD, "NHO"))
-            posterior_path_mod_2 = Path(posterior_path.format(collection, "hllhc", mod_nr, pQCD, "NHO"))
-            posterior_path_mod_3 = Path(posterior_path.format(collection, "fcc", mod_nr, pQCD, "NHO"))
+            posterior_path_mod_1 = Path(
+                posterior_path.format(collection, "lhc", mod_nr, pQCD, "NHO")
+            )
+            posterior_path_mod_2 = Path(
+                posterior_path.format(collection, "hllhc", mod_nr, pQCD, "NHO")
+            )
+            posterior_path_mod_3 = Path(
+                posterior_path.format(collection, "fcc", mod_nr, pQCD, "NHO")
+            )
         else:
             print("EFT and pQCD cannot both be None, aborting")
             sys.exit()
@@ -383,7 +446,7 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
                 continue
 
             for (key, samples_1_list), (_, samples_2_list), (_, samples_3_list) in zip(
-                    posterior_1.items(), posterior_2.items(), posterior_3.items()
+                posterior_1.items(), posterior_2.items(), posterior_3.items()
             ):
                 if not key.startswith("inv"):
                     continue
@@ -433,7 +496,7 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
                         fontsize=17,
                         ha="left",
                         va="top",
-                        transform=ax.transAxes
+                        transform=ax.transAxes,
                     )
 
                     ax.text(
@@ -443,40 +506,67 @@ def plot_uv_posterior(n_params, collection, mod_nrs, EFT=None, name=None, pQCD=N
                         fontsize=20,
                         ha="right",
                         va="top",
-                        transform=ax.transAxes
+                        transform=ax.transAxes,
                     )
 
-
     if pQCD is None:
-        order_EFT = -2 if EFT == 'NHO' else -4
-        fig.legend([f"$\mathrm{{LO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$",
-                    f"$\mathrm{{NLO}}\;\mathcal{{O}}\\left(\Lambda^{{{order_EFT}}}\\right)$"], loc="upper center",
-                   ncol=2,
-                   prop={"size": 25 * (n_cols * 4) / 20}, bbox_to_anchor=(0.5, 1.0), frameon=False)
+        order_EFT = -2 if EFT == "NHO" else -4
+        fig.legend(
+            [
+                f"$\\mathrm{{LO}}\\;\\mathcal{{O}}\\left(\\Lambda^{{{order_EFT}}}\\right)$",
+                f"$\\mathrm{{NLO}}\\;\\mathcal{{O}}\\left(\\Lambda^{{{order_EFT}}}\\right)$",
+            ],
+            loc="upper center",
+            ncol=2,
+            prop={"size": 25 * (n_cols * 4) / 20},
+            bbox_to_anchor=(0.5, 1.0),
+            frameon=False,
+        )
 
         if n_rows > 1:
-            plt.tight_layout(rect=[0, 0.05 * (5. / n_rows), 1, 1 - 0.05 * (5. / n_rows)])  # make room for the legend
+            plt.tight_layout(
+                rect=[0, 0.05 * (5.0 / n_rows), 1, 1 - 0.05 * (5.0 / n_rows)]
+            )  # make room for the legend
         else:
             plt.tight_layout(rect=[0, 0.08, 1, 0.92])  # make room for the legend
         if name is not None:
-            fig.savefig(result_dir / "{}_posteriors_LO_vs_NLO_{}_{}.pdf".format(collection, EFT, name))
+            fig.savefig(
+                result_dir / f"{collection}_posteriors_LO_vs_NLO_{EFT}_{name}.pdf"
+            )
         else:
-            fig.savefig(result_dir / "{}_posteriors_LO_vs_NLO_{}.pdf".format(collection, EFT))
+            fig.savefig(result_dir / f"{collection}_posteriors_LO_vs_NLO_{EFT}.pdf")
     elif EFT is None:
-        fig.legend([f"$\mathrm{{LHC}}\;\mathcal{{O}}\\left(\Lambda^{{-2}}\\right)$",
-                    f"$\mathrm{{HL-LHC}}\;\mathcal{{O}}\\left(\Lambda^{{-2}}\\right)$",
-                    f"$\mathrm{{FCCee}}\;\mathcal{{O}}\\left(\Lambda^{{-2}}\\right)$"], ncol=3,
-                   prop={"size": 25 * (n_cols * 4) / 20}, bbox_to_anchor=(0.5, 1.0), loc='upper center', frameon=False)
+        fig.legend(
+            [
+                f"$\\mathrm{{LHC}}\\;\\mathcal{{O}}\\left(\\Lambda^{{-2}}\\right)$",
+                f"$\\mathrm{{HL-LHC}}\\;\\mathcal{{O}}\\left(\\Lambda^{{-2}}\\right)$",
+                f"$\\mathrm{{FCCee}}\\;\\mathcal{{O}}\\left(\\Lambda^{{-2}}\\right)$",
+            ],
+            ncol=3,
+            prop={"size": 25 * (n_cols * 4) / 20},
+            bbox_to_anchor=(0.5, 1.0),
+            loc="upper center",
+            frameon=False,
+        )
         if n_rows > 1:
-            plt.tight_layout(rect=[0, 0.05 * (5. / n_rows), 1, 1 - 0.05 * (5. / n_rows)])  # make room for the legend
+            plt.tight_layout(
+                rect=[0, 0.05 * (5.0 / n_rows), 1, 1 - 0.05 * (5.0 / n_rows)]
+            )  # make room for the legend
         else:
             plt.tight_layout(rect=[0, 0.08, 1, 0.92])  # make room for the legend
 
-        fig.savefig(result_dir / "{}_posteriors_lhc_vs_hlhc_{}.png".format(collection, name))
+        fig.savefig(result_dir / f"{collection}_posteriors_lhc_vs_hlhc_{name}.png")
+
 
 # plot_uv_posterior_bar(10, "Granada", vboson_mdl_nrs, name="vbosons", pQCD="NLO")
 # plot_uv_posterior(15, "Granada", vfermion_mdl_nrs, name="vfermions", pQCD="NLO")
-plot_uv_posterior_bar(10, "Granada", [scalar_mdl_nrs, vfermion_mdl_nrs, vboson_mdl_nrs], name="scalars", pQCD="NLO")
+plot_uv_posterior_bar(
+    10,
+    "Granada",
+    [scalar_mdl_nrs, vfermion_mdl_nrs, vboson_mdl_nrs],
+    name="scalars",
+    pQCD="NLO",
+)
 
 # plot_uv_posterior(n_mp, "MultiParticleCollection", mp_mdl_idx, EFT="NHO")
 # plot_uv_posterior(n_mp, "MultiParticleCollection", mp_mdl_idx, EFT="HO")

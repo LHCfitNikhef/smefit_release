@@ -19,10 +19,10 @@ class Projection:
         self,
         commondata_path,
         theory_path,
-        dataset_names,
+        datasets,
         projections_path,
         coefficients,
-        order,
+        default_order,
         use_quad,
         use_theory_covmat,
         rot_to_fit_basis,
@@ -30,13 +30,12 @@ class Projection:
         fred_sys,
         use_t0,
     ):
-
         self.commondata_path = commondata_path
         self.theory_path = theory_path
-        self.dataset_names = dataset_names
+        self.datasets = datasets
         self.projections_path = projections_path
         self.coefficients = coefficients
-        self.order = order
+        self.default_order = default_order
         self.use_quad = use_quad
         self.use_theory_covmat = use_theory_covmat
         self.rot_to_fit_basis = rot_to_fit_basis
@@ -46,13 +45,13 @@ class Projection:
 
         self.datasets = load_datasets(
             self.commondata_path,
-            self.dataset_names,
+            self.datasets,
             self.coefficients,
-            self.order,
             self.use_quad,
             self.use_theory_covmat,
             self.use_t0,
             False,
+            self.default_order,
             theory_path=self.theory_path,
         )
 
@@ -83,10 +82,10 @@ class Projection:
         projections_path = pathlib.Path(
             projection_config["projections_path"]
         ).absolute()
-        dataset_names = projection_config["datasets"]
+        datasets = projection_config["datasets"]
 
         coefficients = projection_config.get("coefficients", [])
-        order = projection_config.get("order", "LO")
+        default_order = projection_config.get("default_order", "LO")
         use_quad = projection_config.get("use_quad", False)
         use_theory_covmat = projection_config.get("use_theory_covmat", True)
         rot_to_fit_basis = projection_config.get("rot_to_fit_basis", None)
@@ -99,10 +98,10 @@ class Projection:
         return cls(
             commondata_path,
             theory_path,
-            dataset_names,
+            datasets,
             projections_path,
             coefficients,
-            order,
+            default_order,
             use_quad,
             use_theory_covmat,
             rot_to_fit_basis,
@@ -153,7 +152,6 @@ class Projection:
         is_artificial = is_square & np.any(sys < 0)
 
         if is_artificial:
-
             # reconstruct covmat and keep only diagonal components
             cov_tot = sys @ sys.T
             sys_diag = np.sqrt(np.diagonal(cov_tot))
@@ -166,7 +164,6 @@ class Projection:
 
     @staticmethod
     def rescale_stat(stat, lumi_old, lumi_new):
-
         """
         Projects the statistical uncertainties from lumi_old to lumi_new
 
@@ -205,7 +202,6 @@ class Projection:
 
         cnt = 0
         for dataset_idx, num_data in enumerate(self.datasets.NdataExp):
-
             dataset_name = self.datasets.ExpNames[dataset_idx]
             path_to_dataset = self.commondata_path / f"{dataset_name}.yaml"
 
@@ -297,7 +293,6 @@ class Projection:
                 # build covmat for projections. Use rescaled uncertainties
                 newcov = covmat_from_systematics([stat_red], [sys_red])
             else:  # closure test
-
                 # we store absolute uncertainties and convert all multipicative uncertainties to additive ones
 
                 if num_data > 1:

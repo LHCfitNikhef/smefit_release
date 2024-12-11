@@ -47,9 +47,9 @@ class ALOptimizer(Optimizer):
         n_samples,
     ):
         super().__init__(
-            f"{result_path}/{result_ID}",
-            loaded_datasets,
-            coefficients,
+            results_path=f"{result_path}/{result_ID}",
+            loaded_datasets=loaded_datasets,
+            coefficients=coefficients,
             # disble quadratic corrections here
             use_quad=False,
             single_parameter_fits=single_parameter_fits,
@@ -82,14 +82,15 @@ class ALOptimizer(Optimizer):
             config["data_path"],
             config["datasets"],
             config["coefficients"],
-            config["order"],
             False,
             config["use_theory_covmat"],
             config["use_t0"],
             False,
+            config.get("default_order", "LO"),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
+            cutoff_scale=config.get("cutoff_scale", None),
         )
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
@@ -117,6 +118,8 @@ class ALOptimizer(Optimizer):
 
     def run_sampling(self):
         """Run sapmling accordying to the analytic solution."""
+
+        fit_result = {}
 
         # update linear corrections in casde
         new_LinearCorrections = impose_constrain(
@@ -147,19 +150,44 @@ class ALOptimizer(Optimizer):
             @ diff_sm
         )
 
+        # Compute some metrics of the fit result
+        # Get names of coefficients, including the constrained ones
+        coeffs_name = sorted(self.coefficients.name)
+
+        # set the best fit point
+        self.coefficients.set_free_parameters(coeff_best)
+        self.coefficients.set_constraints()
+
+        fit_result["best_fit_point"] = dict(zip(coeffs_name, self.coefficients.value))
+
+        # compute max log likelihood
+        chi2_tot = chi2.compute_chi2(
+            self.loaded_datasets,
+            self.coefficients.value,
+            self.use_quad,
+            self.use_multiplicative_prescription,
+        )
+        max_logl = float(-0.5 * chi2_tot)
+
+        fit_result["max_loglikelihood"] = max_logl
+
+        gaussian_integral = np.log(np.sqrt(np.linalg.det(2 * np.pi * coeff_covmat)))
+        # NOTE: current formula for logz is not inluding the prior penalty
+        logz = gaussian_integral + max_logl
+        fit_result["logz"] = logz
+        _logger.warning("The logZ computation is not including the prior penalty.")
+
         # generate samples in case n_samples > 0
         if self.n_samples > 0:
-
             self.log_result(coeff_best, coeff_covmat)
 
             # sample
             _logger.info("Sampling solutions ...")
-            samples = np.random.multivariate_normal(
+            fit_result["samples"] = np.random.multivariate_normal(
                 coeff_best, coeff_covmat, size=(self.n_samples,)
             )
-            self.save(samples)
+            self.save(fit_result)
         else:  # record only chi2 if no samples are requested
-
             self.coefficients.set_free_parameters(coeff_best)
             self.coefficients.set_constraints()
 
@@ -172,10 +200,11 @@ class ALOptimizer(Optimizer):
             chi2_red = chi2_tot / self.loaded_datasets.Commondata.size
 
             with open(self.results_path / "chi2.dat", "a") as f:
-                f.write("{} \n".format(chi2_red))
+                f.write(f"{chi2_red} \n")
 
-    def save(self, samples):
+    def save(self, result):
         """Save samples to json inside a dictionary: {coff: [replicas values]}.
+        Saving also some basic information about the fit.
 
         Parameters
         ----------
@@ -183,17 +212,18 @@ class ALOptimizer(Optimizer):
             raw samples with shape (n_samples, n_free_param)
 
         """
-        values = {}
+        posterior_samples = {}
         for c in self.coefficients.name:
-            values[c] = []
+            posterior_samples[c] = []
 
         # propagate constrain
-        for sample in samples:
+        for sample in result["samples"]:
             self.coefficients.set_free_parameters(sample)
             self.coefficients.set_constraints()
 
             for c in self.coefficients.name:
-                values[c].append(self.coefficients[c].value)
+                posterior_samples[c].append(self.coefficients[c].value)
 
-        posterior_file = self.results_path / "posterior.json"
-        self.dump_posterior(posterior_file, values)
+        result["samples"] = posterior_samples
+        # save fit result
+        self.dump_fit_result(self.results_path / "fit_results.json", result)

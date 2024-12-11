@@ -72,15 +72,17 @@ theory_test_2 = {
 
 def test_load_datasets():
     operators_to_keep = np.array(["Op1", "Op2", "Op4"])
-    datasets = ["data_test1", "data_test2"]
 
     for use_quad in [True, False]:
         for order in ["LO", "NLO"]:
+            datasets = [
+                {"name": "data_test1", "order": f"{order}"},
+                {"name": "data_test2", "order": f"{order}"},
+            ]
             loaded_tuple = load_datasets(
                 commondata_path,
                 datasets=datasets,
                 operators_to_keep=operators_to_keep,
-                order=order,
                 use_quad=use_quad,
                 use_theory_covmat=True,
                 use_t0=False,
@@ -117,10 +119,10 @@ def test_load_datasets():
             np.testing.assert_equal(loaded_tuple.OperatorsNames, operators_to_keep)
             np.testing.assert_equal(loaded_tuple.ExpNames, ["data_test1", "data_test2"])
             np.testing.assert_equal(loaded_tuple.NdataExp, [2, 4])
+
             np.testing.assert_equal(loaded_tuple.LinearCorrections, lin_corr)
 
             if use_quad:
-
                 # construct expected quad corr tables
                 quad_corr_1 = np.asarray(
                     [
@@ -153,9 +155,8 @@ def test_operator_correction_sorted():
     for order in ["LO", "NLO"]:
         loaded_tuple = load_datasets(
             commondata_path,
-            datasets=["data_test1"],
+            datasets=[{"name": "data_test1", "order": f"{order}"}],
             operators_to_keep=operators_to_keep,
-            order=order,
             use_quad=True,
             use_theory_covmat=True,
             use_t0=False,

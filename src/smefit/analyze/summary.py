@@ -50,7 +50,6 @@ class SummaryWriter:
     """
 
     def __init__(self, fits, data_groups, coeff_config):
-
         self.fits = fits
         self.data_info = data_groups
         self.coeff_info = coeff_config
@@ -70,7 +69,6 @@ class SummaryWriter:
             summary_dict["EFT order"] = (
                 "Qudratic" if fit.config["use_quad"] else "Linear"
             )
-            summary_dict["pQCD"] = fit.config["order"]
             summary_dict["Replicas"] = fit.n_replica
             label = fit.label.replace(r"\ ", "").replace(r"\rm", "")
             summaries[label] = summary_dict

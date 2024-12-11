@@ -2,6 +2,7 @@
 """Module for the computation of chi-squared values."""
 import json
 
+import jax.numpy as jnp
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.optimize as opt
@@ -21,6 +22,7 @@ def compute_chi2(
     use_quad,
     use_multiplicative_prescription,
     use_replica=False,
+    rgemat=None,
 ):
     r"""
     Compute the :math:`\chi^2`.
@@ -35,6 +37,8 @@ def compute_chi2(
         if True add the |EFT| contribution as a key factor
     use_quad: bool
         if True include also |HO| corrections
+    rgemat: numpy.ndarray
+        solution matrix of the RGE
 
     Returns
     -------
@@ -44,7 +48,7 @@ def compute_chi2(
 
     # compute theory prediction for each point in the dataset
     theory_predictions = pr.make_predictions(
-        dataset, coefficients_values, use_quad, use_multiplicative_prescription
+        dataset, coefficients_values, use_quad, use_multiplicative_prescription, rgemat
     )
 
     # compute experimental central values - theory
@@ -55,7 +59,7 @@ def compute_chi2(
 
     invcovmat = dataset.InvCovMat
     # note @ is slower when running with mpiexec
-    return np.einsum("i,ij,j->", diff, invcovmat, diff)
+    return jnp.einsum("i,ij,j->", diff, invcovmat, diff)
 
 
 class Scanner:
@@ -81,11 +85,11 @@ class Scanner:
             run_card["data_path"],
             run_card["datasets"],
             run_card["coefficients"],
-            run_card["order"],
             run_card["use_quad"],
             run_card["use_theory_covmat"],
             False,
             self.use_multiplicative_prescription,
+            run_card.get("default_order", "LO"),
             run_card.get("theory_path", None),
             run_card.get("rot_to_fit_basis", None),
             run_card.get("uv_couplings", False),
