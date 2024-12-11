@@ -3,23 +3,23 @@
 result_ID: EOS_TEST
 
 # absolute path where results are stored
-result_path: /data/theorie/jthoeve/smefit_release/results/smefit_flavour
+result_path: /Users/jaco/Documents/smefit_release/results/smefit_flavour
 
 # path to common data
-data_path: /data/theorie/jthoeve/smefit_database/commondata
+data_path: /Users/jaco/Documents/smefit_database/commondata
 
 # path to theory tables, default same as data path
-theory_path: /data/theorie/jthoeve/smefit_database/theory
+theory_path: /Users/jaco/Documents/smefit_database/theory
 
 # pQCD order (LO or NLO)
-order: NLO
+order: NLO_QCD
 
 use_theory_covmat: True
 
 use_t0: True
 
 # SMEFT Expansion Order (NHO = Lambda^-2 , HO = Lambda^-4)
-use_quad: True
+use_quad: False
 
 # Set parameter bounds to previous SCAN result
 bounds: Null
@@ -32,12 +32,12 @@ nlive: 100
 # Datasets to include
 datasets:
 
-  - ATLAS_WhelF_8TeV
-  - CMS_WhelF_8TeV
-  - ATLAS_Whel_13TeV
-  - ATLAS_ZH_Hbb_13TeV
-  - ATLAS_WW_13TeV_2016_memu
-  - ATLAS_ttZ_13TeV_pTZ
+  - {name: ATLAS_WhelF_8TeV, order: NLO_QCD}
+  - {name: CMS_WhelF_8TeV, order: NLO_QCD}
+  - {name: ATLAS_Whel_13TeV, order: NLO_QCD}
+  - {name: ATLAS_ZH_Hbb_13TeV, order: NLO_QCD}
+  - {name: ATLAS_WW_13TeV_2016_memu, order: NLO_QCD}
+  - {name: ATLAS_ttZ_13TeV_pTZ, order: NLO_QCD}
 
 # Coefficients to fit
 coefficients:
@@ -51,18 +51,23 @@ coefficients:
 
 
 #external_chi2:
-#  'EOSLikelihood': /data/theorie/jthoeve/smefit_release/smefit_flavour/run_fit.py
+# OptimalWW161:
+#   path: /Users/jaco/Documents/smefit_database/external_chi2/optimal_observables/interface_oos.py
+#   scale: 161.0
+# OptimalWW240:
+#   path: /Users/jaco/Documents/smefit_database/external_chi2/optimal_observables/interface_oos.py
+#   scale: 240.0
+# OptimalWW365:
+#   path: /Users/jaco/Documents/smefit_database/external_chi2/optimal_observables/interface_oos.py
+#   scale: 365.0
+# Optimaltt:
+#   path: /Users/jaco/Documents/smefit_database/external_chi2/optimal_observables/interface_oos.py
+#   scale: 365.0
 
-external_likelihoods:
+
+external_chi2:
 
   - likelihood_type: 'EOSLikelihood'
     id: "2023-01v2"
     likelihood: "WET-ublnu"
-    path: '/data/theorie/jthoeve/smefit_release/smefit_flavour/EOSLikelihood.py'
-
-
-
-
-#uv_couplings: True
-
-rot_to_fit_basis: null
+    path: '/Users/jaco/Documents/smefit_database/external_chi2/EOS/EOSLikelihood.py'

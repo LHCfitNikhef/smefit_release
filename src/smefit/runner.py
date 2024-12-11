@@ -139,7 +139,7 @@ class Runner:
         # add external modules to paths
         if "external_chi2" in config:
             external_chi2 = config["external_chi2"]
-            for _, module in external_chi2.items():
+            for module in external_chi2:
                 module_path = module["path"]
                 path = pathlib.Path(module_path)
                 base_path, stem = path.parent, path.stem
