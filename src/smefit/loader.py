@@ -3,6 +3,7 @@ import json
 import pathlib
 from collections import namedtuple
 
+import jax.numpy as jnp
 import numpy as np
 import pandas as pd
 import scipy.linalg as la
@@ -493,10 +494,11 @@ class Loader:
         return self.dataspec["quad_corrections"]
 
 
-def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None):
+def construct_corrections_matrix_linear(
+    corrections_list, n_data_tot, sorted_keys, rgemat=None
+):
     """
-    Construct a unique list of correction name,
-    with corresponding values.
+    Constructs the linear EFT corrections.
 
     Parameters
     ----------
@@ -506,39 +508,85 @@ def construct_corrections_matrix(corrections_list, n_data_tot, sorted_keys=None)
             total number of experimental data points
         sorted_keys: numpy.ndarray
             list of sorted operator corrections
+        rgemat: numpy.ndarray, optional
+            solution matrix of the RGE, shape (k, l, m) with k the number of datapoints,
+            l the number of generated coefficients and m the number of
+            original |EFT| coefficients specified in the runcard.
 
     Returns
     -------
-        sorted_keys : np.ndarray
-            unique list of operators for which at least one correction is present
         corr_values : np.ndarray
             matrix with correction values (n_data_tot, sorted_keys.size)
     """
 
-    if sorted_keys is None:
-        tmp = [
-            [
-                *c,
-            ]
-            for _, c in corrections_list
-        ]
-        sorted_keys = np.unique([item for sublist in tmp for item in sublist])
     corr_values = np.zeros((n_data_tot, sorted_keys.size))
     cnt = 0
     # loop on experiments
     for n_dat, correction_dict in corrections_list:
         # loop on corrections
         for key, values in correction_dict.items():
-            if "*" in key:
-                op1, op2 = key.split("*")
-                if op2 < op1:
-                    key = f"{op2}*{op1}"
-
             idx = np.where(sorted_keys == key)[0][0]
             corr_values[cnt : cnt + n_dat, idx] = values
         cnt += n_dat
 
-    return sorted_keys, corr_values
+    if rgemat is not None:
+        if len(rgemat.shape) == 3:  # dynamic scale, scale is datapoint specific
+            corr_values = jnp.einsum("ij, ijk -> ik", corr_values, rgemat)
+        else:  # fixed scale so same rgemat for all datapoints
+            corr_values = jnp.einsum("ij, jk -> ik", corr_values, rgemat)
+
+    return corr_values
+
+
+def construct_corrections_matrix_quadratic(
+    corrections_list, n_data_tot, sorted_keys, rgemat=None
+):
+    """
+    Constructs quadratic EFT corrections.
+
+    Parameters
+    ----------
+        corrections_list : list(dict)
+            list containing per experiment the number of datapoints and corresponding corrections
+        n_data_tot : int
+            total number of experimental data points
+        sorted_keys: numpy.ndarray
+            list of sorted operator corrections, shape=(n rg generated coeff,)
+            or shape=(n original coeff,) in the absence of rgemat
+
+    Returns
+    -------
+        corr_values : np.ndarray
+            matrix with correction values (n_data_tot, sorted_keys.size, sorted_keys.size)
+    """
+
+    corr_values = np.zeros((n_data_tot, sorted_keys.size, sorted_keys.size))
+    cnt = 0
+
+    # loop on experiments
+    for n_dat, correction_dict in corrections_list:
+        # loop on corrections
+        for key, values in correction_dict.items():
+            op1, op2 = key.split("*")
+            idx1 = np.where(sorted_keys == op1)[0][0]
+            idx2 = np.where(sorted_keys == op2)[0][0]
+
+            # we want to store the values in the upper triangular part of the matrix
+            if idx1 > idx2:
+                idx1, idx2 = idx2, idx1
+
+            corr_values[cnt : cnt + n_dat, idx1, idx2] = values
+        cnt += n_dat
+
+    if rgemat is not None:
+        if len(rgemat.shape) == 3:  # dynamic scale, scale is datapoint specific
+            corr_values = jnp.einsum(
+                "ijk, ijl, ikr -> ilr", corr_values, rgemat, rgemat
+            )
+        else:  # fixed scale so same rgemat for all datapoints
+            corr_values = jnp.einsum("ijk, jl, kr -> ilr", corr_values, rgemat, rgemat)
+
+    return corr_values
 
 
 def load_datasets(
@@ -554,7 +602,7 @@ def load_datasets(
     rot_to_fit_basis=None,
     has_uv_couplings=False,
     has_external_chi2=False,
-    has_rge=False,
+    rgemat=None,
     cutoff_scale=None,
 ):
     """
@@ -583,8 +631,10 @@ def load_datasets(
             True for UV fits
         has_external_chi2: bool, optional
             True in the presence of external chi2 modules
-        has_rge: bool, optional
-            True in the presence of RGE matrix
+        rgemat: numpy.ndarray, optional
+            solution matrix of the RGE, shape=(k, l, m) with k the number of datapoints,
+            l the number of generated coefficients under the RG and m the number of
+            original |EFT| coefficients specified in the runcard.
         cutoff_scale: float, optional
             kinematic cutoff scale
     """
@@ -638,27 +688,29 @@ def load_datasets(
     exp_data = np.array(exp_data)
     n_data_tot = exp_data.size
 
-    sorted_keys = None
     # if uv couplings are present allow for op which are not in the
     # theory files (same for external chi2 and rge)
-    if has_uv_couplings or has_external_chi2 or has_rge:
+    if has_uv_couplings or has_external_chi2 or rgemat is not None:
         sorted_keys = np.unique((*operators_to_keep,))
-    operators_names, lin_corr_values = construct_corrections_matrix(
-        lin_corr_list, n_data_tot, sorted_keys
+    else:
+        # Construct unique list of operator names entering lin_corr_list
+        operator_names = []
+        for item in lin_corr_list:
+            operator_names.extend(list(item[1].keys()))
+        sorted_keys = np.unique(operator_names)
+
+        # operators to keep contains the operators that are present in the runcard
+        # sorted_keys contains the operators that are present in the theory files
+        # we need to check that all operators in the runcard are also present in the theory files
+        check_missing_operators(sorted_keys, operators_to_keep)
+
+    lin_corr_values = construct_corrections_matrix_linear(
+        lin_corr_list, n_data_tot, sorted_keys, rgemat
     )
-    check_missing_operators(operators_names, operators_to_keep)
 
     if use_quad:
-        quad_corrections_names = []
-        for op1 in operators_names:
-            for op2 in operators_names:
-                if (
-                    f"{op1}*{op2}" not in quad_corrections_names
-                    and f"{op2}*{op1}" not in quad_corrections_names
-                ):
-                    quad_corrections_names.append(f"{op1}*{op2}")
-        _, quad_corr_values = construct_corrections_matrix(
-            quad_corr_list, n_data_tot, np.array(quad_corrections_names)
+        quad_corr_values = construct_corrections_matrix_quadratic(
+            quad_corr_list, n_data_tot, sorted_keys, rgemat
         )
     else:
         quad_corr_values = None
@@ -682,7 +734,7 @@ def load_datasets(
     return DataTuple(
         exp_data,
         np.array(sm_theory),
-        operators_names,
+        sorted_keys,
         lin_corr_values,
         quad_corr_values,
         np.array(exp_name),

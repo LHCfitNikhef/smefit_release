@@ -33,8 +33,8 @@ class TestPredictions:
     )  # Op1, Op2
     quad_corr_values = np.array(
         [
-            [0.3, 0.4, 0.5],
-            [0.6, 0.7, 0.8],
+            [[0.3, 0.4], [0.0, 0.5]],
+            [[0.6, 0.7], [0.0, 0.8]],
         ]
     )  # Op1^2, Op1*Op2, Op2^2
     covmat = np.array([[0.06, 0.02], [0.02, 0.03]])
@@ -77,17 +77,17 @@ class TestPredictions:
         quad_corr = np.array(
             [
                 # data0
-                +self.wilson_coeff[0] ** 2 * self.quad_corr_values[0, 0]
+                +self.wilson_coeff[0] ** 2 * self.quad_corr_values[0, 0, 0]
                 + self.wilson_coeff[0]
                 * self.wilson_coeff[1]
-                * self.quad_corr_values[0, 1]
-                + self.wilson_coeff[1] ** 2 * self.quad_corr_values[0, 2],
+                * self.quad_corr_values[0, 0, 1]
+                + self.wilson_coeff[1] ** 2 * self.quad_corr_values[0, 1, 1],
                 # data1
-                +self.wilson_coeff[0] ** 2 * self.quad_corr_values[1, 0]
+                +self.wilson_coeff[0] ** 2 * self.quad_corr_values[1, 0, 0]
                 + self.wilson_coeff[0]
                 * self.wilson_coeff[1]
-                * self.quad_corr_values[1, 1]
-                + self.wilson_coeff[1] ** 2 * self.quad_corr_values[1, 2],
+                * self.quad_corr_values[1, 0, 1]
+                + self.wilson_coeff[1] ** 2 * self.quad_corr_values[1, 1, 1],
             ]
         )
         quad_corr += lin_corr
