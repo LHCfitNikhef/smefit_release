@@ -70,16 +70,19 @@ class Report:
             self.fits.append(fit)
         self.fits = np.array(self.fits)
 
+        # Get names of datasets for each fit
+        self.dataset_fits = []
+        for fit in self.fits:
+            self.dataset_fits.append([data["name"] for data in fit.config["datasets"]])
+
         # Loads useful information about data
-        self.data_info = self._load_grouped_info(report_config["data_info"], "datasets")
+        self.data_info = self._load_grouped_data_info(report_config["data_info"])
         # Loads coefficients grouped with latex name
-        self.coeff_info = self._load_grouped_info(
-            report_config["coeff_info"], "coefficients"
-        )
+        self.coeff_info = self._load_grouped_coeff_info(report_config["coeff_info"])
         self.html_index = ""
         self.html_content = ""
 
-    def _load_grouped_info(self, raw_dict, key):
+    def _load_grouped_data_info(self, raw_dict):
         """Load grouped info of coefficients and datasets.
 
         Only elements appearing at least once in the fit configs are kept.
@@ -88,8 +91,6 @@ class Report:
         ----------
         raw_dict: dict
             raw dictionary with relevant information
-        key: "datasets" or "coefficients"
-            key to check
 
         Returns
         _______
@@ -101,7 +102,34 @@ class Report:
         for group, entries in raw_dict.items():
             out_dict[group] = {}
             for val in entries:
-                if np.any([val[0] in fit.config[key] for fit in self.fits]):
+                if np.any([val[0] in datasets for datasets in self.dataset_fits]):
+                    out_dict[group][val[0]] = val[1]
+
+            if len(out_dict[group]) == 0:
+                out_dict.pop(group)
+        return pd.DataFrame(out_dict).stack().swaplevel()
+
+    def _load_grouped_coeff_info(self, raw_dict):
+        """Load grouped info of coefficients and datasets.
+
+        Only elements appearing at least once in the fit configs are kept.
+
+        Parameters
+        ----------
+        raw_dict: dict
+            raw dictionary with relevant information
+
+        Returns
+        _______
+        grouped_config: pandas.DataFrame
+            table with information by group
+
+        """
+        out_dict = {}
+        for group, entries in raw_dict.items():
+            out_dict[group] = {}
+            for val in entries:
+                if np.any([val[0] in fit.config["coefficients"] for fit in self.fits]):
                     out_dict[group][val[0]] = val[1]
 
             if len(out_dict[group]) == 0:
