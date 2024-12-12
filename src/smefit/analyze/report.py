@@ -83,7 +83,7 @@ class Report:
         self.html_content = ""
 
     def _load_grouped_data_info(self, raw_dict):
-        """Load grouped info of coefficients and datasets.
+        """Load grouped info of datasets.
 
         Only elements appearing at least once in the fit configs are kept.
 
@@ -110,7 +110,7 @@ class Report:
         return pd.DataFrame(out_dict).stack().swaplevel()
 
     def _load_grouped_coeff_info(self, raw_dict):
-        """Load grouped info of coefficients and datasets.
+        """Load grouped info of coefficients.
 
         Only elements appearing at least once in the fit configs are kept.
 
