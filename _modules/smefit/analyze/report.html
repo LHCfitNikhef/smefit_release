@@ -189,17 +189,20 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">)</span>
 
+        <span class="c1"># Get names of datasets for each fit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset_fits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset_fits</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">fit</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;datasets&quot;</span><span class="p">]])</span>
+
         <span class="c1"># Loads useful information about data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_grouped_info</span><span class="p">(</span><span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;data_info&quot;</span><span class="p">],</span> <span class="s2">&quot;datasets&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_grouped_data_info</span><span class="p">(</span><span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;data_info&quot;</span><span class="p">])</span>
         <span class="c1"># Loads coefficients grouped with latex name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_grouped_info</span><span class="p">(</span>
-            <span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;coeff_info&quot;</span><span class="p">],</span> <span class="s2">&quot;coefficients&quot;</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_grouped_coeff_info</span><span class="p">(</span><span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;coeff_info&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">html_index</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">html_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_load_grouped_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_dict</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load grouped info of coefficients and datasets.</span>
+    <span class="k">def</span> <span class="nf">_load_grouped_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load grouped info of datasets.</span>
 
 <span class="sd">        Only elements appearing at least once in the fit configs are kept.</span>
 
@@ -207,8 +210,6 @@
 <span class="sd">        ----------</span>
 <span class="sd">        raw_dict: dict</span>
 <span class="sd">            raw dictionary with relevant information</span>
-<span class="sd">        key: &quot;datasets&quot; or &quot;coefficients&quot;</span>
-<span class="sd">            key to check</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        _______</span>
@@ -220,7 +221,34 @@
         <span class="k">for</span> <span class="n">group</span><span class="p">,</span> <span class="n">entries</span> <span class="ow">in</span> <span class="n">raw_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">out_dict</span><span class="p">[</span><span class="n">group</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">([</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">fit</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">]):</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">([</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">datasets</span> <span class="k">for</span> <span class="n">datasets</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset_fits</span><span class="p">]):</span>
+                    <span class="n">out_dict</span><span class="p">[</span><span class="n">group</span><span class="p">][</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">out_dict</span><span class="p">[</span><span class="n">group</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">out_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out_dict</span><span class="p">)</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span><span class="o">.</span><span class="n">swaplevel</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_load_grouped_coeff_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load grouped info of coefficients.</span>
+
+<span class="sd">        Only elements appearing at least once in the fit configs are kept.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        raw_dict: dict</span>
+<span class="sd">            raw dictionary with relevant information</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        _______</span>
+<span class="sd">        grouped_config: pandas.DataFrame</span>
+<span class="sd">            table with information by group</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">group</span><span class="p">,</span> <span class="n">entries</span> <span class="ow">in</span> <span class="n">raw_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">out_dict</span><span class="p">[</span><span class="n">group</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">([</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">fit</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;coefficients&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">fit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">]):</span>
                     <span class="n">out_dict</span><span class="p">[</span><span class="n">group</span><span class="p">][</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">out_dict</span><span class="p">[</span><span class="n">group</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
