@@ -3,7 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib import colors
+from matplotlib.patches import Polygon
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from numpy.f2py.crackfortran import privatepattern
 from rich.progress import track
 
 from .latex_tools import latex_packages
@@ -316,6 +318,135 @@ class FisherCalculator:
         )
         return L
 
+    @staticmethod
+    def unify_fishers(df, df_other):
+
+        # Get the union of row and column indices
+        all_rows = df.index.union(df_other.index)
+        all_columns = df.columns.union(df_other.columns)
+
+        # Reindex both DataFrames to have the same rows and columns
+        df = df.reindex(index=all_rows, columns=all_columns, fill_value=0)
+        df_other = df_other.reindex(index=all_rows, columns=all_columns, fill_value=0)
+
+        return df, df_other
+
+    def plot_heatmap_triangle(
+        self,
+        latex_names,
+        fig_name,
+        title=None,
+        df_other=None,
+        summary_only=True,
+        figsize=(11, 15),
+    ):
+
+        if summary_only:
+            fisher_df = self.summary_table
+            quad_fisher_df = self.summary_HOtable
+        else:
+            fisher_df = self.lin_fisher
+            quad_fisher_df = self.quad_fisher
+
+        fisher_df_1, fisher_df_2 = self.unify_fishers(fisher_df, df_other)
+        cols, rows = fisher_df_1.shape
+
+        # colour map
+        cmap_full = plt.get_cmap("Blues")
+        cmap = colors.LinearSegmentedColormap.from_list(
+            f"trunc({{{cmap_full.name}}},{{0}},{{0.8}})",
+            cmap_full(np.linspace(0, 0.8, 100)),
+        )
+        norm = colors.BoundaryNorm(np.arange(110, step=10), cmap.N)
+
+        # ticks
+        yticks = np.arange(fisher_df.shape[1])
+        xticks = np.arange(fisher_df.shape[0])
+        x_labels = [f"\\rm{{{name}}}".replace("_", "\\_") for name in fisher_df.index]
+
+        def set_ticks(ax):
+            ax.set_yticks(yticks, labels=latex_names, fontsize=15)
+            ax.set_xticks(
+                xticks,
+                labels=x_labels,
+                rotation=90,
+                fontsize=15,
+            )
+            ax.xaxis.set_ticks_position("top")
+            ax.tick_params(which="major", top=False, bottom=False, left=False)
+            # minor grid
+            ax.set_xticks(xticks - 0.5, minor=True)
+            ax.set_yticks(yticks - 0.5, minor=True)
+            ax.tick_params(which="minor", bottom=False)
+            ax.grid(visible=True, which="minor", alpha=0.2)
+
+        def plot_values(ax, df_1, df_2):
+
+            for i, row in enumerate(df_1.values.T):
+                for j, elem_1 in enumerate(row):
+                    elem_2 = df_2.values.T[i, j]
+
+                    x, y = j, i
+                    x = x - 0.5
+                    y = y - 0.5
+                    if elem_1 > 0:
+                        ax.text(
+                            j - 0.2,
+                            i - 0.2,
+                            f"{elem_1:.1f}",
+                            va="center",
+                            ha="center",
+                            fontsize=8,
+                        )
+
+                    if elem_2 > 0:
+                        ax.text(
+                            j + 0.2,
+                            i + 0.2,
+                            f"{elem_2:.1f}",
+                            va="center",
+                            ha="center",
+                            fontsize=8,
+                        )
+
+                    triangle1 = Polygon(
+                        [[x, y], [x + 1, y], [x, y + 1]],
+                        closed=True,
+                        facecolor=cmap(norm(elem_1)),
+                        edgecolor="black",
+                    )
+                    ax.add_patch(triangle1)
+
+                    triangle2 = Polygon(
+                        [[x + 1, y], [x + 1, y + 1], [x, y + 1]],
+                        closed=True,
+                        facecolor=cmap(norm(elem_2)),
+                        edgecolor="black",
+                    )
+                    #
+                    ax.add_patch(triangle2)
+            ax.set_xlim(0, cols - 0.5)
+            ax.set_ylim(0, rows - 0.5)
+
+        fig = plt.figure(figsize=figsize)
+        if quad_fisher_df is not None:
+            ax = fig.add_subplot(121)
+        else:
+            ax = plt.gca()
+
+        plot_values(ax, fisher_df_1, fisher_df_2)
+
+        set_ticks(ax)
+        ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
+        # cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
+        # colour_bar = fig.colorbar(cax, cax=cax1)
+        # fig.subplots_adjust(top=0.85)
+
+        plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25, y=0.98)
+
+        plt.savefig(f"{fig_name}.pdf")
+        plt.savefig(f"{fig_name}.png")
+
     def plot(
         self,
         latex_names,
@@ -324,7 +455,6 @@ class FisherCalculator:
         other=None,
         summary_only=True,
         figsize=(11, 15),
-        fit_list=None,
     ):
         """Plot the heat map of Fisher table.
 
@@ -384,79 +514,33 @@ class FisherCalculator:
             ax.grid(visible=True, which="minor", alpha=0.2)
 
         def plot_values(ax, df):
-
-            for key in df.columns:  # columns
-                for i, elem in enumerate(df[key]):
-                    ax.text(
-                        i - 0.2,
-                        df.columns.get_loc(key) - 0.2,
-                        f"{elem:.1f}",
-                        va="center",
-                        ha="center",
-                        fontsize=8,
-                    )
-
-            if other is not None:
-                for key in other.columns:  # columns
-                    for i, elem in enumerate(other[key]):
+            for i, row in enumerate(df.values.T):
+                for j, elem in enumerate(row):
+                    if elem > 0:
                         ax.text(
-                            i + 0.2,
-                            df.columns.get_loc(key) + 0.2,
+                            j,
+                            i,
                             f"{elem:.1f}",
                             va="center",
                             ha="center",
                             fontsize=8,
                         )
 
-        rows = fisher_df.values.T.shape[0]
-        cols = fisher_df.values.T.shape[1]
-        from matplotlib.patches import Polygon
-
-        if other is not None:
-
-            for i in range(rows):
-                for j in range(cols):
-                    # Coordinates of the cell
-                    x, y = j, rows - i - 1  # Flip y for correct orientation
-                    x = x - 0.5
-                    y = y - 0.5
-                    # Top-left triangle (value1)
-                    triangle1 = Polygon(
-                        [[x, y], [x + 1, y], [x, y + 1]],
-                        closed=True,
-                        facecolor=cmap(norm(fisher_df.values.T[i, j])),
-                        edgecolor="black",
-                    )
-                    ax.add_patch(triangle1)
-
-                    # Bottom-right triangle (value2)
-                    # triangle2 = Polygon([[x + 1, y], [x + 1, y + 1], [x, y + 1]], closed=True, color=cmap(norm(other.values.T[i, j])))
-                    triangle2 = Polygon(
-                        [[x + 1, y], [x + 1, y + 1], [x, y + 1]],
-                        closed=True,
-                        facecolor="red",
-                        edgecolor="black",
-                    )
-
-                    ax.add_patch(triangle2)
-
         cax = ax.matshow(fisher_df.values.T, cmap=cmap, norm=norm)
-
         plot_values(ax, fisher_df)
         set_ticks(ax)
         ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
-
         cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
         colour_bar = fig.colorbar(cax, cax=cax1)
 
-        # if quad_fisher_df is not None:
-        #     ax = fig.add_subplot(122)
-        #     cax = ax.matshow(quad_fisher_df.values.T, cmap=cmap, norm=norm)
-        #     # plot_values(ax, quad_fisher_df)
-        #     # set_ticks(ax)
-        #     ax.set_title(r"\rm Quadratic", fontsize=20, y=-0.08)
-        #     cax1 = make_axes_locatable(ax).append_axes("right", size="10%", pad=0.1)
-        #     colour_bar = fig.colorbar(cax, cax=cax1)
+        if quad_fisher_df is not None:
+            ax = fig.add_subplot(122)
+            cax = ax.matshow(quad_fisher_df.values.T, cmap=cmap, norm=norm)
+            plot_values(ax, quad_fisher_df)
+            set_ticks(ax)
+            ax.set_title(r"\rm Quadratic", fontsize=20, y=-0.08)
+            cax1 = make_axes_locatable(ax).append_axes("right", size="10%", pad=0.1)
+            colour_bar = fig.colorbar(cax, cax=cax1)
 
         fig.subplots_adjust(top=0.85)
 

@@ -575,11 +575,11 @@ class Report:
 
         fit_plot = copy.deepcopy(plot)
         title = fit.label if fit_plot.pop("title") else None
-        fisher_cal.plot(
+        fisher_cal.plot_heatmap_triangle(
             free_coeff_config,
             f"{self.report}/fisher_heatmap_both",
             title=title,
-            other=fit_list[0].fisher,
+            df_other=fit_list[0].fisher,
             **fit_plot,
         )
         figs_list.append(f"fisher_heatmap_both")
