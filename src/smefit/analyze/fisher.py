@@ -410,13 +410,7 @@ class FisherCalculator:
                             fontsize=8,
                         )
 
-                    triangle1 = Polygon(
-                        [[x, y], [x + 1, y], [x, y + 1]],
-                        closed=True,
-                        facecolor=cmap(norm(elem_1)),
-                        edgecolor="black",
-                    )
-                    ax.add_patch(triangle1)
+                    edgecolor_1 = "red" if elem_2 == 0 and elem_1 > 0 else "black"
 
                     triangle2 = Polygon(
                         [[x + 1, y], [x + 1, y + 1], [x, y + 1]],
@@ -426,6 +420,15 @@ class FisherCalculator:
                     )
 
                     ax.add_patch(triangle2)
+
+                    triangle1 = Polygon(
+                        [[x, y], [x + 1, y], [x, y + 1]],
+                        closed=True,
+                        facecolor=cmap(norm(elem_1)),
+                        edgecolor=edgecolor_1,
+                    )
+                    ax.add_patch(triangle1)
+
             ax.set_xlim(-0.5, cols - 0.5)
             ax.set_ylim(-0.5, rows - 0.5)
 
@@ -453,7 +456,7 @@ class FisherCalculator:
 
         plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25, y=0.98)
 
-        fig.tight_layout()
+        # fig.tight_layout()
         plt.savefig(f"{fig_name}.pdf")
         plt.savefig(f"{fig_name}.png")
 
