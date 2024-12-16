@@ -140,7 +140,6 @@
     <span class="n">use_quad</span><span class="p">,</span>
     <span class="n">use_multiplicative_prescription</span><span class="p">,</span>
     <span class="n">use_replica</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">rgemat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the :math:`\chi^2`.</span>
@@ -166,7 +165,7 @@
 
     <span class="c1"># compute theory prediction for each point in the dataset</span>
     <span class="n">theory_predictions</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">make_predictions</span><span class="p">(</span>
-        <span class="n">dataset</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">,</span> <span class="n">use_quad</span><span class="p">,</span> <span class="n">use_multiplicative_prescription</span><span class="p">,</span> <span class="n">rgemat</span>
+        <span class="n">dataset</span><span class="p">,</span> <span class="n">coefficients_values</span><span class="p">,</span> <span class="n">use_quad</span><span class="p">,</span> <span class="n">use_multiplicative_prescription</span>
     <span class="p">)</span>
 
     <span class="c1"># compute experimental central values - theory</span>

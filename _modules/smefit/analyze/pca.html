@@ -128,7 +128,6 @@
 <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
 
 <span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
-<span class="kn">from</span> <span class="nn">..compute_theory</span> <span class="kn">import</span> <span class="n">flatten</span>
 <span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">load_datasets</span>
 <span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">latex_packages</span>
 
@@ -335,9 +334,13 @@
                 <span class="n">params</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
                 <span class="n">temp_coeffs</span><span class="o">.</span><span class="n">set_free_parameters</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
                 <span class="n">temp_coeffs</span><span class="o">.</span><span class="n">set_constraints</span><span class="p">()</span>
-                <span class="n">coeff_outer_coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">temp_coeffs</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">temp_coeffs</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
                 <span class="n">new_quad_corrections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">flatten</span><span class="p">(</span><span class="n">coeff_outer_coeff</span><span class="p">)</span> <span class="o">@</span> <span class="n">dataset</span><span class="o">.</span><span class="n">QuadraticCorrections</span><span class="o">.</span><span class="n">T</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
+                        <span class="s2">&quot;ijk,j,k -&gt; i&quot;</span><span class="p">,</span>
+                        <span class="n">dataset</span><span class="o">.</span><span class="n">QuadraticCorrections</span><span class="p">,</span>
+                        <span class="n">temp_coeffs</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                        <span class="n">temp_coeffs</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                    <span class="p">)</span>
                 <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">update_quad</span><span class="p">:</span>
