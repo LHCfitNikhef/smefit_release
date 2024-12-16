@@ -384,30 +384,29 @@ class FisherCalculator:
             ax.grid(visible=True, which="minor", alpha=0.2)
 
         def plot_values(ax, df):
-            for i, row in enumerate(df.values.T):
-                for j, elem in enumerate(row):
-                    if elem > 0:
+
+            for key in df.columns:  # columns
+                for i, elem in enumerate(df[key]):
+                    ax.text(
+                        i - 0.2,
+                        df.columns.get_loc(key) - 0.2,
+                        f"{elem:.1f}",
+                        va="center",
+                        ha="center",
+                        fontsize=8,
+                    )
+
+            if other is not None:
+                for key in other.columns:  # columns
+                    for i, elem in enumerate(other[key]):
                         ax.text(
-                            j - 0.25,
-                            i - 0.25,
+                            i + 0.2,
+                            df.columns.get_loc(key) + 0.2,
                             f"{elem:.1f}",
                             va="center",
                             ha="center",
                             fontsize=8,
                         )
-
-            if other is not None:
-                for i, row in enumerate(other.values.T):
-                    for j, elem in enumerate(row):
-                        if elem > 0:
-                            ax.text(
-                                j + 0.25,
-                                i + 0.25,
-                                f"{elem:.1f}",
-                                va="center",
-                                ha="center",
-                                fontsize=8,
-                            )
 
         rows = fisher_df.values.T.shape[0]
         cols = fisher_df.values.T.shape[1]
@@ -425,7 +424,8 @@ class FisherCalculator:
                     triangle1 = Polygon(
                         [[x, y], [x + 1, y], [x, y + 1]],
                         closed=True,
-                        color=cmap(norm(fisher_df.values.T[i, j])),
+                        facecolor=cmap(norm(fisher_df.values.T[i, j])),
+                        edgecolor="black",
                     )
                     ax.add_patch(triangle1)
 
@@ -434,12 +434,14 @@ class FisherCalculator:
                     triangle2 = Polygon(
                         [[x + 1, y], [x + 1, y + 1], [x, y + 1]],
                         closed=True,
-                        color="red",
+                        facecolor="red",
+                        edgecolor="black",
                     )
 
                     ax.add_patch(triangle2)
 
         cax = ax.matshow(fisher_df.values.T, cmap=cmap, norm=norm)
+
         plot_values(ax, fisher_df)
         set_ticks(ax)
         ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
