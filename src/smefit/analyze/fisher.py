@@ -53,7 +53,6 @@ class FisherCalculator:
         fisher_tab = []
         cnt = 0
         for ndat in self.datasets.NdataExp:
-            fisher_row = np.zeros(self.free_parameters.size)
             idxs = slice(cnt, cnt + ndat)
             sigma = self.new_LinearCorrections[:, idxs]
             fisher_row = np.diag(sigma @ self.datasets.InvCovMat[idxs, idxs] @ sigma.T)
@@ -322,8 +321,10 @@ class FisherCalculator:
         latex_names,
         fig_name,
         title=None,
+        other=None,
         summary_only=True,
         figsize=(11, 15),
+        fit_list=None,
     ):
         """Plot the heat map of Fisher table.
 
@@ -387,29 +388,73 @@ class FisherCalculator:
                 for j, elem in enumerate(row):
                     if elem > 0:
                         ax.text(
-                            j,
-                            i,
+                            j - 0.25,
+                            i - 0.25,
                             f"{elem:.1f}",
                             va="center",
                             ha="center",
                             fontsize=8,
                         )
 
+            if other is not None:
+                for i, row in enumerate(other.values.T):
+                    for j, elem in enumerate(row):
+                        if elem > 0:
+                            ax.text(
+                                j + 0.25,
+                                i + 0.25,
+                                f"{elem:.1f}",
+                                va="center",
+                                ha="center",
+                                fontsize=8,
+                            )
+
+        rows = fisher_df.values.T.shape[0]
+        cols = fisher_df.values.T.shape[1]
+        from matplotlib.patches import Polygon
+
+        if other is not None:
+
+            for i in range(rows):
+                for j in range(cols):
+                    # Coordinates of the cell
+                    x, y = j, rows - i - 1  # Flip y for correct orientation
+                    x = x - 0.5
+                    y = y - 0.5
+                    # Top-left triangle (value1)
+                    triangle1 = Polygon(
+                        [[x, y], [x + 1, y], [x, y + 1]],
+                        closed=True,
+                        color=cmap(norm(fisher_df.values.T[i, j])),
+                    )
+                    ax.add_patch(triangle1)
+
+                    # Bottom-right triangle (value2)
+                    # triangle2 = Polygon([[x + 1, y], [x + 1, y + 1], [x, y + 1]], closed=True, color=cmap(norm(other.values.T[i, j])))
+                    triangle2 = Polygon(
+                        [[x + 1, y], [x + 1, y + 1], [x, y + 1]],
+                        closed=True,
+                        color="red",
+                    )
+
+                    ax.add_patch(triangle2)
+
         cax = ax.matshow(fisher_df.values.T, cmap=cmap, norm=norm)
         plot_values(ax, fisher_df)
         set_ticks(ax)
         ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
+
         cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
         colour_bar = fig.colorbar(cax, cax=cax1)
 
-        if quad_fisher_df is not None:
-            ax = fig.add_subplot(122)
-            cax = ax.matshow(quad_fisher_df.values.T, cmap=cmap, norm=norm)
-            plot_values(ax, quad_fisher_df)
-            set_ticks(ax)
-            ax.set_title(r"\rm Quadratic", fontsize=20, y=-0.08)
-            cax1 = make_axes_locatable(ax).append_axes("right", size="10%", pad=0.1)
-            colour_bar = fig.colorbar(cax, cax=cax1)
+        # if quad_fisher_df is not None:
+        #     ax = fig.add_subplot(122)
+        #     cax = ax.matshow(quad_fisher_df.values.T, cmap=cmap, norm=norm)
+        #     # plot_values(ax, quad_fisher_df)
+        #     # set_ticks(ax)
+        #     ax.set_title(r"\rm Quadratic", fontsize=20, y=-0.08)
+        #     cax1 = make_axes_locatable(ax).append_axes("right", size="10%", pad=0.1)
+        #     colour_bar = fig.colorbar(cax, cax=cax1)
 
         fig.subplots_adjust(top=0.85)
 

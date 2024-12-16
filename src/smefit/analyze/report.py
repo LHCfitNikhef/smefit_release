@@ -533,6 +533,7 @@ class Report:
             fisher_cal.summary_table = fisher_cal.groupby_data(
                 fisher_cal.lin_fisher, self.data_info, norm, log
             )
+            fit.fisher = fisher_cal.summary_table
 
             # if necessary compute the quadratic Fisher
             if compute_quad:
@@ -569,4 +570,19 @@ class Report:
                     **fit_plot,
                 )
                 figs_list.append(f"fisher_heatmap_{fit.name}")
+
+        # TODO: unindent if plot is not None above?
+
+        fit_plot = copy.deepcopy(plot)
+        title = fit.label if fit_plot.pop("title") else None
+        fisher_cal.plot(
+            free_coeff_config,
+            f"{self.report}/fisher_heatmap_both",
+            title=title,
+            other=fit_list[0].fisher,
+            **fit_plot,
+        )
+        figs_list.append(f"fisher_heatmap_both")
+
+        # self.fits[0].fisher
         self._append_section("Fisher", figs=figs_list, links=links_list)

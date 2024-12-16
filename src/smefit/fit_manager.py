@@ -143,6 +143,8 @@ class FitManager:
             rgemat=self.rgemat,
         )
 
+        # TODO: load also without rg for the fisher
+
     @property
     def smeft_predictions(self):
         """Compute |SMEFT| predictions for each replica.
