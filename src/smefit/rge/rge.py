@@ -453,13 +453,11 @@ def load_rge_matrix(
         gen_operators = list(rgemat.index)
         operators_to_keep = {k: {} for k in gen_operators}
 
-        # save RGE matrix to result_path
-        if result_path is not None:
-            result_path = pathlib.Path(result_path) / result_ID
-            with open(result_path / "rge_matrix.pkl", "wb") as f:
-                pickle.dump(rgemat.values, f)
+        # prepend additional dimension for consistency with the dynamic scale case
+        stacked_mats = jnp.stack([rgemat.values])
+        save_rg(pathlib.Path(result_path) / result_ID, rgemat=[rgemat])
 
-        return rgemat.values, operators_to_keep
+        return stacked_mats, operators_to_keep
 
     elif obs_scale == "dynamic":
         scales = load_scales(
@@ -501,10 +499,7 @@ def load_rge_matrix(
         stacked_mats = jnp.stack([mat.values for mat in rgemat])
 
         # save RGE matrix to result_path
-        if result_path is not None:
-            result_path = pathlib.Path(result_path) / result_ID
-            with open(result_path / "rge_matrix.pkl", "wb") as f:
-                pickle.dump(stacked_mats, f)
+        save_rg(pathlib.Path(result_path) / result_ID, rgemat=rgemat)
 
         return stacked_mats, operators_to_keep
 
@@ -512,3 +507,19 @@ def load_rge_matrix(
         raise ValueError(
             f"obs_scale must be either a float/int or 'dynamic'. Passed: {obs_scale}"
         )
+
+
+def save_rg(path, rgemat):
+    """
+    Save the RGE matrix to the result folder.
+
+    Parameters
+    ----------
+    path : pathlib.Path
+        path to the result folder
+    rgemat: list
+        List of RGE matrices for each datapoint
+    """
+    if path is not None:
+        with open(path / "rge_matrix.pkl", "wb") as f:
+            pickle.dump(rgemat, f)
