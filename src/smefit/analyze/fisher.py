@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -423,10 +424,10 @@ class FisherCalculator:
                         facecolor=cmap(norm(elem_2)),
                         edgecolor="black",
                     )
-                    #
+
                     ax.add_patch(triangle2)
-            ax.set_xlim(0, cols - 0.5)
-            ax.set_ylim(0, rows - 0.5)
+            ax.set_xlim(-0.5, cols - 0.5)
+            ax.set_ylim(-0.5, rows - 0.5)
 
         fig = plt.figure(figsize=figsize)
         if quad_fisher_df is not None:
@@ -438,12 +439,21 @@ class FisherCalculator:
 
         set_ticks(ax)
         ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
-        # cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
-        # colour_bar = fig.colorbar(cax, cax=cax1)
-        # fig.subplots_adjust(top=0.85)
+        cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
+        colour_bar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1)
+
+        fig.subplots_adjust(top=0.85)
+
+        colour_bar.set_label(
+            r"${\rm Normalized\ Value}$",
+            fontsize=25,
+            labelpad=30,
+            rotation=270,
+        )
 
         plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25, y=0.98)
 
+        fig.tight_layout()
         plt.savefig(f"{fig_name}.pdf")
         plt.savefig(f"{fig_name}.png")
 
