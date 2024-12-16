@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+import pickle
 
 import numpy as np
 import pandas as pd
@@ -54,6 +55,7 @@ class FitManager:
         self.has_posterior = self.config.get("has_posterior", True)
         self.results = None
         self.datasets = None
+        self.rgemat = None
 
     def __repr__(self):
         return self.name
@@ -72,6 +74,13 @@ class FitManager:
             file = "fit_results"
         with open(f"{self.path}/{self.name}/{file}.json", encoding="utf-8") as f:
             results = json.load(f)
+
+        # load the rge matrix in the result dir if it exists
+        try:
+            with open(f"{self.path}/{self.name}/rge_matrix.pkl", "rb") as f:
+                self.rgemat = pickle.load(f)
+        except FileNotFoundError:
+            print("No RGE matrix found in the result folder, skipping...")
 
         # if the posterior is from single parameter fits
         # then each distribution might have a different number of samples

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import pickle
 import warnings
 from copy import deepcopy
 from functools import partial, wraps
@@ -13,7 +14,7 @@ from numpy import ComplexWarning
 
 from smefit import log
 from smefit.loader import Loader
-from smefit.wcxf import inverse_wcxf_translate, wcxf_translate
+from smefit.rge.wcxf import inverse_wcxf_translate, wcxf_translate
 
 ### Patch of a CKM function, so that the CP violating
 ### phase is set to gamma and not computed explicitly
@@ -412,7 +413,13 @@ def load_scales(
 
 
 def load_rge_matrix(
-    rge_dict, coeff_list, datasets=None, theory_path=None, cutoff_scale=None
+    rge_dict,
+    coeff_list,
+    datasets=None,
+    theory_path=None,
+    cutoff_scale=None,
+    result_path=None,
+    result_ID=None,
 ):
     """
     Load the RGE matrix for the SMEFT Wilson coefficients.
@@ -445,6 +452,13 @@ def load_rge_matrix(
         rgemat = rge_runner.RGEmatrix(obs_scale)
         gen_operators = list(rgemat.index)
         operators_to_keep = {k: {} for k in gen_operators}
+
+        # save RGE matrix to result_path
+        if result_path is not None:
+            result_path = pathlib.Path(result_path) / result_ID
+            with open(result_path / "rge_matrix.pkl", "wb") as f:
+                pickle.dump(rgemat.values, f)
+
         return rgemat.values, operators_to_keep
 
     elif obs_scale == "dynamic":
@@ -485,6 +499,13 @@ def load_rge_matrix(
 
         # now stack the matrices in a 3D array
         stacked_mats = jnp.stack([mat.values for mat in rgemat])
+
+        # save RGE matrix to result_path
+        if result_path is not None:
+            result_path = pathlib.Path(result_path) / result_ID
+            with open(result_path / "rge_matrix.pkl", "wb") as f:
+                pickle.dump(stacked_mats, f)
+
         return stacked_mats, operators_to_keep
 
     else:
