@@ -341,6 +341,7 @@ class FisherCalculator:
         summary_only=True,
         figsize=(11, 15),
         column_names=None,
+        order_rows=False,
     ):
 
         if summary_only:
@@ -357,6 +358,8 @@ class FisherCalculator:
             custom_ordering = [list(column.keys())[0] for column in column_names]
             fisher_df_1 = fisher_df_1.loc[custom_ordering]
             fisher_df_2 = fisher_df_2.loc[custom_ordering]
+            fisher_df_1 = fisher_df_1[latex_names.index.get_level_values(level=1)]
+            fisher_df_2 = fisher_df_2[latex_names.index.get_level_values(level=1)]
             x_labels = [list(column.values())[0] for column in column_names]
         else:
             x_labels = [
@@ -397,13 +400,15 @@ class FisherCalculator:
                 for j, elem_1 in enumerate(row):
                     elem_2 = df_2.values.T[i, j]
 
-                    x, y = j, rows - 1 - i
-                    x = x - 0.5
-                    y = y - 0.5
+                    x, y = (
+                        j,
+                        rows - 1 - i,
+                    )  # rows - 1 is needed to start filling from the top
+
                     if elem_1 > 0:
                         ax.text(
-                            j - 0.2,
-                            rows - 1 - i - 0.2,
+                            x - 0.2,
+                            y - 0.2,
                             f"{elem_1:.1f}",
                             va="center",
                             ha="center",
@@ -412,35 +417,45 @@ class FisherCalculator:
 
                     if elem_2 > 0:
                         ax.text(
-                            j + 0.2,
-                            rows - 1 - i + 0.2,
+                            x + 0.2,
+                            y + 0.2,
                             f"{elem_2:.1f}",
                             va="center",
                             ha="center",
                             fontsize=8,
                         )
 
-                    if not (elem_1 == 0 and elem_2 == 0):
-                        edgecolor_1 = "red" if elem_2 == 0 and elem_1 > 0 else "black"
+                    # plot the triangles
+                    if elem_1 > 0 or elem_2 > 0:
+
+                        # highlight operators that enter in 1 but not in 2
                         triangle2 = Polygon(
-                            [[x + 1, y], [x + 1, y + 1], [x, y + 1]],
+                            [
+                                [x + 0.5, y - 0.5],
+                                [x + 0.5, y + 0.5],
+                                [x - 0.5, y + 0.5],
+                            ],
                             closed=True,
                             facecolor=cmap(norm(elem_2)),
                             edgecolor="black",
                         )
-
                         ax.add_patch(triangle2)
 
+                        edgecolor_1 = "red" if elem_2 == 0 and elem_1 > 0 else "black"
                         triangle1 = Polygon(
-                            [[x, y], [x + 1, y], [x, y + 1]],
+                            [
+                                [x - 0.5, y - 0.5],
+                                [x + 0.5, y - 0.5],
+                                [x - 0.5, y + 0.5],
+                            ],
                             closed=True,
                             facecolor=cmap(norm(elem_1)),
                             edgecolor=edgecolor_1,
                         )
                         ax.add_patch(triangle1)
 
-            ax.set_xlim(-0.5, cols - 0.5)
-            ax.set_ylim(-0.5, rows - 0.5)
+            ax.set_xlim(0, cols - 0.5)
+            ax.set_ylim(0, rows - 0.5)
             ax.set_aspect("equal", adjustable="box")
 
         fig = plt.figure(figsize=figsize)
@@ -467,7 +482,6 @@ class FisherCalculator:
 
         plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25, y=0.98)
 
-        # fig.tight_layout()
         plt.savefig(f"{fig_name}.pdf")
         plt.savefig(f"{fig_name}.png")
 
@@ -480,6 +494,7 @@ class FisherCalculator:
         summary_only=True,
         figsize=(11, 15),
         column_names=None,
+        order_rows=False,
     ):
         """Plot the heat map of Fisher table.
 
@@ -497,6 +512,7 @@ class FisherCalculator:
         title: str, None
             plot title
         """
+
         if summary_only:
             fisher_df = self.summary_table
             quad_fisher_df = self.summary_HOtable
