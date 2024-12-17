@@ -548,9 +548,10 @@ class Report:
                 )
 
             # Write down the table in latex
-            free_coeff_config = self.coeff_info.loc[
-                :, fit.coefficients.free_parameters.index
-            ]
+            # free_coeff_config = self.coeff_info.loc[
+            #     :, fit.coefficients.free_parameters.index
+            # ]
+            free_coeff_config = self.coeff_info
             compile_tex(
                 self.report,
                 fisher_cal.write_grouped(

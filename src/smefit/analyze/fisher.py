@@ -376,7 +376,7 @@ class FisherCalculator:
         xticks = np.arange(fisher_df.shape[0])
 
         def set_ticks(ax):
-            ax.set_yticks(yticks, labels=latex_names, fontsize=15)
+            ax.set_yticks(yticks, labels=latex_names[::-1], fontsize=15)
             ax.set_xticks(
                 xticks,
                 labels=x_labels,
@@ -397,13 +397,13 @@ class FisherCalculator:
                 for j, elem_1 in enumerate(row):
                     elem_2 = df_2.values.T[i, j]
 
-                    x, y = j, i
+                    x, y = j, rows - 1 - i
                     x = x - 0.5
                     y = y - 0.5
                     if elem_1 > 0:
                         ax.text(
                             j - 0.2,
-                            i - 0.2,
+                            rows - 1 - i - 0.2,
                             f"{elem_1:.1f}",
                             va="center",
                             ha="center",
@@ -413,7 +413,7 @@ class FisherCalculator:
                     if elem_2 > 0:
                         ax.text(
                             j + 0.2,
-                            i + 0.2,
+                            rows - 1 - i + 0.2,
                             f"{elem_2:.1f}",
                             va="center",
                             ha="center",
@@ -456,7 +456,7 @@ class FisherCalculator:
         cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
         colour_bar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1)
 
-        fig.subplots_adjust(top=0.85)
+        fig.subplots_adjust(top=0.9)
 
         colour_bar.set_label(
             r"${\rm Normalized\ Value}$",
