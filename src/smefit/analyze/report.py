@@ -563,7 +563,7 @@ class Report:
             if plot is not None:
                 fit_plot = copy.deepcopy(plot)
                 title = fit.label if fit_plot.pop("title") else None
-                fisher_cal.plot(
+                fisher_cal.plot_heatmap(
                     free_coeff_config,
                     f"{self.report}/fisher_heatmap_{fit.name}",
                     title=title,
@@ -573,7 +573,7 @@ class Report:
 
         fit_plot = copy.deepcopy(plot)
         title = fit.label if fit_plot.pop("title") else None
-        fisher_cal.plot_heatmap_triangle(
+        fisher_cal.plot_heatmap(
             free_coeff_config,
             f"{self.report}/fisher_heatmap_both",
             title=title,
