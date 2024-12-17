@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import matplotlib as mpl
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib import colors
+from matplotlib.legend_handler import HandlerPatch
 from matplotlib.patches import Polygon
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from numpy.f2py.crackfortran import privatepattern
@@ -11,6 +13,37 @@ from rich.progress import track
 
 from .latex_tools import latex_packages
 from .pca import impose_constrain
+
+
+class HandlerTriangle(HandlerPatch):
+    def create_artists(
+        self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans
+    ):
+        center = (width / 2 - xdescent, height / 2 - ydescent)
+        size = min(width, height) / 2
+        # Define the lower-left triangle vertices
+        # if orig_handle.get_facecolor() == "blue":  # Blue triangle (lower-left)
+        if orig_handle.xy[0, 0] < orig_handle.xy[1, 0]:
+            vertices = [
+                (center[0] - size, center[1] - size),  # Bottom-left
+                (center[0] + size, center[1] - size),  # Bottom-right
+                (center[0] - size, center[1] + size),  # Top-left
+            ]
+        else:
+            # (upper-right)
+            vertices = [
+                (center[0] + size, center[1] + size),  # Top-right
+                (center[0] - size, center[1] + size),  # Top-left
+                (center[0] + size, center[1] - size),  # Bottom-right
+            ]
+        p = mpatches.Polygon(
+            vertices,
+            closed=True,
+            facecolor=orig_handle.get_facecolor(),
+            edgecolor=orig_handle.get_edgecolor(),
+        )
+        p.set_transform(trans)
+        return [p]
 
 
 class FisherCalculator:
@@ -341,7 +374,6 @@ class FisherCalculator:
         summary_only=True,
         figsize=(11, 15),
         column_names=None,
-        order_rows=False,
     ):
 
         if summary_only:
@@ -351,15 +383,21 @@ class FisherCalculator:
             fisher_df = self.lin_fisher
             quad_fisher_df = self.quad_fisher
 
+        # unify the fisher tables and fill missing values by zeros
         fisher_df_1, fisher_df_2 = self.unify_fishers(fisher_df, df_other)
+
+        # reshuffle the tables according to the latex names ordering
+        fisher_df_1 = fisher_df_1[latex_names.index.get_level_values(level=1)]
+        fisher_df_2 = fisher_df_2[latex_names.index.get_level_values(level=1)]
+
         cols, rows = fisher_df_1.shape
 
+        # reshuffle column name ordering
         if column_names is not None:
             custom_ordering = [list(column.keys())[0] for column in column_names]
             fisher_df_1 = fisher_df_1.loc[custom_ordering]
             fisher_df_2 = fisher_df_2.loc[custom_ordering]
-            fisher_df_1 = fisher_df_1[latex_names.index.get_level_values(level=1)]
-            fisher_df_2 = fisher_df_2[latex_names.index.get_level_values(level=1)]
+
             x_labels = [list(column.values())[0] for column in column_names]
         else:
             x_labels = [
@@ -395,7 +433,6 @@ class FisherCalculator:
             ax.grid(visible=True, which="minor", alpha=0.2)
 
         def plot_values(ax, df_1, df_2):
-
             for i, row in enumerate(df_1.values.T):
                 for j, elem_1 in enumerate(row):
                     elem_2 = df_2.values.T[i, j]
@@ -425,10 +462,8 @@ class FisherCalculator:
                             fontsize=8,
                         )
 
-                    # plot the triangles
+                    # Plot the triangles
                     if elem_1 > 0 or elem_2 > 0:
-
-                        # highlight operators that enter in 1 but not in 2
                         triangle2 = Polygon(
                             [
                                 [x + 0.5, y - 0.5],
@@ -453,6 +488,41 @@ class FisherCalculator:
                             edgecolor=edgecolor_1,
                         )
                         ax.add_patch(triangle1)
+
+            # Define triangular legend elements
+            legend_elements = [
+                mpatches.Polygon(
+                    [
+                        [-0.5, -0.5],
+                        [0.5, -0.5],
+                        [-0.5, 0.5],
+                    ],
+                    closed=True,
+                    facecolor="blue",
+                    edgecolor="black",
+                    label="Value 1 (Top-left triangle)",
+                ),
+                mpatches.Polygon(
+                    [
+                        [0.5, -0.5],
+                        [0.5, 0.5],
+                        [0.5, 0.5],
+                    ],
+                    closed=True,
+                    facecolor="red",
+                    edgecolor="black",
+                    label="Value 2 (Bottom-right triangle)",
+                ),
+            ]
+
+            # need custom handler as triangles are shown as rectangles by default
+            ax.legend(
+                handles=legend_elements,
+                loc="upper right",
+                fontsize=12,
+                frameon=True,
+                handler_map={mpatches.Polygon: HandlerTriangle()},
+            )
 
             ax.set_xlim(0, cols - 0.5)
             ax.set_ylim(0, rows - 0.5)
@@ -494,7 +564,6 @@ class FisherCalculator:
         summary_only=True,
         figsize=(11, 15),
         column_names=None,
-        order_rows=False,
     ):
         """Plot the heat map of Fisher table.
 

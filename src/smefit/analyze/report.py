@@ -496,6 +496,7 @@ class Report:
         plot=None,
         fit_list=None,
         log=False,
+        order_rows=False,
     ):
         """Fisher information table and plots runner.
 
@@ -548,10 +549,8 @@ class Report:
                 )
 
             # Write down the table in latex
-            free_coeff_config = self.coeff_info.loc[
-                :, fit.coefficients.free_parameters.index
-            ]
             free_coeff_config = self.coeff_info
+
             compile_tex(
                 self.report,
                 fisher_cal.write_grouped(
@@ -571,8 +570,6 @@ class Report:
                     **fit_plot,
                 )
                 figs_list.append(f"fisher_heatmap_{fit.name}")
-
-        # TODO: unindent if plot is not None above?
 
         fit_plot = copy.deepcopy(plot)
         title = fit.label if fit_plot.pop("title") else None
