@@ -340,6 +340,7 @@ class FisherCalculator:
         df_other=None,
         summary_only=True,
         figsize=(11, 15),
+        column_names=None,
     ):
 
         if summary_only:
@@ -352,6 +353,16 @@ class FisherCalculator:
         fisher_df_1, fisher_df_2 = self.unify_fishers(fisher_df, df_other)
         cols, rows = fisher_df_1.shape
 
+        if column_names is not None:
+            custom_ordering = [list(column.keys())[0] for column in column_names]
+            fisher_df_1 = fisher_df_1.loc[custom_ordering]
+            fisher_df_2 = fisher_df_2.loc[custom_ordering]
+            x_labels = [list(column.values())[0] for column in column_names]
+        else:
+            x_labels = [
+                f"\\rm{{{name}}}".replace("_", "\\_") for name in fisher_df.index
+            ]
+
         # colour map
         cmap_full = plt.get_cmap("Blues")
         cmap = colors.LinearSegmentedColormap.from_list(
@@ -363,7 +374,6 @@ class FisherCalculator:
         # ticks
         yticks = np.arange(fisher_df.shape[1])
         xticks = np.arange(fisher_df.shape[0])
-        x_labels = [f"\\rm{{{name}}}".replace("_", "\\_") for name in fisher_df.index]
 
         def set_ticks(ax):
             ax.set_yticks(yticks, labels=latex_names, fontsize=15)
@@ -469,6 +479,7 @@ class FisherCalculator:
         other=None,
         summary_only=True,
         figsize=(11, 15),
+        column_names=None,
     ):
         """Plot the heat map of Fisher table.
 
