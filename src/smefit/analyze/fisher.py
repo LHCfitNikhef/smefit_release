@@ -22,7 +22,7 @@ class HandlerTriangle(HandlerPatch):
         center = (width / 2 - xdescent, height / 2 - ydescent)
         size = min(width, height) / 2
         # Define the lower-left triangle vertices
-        # if orig_handle.get_facecolor() == "blue":  # Blue triangle (lower-left)
+
         if orig_handle.xy[0, 0] < orig_handle.xy[1, 0]:
             vertices = [
                 (center[0] - size, center[1] - size),  # Bottom-left
@@ -476,7 +476,7 @@ class FisherCalculator:
                         )
                         ax.add_patch(triangle2)
 
-                        edgecolor_1 = "red" if elem_2 == 0 and elem_1 > 0 else "black"
+                        edgecolor_1 = "C1" if elem_2 == 0 and elem_1 > 0 else "black"
                         triangle1 = Polygon(
                             [
                                 [x - 0.5, y - 0.5],
@@ -498,9 +498,9 @@ class FisherCalculator:
                         [-0.5, 0.5],
                     ],
                     closed=True,
-                    facecolor="blue",
+                    fc="none",
                     edgecolor="black",
-                    label="Value 1 (Top-left triangle)",
+                    label="$\\rm w/\\;RGE$",
                 ),
                 mpatches.Polygon(
                     [
@@ -509,19 +509,21 @@ class FisherCalculator:
                         [0.5, 0.5],
                     ],
                     closed=True,
-                    facecolor="red",
+                    fc="none",
                     edgecolor="black",
-                    label="Value 2 (Bottom-right triangle)",
+                    label="$\\rm w/o\\;RGE$",
                 ),
             ]
 
             # need custom handler as triangles are shown as rectangles by default
             ax.legend(
                 handles=legend_elements,
-                loc="upper right",
-                fontsize=12,
-                frameon=True,
+                loc="upper center",
+                fontsize=25,
+                frameon=False,
+                ncol=2,
                 handler_map={mpatches.Polygon: HandlerTriangle()},
+                bbox_to_anchor=(0.5, -0.02),
             )
 
             ax.set_xlim(0, cols - 0.5)
@@ -537,7 +539,7 @@ class FisherCalculator:
         plot_values(ax, fisher_df_1, fisher_df_2)
 
         set_ticks(ax)
-        ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
+        # ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
         cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
         colour_bar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1)
 
