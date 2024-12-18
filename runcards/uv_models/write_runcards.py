@@ -17,7 +17,7 @@ def load_base(collider) -> dict:
     return card
 
 
-def parse_UV_coeffs(model_dict: dict) -> dict:
+def parse_UV_coeffs(model_dict: dict, mass) -> dict:
     """Parse the UV coefficient dictionay."""
     coeff_dict = {}
     free_dofs = []
@@ -25,7 +25,10 @@ def parse_UV_coeffs(model_dict: dict) -> dict:
     # add uv couplings
     for c in model_dict["UV couplings"]:
         free_dofs.append(c)
-        coeff_dict[c] = {"min": MIN_VALUE, "max": MAX_VALUE}
+        if float(mass) > 0:
+            coeff_dict[c] = {"min": MIN_VALUE, "max": MAX_VALUE}
+        else:
+            coeff_dict[c] = {"min": 0, "max": 100 * MAX_VALUE}
 
     # now add the non linear relations
     for coeff, rel in model_dict.items():
@@ -70,16 +73,20 @@ def dump_runcard(
     fitting_mode: str,
     mass: str,
     collider: str,
+    path: str,
 ) -> None:
     """Parse a model card to a SMEFiT runcard."""
-    if "OneLoop" in collection:
-        file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Loop.yaml"
-    elif "Multiparticle" in collection:
-        file_path = f"UV_scan/{collection}/out_UV_dict_Coll_MultiParticleCollection_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
+    if path == "--":
+        if "OneLoop" in collection:
+            file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Loop.yaml"
+        elif "Multiparticle" in collection:
+            file_path = f"UV_scan/{collection}/out_UV_dict_Coll_MultiParticleCollection_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
+        else:
+            file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
     else:
-        file_path = f"UV_scan/{collection}/out_UV_dict_Coll_{collection}_Mod_{idx_model}_Mass_{mass}_Tree.yaml"
+        file_path = path
 
-    with open(here / file_path, encoding="utf-8") as f:
+    with open(here / file_path, "r", encoding="utf-8") as f:
         model_dict = yaml.safe_load(f)
 
     runcard = load_base(collider)
@@ -95,12 +102,12 @@ def dump_runcard(
     runcard["UV model"] = model_dict["UV model"]
     runcard["uv_couplings"] = True
 
-    coeff_dict = parse_UV_coeffs(model_dict)
+    coeff_dict = parse_UV_coeffs(model_dict, mass)
     flag = "UV"
 
     runcard["coefficients"] = coeff_dict
     with open(
-        f"{here.parent}/smefit_fcc_uv_spider/{collection}_{collider}_{flag}_{idx_model}_{mass}_{pto}_{eft_order}_{fitting_mode}.yaml",
+        f"{here.parent}/{collection}_{collider}_{flag}_{idx_model}_{mass}_{pto}_{eft_order}_{fitting_mode}.yaml",
         "w",
         encoding="utf-8",
     ) as f:
@@ -108,6 +115,7 @@ def dump_runcard(
 
 
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser(
         prog="SMEFiT_runcards",
         description="Write SMEFIT runcards for WC/UV models",
@@ -129,8 +137,28 @@ if __name__ == "__main__":
         type=str,
         required=True,
     )
-    parser.add_argument("-m", "--mass", help="Particle masses", type=str, default="1")
-    parser.add_argument("-d", "--collider", help="collider", type=str, required=True)
+    # If the mass parameter is set to a non-positive number, a mass scan is assumed and the prior will be set to positive values only.
+    parser.add_argument(
+        "-m",
+        "--mass",
+        help="Particle masses. Non-positive values are reserved for mass scans and will affect the prior setting.",
+        type=str,
+        default="1",
+    )
+    parser.add_argument(
+        "-d",
+        "--collider",
+        help="Collider to pick base runcard",
+        type=str,
+        required=True,
+    )
+    parser.add_argument(
+        "-p",
+        "--path",
+        help="Path of the Match2Fit output to convert.",
+        type=str,
+        default="--",
+    )
     args = parser.parse_args()
 
     dump_runcard(
@@ -141,4 +169,5 @@ if __name__ == "__main__":
         args.mode,
         args.mass,
         args.collider,
+        args.path,
     )
