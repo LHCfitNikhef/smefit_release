@@ -447,6 +447,16 @@ def load_rge_matrix(
     yukawa = rge_dict.get("yukawa", "top")
     scale_variation = rge_dict.get("scale_variation", 1.0)
     rge_runner = RGE(coeff_list, init_scale, smeft_accuracy, adm_QCD, yukawa)
+
+    # load precomputed RGE matrix if it exists
+    path_to_rge_mat = rge_dict.get("rg_matrix", False)
+    if path_to_rge_mat:
+        with open(path_to_rge_mat, "rb") as f:
+            rgemats = pickle.load(f)
+        stacked_mats = jnp.stack([rgemat.values for rgemat in rgemats])
+        operators_to_keep = {op: {} for op in rgemats[0].index}
+        return stacked_mats, operators_to_keep
+
     # if it is a float, it is a static scale
     if type(obs_scale) is float or type(obs_scale) is int:
         rgemat = rge_runner.RGEmatrix(obs_scale)

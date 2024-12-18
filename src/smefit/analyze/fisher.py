@@ -553,9 +553,10 @@ class FisherCalculator:
             ]
         else:
             fisher_dfs = [fisher_df[latex_names.index.get_level_values(level=1)]]
-            quad_fisher_dfs = [
-                quad_fisher_df[latex_names.index.get_level_values(level=1)]
-            ]
+            if quad_fisher_df is not None:
+                quad_fisher_dfs = [
+                    quad_fisher_df[latex_names.index.get_level_values(level=1)]
+                ]
 
         # reshuffle column name ordering
         if column_names is not None:
