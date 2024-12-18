@@ -358,7 +358,9 @@ class RGE:
         return self.map_to_smefit(wc_final, scale)
 
 
-def load_scales(datasets, theory_path, default_scale=1e3, cutoff_scale=None):
+def load_scales(
+    datasets, theory_path, default_scale=1e3, cutoff_scale=None, scale_variation=1.0
+):
     """
     Load the energy scales for the datasets.
 
@@ -402,6 +404,9 @@ def load_scales(datasets, theory_path, default_scale=1e3, cutoff_scale=None):
 
     if cutoff_scale is not None:
         scales = [scale for scale in scales if scale < cutoff_scale]
+    if scale_variation != 1.0:
+        _logger.info(f"Applying scale variation of {scale_variation}.")
+        scales = [scale * scale_variation for scale in scales]
 
     return scales
 
@@ -433,6 +438,7 @@ def load_rge_matrix(
     smeft_accuracy = rge_dict.get("smeft_accuracy", "integrate")
     adm_QCD = rge_dict.get("adm_QCD", "full")
     yukawa = rge_dict.get("yukawa", "top")
+    scale_variation = rge_dict.get("scale_variation", 1.0)
     rge_runner = RGE(coeff_list, init_scale, smeft_accuracy, adm_QCD, yukawa)
     # if it is a float, it is a static scale
     if type(obs_scale) is float or type(obs_scale) is int:
@@ -443,7 +449,11 @@ def load_rge_matrix(
 
     elif obs_scale == "dynamic":
         scales = load_scales(
-            datasets, theory_path, default_scale=init_scale, cutoff_scale=cutoff_scale
+            datasets,
+            theory_path,
+            default_scale=init_scale,
+            cutoff_scale=cutoff_scale,
+            scale_variation=scale_variation,
         )
 
         operators_to_keep = {}
