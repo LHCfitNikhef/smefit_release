@@ -551,6 +551,12 @@ class FisherCalculator:
                 fisher[latex_names.index.get_level_values(level=1)]
                 for fisher in fisher_dfs
             ]
+
+            quad_fisher_dfs = [
+                fisher[latex_names.index.get_level_values(level=1)]
+                for fisher in quad_fisher_dfs
+            ]
+
         else:
             fisher_dfs = [fisher_df[latex_names.index.get_level_values(level=1)]]
             if quad_fisher_df is not None:
