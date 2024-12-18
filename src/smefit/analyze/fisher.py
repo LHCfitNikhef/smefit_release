@@ -355,6 +355,9 @@ class FisherCalculator:
     @staticmethod
     def unify_fishers(df, df_other):
 
+        if df_other is None or df is None:
+            return None
+
         # Get the union of row and column indices
         all_rows = df.index.union(df_other.index)
         all_columns = df.columns.union(df_other.columns)
@@ -383,17 +386,44 @@ class FisherCalculator:
 
     @staticmethod
     def plot_values(ax, dfs, cmap, norm):
+        """
+        Plot the values of the Fisher information.
+
+        Parameters
+        ----------
+        ax: matplotlib.axes.Axes
+            axes object
+        dfs: list
+            list of pandas.DataFrame
+        cmap: matplotlib.colors.LinearSegmentedColormap
+            colour map
+        norm: matplotlib.colors.BoundaryNorm
+            normalisation of colorbar
+        """
+
         df_1 = dfs[0]
         df_2 = dfs[1] if len(dfs) > 1 else None
         cols, rows = df_1.shape
+
+        # Initialize the delta shift for text positioning
         delta_shift = 0
+
         for i, row in enumerate(df_1.values.T):
             for j, elem_1 in enumerate(row):
+
+                # start filling from the top left corner
                 x, y = j, rows - 1 - i
                 ec_1 = "black"
+
+                # if two fishers must be plotted together
                 if df_2 is not None:
+
                     elem_2 = df_2.values.T[i, j]
+
+                    # move position numbers
                     delta_shift = 0.2
+
+                    # highlight operators that exist in one but not the other
                     ec_1 = "C1" if elem_2 == 0 and elem_1 > 0 else "black"
 
                     if elem_2 > 0:
@@ -406,6 +436,7 @@ class FisherCalculator:
                             fontsize=8,
                         )
 
+                        # Create a triangle patch for the second element
                         triangle2 = Polygon(
                             [
                                 [x + 0.5, y - 0.5],
@@ -419,6 +450,7 @@ class FisherCalculator:
                         ax.add_patch(triangle2)
 
                 if elem_1 > 0:
+
                     ax.text(
                         x - delta_shift,
                         y - delta_shift,
@@ -427,8 +459,9 @@ class FisherCalculator:
                         ha="center",
                         fontsize=8,
                     )
-
                     if df_2 is not None:
+
+                        # Create a triangle patch for the first element
                         triangle1 = Polygon(
                             [
                                 [x - 0.5, y - 0.5],
@@ -441,30 +474,24 @@ class FisherCalculator:
                         )
                         ax.add_patch(triangle1)
 
+                        # Create legend elements for the patches
                         legend_elements = [
                             mpatches.Polygon(
-                                [
-                                    [-0.5, -0.5],
-                                    [0.5, -0.5],
-                                    [-0.5, 0.5],
-                                ],
+                                [[-0.5, -0.5], [0.5, -0.5], [-0.5, 0.5]],
                                 closed=True,
                                 fc="none",
                                 edgecolor="black",
                                 label="$\\rm w/\\;RGE$",
                             ),
                             mpatches.Polygon(
-                                [
-                                    [0.5, -0.5],
-                                    [0.5, 0.5],
-                                    [0.5, 0.5],
-                                ],
+                                [[0.5, -0.5], [0.5, 0.5], [0.5, 0.5]],
                                 closed=True,
                                 fc="none",
                                 edgecolor="black",
                                 label="$\\rm w/o\\;RGE$",
                             ),
                         ]
+                        # Add the legend to the plot
                         ax.legend(
                             handles=legend_elements,
                             loc="upper center",
@@ -474,8 +501,8 @@ class FisherCalculator:
                             handler_map={mpatches.Polygon: HandlerTriangle()},
                             bbox_to_anchor=(0.5, -0.02),
                         )
-
                     else:
+                        # Create a rectangle patch for the first element
                         rectangle = Polygon(
                             [
                                 [x - 0.5, y - 0.5],
@@ -489,8 +516,10 @@ class FisherCalculator:
                         )
                         ax.add_patch(rectangle)
 
+        # Set the x and y limits of the plot
         ax.set_xlim(0, cols - 0.5)
         ax.set_ylim(0, rows - 0.5)
+        # Set the aspect ratio of the plot to be equal
         ax.set_aspect("equal", adjustable="box")
 
     def plot_heatmap(
@@ -498,7 +527,7 @@ class FisherCalculator:
         latex_names,
         fig_name,
         title=None,
-        df_other=None,
+        other=None,
         summary_only=True,
         figsize=(11, 15),
         column_names=None,
@@ -507,16 +536,21 @@ class FisherCalculator:
         fisher_df = self.summary_table if summary_only else self.lin_fisher
         quad_fisher_df = self.summary_HOtable if summary_only else self.quad_fisher
 
-        if df_other is not None:
+        if other is not None:
+
+            fisher_df_other = other.summary_table if summary_only else other.lin_fisher
+            quad_fisher_df_other = (
+                other.summary_HOtable if summary_only else other.quad_fisher
+            )
             # unify the fisher tables and fill missing values by zeros
-            fisher_dfs = self.unify_fishers(fisher_df, df_other)
+            fisher_dfs = self.unify_fishers(fisher_df, fisher_df_other)
+            quad_fisher_dfs = self.unify_fishers(quad_fisher_df, quad_fisher_df_other)
 
             # reshuffle the tables according to the latex names ordering
             fisher_dfs = [
                 fisher[latex_names.index.get_level_values(level=1)]
                 for fisher in fisher_dfs
             ]
-
         else:
             fisher_dfs = [fisher_df[latex_names.index.get_level_values(level=1)]]
 
