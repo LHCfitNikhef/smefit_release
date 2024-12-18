@@ -553,6 +553,9 @@ class FisherCalculator:
             ]
         else:
             fisher_dfs = [fisher_df[latex_names.index.get_level_values(level=1)]]
+            quad_fisher_dfs = [
+                quad_fisher_df[latex_names.index.get_level_values(level=1)]
+            ]
 
         # reshuffle column name ordering
         if column_names is not None:
@@ -587,24 +590,26 @@ class FisherCalculator:
             latex_names,
             x_labels,
         )
-        # ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
+        ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
         cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
         colour_bar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1)
 
         if quad_fisher_df is not None:
             ax = fig.add_subplot(122)
-            cax = ax.matshow(quad_fisher_df.values.T, cmap=cmap, norm=norm)
-            self.plot_values(ax, [quad_fisher_df], cmap, norm)
+            self.plot_values(ax, quad_fisher_dfs, cmap, norm)
+
             self.set_ticks(
                 ax,
-                np.arange(quad_fisher_df.shape[1]),
-                np.arange(quad_fisher_df.shape[0]),
+                np.arange(quad_fisher_dfs[0].shape[1]),
+                np.arange(quad_fisher_dfs[0].shape[0]),
                 latex_names,
                 x_labels,
             )
             ax.set_title(r"\rm Quadratic", fontsize=20, y=-0.08)
-            cax1 = make_axes_locatable(ax).append_axes("right", size="10%", pad=0.1)
-            colour_bar = fig.colorbar(cax, cax=cax1)
+            cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
+            colour_bar = fig.colorbar(
+                mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1
+            )
 
         fig.subplots_adjust(top=0.9)
 
