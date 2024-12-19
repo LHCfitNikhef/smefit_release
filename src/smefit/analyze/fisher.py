@@ -8,7 +8,6 @@ from matplotlib import colors
 from matplotlib.legend_handler import HandlerPatch
 from matplotlib.patches import Polygon
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from numpy.f2py.crackfortran import privatepattern
 from rich.progress import track
 
 from .latex_tools import latex_packages
