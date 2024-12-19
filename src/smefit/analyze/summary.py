@@ -256,17 +256,17 @@ class SummaryWriter:
 
             order = [
                 r"$\bar{t}t\bar{t}t + \bar{t}t\bar{b}b$",
-                r"$Higgs$",
-                r"$LEP$",
+                r"$\rm Higgs$",
+                r"$\rm LEP$",
                 r"$\bar{t}t$",
                 r"$\bar{t}tV$",
                 r"$t$",
                 r"$tV$",
                 r"$VV$",
-                r"$FCCee-91$",
-                r"$FCCee-161$",
-                r"$FCCee-240$",
-                r"$FCCee-365$",
+                r"$\rm FCC-ee\:91\:GeV$",
+                r"$\rm FCC-ee\:161\:GeV$",
+                r"$\rm FCC-ee\:240\:GeV$",
+                r"$\rm FCC-ee\:365\:GeV$",
             ]
 
             # Create a dictionary to map order to their indices
