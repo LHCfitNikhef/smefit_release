@@ -127,15 +127,12 @@ class FitManager:
     def load_datasets(self):
         """Load all datasets."""
 
-        if self.rgemat is None:
-            operators_to_keep2 = self.config["coefficients"]
-        else:
-            operators_to_keep2 = self.operators_to_keep
-
         self.datasets = load_datasets(
             self.config["data_path"],
             self.config["datasets"],
-            operators_to_keep2,
+            self.config["coefficients"]
+            if self.rgemat is None
+            else self.operators_to_keep,
             self.config["use_quad"],
             self.config["use_theory_covmat"],
             False,  # t0 is not used here because in the report we look at the experimental chi2
@@ -147,8 +144,6 @@ class FitManager:
             self.config.get("external_chi2", False),
             rgemat=self.rgemat,
         )
-
-        # TODO: load also without rg for the fisher
 
     @property
     def smeft_predictions(self):

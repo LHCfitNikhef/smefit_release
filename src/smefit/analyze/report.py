@@ -552,7 +552,7 @@ class Report:
 
             if plot is not None:
                 fit_plot = copy.deepcopy(plot)
-                fit_plot.pop("together")
+                fit_plot.pop("together", None)
                 title = fit.label if fit_plot.pop("title") else None
                 fisher_cal.plot_heatmap(
                     self.coeff_info,
@@ -578,6 +578,7 @@ class Report:
                 f"{self.report}/fisher_heatmap_both",
                 title=title,
                 other=fisher_1,
+                labels=[fit.label for fit in self.fits],
                 **fit_plot,
             )
             figs_list.append(f"fisher_heatmap_both")

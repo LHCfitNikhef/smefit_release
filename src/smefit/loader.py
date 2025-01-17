@@ -300,6 +300,7 @@ class Loader:
         lin_dict = {}
 
         # save sm prediction at the chosen perturbative order
+
         sm = np.array(raw_th_data[order]["SM"])
 
         # split corrections into a linear and quadratic dict
