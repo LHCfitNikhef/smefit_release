@@ -287,7 +287,10 @@ class CoefficientsPlotter:
         groups, axs = self._get_suplblots(figsize)
 
         for ax, (g, bars) in zip(axs, df.groupby(level=0)):
-            bars.droplevel(0).plot(
+
+            bars["theory_error"] = bars.iloc[:, 2] - bars.iloc[:, 0]
+
+            bars.iloc[:, 1].droplevel(0).plot(
                 kind="barh",
                 width=0.6,
                 ax=ax,
@@ -295,7 +298,23 @@ class CoefficientsPlotter:
                 logx=x_log,
                 xlim=(x_min, x_max),
                 fontsize=13,
+                edgecolor="black",
             )
+
+            # Add the hashed bar using matplotlib
+            for i, (index, row) in enumerate(bars.iterrows()):
+
+                ax.barh(
+                    i,
+                    row["theory_error"],  # Width of the hashed bar
+                    left=row.iloc[1] - row["theory_error"] / 2,  # Start position
+                    hatch="//",
+                    edgecolor="black",
+                    label="Hashed Bar" if index == 0 else "",  # Add legend only onc
+                    height=0.6,
+                    color="None",
+                )
+
             ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
             ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
 
