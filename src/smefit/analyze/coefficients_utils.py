@@ -276,7 +276,6 @@ class CoefficientsPlotter:
         x_log=True,
         x_min=1e-2,
         x_max=500,
-        legend_loc="best",
     ):
         """
         Plot error bars at given confidence level
@@ -344,14 +343,7 @@ class CoefficientsPlotter:
         plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_bar.png")
 
-    def plot_pull(
-        self,
-        pull,
-        x_min=-3,
-        x_max=3,
-        figsize=(10, 15),
-        legend_loc="best",
-    ):
+    def plot_pull(self, pull, x_min=-3, x_max=3, figsize=(10, 15)):
         """
         Plot error bars at given confidence level
 
