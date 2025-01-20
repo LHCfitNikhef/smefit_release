@@ -148,7 +148,7 @@ class CoefficientsPlotter:
             )
 
     def _get_suplblots(self, figsize):
-        groups = self.coeff_info.groupby(level=0).count()
+        groups = self.coeff_info.groupby(level=0, sort=False).count()
         _, axs = plt.subplots(
             groups.size,
             1,
@@ -285,12 +285,16 @@ class CoefficientsPlotter:
         """
         df = pd.DataFrame(error)
         groups, axs = self._get_suplblots(figsize)
+        for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
 
-        for ax, (g, bars) in zip(axs, df.groupby(level=0)):
+            bars["theory_error_linear"] = bars.iloc[:, 2] - bars.iloc[:, 0]
+            bars["theory_error_quadratic"] = bars.iloc[:, 5] - bars.iloc[:, 3]
 
-            bars["theory_error"] = bars.iloc[:, 2] - bars.iloc[:, 0]
+            bars_top_to_bottom = bars.iloc[
+                ::-1
+            ]  # reverse order to plot from top to bottom in ax
 
-            bars.iloc[:, 1].droplevel(0).plot(
+            bars_top_to_bottom.iloc[:, [1, 4]].droplevel(0).plot(
                 kind="barh",
                 width=0.6,
                 ax=ax,
@@ -301,17 +305,40 @@ class CoefficientsPlotter:
                 edgecolor="black",
             )
 
+            # bars.iloc[:, 4].droplevel(0).plot(
+            #     kind="barh",
+            #     width=0.6,
+            #     ax=ax,
+            #     legend=None,
+            #     logx=x_log,
+            #     xlim=(x_min, x_max),
+            #     fontsize=13,
+            #     edgecolor="black",
+            # )
+
             # Add the hashed bar using matplotlib
-            for i, (index, row) in enumerate(bars.iterrows()):
+            for i, (index, row) in enumerate(bars_top_to_bottom.iterrows()):
 
                 ax.barh(
-                    i,
-                    row["theory_error"],  # Width of the hashed bar
-                    left=row.iloc[1] - row["theory_error"] / 2,  # Start position
-                    hatch="//",
+                    i - 0.15,
+                    row["theory_error_linear"],  # Width of the hashed bar
+                    left=row.iloc[1] - row["theory_error_linear"] / 2,  # Start position
+                    hatch="//////",
                     edgecolor="black",
                     label="Hashed Bar" if index == 0 else "",  # Add legend only onc
-                    height=0.6,
+                    height=0.3,
+                    color="None",
+                )
+
+                ax.barh(
+                    i + 0.15,
+                    row["theory_error_quadratic"],  # Width of the hashed bar
+                    left=row.iloc[4]
+                    - row["theory_error_quadratic"] / 2,  # Start position
+                    hatch="//////",
+                    edgecolor="black",
+                    label="Hashed Bar" if index == 0 else "",  # Add legend only onc
+                    height=0.3,
                     color="None",
                 )
 
@@ -333,7 +360,14 @@ class CoefficientsPlotter:
         axs[-1].set_xlabel(
             r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
         )
-        axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
+        axs[0].legend(
+            loc="lower center",
+            bbox_to_anchor=(0, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 13},
+            ncol=2,
+        )
+        # axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_bar.png")
