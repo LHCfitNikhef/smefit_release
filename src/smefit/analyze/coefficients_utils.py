@@ -180,6 +180,7 @@ class CoefficientsPlotter:
         colors = plt.get_cmap("tab20")
 
         def plot_error_bars(ax, vals, cnt, i, label=None):
+
             ax.errorbar(
                 x=vals.mid,
                 y=Y[cnt] + y_shift[i],
@@ -202,8 +203,13 @@ class CoefficientsPlotter:
             # loop over fits
             for i, (fit_name, bound_df) in enumerate(bounds.items()):
                 label = fit_name
+                bound_df_top_to_bottom = bound_df[g].iloc[
+                    :, ::-1
+                ]  # reverse order to plot from top to bottom in ax
                 # loop on coeffs
-                for cnt, (coeff_name, coeff) in enumerate(bound_df[g].items()):
+                for cnt, (coeff_name, coeff) in enumerate(
+                    bound_df_top_to_bottom.items()
+                ):
                     # maybe there are no double solutions
                     key_not_found = f"{coeff_name} posterior is not found in {fit_name}"
                     try:
@@ -222,9 +228,10 @@ class CoefficientsPlotter:
                     except KeyError:
                         pass
 
-            # y thicks
+            # y ticks
             ax.set_ylim(-2, Y[-1] + 2)
-            ax.set_yticks(Y, self.coeff_info[g], fontsize=13)
+            # also position y tick labels from top to bottom
+            ax.set_yticks(Y[::-1], self.coeff_info[g], fontsize=13)
             # x grid
             ax.vlines(0, -2, Y[-1] + 2, ls="dashed", color="black", alpha=0.7)
             if x_log:
@@ -247,7 +254,16 @@ class CoefficientsPlotter:
 
         self._plot_logo(axs[-1])
         axs[-1].set_xlabel(r"$c_i/\Lambda^2\ ({\rm TeV}^{-2})$", fontsize=20)
-        axs[0].legend(loc=0, frameon=False, prop={"size": 13})
+        handles, labels = axs[-1].get_legend_handles_labels()
+        axs[0].legend(
+            handles,
+            labels,
+            loc="lower center",
+            bbox_to_anchor=(0, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 13},
+            ncol=2,
+        )
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_central.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_central.png")
@@ -317,7 +333,6 @@ class CoefficientsPlotter:
         axs[-1].set_xlabel(
             r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
         )
-        # axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
         axs[0].legend(
             loc="lower center",
             bbox_to_anchor=(0, 1.1, 1.0, 0.05),
