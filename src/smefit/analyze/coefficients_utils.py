@@ -389,7 +389,6 @@ class CoefficientsPlotter:
 
         self._plot_logo(axs[-1])
         axs[-1].set_xlabel(r"${\rm Fit\:Residual\:}(\sigma)$", fontsize=20)
-        # axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
         axs[0].legend(
             loc="lower center",
             bbox_to_anchor=(0, 1.1, 1.0, 0.05),
