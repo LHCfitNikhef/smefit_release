@@ -372,8 +372,11 @@ class CoefficientsPlotter:
         df = pd.DataFrame(pull)
         groups, axs = self._get_suplblots(figsize)
 
-        for ax, (g, bars) in zip(axs, df.groupby(level=0)):
-            bars.droplevel(0).plot(
+        for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
+            bars_top_to_bottom = bars.iloc[
+                ::-1
+            ]  # reverse order to plot from top to bottom in ax
+            bars_top_to_bottom.droplevel(0).plot(
                 kind="barh",
                 width=0.6,
                 ax=ax,
@@ -386,7 +389,14 @@ class CoefficientsPlotter:
 
         self._plot_logo(axs[-1])
         axs[-1].set_xlabel(r"${\rm Fit\:Residual\:}(\sigma)$", fontsize=20)
-        axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
+        # axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
+        axs[0].legend(
+            loc="lower center",
+            bbox_to_anchor=(0, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 13},
+            ncol=2,
+        )
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_pull.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_pull.png")
