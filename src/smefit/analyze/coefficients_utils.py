@@ -863,7 +863,7 @@ class CoefficientsPlotter:
         ax.legend(
             labels=labels + [r"$\mathrm{SM}$"],
             handles=hndls_all,
-            loc="lower left",
+            loc="lower right",
             frameon=False,
             fontsize=20,
             handlelength=1,
@@ -872,9 +872,16 @@ class CoefficientsPlotter:
             title_fontsize=24,
         )
 
-        ax.set_title(
-            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.L.\:intervals}}$",
-            fontsize=18,
+        # ax.set_title(
+        #     rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.I.\:intervals}}$",
+        #     fontsize=26,
+        #     loc="left"
+        # )
+        fig.suptitle(
+            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.I.\:intervals}}$",
+            fontsize=26,
+            ha="center",
+            x=0.5,
         )
         grid.tight_layout(fig)
         fig.savefig(f"{self.report_folder}/contours_2d.pdf")
