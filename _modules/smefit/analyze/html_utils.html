@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.analyze.html_utils &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -116,16 +116,16 @@
              
   <h1>Source code for smefit.analyze.html_utils</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
 
 <span class="n">current_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="html_link">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.html_utils.html_link">[docs]</a>
-<span class="k">def</span> <span class="nf">html_link</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">add_meta</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">html_link</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">add_meta</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;HTML link relative to report folder.</span>
 
 <span class="sd">    Parameters</span>
@@ -151,7 +151,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_container_header</span><span class="p">(</span><span class="n">title</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_container_header</span><span class="p">(</span><span class="n">title</span><span class="p">):</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">        &lt;div class=&#39;container&#39;&gt; </span><span class="se">\n</span>
 <span class="s2">        &lt;h2 id=&#39;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&#39;&gt; </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&lt;/h2&gt; </span><span class="se">\n</span>
@@ -159,7 +159,7 @@
 <span class="s2">    &quot;&quot;&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">_html_figure</span><span class="p">(</span><span class="n">fig_name</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_html_figure</span><span class="p">(</span><span class="n">fig_name</span><span class="p">):</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">        &lt;div class=&quot;figiterwrapper&quot;&gt; </span><span class="se">\n</span>
 <span class="s2">        &lt;figure&gt; </span><span class="se">\n</span>
@@ -175,7 +175,7 @@
 
 <div class="viewcode-block" id="write_html_container">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.html_utils.write_html_container">[docs]</a>
-<span class="k">def</span> <span class="nf">write_html_container</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_html_container</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dataFrame</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write the content of single report section in HTML.</span>
 
 <span class="sd">    Parameters</span>
@@ -216,7 +216,7 @@
 
 <div class="viewcode-block" id="run_htlatex">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.html_utils.run_htlatex">[docs]</a>
-<span class="k">def</span> <span class="nf">run_htlatex</span><span class="p">(</span><span class="n">report_path</span><span class="p">,</span> <span class="n">tex_file</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_htlatex</span><span class="p">(</span><span class="n">report_path</span><span class="p">,</span> <span class="n">tex_file</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run pandoc to generate HTML files.</span>
 
 <span class="sd">    Parameters</span>
@@ -240,7 +240,7 @@
 
 <div class="viewcode-block" id="dump_html_index">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.html_utils.dump_html_index">[docs]</a>
-<span class="k">def</span> <span class="nf">dump_html_index</span><span class="p">(</span><span class="n">html_report</span><span class="p">,</span> <span class="n">html_index</span><span class="p">,</span> <span class="n">report_path</span><span class="p">,</span> <span class="n">report_title</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dump_html_index</span><span class="p">(</span><span class="n">html_report</span><span class="p">,</span> <span class="n">html_index</span><span class="p">,</span> <span class="n">report_path</span><span class="p">,</span> <span class="n">report_title</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Dump report index to html.</span>
 
 <span class="sd">    Parameters</span>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.analyze.pca &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -116,25 +116,25 @@
              
   <h1>Source code for smefit.analyze.pca</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">colors</span>
-<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">colors</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.axes_grid1</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_axes_locatable</span>
 
-<span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
-<span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">load_datasets</span>
-<span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">latex_packages</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..coefficients</span><span class="w"> </span><span class="kn">import</span> <span class="n">CoefficientManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_datasets</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.latex_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">latex_packages</span>
 
 
 <div class="viewcode-block" id="RotateToPca">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca">[docs]</a>
-<span class="k">class</span> <span class="nc">RotateToPca</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RotateToPca</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Contruct a new fit runcard using PCA.</span>
 
 <span class="sd">    Parameters</span>
@@ -147,7 +147,7 @@
 <span class="sd">            runcard configuration dictionary</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loaded_datasets</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loaded_datasets</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loaded_datasets</span> <span class="o">=</span> <span class="n">loaded_datasets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="n">coefficients</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
@@ -156,7 +156,7 @@
 <div class="viewcode-block" id="RotateToPca.from_dict">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.from_dict">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Build the class from a runcard dictionary.</span>
 
 <span class="sd">        Parameters</span>
@@ -186,7 +186,7 @@
 
 <div class="viewcode-block" id="RotateToPca.compute">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.compute">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the roation matrix.</span>
 <span class="sd">        This is composed by two blocks: PCA and an identity for the constrained dofs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -205,7 +205,7 @@
 
 <div class="viewcode-block" id="RotateToPca.update_runcard">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.update_runcard">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_runcard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_runcard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the runcard object.&quot;&quot;&quot;</span>
 
         <span class="c1"># update coefficient contraints</span>
@@ -228,7 +228,7 @@
 
 <div class="viewcode-block" id="RotateToPca.save">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.RotateToPca.save">[docs]</a>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dump updated runcard and roation matrix into the reult folder.&quot;&quot;&quot;</span>
         <span class="n">result_ID</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;result_ID&quot;</span><span class="p">]</span>
         <span class="n">result_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;result_path&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">result_ID</span>
@@ -255,7 +255,7 @@
 
 <div class="viewcode-block" id="make_sym_matrix">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.make_sym_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">make_sym_matrix</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">n_op</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_sym_matrix</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">n_op</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a square tensor (n_op,n_op,vals.shape[0]), starting from the upper tiangular part.</span>
 
 <span class="sd">    Parameters</span>
@@ -287,7 +287,7 @@
 
 <div class="viewcode-block" id="impose_constrain">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.impose_constrain">[docs]</a>
-<span class="k">def</span> <span class="nf">impose_constrain</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">update_quad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">impose_constrain</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">update_quad</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Propagate coefficient constraint into the theory tables.</span>
 
 <span class="sd">    Note: only linear contraints are allowed in this method.</span>
@@ -363,7 +363,7 @@
 
 <div class="viewcode-block" id="PcaCalculator">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator">[docs]</a>
-<span class="k">class</span> <span class="nc">PcaCalculator</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PcaCalculator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes and writes PCA table and heat map.</span>
 
 <span class="sd">    Note: matrix being decomposed by SVD are the</span>
@@ -380,7 +380,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">latex_names</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">latex_names</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="n">coefficients</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="n">datasets</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">latex_names</span> <span class="o">=</span> <span class="n">latex_names</span>
@@ -389,7 +389,7 @@
 
 <div class="viewcode-block" id="PcaCalculator.compute">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator.compute">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute PCA.&quot;&quot;&quot;</span>
         <span class="n">free_parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">index</span>
 
@@ -405,7 +405,7 @@
 
 <div class="viewcode-block" id="PcaCalculator.write">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator.write">[docs]</a>
-    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit_label</span><span class="p">,</span> <span class="n">thr_show</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit_label</span><span class="p">,</span> <span class="n">thr_show</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write PCA latex table.</span>
 
 <span class="sd">        Parameters</span>
@@ -442,7 +442,7 @@
 
 <div class="viewcode-block" id="PcaCalculator.plot_heatmap">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.pca.PcaCalculator.plot_heatmap">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_heatmap</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_heatmap</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">fig_name</span><span class="p">,</span>
         <span class="n">sv_min</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span>

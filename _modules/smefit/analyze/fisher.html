@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.analyze.fisher &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -116,20 +116,20 @@
              
   <h1>Source code for smefit.analyze.fisher</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">colors</span>
-<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
-<span class="kn">from</span> <span class="nn">rich.progress</span> <span class="kn">import</span> <span class="n">track</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">colors</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.axes_grid1</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_axes_locatable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.progress</span><span class="w"> </span><span class="kn">import</span> <span class="n">track</span>
 
-<span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">latex_packages</span>
-<span class="kn">from</span> <span class="nn">.pca</span> <span class="kn">import</span> <span class="n">impose_constrain</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.latex_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">latex_packages</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.pca</span><span class="w"> </span><span class="kn">import</span> <span class="n">impose_constrain</span>
 
 
 <div class="viewcode-block" id="FisherCalculator">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.FisherCalculator">[docs]</a>
-<span class="k">class</span> <span class="nc">FisherCalculator</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FisherCalculator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes and writes the Fisher information table, and plots heat map.</span>
 
 <span class="sd">    Linear Fisher information depends only on the theoretical corrections,</span>
@@ -146,7 +146,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">compute_quad</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">compute_quad</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span> <span class="o">=</span> <span class="n">coefficients</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="n">datasets</span>
@@ -169,7 +169,7 @@
 
 <div class="viewcode-block" id="FisherCalculator.compute_linear">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.compute_linear">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_linear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_linear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute linear Fisher information.&quot;&quot;&quot;</span>
         <span class="n">fisher_tab</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
@@ -187,7 +187,7 @@
 
 <div class="viewcode-block" id="FisherCalculator.compute_quadratic">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.compute_quadratic">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_quadratic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">posterior_df</span><span class="p">,</span> <span class="n">smeft_predictions</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_quadratic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">posterior_df</span><span class="p">,</span> <span class="n">smeft_predictions</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute quadratic Fisher information.&quot;&quot;&quot;</span>
         <span class="n">quad_fisher</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -261,7 +261,7 @@
 
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Normalize a Pandas DataFrame</span>
 
@@ -297,7 +297,7 @@
 
 <div class="viewcode-block" id="FisherCalculator.groupby_data">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.groupby_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">groupby_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">data_groups</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">groupby_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">data_groups</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge fisher per data group.&quot;&quot;&quot;</span>
         <span class="n">summary_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
             <span class="n">data_groups</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span> <span class="n">table</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s2">&quot;level_1&quot;</span><span class="p">,</span> <span class="n">right_index</span><span class="o">=</span><span class="kc">True</span>
@@ -310,7 +310,7 @@
 
 <div class="viewcode-block" id="FisherCalculator.write_grouped">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.write_grouped">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_grouped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeff_config</span><span class="p">,</span> <span class="n">data_groups</span><span class="p">,</span> <span class="n">summary_only</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_grouped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeff_config</span><span class="p">,</span> <span class="n">data_groups</span><span class="p">,</span> <span class="n">summary_only</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write Fisher information tables in latex, both for grouped data and for summary.</span>
 
 <span class="sd">        Parameters</span>
@@ -366,7 +366,7 @@
         <span class="k">return</span> <span class="n">L</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_write</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_write</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">lin_fisher</span><span class="p">,</span> <span class="n">quad_fisher</span><span class="p">,</span> <span class="n">coeff_config</span><span class="p">,</span> <span class="n">data_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_group</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write Fisher information table in latex.</span>
@@ -391,7 +391,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">color</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">thr_val</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">color</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">thr_val</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="n">thr_val</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
             <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
@@ -453,7 +453,7 @@
 
 <div class="viewcode-block" id="FisherCalculator.plot">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.plot">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">latex_names</span><span class="p">,</span>
         <span class="n">fig_name</span><span class="p">,</span>
@@ -503,7 +503,7 @@
         <span class="n">xticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">fisher_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">x_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">rm</span><span class="se">{{</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">fisher_df</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
 
-        <span class="k">def</span> <span class="nf">set_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">set_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">):</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">yticks</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">latex_names</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span>
                 <span class="n">xticks</span><span class="p">,</span>
@@ -518,7 +518,7 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">plot_values</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">plot_values</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">elem</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>

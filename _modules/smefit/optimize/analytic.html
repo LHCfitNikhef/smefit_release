@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.optimize.analytic &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -117,24 +117,24 @@
   <h1>Source code for smefit.optimize.analytic</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Solve the linear plolem to get the best analytic bounds.&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">rich.style</span> <span class="kn">import</span> <span class="n">Style</span>
-<span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.style</span><span class="w"> </span><span class="kn">import</span> <span class="n">Style</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.table</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span>
 
-<span class="kn">from</span> <span class="nn">smefit.rge</span> <span class="kn">import</span> <span class="n">load_rge_matrix</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smefit.rge</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_rge_matrix</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">log</span>
-<span class="kn">from</span> <span class="nn">..analyze.pca</span> <span class="kn">import</span> <span class="n">impose_constrain</span>
-<span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
-<span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">load_datasets</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Optimizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">log</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..analyze.pca</span><span class="w"> </span><span class="kn">import</span> <span class="n">impose_constrain</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..coefficients</span><span class="w"> </span><span class="kn">import</span> <span class="n">CoefficientManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_datasets</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optimizer</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="is_semi_pos_def">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.analytic.is_semi_pos_def">[docs]</a>
-<span class="k">def</span> <span class="nf">is_semi_pos_def</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_semi_pos_def</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check is a matrix is positive-semidefinite.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span></div>
 
@@ -142,7 +142,7 @@
 
 <div class="viewcode-block" id="ALOptimizer">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.analytic.ALOptimizer">[docs]</a>
-<span class="k">class</span> <span class="nc">ALOptimizer</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ALOptimizer</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimizer specification for the linear analytic solution.</span>
 
 <span class="sd">    Parameters</span>
@@ -161,7 +161,7 @@
 <span class="sd">        number of replica to sample</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">loaded_datasets</span><span class="p">,</span>
         <span class="n">coefficients</span><span class="p">,</span>
@@ -185,7 +185,7 @@
 <div class="viewcode-block" id="ALOptimizer.from_dict">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.analytic.ALOptimizer.from_dict">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create object from theory dictionary.</span>
 
 <span class="sd">        Parameters</span>
@@ -252,7 +252,7 @@
 
 <div class="viewcode-block" id="ALOptimizer.log_result">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.analytic.ALOptimizer.log_result">[docs]</a>
-    <span class="k">def</span> <span class="nf">log_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeff_best</span><span class="p">,</span> <span class="n">coeff_covmat</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">log_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeff_best</span><span class="p">,</span> <span class="n">coeff_covmat</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Log a table with solution.&quot;&quot;&quot;</span>
         <span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="n">Style</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">),</span> <span class="n">title_style</span><span class="o">=</span><span class="s2">&quot;bold cyan&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Parameter&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold red&quot;</span><span class="p">,</span> <span class="n">no_wrap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -267,7 +267,7 @@
 
 <div class="viewcode-block" id="ALOptimizer.run_sampling">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.analytic.ALOptimizer.run_sampling">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run sapmling accordying to the analytic solution.&quot;&quot;&quot;</span>
 
         <span class="n">fit_result</span> <span class="o">=</span> <span class="p">{}</span>
@@ -356,7 +356,7 @@
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">chi2_red</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Save samples to json inside a dictionary: {coff: [replicas values]}.</span>
 <span class="sd">        Saving also some basic information about the fit.</span>
 

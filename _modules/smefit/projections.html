@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.projections &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f74d80cf" />
 
@@ -115,25 +115,25 @@
              
   <h1>Source code for smefit.projections</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
-<span class="kn">from</span> <span class="nn">..compute_theory</span> <span class="kn">import</span> <span class="n">make_predictions</span>
-<span class="kn">from</span> <span class="nn">..covmat</span> <span class="kn">import</span> <span class="n">covmat_from_systematics</span>
-<span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">Loader</span><span class="p">,</span> <span class="n">load_datasets</span>
-<span class="kn">from</span> <span class="nn">..log</span> <span class="kn">import</span> <span class="n">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..compute_theory</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_predictions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..covmat</span><span class="w"> </span><span class="kn">import</span> <span class="n">covmat_from_systematics</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">Loader</span><span class="p">,</span> <span class="n">load_datasets</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..log</span><span class="w"> </span><span class="kn">import</span> <span class="n">logging</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Projection">
 <a class="viewcode-back" href="../../modules/smefit/smefit.projections.html#smefit.projections.Projection">[docs]</a>
-<span class="k">class</span> <span class="nc">Projection</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Projection</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">commondata_path</span><span class="p">,</span>
         <span class="n">theory_path</span><span class="p">,</span>
@@ -181,7 +181,7 @@
 <div class="viewcode-block" id="Projection.from_config">
 <a class="viewcode-back" href="../../modules/smefit/smefit.projections.html#smefit.projections.Projection.from_config">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">projection_card</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">projection_card</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the class Projection</span>
 
@@ -233,7 +233,7 @@
 
 <div class="viewcode-block" id="Projection.compute_cv_projection">
 <a class="viewcode-back" href="../../modules/smefit/smefit.projections.html#smefit.projections.Projection.compute_cv_projection">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_cv_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_cv_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes the new central value under the EFT hypothesis (is SM when coefficients are zero)</span>
 
@@ -256,7 +256,7 @@
 
 <div class="viewcode-block" id="Projection.rescale_sys">
 <a class="viewcode-back" href="../../modules/smefit/smefit.projections.html#smefit.projections.Projection.rescale_sys">[docs]</a>
-    <span class="k">def</span> <span class="nf">rescale_sys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">fred_sys</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rescale_sys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">fred_sys</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Projects the systematic uncertainties by reducing them by fred_sys</span>
 
@@ -292,7 +292,7 @@
 <div class="viewcode-block" id="Projection.rescale_stat">
 <a class="viewcode-back" href="../../modules/smefit/smefit.projections.html#smefit.projections.Projection.rescale_stat">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">rescale_stat</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">lumi_old</span><span class="p">,</span> <span class="n">lumi_new</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rescale_stat</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">lumi_old</span><span class="p">,</span> <span class="n">lumi_new</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Projects the statistical uncertainties from lumi_old to lumi_new</span>
 
@@ -315,7 +315,7 @@
 
 <div class="viewcode-block" id="Projection.build_projection">
 <a class="viewcode-back" href="../../modules/smefit/smefit.projections.html#smefit.projections.Projection.build_projection">[docs]</a>
-    <span class="k">def</span> <span class="nf">build_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumi_new</span><span class="p">,</span> <span class="n">closure</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_projection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lumi_new</span><span class="p">,</span> <span class="n">closure</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructs runcard for projection by updating the central value and statistical and</span>
 <span class="sd">        systematic uncertainties</span>

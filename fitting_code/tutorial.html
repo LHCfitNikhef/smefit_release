@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SMEFiT Tutorial &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f74d80cf" />
@@ -166,14 +166,14 @@ SMEFT potential for indirect New Physics searches from precision measurements re
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>wget
 <span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>ipywidgets
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">wget</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wget</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
 
 <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParamsDefault</span><span class="p">)</span>
 </pre></div>
@@ -191,9 +191,9 @@ Requirement already satisfied: wget in /Users/jaco/opt/anaconda3/envs/smefit_tut
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">smefit</span>
-<span class="kn">import</span> <span class="nn">smefit.runner</span>
-<span class="kn">from</span> <span class="nn">smefit.analyze.report</span> <span class="kn">import</span> <span class="n">Report</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">smefit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">smefit.runner</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smefit.analyze.report</span><span class="w"> </span><span class="kn">import</span> <span class="n">Report</span>
 
 <span class="n">smefit</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">setup_console</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
@@ -204,7 +204,7 @@ Requirement already satisfied: wget in /Users/jaco/opt/anaconda3/envs/smefit_tut
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">file_downloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">download_dir</span><span class="o">=</span><span class="s1">&#39;./downloads&#39;</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">file_downloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">download_dir</span><span class="o">=</span><span class="s1">&#39;./downloads&#39;</span><span class="p">):</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">download_dir</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">download_dir</span><span class="p">)</span>
@@ -236,9 +236,15 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 \mathcal{O}_{qq}^{3(i33i)} &amp;= \left(\bar{q}_i\gamma^\mu \tau^I Q \right)\left(\bar{Q} \gamma_\mu \tau^I q_l\right) \, .
 \end{align}\end{split}\]</div>
 <p>Here the fields <span class="math notranslate nohighlight">\(q_i\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> constitute respectively the light (<span class="math notranslate nohighlight">\(i=1,2\)</span>) and heavy quark <span class="math notranslate nohighlight">\(SU(2)\)</span> doublets, while the <span class="math notranslate nohighlight">\(\tau^I\)</span> are the usual Pauli matrices.</p>
-<p><strong>Question 1A</strong> - Do <span class="math notranslate nohighlight">\(\mathcal{O}_{qq}^{1(ijkl)}\)</span> and <span class="math notranslate nohighlight">\(\mathcal{O}_{qq}^{3(ijkl)}\)</span> define valid SMEFT operators at dimension-six? If so, why?</p>
+<p><strong>Question 1A</strong></p>
+<ul class="simple">
+<li><p>Do <span class="math notranslate nohighlight">\(\mathcal{O}_{qq}^{1(ijkl)}\)</span> and <span class="math notranslate nohighlight">\(\mathcal{O}_{qq}^{3(ijkl)}\)</span> define valid SMEFT operators at dimension-six? If so, why?</p></li>
+</ul>
 <p>These operators modify SM processes measured at the LHC, and hence provide a probe to study possible new physics beyond the SM. The goal of the rest of this exercise is to set bounds on the corresponding Wilson coefficients to check whether current data is compatible with the SM or not.</p>
-<p><strong>Question 1B</strong> - Consider top-pair production in association with a Z or W boson. Convince yourself by drawing a representative Feynman diagram that the operators defined above modify <span class="math notranslate nohighlight">\(ttV\)</span> (<span class="math notranslate nohighlight">\(V=W, Z)\)</span> production.</p>
+<p><strong>Question 1B</strong></p>
+<ul class="simple">
+<li><p>Consider top-pair production in association with a Z or W boson. Convince yourself by drawing a representative Feynman diagram that the operators defined above modify <span class="math notranslate nohighlight">\(ttV\)</span> (<span class="math notranslate nohighlight">\(V=W, Z)\)</span> production.</p></li>
+</ul>
 <p>To run the fit, we need a runcard. An example is given below. In this first exercise we will provide all runcards, so no need to write them yourself.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># smefit_runcard.yaml</span>
 
@@ -307,7 +313,7 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_report</span><span class="p">(</span><span class="n">runcard_report</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">make_report</span><span class="p">(</span><span class="n">runcard_report</span><span class="p">):</span>
 
     <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParamsDefault</span><span class="p">)</span>
 

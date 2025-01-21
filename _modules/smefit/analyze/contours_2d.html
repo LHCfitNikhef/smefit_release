@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.analyze.contours_2d &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -116,17 +116,17 @@
              
   <h1>Source code for smefit.analyze.contours_2d</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.stats</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">patches</span><span class="p">,</span> <span class="n">transforms</span>
-<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Ellipse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.stats</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">patches</span><span class="p">,</span> <span class="n">transforms</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ellipse</span>
 
 
 <div class="viewcode-block" id="split_solution">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.contours_2d.split_solution">[docs]</a>
-<span class="k">def</span> <span class="nf">split_solution</span><span class="p">(</span><span class="n">full_solution</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">split_solution</span><span class="p">(</span><span class="n">full_solution</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Split the posterior solution&quot;&quot;&quot;</span>
 
     <span class="n">min_val</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">full_solution</span><span class="p">)</span>
@@ -145,7 +145,7 @@
 
 <div class="viewcode-block" id="confidence_ellipse">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.contours_2d.confidence_ellipse">[docs]</a>
-<span class="k">def</span> <span class="nf">confidence_ellipse</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">confidence_ellipse</span><span class="p">(</span>
     <span class="n">coeff1</span><span class="p">,</span> <span class="n">coeff2</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">confidence_level</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -221,7 +221,7 @@
 
 <div class="viewcode-block" id="plot_contours">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.contours_2d.plot_contours">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_contours</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_contours</span><span class="p">(</span>
     <span class="n">ax</span><span class="p">,</span>
     <span class="n">posterior</span><span class="p">,</span>
     <span class="n">ax_labels</span><span class="p">,</span>

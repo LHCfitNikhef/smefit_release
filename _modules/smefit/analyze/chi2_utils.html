@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.analyze.chi2_utils &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -116,16 +116,16 @@
              
   <h1>Source code for smefit.analyze.chi2_utils</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">chi2table_header</span><span class="p">,</span> <span class="n">latex_packages</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.latex_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">chi2table_header</span><span class="p">,</span> <span class="n">latex_packages</span>
 
 
 <div class="viewcode-block" id="Chi2tableCalculator">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator">[docs]</a>
-<span class="k">class</span> <span class="nc">Chi2tableCalculator</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Chi2tableCalculator</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the :math:`\chi^2` for each replica and produce:</span>
 
 <span class="sd">        * Tables with :math:`\chi^2` for each dataset and datagroup.</span>
@@ -139,7 +139,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_info</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_info</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span> <span class="o">=</span> <span class="n">data_info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chi2_df_sm_grouped</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
@@ -147,7 +147,7 @@
 <div class="viewcode-block" id="Chi2tableCalculator.compute">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.compute">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">smeft_predictions</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">smeft_predictions</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the :math:`\chi^2` for each replica and dataset.</span>
 
 <span class="sd">        Parameters</span>
@@ -232,7 +232,7 @@
 <div class="viewcode-block" id="Chi2tableCalculator.add_normalized_chi2">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.add_normalized_chi2">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">add_normalized_chi2</span><span class="p">(</span><span class="n">chi2_df</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_normalized_chi2</span><span class="p">(</span><span class="n">chi2_df</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Add the normalized :math:`\chi^2` to the table.</span>
 
 <span class="sd">        Parameters</span>
@@ -252,7 +252,7 @@
 
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_add_chi2_df_colors</span><span class="p">(</span><span class="n">chi2_df</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_add_chi2_df_colors</span><span class="p">(</span><span class="n">chi2_df</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Values higer than one std are labelled with blue.</span>
 <span class="sd">        Values lowe  than one std are labelled with red.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -265,7 +265,7 @@
 
 <div class="viewcode-block" id="Chi2tableCalculator.group_chi2_df">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.group_chi2_df">[docs]</a>
-    <span class="k">def</span> <span class="nf">group_chi2_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_df</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">group_chi2_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_df</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Group the :math:`\chi^2` according to the data type.</span>
 
 <span class="sd">        Parameters</span>
@@ -293,7 +293,7 @@
         <span class="k">return</span> <span class="n">chi2_df_grouped</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_split_table_entries_sm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_split_table_entries_sm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the chi2_df dict for all included datasets.&quot;&quot;&quot;</span>
         <span class="n">labels_to_include</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ndat&quot;</span><span class="p">,</span> <span class="s2">&quot;chi2_sm/ndat&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">chi2_df</span><span class="p">,</span> <span class="n">chi2_df_grouped</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
@@ -315,7 +315,7 @@
 
 <div class="viewcode-block" id="Chi2tableCalculator.write">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write">[docs]</a>
-    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Write the :math:`\chi^2` latex tables.</span>
 
 <span class="sd">        Parameters</span>
@@ -341,7 +341,7 @@
 
 <div class="viewcode-block" id="Chi2tableCalculator.write_chi2_grouped">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write_chi2_grouped">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_chi2_grouped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_chi2_grouped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Write the :math:`\chi^2` latex tables for each data group.</span>
 
 <span class="sd">        Parameters</span>
@@ -405,7 +405,7 @@
 
 <div class="viewcode-block" id="Chi2tableCalculator.write_chi2_summary">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.write_chi2_summary">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_chi2_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_chi2_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict_group</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Write the summary :math:`\chi^2` table for grouped data.</span>
 
 <span class="sd">        Parameters</span>
@@ -468,7 +468,7 @@
 
 <div class="viewcode-block" id="Chi2tableCalculator.plot_exp">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.plot_exp">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_exp</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_exp</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">chi2_dict</span><span class="p">,</span>
         <span class="n">fig_name</span><span class="p">,</span>
@@ -506,7 +506,7 @@
 
 <div class="viewcode-block" id="Chi2tableCalculator.plot_dist">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.chi2_utils.Chi2tableCalculator.plot_dist">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_hist</span><span class="p">,</span> <span class="n">fig_name</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">)):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_dist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_hist</span><span class="p">,</span> <span class="n">fig_name</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">)):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Plots the :math:`\chi^2` distribution.&quot;&quot;&quot;</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>

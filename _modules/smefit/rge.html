@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.rge &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f74d80cf" />
 
@@ -115,21 +115,21 @@
              
   <h1>Source code for smefit.rge</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">wraps</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span><span class="p">,</span> <span class="n">wraps</span>
 
-<span class="kn">import</span> <span class="nn">ckmutil.ckm</span>
-<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">wilson</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ComplexWarning</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ckmutil.ckm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">wilson</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ComplexWarning</span>
 
-<span class="kn">from</span> <span class="nn">smefit</span> <span class="kn">import</span> <span class="n">log</span>
-<span class="kn">from</span> <span class="nn">smefit.loader</span> <span class="kn">import</span> <span class="n">Loader</span>
-<span class="kn">from</span> <span class="nn">smefit.wcxf</span> <span class="kn">import</span> <span class="n">inverse_wcxf_translate</span><span class="p">,</span> <span class="n">wcxf_translate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smefit</span><span class="w"> </span><span class="kn">import</span> <span class="n">log</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smefit.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">Loader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smefit.wcxf</span><span class="w"> </span><span class="kn">import</span> <span class="n">inverse_wcxf_translate</span><span class="p">,</span> <span class="n">wcxf_translate</span>
 
 <span class="c1">### Patch of a CKM function, so that the CP violating</span>
 <span class="c1">### phase is set to gamma and not computed explicitly</span>
@@ -150,7 +150,7 @@
 
 <div class="viewcode-block" id="beta_wrapper">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.rge.beta_wrapper">[docs]</a>
-<span class="k">def</span> <span class="nf">beta_wrapper</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">HIGHSCALE</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">beta_wrapper</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">HIGHSCALE</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">original_beta</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">HIGHSCALE</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
@@ -182,7 +182,7 @@
 
 <span class="c1"># Define the monkey-patched function</span>
 <span class="nd">@wraps</span><span class="p">(</span><span class="n">original_smeftpar</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">patched_smeftpar</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">patched_smeftpar</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="c1"># check if C is passed as a keyword argument</span>
     <span class="k">if</span> <span class="s2">&quot;C&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">C_patch</span>
@@ -202,7 +202,7 @@
 <span class="c1">##################### MONKEY PATCH</span>
 <span class="c1"># Monkey patch flavour rotation</span>
 <span class="c1"># Define the new method</span>
-<span class="k">def</span> <span class="nf">_to_wcxf_no_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C_out</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_wcxf_no_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">C_out</span><span class="p">,</span> <span class="n">scale_out</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the Wilson coefficients `C_out` as a wcxf.WC instance, without rotation.&quot;&quot;&quot;</span>
     <span class="c1"># Skip the self._rotate_defaultbasis line</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">wilson</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">smeftutil</span><span class="o">.</span><span class="n">arrays2wcxf_nonred</span><span class="p">(</span><span class="n">C_out</span><span class="p">)</span>
@@ -271,7 +271,7 @@
 
 <div class="viewcode-block" id="evolve_gs">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.rge.evolve_gs">[docs]</a>
-<span class="k">def</span> <span class="nf">evolve_gs</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">evolve_gs</span><span class="p">(</span><span class="n">scale</span><span class="p">):</span>
     <span class="c1"># evolve gs from MZ to scale</span>
     <span class="n">beta0</span> <span class="o">=</span> <span class="mi">11</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">6</span>
     <span class="k">return</span> <span class="n">gs</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
@@ -282,7 +282,7 @@
 
 <div class="viewcode-block" id="RGE">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.rge.RGE">[docs]</a>
-<span class="k">class</span> <span class="nc">RGE</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RGE</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class to compute the RGE matrix for the SMEFT Wilson coefficients.</span>
 <span class="sd">    The RGE matrix is computed at the initial scale `init_scale` and</span>
@@ -304,7 +304,7 @@
 <span class="sd">        Default is &quot;top&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">wc_names</span><span class="p">,</span>
         <span class="n">init_scale</span><span class="p">,</span>
@@ -341,7 +341,7 @@
 
 <div class="viewcode-block" id="RGE.RGEmatrix_dict">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.rge.RGE.RGEmatrix_dict">[docs]</a>
-    <span class="k">def</span> <span class="nf">RGEmatrix_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">RGEmatrix_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the RGE solution at the scale `scale` and return it as a dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -374,7 +374,7 @@
 
 <div class="viewcode-block" id="RGE.RGEmatrix">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.rge.RGE.RGEmatrix">[docs]</a>
-    <span class="k">def</span> <span class="nf">RGEmatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">RGEmatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the RGE solution at the scale `scale` and return it as a pandas DataFrame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -396,7 +396,7 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">RGEbasis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">RGEbasis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the RGE basis translated from smefit to Warsaw.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -437,7 +437,7 @@
 
 <div class="viewcode-block" id="RGE.map_to_smefit">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.rge.RGE.map_to_smefit">[docs]</a>
-    <span class="k">def</span> <span class="nf">map_to_smefit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc_final_vals</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">map_to_smefit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wc_final_vals</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Map the Wilson coefficients from the Warsaw basis to the SMEFiT basis.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -464,12 +464,12 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">all_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">all_ops</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">wcxf_translate</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
 <div class="viewcode-block" id="RGE.RGEevolve">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.rge.RGE.RGEevolve">[docs]</a>
-    <span class="k">def</span> <span class="nf">RGEevolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wcs</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">RGEevolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wcs</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evolve the Wilson coefficients from the initial scale to the scale of interest.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -497,7 +497,7 @@
 
 <div class="viewcode-block" id="load_scales">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.rge.load_scales">[docs]</a>
-<span class="k">def</span> <span class="nf">load_scales</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_scales</span><span class="p">(</span>
     <span class="n">datasets</span><span class="p">,</span> <span class="n">theory_path</span><span class="p">,</span> <span class="n">default_scale</span><span class="o">=</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">cutoff_scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale_variation</span><span class="o">=</span><span class="mf">1.0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -553,7 +553,7 @@
 
 <div class="viewcode-block" id="load_rge_matrix">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.rge.load_rge_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">load_rge_matrix</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_rge_matrix</span><span class="p">(</span>
     <span class="n">rge_dict</span><span class="p">,</span> <span class="n">coeff_list</span><span class="p">,</span> <span class="n">datasets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">theory_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cutoff_scale</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>

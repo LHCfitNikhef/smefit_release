@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.optimize.ultranest &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -117,25 +117,25 @@
   <h1>Source code for smefit.optimize.ultranest</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Fitting the Wilson coefficients with |NS|&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
 
-<span class="kn">import</span> <span class="nn">jax</span>
-<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">import</span> <span class="nn">ultranest</span>
-<span class="kn">from</span> <span class="nn">rich.style</span> <span class="kn">import</span> <span class="n">Style</span>
-<span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
-<span class="kn">from</span> <span class="nn">ultranest</span> <span class="kn">import</span> <span class="n">stepsampler</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ultranest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.style</span><span class="w"> </span><span class="kn">import</span> <span class="n">Style</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.table</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ultranest</span><span class="w"> </span><span class="kn">import</span> <span class="n">stepsampler</span>
 
-<span class="kn">from</span> <span class="nn">smefit.rge</span> <span class="kn">import</span> <span class="n">load_rge_matrix</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smefit.rge</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_rge_matrix</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">log</span>
-<span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
-<span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">load_datasets</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">Optimizer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">log</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..coefficients</span><span class="w"> </span><span class="kn">import</span> <span class="n">CoefficientManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_datasets</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optimizer</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">mpi4py</span><span class="w"> </span><span class="kn">import</span> <span class="n">MPI</span>
 
     <span class="n">run_parallel</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
@@ -146,7 +146,7 @@
 
 <div class="viewcode-block" id="USOptimizer">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer">[docs]</a>
-<span class="k">class</span> <span class="nc">USOptimizer</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">USOptimizer</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimizer specification for Ultra nest.</span>
 
 <span class="sd">    Parameters</span>
@@ -195,7 +195,7 @@
 
     <span class="n">print_rate</span> <span class="o">=</span> <span class="mi">5000</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">loaded_datasets</span><span class="p">,</span>
         <span class="n">coefficients</span><span class="p">,</span>
@@ -250,7 +250,7 @@
 <div class="viewcode-block" id="USOptimizer.from_dict">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.from_dict">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create object from theory dictionary.</span>
 
 <span class="sd">        Parameters</span>
@@ -375,7 +375,7 @@
 
 <div class="viewcode-block" id="USOptimizer.chi2_func_ns">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.chi2_func_ns">[docs]</a>
-    <span class="k">def</span> <span class="nf">chi2_func_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">chi2_func_ns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the chi2 function for |NS|.</span>
 <span class="sd">        It is simplified with respect to the one in the Optimizer class,</span>
 <span class="sd">        so that it can be compiled with jax.jit.</span>
@@ -406,7 +406,7 @@
 
 <div class="viewcode-block" id="USOptimizer.compute_fixed_coeff">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.compute_fixed_coeff">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_fixed_coeff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constrain</span><span class="p">,</span> <span class="n">param_dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_fixed_coeff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constrain</span><span class="p">,</span> <span class="n">param_dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the fixed coefficient.&quot;&quot;&quot;</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">for</span> <span class="n">add_factor_dict</span> <span class="ow">in</span> <span class="n">constrain</span><span class="p">:</span>
@@ -420,7 +420,7 @@
 
 <div class="viewcode-block" id="USOptimizer.produce_all_params">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.produce_all_params">[docs]</a>
-    <span class="k">def</span> <span class="nf">produce_all_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">produce_all_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Produce all parameters from the free parameters.</span>
 
 <span class="sd">        Parameters</span>
@@ -461,7 +461,7 @@
 <div class="viewcode-block" id="USOptimizer.gaussian_loglikelihood">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.gaussian_loglikelihood">[docs]</a>
     <span class="nd">@partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;self&quot;</span><span class="p">])</span>
-    <span class="k">def</span> <span class="nf">gaussian_loglikelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gaussian_loglikelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Multi gaussian log likelihood function.</span>
 
 <span class="sd">        Parameters</span>
@@ -483,7 +483,7 @@
 <div class="viewcode-block" id="USOptimizer.flat_prior">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.flat_prior">[docs]</a>
     <span class="nd">@partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;self&quot;</span><span class="p">])</span>
-    <span class="k">def</span> <span class="nf">flat_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypercube</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">flat_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hypercube</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the prior function.</span>
 
 <span class="sd">        Parameters</span>
@@ -503,7 +503,7 @@
 
 <div class="viewcode-block" id="USOptimizer.run_sampling">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.run_sampling">[docs]</a>
-    <span class="k">def</span> <span class="nf">run_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the minimization with Ultra nest.&quot;&quot;&quot;</span>
 
         <span class="n">log_dir</span> <span class="o">=</span> <span class="kc">None</span>
@@ -572,7 +572,7 @@
 
 <div class="viewcode-block" id="USOptimizer.save">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.optimize.html#smefit.optimize.ultranest.USOptimizer.save">[docs]</a>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Save |NS| replicas to json inside a dictionary: {coff: [replicas values]}.</span>
 <span class="sd">        Saving also some basic information about the fit.</span>
 

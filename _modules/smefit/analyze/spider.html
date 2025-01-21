@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.analyze.spider &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -116,18 +116,18 @@
              
   <h1>Source code for smefit.analyze.spider</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Circle</span><span class="p">,</span> <span class="n">RegularPolygon</span>
-<span class="kn">from</span> <span class="nn">matplotlib.path</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">matplotlib.projections</span> <span class="kn">import</span> <span class="n">register_projection</span>
-<span class="kn">from</span> <span class="nn">matplotlib.projections.polar</span> <span class="kn">import</span> <span class="n">PolarAxes</span>
-<span class="kn">from</span> <span class="nn">matplotlib.spines</span> <span class="kn">import</span> <span class="n">Spine</span>
-<span class="kn">from</span> <span class="nn">matplotlib.transforms</span> <span class="kn">import</span> <span class="n">Affine2D</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Circle</span><span class="p">,</span> <span class="n">RegularPolygon</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.projections</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_projection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.projections.polar</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolarAxes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.spines</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spine</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">Affine2D</span>
 
 
 <div class="viewcode-block" id="radar_factory">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.spider.radar_factory">[docs]</a>
-<span class="k">def</span> <span class="nf">radar_factory</span><span class="p">(</span><span class="n">num_vars</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s2">&quot;circle&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">radar_factory</span><span class="p">(</span><span class="n">num_vars</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="s2">&quot;circle&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function is copied from https://matplotlib.org/stable/gallery/specialty_plots/radar_chart.html</span>
 
@@ -146,8 +146,8 @@
     <span class="c1"># calculate evenly-spaced axis angles</span>
     <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">num_vars</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="k">class</span> <span class="nc">RadarTransform</span><span class="p">(</span><span class="n">PolarAxes</span><span class="o">.</span><span class="n">PolarTransform</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">transform_path_non_affine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">RadarTransform</span><span class="p">(</span><span class="n">PolarAxes</span><span class="o">.</span><span class="n">PolarTransform</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">transform_path_non_affine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
             <span class="c1"># Paths with non-unit interpolation steps correspond to gridlines,</span>
             <span class="c1"># in which case we force interpolation (to defeat PolarTransform&#39;s</span>
             <span class="c1"># autoconversion to circular arcs).</span>
@@ -155,27 +155,27 @@
                 <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">interpolated</span><span class="p">(</span><span class="n">num_vars</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">vertices</span><span class="p">),</span> <span class="n">path</span><span class="o">.</span><span class="n">codes</span><span class="p">)</span>
 
-    <span class="k">class</span> <span class="nc">RadarAxes</span><span class="p">(</span><span class="n">PolarAxes</span><span class="p">):</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">RadarAxes</span><span class="p">(</span><span class="n">PolarAxes</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;radar&quot;</span>
         <span class="n">PolarTransform</span> <span class="o">=</span> <span class="n">RadarTransform</span>
 
-        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="c1"># rotate plot such that the first axis is at the top</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_theta_zero_location</span><span class="p">(</span><span class="s2">&quot;N&quot;</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">fill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Override fill so that line is closed by default&quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">closed</span><span class="o">=</span><span class="n">closed</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Override plot so that line is closed by default&quot;&quot;&quot;</span>
             <span class="n">lines</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_close_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">lines</span>
 
-        <span class="k">def</span> <span class="nf">_close_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_close_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
             <span class="c1"># FIXME: markers at x[0], y[0] get doubled-up</span>
             <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
@@ -183,10 +183,10 @@
                 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="n">line</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">set_varlabels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">set_varlabels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_thetagrids</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="n">labels</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">_gen_axes_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_gen_axes_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="c1"># The Axes patch must be centered at (0.5, 0.5) and of radius 0.5</span>
             <span class="c1"># in axes coordinates.</span>
             <span class="k">if</span> <span class="n">frame</span> <span class="o">==</span> <span class="s2">&quot;circle&quot;</span><span class="p">:</span>
@@ -196,7 +196,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown value for &#39;frame&#39;: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">frame</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">_gen_axes_spines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_gen_axes_spines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">frame</span> <span class="o">==</span> <span class="s2">&quot;circle&quot;</span><span class="p">:</span>
                 <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_gen_axes_spines</span><span class="p">()</span>
             <span class="k">elif</span> <span class="n">frame</span> <span class="o">==</span> <span class="s2">&quot;polygon&quot;</span><span class="p">:</span>

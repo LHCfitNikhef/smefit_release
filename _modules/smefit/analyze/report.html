@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.analyze.report &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -116,29 +116,29 @@
              
   <h1>Source code for smefit.analyze.report</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">..fit_manager</span> <span class="kn">import</span> <span class="n">FitManager</span>
-<span class="kn">from</span> <span class="nn">..log</span> <span class="kn">import</span> <span class="n">logging</span>
-<span class="kn">from</span> <span class="nn">.chi2_utils</span> <span class="kn">import</span> <span class="n">Chi2tableCalculator</span>
-<span class="kn">from</span> <span class="nn">.coefficients_utils</span> <span class="kn">import</span> <span class="n">CoefficientsPlotter</span><span class="p">,</span> <span class="n">compute_confidence_level</span>
-<span class="kn">from</span> <span class="nn">.correlations</span> <span class="kn">import</span> <span class="n">plot_correlations</span>
-<span class="kn">from</span> <span class="nn">.fisher</span> <span class="kn">import</span> <span class="n">FisherCalculator</span>
-<span class="kn">from</span> <span class="nn">.html_utils</span> <span class="kn">import</span> <span class="n">html_link</span><span class="p">,</span> <span class="n">write_html_container</span>
-<span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">compile_tex</span>
-<span class="kn">from</span> <span class="nn">.pca</span> <span class="kn">import</span> <span class="n">PcaCalculator</span>
-<span class="kn">from</span> <span class="nn">.summary</span> <span class="kn">import</span> <span class="n">SummaryWriter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..fit_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">FitManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..log</span><span class="w"> </span><span class="kn">import</span> <span class="n">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.chi2_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">Chi2tableCalculator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.coefficients_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">CoefficientsPlotter</span><span class="p">,</span> <span class="n">compute_confidence_level</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.correlations</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_correlations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.fisher</span><span class="w"> </span><span class="kn">import</span> <span class="n">FisherCalculator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.html_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">html_link</span><span class="p">,</span> <span class="n">write_html_container</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.latex_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">compile_tex</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.pca</span><span class="w"> </span><span class="kn">import</span> <span class="n">PcaCalculator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.summary</span><span class="w"> </span><span class="kn">import</span> <span class="n">SummaryWriter</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Report">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report">[docs]</a>
-<span class="k">class</span> <span class="nc">Report</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Report</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Report class manager.</span>
 
 <span class="sd">    If :math:`\chi^2`, Fisher or Data vs Theory plots are produced it computes the</span>
@@ -167,7 +167,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_path</span><span class="p">,</span> <span class="n">result_path</span><span class="p">,</span> <span class="n">report_config</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_path</span><span class="p">,</span> <span class="n">result_path</span><span class="p">,</span> <span class="n">report_config</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">report_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">report_config</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># build the fits labels if needed</span>
@@ -201,7 +201,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">html_index</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">html_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_load_grouped_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_grouped_data_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load grouped info of datasets.</span>
 
 <span class="sd">        Only elements appearing at least once in the fit configs are kept.</span>
@@ -228,7 +228,7 @@
                 <span class="n">out_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out_dict</span><span class="p">)</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span><span class="o">.</span><span class="n">swaplevel</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_load_grouped_coeff_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_grouped_coeff_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load grouped info of coefficients.</span>
 
 <span class="sd">        Only elements appearing at least once in the fit configs are kept.</span>
@@ -255,7 +255,7 @@
                 <span class="n">out_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out_dict</span><span class="p">)</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span><span class="o">.</span><span class="n">swaplevel</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_append_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_append_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">html_index</span> <span class="o">+=</span> <span class="n">html_link</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">add_meta</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">html_content</span> <span class="o">+=</span> <span class="n">write_html_container</span><span class="p">(</span>
             <span class="n">title</span><span class="p">,</span> <span class="n">links</span><span class="o">=</span><span class="n">links</span><span class="p">,</span> <span class="n">figs</span><span class="o">=</span><span class="n">figs</span><span class="p">,</span> <span class="n">dataFrame</span><span class="o">=</span><span class="n">tables</span>
@@ -263,7 +263,7 @@
 
 <div class="viewcode-block" id="Report.summary">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.summary">[docs]</a>
-    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Summary Table runner.&quot;&quot;&quot;</span>
         <span class="n">summary</span> <span class="o">=</span> <span class="n">SummaryWriter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="p">)</span>
         <span class="n">section_title</span> <span class="o">=</span> <span class="s2">&quot;Summary&quot;</span>
@@ -283,7 +283,7 @@
 
 <div class="viewcode-block" id="Report.chi2">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.chi2">[docs]</a>
-    <span class="k">def</span> <span class="nf">chi2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_experiment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">chi2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_experiment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_distribution</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;:math:`\chi^2` table and plots runner.</span>
 
 <span class="sd">        Parameters</span>
@@ -341,7 +341,7 @@
 
 <div class="viewcode-block" id="Report.coefficients">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.coefficients">[docs]</a>
-    <span class="k">def</span> <span class="nf">coefficients</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">coefficients</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">scatter_plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">confidence_level_bar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -526,7 +526,7 @@
 
 <div class="viewcode-block" id="Report.correlations">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.correlations">[docs]</a>
-    <span class="k">def</span> <span class="nf">correlations</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">correlations</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">hide_dofs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">thr_show</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fit_list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot coefficients correlation matrix.</span>
@@ -570,7 +570,7 @@
 
 <div class="viewcode-block" id="Report.pca">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.pca">[docs]</a>
-    <span class="k">def</span> <span class="nf">pca</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pca</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">table</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -625,7 +625,7 @@
 
 <div class="viewcode-block" id="Report.fisher">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.report.Report.fisher">[docs]</a>
-    <span class="k">def</span> <span class="nf">fisher</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fisher</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">norm</span><span class="o">=</span><span class="s2">&quot;coeff&quot;</span><span class="p">,</span>
         <span class="n">summary_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>

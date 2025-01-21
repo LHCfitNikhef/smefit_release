@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.analyze.latex_tools &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -116,15 +116,15 @@
              
   <h1>Source code for smefit.analyze.latex_tools</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
 
-<span class="kn">from</span> <span class="nn">.html_utils</span> <span class="kn">import</span> <span class="n">run_htlatex</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.html_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_htlatex</span>
 
 
 <div class="viewcode-block" id="latex_packages">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.latex_packages">[docs]</a>
-<span class="k">def</span> <span class="nf">latex_packages</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">latex_packages</span><span class="p">():</span>
     <span class="n">L</span> <span class="o">=</span> <span class="p">[</span>
         <span class="sa">r</span><span class="s2">&quot;\documentclass</span><span class="si">{article}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="sa">r</span><span class="s2">&quot;\usepackage</span><span class="si">{float}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -150,7 +150,7 @@
 
 <div class="viewcode-block" id="multicolum_table_header">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.multicolum_table_header">[docs]</a>
-<span class="k">def</span> <span class="nf">multicolum_table_header</span><span class="p">(</span><span class="n">fit_labels</span><span class="p">,</span> <span class="n">ncolumn</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">multicolum_table_header</span><span class="p">(</span><span class="n">fit_labels</span><span class="p">,</span> <span class="n">ncolumn</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Append the multicolumn table header&quot;&quot;&quot;</span>
     <span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;\hline&quot;</span><span class="p">]</span>
     <span class="n">temp</span> <span class="o">=</span> <span class="s2">&quot; &amp; &quot;</span>
@@ -164,7 +164,7 @@
 
 <div class="viewcode-block" id="chi2table_header">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.chi2table_header">[docs]</a>
-<span class="k">def</span> <span class="nf">chi2table_header</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">fit_labels</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">chi2table_header</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">fit_labels</span><span class="p">):</span>
     <span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\hline&quot;</span><span class="p">)</span>
     <span class="n">temp</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot; \multicolumn</span><span class="si">{2}</span><span class="s2">{|c|}</span><span class="si">{}</span><span class="s2"> &amp; SM&quot;</span>
     <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">fit_labels</span><span class="p">:</span>
@@ -182,7 +182,7 @@
 
 <div class="viewcode-block" id="dump_to_tex">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.dump_to_tex">[docs]</a>
-<span class="k">def</span> <span class="nf">dump_to_tex</span><span class="p">(</span><span class="n">tex_file</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dump_to_tex</span><span class="p">(</span><span class="n">tex_file</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Dump a string to a tex file.</span>
 
 <span class="sd">    Parameters</span>
@@ -201,7 +201,7 @@
 
 <div class="viewcode-block" id="run_pdflatex">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.run_pdflatex">[docs]</a>
-<span class="k">def</span> <span class="nf">run_pdflatex</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_pdflatex</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run pdflatex.</span>
 
 <span class="sd">    Parameters</span>
@@ -221,7 +221,7 @@
 
 <div class="viewcode-block" id="compile_tex">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.latex_tools.compile_tex">[docs]</a>
-<span class="k">def</span> <span class="nf">compile_tex</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compile_tex</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compile tex file.</span>
 
 <span class="sd">    Parameters</span>

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.postfit &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f74d80cf" />
 
@@ -115,22 +115,22 @@
              
   <h1>Source code for smefit.postfit</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
-<span class="kn">from</span> <span class="nn">..log</span> <span class="kn">import</span> <span class="n">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..log</span><span class="w"> </span><span class="kn">import</span> <span class="n">logging</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Postfit">
 <a class="viewcode-back" href="../../modules/smefit/smefit.postfit.html#smefit.postfit.Postfit">[docs]</a>
-<span class="k">class</span> <span class="nc">Postfit</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_path</span><span class="p">,</span> <span class="n">single_parameter_fits</span><span class="p">,</span> <span class="n">chi2_threshold</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Postfit</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_path</span><span class="p">,</span> <span class="n">single_parameter_fits</span><span class="p">,</span> <span class="n">chi2_threshold</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results_folder</span> <span class="o">=</span> <span class="n">result_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">finished_replicas</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_folder</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
@@ -144,7 +144,7 @@
 <div class="viewcode-block" id="Postfit.from_file">
 <a class="viewcode-back" href="../../modules/smefit/smefit.postfit.html#smefit.postfit.Postfit.from_file">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">result_folder</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">result_folder</span><span class="p">):</span>
         <span class="c1"># load file</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">result_folder</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">result_folder</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">.yaml&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -165,7 +165,7 @@
 
 <div class="viewcode-block" id="Postfit.save">
 <a class="viewcode-back" href="../../modules/smefit/smefit.postfit.html#smefit.postfit.Postfit.save">[docs]</a>
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nrep</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nrep</span><span class="p">):</span>
         <span class="n">postfit_res</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">chi2_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">coeffs</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Initialize coeffs to None</span>
@@ -220,7 +220,7 @@
 
 <div class="viewcode-block" id="Postfit.clean">
 <a class="viewcode-back" href="../../modules/smefit/smefit.postfit.html#smefit.postfit.Postfit.clean">[docs]</a>
-    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">not_completed</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cleaning not done, since you don&#39;t have enough replicas.&quot;</span><span class="p">)</span>
             <span class="k">return</span>

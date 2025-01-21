@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.analyze.coefficients_utils &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -116,27 +116,27 @@
              
   <h1>Source code for smefit.analyze.coefficients_utils</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">itertools</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
 
-<span class="kn">import</span> <span class="nn">arviz</span>
-<span class="kn">import</span> <span class="nn">matplotlib.lines</span> <span class="k">as</span> <span class="nn">mlines</span>
-<span class="kn">import</span> <span class="nn">matplotlib.markers</span> <span class="k">as</span> <span class="nn">markers</span>
-<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">patches</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">arviz</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.lines</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mlines</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.markers</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">markers</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">patches</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 
-<span class="kn">from</span> <span class="nn">.contours_2d</span> <span class="kn">import</span> <span class="n">confidence_ellipse</span><span class="p">,</span> <span class="n">plot_contours</span><span class="p">,</span> <span class="n">split_solution</span>
-<span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">latex_packages</span><span class="p">,</span> <span class="n">multicolum_table_header</span>
-<span class="kn">from</span> <span class="nn">.spider</span> <span class="kn">import</span> <span class="n">radar_factory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.contours_2d</span><span class="w"> </span><span class="kn">import</span> <span class="n">confidence_ellipse</span><span class="p">,</span> <span class="n">plot_contours</span><span class="p">,</span> <span class="n">split_solution</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.latex_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">latex_packages</span><span class="p">,</span> <span class="n">multicolum_table_header</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.spider</span><span class="w"> </span><span class="kn">import</span> <span class="n">radar_factory</span>
 
 
 <div class="viewcode-block" id="get_confidence_values">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.coefficients_utils.get_confidence_values">[docs]</a>
-<span class="k">def</span> <span class="nf">get_confidence_values</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">has_posterior</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_confidence_values</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">has_posterior</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get confidence level bounds given the distribution</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -174,7 +174,7 @@
 
 <div class="viewcode-block" id="compute_confidence_level">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.coefficients_utils.compute_confidence_level">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_confidence_level</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_confidence_level</span><span class="p">(</span>
     <span class="n">posterior</span><span class="p">,</span> <span class="n">coeff_info</span><span class="p">,</span> <span class="n">has_posterior</span><span class="p">,</span> <span class="n">disjointed_list</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -219,7 +219,7 @@
 
 <div class="viewcode-block" id="CoefficientsPlotter">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter">[docs]</a>
-<span class="k">class</span> <span class="nc">CoefficientsPlotter</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CoefficientsPlotter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots central values + 95% CL errors, 95% CL bounds,</span>
 <span class="sd">    probability distributions, residuals,</span>
@@ -248,7 +248,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_path</span><span class="p">,</span> <span class="n">coeff_config</span><span class="p">,</span> <span class="n">logo</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_path</span><span class="p">,</span> <span class="n">coeff_config</span><span class="p">,</span> <span class="n">logo</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report_folder</span> <span class="o">=</span> <span class="n">report_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span> <span class="o">=</span> <span class="n">coeff_config</span>
 
@@ -262,7 +262,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">npar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_plot_logo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.999</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_plot_logo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.999</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">]):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">logo</span><span class="p">,</span>
@@ -272,8 +272,8 @@
                 <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_get_suplblots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">figsize</span><span class="p">):</span>
-        <span class="n">groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_suplblots</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">figsize</span><span class="p">):</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
             <span class="n">groups</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
             <span class="mi">1</span><span class="p">,</span>
@@ -286,7 +286,7 @@
 
 <div class="viewcode-block" id="CoefficientsPlotter.plot_coeffs">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_coeffs</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_coeffs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="n">x_min</span><span class="o">=-</span><span class="mi">400</span><span class="p">,</span> <span class="n">x_max</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">x_log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lin_thr</span><span class="o">=</span><span class="mf">1e-1</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -306,7 +306,8 @@
         <span class="n">y_shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">nfits</span><span class="p">,</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">nfits</span><span class="p">,</span> <span class="n">nfits</span><span class="p">)</span>
         <span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;tab20&quot;</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">plot_error_bars</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">plot_error_bars</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
             <span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span>
                 <span class="n">x</span><span class="o">=</span><span class="n">vals</span><span class="o">.</span><span class="n">mid</span><span class="p">,</span>
                 <span class="n">y</span><span class="o">=</span><span class="n">Y</span><span class="p">[</span><span class="n">cnt</span><span class="p">]</span> <span class="o">+</span> <span class="n">y_shift</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
@@ -329,8 +330,13 @@
             <span class="c1"># loop over fits</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">fit_name</span><span class="p">,</span> <span class="n">bound_df</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bounds</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
                 <span class="n">label</span> <span class="o">=</span> <span class="n">fit_name</span>
+                <span class="n">bound_df_top_to_bottom</span> <span class="o">=</span> <span class="n">bound_df</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span>
+                    <span class="p">:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span>
+                <span class="p">]</span>  <span class="c1"># reverse order to plot from top to bottom in ax</span>
                 <span class="c1"># loop on coeffs</span>
-                <span class="k">for</span> <span class="n">cnt</span><span class="p">,</span> <span class="p">(</span><span class="n">coeff_name</span><span class="p">,</span> <span class="n">coeff</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bound_df</span><span class="p">[</span><span class="n">g</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                <span class="k">for</span> <span class="n">cnt</span><span class="p">,</span> <span class="p">(</span><span class="n">coeff_name</span><span class="p">,</span> <span class="n">coeff</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+                    <span class="n">bound_df_top_to_bottom</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="p">):</span>
                     <span class="c1"># maybe there are no double solutions</span>
                     <span class="n">key_not_found</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">coeff_name</span><span class="si">}</span><span class="s2"> posterior is not found in </span><span class="si">{</span><span class="n">fit_name</span><span class="si">}</span><span class="s2">&quot;</span>
                     <span class="k">try</span><span class="p">:</span>
@@ -339,7 +345,7 @@
                         <span class="c1"># fitted ?</span>
                         <span class="k">if</span> <span class="n">coeff</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
                             <span class="k">continue</span>
-                        <span class="k">raise</span> <span class="ne">KeyError</span> <span class="kn">from</span> <span class="nn">key_not_found</span>
+                        <span class="k">raise</span> <span class="ne">KeyError</span> <span class="kn">from</span><span class="w"> </span><span class="nn">key_not_found</span>
                     <span class="n">plot_error_bars</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
                     <span class="n">label</span> <span class="o">=</span> <span class="kc">None</span>
                     <span class="c1"># double solution</span>
@@ -349,9 +355,10 @@
                     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                         <span class="k">pass</span>
 
-            <span class="c1"># y thicks</span>
+            <span class="c1"># y ticks</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">Y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="p">[</span><span class="n">g</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+            <span class="c1"># also position y tick labels from top to bottom</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">Y</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span><span class="p">[</span><span class="n">g</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
             <span class="c1"># x grid</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">Y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">x_log</span><span class="p">:</span>
@@ -374,7 +381,16 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_plot_logo</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$c_i/\Lambda^2\ ({\rm TeV}^{-2})$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-        <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">})</span>
+        <span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+        <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+            <span class="n">handles</span><span class="p">,</span>
+            <span class="n">labels</span><span class="p">,</span>
+            <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower center&quot;</span><span class="p">,</span>
+            <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">),</span>
+            <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">},</span>
+            <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report_folder</span><span class="si">}</span><span class="s2">/coefficient_central.pdf&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report_folder</span><span class="si">}</span><span class="s2">/coefficient_central.png&quot;</span><span class="p">)</span></div>
@@ -382,7 +398,7 @@
 
 <div class="viewcode-block" id="CoefficientsPlotter.plot_coeffs_bar">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_coeffs_bar">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_coeffs_bar</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_coeffs_bar</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">error</span><span class="p">,</span>
         <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
@@ -390,7 +406,6 @@
         <span class="n">x_log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">x_min</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
         <span class="n">x_max</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot error bars at given confidence level</span>
@@ -416,8 +431,11 @@
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
         <span class="n">groups</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_suplblots</span><span class="p">(</span><span class="n">figsize</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">bars</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">)):</span>
-            <span class="n">bars</span><span class="o">.</span><span class="n">droplevel</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">bars</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)):</span>
+            <span class="n">bars_top_to_bottom</span> <span class="o">=</span> <span class="n">bars</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span>
+                <span class="p">::</span><span class="o">-</span><span class="mi">1</span>
+            <span class="p">]</span>  <span class="c1"># reverse order to plot from top to bottom in ax</span>
+            <span class="n">bars_top_to_bottom</span><span class="o">.</span><span class="n">droplevel</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
                 <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;barh&quot;</span><span class="p">,</span>
                 <span class="n">width</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
                 <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
@@ -444,7 +462,13 @@
         <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span>
             <span class="sa">r</span><span class="s2">&quot;$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span>
         <span class="p">)</span>
-        <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">legend_loc</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">})</span>
+        <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+            <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower center&quot;</span><span class="p">,</span>
+            <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">),</span>
+            <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">},</span>
+            <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report_folder</span><span class="si">}</span><span class="s2">/coefficient_bar.pdf&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report_folder</span><span class="si">}</span><span class="s2">/coefficient_bar.png&quot;</span><span class="p">)</span></div>
@@ -452,14 +476,7 @@
 
 <div class="viewcode-block" id="CoefficientsPlotter.plot_pull">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_pull">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_pull</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">pull</span><span class="p">,</span>
-        <span class="n">x_min</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">x_max</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
-        <span class="n">legend_loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span>
-    <span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pull</span><span class="p">,</span> <span class="n">x_min</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">x_max</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">)):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot error bars at given confidence level</span>
 
@@ -480,8 +497,11 @@
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pull</span><span class="p">)</span>
         <span class="n">groups</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_suplblots</span><span class="p">(</span><span class="n">figsize</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">bars</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">)):</span>
-            <span class="n">bars</span><span class="o">.</span><span class="n">droplevel</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">bars</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)):</span>
+            <span class="n">bars_top_to_bottom</span> <span class="o">=</span> <span class="n">bars</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span>
+                <span class="p">::</span><span class="o">-</span><span class="mi">1</span>
+            <span class="p">]</span>  <span class="c1"># reverse order to plot from top to bottom in ax</span>
+            <span class="n">bars_top_to_bottom</span><span class="o">.</span><span class="n">droplevel</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
                 <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;barh&quot;</span><span class="p">,</span>
                 <span class="n">width</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
                 <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
@@ -494,7 +514,13 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_plot_logo</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;${\rm Fit\:Residual\:}(\sigma)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-        <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">legend_loc</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">})</span>
+        <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+            <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower center&quot;</span><span class="p">,</span>
+            <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">),</span>
+            <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">13</span><span class="p">},</span>
+            <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report_folder</span><span class="si">}</span><span class="s2">/coefficient_pull.pdf&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report_folder</span><span class="si">}</span><span class="s2">/coefficient_pull.png&quot;</span><span class="p">)</span></div>
@@ -502,7 +528,7 @@
 
 <div class="viewcode-block" id="CoefficientsPlotter.plot_spider">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_spider">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_spider</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_spider</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">error</span><span class="p">,</span>
         <span class="n">labels</span><span class="p">,</span>
@@ -550,7 +576,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">log_transform</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">delta_shift</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">log_transform</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">delta_shift</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Log transform plus possible shift to map to semi-positive value</span>
 
@@ -761,7 +787,7 @@
 
 <div class="viewcode-block" id="CoefficientsPlotter.plot_posteriors">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_posteriors">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_posteriors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">posteriors</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">disjointed_lists</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_posteriors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">posteriors</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">disjointed_lists</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot posteriors histograms.</span>
 
 <span class="sd">        Parameters</span>
@@ -861,7 +887,7 @@
 
 <div class="viewcode-block" id="CoefficientsPlotter.plot_contours_2d">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.plot_contours_2d">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_contours_2d</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_contours_2d</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">posteriors</span><span class="p">,</span>
         <span class="n">labels</span><span class="p">,</span>
@@ -1030,7 +1056,7 @@
 
 <div class="viewcode-block" id="CoefficientsPlotter.write_cl_table">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.coefficients_utils.CoefficientsPlotter.write_cl_table">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_cl_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">round_val</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_cl_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">round_val</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Coefficients latex table&quot;&quot;&quot;</span>
         <span class="n">nfits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bounds</span><span class="p">)</span>
         <span class="n">L</span> <span class="o">=</span> <span class="n">latex_packages</span><span class="p">()</span>

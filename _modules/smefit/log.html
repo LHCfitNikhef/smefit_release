@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.log &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f74d80cf" />
 
@@ -115,12 +115,12 @@
              
   <h1>Source code for smefit.log</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 
-<span class="kn">import</span> <span class="nn">rich.align</span>
-<span class="kn">from</span> <span class="nn">rich.console</span> <span class="kn">import</span> <span class="n">Console</span>
-<span class="kn">from</span> <span class="nn">rich.logging</span> <span class="kn">import</span> <span class="n">RichHandler</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rich.align</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.console</span><span class="w"> </span><span class="kn">import</span> <span class="n">Console</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">RichHandler</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
     <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
@@ -132,7 +132,7 @@
 
 <div class="viewcode-block" id="setup_console">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.log.setup_console">[docs]</a>
-<span class="k">def</span> <span class="nf">setup_console</span><span class="p">(</span><span class="n">logfile</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">setup_console</span><span class="p">(</span><span class="n">logfile</span><span class="p">):</span>
     <span class="k">global</span> <span class="n">console</span>
     <span class="k">if</span> <span class="n">logfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">log_object</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
@@ -146,7 +146,7 @@
 
 <div class="viewcode-block" id="print_banner">
 <a class="viewcode-back" href="../../modules/smefit/smefit.html#smefit.log.print_banner">[docs]</a>
-<span class="k">def</span> <span class="nf">print_banner</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">print_banner</span><span class="p">():</span>
     <span class="n">banner</span> <span class="o">=</span> <span class="n">rich</span><span class="o">.</span><span class="n">align</span><span class="o">.</span><span class="n">Align</span><span class="p">(</span>
         <span class="n">rich</span><span class="o">.</span><span class="n">panel</span><span class="o">.</span><span class="n">Panel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
             <span class="n">inspect</span><span class="o">.</span><span class="n">cleandoc</span><span class="p">(</span>

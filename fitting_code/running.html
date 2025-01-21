@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>How to run the code &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f74d80cf" />
 
@@ -305,11 +305,11 @@ the following to the runcard:</p>
 </pre></div>
 </div>
 <p>Here, <code class="docutils literal notranslate"><span class="pre">ExternalChi2</span></code> is the name of the class that must be defined in the referenced python file as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 
-<span class="k">class</span> <span class="nc">ExternalChi2</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ExternalChi2</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor that allows one to set attributes that can be called in the compute_chi2 method</span>
 <span class="sd">        Parameters</span>
@@ -319,7 +319,7 @@ the following to the runcard:</p>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">example_attribute</span> <span class="o">=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">name</span>
 
-    <span class="k">def</span> <span class="nf">compute_chi2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficient_values</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_chi2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficient_values</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>

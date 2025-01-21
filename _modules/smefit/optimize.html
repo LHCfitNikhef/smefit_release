@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.optimize &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=f74d80cf" />
 
@@ -115,22 +115,22 @@
              
   <h1>Source code for smefit.optimize</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">rich.style</span> <span class="kn">import</span> <span class="n">Style</span>
-<span class="kn">from</span> <span class="nn">rich.table</span> <span class="kn">import</span> <span class="n">Table</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.style</span><span class="w"> </span><span class="kn">import</span> <span class="n">Style</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.table</span><span class="w"> </span><span class="kn">import</span> <span class="n">Table</span>
 
-<span class="kn">from</span> <span class="nn">smefit.rge</span> <span class="kn">import</span> <span class="n">RGE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">smefit.rge</span><span class="w"> </span><span class="kn">import</span> <span class="n">RGE</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">log</span>
-<span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">CoefficientManager</span>
-<span class="kn">from</span> <span class="nn">..loader</span> <span class="kn">import</span> <span class="n">get_dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">chi2</span><span class="p">,</span> <span class="n">log</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..coefficients</span><span class="w"> </span><span class="kn">import</span> <span class="n">CoefficientManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_dataset</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">mpi4py</span> <span class="kn">import</span> <span class="n">MPI</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">mpi4py</span><span class="w"> </span><span class="kn">import</span> <span class="n">MPI</span>
 
     <span class="n">run_parallel</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
@@ -141,10 +141,10 @@
 
 <div class="viewcode-block" id="NumpyEncoder">
 <a class="viewcode-back" href="../../modules/smefit/smefit.optimize.html#smefit.optimize.NumpyEncoder">[docs]</a>
-<span class="k">class</span> <span class="nc">NumpyEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NumpyEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
 <div class="viewcode-block" id="NumpyEncoder.default">
 <a class="viewcode-back" href="../../modules/smefit/smefit.optimize.html#smefit.optimize.NumpyEncoder.default">[docs]</a>
-    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)):</span>
             <span class="k">return</span> <span class="n">o</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>  <span class="c1"># Convert to native Python type</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">o</span><span class="p">)</span></div>
@@ -154,7 +154,7 @@
 
 <div class="viewcode-block" id="Optimizer">
 <a class="viewcode-back" href="../../modules/smefit/smefit.optimize.html#smefit.optimize.Optimizer">[docs]</a>
-<span class="k">class</span> <span class="nc">Optimizer</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Optimizer</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Common interface for Chi2 profile, NS and MC and A optimizers.</span>
 
@@ -182,7 +182,7 @@
 
     <span class="n">print_rate</span> <span class="o">=</span> <span class="mi">500</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">results_path</span><span class="p">,</span>
         <span class="n">loaded_datasets</span><span class="p">,</span>
@@ -218,7 +218,7 @@
 
 <div class="viewcode-block" id="Optimizer.load_external_chi2">
 <a class="viewcode-back" href="../../modules/smefit/smefit.optimize.html#smefit.optimize.Optimizer.load_external_chi2">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_external_chi2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external_chi2</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_external_chi2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">external_chi2</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the external chi2 modules</span>
 
@@ -288,13 +288,13 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">free_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">free_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the free parameters entering fit&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">free_parameters</span>
 
 <div class="viewcode-block" id="Optimizer.generate_chi2_table">
 <a class="viewcode-back" href="../../modules/smefit/smefit.optimize.html#smefit.optimize.Optimizer.generate_chi2_table">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate_chi2_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_tot</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_chi2_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chi2_dict</span><span class="p">,</span> <span class="n">chi2_tot</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Generate log :math:`\chi^2` table&quot;&quot;&quot;</span>
         <span class="n">table</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="n">Style</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">),</span> <span class="n">title_style</span><span class="o">=</span><span class="s2">&quot;bold cyan&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="n">table</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;Dataset&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;bold green&quot;</span><span class="p">,</span> <span class="n">no_wrap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -309,7 +309,7 @@
 
 <div class="viewcode-block" id="Optimizer.chi2_func">
 <a class="viewcode-back" href="../../modules/smefit/smefit.optimize.html#smefit.optimize.Optimizer.chi2_func">[docs]</a>
-    <span class="k">def</span> <span class="nf">chi2_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_replica</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">print_log</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">chi2_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_replica</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">print_log</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wrap the math:`\chi^2` in a function for the optimizer. Pass noise and</span>
 <span class="sd">        data info as args. Log the math:`\chi^2` value and values of the coefficients.</span>
@@ -369,7 +369,7 @@
 
 <div class="viewcode-block" id="Optimizer.dump_fit_result">
 <a class="viewcode-back" href="../../modules/smefit/smefit.optimize.html#smefit.optimize.Optimizer.dump_fit_result">[docs]</a>
-    <span class="k">def</span> <span class="nf">dump_fit_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit_result_file</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dump_fit_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit_result_file</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Dumps the fit results to a json file.</span>
 

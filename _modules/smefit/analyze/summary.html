@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>smefit.analyze.summary &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=f74d80cf" />
 
@@ -116,16 +116,16 @@
              
   <h1>Source code for smefit.analyze.summary</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">..coefficients</span> <span class="kn">import</span> <span class="n">Coefficient</span>
-<span class="kn">from</span> <span class="nn">.latex_tools</span> <span class="kn">import</span> <span class="n">latex_packages</span><span class="p">,</span> <span class="n">multicolum_table_header</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..coefficients</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coefficient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.latex_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">latex_packages</span><span class="p">,</span> <span class="n">multicolum_table_header</span>
 
 
 <div class="viewcode-block" id="add_bounded_coeff">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.summary.add_bounded_coeff">[docs]</a>
-<span class="k">def</span> <span class="nf">add_bounded_coeff</span><span class="p">(</span><span class="n">coeff_dict</span><span class="p">,</span> <span class="n">coeff_df</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_bounded_coeff</span><span class="p">(</span><span class="n">coeff_dict</span><span class="p">,</span> <span class="n">coeff_df</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build constrain formula&quot;&quot;&quot;</span>
     <span class="n">line</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot; &amp; &amp; = &quot;</span>
     <span class="n">temp_c</span> <span class="o">=</span> <span class="n">Coefficient</span><span class="p">(</span>
@@ -155,7 +155,7 @@
 
 <div class="viewcode-block" id="SummaryWriter">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.summary.SummaryWriter">[docs]</a>
-<span class="k">class</span> <span class="nc">SummaryWriter</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SummaryWriter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provides a summary of the fits included in the report: the fit settings,</span>
 <span class="sd">    fitted parameters (including any parameter constraints), and</span>
@@ -171,7 +171,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fits</span><span class="p">,</span> <span class="n">data_groups</span><span class="p">,</span> <span class="n">coeff_config</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fits</span><span class="p">,</span> <span class="n">data_groups</span><span class="p">,</span> <span class="n">coeff_config</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fits</span> <span class="o">=</span> <span class="n">fits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_info</span> <span class="o">=</span> <span class="n">data_groups</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coeff_info</span> <span class="o">=</span> <span class="n">coeff_config</span>
@@ -183,7 +183,7 @@
 
 <div class="viewcode-block" id="SummaryWriter.fit_settings">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.summary.SummaryWriter.fit_settings">[docs]</a>
-    <span class="k">def</span> <span class="nf">fit_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit settings table.</span>
 
 <span class="sd">        Returns</span>
@@ -205,7 +205,7 @@
 
 <div class="viewcode-block" id="SummaryWriter.write_dataset_table">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write_dataset_table">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_dataset_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_dataset_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write the summary tables</span>
 
 <span class="sd">        Returns</span>
@@ -257,7 +257,7 @@
 
 <div class="viewcode-block" id="SummaryWriter.write_coefficients_table">
 <a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.summary.SummaryWriter.write_coefficients_table">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_coefficients_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_coefficients_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write the coefficients tables</span>
 
 <span class="sd">        Returns</span>
