@@ -263,10 +263,10 @@ class SummaryWriter:
                 r"$t$",
                 r"$tV$",
                 r"$VV$",
-                r"$\rm FCC-ee\:91\:GeV$",
-                r"$\rm FCC-ee\:161\:GeV$",
-                r"$\rm FCC-ee\:240\:GeV$",
-                r"$\rm FCC-ee\:365\:GeV$",
+                r"$\mathrm{FCC\textnormal{-}ee\:91\:GeV}$",
+                r"$\mathrm{FCC\textnormal{-}ee\:161\:GeV}$",
+                r"$\mathrm{FCC\textnormal{-}ee\:240\:GeV}$",
+                r"$\mathrm{FCC\textnormal{-}ee\:365\:GeV}$",
             ]
 
             # Create a dictionary to map order to their indices
@@ -316,14 +316,14 @@ class SummaryWriter:
             )
 
             cbar = heatmap.collections[0].colorbar
-            cbar.set_label("\\# of Data-points", fontsize=14)
+            cbar.set_label("\\# of Data points", fontsize=14)
 
             # Adjust the x-tick positions to align with bin edges
             xtick_positions = [i for i in range(len(bins))]
             ax.set_xticks(xtick_positions)  # Set tick positions
             ax.set_xticklabels([f"{int(bins[i])}" for i in range(len(bins))])
 
-            ax.set_title(f"Data Scales for Fit {self.fits[i].label}", fontsize=16)
+            ax.set_title(f"Data Scales for {self.fits[i].label}", fontsize=16)
             ax.set_xlabel(
                 "Scales [GeV]",
                 fontsize=14,
