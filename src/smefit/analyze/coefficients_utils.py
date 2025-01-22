@@ -882,6 +882,7 @@ class CoefficientsPlotter:
             fontsize=26,
             ha="center",
             x=0.5,
+            y=0.9,
         )
         grid.tight_layout(fig)
         fig.savefig(f"{self.report_folder}/contours_2d.pdf")
