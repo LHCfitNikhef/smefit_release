@@ -75,6 +75,11 @@ class Report:
         for fit in self.fits:
             self.dataset_fits.append([data["name"] for data in fit.config["datasets"]])
 
+        # Get scales for each fit
+        self.data_scales = []
+        for fit in self.fits:
+            self.data_scales.append(fit.load_data_scales())
+
         # Loads useful information about data
         self.data_info = self._load_grouped_data_info(report_config["data_info"])
         # Loads coefficients grouped with latex name
@@ -144,7 +149,9 @@ class Report:
 
     def summary(self):
         """Summary Table runner."""
-        summary = SummaryWriter(self.fits, self.data_info, self.coeff_info)
+        summary = SummaryWriter(
+            self.fits, self.data_info, self.coeff_info, self.data_scales
+        )
         section_title = "Summary"
         coeff_tab = "coefficient_summary"
         data_tab = "dataset_summary"
@@ -158,6 +165,13 @@ class Report:
             links=[(data_tab, "Dataset summary"), (coeff_tab, "Coefficient summary")],
             tables=summary.fit_settings(),
         )
+
+        figs_list = []
+        for fit in self.fits:
+            _logger.info(f"Plotting scales for: {fit.name}")
+            figs_list.append(f"scales_{fit.name}")
+        summary.plot_data_scales(path=f"{self.report}")
+        self._append_section("Scales", figs=figs_list)
 
     def chi2(self, table=True, plot_experiment=None, plot_distribution=None):
         r""":math:`\chi^2` table and plots runner.

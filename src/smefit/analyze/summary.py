@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
+from matplotlib.colors import BoundaryNorm
 
 from ..coefficients import Coefficient
 from .latex_tools import latex_packages, multicolum_table_header
@@ -49,13 +52,15 @@ class SummaryWriter:
 
     """
 
-    def __init__(self, fits, data_groups, coeff_config):
+    def __init__(self, fits, data_groups, coeff_config, data_scales):
         self.fits = fits
         self.data_info = data_groups
         self.coeff_info = coeff_config
         self.nfits = len(self.fits)
         # Get names of datasets for each fit
         self.dataset_fits = []
+        self.data_scales = data_scales
+
         for fit in self.fits:
             self.dataset_fits.append([data["name"] for data in fit.config["datasets"]])
 
@@ -198,3 +203,133 @@ class SummaryWriter:
             ]
         )
         return L
+
+    def plot_data_scales(self, path):
+        # Collect scales for each dataset in each group
+        # Doing it for all the fits
+        fits_datagroup_scales = []
+        for fit in self.data_scales:
+            fit_scales = {}
+            for group, datasets in self.data_info.groupby(level=0):
+                fit_scales[group] = np.array([])
+                datasets = datasets.droplevel(0)
+                for dataset, _ in datasets.items():
+                    # concatenate the scales for each dataset in the group
+                    fit_scales[group] = np.concatenate(
+                        (fit_scales[group], fit[dataset])
+                    )
+            fits_datagroup_scales.append(fit_scales)
+
+        # Now we plot the scales for each fit
+        # We plot a heatmap with groups in the x-axis and scales on the y axis
+        # The color of each cell will represent the scale count
+        # We will have a plot for each fit
+        for i, fit_scales in enumerate(fits_datagroup_scales):
+            group_names = list(fit_scales.keys())
+
+            raw_min = min(min(scales) for _, scales in fit_scales.items())
+            raw_max = max(max(scales) for _, scales in fit_scales.items())
+            bins = np.logspace(
+                np.log10(raw_min),
+                np.log10(raw_max),
+                21,
+            )
+
+            # Round to 10 if below 300, otherwise round to 100
+            bins = np.where(
+                bins < 300, np.round(bins / 10) * 10, np.round(bins / 100) * 100
+            )
+
+            # Adjust the first and last bin if necessary to ensure coverage
+            if bins[0] > raw_min:
+                bins[0] = (
+                    np.floor(raw_min / 10) * 10
+                    if raw_min < 300
+                    else np.floor(raw_min / 100) * 100
+                )
+            if bins[-1] < raw_max:
+                bins[-1] = (
+                    np.ceil(raw_max / 10) * 10
+                    if raw_max < 300
+                    else np.ceil(raw_max / 100) * 100
+                )
+
+            order = [
+                r"$\bar{t}t\bar{t}t + \bar{t}t\bar{b}b$",
+                r"$\rm Higgs$",
+                r"$\rm LEP$",
+                r"$\bar{t}t$",
+                r"$\bar{t}tV$",
+                r"$t$",
+                r"$tV$",
+                r"$VV$",
+                r"$\mathrm{FCC\textnormal{-}ee\:91\:GeV}$",
+                r"$\mathrm{FCC\textnormal{-}ee\:161\:GeV}$",
+                r"$\mathrm{FCC\textnormal{-}ee\:240\:GeV}$",
+                r"$\mathrm{FCC\textnormal{-}ee\:365\:GeV}$",
+            ]
+
+            # Create a dictionary to map order to their indices
+            order_index = {name: i for i, name in enumerate(order)}
+
+            # Sort group names by their order index, keeping unmatched names in original order
+            sorted_group_names = sorted(
+                group_names,
+                key=lambda x: order_index.get(
+                    x, np.inf
+                ),  # Use `np.inf` for unmatched names
+            )
+
+            # Prepare the heatmap data
+            heatmap_data = []
+            for group in sorted_group_names:
+                hist, _ = np.histogram(fit_scales[group], bins=bins)
+                heatmap_data.append(hist)
+
+            heatmap_data = np.array(heatmap_data)
+
+            # Replace 0 values with empty strings for annotations
+            annot_data = np.where(heatmap_data == 0, "", heatmap_data)
+            # Define the bins for discrete colorbar (adjust as needed)
+            # Manually define the first few boundaries (0, 1, 2)
+            boundaries = np.array([0, 1, 2, 5])
+
+            # Append the rest of the boundaries starting from 4 and spaced by 4
+            boundaries = np.concatenate(
+                [boundaries, np.arange(10, heatmap_data.max() + 10, 10)]
+            )
+            norm = BoundaryNorm(boundaries, ncolors=256)
+            # Plot the heatmap
+            fig, ax = plt.subplots(figsize=(10, 6))
+            heatmap = sns.heatmap(
+                heatmap_data,
+                annot=annot_data,
+                fmt="",
+                cmap="Blues",
+                ax=ax,
+                xticklabels=[f"{int(bins[i + 1])}" for i in range(len(bins) - 1)],
+                yticklabels=sorted_group_names,
+                cbar_kws={
+                    "ticks": boundaries,
+                },
+                norm=norm,
+            )
+
+            cbar = heatmap.collections[0].colorbar
+            cbar.set_label("\\# of Data points", fontsize=14)
+
+            # Adjust the x-tick positions to align with bin edges
+            xtick_positions = [i for i in range(len(bins))]
+            ax.set_xticks(xtick_positions)  # Set tick positions
+            ax.set_xticklabels([f"{int(bins[i])}" for i in range(len(bins))])
+
+            ax.set_title(f"Data Scales for {self.fits[i].label}", fontsize=16)
+            ax.set_xlabel(
+                "Scales [GeV]",
+                fontsize=14,
+            )
+            fig.tight_layout()
+
+            # Save the heatmap
+            fig.savefig(f"{path}/scales_{self.fits[i].name}.pdf")
+            fig.savefig(f"{path}/scales_{self.fits[i].name}.png")

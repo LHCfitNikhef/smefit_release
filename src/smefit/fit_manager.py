@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
+import pathlib
 
 import numpy as np
 import pandas as pd
 import yaml
 from rich.progress import track
+
+from smefit.loader import Loader
 
 from .coefficients import CoefficientManager
 from .compute_theory import make_predictions
@@ -127,6 +130,25 @@ class FitManager:
             self.config.get("uv_couplings", False),
             self.config.get("external_chi2", False),
         )
+
+    def load_data_scales(self):
+        datasets = [data["name"] for data in self.config["datasets"]]
+        scales = {}
+        for dataset in datasets:
+
+            Loader.theory_path = pathlib.Path(self.config["theory_path"])
+            # dummy call just to get the scales
+            _, _, _, _, dataset_scales = Loader.load_theory(
+                dataset,
+                operators_to_keep={},
+                order="LO",
+                use_quad=False,
+                use_theory_covmat=False,
+                use_multiplicative_prescription=False,
+            )
+            scales[dataset] = dataset_scales
+
+        return scales
 
     @property
     def smeft_predictions(self):
