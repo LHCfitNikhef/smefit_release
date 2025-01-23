@@ -652,7 +652,7 @@ class FisherCalculator:
                 latex_names,
                 [wc_to_latex[op] for op in wc_fisher_dfs[0].index],
             )
-            ax.set_title(r"\rm WC Fisher", fontsize=20)
+            ax.set_title(r"\rm RGE Fisher Information", fontsize=25)
             cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
             colour_bar = fig.colorbar(
                 mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1
