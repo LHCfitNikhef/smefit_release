@@ -1030,7 +1030,7 @@
 
         <span class="c1"># in case n_par &gt; 2, put legend outside subplot</span>
         <span class="k">if</span> <span class="n">n_par</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
@@ -1045,11 +1045,19 @@
             <span class="n">title_fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-            <span class="sa">rf</span><span class="s2">&quot;$\mathrm</span><span class="se">{{</span><span class="s2">Marginalised</span><span class="se">}}</span><span class="s2">\:</span><span class="si">{</span><span class="n">cl</span><span class="si">}</span><span class="s2">\:\%\:\mathrm</span><span class="se">{{</span><span class="s2">C.L.\:intervals</span><span class="se">}}</span><span class="s2">$&quot;</span><span class="p">,</span>
-            <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>
+        <span class="n">ax_logo</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">ax_logo</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plot_logo</span><span class="p">(</span><span class="n">ax_logo</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="mf">0.05</span><span class="p">,</span>
+            <span class="mf">0.95</span><span class="p">,</span>
+            <span class="sa">rf</span><span class="s2">&quot;$\mathrm</span><span class="se">{{</span><span class="s2">Marginalised</span><span class="se">}}</span><span class="s2">\:</span><span class="si">{</span><span class="n">cl</span><span class="si">}</span><span class="s2">\:\%\:\mathrm</span><span class="se">{{</span><span class="s2">C.I.\:intervals</span><span class="se">}}</span><span class="s2">$&quot;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+            <span class="n">verticalalignment</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">grid</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report_folder</span><span class="si">}</span><span class="s2">/contours_2d.pdf&quot;</span><span class="p">)</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">report_folder</span><span class="si">}</span><span class="s2">/contours_2d.png&quot;</span><span class="p">)</span></div>
 
