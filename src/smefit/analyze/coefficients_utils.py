@@ -888,7 +888,7 @@ class CoefficientsPlotter:
 
         # in case n_par > 2, put legend outside subplot
         if n_par > 2:
-            ax = fig.add_subplot(grid[0, -1])
+            ax = fig.add_subplot(grid[0, 1])
             ax.axis("off")
 
         ax.legend(
@@ -903,11 +903,19 @@ class CoefficientsPlotter:
             title_fontsize=24,
         )
 
-        ax.set_title(
-            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.L.\:intervals}}$",
-            fontsize=18,
+        ax_logo = fig.add_subplot(grid[0, -1])
+        ax_logo.axis("off")
+        self._plot_logo(ax_logo, extent=[0.05, 0.95, 0.7, 1])
+
+        ax.text(
+            0.05,
+            0.95,
+            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.I.\:intervals}}$",
+            fontsize=24,
+            transform=ax.transAxes,
+            verticalalignment="top",
         )
-        grid.tight_layout(fig)
+
         fig.savefig(f"{self.report_folder}/contours_2d.pdf")
         fig.savefig(f"{self.report_folder}/contours_2d.png")
 
