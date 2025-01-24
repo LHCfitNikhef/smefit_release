@@ -288,7 +288,18 @@ class CoefficientsPlotter:
         for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
 
             bars["theory_error_linear"] = bars.iloc[:, 2] - bars.iloc[:, 0]
-            bars["theory_error_quadratic"] = bars.iloc[:, 5] - bars.iloc[:, 3]
+
+            bars["scale_min_linear"] = bars.iloc[:, :3].min(axis=1)
+            bars["scale_max_linear"] = bars.iloc[:, :3].max(axis=1)
+            bars["theory_error_linear"] = (
+                bars["scale_max_linear"] - bars["scale_min_linear"]
+            )
+
+            bars["scale_min_quadratic"] = bars.iloc[:, 3:6].min(axis=1)
+            bars["scale_max_quadratic"] = bars.iloc[:, 3:6].max(axis=1)
+            bars["theory_error_quadratic"] = (
+                bars["scale_max_quadratic"] - bars["scale_min_quadratic"]
+            )
 
             bars_top_to_bottom = bars.iloc[
                 ::-1
@@ -322,7 +333,7 @@ class CoefficientsPlotter:
                 ax.barh(
                     i - 0.15,
                     row["theory_error_linear"],  # Width of the hashed bar
-                    left=row.iloc[1] - row["theory_error_linear"] / 2,  # Start position
+                    left=row["scale_min_linear"],  # Start position
                     hatch="//////",
                     edgecolor="black",
                     label="Hashed Bar" if index == 0 else "",  # Add legend only onc
@@ -333,8 +344,7 @@ class CoefficientsPlotter:
                 ax.barh(
                     i + 0.15,
                     row["theory_error_quadratic"],  # Width of the hashed bar
-                    left=row.iloc[4]
-                    - row["theory_error_quadratic"] / 2,  # Start position
+                    left=row["scale_min_quadratic"],  # Start position
                     hatch="//////",
                     edgecolor="black",
                     label="Hashed Bar" if index == 0 else "",  # Add legend only onc
