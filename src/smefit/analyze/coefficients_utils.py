@@ -245,7 +245,8 @@ class CoefficientsPlotter:
             ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
             cnt_plot += npar
 
-        self._plot_logo(axs[-1])
+        self._plot_logo(axs[-1], extent=[0.8, 0.999, 0.25, 0.50])
+
         axs[-1].set_xlabel(r"$c_i/\Lambda^2\ ({\rm TeV}^{-2})$", fontsize=20)
         axs[0].legend(loc=0, frameon=False, prop={"size": 13})
         plt.tight_layout()

@@ -482,14 +482,14 @@ class FisherCalculator:
                                 closed=True,
                                 fc="none",
                                 edgecolor="black",
-                                label=labels[0],
+                                label=labels[1],
                             ),
                             mpatches.Polygon(
-                                [[0.5, -0.5], [0.5, 0.5], [0.5, 0.5]],
+                                [[0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
                                 closed=True,
                                 fc="none",
                                 edgecolor="black",
-                                label=labels[1],
+                                label=labels[0],
                             ),
                         ]
                         # Add the legend to the plot
@@ -604,9 +604,9 @@ class FisherCalculator:
             latex_names,
             x_labels,
         )
-        ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
-        cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
-        colour_bar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1)
+        # ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
+        # cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
+        # colour_bar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1)
 
         if quad_fisher_df is not None:
             ax = fig.add_subplot(122)
@@ -620,21 +620,21 @@ class FisherCalculator:
                 x_labels,
             )
             ax.set_title(r"\rm Quadratic", fontsize=20, y=-0.08)
-            cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
-            colour_bar = fig.colorbar(
-                mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1
-            )
+            # cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
+            # colour_bar = fig.colorbar(
+            #     mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1
+            # )
 
         fig.subplots_adjust(top=0.9)
 
-        colour_bar.set_label(
-            r"${\rm Normalized\ Value}$",
-            fontsize=25,
-            labelpad=30,
-            rotation=270,
-        )
+        # colour_bar.set_label(
+        #     r"${\rm Normalized\ Value}$",
+        #     fontsize=25,
+        #     labelpad=30,
+        #     rotation=270,
+        # )
 
-        plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25, y=0.98)
+        plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25, y=0.97)
 
         plt.savefig(f"{fig_name}.pdf")
         plt.savefig(f"{fig_name}.png")
