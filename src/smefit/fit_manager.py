@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
+import pickle
 
+import jax.numpy as jnp
 import numpy as np
 import pandas as pd
 import yaml
@@ -54,6 +56,7 @@ class FitManager:
         self.has_posterior = self.config.get("has_posterior", True)
         self.results = None
         self.datasets = None
+        self.rgemat = None
 
     def __repr__(self):
         return self.name
@@ -72,6 +75,16 @@ class FitManager:
             file = "fit_results"
         with open(f"{self.path}/{self.name}/{file}.json", encoding="utf-8") as f:
             results = json.load(f)
+
+        # load the rge matrix in the result dir if it exists
+        try:
+            with open(f"{self.path}/{self.name}/rge_matrix.pkl", "rb") as f:
+                rgemats = pickle.load(f)
+                self.operators_to_keep = {op: {} for op in rgemats[0].index}
+                self.rgemat = jnp.stack([rgemat.values for rgemat in rgemats])
+
+        except FileNotFoundError:
+            print("No RGE matrix found in the result folder, skipping...")
 
         # if the posterior is from single parameter fits
         # then each distribution might have a different number of samples
@@ -113,10 +126,13 @@ class FitManager:
 
     def load_datasets(self):
         """Load all datasets."""
+
         self.datasets = load_datasets(
             self.config["data_path"],
             self.config["datasets"],
-            self.config["coefficients"],
+            self.config["coefficients"]
+            if self.rgemat is None
+            else self.operators_to_keep,
             self.config["use_quad"],
             self.config["use_theory_covmat"],
             False,  # t0 is not used here because in the report we look at the experimental chi2
@@ -126,6 +142,7 @@ class FitManager:
             self.config.get("rot_to_fit_basis", None),
             self.config.get("uv_couplings", False),
             self.config.get("external_chi2", False),
+            rgemat=self.rgemat,
         )
 
     @property
