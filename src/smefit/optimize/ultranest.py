@@ -474,6 +474,7 @@ class USOptimizer(Optimizer):
             "logz": logz,
             "max_loglikelihood": max_loglikelihood,
             "best_fit_point": best_fit_point,
+            "free_parameters": self.coefficients.free_parameters.index.tolist(),
         }
 
         self.dump_fit_result(fit_results_file, fit_result)

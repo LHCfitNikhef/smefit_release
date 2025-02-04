@@ -141,6 +141,8 @@ class ALOptimizer(Optimizer):
         """Run sapmling accordying to the analytic solution."""
 
         fit_result = {}
+        # add names of the free parameters
+        fit_result["free_parameters"] = self.coefficients.free_parameters.index.tolist()
 
         # update linear corrections in casde
         new_LinearCorrections = impose_constrain(
