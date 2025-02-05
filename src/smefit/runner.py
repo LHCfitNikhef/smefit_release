@@ -209,7 +209,7 @@ class Runner:
 
             # skip contrained coeffs
             if "constrain" in config["coefficients"][coeff]:
-                _logger.info("Skipping contrained coefficient %s", coeff)
+                _logger.info("Skipping constrained coefficient %s", coeff)
                 continue
 
             # if there are constrained coefficients, only
