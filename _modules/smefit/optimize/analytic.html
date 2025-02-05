@@ -273,6 +273,8 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run sapmling accordying to the analytic solution.&quot;&quot;&quot;</span>
 
         <span class="n">fit_result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># add names of the free parameters</span>
+        <span class="n">fit_result</span><span class="p">[</span><span class="s2">&quot;free_parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
         <span class="c1"># update linear corrections in casde</span>
         <span class="n">new_LinearCorrections</span> <span class="o">=</span> <span class="n">impose_constrain</span><span class="p">(</span>
