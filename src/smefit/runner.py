@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import importlib
 import itertools
 import pathlib
+import shutil
 import subprocess
 import sys
 from shutil import copyfile
@@ -65,9 +65,9 @@ class Runner:
         else:
             res_folder_fit = result_folder / result_ID
 
-        subprocess.call(f"mkdir -p {result_folder}", shell=True)
         if res_folder_fit.exists():
             _logger.warning(f"{res_folder_fit} already found, overwriting old results")
+            shutil.rmtree(res_folder_fit)
         subprocess.call(f"mkdir -p {res_folder_fit}", shell=True)
 
         # Copy yaml runcard to results folder or dump it
@@ -209,7 +209,7 @@ class Runner:
 
             # skip contrained coeffs
             if "constrain" in config["coefficients"][coeff]:
-                _logger.info("Skipping contrained coefficient %s", coeff)
+                _logger.info("Skipping constrained coefficient %s", coeff)
                 continue
 
             # if there are constrained coefficients, only

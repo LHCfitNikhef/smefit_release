@@ -256,12 +256,13 @@ class Optimizer:
                 with open(fit_result_file, encoding="utf-8") as f:
                     tmp = json.load(f)
                     # Get the operator name
-                    coeff = list(values["samples"].keys())[0]
+                    coeff = values["free_parameters"][0]
                     # update the values
                     tmp["logz"][coeff] = values["logz"]
                     tmp["max_loglikelihood"][coeff] = values["max_loglikelihood"]
                     tmp["best_fit_point"][coeff] = values["best_fit_point"][coeff]
                     tmp["samples"][coeff] = values["samples"][coeff]
+                    tmp["free_parameters"].append(values["free_parameters"][0])
                     # update the file with the new values
                     with open(fit_result_file, "w", encoding="utf-8") as f:
                         json.dump(tmp, f, indent=4, cls=NumpyEncoder)
@@ -270,9 +271,11 @@ class Optimizer:
                 values["single_parameter_fits"] = True
                 with open(fit_result_file, "w", encoding="utf-8") as f:
                     # Get the operator name
-                    coeff = list(values["best_fit_point"].keys())[0]
+                    coeff = values["free_parameters"][0]
                     values["logz"] = {coeff: values["logz"]}
                     values["max_loglikelihood"] = {coeff: values["max_loglikelihood"]}
+                    values["best_fit_point"] = {coeff: values["best_fit_point"][coeff]}
+                    values["samples"] = {coeff: values["samples"][coeff]}
                     json.dump(values, f, indent=4, cls=NumpyEncoder)
 
         else:
