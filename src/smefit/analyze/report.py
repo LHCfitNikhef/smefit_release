@@ -490,12 +490,7 @@ class Report:
         self._append_section("PCA", figs=figs_list, links=links_list)
 
     def fisher(
-        self,
-        norm="coeff",
-        summary_only=True,
-        plot=None,
-        fit_list=None,
-        log=False,
+        self, norm="coeff", summary_only=True, plot=None, fit_list=None, log=False
     ):
         """Fisher information table and plots runner.
 
@@ -523,6 +518,7 @@ class Report:
         else:
             fit_list = self.fits
 
+        fishers = {}
         for fit in fit_list:
             compute_quad = fit.config["use_quad"]
             fisher_cal = FisherCalculator(fit.coefficients, fit.datasets, compute_quad)
@@ -533,6 +529,7 @@ class Report:
             fisher_cal.summary_table = fisher_cal.groupby_data(
                 fisher_cal.lin_fisher, self.data_info, norm, log
             )
+            fishers[fit.name] = fisher_cal
 
             # if necessary compute the quadratic Fisher
             if compute_quad:
@@ -546,27 +543,44 @@ class Report:
                     fisher_cal.quad_fisher, self.data_info, norm, log
                 )
 
-            # Write down the table in latex
-            free_coeff_config = self.coeff_info.loc[
-                :, fit.coefficients.free_parameters.index
-            ]
             compile_tex(
                 self.report,
-                fisher_cal.write_grouped(
-                    free_coeff_config, self.data_info, summary_only
-                ),
+                fisher_cal.write_grouped(self.coeff_info, self.data_info, summary_only),
                 f"fisher_{fit.name}",
             )
             links_list.append((f"fisher_{fit.name}", f"Table {fit.label}"))
 
             if plot is not None:
                 fit_plot = copy.deepcopy(plot)
+                fit_plot.pop("together", None)
                 title = fit.label if fit_plot.pop("title") else None
-                fisher_cal.plot(
-                    free_coeff_config,
+                fisher_cal.plot_heatmap(
+                    self.coeff_info,
                     f"{self.report}/fisher_heatmap_{fit.name}",
                     title=title,
                     **fit_plot,
                 )
                 figs_list.append(f"fisher_heatmap_{fit.name}")
+
+        # plot both fishers
+        if plot.get("together", False):
+            fisher_1 = fishers[plot["together"][0]]
+            fisher_2 = fishers[plot["together"][1]]
+            fit_plot = copy.deepcopy(plot)
+            fit_plot.pop("together")
+
+            # show title of last fit
+            title = fit.label if fit_plot.pop("title") else None
+
+            # make heatmap of fisher_1 and fisher_2
+            fisher_2.plot_heatmap(
+                self.coeff_info,
+                f"{self.report}/fisher_heatmap_both",
+                title=title,
+                other=fisher_1,
+                labels=[fit.label for fit in self.fits],
+                **fit_plot,
+            )
+            figs_list.append(f"fisher_heatmap_both")
+
         self._append_section("Fisher", figs=figs_list, links=links_list)
