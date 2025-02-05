@@ -113,6 +113,7 @@
 <li class="toctree-l3"><a class="reference internal" href="smefit.postfit.html">smefit.postfit package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.prefit.html">smefit.prefit package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="smefit.projections.html">smefit.projections package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="smefit.rge.html">smefit.rge package</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="smefit.html#submodules">Submodules</a></li>
@@ -124,9 +125,7 @@
 <li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.fit_manager">smefit.fit_manager module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.loader">smefit.loader module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.log">smefit.log module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.rge">smefit.rge module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.runner">smefit.runner module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="smefit.html#module-smefit.wcxf">smefit.wcxf module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../zzz-refs.html">References</a></li>
@@ -627,22 +626,36 @@ degrees of freedom are shown in the tables.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="smefit.analyze.fisher.FisherCalculator.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latex_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(11,</span> <span class="pre">15)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#FisherCalculator.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.FisherCalculator.plot" title="Link to this definition"></a></dt>
-<dd><p>Plot the heat map of Fisher table.</p>
+<dt class="sig sig-object py" id="smefit.analyze.fisher.FisherCalculator.plot_heatmap">
+<span class="sig-name descname"><span class="pre">plot_heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latex_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summary_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(11,</span> <span class="pre">15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#FisherCalculator.plot_heatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.FisherCalculator.plot_heatmap" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.analyze.fisher.FisherCalculator.plot_values">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plot_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dfs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#FisherCalculator.plot_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.FisherCalculator.plot_values" title="Link to this definition"></a></dt>
+<dd><p>Plot the values of the Fisher information.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>latex_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – list of coefficients latex names</p></li>
-<li><p><strong>fig_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – figure path</p></li>
-<li><p><strong>summary_only</strong> – if True plot the fisher grouped per datsets,
-else the fine grained dataset per dataset</p></li>
-<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a>) – figure size</p></li>
-<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><em>None</em>) – plot title</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.axes.Axes</em>) – axes object</p></li>
+<li><p><strong>dfs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a>) – list of pandas.DataFrame</p></li>
+<li><p><strong>cmap</strong> (<em>matplotlib.colors.LinearSegmentedColormap</em>) – colour map</p></li>
+<li><p><strong>norm</strong> (<em>matplotlib.colors.BoundaryNorm</em>) – normalisation of colorbar</p></li>
+<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>, </em><em>optional</em>) – label elements for legend</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.analyze.fisher.FisherCalculator.set_ticks">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_ticks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yticks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xticks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latex_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_labels</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#FisherCalculator.set_ticks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.FisherCalculator.set_ticks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.analyze.fisher.FisherCalculator.unify_fishers">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unify_fishers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#FisherCalculator.unify_fishers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.FisherCalculator.unify_fishers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="smefit.analyze.fisher.FisherCalculator.write_grouped">
@@ -661,6 +674,39 @@ else the fine grained dataset per dataset</p></li>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="smefit.analyze.fisher.HandlerTriangle">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">smefit.analyze.fisher.</span></span><span class="sig-name descname"><span class="pre">HandlerTriangle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#HandlerTriangle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.HandlerTriangle" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">HandlerPatch</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="smefit.analyze.fisher.HandlerTriangle.create_artists">
+<span class="sig-name descname"><span class="pre">create_artists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">legend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xdescent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ydescent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/smefit/analyze/fisher.html#HandlerTriangle.create_artists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#smefit.analyze.fisher.HandlerTriangle.create_artists" title="Link to this definition"></a></dt>
+<dd><p>Return the legend artists generated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>legend</strong> (<cite>~matplotlib.legend.Legend</cite>) – The legend for which these legend artists are being created.</p></li>
+<li><p><strong>orig_handle</strong> (<cite>~matplotlib.artist.Artist</cite> or similar) – The object for which these legend artists are being created.</p></li>
+<li><p><strong>xdescent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The rectangle (<em>xdescent</em>, <em>ydescent</em>, <em>width</em>, <em>height</em>) that the
+legend artists being created should fit within.</p></li>
+<li><p><strong>ydescent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The rectangle (<em>xdescent</em>, <em>ydescent</em>, <em>width</em>, <em>height</em>) that the
+legend artists being created should fit within.</p></li>
+<li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The rectangle (<em>xdescent</em>, <em>ydescent</em>, <em>width</em>, <em>height</em>) that the
+legend artists being created should fit within.</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The rectangle (<em>xdescent</em>, <em>ydescent</em>, <em>width</em>, <em>height</em>) that the
+legend artists being created should fit within.</p></li>
+<li><p><strong>fontsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The fontsize in pixels. The legend artists being created should
+be scaled according to the given fontsize.</p></li>
+<li><p><strong>trans</strong> (<cite>~matplotlib.transforms.Transform</cite>) – The transform that is applied to the legend artists being created.
+Typically from unit coordinates in the handler box to screen
+coordinates.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

@@ -432,6 +432,7 @@
         <span class="n">lin_dict</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># save sm prediction at the chosen perturbative order</span>
+
         <span class="n">sm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">raw_th_data</span><span class="p">[</span><span class="n">order</span><span class="p">][</span><span class="s2">&quot;SM&quot;</span><span class="p">])</span>
 
         <span class="c1"># split corrections into a linear and quadratic dict</span>
@@ -666,10 +667,7 @@
         <span class="n">cnt</span> <span class="o">+=</span> <span class="n">n_dat</span>
 
     <span class="k">if</span> <span class="n">rgemat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rgemat</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># dynamic scale, scale is datapoint specific</span>
-            <span class="n">corr_values</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij, ijk -&gt; ik&quot;</span><span class="p">,</span> <span class="n">corr_values</span><span class="p">,</span> <span class="n">rgemat</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>  <span class="c1"># fixed scale so same rgemat for all datapoints</span>
-            <span class="n">corr_values</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij, jk -&gt; ik&quot;</span><span class="p">,</span> <span class="n">corr_values</span><span class="p">,</span> <span class="n">rgemat</span><span class="p">)</span>
+        <span class="n">corr_values</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij, ijk -&gt; ik&quot;</span><span class="p">,</span> <span class="n">corr_values</span><span class="p">,</span> <span class="n">rgemat</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">corr_values</span></div>
 
@@ -692,6 +690,10 @@
 <span class="sd">        sorted_keys: numpy.ndarray</span>
 <span class="sd">            list of sorted operator corrections, shape=(n rg generated coeff,)</span>
 <span class="sd">            or shape=(n original coeff,) in the absence of rgemat</span>
+<span class="sd">        rgemat: numpy.ndarray, optional</span>
+<span class="sd">            solution matrix of the RGE, shape=(k, l, m) with k the number of datapoints,</span>
+<span class="sd">            l the number of generated coefficients under the RG and m the number of</span>
+<span class="sd">            original |EFT| coefficients specified in the runcard.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -718,12 +720,7 @@
         <span class="n">cnt</span> <span class="o">+=</span> <span class="n">n_dat</span>
 
     <span class="k">if</span> <span class="n">rgemat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rgemat</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># dynamic scale, scale is datapoint specific</span>
-            <span class="n">corr_values</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span>
-                <span class="s2">&quot;ijk, ijl, ikr -&gt; ilr&quot;</span><span class="p">,</span> <span class="n">corr_values</span><span class="p">,</span> <span class="n">rgemat</span><span class="p">,</span> <span class="n">rgemat</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>  <span class="c1"># fixed scale so same rgemat for all datapoints</span>
-            <span class="n">corr_values</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ijk, jl, kr -&gt; ilr&quot;</span><span class="p">,</span> <span class="n">corr_values</span><span class="p">,</span> <span class="n">rgemat</span><span class="p">,</span> <span class="n">rgemat</span><span class="p">)</span>
+        <span class="n">corr_values</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ijk, ijl, ikr -&gt; ilr&quot;</span><span class="p">,</span> <span class="n">corr_values</span><span class="p">,</span> <span class="n">rgemat</span><span class="p">,</span> <span class="n">rgemat</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">corr_values</span></div>
 

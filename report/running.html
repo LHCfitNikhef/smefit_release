@@ -277,6 +277,16 @@ be skipped.</p>
 <span class="w">    </span><span class="nt">summary_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset</span>
 <span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">11</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span>
 <span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"> </span><span class="c1"># if True display the fit label as title</span>
+
+<span class="w">    </span><span class="nt">plot</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">summary_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span><span class="w"> </span><span class="c1"># if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset</span>
+<span class="w">    </span><span class="nt">figsize</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">11</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">15</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># figure size</span>
+<span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"> </span><span class="c1"># if True display the fit label as title</span>
+<span class="w">    </span><span class="nt">column_names</span><span class="p">:</span><span class="w"> </span><span class="c1"># list of column names to be displayed, default is all</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">group_1</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;$\\rm</span><span class="nv"> </span><span class="s">group\\:1$&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tt13</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;$t\\bar{t}$&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="nt">together</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;fit_1&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;fit_2&quot;</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># list of result IDs to be plotted together</span>
 </pre></div>
 </div>
 <p>Finally the user has to specify two dictionaries where the informaions about

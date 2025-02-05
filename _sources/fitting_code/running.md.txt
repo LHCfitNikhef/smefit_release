@@ -221,6 +221,19 @@ One is free to set custom attributes in the constructor. The coefficient values 
 are accesible via ``coefficient_values`` in the ``compute_chi2`` method. In order for the external chi2
 to work, it is important one does not change the name of the ``compute_chi2`` method!
 
+### Adding RG evolution
+Renormalisation group evolution can be turned on in the fit by adding the following to the runcard.
+
+```yaml
+rge:
+  init_scale: 5000.0
+  obs_scale: dynamic # float or "dynamic"
+  smeft_accuracy: integrate # options: integrate, leadinglog
+  yukawa: top # options: top, full or none
+  adm_QCD: False # if true, the EW couplings are set to zero
+  rg_matrix: <path/to/rge_matrix.pkl>
+```
+
 ## Running a fit with NS
 To run a fiy using Nested Sampling use the command
 ```bash

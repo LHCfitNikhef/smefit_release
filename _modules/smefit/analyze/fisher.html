@@ -116,15 +116,56 @@
              
   <h1>Source code for smefit.analyze.fisher</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpatches</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">colors</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.legend_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">HandlerPatch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.axes_grid1</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_axes_locatable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">rich.progress</span><span class="w"> </span><span class="kn">import</span> <span class="n">track</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.latex_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">latex_packages</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.pca</span><span class="w"> </span><span class="kn">import</span> <span class="n">impose_constrain</span>
+
+
+<div class="viewcode-block" id="HandlerTriangle">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.HandlerTriangle">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HandlerTriangle</span><span class="p">(</span><span class="n">HandlerPatch</span><span class="p">):</span>
+<div class="viewcode-block" id="HandlerTriangle.create_artists">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.HandlerTriangle.create_artists">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_artists</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">legend</span><span class="p">,</span> <span class="n">orig_handle</span><span class="p">,</span> <span class="n">xdescent</span><span class="p">,</span> <span class="n">ydescent</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">fontsize</span><span class="p">,</span> <span class="n">trans</span>
+    <span class="p">):</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">xdescent</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">ydescent</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="c1"># Define the lower-left triangle vertices</span>
+
+        <span class="k">if</span> <span class="n">orig_handle</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">orig_handle</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span>
+            <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">size</span><span class="p">,</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">size</span><span class="p">),</span>  <span class="c1"># Bottom-left</span>
+                <span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">,</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">size</span><span class="p">),</span>  <span class="c1"># Bottom-right</span>
+                <span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">size</span><span class="p">,</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">),</span>  <span class="c1"># Top-left</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># (upper-right)</span>
+            <span class="n">vertices</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">,</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">),</span>  <span class="c1"># Top-right</span>
+                <span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">size</span><span class="p">,</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">),</span>  <span class="c1"># Top-left</span>
+                <span class="p">(</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">size</span><span class="p">,</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">size</span><span class="p">),</span>  <span class="c1"># Bottom-right</span>
+            <span class="p">]</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span>
+            <span class="n">vertices</span><span class="p">,</span>
+            <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">facecolor</span><span class="o">=</span><span class="n">orig_handle</span><span class="o">.</span><span class="n">get_facecolor</span><span class="p">(),</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="n">orig_handle</span><span class="o">.</span><span class="n">get_edgecolor</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">set_transform</span><span class="p">(</span><span class="n">trans</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">p</span><span class="p">]</span></div>
+</div>
+
 
 
 <div class="viewcode-block" id="FisherCalculator">
@@ -174,7 +215,6 @@
         <span class="n">fisher_tab</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">ndat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">NdataExp</span><span class="p">:</span>
-            <span class="n">fisher_row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">free_parameters</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
             <span class="n">idxs</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span> <span class="n">cnt</span> <span class="o">+</span> <span class="n">ndat</span><span class="p">)</span>
             <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_LinearCorrections</span><span class="p">[:,</span> <span class="n">idxs</span><span class="p">]</span>
             <span class="n">fisher_row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">sigma</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">InvCovMat</span><span class="p">[</span><span class="n">idxs</span><span class="p">,</span> <span class="n">idxs</span><span class="p">]</span> <span class="o">@</span> <span class="n">sigma</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
@@ -451,44 +491,246 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">L</span>
 
-<div class="viewcode-block" id="FisherCalculator.plot">
-<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.plot">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span>
+<div class="viewcode-block" id="FisherCalculator.unify_fishers">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.unify_fishers">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unify_fishers</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">df_other</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">df_other</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># Get the union of row and column indices</span>
+        <span class="n">all_rows</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">df_other</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">all_columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">df_other</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+        <span class="c1"># Reindex both DataFrames to have the same rows and columns</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">all_rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">all_columns</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">df_other</span> <span class="o">=</span> <span class="n">df_other</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">all_rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">all_columns</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">df_other</span></div>
+
+
+<div class="viewcode-block" id="FisherCalculator.set_ticks">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.set_ticks">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">yticks</span><span class="p">,</span> <span class="n">xticks</span><span class="p">,</span> <span class="n">latex_names</span><span class="p">,</span> <span class="n">x_labels</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">yticks</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">latex_names</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span>
+            <span class="n">xticks</span><span class="p">,</span>
+            <span class="n">labels</span><span class="o">=</span><span class="n">x_labels</span><span class="p">,</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s2">&quot;top&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">xticks</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">yticks</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FisherCalculator.plot_values">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.plot_values">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_values</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">dfs</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the values of the Fisher information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ax: matplotlib.axes.Axes</span>
+<span class="sd">            axes object</span>
+<span class="sd">        dfs: list</span>
+<span class="sd">            list of pandas.DataFrame</span>
+<span class="sd">        cmap: matplotlib.colors.LinearSegmentedColormap</span>
+<span class="sd">            colour map</span>
+<span class="sd">        norm: matplotlib.colors.BoundaryNorm</span>
+<span class="sd">            normalisation of colorbar</span>
+<span class="sd">        labels: list, optional</span>
+<span class="sd">            label elements for legend</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">df_1</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">df_2</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dfs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">cols</span><span class="p">,</span> <span class="n">rows</span> <span class="o">=</span> <span class="n">df_1</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="c1"># Initialize the delta shift for text positioning</span>
+        <span class="n">delta_shift</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df_1</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">elem_1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+
+                <span class="c1"># start filling from the top left corner</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">j</span><span class="p">,</span> <span class="n">rows</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">i</span>
+                <span class="n">ec_1</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+
+                <span class="c1"># if two fishers must be plotted together</span>
+                <span class="k">if</span> <span class="n">df_2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+                    <span class="n">elem_2</span> <span class="o">=</span> <span class="n">df_2</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+                    <span class="c1"># move position numbers</span>
+                    <span class="n">delta_shift</span> <span class="o">=</span> <span class="mf">0.2</span>
+
+                    <span class="c1"># highlight operators that exist in one but not the other</span>
+                    <span class="n">ec_1</span> <span class="o">=</span> <span class="s2">&quot;C1&quot;</span> <span class="k">if</span> <span class="n">elem_2</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">elem_1</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;black&quot;</span>
+
+                    <span class="k">if</span> <span class="n">elem_2</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                            <span class="n">x</span> <span class="o">+</span> <span class="n">delta_shift</span><span class="p">,</span>
+                            <span class="n">y</span> <span class="o">+</span> <span class="n">delta_shift</span><span class="p">,</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">elem_2</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                            <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                            <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+                        <span class="c1"># Create a triangle patch for the second element</span>
+                        <span class="n">triangle2</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span>
+                            <span class="p">[</span>
+                                <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">],</span>
+                                <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">],</span>
+                                <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">],</span>
+                            <span class="p">],</span>
+                            <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">facecolor</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">elem_2</span><span class="p">)),</span>
+                            <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">triangle2</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">elem_1</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+                    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                        <span class="n">x</span> <span class="o">-</span> <span class="n">delta_shift</span><span class="p">,</span>
+                        <span class="n">y</span> <span class="o">-</span> <span class="n">delta_shift</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">elem_1</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                        <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                        <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                        <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">df_2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+                        <span class="c1"># Create a triangle patch for the first element</span>
+                        <span class="n">triangle1</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span>
+                            <span class="p">[</span>
+                                <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">],</span>
+                                <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">],</span>
+                                <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">],</span>
+                            <span class="p">],</span>
+                            <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">facecolor</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">elem_1</span><span class="p">)),</span>
+                            <span class="n">edgecolor</span><span class="o">=</span><span class="n">ec_1</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">triangle1</span><span class="p">)</span>
+
+                        <span class="c1"># Create legend elements for the patches</span>
+                        <span class="n">legend_elements</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="n">mpatches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span>
+                                <span class="p">[[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]],</span>
+                                <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+                                <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+                                <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="p">),</span>
+                            <span class="n">mpatches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span>
+                                <span class="p">[[</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]],</span>
+                                <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+                                <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+                                <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="p">),</span>
+                        <span class="p">]</span>
+                        <span class="c1"># Add the legend to the plot</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+                            <span class="n">handles</span><span class="o">=</span><span class="n">legend_elements</span><span class="p">,</span>
+                            <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper center&quot;</span><span class="p">,</span>
+                            <span class="n">fontsize</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+                            <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                            <span class="n">handler_map</span><span class="o">=</span><span class="p">{</span><span class="n">mpatches</span><span class="o">.</span><span class="n">Polygon</span><span class="p">:</span> <span class="n">HandlerTriangle</span><span class="p">()},</span>
+                            <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.02</span><span class="p">),</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Create a rectangle patch for the first element</span>
+                        <span class="n">rectangle</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span>
+                            <span class="p">[</span>
+                                <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">],</span>
+                                <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">],</span>
+                                <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">],</span>
+                                <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">],</span>
+                            <span class="p">],</span>
+                            <span class="n">closed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">ec</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span>
+                            <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">elem_1</span><span class="p">)),</span>
+                        <span class="p">)</span>
+                        <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rectangle</span><span class="p">)</span>
+
+        <span class="c1"># Set the x and y limits of the plot</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cols</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">rows</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="c1"># Set the aspect ratio of the plot to be equal</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">,</span> <span class="n">adjustable</span><span class="o">=</span><span class="s2">&quot;box&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FisherCalculator.plot_heatmap">
+<a class="viewcode-back" href="../../../modules/smefit/smefit.analyze.html#smefit.analyze.fisher.FisherCalculator.plot_heatmap">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_heatmap</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">latex_names</span><span class="p">,</span>
         <span class="n">fig_name</span><span class="p">,</span>
         <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">other</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">summary_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span>
+        <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">column_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot the heat map of Fisher table.</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        latex_names : list</span>
-<span class="sd">            list of coefficients latex names</span>
-<span class="sd">        fig_name: str</span>
-<span class="sd">            figure path</span>
-<span class="sd">        summary_only:</span>
-<span class="sd">            if True plot the fisher grouped per datsets,</span>
-<span class="sd">            else the fine grained dataset per dataset</span>
-<span class="sd">        figsize : tuple</span>
-<span class="sd">            figure size</span>
-<span class="sd">        title: str, None</span>
-<span class="sd">            plot title</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">summary_only</span><span class="p">:</span>
-            <span class="n">fisher_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary_table</span>
-            <span class="n">quad_fisher_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary_HOtable</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">fisher_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lin_fisher</span>
-            <span class="n">quad_fisher_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quad_fisher</span>
+        <span class="n">fisher_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary_table</span> <span class="k">if</span> <span class="n">summary_only</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">lin_fisher</span>
+        <span class="n">quad_fisher_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary_HOtable</span> <span class="k">if</span> <span class="n">summary_only</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">quad_fisher</span>
 
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">quad_fisher_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="n">fisher_df_other</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">summary_table</span> <span class="k">if</span> <span class="n">summary_only</span> <span class="k">else</span> <span class="n">other</span><span class="o">.</span><span class="n">lin_fisher</span>
+            <span class="n">quad_fisher_df_other</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">other</span><span class="o">.</span><span class="n">summary_HOtable</span> <span class="k">if</span> <span class="n">summary_only</span> <span class="k">else</span> <span class="n">other</span><span class="o">.</span><span class="n">quad_fisher</span>
+            <span class="p">)</span>
+            <span class="c1"># unify the fisher tables and fill missing values by zeros</span>
+            <span class="n">fisher_dfs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unify_fishers</span><span class="p">(</span><span class="n">fisher_df</span><span class="p">,</span> <span class="n">fisher_df_other</span><span class="p">)</span>
+
+            <span class="c1"># reshuffle the tables according to the latex names ordering</span>
+            <span class="n">fisher_dfs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">fisher</span><span class="p">[</span><span class="n">latex_names</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_level_values</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+                <span class="k">for</span> <span class="n">fisher</span> <span class="ow">in</span> <span class="n">fisher_dfs</span>
+            <span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">quad_fisher_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">quad_fisher_dfs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unify_fishers</span><span class="p">(</span>
+                    <span class="n">quad_fisher_df</span><span class="p">,</span> <span class="n">quad_fisher_df_other</span>
+                <span class="p">)</span>
+
+                <span class="c1"># reshuffle the tables according to the latex names ordering</span>
+                <span class="n">quad_fisher_dfs</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">fisher</span><span class="p">[</span><span class="n">latex_names</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_level_values</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+                    <span class="k">for</span> <span class="n">fisher</span> <span class="ow">in</span> <span class="n">quad_fisher_dfs</span>
+                <span class="p">]</span>
+
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+            <span class="n">fisher_dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">fisher_df</span><span class="p">[</span><span class="n">latex_names</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_level_values</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)]]</span>
+            <span class="k">if</span> <span class="n">quad_fisher_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">quad_fisher_dfs</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">quad_fisher_df</span><span class="p">[</span><span class="n">latex_names</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_level_values</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+                <span class="p">]</span>
+
+        <span class="c1"># reshuffle column name ordering</span>
+        <span class="k">if</span> <span class="n">column_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">custom_ordering</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">column</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">]</span>
+            <span class="n">fisher_dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">fisher_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">custom_ordering</span><span class="p">]</span> <span class="k">for</span> <span class="n">fisher_df</span> <span class="ow">in</span> <span class="n">fisher_dfs</span><span class="p">]</span>
+            <span class="n">x_labels</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">column</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">column_names</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x_labels</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">rm</span><span class="se">{{</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">fisher_df</span><span class="o">.</span><span class="n">index</span>
+            <span class="p">]</span>
 
         <span class="c1"># colour map</span>
         <span class="n">cmap_full</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Blues&quot;</span><span class="p">)</span>
@@ -498,56 +740,43 @@
         <span class="p">)</span>
         <span class="n">norm</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="n">cmap</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
 
-        <span class="c1"># ticks</span>
-        <span class="n">yticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">fisher_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">xticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">fisher_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">x_labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">rm</span><span class="se">{{</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">fisher_df</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">quad_fisher_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 
-        <span class="k">def</span><span class="w"> </span><span class="nf">set_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">):</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">yticks</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">latex_names</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span>
-                <span class="n">xticks</span><span class="p">,</span>
-                <span class="n">labels</span><span class="o">=</span><span class="n">x_labels</span><span class="p">,</span>
-                <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
-                <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="c1"># minor grid</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">xticks</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">yticks</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;minor&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_values</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">fisher_dfs</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 
-        <span class="k">def</span><span class="w"> </span><span class="nf">plot_values</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">elem</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-                            <span class="n">j</span><span class="p">,</span>
-                            <span class="n">i</span><span class="p">,</span>
-                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">elem</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                            <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
-                            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
-                            <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-                        <span class="p">)</span>
-
-        <span class="n">cax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">matshow</span><span class="p">(</span><span class="n">fisher_df</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
-        <span class="n">plot_values</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">fisher_df</span><span class="p">)</span>
-        <span class="n">set_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span>
+            <span class="n">ax</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">fisher_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">fisher_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="n">latex_names</span><span class="p">,</span>
+            <span class="n">x_labels</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\rm Linear&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.08</span><span class="p">)</span>
         <span class="n">cax1</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s2">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-        <span class="n">colour_bar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cax</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax1</span><span class="p">)</span>
+        <span class="n">colour_bar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">),</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax1</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">quad_fisher_df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
-            <span class="n">cax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">matshow</span><span class="p">(</span><span class="n">quad_fisher_df</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">)</span>
-            <span class="n">plot_values</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">quad_fisher_df</span><span class="p">)</span>
-            <span class="n">set_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\rm Quadratic&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.08</span><span class="p">)</span>
-            <span class="n">cax1</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s2">&quot;10%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-            <span class="n">colour_bar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cax</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot_values</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">quad_fisher_dfs</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 
-        <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.85</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span>
+                <span class="n">ax</span><span class="p">,</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">quad_fisher_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">quad_fisher_dfs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                <span class="n">latex_names</span><span class="p">,</span>
+                <span class="n">x_labels</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\rm Quadratic&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.08</span><span class="p">)</span>
+            <span class="n">cax1</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s2">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">colour_bar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
+                <span class="n">mpl</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">(</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">),</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax1</span>
+            <span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
 
         <span class="n">colour_bar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span>
             <span class="sa">r</span><span class="s2">&quot;${\rm Normalized\ Value}$&quot;</span><span class="p">,</span>

@@ -72,6 +72,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#constrains-between-coefficients">Constrains between coefficients</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fit-in-different-basis">Fit in different basis</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#adding-custom-likelihoods">Adding custom likelihoods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-rg-evolution">Adding RG evolution</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#running-a-fit-with-ns">Running a fit with NS</a></li>
@@ -336,6 +337,19 @@ the following to the runcard:</p>
 <p>One is free to set custom attributes in the constructor. The coefficient values during optimisation
 are accesible via <code class="docutils literal notranslate"><span class="pre">coefficient_values</span></code> in the <code class="docutils literal notranslate"><span class="pre">compute_chi2</span></code> method. In order for the external chi2
 to work, it is important one does not change the name of the <code class="docutils literal notranslate"><span class="pre">compute_chi2</span></code> method!</p>
+</section>
+<section id="adding-rg-evolution">
+<h3>Adding RG evolution<a class="headerlink" href="#adding-rg-evolution" title="Link to this heading"></a></h3>
+<p>Renormalisation group evolution can be turned on in the fit by adding the following to the runcard.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rge</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">init_scale</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000.0</span>
+<span class="w">  </span><span class="nt">obs_scale</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dynamic</span><span class="w"> </span><span class="c1"># float or &quot;dynamic&quot;</span>
+<span class="w">  </span><span class="nt">smeft_accuracy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">integrate</span><span class="w"> </span><span class="c1"># options: integrate, leadinglog</span>
+<span class="w">  </span><span class="nt">yukawa</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">top</span><span class="w"> </span><span class="c1"># options: top, full or none</span>
+<span class="w">  </span><span class="nt">adm_QCD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"> </span><span class="c1"># if true, the EW couplings are set to zero</span>
+<span class="w">  </span><span class="nt">rg_matrix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path/to/rge_matrix.pkl&gt;</span>
+</pre></div>
+</div>
 </section>
 </section>
 <section id="running-a-fit-with-ns">
