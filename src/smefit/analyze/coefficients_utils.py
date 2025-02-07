@@ -916,8 +916,8 @@ class CoefficientsPlotter:
             verticalalignment="top",
         )
 
-        fig.savefig(f"{self.report_folder}/contours_2d.pdf")
-        fig.savefig(f"{self.report_folder}/contours_2d.png")
+        fig.savefig(f"{self.report_folder}/contours_2d.pdf", bbox_inches="tight")
+        fig.savefig(f"{self.report_folder}/contours_2d.png", bbox_inches="tight")
 
     def write_cl_table(self, bounds, round_val=3):
         """Coefficients latex table"""
