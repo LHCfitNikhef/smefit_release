@@ -910,7 +910,7 @@ class CoefficientsPlotter:
         ax.text(
             0.05,
             0.95,
-            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.I.\:intervals}}$",
+            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.I.}}$",
             fontsize=24,
             transform=ax.transAxes,
             verticalalignment="top",
