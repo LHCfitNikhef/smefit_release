@@ -117,7 +117,9 @@ class Optimizer:
             try:
                 chi2_module = importlib.import_module(stem)
             except ModuleNotFoundError:
-                print(f"Module {stem} not found in {base_path}. Adjust and rerun. Exiting the code.")
+                print(
+                    f"Module {stem} not found in {base_path}. Adjust and rerun. Exiting the code."
+                )
                 exit(1)
 
             my_chi2_class = getattr(chi2_module, class_name)
