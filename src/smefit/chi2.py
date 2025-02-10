@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Module for the computation of chi-squared values."""
+import importlib
 import json
 import pathlib
-import importlib
+
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
 import numpy as np
@@ -178,7 +179,9 @@ class Scanner:
             try:
                 chi2_module = importlib.import_module(stem)
             except ModuleNotFoundError:
-                print(f"Module {stem} not found in {base_path}. Modify the runcard and rerun, exiting")
+                print(
+                    f"Module {stem} not found in {base_path}. Modify the runcard and rerun, exiting"
+                )
                 exit(1)
 
             my_chi2_class = getattr(chi2_module, class_name)

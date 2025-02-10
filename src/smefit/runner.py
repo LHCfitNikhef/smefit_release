@@ -11,9 +11,9 @@ import yaml
 from .analyze.pca import RotateToPca
 from .chi2 import Scanner
 from .log import logging
+from .optimize import Optimizer
 from .optimize.analytic import ALOptimizer
 from .optimize.mc import MCOptimizer
-from .optimize import Optimizer
 
 try:
     from mpi4py import MPI
@@ -312,7 +312,9 @@ class Runner:
                 path = pathlib.Path(module_path)
                 base_path, stem = path.parent, path.stem
                 if not base_path.exists():
-                    raise FileNotFoundError(f"Path {base_path} does not exist. Modify the runcard and rerun. Exiting")
+                    raise FileNotFoundError(
+                        f"Path {base_path} does not exist. Modify the runcard and rerun. Exiting"
+                    )
                 else:
                     sys.path = [str(base_path)] + sys.path
 
