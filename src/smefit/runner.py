@@ -14,6 +14,7 @@ from .log import logging
 from .optimize import Optimizer
 from .optimize.analytic import ALOptimizer
 from .optimize.mc import MCOptimizer
+from .optimize.ultranest import USOptimizer
 
 try:
     from mpi4py import MPI

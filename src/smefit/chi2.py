@@ -10,13 +10,14 @@ import numpy as np
 import scipy.optimize as opt
 from rich.progress import track
 
-from smefit.rge import load_rge_matrix
+from smefit.rge import load_rge_matrix, RGE
 from smefit.utils import NumpyEncoder
 
 from . import compute_theory as pr
 from .coefficients import CoefficientManager
 from .loader import DataTuple, load_datasets
 from .log import logging
+
 
 _logger = logging.getLogger(__name__)
 
