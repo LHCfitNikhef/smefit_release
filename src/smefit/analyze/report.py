@@ -292,8 +292,11 @@ class Report:
             zero_sol = 0
             coeff_plt.plot_coeffs_bar(
                 {
-                    name: -bound_df.loc[zero_sol, f"low{bar_cl}"]
-                    + bound_df.loc[zero_sol, f"high{bar_cl}"]
+                    name: 0.5
+                    * (
+                        -bound_df.loc[zero_sol, f"low{bar_cl}"]
+                        + bound_df.loc[zero_sol, f"high{bar_cl}"]
+                    )
                     for name, bound_df in bounds_dict.items()
                 },
                 **confidence_level_bar,

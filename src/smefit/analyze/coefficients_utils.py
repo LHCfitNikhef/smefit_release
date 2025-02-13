@@ -287,8 +287,6 @@ class CoefficientsPlotter:
         groups, axs = self._get_suplblots(figsize)
         for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
 
-            bars["theory_error_linear"] = bars.iloc[:, 2] - bars.iloc[:, 0]
-
             bars["scale_min_linear"] = bars.iloc[:, :3].min(axis=1)
             bars["scale_max_linear"] = bars.iloc[:, :3].max(axis=1)
             bars["theory_error_linear"] = (
