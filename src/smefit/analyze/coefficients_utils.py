@@ -792,7 +792,7 @@ class CoefficientsPlotter:
                             x=posterior[c2].values,
                             y=posterior[c1].values,
                             levels=[1 - confidence_level[0] / 100.0, 1.0],
-                            bw_adjust=1.2,
+                            bw_adjust=1.5,
                             ax=ax,
                             linestyles="dashed",
                             linewidths=2,
@@ -879,7 +879,7 @@ class CoefficientsPlotter:
         ax.text(
             0.05,
             0.95,
-            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.I.\:intervals}},\,\mu=2\,\mathrm{{TeV}}$",
+            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.I.}},\,\mu_0=2\,\mathrm{{TeV}}$",
             fontsize=24,
             transform=ax.transAxes,
             verticalalignment="top",
