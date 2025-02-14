@@ -366,7 +366,7 @@ class CoefficientsPlotter:
 
         self._plot_logo(axs[-1])
         axs[-1].set_xlabel(
-            r"$95\%\ {\rm Credible\ Interval\ Half \Length}\ (1/{\rm TeV}^2)$",
+            r"${\rm Halfwidth\:}95\%\:{\rm Credible\:Interval}\:(1/{\rm TeV}^2)$",
             fontsize=20,
         )
         axs[0].legend(
