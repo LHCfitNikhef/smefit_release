@@ -576,7 +576,7 @@ class Report:
             fisher_2.plot_heatmap(
                 self.coeff_info,
                 f"{self.report}/fisher_heatmap_both",
-                title="$\\mathrm{LEP} + \\mathrm{LHC} + \\mathrm{HL}\\,\\textnormal{-}\\,\\mathrm{LHC}$",
+                title="$\\mathrm{LEP} + \\mathrm{LHC} + \\mathrm{HL}\\,\\textnormal{-}\\,\\mathrm{LHC} + \\mathrm{FCC}\\,\\textnormal{-}\\,\\mathrm{ee}$",
                 other=fisher_1,
                 labels=[fit.label for fit in self.fits],
                 **fit_plot,
