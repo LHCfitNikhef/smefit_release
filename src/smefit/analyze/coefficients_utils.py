@@ -17,6 +17,23 @@ from .latex_tools import latex_packages, multicolum_table_header
 from .spider import radar_factory
 
 
+def find_mode_hdis(post, intervs):
+    """
+    Function to find the modes inside disjoint HDI intervals
+    """
+    peaks = []
+    for int in intervs:
+        if abs(int[0] - int[1]) > 0:
+            idx_max = np.argwhere(post < int[1])[-1][0]
+            idx_min = np.argwhere(post > int[0])[0][0]
+            subpost = sorted(post[idx_min:idx_max])
+            mid_pos = len(subpost) // 2
+            peaks.append(subpost[mid_pos])
+        else:
+            peaks.append(int[0])
+    return peaks
+
+
 def get_confidence_values(dist, has_posterior=True):
     """
     Get confidence level bounds given the distribution
@@ -42,11 +59,15 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals[f"err{cl}_high"] = cl_vals[f"high{cl}"] - cl_vals["mid"]
 
         # highest density intervals
-        hdi_widths = np.diff(
-            arviz.hdi(dist.values, hdi=cl * 1e-2, multimodal=True), axis=1
+        hdi_interval = np.array(
+            arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=True)
         )
+        hdi_widths = np.diff(hdi_interval.flatten(), axis=0)
+        cl_vals[f"hdi_{cl}_low"] = hdi_interval[:, 0].tolist()
+        cl_vals[f"hdi_{cl}_high"] = hdi_interval[:, 1].tolist()
+        cl_vals[f"hdi_{cl}_mids"] = find_mode_hdis(sorted(dist.values), hdi_interval)
         cl_vals[f"hdi_{cl}"] = np.sum(hdi_widths.flatten())
-
+    
     cl_vals["pull"] = cl_vals["mid"] / cl_vals["mean_err68"]
 
     return cl_vals
