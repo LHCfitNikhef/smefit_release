@@ -86,6 +86,19 @@ wcxf_translate = {
     # 4 leptons
     "Oll": {"wc": ["ll_1221"]},
     "Oll1111": {"wc": ["ll_1111"]},
+    # 2 quark 2 lepton operators
+    "Oeu": {"wc": ["eu_1111", "eu_1122"]},
+    "Oed": {"wc": ["ed_1111", "ed_1122"]},
+    "Oeb": {"wc": ["ed_1133"]},
+    "Olq1": {"wc": ["lq1_1111", "lq1_1122"]},
+    "Olq3": {"wc": ["lq3_1111", "lq3_1122"]},
+    "OQl1": {"wc": ["lq1_1133"]},
+    "OQl3": {"wc": ["lq3_1133"]},
+    "Olu": {"wc": ["lu_1111","lu_1122"]}, 
+    "Old": {"wc": ["ld_1111","ld_1122"]}, 
+    "Olb": {"wc": ["ld_1133"]}, 
+    "Oqe": {"wc": ["qe_1111","qe_2211"]}, 
+    "OQe": {"wc": ["qe_3311"]}, 
 }
 
 # This creates a dictionary to go from Warsaw to SMEFiT.
