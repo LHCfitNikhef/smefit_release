@@ -63,7 +63,8 @@ ccp : [{kS: [0.,0]}]
 ctap : [{kS: [0.,0]}]
 ctW : [{kS: [0.,0]}]
 ctZ : [{kS: [0.,0]}]
+cp : [{kS: [0.,0]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_1Sep23.wxf
-# Export date: Fri 1 Sep 2023 13:14:24
+# Tree-level dictionary: /home/alejorossia/Documents/UVcomp-GlobalFits/dict_all_SMEFTsim_FitMakerModels_YukaFitMaker_8Nov24.wxf
+# Export date: Mon 11 Nov 2024 10:59:56
