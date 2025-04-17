@@ -1,10 +1,7 @@
 # .github/workflows/pre-commit.yml
 name: pre-commit
 
-on:
-  pull_request:
-  push:
-    branches: [main]
+on: [push]
 
 jobs:
   pre-commit:
