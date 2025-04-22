@@ -286,8 +286,30 @@ To do this add to the runcard
 single_parameter_fits: True
 ```
 and proceed as documented above for a normal fit.
-For both NS, MC and A the final output will be the file ``posterior.json``
-containing the independent posterior of the fitted Wilson coefficients, obtained by a series os independent single parameter fits.
+For both `NS` and `A` the final output will be the file ``fit_results.json``
+containing the independent posterior of the fitted Wilson coefficients, obtained by a series of independent single parameter fits.
+
+It is possible to perform single paramters in the presence of multiple constraints. For example
+
+```yaml
+
+single_parameter_fits: True
+uv_couplings: true
+
+coefficients:
+  # Free params
+  OWWW: {'min': -3, 'max': 3}
+  Opq1: {'min': -3, 'max': 3}
+  Opq3: {'min': -3, 'max': 3}
+
+  ## To fix ##
+  OpqMi: {'constrain': [{'Opq1': 1}, {'Opq3': -1}], 'min': -2, 'max': 2 }
+  O3pq: {'constrain': [{'Opq3': 1}], 'min': -1, 'max': 1 }
+
+```
+performs a single parameter fit for ``OWWW``, ``Opq1`` and ``Opq3``. Note that this requires `uv_couplings` to be set to
+True (this allows you to fit parameters that do not appear in the theory tables). The naming `uv_couplings` stems from fitting with
+constraints among Wilson coefficients and UV parameters.
 
 
 
