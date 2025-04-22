@@ -5,6 +5,7 @@ on:
     branches:
       - main
 
+
 jobs:
   deploy-ghpages:
     runs-on: ubuntu-latest
@@ -33,7 +34,7 @@ jobs:
           pip install sphinxcontrib-bibtex
           pip install nbsphinx
           pip install recommonmark
-          conda install pandoc
+          pip install pandoc
           cd docs
           mkdir -p source/development
           make html
