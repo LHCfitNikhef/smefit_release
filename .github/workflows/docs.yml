@@ -1,11 +1,10 @@
 name: docs
 
-#on:
-#  push:
-#    branches:
-#      - main
+on:
+  push:
+    branches:
+      - main
 
-on: [push]
 
 jobs:
   deploy-ghpages:
@@ -39,8 +38,8 @@ jobs:
           cd docs
           mkdir -p source/development
           make html
-#      - name: Deploy 🚀
-#        uses: JamesIves/github-pages-deploy-action@4.0.0
-#        with:
-#          branch: gh-pages # The branch the action should deploy to.
-#          folder: "docs/build/html" # The folder the action should deploy.
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.0.0
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: "docs/build/html" # The folder the action should deploy.
