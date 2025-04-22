@@ -27,7 +27,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
           auto-update-conda: true
           activate-environment: docsenv
-          environment-name: docsenv
       - name: Build docs  🔨
         shell: bash -l {0}
         run: |
