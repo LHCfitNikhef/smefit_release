@@ -154,7 +154,7 @@ SMEFT potential for indirect New Physics searches from precision measurements re
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>smefit
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!pip install smefit
 </pre></div>
 </div>
 </div>
@@ -164,18 +164,18 @@ SMEFT potential for indirect New Physics searches from precision measurements re
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>wget
-<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>ipywidgets
-<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">wget</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!pip install wget
+!pip install ipywidgets
+import sys
+import os
+import wget
+import subprocess
+import pathlib
+import yaml
+import matplotlib as mpl
+from IPython.display import Image
 
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParamsDefault</span><span class="p">)</span>
+mpl.rcParams.update(mpl.rcParamsDefault)
 </pre></div>
 </div>
 </div>
@@ -191,11 +191,11 @@ Requirement already satisfied: wget in /Users/jaco/opt/anaconda3/envs/smefit_tut
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">smefit</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">smefit.runner</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">smefit.analyze.report</span><span class="w"> </span><span class="kn">import</span> <span class="n">Report</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import smefit
+import smefit.runner
+from smefit.analyze.report import Report
 
-<span class="n">smefit</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">setup_console</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+smefit.log.setup_console(None)
 </pre></div>
 </div>
 </div>
@@ -204,19 +204,19 @@ Requirement already satisfied: wget in /Users/jaco/opt/anaconda3/envs/smefit_tut
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">file_downloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">download_dir</span><span class="o">=</span><span class="s1">&#39;./downloads&#39;</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def file_downloader(url, download_dir=&#39;./downloads&#39;):
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">download_dir</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">download_dir</span><span class="p">)</span>
+    if not os.path.exists(download_dir):
+        os.mkdir(download_dir)
 
-    <span class="n">file</span> <span class="o">=</span> <span class="n">wget</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">download_dir</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">file</span>
+    file = wget.download(url, out=download_dir)
+    return file
 
-<span class="n">smefit_database</span> <span class="o">=</span> <span class="n">file_downloader</span><span class="p">(</span><span class="s1">&#39;https://github.com/LHCfitNikhef/smefit_database/archive/refs/heads/main.zip&#39;</span><span class="p">)</span>
-<span class="n">runcards</span> <span class="o">=</span> <span class="n">file_downloader</span><span class="p">(</span><span class="s1">&#39;https://github.com/LHCfitNikhef/smefit_release/raw/tutorial/tutorial/runcards.zip&#39;</span><span class="p">)</span>
+smefit_database = file_downloader(&#39;https://github.com/LHCfitNikhef/smefit_database/archive/refs/heads/main.zip&#39;)
+runcards = file_downloader(&#39;https://github.com/LHCfitNikhef/smefit_release/raw/tutorial/tutorial/runcards.zip&#39;)
 
-<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;unzip </span><span class="si">{</span><span class="n">smefit_database</span><span class="si">}</span><span class="s2"> -d ./downloads&quot;</span><span class="p">],</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;unzip </span><span class="si">{</span><span class="n">runcards</span><span class="si">}</span><span class="s2"> -d ./downloads&quot;</span><span class="p">],</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+subprocess.run([f&quot;unzip {smefit_database} -d ./downloads&quot;], capture_output=False, shell=True, text=False)
+subprocess.run([f&quot;unzip {runcards} -d ./downloads&quot;], capture_output=False, shell=True, text=False)
 </pre></div>
 </div>
 </div>
@@ -303,8 +303,8 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runner_ttV</span> <span class="o">=</span> <span class="n">smefit</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">Runner</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./downloads/runcards/runcard_ttV.yaml&quot;</span><span class="p">))</span>
-<span class="n">runner_ttV</span><span class="o">.</span><span class="n">global_analysis</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>runner_ttV = smefit.runner.Runner.from_file(pathlib.Path(&quot;./downloads/runcards/runcard_ttV.yaml&quot;))
+runner_ttV.global_analysis(&quot;A&quot;)
 </pre></div>
 </div>
 </div>
@@ -313,22 +313,22 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">make_report</span><span class="p">(</span><span class="n">runcard_report</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def make_report(runcard_report):
 
-    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">rcParamsDefault</span><span class="p">)</span>
+    mpl.rcParams.update(mpl.rcParamsDefault)
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">runcard_report</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">report_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    with open(runcard_report, encoding=&quot;utf-8&quot;) as f:
+        report_config = yaml.safe_load(f)
 
-    <span class="n">report_name</span> <span class="o">=</span> <span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-    <span class="n">report_path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;report_path&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
-    <span class="n">report_folder</span> <span class="o">=</span> <span class="n">report_path</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">report_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    report_name = report_config[&quot;name&quot;]
+    report_path = pathlib.Path(report_config[&quot;report_path&quot;]).absolute()
+    report_folder = report_path.joinpath(f&quot;{report_name}&quot;)
 
-    <span class="n">report_folder</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    report_folder.mkdir(exist_ok=True, parents=True)
 
-    <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span><span class="n">report_path</span><span class="p">,</span> <span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;result_path&quot;</span><span class="p">],</span> <span class="n">report_config</span><span class="p">)</span>
+    report = Report(report_path, report_config[&quot;result_path&quot;], report_config)
 
-    <span class="n">report</span><span class="o">.</span><span class="n">coefficients</span><span class="p">(</span><span class="o">**</span><span class="n">report_config</span><span class="p">[</span><span class="s2">&quot;coefficients_plots&quot;</span><span class="p">])</span>
+    report.coefficients(**report_config[&quot;coefficients_plots&quot;])
 </pre></div>
 </div>
 </div>
@@ -336,7 +336,7 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">make_report</span><span class="p">(</span><span class="s2">&quot;./downloads/runcards/runcard_report_ttV.yaml&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>make_report(&quot;./downloads/runcards/runcard_report_ttV.yaml&quot;)
 </pre></div>
 </div>
 </div>
@@ -344,8 +344,8 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the exclusion contour</span>
-<span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./reports/report_ttV/contours_2d.png&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># show the exclusion contour
+Image(filename=&#39;./reports/report_ttV/contours_2d.png&#39;)
 </pre></div>
 </div>
 </div>
@@ -371,8 +371,8 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runner_tt_mtt</span> <span class="o">=</span> <span class="n">smefit</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">Runner</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./downloads/runcards/runcard_tt_mtt.yaml&quot;</span><span class="p">))</span>
-<span class="n">runner_tt_mtt</span><span class="o">.</span><span class="n">global_analysis</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>runner_tt_mtt = smefit.runner.Runner.from_file(pathlib.Path(&quot;./downloads/runcards/runcard_tt_mtt.yaml&quot;))
+runner_tt_mtt.global_analysis(&quot;A&quot;)
 </pre></div>
 </div>
 </div>
@@ -381,7 +381,7 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">make_report</span><span class="p">(</span><span class="s2">&quot;./downloads/runcards/runcard_report_tt_mtt.yaml&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>make_report(&quot;./downloads/runcards/runcard_report_tt_mtt.yaml&quot;)
 </pre></div>
 </div>
 </div>
@@ -389,8 +389,8 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the exclusion contour</span>
-<span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./reports/report_tt_mtt/contours_2d.png&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># show the exclusion contour
+Image(filename=&#39;./reports/report_tt_mtt/contours_2d.png&#39;)
 </pre></div>
 </div>
 </div>
@@ -418,8 +418,8 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the exclusion contour</span>
-<span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;./reports/report_combined/contours_2d.png&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># show the exclusion contour
+Image(filename=&#39;./reports/report_combined/contours_2d.png&#39;)
 </pre></div>
 </div>
 </div>
@@ -444,8 +444,8 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">runner_tt_mtt_quad</span> <span class="o">=</span> <span class="n">smefit</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">Runner</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./downloads/runcards/runcard_tt_mtt_quad.yaml&quot;</span><span class="p">))</span>
-<span class="n">runner_tt_mtt_quad</span><span class="o">.</span><span class="n">global_analysis</span><span class="p">(</span><span class="s2">&quot;NS&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>runner_tt_mtt_quad = smefit.runner.Runner.from_file(pathlib.Path(&quot;./downloads/runcards/runcard_tt_mtt_quad.yaml&quot;))
+runner_tt_mtt_quad.global_analysis(&quot;NS&quot;)
 </pre></div>
 </div>
 </div>

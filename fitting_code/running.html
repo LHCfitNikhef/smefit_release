@@ -398,8 +398,26 @@ To do this add to the runcard</p>
 </pre></div>
 </div>
 <p>and proceed as documented above for a normal fit.
-For both NS, MC and A the final output will be the file <code class="docutils literal notranslate"><span class="pre">posterior.json</span></code>
-containing the independent posterior of the fitted Wilson coefficients, obtained by a series os independent single parameter fits.</p>
+For both <code class="docutils literal notranslate"><span class="pre">NS</span></code> and <code class="docutils literal notranslate"><span class="pre">A</span></code> the final output will be the file <code class="docutils literal notranslate"><span class="pre">fit_results.json</span></code>
+containing the independent posterior of the fitted Wilson coefficients, obtained by a series of independent single parameter fits.</p>
+<p>It is possible to perform single paramters in the presence of multiple constraints. For example</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">single_parameter_fits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="nt">uv_couplings</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">coefficients</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Free params</span>
+<span class="w">  </span><span class="nt">OWWW</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">3</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">Opq1</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">3</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">Opq3</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">3</span><span class="p p-Indicator">}</span>
+
+<span class="w">  </span><span class="c1">## To fix ##</span>
+<span class="w">  </span><span class="nt">OpqMi</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;constrain&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="s">&#39;Opq1&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">},</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;Opq3&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-1</span><span class="p p-Indicator">}],</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">2</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">O3pq</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;constrain&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="s">&#39;Opq3&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">}],</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">1</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>performs a single parameter fit for <code class="docutils literal notranslate"><span class="pre">OWWW</span></code>, <code class="docutils literal notranslate"><span class="pre">Opq1</span></code> and <code class="docutils literal notranslate"><span class="pre">Opq3</span></code>. Note that this requires <code class="docutils literal notranslate"><span class="pre">uv_couplings</span></code> to be set to
+True (this allows you to fit parameters that do not appear in the theory tables). The naming <code class="docutils literal notranslate"><span class="pre">uv_couplings</span></code> stems from fitting with
+constraints among Wilson coefficients and UV parameters.</p>
 </section>
 <section id="individual-parameter-scan">
 <h2>Individual parameter scan<a class="headerlink" href="#individual-parameter-scan" title="Link to this heading"></a></h2>
