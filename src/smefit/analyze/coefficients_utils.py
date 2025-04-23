@@ -148,7 +148,7 @@ class CoefficientsPlotter:
             )
 
     def _get_suplblots(self, figsize):
-        groups = self.coeff_info.groupby(level=0).count()
+        groups = self.coeff_info.groupby(level=0, sort=False).count()
         _, axs = plt.subplots(
             groups.size,
             1,
@@ -180,6 +180,7 @@ class CoefficientsPlotter:
         colors = plt.get_cmap("tab20")
 
         def plot_error_bars(ax, vals, cnt, i, label=None):
+
             ax.errorbar(
                 x=vals.mid,
                 y=Y[cnt] + y_shift[i],
@@ -202,8 +203,13 @@ class CoefficientsPlotter:
             # loop over fits
             for i, (fit_name, bound_df) in enumerate(bounds.items()):
                 label = fit_name
+                bound_df_top_to_bottom = bound_df[g].iloc[
+                    :, ::-1
+                ]  # reverse order to plot from top to bottom in ax
                 # loop on coeffs
-                for cnt, (coeff_name, coeff) in enumerate(bound_df[g].items()):
+                for cnt, (coeff_name, coeff) in enumerate(
+                    bound_df_top_to_bottom.items()
+                ):
                     # maybe there are no double solutions
                     key_not_found = f"{coeff_name} posterior is not found in {fit_name}"
                     try:
@@ -222,9 +228,10 @@ class CoefficientsPlotter:
                     except KeyError:
                         pass
 
-            # y thicks
+            # y ticks
             ax.set_ylim(-2, Y[-1] + 2)
-            ax.set_yticks(Y, self.coeff_info[g], fontsize=13)
+            # also position y tick labels from top to bottom
+            ax.set_yticks(Y[::-1], self.coeff_info[g], fontsize=13)
             # x grid
             ax.vlines(0, -2, Y[-1] + 2, ls="dashed", color="black", alpha=0.7)
             if x_log:
@@ -247,7 +254,16 @@ class CoefficientsPlotter:
 
         self._plot_logo(axs[-1])
         axs[-1].set_xlabel(r"$c_i/\Lambda^2\ ({\rm TeV}^{-2})$", fontsize=20)
-        axs[0].legend(loc=0, frameon=False, prop={"size": 13})
+        handles, labels = axs[-1].get_legend_handles_labels()
+        axs[0].legend(
+            handles,
+            labels,
+            loc="lower center",
+            bbox_to_anchor=(0, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 13},
+            ncol=2,
+        )
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_central.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_central.png")
@@ -260,7 +276,6 @@ class CoefficientsPlotter:
         x_log=True,
         x_min=1e-2,
         x_max=500,
-        legend_loc="best",
     ):
         """
         Plot error bars at given confidence level
@@ -286,8 +301,11 @@ class CoefficientsPlotter:
         df = pd.DataFrame(error)
         groups, axs = self._get_suplblots(figsize)
 
-        for ax, (g, bars) in zip(axs, df.groupby(level=0)):
-            bars.droplevel(0).plot(
+        for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
+            bars_top_to_bottom = bars.iloc[
+                ::-1
+            ]  # reverse order to plot from top to bottom in ax
+            bars_top_to_bottom.droplevel(0).plot(
                 kind="barh",
                 width=0.6,
                 ax=ax,
@@ -314,19 +332,18 @@ class CoefficientsPlotter:
         axs[-1].set_xlabel(
             r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
         )
-        axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
+        axs[0].legend(
+            loc="lower center",
+            bbox_to_anchor=(0, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 13},
+            ncol=2,
+        )
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_bar.png")
 
-    def plot_pull(
-        self,
-        pull,
-        x_min=-3,
-        x_max=3,
-        figsize=(10, 15),
-        legend_loc="best",
-    ):
+    def plot_pull(self, pull, x_min=-3, x_max=3, figsize=(10, 15)):
         """
         Plot error bars at given confidence level
 
@@ -347,8 +364,11 @@ class CoefficientsPlotter:
         df = pd.DataFrame(pull)
         groups, axs = self._get_suplblots(figsize)
 
-        for ax, (g, bars) in zip(axs, df.groupby(level=0)):
-            bars.droplevel(0).plot(
+        for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
+            bars_top_to_bottom = bars.iloc[
+                ::-1
+            ]  # reverse order to plot from top to bottom in ax
+            bars_top_to_bottom.droplevel(0).plot(
                 kind="barh",
                 width=0.6,
                 ax=ax,
@@ -361,7 +381,13 @@ class CoefficientsPlotter:
 
         self._plot_logo(axs[-1])
         axs[-1].set_xlabel(r"${\rm Fit\:Residual\:}(\sigma)$", fontsize=20)
-        axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
+        axs[0].legend(
+            loc="lower center",
+            bbox_to_anchor=(0, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 13},
+            ncol=2,
+        )
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_pull.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_pull.png")
@@ -862,7 +888,7 @@ class CoefficientsPlotter:
 
         # in case n_par > 2, put legend outside subplot
         if n_par > 2:
-            ax = fig.add_subplot(grid[0, -1])
+            ax = fig.add_subplot(grid[0, 1])
             ax.axis("off")
 
         ax.legend(
@@ -877,13 +903,21 @@ class CoefficientsPlotter:
             title_fontsize=24,
         )
 
-        ax.set_title(
-            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.L.\:intervals}}$",
-            fontsize=18,
+        ax_logo = fig.add_subplot(grid[0, -1])
+        ax_logo.axis("off")
+        self._plot_logo(ax_logo, extent=[0.05, 0.95, 0.7, 1])
+
+        ax.text(
+            0.05,
+            0.95,
+            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.I.}}$",
+            fontsize=24,
+            transform=ax.transAxes,
+            verticalalignment="top",
         )
-        grid.tight_layout(fig)
-        fig.savefig(f"{self.report_folder}/contours_2d.pdf")
-        fig.savefig(f"{self.report_folder}/contours_2d.png")
+
+        fig.savefig(f"{self.report_folder}/contours_2d.pdf", bbox_inches="tight")
+        fig.savefig(f"{self.report_folder}/contours_2d.png", bbox_inches="tight")
 
     def write_cl_table(self, bounds, round_val=3):
         """Coefficients latex table"""

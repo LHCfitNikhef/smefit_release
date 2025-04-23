@@ -1,13 +1,48 @@
 # -*- coding: utf-8 -*-
+import matplotlib as mpl
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib import colors
+from matplotlib.legend_handler import HandlerPatch
+from matplotlib.patches import Polygon
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from rich.progress import track
 
 from .latex_tools import latex_packages
 from .pca import impose_constrain
+
+
+class HandlerTriangle(HandlerPatch):
+    def create_artists(
+        self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans
+    ):
+        center = (width / 2 - xdescent, height / 2 - ydescent)
+        size = min(width, height) / 2
+        # Define the lower-left triangle vertices
+
+        if orig_handle.xy[0, 0] < orig_handle.xy[1, 0]:
+            vertices = [
+                (center[0] - size, center[1] - size),  # Bottom-left
+                (center[0] + size, center[1] - size),  # Bottom-right
+                (center[0] - size, center[1] + size),  # Top-left
+            ]
+        else:
+            # (upper-right)
+            vertices = [
+                (center[0] + size, center[1] + size),  # Top-right
+                (center[0] - size, center[1] + size),  # Top-left
+                (center[0] + size, center[1] - size),  # Bottom-right
+            ]
+        p = mpatches.Polygon(
+            vertices,
+            closed=True,
+            facecolor=orig_handle.get_facecolor(),
+            edgecolor=orig_handle.get_edgecolor(),
+        )
+        p.set_transform(trans)
+        return [p]
 
 
 class FisherCalculator:
@@ -53,7 +88,6 @@ class FisherCalculator:
         fisher_tab = []
         cnt = 0
         for ndat in self.datasets.NdataExp:
-            fisher_row = np.zeros(self.free_parameters.size)
             idxs = slice(cnt, cnt + ndat)
             sigma = self.new_LinearCorrections[:, idxs]
             fisher_row = np.diag(sigma @ self.datasets.InvCovMat[idxs, idxs] @ sigma.T)
@@ -317,42 +351,235 @@ class FisherCalculator:
         )
         return L
 
-    def plot(
+    @staticmethod
+    def unify_fishers(df, df_other):
+
+        if df_other is None or df is None:
+            return None
+
+        # Get the union of row and column indices
+        all_rows = df.index.union(df_other.index)
+        all_columns = df.columns.union(df_other.columns)
+
+        # Reindex both DataFrames to have the same rows and columns
+        df = df.reindex(index=all_rows, columns=all_columns, fill_value=0)
+        df_other = df_other.reindex(index=all_rows, columns=all_columns, fill_value=0)
+
+        return df, df_other
+
+    @staticmethod
+    def set_ticks(ax, yticks, xticks, latex_names, x_labels):
+        ax.set_yticks(yticks, labels=latex_names[::-1], fontsize=15)
+        ax.set_xticks(
+            xticks,
+            labels=x_labels,
+            rotation=90,
+            fontsize=15,
+        )
+        ax.xaxis.set_ticks_position("top")
+        ax.tick_params(which="major", top=False, bottom=False, left=False)
+        ax.set_xticks(xticks - 0.5, minor=True)
+        ax.set_yticks(yticks - 0.5, minor=True)
+        ax.tick_params(which="minor", bottom=False)
+        ax.grid(visible=True, which="minor", alpha=0.2)
+
+    @staticmethod
+    def plot_values(ax, dfs, cmap, norm, labels=None):
+        """
+        Plot the values of the Fisher information.
+
+        Parameters
+        ----------
+        ax: matplotlib.axes.Axes
+            axes object
+        dfs: list
+            list of pandas.DataFrame
+        cmap: matplotlib.colors.LinearSegmentedColormap
+            colour map
+        norm: matplotlib.colors.BoundaryNorm
+            normalisation of colorbar
+        labels: list, optional
+            label elements for legend
+        """
+
+        df_1 = dfs[0]
+        df_2 = dfs[1] if len(dfs) > 1 else None
+        cols, rows = df_1.shape
+
+        # Initialize the delta shift for text positioning
+        delta_shift = 0
+
+        for i, row in enumerate(df_1.values.T):
+            for j, elem_1 in enumerate(row):
+
+                # start filling from the top left corner
+                x, y = j, rows - 1 - i
+                ec_1 = "black"
+
+                # if two fishers must be plotted together
+                if df_2 is not None:
+
+                    elem_2 = df_2.values.T[i, j]
+
+                    # move position numbers
+                    delta_shift = 0.2
+
+                    # highlight operators that exist in one but not the other
+                    ec_1 = "C1" if elem_2 == 0 and elem_1 > 0 else "black"
+
+                    if elem_2 > 0:
+                        ax.text(
+                            x + delta_shift,
+                            y + delta_shift,
+                            f"{elem_2:.1f}",
+                            va="center",
+                            ha="center",
+                            fontsize=10,
+                        )
+
+                        # Create a triangle patch for the second element
+                        triangle2 = Polygon(
+                            [
+                                [x + 0.5, y - 0.5],
+                                [x + 0.5, y + 0.5],
+                                [x - 0.5, y + 0.5],
+                            ],
+                            closed=True,
+                            facecolor=cmap(norm(elem_2)),
+                            edgecolor="black",
+                        )
+                        ax.add_patch(triangle2)
+
+                if elem_1 > 0:
+
+                    ax.text(
+                        x - delta_shift,
+                        y - delta_shift,
+                        f"{elem_1:.1f}",
+                        va="center",
+                        ha="center",
+                        fontsize=10,
+                    )
+                    if df_2 is not None:
+
+                        # Create a triangle patch for the first element
+                        triangle1 = Polygon(
+                            [
+                                [x - 0.5, y - 0.5],
+                                [x + 0.5, y - 0.5],
+                                [x - 0.5, y + 0.5],
+                            ],
+                            closed=True,
+                            facecolor=cmap(norm(elem_1)),
+                            edgecolor=ec_1,
+                        )
+                        ax.add_patch(triangle1)
+
+                        # Create legend elements for the patches
+                        legend_elements = [
+                            mpatches.Polygon(
+                                [[-0.5, -0.5], [0.5, -0.5], [-0.5, 0.5]],
+                                closed=True,
+                                fc="none",
+                                edgecolor="black",
+                                label=labels[0],
+                            ),
+                            mpatches.Polygon(
+                                [[0.5, -0.5], [0.5, 0.5], [0.5, 0.5]],
+                                closed=True,
+                                fc="none",
+                                edgecolor="black",
+                                label=labels[1],
+                            ),
+                        ]
+                        # Add the legend to the plot
+                        ax.legend(
+                            handles=legend_elements,
+                            loc="upper center",
+                            fontsize=25,
+                            frameon=False,
+                            ncol=2,
+                            handler_map={mpatches.Polygon: HandlerTriangle()},
+                            bbox_to_anchor=(0.5, -0.02),
+                        )
+                    else:
+                        # Create a rectangle patch for the first element
+                        rectangle = Polygon(
+                            [
+                                [x - 0.5, y - 0.5],
+                                [x + 0.5, y - 0.5],
+                                [x + 0.5, y + 0.5],
+                                [x - 0.5, y + 0.5],
+                            ],
+                            closed=True,
+                            ec="grey",
+                            color=cmap(norm(elem_1)),
+                        )
+                        ax.add_patch(rectangle)
+
+        # Set the x and y limits of the plot
+        ax.set_xlim(0, cols - 0.5)
+        ax.set_ylim(0, rows - 0.5)
+        # Set the aspect ratio of the plot to be equal
+        ax.set_aspect("equal", adjustable="box")
+
+    def plot_heatmap(
         self,
         latex_names,
         fig_name,
         title=None,
+        other=None,
         summary_only=True,
         figsize=(11, 15),
+        labels=None,
+        column_names=None,
     ):
-        """Plot the heat map of Fisher table.
 
-        Parameters
-        ----------
-        latex_names : list
-            list of coefficients latex names
-        fig_name: str
-            figure path
-        summary_only:
-            if True plot the fisher grouped per datsets,
-            else the fine grained dataset per dataset
-        figsize : tuple
-            figure size
-        title: str, None
-            plot title
-        """
-        if summary_only:
-            fisher_df = self.summary_table
-            quad_fisher_df = self.summary_HOtable
-        else:
-            fisher_df = self.lin_fisher
-            quad_fisher_df = self.quad_fisher
+        fisher_df = self.summary_table if summary_only else self.lin_fisher
+        quad_fisher_df = self.summary_HOtable if summary_only else self.quad_fisher
 
-        fig = plt.figure(figsize=figsize)
-        if quad_fisher_df is not None:
-            ax = fig.add_subplot(121)
+        if other is not None:
+
+            fisher_df_other = other.summary_table if summary_only else other.lin_fisher
+            quad_fisher_df_other = (
+                other.summary_HOtable if summary_only else other.quad_fisher
+            )
+            # unify the fisher tables and fill missing values by zeros
+            fisher_dfs = self.unify_fishers(fisher_df, fisher_df_other)
+
+            # reshuffle the tables according to the latex names ordering
+            fisher_dfs = [
+                fisher[latex_names.index.get_level_values(level=1)]
+                for fisher in fisher_dfs
+            ]
+
+            if quad_fisher_df is not None:
+                quad_fisher_dfs = self.unify_fishers(
+                    quad_fisher_df, quad_fisher_df_other
+                )
+
+                # reshuffle the tables according to the latex names ordering
+                quad_fisher_dfs = [
+                    fisher[latex_names.index.get_level_values(level=1)]
+                    for fisher in quad_fisher_dfs
+                ]
+
         else:
-            ax = plt.gca()
+            fisher_dfs = [fisher_df[latex_names.index.get_level_values(level=1)]]
+            if quad_fisher_df is not None:
+                quad_fisher_dfs = [
+                    quad_fisher_df[latex_names.index.get_level_values(level=1)]
+                ]
+
+        # reshuffle column name ordering
+        if column_names is not None:
+            custom_ordering = [list(column.keys())[0] for column in column_names]
+            fisher_dfs = [fisher_df.loc[custom_ordering] for fisher_df in fisher_dfs]
+            x_labels = [list(column.values())[0] for column in column_names]
+        else:
+            x_labels = [
+                f"\\rm{{{name}}}".replace("_", "\\_") for name in fisher_df.index
+            ]
 
         # colour map
         cmap_full = plt.get_cmap("Blues")
@@ -362,56 +589,43 @@ class FisherCalculator:
         )
         norm = colors.BoundaryNorm(np.arange(110, step=10), cmap.N)
 
-        # ticks
-        yticks = np.arange(fisher_df.shape[1])
-        xticks = np.arange(fisher_df.shape[0])
-        x_labels = [f"\\rm{{{name}}}".replace("_", "\\_") for name in fisher_df.index]
+        fig = plt.figure(figsize=figsize)
+        if quad_fisher_df is not None:
+            ax = fig.add_subplot(121)
+        else:
+            ax = plt.gca()
 
-        def set_ticks(ax):
-            ax.set_yticks(yticks, labels=latex_names, fontsize=15)
-            ax.set_xticks(
-                xticks,
-                labels=x_labels,
-                rotation=90,
-                fontsize=15,
-            )
-            ax.tick_params(which="major", top=False, bottom=False, left=False)
-            # minor grid
-            ax.set_xticks(xticks - 0.5, minor=True)
-            ax.set_yticks(yticks - 0.5, minor=True)
-            ax.tick_params(which="minor", bottom=False)
-            ax.grid(visible=True, which="minor", alpha=0.2)
+        self.plot_values(ax, fisher_dfs, cmap, norm, labels)
 
-        def plot_values(ax, df):
-            for i, row in enumerate(df.values.T):
-                for j, elem in enumerate(row):
-                    if elem > 0:
-                        ax.text(
-                            j,
-                            i,
-                            f"{elem:.1f}",
-                            va="center",
-                            ha="center",
-                            fontsize=8,
-                        )
-
-        cax = ax.matshow(fisher_df.values.T, cmap=cmap, norm=norm)
-        plot_values(ax, fisher_df)
-        set_ticks(ax)
+        self.set_ticks(
+            ax,
+            np.arange(fisher_dfs[0].shape[1]),
+            np.arange(fisher_dfs[0].shape[0]),
+            latex_names,
+            x_labels,
+        )
         ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
         cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
-        colour_bar = fig.colorbar(cax, cax=cax1)
+        colour_bar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1)
 
         if quad_fisher_df is not None:
             ax = fig.add_subplot(122)
-            cax = ax.matshow(quad_fisher_df.values.T, cmap=cmap, norm=norm)
-            plot_values(ax, quad_fisher_df)
-            set_ticks(ax)
-            ax.set_title(r"\rm Quadratic", fontsize=20, y=-0.08)
-            cax1 = make_axes_locatable(ax).append_axes("right", size="10%", pad=0.1)
-            colour_bar = fig.colorbar(cax, cax=cax1)
+            self.plot_values(ax, quad_fisher_dfs, cmap, norm, labels)
 
-        fig.subplots_adjust(top=0.85)
+            self.set_ticks(
+                ax,
+                np.arange(quad_fisher_dfs[0].shape[1]),
+                np.arange(quad_fisher_dfs[0].shape[0]),
+                latex_names,
+                x_labels,
+            )
+            ax.set_title(r"\rm Quadratic", fontsize=20, y=-0.08)
+            cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
+            colour_bar = fig.colorbar(
+                mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1
+            )
+
+        fig.subplots_adjust(top=0.9)
 
         colour_bar.set_label(
             r"${\rm Normalized\ Value}$",
