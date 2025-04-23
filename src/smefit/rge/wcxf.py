@@ -19,7 +19,7 @@ cw = np.sqrt(1 - sw**2)
 wcxf_translate = {
     # Bosonic
     "OWWW": {"wc": ["W"]},
-    "Opd": {"wc": ["phiBox"]},
+    "OpBox": {"wc": ["phiBox"]},
     "OpD": {"wc": ["phiD"]},
     "OpWB": {"wc": ["phiWB"]},
     "OpG": {"wc": ["phiG"]},
@@ -104,7 +104,7 @@ wcxf_translate = {
 inverse_wcxf_translate = {
     # Bosonic
     "OWWW": {"wc": ["W"]},
-    "Opd": {"wc": ["phiBox"]},
+    "OpBox": {"wc": ["phiBox"]},
     "OpD": {"wc": ["phiD"]},
     "OpWB": {"wc": ["phiWB"]},
     "OpG": {"wc": ["phiG"]},
