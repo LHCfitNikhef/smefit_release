@@ -57,7 +57,7 @@ class Projection:
 
         if self.coefficients:
             _logger.info(
-                f"Some coefficients are specified in the runcard: EFT correction will be used for the central values"
+                "Some coefficients are specified in the runcard: EFT correction will be used for the central values"
             )
 
     @classmethod
@@ -191,8 +191,9 @@ class Projection:
         Parameters
         ----------
         lumi_new: float, optional
-            Adjusts the statistical uncertainties according to the specified luminosity lumi_new. If not specified,
-            the uncertainties are left unchanged and the central values are fluctuated according to the noise level
+            Adjusts the statistical uncertainties according to the specified luminosity lumi_new.
+            If not specified, the uncertainties are left unchanged and the central values are fluctuated
+            according to the noise level
         noise: str
             Noise level for the projection, choose between L0 or L1
         closure: bool
@@ -315,7 +316,8 @@ class Projection:
             if self.use_theory_covmat:
                 newcov += th_covmat
 
-            # add Gaussian noise to central values in case of L1 and leave them unchanged in case of L0
+            # add Gaussian noise to central values in case of L1
+            # and leave them unchanged in case of L0
             cv_projection = cv[idxs]
             if noise == "L1":
                 cv_projection = np.random.multivariate_normal(cv[idxs], newcov)

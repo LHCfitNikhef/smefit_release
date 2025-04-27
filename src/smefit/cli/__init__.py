@@ -217,8 +217,9 @@ def report(report_card: pathlib.Path):
     type=float,
     default=None,
     required=False,
-    help="Adjusts the statistical uncertainties according to the specified luminosity. If not specified, the original "
-    "uncertainties are kept and the central values are fluctuates according to the specified noise level.",
+    help="Adjusts the statistical uncertainties according to the specified luminosity. "
+    "If not specified, the original uncertainties are kept "
+    "and the central values are fluctuates according to the specified noise level.",
 )
 @click.option(
     "--noise",
