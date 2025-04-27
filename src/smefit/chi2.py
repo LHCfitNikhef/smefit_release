@@ -22,7 +22,6 @@ def compute_chi2(
     use_quad,
     use_multiplicative_prescription,
     use_replica=False,
-    rgemat=None,
 ):
     r"""
     Compute the :math:`\chi^2`.
@@ -48,7 +47,7 @@ def compute_chi2(
 
     # compute theory prediction for each point in the dataset
     theory_predictions = pr.make_predictions(
-        dataset, coefficients_values, use_quad, use_multiplicative_prescription, rgemat
+        dataset, coefficients_values, use_quad, use_multiplicative_prescription
     )
 
     # compute experimental central values - theory
@@ -85,11 +84,11 @@ class Scanner:
             run_card["data_path"],
             run_card["datasets"],
             run_card["coefficients"],
-            run_card["order"],
             run_card["use_quad"],
             run_card["use_theory_covmat"],
             False,
             self.use_multiplicative_prescription,
+            run_card.get("default_order", "LO"),
             run_card.get("theory_path", None),
             run_card.get("rot_to_fit_basis", None),
             run_card.get("uv_couplings", False),

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import pickle
 import warnings
 from copy import deepcopy
-from functools import partial
+from functools import partial, wraps
 
 import ckmutil.ckm
 import jax.numpy as jnp
@@ -13,7 +14,7 @@ from numpy import ComplexWarning
 
 from smefit import log
 from smefit.loader import Loader
-from smefit.wcxf import inverse_wcxf_translate, wcxf_translate
+from smefit.rge.wcxf import inverse_wcxf_translate, wcxf_translate
 
 ### Patch of a CKM function, so that the CP violating
 ### phase is set to gamma and not computed explicitly
@@ -25,6 +26,7 @@ ckm_tree = deepcopy(ckmutil.ckm.ckm_tree)
 ckmutil.ckm.ckm_tree = partial(ckm_tree, delta_expansion_order=0)
 ### End of patch
 
+##################### MONKEY PATCH
 # switch off the SM - EFT mixing, since SMEFiT assumes that the
 # RGE solution is linearised
 # Keep a reference to the original beta function
@@ -39,6 +41,61 @@ wilson.run.smeft.beta.beta = beta_wrapper
 wilson.run.smeft.beta.beta_array = partial(
     wilson.run.smeft.beta.beta_array, HIGHSCALE=np.inf
 )
+##################### END OF MONKEY PATCH
+
+##################### MONKEY PATCH
+# Patch smeftpar: we remove all dependence on SMEFT parameters
+# in SM paramaters, otherwise the linear approximation is not valid
+C_patch = {
+    "phi": 0.0,
+    "phiBox": 0.0,
+    "phiD": 0.0,
+    "phiWB": 0.0,
+    "phiG": 0.0,
+    "phiW": 0.0,
+    "phiB": 0.0,
+    "dphi": 0.0,
+    "uphi": 0.0,
+    "ephi": 0.0,
+}
+# Reference to the original smeftpar function
+original_smeftpar = wilson.run.smeft.smpar.smeftpar
+
+
+# Define the monkey-patched function
+@wraps(original_smeftpar)
+def patched_smeftpar(*args, **kwargs):
+    # check if C is passed as a keyword argument
+    if "C" in kwargs:
+        kwargs["C"] = C_patch
+    # otherwise, check if it is passed as a positional argument
+    else:
+        args = list(args)
+        args[1] = C_patch
+
+    return original_smeftpar(*args, **kwargs)
+
+
+# Apply the monkey patch
+wilson.run.smeft.smpar.smeftpar = patched_smeftpar
+##################### END OF MONKEY PATCH
+
+
+##################### MONKEY PATCH
+# Monkey patch flavour rotation
+# Define the new method
+def _to_wcxf_no_rotation(self, C_out, scale_out):
+    """Return the Wilson coefficients `C_out` as a wcxf.WC instance, without rotation."""
+    # Skip the self._rotate_defaultbasis line
+    d = wilson.util.smeftutil.arrays2wcxf_nonred(C_out)
+    d = wilson.wcxf.WC.dict2values(d)
+    wc = wilson.wcxf.WC("SMEFT", "Warsaw", scale_out, d)
+    return wc
+
+
+# Monkey-patch the method
+wilson.run.smeft.classes.SMEFT._to_wcxf = _to_wcxf_no_rotation
+##################### END OF MONKEY PATCH
 
 # Suppress the ComplexWarning
 warnings.filterwarnings("ignore", category=ComplexWarning)
@@ -302,7 +359,9 @@ class RGE:
         return self.map_to_smefit(wc_final, scale)
 
 
-def load_scales(datasets, theory_path, default_scale=1e3):
+def load_scales(
+    datasets, theory_path, default_scale=1e3, cutoff_scale=None, scale_variation=1.0
+):
     """
     Load the energy scales for the datasets.
 
@@ -314,6 +373,8 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         path to the theory files
     default_scale: float
         default scale to use if the dataset does not have a scale
+    cutoff_scale: float
+        cutoff scale to use for the scales
 
     Returns
     -------
@@ -321,11 +382,12 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         list of scales for the datasets
     """
     scales = []
-    for dataset in np.unique(datasets):
+    for dataset in datasets:
+
         Loader.theory_path = pathlib.Path(theory_path)
         # dummy call just to get the scales
         _, _, _, _, dataset_scales = Loader.load_theory(
-            dataset,
+            dataset.get("name"),
             operators_to_keep={},
             order="LO",
             use_quad=False,
@@ -339,12 +401,26 @@ def load_scales(datasets, theory_path, default_scale=1e3):
         else:
             scales.extend([default_scale] * len(dataset_scales))
 
-        _logger.info(f"Loaded scales for dataset {dataset}: {dataset_scales}")
+        _logger.info(f"Loaded scales for dataset {dataset['name']}: {dataset_scales}")
+
+    if cutoff_scale is not None:
+        scales = [scale for scale in scales if scale < cutoff_scale]
+    if scale_variation != 1.0:
+        _logger.info(f"Applying scale variation of {scale_variation}.")
+        scales = [scale * scale_variation for scale in scales]
 
     return scales
 
 
-def load_rge_matrix(rge_dict, coeff_list, datasets=None, theory_path=None):
+def load_rge_matrix(
+    rge_dict,
+    coeff_list,
+    datasets=None,
+    theory_path=None,
+    cutoff_scale=None,
+    result_path=None,
+    result_ID=None,
+):
     """
     Load the RGE matrix for the SMEFT Wilson coefficients.
 
@@ -369,31 +445,45 @@ def load_rge_matrix(rge_dict, coeff_list, datasets=None, theory_path=None):
     smeft_accuracy = rge_dict.get("smeft_accuracy", "integrate")
     adm_QCD = rge_dict.get("adm_QCD", "full")
     yukawa = rge_dict.get("yukawa", "top")
+    scale_variation = rge_dict.get("scale_variation", 1.0)
     rge_runner = RGE(coeff_list, init_scale, smeft_accuracy, adm_QCD, yukawa)
+
+    # load precomputed RGE matrix if it exists
+    path_to_rge_mat = rge_dict.get("rg_matrix", False)
+    if path_to_rge_mat:
+        with open(path_to_rge_mat, "rb") as f:
+            rgemats = pickle.load(f)
+        stacked_mats = jnp.stack([rgemat.values for rgemat in rgemats])
+        operators_to_keep = {op: {} for op in rgemats[0].index}
+        return stacked_mats, operators_to_keep
+
     # if it is a float, it is a static scale
     if type(obs_scale) is float or type(obs_scale) is int:
         rgemat = rge_runner.RGEmatrix(obs_scale)
         gen_operators = list(rgemat.index)
         operators_to_keep = {k: {} for k in gen_operators}
-        return rgemat.values, operators_to_keep
+
+        # prepend additional dimension for consistency with the dynamic scale case
+        stacked_mats = jnp.stack([rgemat.values])
+        save_rg(pathlib.Path(result_path) / result_ID, rgemat=[rgemat])
+
+        return stacked_mats, operators_to_keep
 
     elif obs_scale == "dynamic":
-        scales = load_scales(datasets, theory_path, default_scale=init_scale)
+        scales = load_scales(
+            datasets,
+            theory_path,
+            default_scale=init_scale,
+            cutoff_scale=cutoff_scale,
+            scale_variation=scale_variation,
+        )
 
         operators_to_keep = {}
         rgemat = []
         rge_cache = {}
         for scale in scales:
-            if scale == init_scale:
-                # produce an identity matrix with row and columns coeff_list
-                rgemat_scale = pd.DataFrame(
-                    np.eye(len(coeff_list), len(coeff_list)),
-                    columns=sorted(coeff_list),
-                    index=sorted(coeff_list),
-                )
-
             # Check if the RGE matrix has already been computed
-            elif scale in rge_cache:
+            if scale in rge_cache:
                 rgemat_scale = rge_cache[scale]
             else:
                 rgemat_scale = rge_runner.RGEmatrix(scale)
@@ -417,9 +507,29 @@ def load_rge_matrix(rge_dict, coeff_list, datasets=None, theory_path=None):
 
         # now stack the matrices in a 3D array
         stacked_mats = jnp.stack([mat.values for mat in rgemat])
+
+        # save RGE matrix to result_path
+        save_rg(pathlib.Path(result_path) / result_ID, rgemat=rgemat)
+
         return stacked_mats, operators_to_keep
 
     else:
         raise ValueError(
             f"obs_scale must be either a float/int or 'dynamic'. Passed: {obs_scale}"
         )
+
+
+def save_rg(path, rgemat):
+    """
+    Save the RGE matrix to the result folder.
+
+    Parameters
+    ----------
+    path : pathlib.Path
+        path to the result folder
+    rgemat: list
+        List of RGE matrices for each datapoint
+    """
+    if path is not None:
+        with open(path / "rge_matrix.pkl", "wb") as f:
+            pickle.dump(rgemat, f)

@@ -121,11 +121,11 @@ class MCOptimizer(Optimizer):
             config["data_path"],
             config["datasets"],
             config["coefficients"],
-            config["order"],
             config["use_quad"],
             config["use_theory_covmat"],
             config["use_t0"],
             config.get("use_multiplicative_prescription", False),
+            config.get("default_order", "LO"),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
@@ -311,4 +311,11 @@ class MCOptimizer(Optimizer):
             / f"replica_{self.replica}/coefficients_rep_{self.replica}.json"
         )
 
-        self.dump_posterior(posterior_file, values)
+        fit_result = {
+            "samples": values,
+            "logz": None,
+            "max_loglikelihood": None,
+            "best_fit_point": None,
+        }
+
+        self.dump_fit_result(posterior_file, fit_result)

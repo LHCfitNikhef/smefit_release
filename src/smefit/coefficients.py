@@ -26,6 +26,11 @@ class Coefficient:
 
     def __init__(self, name, minimum, maximum, value=None, constrain=False):
         self.name = name
+        # Temporary check for deprecated operator
+        if name == "Opd":
+            raise ValueError(
+                "The operator Opd is deprecated and has been renamed. Use OpBox instead."
+            )
         self.minimum = minimum
         self.maximum = maximum
 

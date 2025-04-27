@@ -41,17 +41,20 @@ theory_path:
 
 ```
 ### Theory specifications
-The perturbative order of the QCD theory prediction (LO or NLO) should be specified using ``order``.
-``use_quad`` should be set to ``True`` for a fit with quadratic corrections, ``use_t0`` controls the use
+The default perturbative order of the theory prediction is set by the key ``default_order``. Orders may also be specified
+per datset, see [here](./example.html#datasets-to-consider-and-coefficients-to-fit) for more details.
+The order in the EFT expansion should be specified by setting ``use_quad`` to either ``True`` or ``False`` to include quadratic or only linear corrections respectively. The option ``use_t0`` controls the use
 of the ``t0`` prescription and ``use_theory_covmat`` specifies whether or not to use the theory covariance matrix
 which can be specified in the theory files.
 
 ```yaml
-order: NLO
+default_order: LO
 use_quad: False
 use_t0: False
 use_theory_covmat: True
+cutoff_scale: 1000
 ```
+Here ``cutoff_scale`` specifies the scale (in GeV) above which all datapoints will be excluded from the fit.
 
 ### Minimizer specifications
 The different parameters controlling the minimizer used in the analysis are specified here.
@@ -89,22 +92,32 @@ n_samples: 1000 # number of the required samples of the posterior distribution
 
 ### Datasets to consider and coefficients to fit
 The datasets and Wilson coefficients to be included in the analysis must be listed under ``datasets``
-and ``coefficients`` respectively.
+and ``coefficients`` respectively. The default order for each dataset is taken from  ``default_order``. However, it is
+possible to specify specific orders per dataset. To do this, add the key ``order`` to the dataset entry as follows.
 
 ```yaml
 datasets:
 
-  - ATLAS_tt_8TeV_ljets_Mtt
-  - ATLAS_tt_8TeV_dilep_Mtt
-  - CMS_tt_8TeV_ljets_Ytt
-  - CMS_tt2D_8TeV_dilep_MttYtt
-  - CMS_tt_13TeV_ljets_2015_Mtt
-  - CMS_tt_13TeV_dilep_2015_Mtt
-  - CMS_tt_13TeV_ljets_2016_Mtt
-  - CMS_tt_13TeV_dilep_2016_Mtt
-  - ATLAS_tt_13TeV_ljets_2016_Mtt
-  - ATLAS_CMS_tt_AC_8TeV
-  - ATLAS_tt_AC_13TeV
+  - name: ATLAS_tt_8TeV_ljets_Mtt
+  - name: ATLAS_tt_8TeV_dilep_Mtt
+    order: NLO_QCD
+  - name: CMS_tt_8TeV_ljets_Ytt
+    order: NLO_QCD
+  - name: CMS_tt2D_8TeV_dilep_MttYtt
+    order: NLO_QCD
+  - name: CMS_tt_13TeV_ljets_2015_Mtt
+    order: NLO_QCD
+  - name: CMS_tt_13TeV_dilep_2015_Mtt
+    order: NLO_QCD
+  - name: CMS_tt_13TeV_ljets_2016_Mtt
+    order: NLO_QCD
+  - name: CMS_tt_13TeV_dilep_2016_Mtt
+    order: NLO_QCD
+  - name: ATLAS_tt_13TeV_ljets_2016_Mtt
+    order: NLO_QCD
+  - name: ATLAS_CMS_tt_AC_8TeV
+    order: NLO_QCD
+  - name: ATLAS_tt_AC_13TeV
   ...
   ...
 
@@ -208,6 +221,19 @@ One is free to set custom attributes in the constructor. The coefficient values 
 are accesible via ``coefficient_values`` in the ``compute_chi2`` method. In order for the external chi2
 to work, it is important one does not change the name of the ``compute_chi2`` method!
 
+### Adding RG evolution
+Renormalisation group evolution can be turned on in the fit by adding the following to the runcard.
+
+```yaml
+rge:
+  init_scale: 5000.0
+  obs_scale: dynamic # float or "dynamic"
+  smeft_accuracy: integrate # options: integrate, leadinglog
+  yukawa: top # options: top, full or none
+  adm_QCD: False # if true, the EW couplings are set to zero
+  rg_matrix: <path/to/rge_matrix.pkl>
+```
+
 ## Running a fit with NS
 To run a fiy using Nested Sampling use the command
 ```bash
@@ -260,8 +286,30 @@ To do this add to the runcard
 single_parameter_fits: True
 ```
 and proceed as documented above for a normal fit.
-For both NS, MC and A the final output will be the file ``posterior.json``
-containing the independent posterior of the fitted Wilson coefficients, obtained by a series os independent single parameter fits.
+For both `NS` and `A` the final output will be the file ``fit_results.json``
+containing the independent posterior of the fitted Wilson coefficients, obtained by a series of independent single parameter fits.
+
+It is possible to perform single paramters in the presence of multiple constraints. For example
+
+```yaml
+
+single_parameter_fits: True
+uv_couplings: true
+
+coefficients:
+  # Free params
+  OWWW: {'min': -3, 'max': 3}
+  Opq1: {'min': -3, 'max': 3}
+  Opq3: {'min': -3, 'max': 3}
+
+  ## To fix ##
+  OpqMi: {'constrain': [{'Opq1': 1}, {'Opq3': -1}], 'min': -2, 'max': 2 }
+  O3pq: {'constrain': [{'Opq3': 1}], 'min': -1, 'max': 1 }
+
+```
+performs a single parameter fit for ``OWWW``, ``Opq1`` and ``Opq3``. Note that this requires `uv_couplings` to be set to
+True (this allows you to fit parameters that do not appear in the theory tables). The naming `uv_couplings` stems from fitting with
+constraints among Wilson coefficients and UV parameters.
 
 
 
