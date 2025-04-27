@@ -222,7 +222,7 @@ def report(report_card: pathlib.Path):
 )
 @click.option(
     "--noise",
-    type=str,
+    type=click.Choice(["L0", "L1"], case_sensitive=True),
     default="L0",
     required=False,
     help="Noise level for the projection, choose between L0 or L1. Assumes L0 by default.",
