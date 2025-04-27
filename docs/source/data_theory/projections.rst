@@ -7,7 +7,8 @@ In the following, we first lay out the theory behind this, followed by how one c
 Theory
 ------
 
-The projection module starts by considering a given available measurement from the LHC Run  II, composed by :math:`n_{\rm bin}` data points, and with the corresponding SM predictions given by :math:`\mathcal{O}_i^{{\rm (th)}}`.
+The projection module starts by considering a given available measurement from the LHC Run  II, composed by :math:`n_{\rm bin}` data points, and with the corresponding theory predictions given by :math:`\mathcal{O}_i^{{\rm (th)}}`.
+These can either be SM or BSM predictions.
 The central values for the pseudo-data, denoted by :math:`\mathcal{O}_i^{{\rm (exp)}}`, are obtained
 by fluctuating these theory predictions by the fractional statistical :math:`(\delta_i^{\rm (stat)})`
 and systematic :math:`(\delta_{k,i}^{\rm (sys)})` uncertainties,
@@ -91,84 +92,19 @@ The ``projection_runcard`` specifies which datasets need to be extrapolated, by 
         commondata_path: /path/to/exisiting_data
 
         # path to theory tables
-        theory_path:  /path/to/theory_tables
+        theory_path: /path/to/theory_tables
 
         # datasets for which projections are computed
         datasets:
+          - {name: ATLAS_tt_13TeV_ljets_2016_Mtt, order: NLO_QCD}
+          - {name: CMS_ggF_aa_13TeV, order: NLO_QCD}
+          - {name: LEP1_EWPOs_2006, order: LO}
 
-          # TOP QUARK PRODUCTION
-          # ttbar
-          - ATLAS_tt_13TeV_ljets_2016_Mtt
-          - CMS_tt_13TeV_dilep_2016_Mtt
-          - CMS_tt_13TeV_Mtt
-          - CMS_tt_13TeV_ljets_inc
+        coefficients:
+          OtG: {constrain: True, value: 2.0}
+          OpD: {constrain: True, value: -1.0}
 
-          # ttbar asymm and helicity frac
-          - ATLAS_tt_13TeV_asy_2022_uncor
-          - CMS_tt_13TeV_asy
-          - ATLAS_Whel_13TeV_uncor
-
-          # ttbb
-          - ATLAS_ttbb_13TeV_2016
-          - CMS_ttbb_13TeV_2016
-          - CMS_ttbb_13TeV_dilepton_inc
-          - CMS_ttbb_13TeV_ljets_inc
-
-          # tttt
-          - ATLAS_tttt_13TeV_run2
-          - CMS_tttt_13TeV_run2
-          - ATLAS_tttt_13TeV_slep_inc
-          - CMS_tttt_13TeV_slep_inc
-          - ATLAS_tttt_13TeV_2023
-          - CMS_tttt_13TeV_2023
-
-          # ttZ
-          - CMS_ttZ_13TeV_pTZ
-          - ATLAS_ttZ_13TeV_pTZ_uncor
-
-          # ttW
-          - ATLAS_ttW_13TeV_2016
-          - CMS_ttW_13TeV
-
-          # Single top
-          - ATLAS_t_tch_13TeV_inc
-          - CMS_t_tch_13TeV_2019_diff_Yt
-          - ATLAS_t_sch_13TeV_inc
-
-          # tW
-          - ATLAS_tW_13TeV_inc
-          - CMS_tW_13TeV_inc
-          - CMS_tW_13TeV_slep_inc
-
-          # tZ
-          - ATLAS_tZ_13TeV_run2_inc
-          - CMS_tZ_13TeV_pTt_uncor
-
-          # HIGGS PRODUCTION
-
-          # Signal Strengths
-          - ATLAS_SSinc_RunII
-          - CMS_SSinc_RunII
-
-          # ATLAS & CMS Run II Higgs Differential
-          - CMS_H_13TeV_2015_pTH
-
-          # ATLAS & CMS STXS
-          - ATLAS_WH_Hbb_13TeV
-          - ATLAS_ZH_Hbb_13TeV
-          - ATLAS_ggF_13TeV_2015
-          - ATLAS_ggF_ZZ_13TeV
-          - CMS_ggF_aa_13TeV
-          - ATLAS_STXS_runII_13TeV_uncor
-
-          # DIBOSON DATA
-          - ATLAS_WW_13TeV_2016_memu
-          - ATLAS_WZ_13TeV_2016_mTWZ
-          - CMS_WZ_13TeV_2016_pTZ
-          - CMS_WZ_13TeV_2022_pTZ
-
-
-        order: NLO
+        uv_couplings: False
         use_quad: False
         use_theory_covmat: False
         rot_to_fit_basis: null
@@ -177,19 +113,11 @@ The ``projection_runcard`` specifies which datasets need to be extrapolated, by 
         fred_sys: 0.5 # systematics get reduced by 1/2
         fred_tot: 0.333 # total errors get reduced by 1/3
 
+If the coefficients are not specified, the predictions will be computed at the SM point.
+
 The projected datafiles will get appended the suffix ``_proj`` so that they can be easily distinguished from the original
 ones. The corresponding theory file (which is the same for both the projected and the original datasets) also gets appended
 this same suffix.
 
 Once the projected datasets are written at the specified ``projections_path``, one can use these in exactly the same way
 as the original datasets. They can be read by SMEFiT directly.
-
-In case the original luminosity needs to be kept and one is only interested in adding statistical noise, one should use the following
-syntax
-
-.. code-block:: bash
-
-    smefit PROJ --closure /path/to/projection_runcard.yaml
-
-This does nothing to the statistical and systematic uncertainties - it only fluctuates the central value around the SM
-prediction according to the specified uncertainties.
