@@ -191,6 +191,13 @@ class CoefficientManager:
             constrain = (
                 property_dict["constrain"] if "constrain" in property_dict else False
             )
+            # Check that min and max are set,
+            # otherwise set them to default values -1 and +1
+            if "min" not in property_dict:
+                property_dict["min"] = -1.0
+            if "max" not in property_dict:
+                property_dict["max"] = 1.0
+
             elements.append(
                 Coefficient(
                     name,

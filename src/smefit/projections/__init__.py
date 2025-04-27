@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import yaml
 
+from smefit.coefficients import CoefficientManager
 from smefit.rge.rge import load_rge_matrix
 
 from ..compute_theory import make_predictions
@@ -32,13 +33,15 @@ class Projection:
         fred_tot,
         fred_sys,
         use_t0,
+        use_multiplicative_prescription,
+        has_uv_couplings,
         rge_dict,
     ):
         self.commondata_path = commondata_path
         self.theory_path = theory_path
         self.datasets = datasets
         self.projections_path = projections_path
-        self.coefficients = coefficients
+        self.coefficients = CoefficientManager.from_dict(coefficients)
         self.default_order = default_order
         self.use_quad = use_quad
         self.use_theory_covmat = use_theory_covmat
@@ -46,7 +49,8 @@ class Projection:
         self.fred_tot = fred_tot
         self.fred_sys = fred_sys
         self.use_t0 = use_t0
-
+        self.mult_prescription = use_multiplicative_prescription
+        self.has_uv_couplings = has_uv_couplings
         self.rge_dict = rge_dict
 
         # Better to distinguish the fitted coefficients from the operators
@@ -76,9 +80,10 @@ class Projection:
             self.use_quad,
             self.use_theory_covmat,
             self.use_t0,
-            False,
+            self.mult_prescription,
             self.default_order,
             theory_path=self.theory_path,
+            has_uv_couplings=self.has_uv_couplings,
             rgemat=rgemat,
         )
 
@@ -116,11 +121,15 @@ class Projection:
         use_quad = projection_config.get("use_quad", False)
         use_theory_covmat = projection_config.get("use_theory_covmat", True)
         rot_to_fit_basis = projection_config.get("rot_to_fit_basis", None)
+        use_multiplicative_prescription = projection_config.get(
+            "use_multiplicative_prescription", False
+        )
 
         fred_tot = projection_config.get("fred_tot", 1)
         fred_sys = projection_config.get("fred_sys", 1)
 
         use_t0 = projection_config.get("use_t0", False)
+        has_uv_couplings = projection_config.get("uv_couplings", False)
         rge_dict = projection_config.get("rge", None)
 
         return cls(
@@ -136,6 +145,8 @@ class Projection:
             fred_tot,
             fred_sys,
             use_t0,
+            use_multiplicative_prescription,
+            has_uv_couplings,
             rge_dict,
         )
 
@@ -151,11 +162,15 @@ class Projection:
         cv = self.datasets.SMTheory
 
         if self.coefficients:
-            coefficient_values = []
-            for coeff in self.coefficients:
-                coefficient_values.append(self.coefficients[coeff]["value"])
+            # Wilson coefficients are fixed, if some are functions of others,
+            # we need to set the constraints
+            self.coefficients.set_constraints()
+
             cv = make_predictions(
-                self.datasets, coefficient_values, self.use_quad, False
+                self.datasets,
+                self.coefficients.value,
+                self.use_quad,
+                self.mult_prescription,
             )
         return cv
 
