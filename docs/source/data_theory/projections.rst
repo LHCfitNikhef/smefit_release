@@ -75,7 +75,7 @@ and systematic uncertainties) as ``.yaml`` files in the standard SMEFiT format w
 
     smefit PROJ --lumi <luminosity> --noise <noise level> /path/to/projection_runcard.yaml
 
-where ``<luminosity>`` specifies the luminosity of the projection in :math:`{\rm fb}^{-1}`. The noise level ``<luminosity>``
+where ``<luminosity>`` specifies the luminosity of the projection in :math:`{\rm fb}^{-1}`. The noise level ``<noise level>``
 can be either ``L0`` are ``L1`` corresponding to either level 0 or level 1 projections respectively. In level 0 projections,
 the experimental central value coincides exactly with the theory prediction, while the experimental central values are fluctuated around
 the theory prediction according to the experimental uncertainties in case of level 1. If ``<noise level>`` is not specified, level 0
