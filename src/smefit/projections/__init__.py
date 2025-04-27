@@ -295,6 +295,8 @@ class Projection:
 
                 # build covmat for projections. Use rescaled uncertainties
                 newcov = covmat_from_systematics([stat_red], [sys_red])
+                # Replace old luminosity with new one in the dataset
+                data_dict["luminosity"] = lumi_new
             else:  # closure test
                 # we store absolute uncertainties and convert all multipicative uncertainties to additive ones
 
