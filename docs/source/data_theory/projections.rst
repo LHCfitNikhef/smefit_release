@@ -73,10 +73,14 @@ and systematic uncertainties) as ``.yaml`` files in the standard SMEFiT format w
 
 .. code-block:: bash
 
-    smefit PROJ --lumi <luminosity> /path/to/projection_runcard.yaml
+    smefit PROJ --lumi <luminosity> --noise <noise level> /path/to/projection_runcard.yaml
 
-where the desired luminosity in :math:`{\rm fb}^{-1}` can be specified by replacing ``<luminosity>``. The ``projection_runcard``
-specifies which datasets need to be extrapolated, by which factor to reduce the systematics, and sets the necessary paths:
+where ``<luminosity>`` specifies the luminosity of the projection in :math:`{\rm fb}^{-1}`. The noise level ``<noise level>``
+can be either ``L0`` are ``L1`` corresponding to either level 0 or level 1 projections respectively. In level 0 projections,
+the experimental central value coincides exactly with the theory prediction, while the experimental central values are fluctuated around
+the theory prediction according to the experimental uncertainties in case of level 1. If ``<noise level>`` is not specified, level 0
+is assumed. If ``<luminosity>`` is not specified, the original luminosities are kept and the uncertainties are not rescaled.
+The ``projection_runcard`` specifies which datasets need to be extrapolated, by which factor to reduce the systematics, and sets the necessary paths:
 
 .. code-block:: yaml
 
