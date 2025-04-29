@@ -369,12 +369,12 @@ class FisherCalculator:
 
     @staticmethod
     def set_ticks(ax, yticks, xticks, latex_names, x_labels):
-        ax.set_yticks(yticks, labels=latex_names[::-1], fontsize=15)
+        ax.set_yticks(yticks, labels=latex_names[::-1], fontsize=22)
         ax.set_xticks(
             xticks,
             labels=x_labels,
             rotation=90,
-            fontsize=15,
+            fontsize=22,
         )
         ax.xaxis.set_ticks_position("top")
         ax.tick_params(which="major", top=False, bottom=False, left=False)
@@ -434,7 +434,7 @@ class FisherCalculator:
                             f"{elem_2:.1f}",
                             va="center",
                             ha="center",
-                            fontsize=10,
+                            fontsize=9,
                         )
 
                         # Create a triangle patch for the second element
@@ -458,7 +458,7 @@ class FisherCalculator:
                         f"{elem_1:.1f}",
                         va="center",
                         ha="center",
-                        fontsize=10,
+                        fontsize=9,
                     )
                     if df_2 is not None:
 
@@ -485,7 +485,7 @@ class FisherCalculator:
                                 label=labels[0],
                             ),
                             mpatches.Polygon(
-                                [[0.5, -0.5], [0.5, 0.5], [0.5, 0.5]],
+                                [[0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]],
                                 closed=True,
                                 fc="none",
                                 edgecolor="black",
@@ -540,6 +540,7 @@ class FisherCalculator:
 
         if other is not None:
 
+            title = ""
             fisher_df_other = other.summary_table if summary_only else other.lin_fisher
             quad_fisher_df_other = (
                 other.summary_HOtable if summary_only else other.quad_fisher
@@ -607,6 +608,7 @@ class FisherCalculator:
         ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
         cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
         colour_bar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1)
+        colour_bar.ax.tick_params(labelsize=22)
 
         if quad_fisher_df is not None:
             ax = fig.add_subplot(122)
@@ -629,12 +631,12 @@ class FisherCalculator:
 
         colour_bar.set_label(
             r"${\rm Normalized\ Value}$",
-            fontsize=25,
+            fontsize=28,
             labelpad=30,
             rotation=270,
         )
 
-        plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25, y=0.98)
+        plt.suptitle(f"\\rm Fisher\\ information\\ {title}", fontsize=25, y=0.98)
 
         plt.savefig(f"{fig_name}.pdf")
         plt.savefig(f"{fig_name}.png")
