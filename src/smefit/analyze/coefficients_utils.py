@@ -648,25 +648,25 @@ class CoefficientsPlotter:
         )
         plt.savefig(f"{self.report_folder}/spider_plot.png", bbox_inches="tight")
 
-    def plot_posteriors(
-        self, posteriors, labels, disjointed_lists=None, nrows=-1, ncols=-1
-    ):
-        """Plot posteriors histograms.
-
+    def compute_rows_and_columns(self, nrows=-1, ncols=-1):
+        """Compute number of rows and columns for the plot layout
         Parameters
         ----------
-            posteriors : list
-                posterior distributions per fit and coefficient
-            labels : list
-                list of fit names
-            disjointed_list: list, optional
-                list of coefficients with double solutions per fit
-            nrows: int, optional
-                Number of rows in the grid layout
-            ncols: int, optional
-                Number of columns in the grid layout
+        nrows : int, optional
+            Number of rows in the plot layout. Default is -1, which means
+            that the number of rows will be calculated based on the
+            number of columns.
+        ncols : int, optional
+            Number of columns in the plot layout. Default is -1, which means
+            that the number of columns will be calculated based on the
+            number of rows.
+        Returns
+        -------
+        nrows : int
+            Number of rows in the plot layout.
+        ncols : int
+            Number of columns in the plot layout.
         """
-        colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 
         if nrows == -1 and ncols == -1:  # square layout
             nrows = ncols = int(np.sqrt(self.npar)) + 1
@@ -676,10 +676,36 @@ class CoefficientsPlotter:
             ncols = int(np.ceil(self.npar / nrows))
         else:  # both are set, ignore ncols
             ncols = int(np.ceil(self.npar / nrows))
-        grid_size = nrows * ncols
 
-        if grid_size % self.npar == 0:
+        if (nrows * ncols) % self.npar == 0:
             nrows += 1  # add an extra row to fit the logo
+
+        return nrows, ncols
+
+    def plot_posteriors(self, posteriors, labels, **kwargs):
+        """Plot posteriors histograms.
+
+        Parameters
+        ----------
+            posteriors : list
+                posterior distributions per fit and coefficient
+            labels : list
+                list of fit names
+            kwargs: dict
+                keyword arguments for the plot
+                nrows: int, optional
+            disjointed_list: list, optional
+                list of coefficients with double solutions per fit
+            nrows: int, optional
+                Number of rows in the grid layout
+            ncols: int, optional
+                Number of columns in the grid layout
+        """
+        colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+
+        nrows, ncols = self.compute_rows_and_columns(
+            kwargs.get("nrows", -1), kwargs.get("ncols", -1)
+        )
 
         subplot_size = 4
         fig = plt.figure(figsize=(ncols * subplot_size, nrows * subplot_size))
@@ -696,8 +722,8 @@ class CoefficientsPlotter:
                 solution = posterior[l]
 
                 if (
-                    disjointed_lists[clr_idx] is not None
-                    and l in disjointed_lists[clr_idx]
+                    kwargs["disjointed_lists"][clr_idx] is not None
+                    and l in kwargs["disjointed_lists"][clr_idx]
                 ):
                     solution1, solution2 = split_solution(posterior[l])
                     bins_solution1 = np.histogram_bin_edges(solution1, bins="fd")
@@ -751,7 +777,7 @@ class CoefficientsPlotter:
             frameon=False,
         )
 
-        if self.npar % grid_size == 0:
+        if self.npar % (ncols * nrows) == 0:
             ax_logo_nr = self.npar + ncols
         else:
             ax_logo_nr = self.npar + (ncols - self.npar % ncols)
