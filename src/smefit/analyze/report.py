@@ -368,6 +368,7 @@ class Report:
                 [fit.results["samples"] for fit in self.fits],
                 labels=[fit.label for fit in self.fits],
                 disjointed_lists=disjointed_lists,
+                **posterior_histograms,
             )
             figs_list.append("coefficient_histo")
 

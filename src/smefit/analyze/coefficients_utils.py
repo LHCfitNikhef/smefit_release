@@ -648,7 +648,9 @@ class CoefficientsPlotter:
         )
         plt.savefig(f"{self.report_folder}/spider_plot.png", bbox_inches="tight")
 
-    def plot_posteriors(self, posteriors, labels, disjointed_lists=None):
+    def plot_posteriors(
+        self, posteriors, labels, disjointed_lists=None, nrows=None, ncols=None
+    ):
         """Plot posteriors histograms.
 
         Parameters
@@ -659,17 +661,33 @@ class CoefficientsPlotter:
                 list of fit names
             disjointed_list: list, optional
                 list of coefficients with double solutions per fit
+            nrows: int, optional
+                Number of rows in the grid layout
+            ncols: int, optional
+                Number of columns in the grid layout
         """
         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
-        grid_size = int(np.sqrt(self.npar)) + 1
-        fig = plt.figure(figsize=(grid_size * 4, grid_size * 4))
-        # loop on coefficients
 
+        if nrows is None and ncols is None:  # square layout
+            nrows = ncols = int(np.sqrt(self.npar)) + 1
+        elif nrows is None:  # calculate nrows based on ncols
+            nrows = int(np.ceil(self.npar / ncols))
+        elif ncols is None:  # calculate ncols based on nrows
+            ncols = int(np.ceil(self.npar / nrows))
+        else:  # both are set, ignore ncols
+            ncols = int(np.ceil(self.npar / nrows))
+        grid_size = nrows * ncols
+
+        if grid_size % self.npar == 0:
+            nrows += 1  # add an extra row to fit the logo
+
+        fig = plt.figure(figsize=(ncols * 4, nrows * 4))
+
+        # loop on coefficients
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
-            try:
-                ax = plt.subplot(grid_size, grid_size, idx + 1)
-            except ValueError:
-                ax = plt.subplot(grid_size, grid_size, idx + 1)
+
+            ax = plt.subplot(nrows, ncols, idx + 1)
+
             # loop on fits
             for clr_idx, posterior in enumerate(posteriors):
                 if l not in posterior:
@@ -722,24 +740,29 @@ class CoefficientsPlotter:
             lines,
             labels,
             ncol=len(posteriors),
-            prop={"size": 25 * (grid_size * 4) / 20},
+            prop={"size": 25 * (ncols * 4) / 20},
             bbox_to_anchor=(0.5, 1.0),
             loc="upper center",
             frameon=False,
         )
 
         if self.npar % grid_size == 0:
-            ax_logo_nr = self.npar + grid_size
+            ax_logo_nr = self.npar + ncols
         else:
-            ax_logo_nr = self.npar + (grid_size - self.npar % grid_size)
+            ax_logo_nr = self.npar + (ncols - self.npar % ncols)
 
-        ax_logo = plt.subplot(grid_size, grid_size, ax_logo_nr)
+        ax_logo = plt.subplot(nrows, ncols, ax_logo_nr)
 
         plt.axis("off")
         self._plot_logo(ax_logo, [0, 1, 0.6, 1])
 
         fig.tight_layout(
-            rect=[0, 0.05 * (5.0 / grid_size), 1, 1 - 0.08 * (5.0 / grid_size)]
+            rect=[
+                0,
+                0,
+                1,
+                1 - 0.2 / nrows,
+            ]  # make room for the legend at the top of the figure
         )
 
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
