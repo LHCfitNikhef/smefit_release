@@ -649,7 +649,7 @@ class CoefficientsPlotter:
         plt.savefig(f"{self.report_folder}/spider_plot.png", bbox_inches="tight")
 
     def plot_posteriors(
-        self, posteriors, labels, disjointed_lists=None, nrows=None, ncols=None
+        self, posteriors, labels, disjointed_lists=None, nrows=-1, ncols=-1
     ):
         """Plot posteriors histograms.
 
@@ -668,11 +668,11 @@ class CoefficientsPlotter:
         """
         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 
-        if nrows is None and ncols is None:  # square layout
+        if nrows == -1 and ncols == -1:  # square layout
             nrows = ncols = int(np.sqrt(self.npar)) + 1
-        elif nrows is None:  # calculate nrows based on ncols
+        elif ncols != -1:  # calculate nrows based on ncols
             nrows = int(np.ceil(self.npar / ncols))
-        elif ncols is None:  # calculate ncols based on nrows
+        elif nrows != -1:  # calculate ncols based on nrows
             ncols = int(np.ceil(self.npar / nrows))
         else:  # both are set, ignore ncols
             ncols = int(np.ceil(self.npar / nrows))
@@ -681,7 +681,8 @@ class CoefficientsPlotter:
         if grid_size % self.npar == 0:
             nrows += 1  # add an extra row to fit the logo
 
-        fig = plt.figure(figsize=(ncols * 4, nrows * 4))
+        subplot_size = 4
+        fig = plt.figure(figsize=(ncols * subplot_size, nrows * subplot_size))
 
         # loop on coefficients
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
@@ -736,11 +737,15 @@ class CoefficientsPlotter:
             if len(axes.get_legend_handles_labels()[0]) > len(lines):
                 lines, labels = axes.get_legend_handles_labels()
 
+        # fontsize is normalised to 25 for 5 columns and subplot size 4
+        legend_font_size = 25 * (ncols * subplot_size) / 20
+        legend_font_size_inch = legend_font_size / 72  # 72 pt = 1 inch
+
         fig.legend(
             lines,
             labels,
             ncol=len(posteriors),
-            prop={"size": 25 * (ncols * 4) / 20},
+            prop={"size": legend_font_size},
             bbox_to_anchor=(0.5, 1.0),
             loc="upper center",
             frameon=False,
@@ -756,12 +761,13 @@ class CoefficientsPlotter:
         plt.axis("off")
         self._plot_logo(ax_logo, [0, 1, 0.6, 1])
 
+        rel_legend_size = legend_font_size_inch / (nrows * subplot_size)
         fig.tight_layout(
             rect=[
-                0,
-                0,
-                1,
-                1 - 0.2 / nrows,
+                0.0,
+                0.0,
+                1.0,
+                1 - 2 * rel_legend_size,
             ]  # make room for the legend at the top of the figure
         )
 
