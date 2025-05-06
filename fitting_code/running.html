@@ -428,6 +428,19 @@ The command</p>
 </div>
 <p>will produce in the results folder a series of pdf files containing plots for
 1-dimensional scans of the chi2 with respect to each parameter in the runcard.</p>
+<p>This is in general done for Wilson coefficients, but if one is interested in a specific UV model and in particular to perform a mass scan, SMEFiT allows for this specific case.
+The way it works is that in the runcard, one specifies</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">uv_couplings</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">coefficients</span><span class="p">:</span>
+<span class="w">  </span><span class="c1">## To fix ##</span>
+<span class="w">  </span><span class="nt">OpqMi</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;constrain&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[{</span><span class="s">&#39;m&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.24</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-2</span><span class="p p-Indicator">]},</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="s">&#39;m&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">-4</span><span class="p p-Indicator">]}],</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">-2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">2</span><span class="w"> </span><span class="p p-Indicator">}</span>
+
+<span class="w">  </span><span class="c1"># Mass parameter</span>
+<span class="w">  </span><span class="nt">m</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">is_mass</span><span class="p">:</span><span class="w"> </span><span class="nv">True</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;min&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">0.2</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&#39;max&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nv">100.0</span><span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>and when performing the scan, it will recognise that this is a mass scan and only the mass will be scanned. Note that the mass values are assumed to be specified in TeV.</p>
 </section>
 </section>
 

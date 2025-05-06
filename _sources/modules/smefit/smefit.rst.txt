@@ -94,3 +94,11 @@ smefit.runner module
    :members:
    :undoc-members:
    :show-inheritance:
+
+smefit.utils module
+-------------------
+
+.. automodule:: smefit.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
