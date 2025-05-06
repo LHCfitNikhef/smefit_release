@@ -11,6 +11,7 @@ import yaml
 from .analyze.pca import RotateToPca
 from .chi2 import Scanner
 from .log import logging
+from .optimize import Optimizer
 from .optimize.analytic import ALOptimizer
 from .optimize.mc import MCOptimizer
 from .optimize.ultranest import USOptimizer
@@ -300,6 +301,20 @@ class Runner:
         compute_bounds: bool
             if True compute and save the :math:`\chi^2` bounds.
         """
+
+        if "external_chi2" in self.run_card:
+            external_chi2 = self.run_card["external_chi2"]
+            for _, module in external_chi2.items():
+                module_path = module["path"]
+                path = pathlib.Path(module_path)
+                base_path, stem = path.parent, path.stem
+                if not base_path.exists():
+                    raise FileNotFoundError(
+                        f"Path {base_path} does not exist. Modify the runcard and rerun. Exiting"
+                    )
+                else:
+                    sys.path = [str(base_path)] + sys.path
+
         scan = Scanner(self.run_card, n_replica, scan_points)
         if compute_bounds:
             scan.compute_bounds()
