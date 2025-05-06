@@ -249,15 +249,20 @@ class Scanner:
         for x in xs:
             coeff.value = x
             self.coefficients.set_constraints()
-            chi2_list.append(
-                compute_chi2(
-                    self.datasets,
-                    self.coefficients.value,
-                    self.use_quad,
-                    self.use_multiplicative_prescription,
-                    use_replica,
-                )
+            chi2_tot = compute_chi2(
+                self.datasets,
+                self.coefficients.value,
+                self.use_quad,
+                self.use_multiplicative_prescription,
+                use_replica,
             )
+            # compute chi2 for each external chi2
+            if self.chi2_ext is not None:
+                for chi2_ext in self.chi2_ext:
+                    chi2_ext_i = chi2_ext(self.coefficients.value)
+                    chi2_tot += chi2_ext_i
+
+            chi2_list.append(chi2_tot)
         return np.array(chi2_list)
 
     def chi2_mass_scan(self, coeff, xs):
