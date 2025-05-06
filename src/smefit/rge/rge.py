@@ -465,7 +465,9 @@ def load_rge_matrix(
 
         # prepend additional dimension for consistency with the dynamic scale case
         stacked_mats = jnp.stack([rgemat.values])
-        save_rg(pathlib.Path(result_path) / result_ID, rgemat=[rgemat])
+        if result_path is not None and result_ID is not None:
+            # save the RGE matrix
+            save_rg(pathlib.Path(result_path) / result_ID, rgemat=[rgemat])
 
         return stacked_mats, operators_to_keep
 
@@ -509,7 +511,9 @@ def load_rge_matrix(
         stacked_mats = jnp.stack([mat.values for mat in rgemat])
 
         # save RGE matrix to result_path
-        save_rg(pathlib.Path(result_path) / result_ID, rgemat=rgemat)
+        if result_path is not None and result_ID is not None:
+            # save the RGE matrix
+            save_rg(pathlib.Path(result_path) / result_ID, rgemat=rgemat)
 
         return stacked_mats, operators_to_keep
 
