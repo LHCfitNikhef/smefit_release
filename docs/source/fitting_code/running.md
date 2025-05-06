@@ -322,3 +322,18 @@ The command
 ```
 will produce in the results folder a series of pdf files containing plots for
 1-dimensional scans of the chi2 with respect to each parameter in the runcard.
+
+This is in general done for Wilson coefficients, but if one is interested in a specific UV model and in particular to perform a mass scan, SMEFiT allows for this specific case.
+The way it works is that in the runcard, one specifies
+
+```yaml
+uv_couplings: true
+
+coefficients:
+  ## To fix ##
+  OpqMi: {'constrain': [{'m': [0.24, -2]}, {'m': [0.5, -4]}], 'min': -2, 'max': 2 }
+
+  # Mass parameter
+  m: {is_mass: True, 'min': 0.2, 'max': 100.0}
+```
+and when performing the scan, it will recognise that this is a mass scan and only the mass will be scanned. Note that the mass values are assumed to be specified in TeV.
