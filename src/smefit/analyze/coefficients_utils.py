@@ -648,7 +648,39 @@ class CoefficientsPlotter:
         )
         plt.savefig(f"{self.report_folder}/spider_plot.png", bbox_inches="tight")
 
-    def plot_posteriors(self, posteriors, labels, disjointed_lists=None):
+    def compute_rows_and_columns(self, nrows=-1, ncols=-1):
+        """Compute number of rows and columns for the plot layout
+        Parameters
+        ----------
+        nrows : int, optional
+            Number of rows in the plot layout. Default is -1, which means
+            that the number of rows will be calculated based on the
+            number of columns.
+        ncols : int, optional
+            Number of columns in the plot layout. Default is -1, which means
+            that the number of columns will be calculated based on the
+            number of rows.
+        Returns
+        -------
+        nrows : int
+            Number of rows in the plot layout.
+        ncols : int
+            Number of columns in the plot layout.
+        """
+
+        if nrows == -1 and ncols == -1:  # square layout
+            nrows = ncols = int(np.sqrt(self.npar)) + 1
+        elif ncols != -1:  # calculate nrows based on ncols
+            nrows = int(np.ceil(self.npar / ncols))
+        else:  # calculate ncols based on nrows
+            ncols = int(np.ceil(self.npar / nrows))
+
+        if (nrows * ncols) % self.npar == 0:
+            nrows += 1  # add an extra row to fit the logo
+
+        return nrows, ncols
+
+    def plot_posteriors(self, posteriors, labels, **kwargs):
         """Plot posteriors histograms.
 
         Parameters
@@ -657,19 +689,23 @@ class CoefficientsPlotter:
                 posterior distributions per fit and coefficient
             labels : list
                 list of fit names
-            disjointed_list: list, optional
-                list of coefficients with double solutions per fit
+            kwargs: dict
+                keyword arguments for the plot
         """
         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
-        grid_size = int(np.sqrt(self.npar)) + 1
-        fig = plt.figure(figsize=(grid_size * 4, grid_size * 4))
-        # loop on coefficients
 
+        nrows, ncols = self.compute_rows_and_columns(
+            kwargs.get("nrows", -1), kwargs.get("ncols", -1)
+        )
+
+        subplot_size = 4
+        fig = plt.figure(figsize=(ncols * subplot_size, nrows * subplot_size))
+
+        # loop on coefficients
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
-            try:
-                ax = plt.subplot(grid_size, grid_size, idx + 1)
-            except ValueError:
-                ax = plt.subplot(grid_size, grid_size, idx + 1)
+
+            ax = plt.subplot(nrows, ncols, idx + 1)
+
             # loop on fits
             for clr_idx, posterior in enumerate(posteriors):
                 if l not in posterior:
@@ -677,8 +713,8 @@ class CoefficientsPlotter:
                 solution = posterior[l]
 
                 if (
-                    disjointed_lists[clr_idx] is not None
-                    and l in disjointed_lists[clr_idx]
+                    kwargs["disjointed_lists"][clr_idx] is not None
+                    and l in kwargs["disjointed_lists"][clr_idx]
                 ):
                     solution1, solution2 = split_solution(posterior[l])
                     bins_solution1 = np.histogram_bin_edges(solution1, bins="fd")
@@ -718,28 +754,38 @@ class CoefficientsPlotter:
             if len(axes.get_legend_handles_labels()[0]) > len(lines):
                 lines, labels = axes.get_legend_handles_labels()
 
+        # fontsize is normalised to 25 for 5 columns and subplot size 4
+        legend_font_size = 25 * (ncols * subplot_size) / 20
+        legend_font_size_inch = legend_font_size / 72  # 72 pt = 1 inch
+
         fig.legend(
             lines,
             labels,
             ncol=len(posteriors),
-            prop={"size": 25 * (grid_size * 4) / 20},
+            prop={"size": legend_font_size},
             bbox_to_anchor=(0.5, 1.0),
             loc="upper center",
             frameon=False,
         )
 
-        if self.npar % grid_size == 0:
-            ax_logo_nr = self.npar + grid_size
+        if self.npar % (ncols * nrows) == 0:
+            ax_logo_nr = self.npar + ncols
         else:
-            ax_logo_nr = self.npar + (grid_size - self.npar % grid_size)
+            ax_logo_nr = self.npar + (ncols - self.npar % ncols)
 
-        ax_logo = plt.subplot(grid_size, grid_size, ax_logo_nr)
+        ax_logo = plt.subplot(nrows, ncols, ax_logo_nr)
 
         plt.axis("off")
         self._plot_logo(ax_logo, [0, 1, 0.6, 1])
 
+        rel_legend_size = legend_font_size_inch / (nrows * subplot_size)
         fig.tight_layout(
-            rect=[0, 0.05 * (5.0 / grid_size), 1, 1 - 0.08 * (5.0 / grid_size)]
+            rect=[
+                0.0,
+                0.0,
+                1.0,
+                1 - 2 * rel_legend_size,
+            ]  # make room for the legend at the top of the figure
         )
 
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")

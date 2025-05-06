@@ -101,7 +101,10 @@ coefficients_plots:
     dofs_show: ["Op1", "Op2"] # list of operator to be displayed (will include all the possible pairs), default is Null
 
   # show the posterior histograms
-  posterior_histograms: True
+  posterior_histograms:
+    # if both nrows and ncols are set, nrows will be inferred from ncols
+    # use nrows: -1 and ncols: -1 to use a square grid
+    nrows: 8 # number of rows in the histogram grid
 
   # show a summary table with all the given bounds
   table:
