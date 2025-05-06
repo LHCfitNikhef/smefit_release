@@ -672,9 +672,7 @@ class CoefficientsPlotter:
             nrows = ncols = int(np.sqrt(self.npar)) + 1
         elif ncols != -1:  # calculate nrows based on ncols
             nrows = int(np.ceil(self.npar / ncols))
-        elif nrows != -1:  # calculate ncols based on nrows
-            ncols = int(np.ceil(self.npar / nrows))
-        else:  # both are set, ignore ncols
+        else:  # calculate ncols based on nrows
             ncols = int(np.ceil(self.npar / nrows))
 
         if (nrows * ncols) % self.npar == 0:
@@ -693,13 +691,6 @@ class CoefficientsPlotter:
                 list of fit names
             kwargs: dict
                 keyword arguments for the plot
-                nrows: int, optional
-            disjointed_list: list, optional
-                list of coefficients with double solutions per fit
-            nrows: int, optional
-                Number of rows in the grid layout
-            ncols: int, optional
-                Number of columns in the grid layout
         """
         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 

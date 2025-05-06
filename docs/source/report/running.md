@@ -102,8 +102,8 @@ coefficients_plots:
 
   # show the posterior histograms
   posterior_histograms:
-    # if both nrows and ncols are set, ncols will be inferred from nrows
-    # use nrows: -1 and ncols: -1 to infer both
+    # if both nrows and ncols are set, nrows will be inferred from ncols
+    # use nrows: -1 and ncols: -1 to use a square grid
     nrows: 8 # number of rows in the histogram grid
 
   # show a summary table with all the given bounds
