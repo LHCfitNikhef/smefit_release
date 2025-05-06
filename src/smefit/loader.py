@@ -300,6 +300,7 @@ class Loader:
         lin_dict = {}
 
         # save sm prediction at the chosen perturbative order
+
         sm = np.array(raw_th_data[order]["SM"])
 
         # split corrections into a linear and quadratic dict
@@ -530,10 +531,7 @@ def construct_corrections_matrix_linear(
         cnt += n_dat
 
     if rgemat is not None:
-        if len(rgemat.shape) == 3:  # dynamic scale, scale is datapoint specific
-            corr_values = jnp.einsum("ij, ijk -> ik", corr_values, rgemat)
-        else:  # fixed scale so same rgemat for all datapoints
-            corr_values = jnp.einsum("ij, jk -> ik", corr_values, rgemat)
+        corr_values = jnp.einsum("ij, ijk -> ik", corr_values, rgemat)
 
     return corr_values
 
@@ -553,6 +551,10 @@ def construct_corrections_matrix_quadratic(
         sorted_keys: numpy.ndarray
             list of sorted operator corrections, shape=(n rg generated coeff,)
             or shape=(n original coeff,) in the absence of rgemat
+        rgemat: numpy.ndarray, optional
+            solution matrix of the RGE, shape=(k, l, m) with k the number of datapoints,
+            l the number of generated coefficients under the RG and m the number of
+            original |EFT| coefficients specified in the runcard.
 
     Returns
     -------
@@ -579,12 +581,7 @@ def construct_corrections_matrix_quadratic(
         cnt += n_dat
 
     if rgemat is not None:
-        if len(rgemat.shape) == 3:  # dynamic scale, scale is datapoint specific
-            corr_values = jnp.einsum(
-                "ijk, ijl, ikr -> ilr", corr_values, rgemat, rgemat
-            )
-        else:  # fixed scale so same rgemat for all datapoints
-            corr_values = jnp.einsum("ijk, jl, kr -> ilr", corr_values, rgemat, rgemat)
+        corr_values = jnp.einsum("ijk, ijl, ikr -> ilr", corr_values, rgemat, rgemat)
 
     return corr_values
 

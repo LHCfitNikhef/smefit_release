@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import pickle
 import warnings
 from copy import deepcopy
 from functools import partial, wraps
@@ -13,7 +14,7 @@ from numpy import ComplexWarning
 
 from smefit import log
 from smefit.loader import Loader
-from smefit.wcxf import inverse_wcxf_translate, wcxf_translate
+from smefit.rge.wcxf import inverse_wcxf_translate, wcxf_translate
 
 ### Patch of a CKM function, so that the CP violating
 ### phase is set to gamma and not computed explicitly
@@ -358,7 +359,9 @@ class RGE:
         return self.map_to_smefit(wc_final, scale)
 
 
-def load_scales(datasets, theory_path, default_scale=1e3, cutoff_scale=None):
+def load_scales(
+    datasets, theory_path, default_scale=1e3, cutoff_scale=None, scale_variation=1.0
+):
     """
     Load the energy scales for the datasets.
 
@@ -402,12 +405,21 @@ def load_scales(datasets, theory_path, default_scale=1e3, cutoff_scale=None):
 
     if cutoff_scale is not None:
         scales = [scale for scale in scales if scale < cutoff_scale]
+    if scale_variation != 1.0:
+        _logger.info(f"Applying scale variation of {scale_variation}.")
+        scales = [scale * scale_variation for scale in scales]
 
     return scales
 
 
 def load_rge_matrix(
-    rge_dict, coeff_list, datasets=None, theory_path=None, cutoff_scale=None
+    rge_dict,
+    coeff_list,
+    datasets=None,
+    theory_path=None,
+    cutoff_scale=None,
+    result_path=None,
+    result_ID=None,
 ):
     """
     Load the RGE matrix for the SMEFT Wilson coefficients.
@@ -433,17 +445,39 @@ def load_rge_matrix(
     smeft_accuracy = rge_dict.get("smeft_accuracy", "integrate")
     adm_QCD = rge_dict.get("adm_QCD", "full")
     yukawa = rge_dict.get("yukawa", "top")
+    scale_variation = rge_dict.get("scale_variation", 1.0)
     rge_runner = RGE(coeff_list, init_scale, smeft_accuracy, adm_QCD, yukawa)
+
+    # load precomputed RGE matrix if it exists
+    path_to_rge_mat = rge_dict.get("rg_matrix", False)
+    if path_to_rge_mat:
+        with open(path_to_rge_mat, "rb") as f:
+            rgemats = pickle.load(f)
+        stacked_mats = jnp.stack([rgemat.values for rgemat in rgemats])
+        operators_to_keep = {op: {} for op in rgemats[0].index}
+        return stacked_mats, operators_to_keep
+
     # if it is a float, it is a static scale
     if type(obs_scale) is float or type(obs_scale) is int:
         rgemat = rge_runner.RGEmatrix(obs_scale)
         gen_operators = list(rgemat.index)
         operators_to_keep = {k: {} for k in gen_operators}
-        return rgemat.values, operators_to_keep
+
+        # prepend additional dimension for consistency with the dynamic scale case
+        stacked_mats = jnp.stack([rgemat.values])
+        if result_path is not None and result_ID is not None:
+            # save the RGE matrix
+            save_rg(pathlib.Path(result_path) / result_ID, rgemat=[rgemat])
+
+        return stacked_mats, operators_to_keep
 
     elif obs_scale == "dynamic":
         scales = load_scales(
-            datasets, theory_path, default_scale=init_scale, cutoff_scale=cutoff_scale
+            datasets,
+            theory_path,
+            default_scale=init_scale,
+            cutoff_scale=cutoff_scale,
+            scale_variation=scale_variation,
         )
 
         operators_to_keep = {}
@@ -475,9 +509,31 @@ def load_rge_matrix(
 
         # now stack the matrices in a 3D array
         stacked_mats = jnp.stack([mat.values for mat in rgemat])
+
+        # save RGE matrix to result_path
+        if result_path is not None and result_ID is not None:
+            # save the RGE matrix
+            save_rg(pathlib.Path(result_path) / result_ID, rgemat=rgemat)
+
         return stacked_mats, operators_to_keep
 
     else:
         raise ValueError(
             f"obs_scale must be either a float/int or 'dynamic'. Passed: {obs_scale}"
         )
+
+
+def save_rg(path, rgemat):
+    """
+    Save the RGE matrix to the result folder.
+
+    Parameters
+    ----------
+    path : pathlib.Path
+        path to the result folder
+    rgemat: list
+        List of RGE matrices for each datapoint
+    """
+    if path is not None:
+        with open(path / "rge_matrix.pkl", "wb") as f:
+            pickle.dump(rgemat, f)

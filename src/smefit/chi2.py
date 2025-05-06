@@ -10,7 +10,7 @@ import numpy as np
 import scipy.optimize as opt
 from rich.progress import track
 
-from smefit.rge import RGE, load_rge_matrix
+from smefit.rge.rge import RGE, load_rge_matrix
 from smefit.utils import NumpyEncoder
 
 from . import compute_theory as pr

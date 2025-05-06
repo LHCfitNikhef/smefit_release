@@ -21,6 +21,9 @@ class Coefficient:
             - if False, the parameter is free, default option
             - if True, the parameter is fixed to the given value
             - if dict the parameter is fixed to a function of other coefficients
+        is_mass : bool
+            if True, the coefficient is a mass parameter
+            default False
 
     """
 
@@ -28,6 +31,11 @@ class Coefficient:
         self, name, minimum, maximum, value=None, constrain=False, is_mass=False
     ):
         self.name = name
+        # Temporary check for deprecated operator
+        if name == "Opd":
+            raise ValueError(
+                "The operator Opd is deprecated and has been renamed. Use OpBox instead."
+            )
         self.minimum = minimum
         self.maximum = maximum
         self.is_mass = is_mass

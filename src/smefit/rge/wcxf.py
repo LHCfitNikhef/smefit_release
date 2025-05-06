@@ -19,7 +19,7 @@ cw = np.sqrt(1 - sw**2)
 wcxf_translate = {
     # Bosonic
     "OWWW": {"wc": ["W"]},
-    "Opd": {"wc": ["phiBox"], "value": [-1.0]},
+    "OpBox": {"wc": ["phiBox"]},
     "OpD": {"wc": ["phiD"]},
     "OpWB": {"wc": ["phiWB"]},
     "OpG": {"wc": ["phiG"]},
@@ -86,6 +86,12 @@ wcxf_translate = {
     # 4 leptons
     "Oll": {"wc": ["ll_1221"]},
     "Oll1111": {"wc": ["ll_1111"]},
+    # 2 lepton 2 quark
+    "OQe": {"wc": ["qe_3311"]},
+    "OQl31": {"wc": ["lq1_1133", "lq3_1133"]},
+    "OQlM1": {"wc": ["lq1_1133"]},
+    "Otl1": {"wc": ["lu_1133"]},
+    "Ote": {"wc": ["eu_1133"]},
 }
 
 # This creates a dictionary to go from Warsaw to SMEFiT.
@@ -98,7 +104,7 @@ wcxf_translate = {
 inverse_wcxf_translate = {
     # Bosonic
     "OWWW": {"wc": ["W"]},
-    "Opd": {"wc": ["phiBox"], "coeff": [-1.0]},
+    "OpBox": {"wc": ["phiBox"]},
     "OpD": {"wc": ["phiD"]},
     "OpWB": {"wc": ["phiWB"]},
     "OpG": {"wc": ["phiG"]},
@@ -165,4 +171,10 @@ inverse_wcxf_translate = {
     # 4 leptons
     "Oll": {"wc": ["ll_1221"]},
     "Oll1111": {"wc": ["ll_1111"]},
+    # 2 lepton 2 quark
+    "OQe": {"wc": ["qe_3311"]},
+    "OQl31": {"wc": ["lq3_1133"]},
+    "OQlM1": {"wc": ["lq1_1133", "lq3_1133"], "coeff": [1.0, -1.0]},
+    "Otl1": {"wc": ["lu_1133"]},
+    "Ote": {"wc": ["eu_1133"]},
 }

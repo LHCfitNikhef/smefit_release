@@ -221,6 +221,19 @@ One is free to set custom attributes in the constructor. The coefficient values 
 are accesible via ``coefficient_values`` in the ``compute_chi2`` method. In order for the external chi2
 to work, it is important one does not change the name of the ``compute_chi2`` method!
 
+### Adding RG evolution
+Renormalisation group evolution can be turned on in the fit by adding the following to the runcard.
+
+```yaml
+rge:
+  init_scale: 5000.0
+  obs_scale: dynamic # float or "dynamic"
+  smeft_accuracy: integrate # options: integrate, leadinglog
+  yukawa: top # options: top, full or none
+  adm_QCD: False # if true, the EW couplings are set to zero
+  rg_matrix: <path/to/rge_matrix.pkl>
+```
+
 ## Running a fit with NS
 To run a fiy using Nested Sampling use the command
 ```bash
@@ -273,8 +286,30 @@ To do this add to the runcard
 single_parameter_fits: True
 ```
 and proceed as documented above for a normal fit.
-For both NS, MC and A the final output will be the file ``posterior.json``
-containing the independent posterior of the fitted Wilson coefficients, obtained by a series os independent single parameter fits.
+For both `NS` and `A` the final output will be the file ``fit_results.json``
+containing the independent posterior of the fitted Wilson coefficients, obtained by a series of independent single parameter fits.
+
+It is possible to perform single paramters in the presence of multiple constraints. For example
+
+```yaml
+
+single_parameter_fits: True
+uv_couplings: true
+
+coefficients:
+  # Free params
+  OWWW: {'min': -3, 'max': 3}
+  Opq1: {'min': -3, 'max': 3}
+  Opq3: {'min': -3, 'max': 3}
+
+  ## To fix ##
+  OpqMi: {'constrain': [{'Opq1': 1}, {'Opq3': -1}], 'min': -2, 'max': 2 }
+  O3pq: {'constrain': [{'Opq3': 1}], 'min': -1, 'max': 1 }
+
+```
+performs a single parameter fit for ``OWWW``, ``Opq1`` and ``Opq3``. Note that this requires `uv_couplings` to be set to
+True (this allows you to fit parameters that do not appear in the theory tables). The naming `uv_couplings` stems from fitting with
+constraints among Wilson coefficients and UV parameters.
 
 
 
@@ -287,3 +322,18 @@ The command
 ```
 will produce in the results folder a series of pdf files containing plots for
 1-dimensional scans of the chi2 with respect to each parameter in the runcard.
+
+This is in general done for Wilson coefficients, but if one is interested in a specific UV model and in particular to perform a mass scan, SMEFiT allows for this specific case.
+The way it works is that in the runcard, one specifies
+
+```yaml
+uv_couplings: true
+
+coefficients:
+  ## To fix ##
+  OpqMi: {'constrain': [{'m': [0.24, -2]}, {'m': [0.5, -4]}], 'min': -2, 'max': 2 }
+
+  # Mass parameter
+  m: {is_mass: True, 'min': 0.2, 'max': 100.0}
+```
+and when performing the scan, it will recognise that this is a mass scan and only the mass will be scanned. Note that the mass values are assumed to be specified in TeV.

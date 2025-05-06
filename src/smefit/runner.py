@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import importlib
 import itertools
 import pathlib
+import shutil
 import subprocess
 import sys
 from shutil import copyfile
@@ -66,9 +66,9 @@ class Runner:
         else:
             res_folder_fit = result_folder / result_ID
 
-        subprocess.call(f"mkdir -p {result_folder}", shell=True)
         if res_folder_fit.exists():
             _logger.warning(f"{res_folder_fit} already found, overwriting old results")
+            shutil.rmtree(res_folder_fit)
         subprocess.call(f"mkdir -p {res_folder_fit}", shell=True)
 
         # Copy yaml runcard to results folder or dump it
@@ -196,11 +196,6 @@ class Runner:
             optimizer to be used (NS, MC or A)
         """
 
-        def MultipleConstrainError():
-            raise ValueError(
-                "Constrain with multiple coefficients do not make sense, in sigle parameter fits."
-            )
-
         config = self.run_card
 
         # loop on all the coefficients
@@ -210,16 +205,15 @@ class Runner:
 
             # skip contrained coeffs
             if "constrain" in config["coefficients"][coeff]:
-                _logger.info("Skipping contrained coefficient %s", coeff)
+                _logger.info("Skipping constrained coefficient %s", coeff)
                 continue
 
-            # if there are constrained coefficients, only
-            # relations in which appears a single indepentent
-            # coefficient make sense.
+            # We define the new coefficient config for the individual fit
             new_coeff_config = {}
 
-            # seach for a realtion: loop on all the coefficients
+            # seach for a relation: loop on all the coefficients
             for coeff2, vals in config["coefficients"].items():
+                # skip free coefficients
                 if "constrain" not in vals:
                     continue
 
@@ -235,19 +229,21 @@ class Runner:
                     else [vals["constrain"]]
                 )
 
-                # only single coefficient constrain are supported
                 new_constrain = []
+                # Now we redefine the constraints
+                # We only keep constraints proportional to the current coeff,
+                # if not we skip the contribution as it is not relevant
+                # for the current individual fit
                 for addend in constrain:
-                    if len(addend) > 1:
-                        MultipleConstrainError()
                     if coeff in addend:
                         new_constrain.append(addend)
-                    # check that the coefficient appearing in all the addends is the same
-                    elif new_constrain:
-                        MultipleConstrainError()
 
                 if new_constrain:
-                    new_coeff_config[coeff2] = vals
+                    new_coeff_config[coeff2] = {
+                        "constrain": new_constrain,
+                        "min": vals["min"],
+                        "max": vals["max"],
+                    }
 
             # add fitted coefficient
             new_coeff_config[coeff] = config["coefficients"][coeff]
