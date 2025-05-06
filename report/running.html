@@ -211,7 +211,10 @@ be skipped.</p>
 <span class="w">    </span><span class="nt">dofs_show</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;Op1&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;Op2&quot;</span><span class="p p-Indicator">]</span><span class="w"> </span><span class="c1"># list of operator to be displayed (will include all the possible pairs), default is Null</span>
 
 <span class="w">  </span><span class="c1"># show the posterior histograms</span>
-<span class="w">  </span><span class="nt">posterior_histograms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">posterior_histograms</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># if both nrows and ncols are set, nrows will be inferred from ncols</span>
+<span class="w">    </span><span class="c1"># use nrows: -1 and ncols: -1 to use a square grid</span>
+<span class="w">    </span><span class="nt">nrows</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w"> </span><span class="c1"># number of rows in the histogram grid</span>
 
 <span class="w">  </span><span class="c1"># show a summary table with all the given bounds</span>
 <span class="w">  </span><span class="nt">table</span><span class="p">:</span>
