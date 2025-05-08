@@ -2,7 +2,6 @@
 """Fitting the Wilson coefficients with |NS|"""
 import time
 from functools import partial
-
 import jax
 import jax.numpy as jnp
 import ultranest
@@ -86,6 +85,8 @@ class USOptimizer(Optimizer):
         single_parameter_fits,
         pairwise_fits,
         use_multiplicative_prescription,
+        poly_mode,
+        external_coefficients,
         live_points=500,
         lepsilon=0.001,
         target_evidence_unc=0.5,
@@ -106,6 +107,8 @@ class USOptimizer(Optimizer):
             single_parameter_fits=single_parameter_fits,
             use_multiplicative_prescription=use_multiplicative_prescription,
             external_chi2=external_chi2,
+            poly_mode=poly_mode,
+            external_coefficients=external_coefficients,
             rgemat=rgemat,
             rge_dict=rge_dict,
         )
@@ -177,6 +180,8 @@ class USOptimizer(Optimizer):
                 config.get("rot_to_fit_basis", None),
                 config.get("uv_couplings", False),
                 config.get("external_chi2", False),
+                config.get("poly_mode", False),
+                config.get("external_coefficients", {})
                 rgemat=rgemat,
                 cutoff_scale=cutoff_scale,
             )
@@ -240,6 +245,8 @@ class USOptimizer(Optimizer):
             single_parameter_fits,
             pairwise_fits,
             use_multiplicative_prescription,
+            config["poly_mode"],
+            config["external_coefficients"],
             live_points=nlive,
             lepsilon=lepsilon,
             target_evidence_unc=target_evidence_unc,
@@ -269,16 +276,15 @@ class USOptimizer(Optimizer):
                 params,
                 self.use_quad,
                 self.use_multiplicative_prescription,
-                use_replica=False,
+                False,
+                self.poly_mode
             )
         else:
             chi2_tot = 0
-
         if self.chi2_ext is not None:
             for chi2_ext in self.chi2_ext:
                 chi2_ext_i = chi2_ext(params)
                 chi2_tot += chi2_ext_i
-
         return chi2_tot
 
     def compute_fixed_coeff(self, constrain, param_dict):

@@ -23,6 +23,8 @@ DataTuple = namedtuple(
         "OperatorsNames",
         "LinearCorrections",
         "QuadraticCorrections",
+        "OperatorsDictionary",
+        "ExternalCoefficients",
         "ExpNames",
         "NdataExp",
         "InvCovMat",
@@ -68,6 +70,10 @@ class Loader:
     if True add the theory covariance matrix to the experimental one
     rot_to_fit_basis: dict, None
         matrix rotation to fit basis or None
+    poly_mode: bool
+        run in polynomial mode
+    external_coefficients:
+        list of coefficients in the theory card that are going to be replaced with the runcard expression
 
     """
 
@@ -85,6 +91,8 @@ class Loader:
         use_theory_covmat,
         use_multiplicative_prescription,
         rot_to_fit_basis,
+        poly_mode,
+        external_coefficients
         cutoff_scale,
     ):
         self._data_folder = self.commondata_path
@@ -94,21 +102,30 @@ class Loader:
         self.setname = setname
 
         self.dataspec = {}
-        (
+        if poly_mode:
+            (
             self.dataspec["SM_predictions"],
             self.dataspec["theory_covmat"],
-            self.dataspec["lin_corrections"],
-            self.dataspec["quad_corrections"],
-            self.dataspec["scales"],
-        ) = self.load_theory(
-            self.setname,
-            operators_to_keep,
+            self.dataspec["operator_dict"],
+            ) = self.load_theory_poly(
             order,
-            use_quad,
             use_theory_covmat,
             use_multiplicative_prescription,
-            rot_to_fit_basis,
-        )
+            )
+        else:
+            (
+                self.dataspec["SM_predictions"],
+                self.dataspec["theory_covmat"],
+                self.dataspec["lin_corrections"],
+                self.dataspec["quad_corrections"],
+            ) = self.load_theory(
+                operators_to_keep,
+                order,
+                use_quad,
+                use_theory_covmat,
+                use_multiplicative_prescription,
+                rot_to_fit_basis,
+            )
 
         (
             self.dataspec["central_values"],
@@ -117,6 +134,8 @@ class Loader:
             self.dataspec["stat_error"],
             self.dataspec["luminosity"],
         ) = self.load_experimental_data()
+
+        self.dataspec["external_coefficients"] = external_coefficients
 
         # mask theory and data to ensure only data below the specified cutoff scale is included
         self.mask = np.array(
@@ -252,6 +271,54 @@ class Loader:
 
         # here return both exp sys and t0 modified sys
         return central_values, df, df_t0, stat_error, luminosity
+    def load_theory_poly(
+            self,
+            order,
+            use_theory_covmat,
+            use_multiplicative_prescription):
+        """
+        Load theory predictions
+
+        Parameters
+        ----------
+            operators_to_keep: list
+                list of operators to keep
+            order: "LO", "NLO"
+                EFT perturbative order
+            use_theory_covmat: bool
+                if True add the theory covariance matrix to the experimental one
+            
+
+
+        Returns
+        -------
+            sm: numpy.ndarray
+                |SM| predictions
+            poly_dict: dict
+                dictionary which labels are the polynomial expression of the correction and the values the contribution to the theory prediction
+   
+            
+        """
+        theory_file = self._theory_folder / f"{self.setname}.json"
+        check_file(theory_file) 
+        with open(theory_file, encoding="utf-8") as f:
+            raw_th_data = json.load(f)
+
+        # save sm prediction at the chosen perturbative order
+        sm = np.array(raw_th_data[order]["SM"])
+
+        poly_dict={}
+        for key, value in raw_th_data[order].items(): 
+            if "SM" not in key:
+                poly_dict[key] = np.array(value)
+                if use_multiplicative_prescription:
+                    poly_dict[key] = np.divide(poly_dict[key], sm)
+        best_sm = np.array(raw_th_data["best_sm"])
+        th_cov = np.zeros((best_sm.size, best_sm.size))
+        if use_theory_covmat:
+            th_cov = raw_th_data["theory_cov"]
+        return raw_th_data["best_sm"], th_cov, poly_dict
+    
 
     @staticmethod
     def load_theory(
@@ -278,6 +345,7 @@ class Loader:
                 if True add the theory covariance matrix to the experimental one
             rotation_matrix: numpy.ndarray
                 rotation matrix from tables basis to fitting basis
+
 
         Returns
         -------
@@ -310,6 +378,7 @@ class Loader:
                 quad_dict[key] = np.array(value)
                 if use_multiplicative_prescription:
                     quad_dict[key] = np.divide(quad_dict[key], sm)
+
 
             # linear terms
             elif "SM" not in key and "*" not in key:
@@ -495,6 +564,33 @@ class Loader:
         return self.dataspec["quad_corrections"]
 
 
+
+    @property
+    def operator_dict(self):
+        """
+        Dictionary of operator and their coefficients in poly_mode
+
+        Returns
+        -------
+            poly_dict : dict
+                dictionary with operators formula and their coefficients
+        """
+        return self.dataspec["operator_dict"]
+    
+    @property
+    def external_coefficients(self):
+        """
+        Dictionary of theory card operator that are going to be replaced with the expression in the runcard
+
+        Returns
+        -------
+            external_coeficcients : dict
+                as per above
+        """
+        return self.dataspec["external_coefficients"]
+
+
+
 def construct_corrections_matrix_linear(
     corrections_list, n_data_tot, sorted_keys, rgemat=None
 ):
@@ -599,6 +695,8 @@ def load_datasets(
     rot_to_fit_basis=None,
     has_uv_couplings=False,
     has_external_chi2=False,
+    poly_mode=False, 
+    external_coefficients={},
     rgemat=None,
     cutoff_scale=None,
 ):
@@ -628,6 +726,10 @@ def load_datasets(
             True for UV fits
         has_external_chi2: bool, optional
             True in the presence of external chi2 modules
+        poly_mode: bool
+            True if running in polymode
+        external_coefficients: dictionary
+            coefficients in the theory card that are going to be replaced by runcard expressions   
         rgemat: numpy.ndarray, optional
             solution matrix of the RGE, shape=(k, l, m) with k the number of datapoints,
             l the number of generated coefficients under the RG and m the number of
@@ -636,6 +738,7 @@ def load_datasets(
             kinematic cutoff scale
     """
 
+
     exp_data = []
     sm_theory = []
     sys_error_t0 = []
@@ -643,6 +746,7 @@ def load_datasets(
     stat_error = []
     lin_corr_list = []
     quad_corr_list = []
+    operators_dict_list= []
     n_data_exp = []
     lumi_exp = []
     exp_name = []
@@ -663,6 +767,8 @@ def load_datasets(
             use_theory_covmat,
             use_multiplicative_prescription,
             rot_to_fit_basis,
+            poly_mode,
+            external_coefficients,
             cutoff_scale,
         )
 
@@ -675,8 +781,14 @@ def load_datasets(
         lumi_exp.append(dataset.lumi)
         exp_data.extend(dataset.central_values)
         sm_theory.extend(dataset.sm_prediction)
-        lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
-        quad_corr_list.append([dataset.n_data, dataset.quad_corrections])
+        if poly_mode:
+            lin_corr_list.append([dataset.n_data, {}])
+            quad_corr_list.append([dataset.n_data,{}])
+            operators_dict_list.append([list(dataset.operator_dict.keys()), list(dataset.operator_dict.values())])
+        else:
+            lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
+            quad_corr_list.append([dataset.n_data, dataset.quad_corrections])
+            operators_dict_list.append([[],[]])
         sys_error_t0.append(dataset.sys_error_t0)
         sys_error.append(dataset.sys_error)
         stat_error.append(dataset.stat_error)
@@ -704,6 +816,12 @@ def load_datasets(
     lin_corr_values = construct_corrections_matrix_linear(
         lin_corr_list, n_data_tot, sorted_keys, rgemat
     )
+
+    if poly_mode:
+        operators_names = sorted(operators_to_keep.keys())
+    if (not(poly_mode)):
+        check_missing_oparators(operators_names, operators_to_keep)
+
 
     if use_quad:
         quad_corr_values = construct_corrections_matrix_quadratic(
@@ -734,6 +852,8 @@ def load_datasets(
         sorted_keys,
         lin_corr_values,
         quad_corr_values,
+        operators_dict_list,
+        external_coefficients,
         np.array(exp_name),
         np.array(n_data_exp),
         np.linalg.inv(fit_covmat),
@@ -755,11 +875,15 @@ def get_dataset(datasets, data_name):
         datasets.SMTheory[posix_in:posix_out],
         datasets.OperatorsNames,
         datasets.LinearCorrections[posix_in:posix_out],
-        (
-            datasets.QuadraticCorrections[posix_in:posix_out]
-            if datasets.QuadraticCorrections is not None
-            else None
-        ),
+        datasets.QuadraticCorrections[posix_in:posix_out]
+        if datasets.QuadraticCorrections is not None
+        else None,
+        [datasets.OperatorsDictionary[idx]]
+        if datasets.OperatorsDictionary is not None
+        else None,
+        datasets.ExternalCoefficients
+        if datasets.ExternalCoefficients is not None
+        else None,
         data_name,
         ndata,
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],

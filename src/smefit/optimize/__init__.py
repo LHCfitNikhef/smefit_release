@@ -60,6 +60,8 @@ class Optimizer:
         use_quad,
         single_parameter_fits,
         use_multiplicative_prescription,
+        poly_mode,
+        external_coefficients,
         external_chi2=None,
         rgemat=None,
         rge_dict=None,
@@ -68,6 +70,8 @@ class Optimizer:
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.use_quad = use_quad
+        self.poly_mode = poly_mode
+        self.external_coefficients = external_coefficients
         self.npts = (
             self.loaded_datasets.Commondata.size
             if self.loaded_datasets is not None
@@ -207,6 +211,7 @@ class Optimizer:
                 self.use_quad,
                 self.use_multiplicative_prescription,
                 use_replica,
+                self.poly_mode
             )
         else:
             chi2_tot = 0
@@ -227,6 +232,7 @@ class Optimizer:
                         self.use_quad,
                         self.use_multiplicative_prescription,
                         use_replica,
+                        self.poly_mode
                     )
                     / dataset.NdataExp
                 )

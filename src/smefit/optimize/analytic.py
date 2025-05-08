@@ -55,6 +55,8 @@ class ALOptimizer(Optimizer):
             # disble quadratic corrections here
             use_quad=False,
             single_parameter_fits=single_parameter_fits,
+            poly_mode=False,
+            external_coefficients={},
             # this option does not make any difference here
             use_multiplicative_prescription=False,
         )
@@ -112,6 +114,8 @@ class ALOptimizer(Optimizer):
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
+            config.get("poly_mode", False),
+            config.get("external_coefficients", {}),
             rgemat=rgemat,
             cutoff_scale=config.get("cutoff_scale", None),
         )

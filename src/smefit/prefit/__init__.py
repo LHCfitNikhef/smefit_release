@@ -27,6 +27,8 @@ class Prefit:
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
+            config.get("poly_mode",False),
+            config.get("external_coefficients",{})
         )
 
     def chi2_sm(self):

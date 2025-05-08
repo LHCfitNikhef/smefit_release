@@ -72,6 +72,8 @@ class MCOptimizer(Optimizer):
         use_bounds,
         minimizer_specs,
         use_multiplicative_prescription,
+        poly_mode,
+        external_coefficients,
         external_chi2=None,
     ):
         super().__init__(
@@ -81,6 +83,8 @@ class MCOptimizer(Optimizer):
             use_quad,
             single_parameter_fits,
             use_multiplicative_prescription,
+            poly_mode,
+            external_coefficients,
             external_chi2,
         )
         self.chi2_values = []
@@ -130,6 +134,8 @@ class MCOptimizer(Optimizer):
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
             config.get("external_chi2", False),
+            config.get("poly_mode", False),
+            config.get("external_coefficients", {}),
         )
 
         coefficients = CoefficientManager.from_dict(config["coefficients"])
@@ -179,6 +185,8 @@ class MCOptimizer(Optimizer):
             use_bounds,
             minimizer_specs,
             use_multiplicative_prescription,
+            config["poly_mode"],
+            config["external_coefficients"],
             external_chi2,
         )
 

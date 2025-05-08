@@ -126,7 +126,7 @@ class Projection:
             for coeff in self.datasets.OperatorsNames:
                 coefficient_values.append(self.coefficients[coeff]["value"])
             cv = make_predictions(
-                self.datasets, coefficient_values, self.use_quad, False
+                self.datasets, coefficient_values, self.use_quad, False, False
             )
         return cv
 
