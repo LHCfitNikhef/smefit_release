@@ -3,8 +3,8 @@
 """
 Module for the generation of theory predictions
 """
-import numpy as np
 import jax.numpy as jnp
+import numpy as np
 
 
 def flatten(quad_mat, axis=0):
@@ -50,6 +50,8 @@ def make_predictions(
             |EFT| coefficients values
         use_quad: bool
             if True include also |HO| corrections
+        use_multiplicative_prescription: bool
+            if True add the |EFT| contribution as a k-factor
     Returns
     -------
         corrected_theory : numpy.ndarray
@@ -77,20 +79,19 @@ def make_predictions(
     else:
 
         coefficients_values = jnp.array(coefficients_values)
-    
-        # Compute total linear correction
-        # note @ is slower when running with mpiexec
+
         summed_corrections = jnp.einsum(
             "ij,j->i", dataset.LinearCorrections, coefficients_values
         )
     
         # Compute total quadratic correction
         if use_quad:
-            coeff_outer_coeff = jnp.outer(coefficients_values, coefficients_values)
-            # note @ is slower when running with mpiexec
             summed_quad_corrections = jnp.einsum(
-                "ij,j->i", dataset.QuadraticCorrections, flatten(coeff_outer_coeff)
-            )
+            "ijk,j,k -> i",
+            dataset.QuadraticCorrections,
+            coefficients_values,
+            coefficients_values,
+        )
             summed_corrections += summed_quad_corrections
     
         # Sum of SM theory + SMEFT corrections
@@ -100,3 +101,4 @@ def make_predictions(
             corrected_theory = dataset.SMTheory + summed_corrections
     
         return corrected_theory
+

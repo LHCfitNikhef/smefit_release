@@ -11,7 +11,6 @@ from matplotlib import colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from ..coefficients import CoefficientManager
-from ..compute_theory import flatten
 from ..loader import load_datasets
 from .latex_tools import latex_packages
 
@@ -30,7 +29,6 @@ class RotateToPca:
     """
 
     def __init__(self, loaded_datasets, coefficients, config):
-
         self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.config = config
@@ -49,11 +47,11 @@ class RotateToPca:
             config["data_path"],
             config["datasets"],
             config["coefficients"],
-            config["order"],
             config["use_quad"],
             config["use_theory_covmat"],
             config["use_t0"],
             config.get("use_multiplicative_prescription", False),
+            config.get("default_order", "LO"),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
@@ -199,9 +197,13 @@ def impose_constrain(dataset, coefficients, update_quad=False):
                 params[idx] = 1.0
                 temp_coeffs.set_free_parameters(params)
                 temp_coeffs.set_constraints()
-                coeff_outer_coeff = np.outer(temp_coeffs.value, temp_coeffs.value)
                 new_quad_corrections.append(
-                    flatten(coeff_outer_coeff) @ dataset.QuadraticCorrections.T
+                    np.einsum(
+                        "ijk,j,k -> i",
+                        dataset.QuadraticCorrections,
+                        temp_coeffs.value,
+                        temp_coeffs.value,
+                    )
                 )
 
     if update_quad:
@@ -239,7 +241,6 @@ class PcaCalculator:
     """
 
     def __init__(self, datasets, coefficients, latex_names):
-
         self.coefficients = coefficients
         self.datasets = datasets
         self.latex_names = latex_names

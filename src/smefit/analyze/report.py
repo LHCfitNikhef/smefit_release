@@ -70,17 +70,20 @@ class Report:
             self.fits.append(fit)
         self.fits = np.array(self.fits)
 
+        # Get names of datasets for each fit
+        self.dataset_fits = []
+        for fit in self.fits:
+            self.dataset_fits.append([data["name"] for data in fit.config["datasets"]])
+
         # Loads useful information about data
-        self.data_info = self._load_grouped_info(report_config["data_info"], "datasets")
+        self.data_info = self._load_grouped_data_info(report_config["data_info"])
         # Loads coefficients grouped with latex name
-        self.coeff_info = self._load_grouped_info(
-            report_config["coeff_info"], "coefficients"
-        )
+        self.coeff_info = self._load_grouped_coeff_info(report_config["coeff_info"])
         self.html_index = ""
         self.html_content = ""
 
-    def _load_grouped_info(self, raw_dict, key):
-        """Load grouped info of coefficients and datasets.
+    def _load_grouped_data_info(self, raw_dict):
+        """Load grouped info of datasets.
 
         Only elements appearing at least once in the fit configs are kept.
 
@@ -88,8 +91,6 @@ class Report:
         ----------
         raw_dict: dict
             raw dictionary with relevant information
-        key: "datasets" or "coefficients"
-            key to check
 
         Returns
         _______
@@ -101,7 +102,34 @@ class Report:
         for group, entries in raw_dict.items():
             out_dict[group] = {}
             for val in entries:
-                if np.any([val[0] in fit.config[key] for fit in self.fits]):
+                if np.any([val[0] in datasets for datasets in self.dataset_fits]):
+                    out_dict[group][val[0]] = val[1]
+
+            if len(out_dict[group]) == 0:
+                out_dict.pop(group)
+        return pd.DataFrame(out_dict).stack().swaplevel()
+
+    def _load_grouped_coeff_info(self, raw_dict):
+        """Load grouped info of coefficients.
+
+        Only elements appearing at least once in the fit configs are kept.
+
+        Parameters
+        ----------
+        raw_dict: dict
+            raw dictionary with relevant information
+
+        Returns
+        _______
+        grouped_config: pandas.DataFrame
+            table with information by group
+
+        """
+        out_dict = {}
+        for group, entries in raw_dict.items():
+            out_dict[group] = {}
+            for val in entries:
+                if np.any([val[0] in fit.config["coefficients"] for fit in self.fits]):
                     out_dict[group][val[0]] = val[1]
 
             if len(out_dict[group]) == 0:
@@ -153,13 +181,19 @@ class Report:
         chi2_dict_group = {}
         chi2_replica = {}
         for fit in self.fits:
-            chi2_df, chi2_total_rep = chi2_cal.compute(
+            # This computes the chi2 by taking the mean of the replicas
+            _, chi2_total_rep = chi2_cal.compute(
                 fit.datasets,
                 fit.smeft_predictions,
             )
+
+            chi2_df_best, _ = chi2_cal.compute(
+                fit.datasets, fit.smeft_predictions_best_fit
+            )
+
             chi2_replica[fit.label] = chi2_total_rep
-            chi2_dict[fit.label] = chi2_cal.add_normalized_chi2(chi2_df)
-            chi2_dict_group[fit.label] = chi2_cal.group_chi2_df(chi2_df)
+            chi2_dict[fit.label] = chi2_cal.add_normalized_chi2(chi2_df_best)
+            chi2_dict_group[fit.label] = chi2_cal.group_chi2_df(chi2_df_best)
 
         if table:
             lines = chi2_cal.write(chi2_dict, chi2_dict_group)
@@ -234,12 +268,14 @@ class Report:
         bounds_dict = {}
         for fit in self.fits:
             bounds_dict[fit.label] = compute_confidence_level(
-                fit.results,
+                fit.results["samples"],
                 coeff_plt.coeff_info,
                 fit.has_posterior,
-                double_solution.get(fit.name, None)
-                if double_solution is not None
-                else None,
+                (
+                    double_solution.get(fit.name, None)
+                    if double_solution is not None
+                    else None
+                ),
             )
 
         if scatter_plot is not None:
@@ -290,7 +326,6 @@ class Report:
                 # if dbl solution requested, add the confidence intervals, otherwise just
                 # use the sum of the hdi intervals
                 if 1 in dbl_solution:
-
                     dbl_op = double_solution.get(fit.name, None)
                     idx = [
                         np.argwhere(
@@ -322,15 +357,19 @@ class Report:
         if posterior_histograms:
             _logger.info("Plotting : Posterior histograms")
             disjointed_lists = [
-                double_solution.get(fit.name, None)
-                if double_solution is not None
-                else None
+                (
+                    double_solution.get(fit.name, None)
+                    if double_solution is not None
+                    else None
+                )
                 for fit in self.fits
             ]
+            posterior_histograms["disjointed_lists"] = disjointed_lists
+
             coeff_plt.plot_posteriors(
-                [fit.results for fit in self.fits],
+                [fit.results["samples"] for fit in self.fits],
                 labels=[fit.label for fit in self.fits],
-                disjointed_lists=disjointed_lists,
+                **posterior_histograms,
             )
             figs_list.append("coefficient_histo")
 
@@ -345,7 +384,7 @@ class Report:
             coeff_plt.plot_contours_2d(
                 [
                     (
-                        fit.results[fit.coefficients.free_parameters.index],
+                        fit.results["samples"][fit.coefficients.free_parameters.index],
                         fit.config["use_quad"],
                     )
                     for fit in self.fits
@@ -388,7 +427,7 @@ class Report:
             _logger.info(f"Plotting correlations for: {fit.name}")
             coeff_to_keep = fit.coefficients.free_parameters.index
             plot_correlations(
-                fit.results[coeff_to_keep],
+                fit.results["samples"][coeff_to_keep],
                 latex_names=self.coeff_info.droplevel(0),
                 fig_name=f"{self.report}/correlations_{fit.name}",
                 title=fit.label if title else None,
@@ -453,12 +492,7 @@ class Report:
         self._append_section("PCA", figs=figs_list, links=links_list)
 
     def fisher(
-        self,
-        norm="coeff",
-        summary_only=True,
-        plot=None,
-        fit_list=None,
-        log=False,
+        self, norm="coeff", summary_only=True, plot=None, fit_list=None, log=False
     ):
         """Fisher information table and plots runner.
 
@@ -486,6 +520,7 @@ class Report:
         else:
             fit_list = self.fits
 
+        fishers = {}
         for fit in fit_list:
             compute_quad = fit.config["use_quad"]
             fisher_cal = FisherCalculator(fit.coefficients, fit.datasets, compute_quad)
@@ -496,10 +531,13 @@ class Report:
             fisher_cal.summary_table = fisher_cal.groupby_data(
                 fisher_cal.lin_fisher, self.data_info, norm, log
             )
+            fishers[fit.name] = fisher_cal
 
             # if necessary compute the quadratic Fisher
             if compute_quad:
-                fisher_cal.compute_quadratic(fit.results, fit.smeft_predictions)
+                fisher_cal.compute_quadratic(
+                    fit.results["samples"], fit.smeft_predictions
+                )
                 fisher_cal.quad_fisher = fisher_cal.normalize(
                     fisher_cal.quad_fisher, norm=norm, log=log
                 )
@@ -507,27 +545,44 @@ class Report:
                     fisher_cal.quad_fisher, self.data_info, norm, log
                 )
 
-            # Write down the table in latex
-            free_coeff_config = self.coeff_info.loc[
-                :, fit.coefficients.free_parameters.index
-            ]
             compile_tex(
                 self.report,
-                fisher_cal.write_grouped(
-                    free_coeff_config, self.data_info, summary_only
-                ),
+                fisher_cal.write_grouped(self.coeff_info, self.data_info, summary_only),
                 f"fisher_{fit.name}",
             )
             links_list.append((f"fisher_{fit.name}", f"Table {fit.label}"))
 
             if plot is not None:
                 fit_plot = copy.deepcopy(plot)
+                fit_plot.pop("together", None)
                 title = fit.label if fit_plot.pop("title") else None
-                fisher_cal.plot(
-                    free_coeff_config,
+                fisher_cal.plot_heatmap(
+                    self.coeff_info,
                     f"{self.report}/fisher_heatmap_{fit.name}",
                     title=title,
                     **fit_plot,
                 )
                 figs_list.append(f"fisher_heatmap_{fit.name}")
+
+        # plot both fishers
+        if plot.get("together", False):
+            fisher_1 = fishers[plot["together"][0]]
+            fisher_2 = fishers[plot["together"][1]]
+            fit_plot = copy.deepcopy(plot)
+            fit_plot.pop("together")
+
+            # show title of last fit
+            title = fit.label if fit_plot.pop("title") else None
+
+            # make heatmap of fisher_1 and fisher_2
+            fisher_2.plot_heatmap(
+                self.coeff_info,
+                f"{self.report}/fisher_heatmap_both",
+                title=title,
+                other=fisher_1,
+                labels=[fit.label for fit in self.fits],
+                **fit_plot,
+            )
+            figs_list.append(f"fisher_heatmap_both")
+
         self._append_section("Fisher", figs=figs_list, links=links_list)

@@ -170,14 +170,16 @@ chi2_tot_mult = chi2_1_mult + chi2_2_mult
 path_abs = pathlib.Path(__file__).parent.resolve()
 
 
-datasets_no_corr = ["data_test1", "data_test2"]
+datasets_no_corr = [
+    {"name": "data_test1", "order": "LO"},
+    {"name": "data_test2", "order": "LO"},
+]
 config_no_corr = {}
 config_no_corr["data_path"] = commondata_path
 config_no_corr["coefficients"] = coeffs_dict
 config_no_corr["result_path"] = commondata_path
 config_no_corr["result_ID"] = "test"
 config_no_corr["datasets"] = datasets_no_corr
-config_no_corr["order"] = "LO"
 config_no_corr["use_quad"] = True
 config_no_corr["use_theory_covmat"] = True
 config_no_corr["use_t0"] = False
@@ -270,14 +272,16 @@ chi2_corr_t0 = diff @ np.linalg.inv(tot_cov_corr_t0) @ diff.T
 chi2_corr_t0_ext = chi2_corr_t0 + chi2_ext
 
 
-datasets_corr = ["data_test3", "data_test4"]
+datasets_corr = [
+    {"name": "data_test3", "order": "LO"},
+    {"name": "data_test4", "order": "LO"},
+]
 config_corr = {}
 config_corr["data_path"] = commondata_path
 config_corr["coefficients"] = coeffs_dict
 config_corr["result_path"] = commondata_path
 config_corr["result_ID"] = "test"
 config_corr["datasets"] = datasets_corr
-config_corr["order"] = "LO"
 config_corr["use_quad"] = True
 config_corr["use_theory_covmat"] = True
 config_corr["theory_path"] = commondata_path
@@ -300,12 +304,13 @@ class TestOptimize_NS:
 
     # external chi2
     config_corr["external_chi2"] = {
-        "ExternalChi2": path_abs / "fake_external_chi2/test_ext_chi2.py"
+        "ExternalChi2": {"path": path_abs / "fake_external_chi2/test_ext_chi2.py"}
     }
 
     # add external chi2 to paths
     external_chi2 = config_corr["external_chi2"]
-    for class_name, module_path in external_chi2.items():
+    for class_name, module in external_chi2.items():
+        module_path = module["path"]
         path = pathlib.Path(module_path)
         base_path, stem = path.parent, path.stem
         sys.path = [str(base_path)] + sys.path
@@ -314,9 +319,12 @@ class TestOptimize_NS:
 
     def test_init(self):
         assert self.test_opt.results_path == commondata_path / "test"
+
         np.testing.assert_equal(
-            self.test_opt.loaded_datasets.ExpNames, datasets_no_corr
+            self.test_opt.loaded_datasets.ExpNames,
+            [dataset.get("name") for dataset in datasets_no_corr],
         )
+
         np.testing.assert_equal(
             self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]
         )
@@ -387,7 +395,8 @@ class TestOptimize_MC:
     def test_init(self):
         assert self.test_opt.results_path == commondata_path / "test"
         np.testing.assert_equal(
-            self.test_opt.loaded_datasets.ExpNames, datasets_no_corr
+            self.test_opt.loaded_datasets.ExpNames,
+            [dataset.get("name") for dataset in datasets_no_corr],
         )
         np.testing.assert_equal(
             self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]
@@ -436,12 +445,18 @@ class TestOptimize_MC:
                     data.LinearCorrections @ temp_coeff.value
                 )
                 if self.test_opt.use_quad:
-                    # derivative of the outher product
-                    quad_coeff_mat = np.outer(temp_coeff.value, coeff_val)
-                    quad_coeff_mat = np.maximum(quad_coeff_mat, quad_coeff_mat.T)
-                    np.fill_diagonal(quad_coeff_mat, 2 * np.diag(quad_coeff_mat))
+                    # Update quadratic corrections
+                    # computing the Jacobian of the quadratic part
                     new_quad_corrections[:, idx] = np.einsum(
-                        "ij,j->i", data.QuadraticCorrections, flatten(quad_coeff_mat)
+                        "ijk,j,k->i",
+                        data.QuadraticCorrections,
+                        temp_coeff.value,
+                        coeff_val,
+                    ) + np.einsum(
+                        "ijk,j,k->i",
+                        data.QuadraticCorrections,
+                        coeff_val,
+                        temp_coeff.value,
                     )
 
             jac = -new_linear_corrections - new_quad_corrections
@@ -486,9 +501,11 @@ class TestOptimize_A:
             opt.analytic.ALOptimizer.from_dict(config_quad)
 
     def test_init(self):
+
         assert self.test_opt.results_path == commondata_path / "test"
         np.testing.assert_equal(
-            self.test_opt.loaded_datasets.ExpNames, datasets_no_corr
+            self.test_opt.loaded_datasets.ExpNames,
+            [dataset.get("name") for dataset in datasets_no_corr],
         )
         np.testing.assert_equal(
             self.test_opt.coefficients.name, ["Op1", "Op2", "Op3", "Op4"]

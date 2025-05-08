@@ -1,4 +1,4 @@
- 
+
 /* start css.sty */
 .cmr-7{font-size:70%;}
 .cmmi-7{font-size:70%;font-style: italic;}
@@ -79,7 +79,7 @@ div.figure img {text-align:center;}
 .reversemarginpar{float:left;}
 table.equation {width:100%;}
 .equation td{text-align:center; }
-td.equation { margin-top:1em; margin-bottom:1em; } 
+td.equation { margin-top:1em; margin-bottom:1em; }
 td.equation-label { width:5%; text-align:center; }
 td.eqnarray4 { width:5%; white-space: normal; }
 td.eqnarray2 { width:5%; }
@@ -153,4 +153,3 @@ table[rules] {border-left:solid black 0.4pt; border-right:solid black 0.4pt; }
 div.array {text-align:center;}
 .rotatebox{display: inline-block;}
 /* end css.sty */
-

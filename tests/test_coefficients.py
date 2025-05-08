@@ -58,7 +58,6 @@ coeff_dict_free = {
 
 
 class TestCoefficient:
-
     name = "c_a"
     minimum = -1
     maximum = 1
@@ -66,14 +65,12 @@ class TestCoefficient:
     constrain_test = {"c_b": np.array([-0.1, 1])}
 
     def test_init(self):
-
         assert self.c_test.name == self.name
         assert self.c_test.minimum == self.minimum
         assert self.c_test.maximum == self.maximum
         assert self.c_test.value <= self.maximum and self.c_test.value >= self.minimum
 
     def test_build_additive_factor_dict(self):
-
         np.testing.assert_equal(
             self.constrain_test,
             coefficients.Coefficient.build_additive_factor_dict(
@@ -105,16 +102,13 @@ class TestCoefficient:
 
 
 class TestCoefficientManager:
-
     c_list = coefficients.CoefficientManager.from_dict(coeff_dict)
 
     def test_init(self):
-
         assert self.c_list[0].name == "c_a"
         np.testing.assert_equal(self.c_list.minimum, [-2, -1, -2, -3, -4, -5, -5])
 
     def test_free_parameters(self):
-
         c_list_free = coefficients.CoefficientManager.from_dict(coeff_dict_free)
         np.testing.assert_equal(self.c_list.free_parameters.index, c_list_free.name)
 

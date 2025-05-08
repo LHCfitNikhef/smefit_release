@@ -17,9 +17,8 @@ here = pathlib.Path(__file__).parent
 
 dataset = load_datasets(
     commondata_path,
-    datasets=["data_test5"],
+    datasets=[{"name": "data_test5", "order": "NLO"}],
     operators_to_keep=operators_to_keep,
-    order="NLO",
     use_quad=True,
     use_theory_covmat=True,
     use_t0=False,
@@ -55,7 +54,6 @@ coefficients = CoefficientManager.from_dict(coeff_dict)
 
 
 def test_make_sym_matrix():
-
     vals = np.array([[1, 2, 3, 4, 5, 6], [7, 8, 9, 10, 11, 12]])
     mat = pca.make_sym_matrix(vals, 3)
     np.testing.assert_equal(mat[:, :, 0], mat[:, :, 0].T)
@@ -71,7 +69,6 @@ def test_make_sym_matrix():
 
 
 def test_impose_constrain():
-
     updated_lincorr, updated_quadcorr = pca.impose_constrain(
         dataset, coefficients, update_quad=True
     )
@@ -84,16 +81,16 @@ def test_impose_constrain():
     np.testing.assert_equal(updated_lincorr.shape, (3, 2))
     np.testing.assert_equal(updated_lincorr, test_updated_lincorr)
 
-    op1op1 = dataset.QuadraticCorrections[:, 0]
-    op1op2 = dataset.QuadraticCorrections[:, 1]
-    op1op3 = dataset.QuadraticCorrections[:, 2]
-    op1op4 = dataset.QuadraticCorrections[:, 3]
-    op2op2 = dataset.QuadraticCorrections[:, 4]
-    op2op3 = dataset.QuadraticCorrections[:, 5]
-    op2op4 = dataset.QuadraticCorrections[:, 6]
-    op3op3 = dataset.QuadraticCorrections[:, 7]
-    op3op4 = dataset.QuadraticCorrections[:, 8]
-    op4op4 = dataset.QuadraticCorrections[:, 9]
+    op1op1 = dataset.QuadraticCorrections[:, 0, 0]
+    op1op2 = dataset.QuadraticCorrections[:, 0, 1]
+    op1op3 = dataset.QuadraticCorrections[:, 0, 2]
+    op1op4 = dataset.QuadraticCorrections[:, 0, 3]
+    op2op2 = dataset.QuadraticCorrections[:, 1, 1]
+    op2op3 = dataset.QuadraticCorrections[:, 1, 2]
+    op2op4 = dataset.QuadraticCorrections[:, 1, 3]
+    op3op3 = dataset.QuadraticCorrections[:, 2, 2]
+    op3op4 = dataset.QuadraticCorrections[:, 2, 3]
+    op4op4 = dataset.QuadraticCorrections[:, 3, 3]
 
     d1 = op1op1 + c13**2 * op3op3 + c13 * op1op3
     d2 = op2op2 + c23**2 * op3op3 + c23 * op2op3
@@ -104,8 +101,9 @@ def test_impose_constrain():
     test_updated_quadcorr = pca.make_sym_matrix(
         np.array([d1, d12, d14, d2, d24, d4]).T, 3
     )
+
     np.testing.assert_equal(test_updated_quadcorr.shape, (3, 3, 2))
-    np.testing.assert_allclose(updated_quadcorr, test_updated_quadcorr, rtol=1e-15)
+    np.testing.assert_allclose(updated_quadcorr, test_updated_quadcorr, rtol=1e-14)
 
 
 def test_pca_eig():
@@ -125,7 +123,6 @@ def test_pca_eig():
 
 
 class TestRotateToPca:
-
     fake_result_path = here / "fake_results" / "test_fit"
     fake_result_path.mkdir(exist_ok=True)
     rot_to_pca = pca.RotateToPca(
@@ -179,9 +176,8 @@ class TestRotateToPca:
         pca_coeffs = CoefficientManager.from_dict(pca_coeffs_dict)
         rotated_datasets = load_datasets(
             commondata_path,
-            datasets=["data_test5"],
+            datasets=[{"name": "data_test5", "order": "NLO"}],
             operators_to_keep=["PC00", "PC01", "PC02", "Op3"],
-            order="NLO",
             use_quad=True,
             use_theory_covmat=True,
             use_t0=False,

@@ -8,7 +8,6 @@ def find_xrange(samples, threshold_x):
     x_high = []
 
     for sample in samples:
-
         n, bins = np.histogram(
             sample,
             bins="fd",

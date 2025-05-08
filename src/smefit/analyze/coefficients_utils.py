@@ -148,7 +148,7 @@ class CoefficientsPlotter:
             )
 
     def _get_suplblots(self, figsize):
-        groups = self.coeff_info.groupby(level=0).count()
+        groups = self.coeff_info.groupby(level=0, sort=False).count()
         _, axs = plt.subplots(
             groups.size,
             1,
@@ -180,6 +180,7 @@ class CoefficientsPlotter:
         colors = plt.get_cmap("tab20")
 
         def plot_error_bars(ax, vals, cnt, i, label=None):
+
             ax.errorbar(
                 x=vals.mid,
                 y=Y[cnt] + y_shift[i],
@@ -202,8 +203,13 @@ class CoefficientsPlotter:
             # loop over fits
             for i, (fit_name, bound_df) in enumerate(bounds.items()):
                 label = fit_name
+                bound_df_top_to_bottom = bound_df[g].iloc[
+                    :, ::-1
+                ]  # reverse order to plot from top to bottom in ax
                 # loop on coeffs
-                for cnt, (coeff_name, coeff) in enumerate(bound_df[g].items()):
+                for cnt, (coeff_name, coeff) in enumerate(
+                    bound_df_top_to_bottom.items()
+                ):
                     # maybe there are no double solutions
                     key_not_found = f"{coeff_name} posterior is not found in {fit_name}"
                     try:
@@ -222,9 +228,10 @@ class CoefficientsPlotter:
                     except KeyError:
                         pass
 
-            # y thicks
+            # y ticks
             ax.set_ylim(-2, Y[-1] + 2)
-            ax.set_yticks(Y, self.coeff_info[g], fontsize=13)
+            # also position y tick labels from top to bottom
+            ax.set_yticks(Y[::-1], self.coeff_info[g], fontsize=13)
             # x grid
             ax.vlines(0, -2, Y[-1] + 2, ls="dashed", color="black", alpha=0.7)
             if x_log:
@@ -247,7 +254,16 @@ class CoefficientsPlotter:
 
         self._plot_logo(axs[-1])
         axs[-1].set_xlabel(r"$c_i/\Lambda^2\ ({\rm TeV}^{-2})$", fontsize=20)
-        axs[0].legend(loc=0, frameon=False, prop={"size": 13})
+        handles, labels = axs[-1].get_legend_handles_labels()
+        axs[0].legend(
+            handles,
+            labels,
+            loc="lower center",
+            bbox_to_anchor=(0, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 13},
+            ncol=2,
+        )
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_central.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_central.png")
@@ -260,7 +276,6 @@ class CoefficientsPlotter:
         x_log=True,
         x_min=1e-2,
         x_max=500,
-        legend_loc="best",
     ):
         """
         Plot error bars at given confidence level
@@ -286,8 +301,11 @@ class CoefficientsPlotter:
         df = pd.DataFrame(error)
         groups, axs = self._get_suplblots(figsize)
 
-        for ax, (g, bars) in zip(axs, df.groupby(level=0)):
-            bars.droplevel(0).plot(
+        for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
+            bars_top_to_bottom = bars.iloc[
+                ::-1
+            ]  # reverse order to plot from top to bottom in ax
+            bars_top_to_bottom.droplevel(0).plot(
                 kind="barh",
                 width=0.6,
                 ax=ax,
@@ -314,19 +332,18 @@ class CoefficientsPlotter:
         axs[-1].set_xlabel(
             r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
         )
-        axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
+        axs[0].legend(
+            loc="lower center",
+            bbox_to_anchor=(0, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 13},
+            ncol=2,
+        )
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_bar.png")
 
-    def plot_pull(
-        self,
-        pull,
-        x_min=-3,
-        x_max=3,
-        figsize=(10, 15),
-        legend_loc="best",
-    ):
+    def plot_pull(self, pull, x_min=-3, x_max=3, figsize=(10, 15)):
         """
         Plot error bars at given confidence level
 
@@ -347,8 +364,11 @@ class CoefficientsPlotter:
         df = pd.DataFrame(pull)
         groups, axs = self._get_suplblots(figsize)
 
-        for ax, (g, bars) in zip(axs, df.groupby(level=0)):
-            bars.droplevel(0).plot(
+        for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
+            bars_top_to_bottom = bars.iloc[
+                ::-1
+            ]  # reverse order to plot from top to bottom in ax
+            bars_top_to_bottom.droplevel(0).plot(
                 kind="barh",
                 width=0.6,
                 ax=ax,
@@ -361,7 +381,13 @@ class CoefficientsPlotter:
 
         self._plot_logo(axs[-1])
         axs[-1].set_xlabel(r"${\rm Fit\:Residual\:}(\sigma)$", fontsize=20)
-        axs[0].legend(loc=legend_loc, frameon=False, prop={"size": 13})
+        axs[0].legend(
+            loc="lower center",
+            bbox_to_anchor=(0, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 13},
+            ncol=2,
+        )
         plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_pull.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_pull.png")
@@ -567,7 +593,6 @@ class CoefficientsPlotter:
         filled_start_angle = 90 - 180 / len(self.coeff_info)
 
         for i, op_type in enumerate(class_order):
-
             filled_end_angle = (
                 angle_sweep[i] * 360 + filled_start_angle
             )  # End angle in degrees
@@ -623,7 +648,39 @@ class CoefficientsPlotter:
         )
         plt.savefig(f"{self.report_folder}/spider_plot.png", bbox_inches="tight")
 
-    def plot_posteriors(self, posteriors, labels, disjointed_lists=None):
+    def compute_rows_and_columns(self, nrows=-1, ncols=-1):
+        """Compute number of rows and columns for the plot layout
+        Parameters
+        ----------
+        nrows : int, optional
+            Number of rows in the plot layout. Default is -1, which means
+            that the number of rows will be calculated based on the
+            number of columns.
+        ncols : int, optional
+            Number of columns in the plot layout. Default is -1, which means
+            that the number of columns will be calculated based on the
+            number of rows.
+        Returns
+        -------
+        nrows : int
+            Number of rows in the plot layout.
+        ncols : int
+            Number of columns in the plot layout.
+        """
+
+        if nrows == -1 and ncols == -1:  # square layout
+            nrows = ncols = int(np.sqrt(self.npar)) + 1
+        elif ncols != -1:  # calculate nrows based on ncols
+            nrows = int(np.ceil(self.npar / ncols))
+        else:  # calculate ncols based on nrows
+            ncols = int(np.ceil(self.npar / nrows))
+
+        if (nrows * ncols) % self.npar == 0:
+            nrows += 1  # add an extra row to fit the logo
+
+        return nrows, ncols
+
+    def plot_posteriors(self, posteriors, labels, **kwargs):
         """Plot posteriors histograms.
 
         Parameters
@@ -632,29 +689,36 @@ class CoefficientsPlotter:
                 posterior distributions per fit and coefficient
             labels : list
                 list of fit names
-            disjointed_list: list, optional
-                list of coefficients with double solutions per fit
+            kwargs: dict
+                keyword arguments for the plot
         """
         colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
-        grid_size = int(np.sqrt(self.npar)) + 1
-        fig = plt.figure(figsize=(grid_size * 4, grid_size * 4))
-        # loop on coefficients
 
+        nrows, ncols = self.compute_rows_and_columns(
+            kwargs.get("nrows", -1), kwargs.get("ncols", -1)
+        )
+
+        subplot_size = 4
+        fig = plt.figure(figsize=(ncols * subplot_size, nrows * subplot_size))
+
+        # loop on coefficients
         for idx, ((_, l), latex_name) in enumerate(self.coeff_info.items()):
-            try:
-                ax = plt.subplot(grid_size, grid_size, idx + 1)
-            except ValueError:
-                ax = plt.subplot(grid_size, grid_size, idx + 1)
+
+            ax = plt.subplot(nrows, ncols, idx + 1)
+
             # loop on fits
             for clr_idx, posterior in enumerate(posteriors):
                 if l not in posterior:
                     continue
                 solution = posterior[l]
 
-                if disjointed_lists[clr_idx] is not None and l in disjointed_lists[clr_idx]:
+                if (
+                    kwargs["disjointed_lists"][clr_idx] is not None
+                    and l in kwargs["disjointed_lists"][clr_idx]
+                ):
                     solution1, solution2 = split_solution(posterior[l])
-                    bins_solution1 = np.histogram_bin_edges(solution1, bins='fd')
-                    bins_solution2 = np.histogram_bin_edges(solution2, bins='fd')
+                    bins_solution1 = np.histogram_bin_edges(solution1, bins="fd")
+                    bins_solution2 = np.histogram_bin_edges(solution2, bins="fd")
 
                     ax.hist(
                         solution,
@@ -690,28 +754,38 @@ class CoefficientsPlotter:
             if len(axes.get_legend_handles_labels()[0]) > len(lines):
                 lines, labels = axes.get_legend_handles_labels()
 
+        # fontsize is normalised to 25 for 5 columns and subplot size 4
+        legend_font_size = 25 * (ncols * subplot_size) / 20
+        legend_font_size_inch = legend_font_size / 72  # 72 pt = 1 inch
+
         fig.legend(
             lines,
             labels,
             ncol=len(posteriors),
-            prop={"size": 25 * (grid_size * 4) / 20},
+            prop={"size": legend_font_size},
             bbox_to_anchor=(0.5, 1.0),
             loc="upper center",
             frameon=False,
         )
 
-        if self.npar % grid_size == 0:
-            ax_logo_nr = self.npar + grid_size
+        if self.npar % (ncols * nrows) == 0:
+            ax_logo_nr = self.npar + ncols
         else:
-            ax_logo_nr = self.npar + (grid_size - self.npar % grid_size)
+            ax_logo_nr = self.npar + (ncols - self.npar % ncols)
 
-        ax_logo = plt.subplot(grid_size, grid_size, ax_logo_nr)
+        ax_logo = plt.subplot(nrows, ncols, ax_logo_nr)
 
         plt.axis("off")
         self._plot_logo(ax_logo, [0, 1, 0.6, 1])
 
+        rel_legend_size = legend_font_size_inch / (nrows * subplot_size)
         fig.tight_layout(
-            rect=[0, 0.05 * (5.0 / grid_size), 1, 1 - 0.08 * (5.0 / grid_size)]
+            rect=[
+                0.0,
+                0.0,
+                1.0,
+                1 - 2 * rel_legend_size,
+            ]  # make room for the legend at the top of the figure
         )
 
         plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
@@ -741,7 +815,7 @@ class CoefficientsPlotter:
         """
 
         if double_solution is None:
-            double_solution = {"fit1": [], "fit2": []}
+            double_solution = {f"fit{i+1}": [] for i in range(len(posteriors))}
 
         if dofs_show is not None:
             posteriors = [
@@ -828,9 +902,9 @@ class CoefficientsPlotter:
                     kde=kde,
                     clr_idx=clr_idx,
                     confidence_level=cl,
-                    double_solution=list(double_solution.values())[clr_idx]
-                    if kde
-                    else None,
+                    double_solution=(
+                        list(double_solution.values())[clr_idx] if kde else None
+                    ),
                 )
                 hndls_all.append(hndls_contours)
 
@@ -860,7 +934,7 @@ class CoefficientsPlotter:
 
         # in case n_par > 2, put legend outside subplot
         if n_par > 2:
-            ax = fig.add_subplot(grid[0, -1])
+            ax = fig.add_subplot(grid[0, 1])
             ax.axis("off")
 
         ax.legend(
@@ -875,13 +949,21 @@ class CoefficientsPlotter:
             title_fontsize=24,
         )
 
-        ax.set_title(
-            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.L.\:intervals}}$",
-            fontsize=18,
+        ax_logo = fig.add_subplot(grid[0, -1])
+        ax_logo.axis("off")
+        self._plot_logo(ax_logo, extent=[0.05, 0.95, 0.7, 1])
+
+        ax.text(
+            0.05,
+            0.95,
+            rf"$\mathrm{{Marginalised}}\:{cl}\:\%\:\mathrm{{C.I.}}$",
+            fontsize=24,
+            transform=ax.transAxes,
+            verticalalignment="top",
         )
-        grid.tight_layout(fig)
-        fig.savefig(f"{self.report_folder}/contours_2d.pdf")
-        fig.savefig(f"{self.report_folder}/contours_2d.png")
+
+        fig.savefig(f"{self.report_folder}/contours_2d.pdf", bbox_inches="tight")
+        fig.savefig(f"{self.report_folder}/contours_2d.png", bbox_inches="tight")
 
     def write_cl_table(self, bounds, round_val=3):
         """Coefficients latex table"""
