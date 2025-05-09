@@ -213,7 +213,14 @@ class CoefficientsPlotter:
         return groups, axs
 
     def plot_coeffs(
-        self, bounds, figsize=(10, 15), x_min=-400, x_max=400, x_log=True, lin_thr=1e-1
+        self,
+        bounds,
+        figsize=(10, 15),
+        x_min=-400,
+        x_max=400,
+        x_log=True,
+        lin_thr=1e-1,
+        ci_type="eti",
     ):
         """
         Plot central value + 95% CL errors
