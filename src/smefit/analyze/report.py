@@ -227,6 +227,7 @@ class Report:
         logo=True,
         table=None,
         double_solution=None,
+        ci_type="eti",
     ):
         """Coefficients plots and table runner.
 
@@ -248,6 +249,8 @@ class Report:
             kwarg the latex confidence level table per coefficient or None
         double_solution: dict
             operator with double solution per fit
+        ci_type: str
+            type of confidence interval to compute, either 'eti', 'hdi' or 'hdi_mono'
 
         """
         links_list = None
