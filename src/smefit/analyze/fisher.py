@@ -450,7 +450,7 @@ class FisherCalculator:
                         )
                         ax.add_patch(triangle2)
 
-                if elem_1 > 0:
+                if elem_1 is not None:
 
                     ax.text(
                         x - delta_shift,
@@ -576,6 +576,11 @@ class FisherCalculator:
         if column_names is not None:
             custom_ordering = [list(column.keys())[0] for column in column_names]
             fisher_dfs = [fisher_df.loc[custom_ordering] for fisher_df in fisher_dfs]
+            if quad_fisher_df is not None:
+                quad_fisher_dfs = [
+                    quad_fisher_df.loc[custom_ordering]
+                    for quad_fisher_df in quad_fisher_dfs
+                ]
             x_labels = [list(column.values())[0] for column in column_names]
         else:
             x_labels = [
