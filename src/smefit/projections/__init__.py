@@ -268,10 +268,13 @@ class Projection:
             cv_theory = cv[idxs]
 
             # ratio SM to experimental central value
+
             ratio_sm_exp = cv_theory / central_values
 
             # set negative ratios to one
-            ratio_sm_exp = jnp.where(ratio_sm_exp < 0, 1, ratio_sm_exp)
+            ratio_sm_exp = jnp.where(
+                jnp.logical_or(ratio_sm_exp <= 0, central_values == 0), 1, ratio_sm_exp
+            )
 
             # rescale the statistical uncertainty to the SM
             stat = np.asarray(data_dict["statistical_error"]) * np.sqrt(ratio_sm_exp)
@@ -285,7 +288,11 @@ class Projection:
                 name_sys = data_dict["sys_names"]
 
                 # express systematics as percentage values of the central values
-                sys_mult = sys_add / central_values * 1e2
+                sys_mult = np.zeros_like(sys_add, dtype=float)
+                np.divide(
+                    sys_add, central_values, out=sys_mult, where=central_values != 0
+                )
+                sys_mult *= 100
 
                 # Identify add and mult systematics
                 # and replace the mult ones with corresponding value computed

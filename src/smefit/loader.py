@@ -719,7 +719,8 @@ def load_datasets(
     exp_covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
 
     # replicas always generated using the experimental covmat, no t0
-    replica = np.random.multivariate_normal(exp_data, exp_covmat)
+    # replica = np.random.multivariate_normal(exp_data, exp_covmat)
+    replica = None
     if use_t0:
         fit_covmat = (
             covmat_from_systematics(stat_error, sys_error_t0) + theory_covariance
