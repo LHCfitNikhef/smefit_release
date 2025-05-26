@@ -106,8 +106,33 @@ class FisherCalculator:
         delta_th = self.datasets.Commondata - np.mean(smeft_predictions, axis=0)
         # c, c**2 mean (n_free_op)
         posterior_df = posterior_df[self.free_parameters]
-        c_mean = np.mean(posterior_df.values, axis=0)
-        c2_mean = np.mean(posterior_df.values**2, axis=0)
+        c_best = np.mean(posterior_df.values, axis=0)
+
+        # self.new_LinearCorrections # shape = (ncoeff, ndat)
+        quad_symmetrised = 0.5 * (
+            np.einsum("ij...->ij...", self.new_QuadraticCorrections)
+            + np.einsum("ij...->ji...", self.new_QuadraticCorrections)
+        )
+        invcovmat = self.datasets.InvCovMat
+
+        A_im = self.new_LinearCorrections + 2 * np.einsum(
+            "l, ilm -> im", c_best, quad_symmetrised
+        )
+
+        fisher_quad_all = np.einsum("im, mn, jn", A_im, invcovmat, A_im)
+        fisher_quad_per_dataset = []
+        cnt = 0
+        invcovmat_block = np.zeros_like(invcovmat)
+        for ndat in self.datasets.NdataExp:
+            idxs = slice(cnt, cnt + ndat)
+            invcovmat_block[idxs, idxs] = invcovmat[idxs, idxs]
+            fisher_dataset = np.einsum(
+                "im, mn, jn", A_im[:, idxs], invcovmat[idxs, idxs], A_im[:, idxs]
+            )
+            fisher_quad_per_dataset.append(fisher_dataset)
+            cnt += ndat
+        fisher_quad_per_dataset = np.array(fisher_quad_per_dataset)
+        # TODO: keep the datasets
 
         # squared quad corr
         diag_corr = np.diagonal(self.new_QuadraticCorrections, axis1=0, axis2=1)
