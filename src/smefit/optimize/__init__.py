@@ -178,10 +178,7 @@ class Optimizer:
                 chi2_ext = my_chi2_class(
                     coefficients=self.coefficients, rgemat=None, **module
                 )
-
-            ext_chi2_modules.append(
-                coefficients=chi2_ext.compute_chi2, rgemat=None, **module
-            )
+            ext_chi2_modules.append(chi2_ext.compute_chi2)
 
         return ext_chi2_modules
 
