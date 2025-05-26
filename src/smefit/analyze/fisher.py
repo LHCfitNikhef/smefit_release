@@ -99,12 +99,7 @@ class FisherCalculator:
 
     def compute_quadratic(self, posterior_df, smeft_predictions):
         """Compute quadratic Fisher information."""
-        quad_fisher = []
 
-        # compute some average values over the replicas
-        # delta exp - th (n_dat)
-        delta_th = self.datasets.Commondata - np.mean(smeft_predictions, axis=0)
-        # c, c**2 mean (n_free_op)
         posterior_df = posterior_df[self.free_parameters]
         c_best = np.mean(posterior_df.values, axis=0)
 
@@ -113,77 +108,24 @@ class FisherCalculator:
             np.einsum("ij...->ij...", self.new_QuadraticCorrections)
             + np.einsum("ij...->ji...", self.new_QuadraticCorrections)
         )
-        invcovmat = self.datasets.InvCovMat
+        covmat = self.datasets.CovMat
 
-        A_im = self.new_LinearCorrections + 2 * np.einsum(
+        A = self.new_LinearCorrections + 2 * np.einsum(
             "l, ilm -> im", c_best, quad_symmetrised
         )
 
-        fisher_quad_all = np.einsum("im, mn, jn", A_im, invcovmat, A_im)
-        fisher_quad_per_dataset = []
+        fisher_quad_all = np.einsum("im, mn, jn", A, covmat, A)
+        quad_fisher = []
         cnt = 0
-        invcovmat_block = np.zeros_like(invcovmat)
+
+        # this neglects correlations across datasets
         for ndat in self.datasets.NdataExp:
             idxs = slice(cnt, cnt + ndat)
-            invcovmat_block[idxs, idxs] = invcovmat[idxs, idxs]
+            invcovmat_dataset = np.linalg.inv(covmat[idxs, idxs])
             fisher_dataset = np.einsum(
-                "im, mn, jn", A_im[:, idxs], invcovmat[idxs, idxs], A_im[:, idxs]
+                "im, mn, jn", A[:, idxs], invcovmat_dataset, A[:, idxs]
             )
-            fisher_quad_per_dataset.append(fisher_dataset)
-            cnt += ndat
-        fisher_quad_per_dataset = np.array(fisher_quad_per_dataset)
-        # TODO: keep the datasets
-
-        # squared quad corr
-        diag_corr = np.diagonal(self.new_QuadraticCorrections, axis1=0, axis2=1)
-        off_diag_corr = self.new_QuadraticCorrections
-        diag_index = np.diag_indices(self.free_parameters.size)
-        off_diag_corr[diag_index[0], diag_index[1], :] = 0
-
-        # additional tensors
-        tmp = np.einsum("ri,ijk->rjk", posterior_df, off_diag_corr, optimize="optimal")
-        A_all = np.mean(tmp, axis=0)  # (n_free_op, n_dat)
-        B_all = (
-            np.einsum("rj,rjk->jk", posterior_df, tmp, optimize="optimal")
-            / posterior_df.shape[0]
-        )  # (n_free_op, n_dat)
-        D_all = (
-            np.einsum("rjk,rjl->jkl", tmp, tmp, optimize="optimal")
-            / posterior_df.shape[0]
-        )  # (n_free_op, n_dat, n_dat)
-
-        cnt = 0
-        for ndat in track(
-            self.datasets.NdataExp,
-            description="[green]Computing quadratic Fisher information per dataset...",
-        ):
-            # slice the big matrices
-            idxs = slice(cnt, cnt + ndat)
-            quad_corr = diag_corr[idxs, :].T
-            lin_corr = self.new_LinearCorrections[:, idxs]
-            inv_corr = self.datasets.InvCovMat[idxs, idxs]
-            delta = delta_th[idxs]
-            A = A_all[:, idxs]
-            B = B_all[:, idxs]
-            D = D_all[:, idxs, idxs]
-
-            # (n_free_op)
-            fisher_row = (
-                -quad_corr @ inv_corr @ delta.T
-                - delta @ inv_corr @ quad_corr.T
-                + lin_corr @ inv_corr @ A.T
-                + A @ inv_corr @ lin_corr.T
-                + 2
-                * c_mean
-                @ (
-                    lin_corr @ inv_corr @ quad_corr.T
-                    + quad_corr @ inv_corr @ lin_corr.T
-                )
-                + 2 * (B @ inv_corr @ quad_corr.T + quad_corr @ inv_corr @ B.T)
-                + 4 * c2_mean @ quad_corr @ inv_corr @ quad_corr.T
-                + np.einsum("ikl,kl -> i", D, inv_corr, optimize="optimal")
-            )
-            quad_fisher.append(np.diag(fisher_row))
+            quad_fisher.append(np.diag(fisher_dataset))
             cnt += ndat
 
         self.quad_fisher = pd.DataFrame(
