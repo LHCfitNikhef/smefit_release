@@ -59,13 +59,15 @@ class FisherCalculator:
         coefficient manager
     datasets: smefit.loader.DataTuple
         DataTuple object with all the data information
-
+    best_fit_point: pandas.DataFrame
+        best fit point of the coefficients
     """
 
-    def __init__(self, coefficients, datasets, compute_quad):
+    def __init__(self, coefficients, datasets, best_fit_point, compute_quad):
         self.coefficients = coefficients
         self.free_parameters = self.coefficients.free_parameters.index
         self.datasets = datasets
+        self.best_fit_point = best_fit_point
 
         # update eft corrections with the constraints
         if compute_quad:
@@ -97,13 +99,11 @@ class FisherCalculator:
             fisher_tab, index=self.datasets.ExpNames, columns=self.free_parameters
         )
 
-    def compute_quadratic(self, posterior_df, smeft_predictions):
+    def compute_quadratic(self):
         """Compute quadratic Fisher information."""
 
-        posterior_df = posterior_df[self.free_parameters]
-        c_best = np.mean(posterior_df.values, axis=0)
+        best_fit_point = self.best_fit_point[self.free_parameters].values.flatten()
 
-        # self.new_LinearCorrections # shape = (ncoeff, ndat)
         quad_symmetrised = 0.5 * (
             np.einsum("ij...->ij...", self.new_QuadraticCorrections)
             + np.einsum("ij...->ji...", self.new_QuadraticCorrections)
@@ -111,7 +111,7 @@ class FisherCalculator:
         covmat = self.datasets.CovMat
 
         A = self.new_LinearCorrections + 2 * np.einsum(
-            "l, ilm -> im", c_best, quad_symmetrised
+            "l, ilm -> im", best_fit_point, quad_symmetrised
         )
 
         fisher_quad_all = np.einsum("im, mn, jn", A, covmat, A)
@@ -129,7 +129,7 @@ class FisherCalculator:
             cnt += ndat
 
         self.quad_fisher = pd.DataFrame(
-            quad_fisher + self.lin_fisher.values,
+            quad_fisher,
             index=self.datasets.ExpNames,
             columns=self.free_parameters,
         )
@@ -336,7 +336,7 @@ class FisherCalculator:
 
     @staticmethod
     def set_ticks(ax, yticks, xticks, latex_names, x_labels):
-        ax.set_yticks(yticks, labels=latex_names[::-1], fontsize=22)
+        ax.set_yticks(yticks, labels=latex_names[::-1], fontsize=16)
         ax.set_xticks(
             xticks,
             labels=x_labels,
@@ -417,7 +417,7 @@ class FisherCalculator:
                         )
                         ax.add_patch(triangle2)
 
-                if elem_1 is not None:
+                if elem_1 > 0:
 
                     ax.text(
                         x - delta_shift,
@@ -577,7 +577,7 @@ class FisherCalculator:
             latex_names,
             x_labels,
         )
-        ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
+        ax.set_title(r"\rm Linear", fontsize=22, y=-0.04)
         cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
         colour_bar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1)
         colour_bar.ax.tick_params(labelsize=22)
@@ -593,13 +593,14 @@ class FisherCalculator:
                 latex_names,
                 x_labels,
             )
-            ax.set_title(r"\rm Quadratic", fontsize=20, y=-0.08)
+            ax.set_title(r"\rm Quadratic", fontsize=22, y=-0.04)
             cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
             colour_bar = fig.colorbar(
                 mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1
             )
+            colour_bar.ax.tick_params(labelsize=22)
 
-        fig.subplots_adjust(top=0.9)
+        # fig.subplots_adjust(top=0.9)
 
         colour_bar.set_label(
             r"${\rm Normalized\ Value}$",
