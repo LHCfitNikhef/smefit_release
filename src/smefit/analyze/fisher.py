@@ -104,17 +104,17 @@ class FisherCalculator:
 
         best_fit_point = self.best_fit_point[self.free_parameters].values.flatten()
 
+        # symmeterise the quadratic corrections s.t. each off diagonal component carries half ot the total
         quad_symmetrised = 0.5 * (
             np.einsum("ij...->ij...", self.new_QuadraticCorrections)
             + np.einsum("ij...->ji...", self.new_QuadraticCorrections)
         )
         covmat = self.datasets.CovMat
 
-        A = self.new_LinearCorrections + 2 * np.einsum(
+        deltaT = self.new_LinearCorrections + 2 * np.einsum(
             "l, ilm -> im", best_fit_point, quad_symmetrised
         )
 
-        fisher_quad_all = np.einsum("im, mn, jn", A, covmat, A)
         quad_fisher = []
         cnt = 0
 
@@ -123,10 +123,12 @@ class FisherCalculator:
             idxs = slice(cnt, cnt + ndat)
             invcovmat_dataset = np.linalg.inv(covmat[idxs, idxs])
             fisher_dataset = np.einsum(
-                "im, mn, jn", A[:, idxs], invcovmat_dataset, A[:, idxs]
+                "im, mn, jn", deltaT[:, idxs], invcovmat_dataset, deltaT[:, idxs]
             )
             quad_fisher.append(np.diag(fisher_dataset))
             cnt += ndat
+        # the full fisher is instead given by
+        # fisher_quad_all = np.einsum("im, mn, jn", A, covmat, A)
 
         self.quad_fisher = pd.DataFrame(
             quad_fisher,
@@ -336,12 +338,12 @@ class FisherCalculator:
 
     @staticmethod
     def set_ticks(ax, yticks, xticks, latex_names, x_labels):
-        ax.set_yticks(yticks, labels=latex_names[::-1], fontsize=16)
+        ax.set_yticks(yticks, labels=latex_names[::-1], fontsize=15)
         ax.set_xticks(
             xticks,
             labels=x_labels,
             rotation=90,
-            fontsize=22,
+            fontsize=15,
         )
         ax.xaxis.set_ticks_position("top")
         ax.tick_params(which="major", top=False, bottom=False, left=False)
@@ -401,7 +403,7 @@ class FisherCalculator:
                             f"{elem_2:.1f}",
                             va="center",
                             ha="center",
-                            fontsize=9,
+                            fontsize=10,
                         )
 
                         # Create a triangle patch for the second element
@@ -425,7 +427,7 @@ class FisherCalculator:
                         f"{elem_1:.1f}",
                         va="center",
                         ha="center",
-                        fontsize=9,
+                        fontsize=10,
                     )
                     if df_2 is not None:
 
@@ -507,7 +509,6 @@ class FisherCalculator:
 
         if other is not None:
 
-            title = ""
             fisher_df_other = other.summary_table if summary_only else other.lin_fisher
             quad_fisher_df_other = (
                 other.summary_HOtable if summary_only else other.quad_fisher
@@ -577,7 +578,7 @@ class FisherCalculator:
             latex_names,
             x_labels,
         )
-        ax.set_title(r"\rm Linear", fontsize=22, y=-0.04)
+        ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
         cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
         colour_bar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1)
         colour_bar.ax.tick_params(labelsize=22)
@@ -593,23 +594,23 @@ class FisherCalculator:
                 latex_names,
                 x_labels,
             )
-            ax.set_title(r"\rm Quadratic", fontsize=22, y=-0.04)
+            ax.set_title(r"\rm Quadratic", fontsize=20, y=-0.08)
             cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
             colour_bar = fig.colorbar(
                 mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1
             )
             colour_bar.ax.tick_params(labelsize=22)
 
-        # fig.subplots_adjust(top=0.9)
+        fig.subplots_adjust(top=0.9)
 
         colour_bar.set_label(
             r"${\rm Normalized\ Value}$",
-            fontsize=28,
+            fontsize=25,
             labelpad=30,
             rotation=270,
         )
 
-        plt.suptitle(f"\\rm Fisher\\ information\\ {title}", fontsize=25, y=0.98)
+        plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25, y=0.98)
 
         plt.savefig(f"{fig_name}.pdf")
         plt.savefig(f"{fig_name}.png")

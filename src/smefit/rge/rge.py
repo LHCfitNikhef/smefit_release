@@ -78,8 +78,6 @@ def patched_smeftpar(*args, **kwargs):
 
 # Apply the monkey patch
 wilson.run.smeft.smpar.smeftpar = patched_smeftpar
-
-
 ##################### END OF MONKEY PATCH
 
 
@@ -388,24 +386,14 @@ def load_scales(
 
         Loader.theory_path = pathlib.Path(theory_path)
         # dummy call just to get the scales
-        try:
-            _, _, _, _, dataset_scales = Loader.load_theory(
-                dataset.get("name"),
-                operators_to_keep={},
-                order="LO",
-                use_quad=False,
-                use_theory_covmat=False,
-                use_multiplicative_prescription=False,
-            )
-        except KeyError:
-            _, _, _, _, dataset_scales = Loader.load_theory(
-                dataset.get("name"),
-                operators_to_keep={},
-                order="NLO_QCD",
-                use_quad=False,
-                use_theory_covmat=False,
-                use_multiplicative_prescription=False,
-            )
+        _, _, _, _, dataset_scales = Loader.load_theory(
+            dataset.get("name"),
+            operators_to_keep={},
+            order="LO",
+            use_quad=False,
+            use_theory_covmat=False,
+            use_multiplicative_prescription=False,
+        )
         # check that dataset_scales is not a list filled with None
         # otherwise, assume the initial scale
         if not all(scale is None for scale in dataset_scales):
