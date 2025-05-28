@@ -41,7 +41,9 @@ class Projection:
         self.theory_path = theory_path
         self.datasets = datasets
         self.projections_path = projections_path
-        self.coefficients = CoefficientManager.from_dict(coefficients)
+        self.coefficients = (
+            CoefficientManager.from_dict(coefficients) if coefficients else {}
+        )
         self.default_order = default_order
         self.use_quad = use_quad
         self.use_theory_covmat = use_theory_covmat
@@ -116,7 +118,7 @@ class Projection:
         ).absolute()
         datasets = projection_config["datasets"]
 
-        coefficients = projection_config.get("coefficients", [])
+        coefficients = projection_config.get("coefficients", {})
         default_order = projection_config.get("default_order", "LO")
         use_quad = projection_config.get("use_quad", False)
         use_theory_covmat = projection_config.get("use_theory_covmat", True)
