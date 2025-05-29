@@ -7,9 +7,9 @@ name = "smefit"
 version = "3.1.0"
 description = "Standard Model Effective Field Theory Fitter"
 authors = [
+    "Jaco ter Hoeve <jaco.ter.hoeve@ed.ac.uk>",
     "Tommaso Armadillo <tommaso.armadillo@uclouvain.be>",
     "Tommaso Giani <tgiani@nikhef.nl>",
-    "Jaco ter Hoeve <jaco.ter.hoeve@ed.ac.uk>",
     "Giacomo Magni <gmagni@nikhef.nl>",
     "Luca Mantani <luca.mantani@uv.es>",
     "Alejo Rossia <alejonahuel.rossia@unipd.it>",
