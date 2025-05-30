@@ -131,7 +131,8 @@ class Optimizer:
                     scale = module["scale"]
                     if scale == "dynamic":
                         _logger.warning(
-                            "Dynamic scale for external likelihood is not implemented. Make sure to compute it in the external likelihood module."
+                            "Dynamic scale for external likelihood is not implemented. "
+                            "Make sure to compute it in the external likelihood module."
                         )
                         gen_operators = list(self.coefficients.name)
                         # Create dummy coefficients
