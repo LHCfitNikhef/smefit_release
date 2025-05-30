@@ -15,7 +15,7 @@ In this section we document the settings that need to be specified here. Example
 repository [smefit_database](https://github.com/LHCfitNikhef/smefit_database). This repository also contains the theory predictions and experimental data files used in the
 latest smefit publications.
 
-Cloning the `smefit_database` repository, and run
+Clone the `smefit_database` repository, and run
 ```yaml
 python update_runcards_path.py -d /path/to/runcard/destination/ runcards/A_LHC_NLO_LIN_GLOB.yaml
 ```
