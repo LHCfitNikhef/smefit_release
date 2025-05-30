@@ -185,7 +185,12 @@ the following to the runcard:
 
 ```yaml
 external_chi2:
-  'ExternalChi2': /path/to/external/chi2.py
+  ExternalChi2:
+    path: /path/to/external/chi2.py
+    scale: dynamic
+    param1: val1
+    param2: val2
+    ...
 ```
 Here, ``ExternalChi2`` is the name of the class that must be defined in the referenced python file as follows:
 
@@ -194,15 +199,22 @@ import numpy as np
 
 
 class ExternalChi2:
-    def __init__(self, coefficients):
+    def __init__(self, coefficients, rgemat, **kwargs):
         """
         Constructor that allows one to set attributes that can be called in the compute_chi2 method
         Parameters
         ----------
         coefficients:  smefit.coefficients.CoefficientManager
             attributes: name, value
+        rgemat: numpy.ndarray
+            solution matrix of the RGE
+        **kwargs: Additional keyword arguments.
         """
-        self.example_attribute = coefficients.name
+        self.coefficients_names = coefficients.name
+        self.rgemat = rgemat
+        self.param1 = kwargs["param1"]
+        self.param2 = kwargs["param2"]
+        ...
 
     def compute_chi2(self, coefficient_values):
         """
@@ -217,9 +229,10 @@ class ExternalChi2:
         chi2_value = np.sum(coefficient_values**2)
         return chi2_value
 ```
-One is free to set custom attributes in the constructor. The coefficient values during optimisation
-are accesible via ``coefficient_values`` in the ``compute_chi2`` method. In order for the external chi2
-to work, it is important one does not change the name of the ``compute_chi2`` method!
+One is free to pass an arbitrary number of parameters in the runcard and later set custom attributes in
+the constructor. The coefficient values during optimisation are accesible via ``coefficient_values`` in
+the ``compute_chi2`` method. In order for the external chi2 to work, it is important one does not change
+the name of the ``compute_chi2`` method!
 
 ### Adding RG evolution
 Renormalisation group evolution can be turned on in the fit by adding the following to the runcard.
