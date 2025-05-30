@@ -63,7 +63,8 @@ ccp : [{cotBeta: [0.,0],Z6: [1,0]}]
 ctap : [{cotBeta: [0.010223784180911823,1],Z6: [1,1]}]
 ctW : [{cotBeta: [0.,0],Z6: [1,0]}]
 ctZ : [{cotBeta: [0.,0],Z6: [1,0]}]
+cp : [{cotBeta: [1,0],Z6: [1,2]}]
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Miscellaneous information
-# Tree-level dictionary: C:\Users\a95826ar.DS\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_FitMakerModels_YukaFitMaker_1Sep23.wxf
-# Export date: Fri 1 Sep 2023 13:14:25
+# Tree-level dictionary: /home/alejorossia/Documents/UVcomp-GlobalFits/dict_all_SMEFTsim_FitMakerModels_YukaFitMaker_8Nov24.wxf
+# Export date: Mon 11 Nov 2024 10:59:56
