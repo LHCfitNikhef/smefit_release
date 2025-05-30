@@ -3,7 +3,7 @@ import numpy as np
 
 
 class ExternalChi2:
-    def __init__(self, coefficients):
+    def __init__(self, coefficients, rgemat=None, **kwargs):
         """
         Constructor is empty for testing purposes but can in general be filled according to the user's ideas
         """
