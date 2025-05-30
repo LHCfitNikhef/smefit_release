@@ -382,28 +382,24 @@ document.write(`
                   
   <section id="how-to-run-the-code">
 <span id="running-fit"></span><h1>How to run the code<a class="headerlink" href="#how-to-run-the-code" title="Link to this heading">#</a></h1>
-<p>In the following we provide detailed instructions on how to use the code in its different
-running modes and on how to analyse the results.</p>
+<p>Here we provide some instructions on how to use the code for the various
+running modes and on how to analyse its results.</p>
 <section id="runcard-specifications">
 <span id="runcard"></span><h2>Runcard specifications<a class="headerlink" href="#runcard-specifications" title="Link to this heading">#</a></h2>
-<p>The basic object required to run the code is a runcard.
-In this section we document the different parameters which have to be specified here.
-As example we will refer to the runcard to reproduce <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code>,
-available from the repository <a class="reference external" href="https://github.com/LHCfitNikhef/smefit_database">smefit_database</a>
-together with the files containing experimental data and the corresponding theory predictions.
-After cloning the repository, run</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">python update_runcards_path.py -d /path/to/runcard/destination/ runcards/NS_GLOBAL_NLO_NHO.yaml</span>
+<p>First of all, the basic object required to run the code is the runcard.
+In this section we document the settings that need to be specified here. Example runcards are available from the separate
+repository <a class="reference external" href="https://github.com/LHCfitNikhef/smefit_database">smefit_database</a>. This repository also contains the theory predictions and experimental data files used in the
+latest smefit publications.</p>
+<p>Clone the <code class="docutils literal notranslate"><span class="pre">smefit_database</span></code> repository, and run</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">python update_runcards_path.py -d /path/to/runcard/destination/ runcards/A_LHC_NLO_LIN_GLOB.yaml</span>
 </pre></div>
 </div>
-<p>This will create in <code class="docutils literal notranslate"><span class="pre">/path/to/runcard/destination/</span></code> a <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code> runcard ready to be used on the local machine of the user, pointing to the experimental data and an theory tables in the repository smefit_database.
-In the folder <code class="docutils literal notranslate"><span class="pre">smefit_database/runcards</span></code> the input runcards for MC and NS fits with both linear (NHO)
-and linear+quadratic corrections (HO) are available.</p>
+<p>This will create a <code class="docutils literal notranslate"><span class="pre">smefit</span></code> runcard in <code class="docutils literal notranslate"><span class="pre">/path/to/runcard/destination/</span></code> ready to be used,
+pointing to the experimental data and theory tables in the repository <code class="docutils literal notranslate"><span class="pre">smefit_database</span></code>.
+The user can change this manually if other datasets are desired.</p>
 <section id="input-and-output-path">
 <h3>Input and output path<a class="headerlink" href="#input-and-output-path" title="Link to this heading">#</a></h3>
-<p>The path to where the experimental data and the corresponding theory tables are stored
-is automatically set to those contained in <code class="docutils literal notranslate"><span class="pre">smefit_dayabase</span></code> by the script <code class="docutils literal notranslate"><span class="pre">update_runcards_path.py</span></code>.
-The user can change them manually if other set of data are desired.
-The folder where the results will be saved can be set using <code class="docutils literal notranslate"><span class="pre">result_path</span></code>. The file containing
+<p>The folder where the results will be saved can be set using <code class="docutils literal notranslate"><span class="pre">result_path</span></code>. The file containing
 the posterior of the fitted Wilson coefficient will be saved in <code class="docutils literal notranslate"><span class="pre">resulth_path/result_ID</span></code>.
 If <code class="docutils literal notranslate"><span class="pre">result_ID</span></code> is not provided, it will be automatically set to the name of the runcard (and any already existing result will be overwritten).</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">result_ID</span><span class="p">:</span>
