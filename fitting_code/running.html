@@ -1,97 +1,185 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../">
-<head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How to run the code &mdash; SMEFiT 3.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f74d80cf" />
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to run the code &#8212; SMEFiT 3.1.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-      <script src="../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=08bfcbec"></script>
-      <script src="../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="../_static/js/theme.js"></script>
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=f74d80cf" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=2d67777c"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'fitting_code/running';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="SMEFiT Tutorial" href="tutorial.html" />
-    <link rel="prev" title="Code structure" href="code_struct.html" /> 
-</head>
+    <link rel="prev" title="Code structure" href="code_struct.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
-          
-          
-          <a href="../index.html" class="icon icon-home">
-            SMEFiT
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Theory:</span></p>
-<ul>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">SMEFiT 3.1.1 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Theory:</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../theory/SMEFT.html">Standard Model Effective Field Theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../theory/general.html">Fitting assumptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../theory/NS.html">Nested Sampling</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../theory/Analytic.html">Analytic solution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../theory/MCFit.html">The Monte Carlo replica method</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
-<ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Data and theory tables:</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/data.html">Experimental data format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/theory.html">Theory tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/covariance.html">Construction of the fit covariance matrix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/rotation.html">Basis rotation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../data_theory/projections.html">Projections</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
-<ul class="current">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Fitting code:</span></p>
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="code_struct.html">Code structure</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">How to run the code</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#runcard-specifications">Runcard specifications</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#input-and-output-path">Input and output path</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#theory-specifications">Theory specifications</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#minimizer-specifications">Minimizer specifications</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#datasets-to-consider-and-coefficients-to-fit">Datasets to consider and coefficients to fit</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#constrains-between-coefficients">Constrains between coefficients</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fit-in-different-basis">Fit in different basis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#adding-custom-likelihoods">Adding custom likelihoods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#adding-rg-evolution">Adding RG evolution</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#running-a-fit-with-ns">Running a fit with NS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-a-fit-with-mc">Running a fit with MC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#solving-the-linear-problem">Solving the linear problem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#single-parameter-fits">Single parameter fits</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#individual-parameter-scan">Individual parameter scan</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">How to run the code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">SMEFiT Tutorial</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Reports:</span></p>
-<ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reports:</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../report/tools.html">Report functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../report/running.html">Produce a report</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../report/links.html">Link to reports</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
-<ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Previous studies:</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_rw.html">SMEFiT RW</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_top.html">SMEFiT Top</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_vbs.html">SMEFiT VBS</a></li>
@@ -99,47 +187,205 @@
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit_uv.html">The automation of SMEFT-Assisted Constraints on UV-Complete Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../previous_releases/smefit30.html">SMEFiT3.0</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
-<ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Collaboration:</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../people/people.html">People</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../people/people.html#former-members">Former members</a></li>
+
 </ul>
-<p class="caption" role="heading"><span class="caption-text">References &amp; API:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../modules/smefit/smefit.html">API</a></li>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References &amp; API:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../modules/smefit/smefit.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../modules/smefit/smefit.analyze.html">smefit.analyze package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/smefit/smefit.cli.html">smefit.cli package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/smefit/smefit.optimize.html">smefit.optimize package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/smefit/smefit.postfit.html">smefit.postfit package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/smefit/smefit.prefit.html">smefit.prefit package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/smefit/smefit.projections.html">smefit.projections package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules/smefit/smefit.rge.html">smefit.rge package</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="../zzz-refs.html">References</a></li>
 </ul>
 
-        </div>
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
       </div>
-    </nav>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">SMEFiT</a>
-      </nav>
+<div class="sbt-scroll-pixel-helper"></div>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">How to run the code</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/fitting_code/running.md.txt" rel="nofollow"> View page source</a>
-      </li>
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/fitting_code/running.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
   </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>How to run the code</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runcard-specifications">Runcard specifications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#input-and-output-path">Input and output path</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#theory-specifications">Theory specifications</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minimizer-specifications">Minimizer specifications</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datasets-to-consider-and-coefficients-to-fit">Datasets to consider and coefficients to fit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constrains-between-coefficients">Constrains between coefficients</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-in-different-basis">Fit in different basis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-custom-likelihoods">Adding custom likelihoods</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-rg-evolution">Adding RG evolution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-fit-with-ns">Running a fit with NS</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-fit-with-mc">Running a fit with MC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-linear-problem">Solving the linear problem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-parameter-fits">Single parameter fits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#individual-parameter-scan">Individual parameter scan</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <section id="how-to-run-the-code">
-<span id="running-fit"></span><h1>How to run the code<a class="headerlink" href="#how-to-run-the-code" title="Link to this heading"></a></h1>
+<span id="running-fit"></span><h1>How to run the code<a class="headerlink" href="#how-to-run-the-code" title="Link to this heading">#</a></h1>
 <p>In the following we provide detailed instructions on how to use the code in its different
 running modes and on how to analyse the results.</p>
 <section id="runcard-specifications">
-<span id="runcard"></span><h2>Runcard specifications<a class="headerlink" href="#runcard-specifications" title="Link to this heading"></a></h2>
+<span id="runcard"></span><h2>Runcard specifications<a class="headerlink" href="#runcard-specifications" title="Link to this heading">#</a></h2>
 <p>The basic object required to run the code is a runcard.
 In this section we document the different parameters which have to be specified here.
 As example we will refer to the runcard to reproduce <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code>,
@@ -153,7 +399,7 @@ After cloning the repository, run</p>
 In the folder <code class="docutils literal notranslate"><span class="pre">smefit_database/runcards</span></code> the input runcards for MC and NS fits with both linear (NHO)
 and linear+quadratic corrections (HO) are available.</p>
 <section id="input-and-output-path">
-<h3>Input and output path<a class="headerlink" href="#input-and-output-path" title="Link to this heading"></a></h3>
+<h3>Input and output path<a class="headerlink" href="#input-and-output-path" title="Link to this heading">#</a></h3>
 <p>The path to where the experimental data and the corresponding theory tables are stored
 is automatically set to those contained in <code class="docutils literal notranslate"><span class="pre">smefit_dayabase</span></code> by the script <code class="docutils literal notranslate"><span class="pre">update_runcards_path.py</span></code>.
 The user can change them manually if other set of data are desired.
@@ -168,7 +414,7 @@ If <code class="docutils literal notranslate"><span class="pre">result_ID</span>
 </div>
 </section>
 <section id="theory-specifications">
-<h3>Theory specifications<a class="headerlink" href="#theory-specifications" title="Link to this heading"></a></h3>
+<h3>Theory specifications<a class="headerlink" href="#theory-specifications" title="Link to this heading">#</a></h3>
 <p>The default perturbative order of the theory prediction is set by the key <code class="docutils literal notranslate"><span class="pre">default_order</span></code>. Orders may also be specified
 per datset, see <a class="reference external" href="./example.html#datasets-to-consider-and-coefficients-to-fit">here</a> for more details.
 The order in the EFT expansion should be specified by setting <code class="docutils literal notranslate"><span class="pre">use_quad</span></code> to either <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code> to include quadratic or only linear corrections respectively. The option <code class="docutils literal notranslate"><span class="pre">use_t0</span></code> controls the use
@@ -184,7 +430,7 @@ which can be specified in the theory files.</p>
 <p>Here <code class="docutils literal notranslate"><span class="pre">cutoff_scale</span></code> specifies the scale (in GeV) above which all datapoints will be excluded from the fit.</p>
 </section>
 <section id="minimizer-specifications">
-<h3>Minimizer specifications<a class="headerlink" href="#minimizer-specifications" title="Link to this heading"></a></h3>
+<h3>Minimizer specifications<a class="headerlink" href="#minimizer-specifications" title="Link to this heading">#</a></h3>
 <p>The different parameters controlling the minimizer used in the analysis are specified here.
 If <code class="docutils literal notranslate"><span class="pre">single_parameter_fits</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the Wilson coefficient specified in the run-card
 will be fit one at time, setting all the others to 0. See <a class="reference external" href="./example.html#single-parameter-fits">here</a> for more details.
@@ -218,7 +464,7 @@ Pairwise fits are supported only with |NS|.</p>
 </div>
 </section>
 <section id="datasets-to-consider-and-coefficients-to-fit">
-<h3>Datasets to consider and coefficients to fit<a class="headerlink" href="#datasets-to-consider-and-coefficients-to-fit" title="Link to this heading"></a></h3>
+<h3>Datasets to consider and coefficients to fit<a class="headerlink" href="#datasets-to-consider-and-coefficients-to-fit" title="Link to this heading">#</a></h3>
 <p>The datasets and Wilson coefficients to be included in the analysis must be listed under <code class="docutils literal notranslate"><span class="pre">datasets</span></code>
 and <code class="docutils literal notranslate"><span class="pre">coefficients</span></code> respectively. The default order for each dataset is taken from  <code class="docutils literal notranslate"><span class="pre">default_order</span></code>. However, it is
 possible to specify specific orders per dataset. To do this, add the key <code class="docutils literal notranslate"><span class="pre">order</span></code> to the dataset entry as follows.</p>
@@ -263,7 +509,7 @@ possible to specify specific orders per dataset. To do this, add the key <code c
 the sampling is performed.</p>
 </section>
 <section id="constrains-between-coefficients">
-<h3>Constrains between coefficients<a class="headerlink" href="#constrains-between-coefficients" title="Link to this heading"></a></h3>
+<h3>Constrains between coefficients<a class="headerlink" href="#constrains-between-coefficients" title="Link to this heading">#</a></h3>
 <p>Some Wilson coefficients are not directly fit, but rather constrained to be linear combinations
 of the other ones. Taking as example some coefficient of the Higgs sector considered in <code class="docutils literal notranslate"><span class="pre">smefit2.0</span></code>,
 this can be specified in the runcard in the following way</p>
@@ -281,7 +527,7 @@ this can be specified in the runcard in the following way</p>
 </div>
 </section>
 <section id="fit-in-different-basis">
-<h3>Fit in different basis<a class="headerlink" href="#fit-in-different-basis" title="Link to this heading"></a></h3>
+<h3>Fit in different basis<a class="headerlink" href="#fit-in-different-basis" title="Link to this heading">#</a></h3>
 <p>It is possible to run a fit using a different basis.
 In this case the coefficients specified in the runcard should be the ones to fit, and
 a rotation basis defining the new basis in terms of the Warsaw basis should be given as input. This can be done
@@ -297,7 +543,7 @@ add the following flag</p>
 </div>
 </section>
 <section id="adding-custom-likelihoods">
-<span id="ns"></span><h3>Adding custom likelihoods<a class="headerlink" href="#adding-custom-likelihoods" title="Link to this heading"></a></h3>
+<span id="ns"></span><h3>Adding custom likelihoods<a class="headerlink" href="#adding-custom-likelihoods" title="Link to this heading">#</a></h3>
 <p>SMEFiT supports the addition of customised likelihoods. This can be relevant when an external likelihood is already at hand
 and one would like to combine it with the one constructed internally in SMEFiT. To make use of this feature, one should add
 the following to the runcard:</p>
@@ -339,7 +585,7 @@ are accesible via <code class="docutils literal notranslate"><span class="pre">c
 to work, it is important one does not change the name of the <code class="docutils literal notranslate"><span class="pre">compute_chi2</span></code> method!</p>
 </section>
 <section id="adding-rg-evolution">
-<h3>Adding RG evolution<a class="headerlink" href="#adding-rg-evolution" title="Link to this heading"></a></h3>
+<h3>Adding RG evolution<a class="headerlink" href="#adding-rg-evolution" title="Link to this heading">#</a></h3>
 <p>Renormalisation group evolution can be turned on in the fit by adding the following to the runcard.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rge</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">init_scale</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000.0</span>
@@ -353,7 +599,7 @@ to work, it is important one does not change the name of the <code class="docuti
 </section>
 </section>
 <section id="running-a-fit-with-ns">
-<h2>Running a fit with NS<a class="headerlink" href="#running-a-fit-with-ns" title="Link to this heading"></a></h2>
+<h2>Running a fit with NS<a class="headerlink" href="#running-a-fit-with-ns" title="Link to this heading">#</a></h2>
 <p>To run a fiy using Nested Sampling use the command</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>smefit<span class="w"> </span>NS<span class="w"> </span>path/to/the/runcard/runcard.yaml
 </pre></div>
@@ -362,7 +608,7 @@ to work, it is important one does not change the name of the <code class="docuti
 containing the posterior distribution of the coefficients specified in the runcard.</p>
 </section>
 <section id="running-a-fit-with-mc">
-<span id="mc"></span><h2>Running a fit with MC<a class="headerlink" href="#running-a-fit-with-mc" title="Link to this heading"></a></h2>
+<span id="mc"></span><h2>Running a fit with MC<a class="headerlink" href="#running-a-fit-with-mc" title="Link to this heading">#</a></h2>
 <p><strong>Disclaimer</strong>: the MC mode is only supported for linear fits.</p>
 <p>The basic command to run a fit using Monte Carlo is</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>MC<span class="w"> </span>path/to/the/runcard/runcard.yaml<span class="w"> </span>-n<span class="w"> </span>replica_number
@@ -381,7 +627,7 @@ Replicas not satisfying the PostFit criteria will be discarded. If the final num
 The final output is the file <code class="docutils literal notranslate"><span class="pre">posterior.json</span></code> containing the full posterior of the Wilson coefficients.</p>
 </section>
 <section id="solving-the-linear-problem">
-<h2>Solving the linear problem<a class="headerlink" href="#solving-the-linear-problem" title="Link to this heading"></a></h2>
+<h2>Solving the linear problem<a class="headerlink" href="#solving-the-linear-problem" title="Link to this heading">#</a></h2>
 <p>In case only linear cocrrections are used, one
 can find the analytic solution to the linear problem by</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>A<span class="w"> </span>path/to/the/runcard/runcard.yaml
@@ -390,7 +636,7 @@ can find the analytic solution to the linear problem by</p>
 <p>This will also sample the posterior distribution according to the runcard.</p>
 </section>
 <section id="single-parameter-fits">
-<h2>Single parameter fits<a class="headerlink" href="#single-parameter-fits" title="Link to this heading"></a></h2>
+<h2>Single parameter fits<a class="headerlink" href="#single-parameter-fits" title="Link to this heading">#</a></h2>
 <p>Given a runcard with a number of Wilson coefficients specified, it is possible to fit each of them in turn,
 keeping all the other ones fix to 0.
 To do this add to the runcard</p>
@@ -420,7 +666,7 @@ True (this allows you to fit parameters that do not appear in the theory tables)
 constraints among Wilson coefficients and UV parameters.</p>
 </section>
 <section id="individual-parameter-scan">
-<h2>Individual parameter scan<a class="headerlink" href="#individual-parameter-scan" title="Link to this heading"></a></h2>
+<h2>Individual parameter scan<a class="headerlink" href="#individual-parameter-scan" title="Link to this heading">#</a></h2>
 <p>The code can also be used to produce 1-dimensional scans of the chi2 function.
 The command</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w">    </span>smefit<span class="w"> </span>SCAN<span class="w"> </span>/path/to/the/runcard/runcard.yaml
@@ -445,34 +691,118 @@ The way it works is that in the runcard, one specifies</p>
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="code_struct.html" class="btn btn-neutral float-left" title="Code structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="tutorial.html" class="btn btn-neutral float-right" title="SMEFiT Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+                </article>
+              
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2024, the SMEFiT developers&#39; team.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
-        </div>
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="code_struct.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Code structure</p>
       </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class="right-next"
+       href="tutorial.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">SMEFiT Tutorial</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-</body>
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runcard-specifications">Runcard specifications</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#input-and-output-path">Input and output path</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#theory-specifications">Theory specifications</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minimizer-specifications">Minimizer specifications</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datasets-to-consider-and-coefficients-to-fit">Datasets to consider and coefficients to fit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constrains-between-coefficients">Constrains between coefficients</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fit-in-different-basis">Fit in different basis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-custom-likelihoods">Adding custom likelihoods</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-rg-evolution">Adding RG evolution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-fit-with-ns">Running a fit with NS</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-fit-with-mc">Running a fit with MC</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving-the-linear-problem">Solving the linear problem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#single-parameter-fits">Single parameter fits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#individual-parameter-scan">Individual parameter scan</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jaco ter Hoeve, Luca Mantani, Alejo Rossia, Giacomo Magni, Tommaso Giani and Juan Rojo
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, the SMEFiT developers&#39; team.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
 </html>
