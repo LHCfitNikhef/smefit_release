@@ -3,31 +3,28 @@
 ```
 # How to run the code
 
-In the following we provide detailed instructions on how to use the code in its different
-running modes and on how to analyse the results.
+Here we provide some instructions on how to use the code for the various
+running modes and on how to analyse its results.
 
 ```eval_rst
 .. _runcard:
 ```
 ## Runcard specifications
-The basic object required to run the code is a runcard.
-In this section we document the different parameters which have to be specified here.
-As example we will refer to the runcard to reproduce ``smefit2.0``,
-available from the repository [smefit_database](https://github.com/LHCfitNikhef/smefit_database)
-together with the files containing experimental data and the corresponding theory predictions.
-After cloning the repository, run
+First of all, the basic object required to run the code is the runcard.
+In this section we document the settings that need to be specified here. Example runcards are available from the separate
+repository [smefit_database](https://github.com/LHCfitNikhef/smefit_database). This repository also contains the theory predictions and experimental data files used in the
+latest smefit publications.
+
+Cloning the `smefit_database` repository, and run
 ```yaml
-python update_runcards_path.py -d /path/to/runcard/destination/ runcards/NS_GLOBAL_NLO_NHO.yaml
+python update_runcards_path.py -d /path/to/runcard/destination/ runcards/A_LHC_NLO_LIN_GLOB.yaml
 ```
-This will create in ``/path/to/runcard/destination/`` a ``smefit2.0`` runcard ready to be used on the local machine of the user, pointing to the experimental data and an theory tables in the repository smefit_database.
-In the folder ``smefit_database/runcards`` the input runcards for MC and NS fits with both linear (NHO)
-and linear+quadratic corrections (HO) are available.
+This will create a ``smefit`` runcard in ``/path/to/runcard/destination/`` ready to be used,
+pointing to the experimental data and theory tables in the repository `smefit_database`.
+The user can change this manually if other datasets are desired.
 
 
 ### Input and output path
-The path to where the experimental data and the corresponding theory tables are stored
-is automatically set to those contained in ``smefit_dayabase`` by the script ``update_runcards_path.py``.
-The user can change them manually if other set of data are desired.
 The folder where the results will be saved can be set using ``result_path``. The file containing
 the posterior of the fitted Wilson coefficient will be saved in ``resulth_path/result_ID``.
 If ``result_ID`` is not provided, it will be automatically set to the name of the runcard (and any already existing result will be overwritten).
