@@ -17,9 +17,49 @@ from .latex_tools import latex_packages, multicolum_table_header
 from .spider import radar_factory
 
 
+def find_mode_hdis(post, intervs):
+    """
+    Function to find the modes inside disjoint HDI intervals
+    """
+    peaks = []
+    for int in intervs:
+        if abs(int[0] - int[1]) > 0:
+            idx_max = np.argwhere(post < int[1])[-1][0]
+            idx_min = np.argwhere(post > int[0])[0][0]
+            subpost = sorted(post[idx_min:idx_max])
+            mid_pos = len(subpost) // 2
+            peaks.append(subpost[mid_pos])
+        else:
+            peaks.append(int[0])
+    return peaks
+
+
 def get_confidence_values(dist, has_posterior=True):
     """
     Get confidence level bounds given the distribution
+    Computes the 68% and 95% confidence levels with ETIs and HDIs
+    For the HDIs, we compute in both multimodal and unimodal modes.
+    Returns
+    -------
+    cl_vals: dict, where the keys are:
+    - low68: lower bound of the 68% CI ETI
+    - high68: upper bound of the 68% CI ETI
+    - low95: lower bound of the 95% CI ETI
+    - high95: upper bound of the 95% CI ETI
+    - mid: mean value of the distribution (or best fit point)
+    - mean_err{cl}: Half-width of the {cl}% CI ETI
+    - err{cl}_low: distance between mid and lower end of the {cl}% CI ETI
+    - err{cl}_high: distance between mid and higher end {cl}% CI ETI
+    - hdi_{cl}_low: list of the lower end of the interval(s) that form the {cl}% CI HDI
+    - hdi_{cl}_high: list of the higher end of the interval(s) that form the {cl}% CI HDI
+    - hdi_{cl}_mids: list of the 1st mode of the distribution inside each of the interval(s) that form the {cl}% CI HDI
+    - hdi_{cl}: sum of the widths of the intervals that form the {cl}% CI HDI
+    - hdi_mono_{cl}_low: lower end of the {cl}% CI HDI in unimodal mode.
+    - hdi_mono_{cl}_high: higher end of the {cl}% CI HDI in unimodal mode.
+    - hdi_mono_{cl}_mids: 1st mode of the distribution inside the {cl}% CI HDI in unimodal mode.
+    - hdi_mono_{cl}: width of the {cl}% CI HDI in unimodal mode.
+    - pull: ratio of the mid value to the half-width of the 68% CI ETI
+
     """
     cl_vals = {}
     if has_posterior:
@@ -42,10 +82,23 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals[f"err{cl}_high"] = cl_vals[f"high{cl}"] - cl_vals["mid"]
 
         # highest density intervals
-        hdi_widths = np.diff(
-            arviz.hdi(dist.values, hdi=cl * 1e-2, multimodal=True), axis=1
+        hdi_interval = np.array(
+            arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=True)
         )
+        hdi_widths = np.diff(hdi_interval.flatten(), axis=0)
+        cl_vals[f"hdi_{cl}_low"] = hdi_interval[:, 0].tolist()
+        cl_vals[f"hdi_{cl}_high"] = hdi_interval[:, 1].tolist()
+        cl_vals[f"hdi_{cl}_mids"] = find_mode_hdis(sorted(dist.values), hdi_interval)
         cl_vals[f"hdi_{cl}"] = np.sum(hdi_widths.flatten())
+        hdi_interval_mono = np.array(
+            arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=False)
+        )
+        cl_vals[f"hdi_mono_{cl}_low"] = hdi_interval_mono[0]
+        cl_vals[f"hdi_mono_{cl}_high"] = hdi_interval_mono[1]
+        cl_vals[f"hdi_mono_{cl}_mids"] = find_mode_hdis(
+            sorted(dist.values), [hdi_interval_mono]
+        )
+        cl_vals[f"hdi_mono_{cl}"] = np.sum(abs(hdi_interval_mono))
 
     cl_vals["pull"] = cl_vals["mid"] / cl_vals["mean_err68"]
 
@@ -160,7 +213,14 @@ class CoefficientsPlotter:
         return groups, axs
 
     def plot_coeffs(
-        self, bounds, figsize=(10, 15), x_min=-400, x_max=400, x_log=True, lin_thr=1e-1
+        self,
+        bounds,
+        figsize=(10, 15),
+        x_min=-400,
+        x_max=400,
+        x_log=True,
+        lin_thr=1e-1,
+        ci_type="eti",
     ):
         """
         Plot central value + 95% CL errors
