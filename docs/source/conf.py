@@ -23,10 +23,10 @@ source_dir = pathlib.Path(__file__).parent
 # -- Project information -----------------------------------------------------
 
 project = "SMEFiT"
-copyright = "2024, the SMEFiT developers' team"
-author = "Tommaso Giani, Jaco ter Hoeve, Giacomo Magni and Juan Rojo"
+copyright = "2025, the SMEFiT developers' team"
+author = "Jaco ter Hoeve, Luca Mantani, Alejo Rossia, Giacomo Magni, Tommaso Giani and Juan Rojo"
 # The full version, including alpha/beta/rc tags
-release = "3.0.1"
+release = "3.1.1"
 
 
 # -- General configuration ---------------------------------------------------
@@ -101,7 +101,7 @@ extlinks = {}
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_book_theme"
 # html_theme = "sphinx_boogergreen_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,

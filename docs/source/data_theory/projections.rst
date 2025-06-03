@@ -103,6 +103,7 @@ The ``projection_runcard`` specifies which datasets need to be extrapolated, by 
         coefficients:
           OtG: {constrain: True, value: 2.0}
           OpD: {constrain: True, value: -1.0}
+          OtW: {constrain: [{OtZ: 1.0}]}
 
         uv_couplings: False
         use_quad: False
