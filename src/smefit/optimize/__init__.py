@@ -85,7 +85,10 @@ class Optimizer:
 
     def load_external_chi2(self, external_chi2):
         """
-        Loads the external chi2 modules
+        Loads the external chi2 modules.
+        We assume that the external chi2 only need to know which coefficients we want to
+        fit and the RGE dictionary, which specifies the reference scale and the theory settings
+        for the RGE evolution.
 
         Parameters
         ----------
