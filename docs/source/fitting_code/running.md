@@ -184,7 +184,6 @@ the following to the runcard:
 external_chi2:
   ExternalChi2:
     path: /path/to/external/chi2.py
-    scale: dynamic
     param1: val1
     param2: val2
     ...
@@ -196,19 +195,18 @@ import numpy as np
 
 
 class ExternalChi2:
-    def __init__(self, coefficients, rgemat, **kwargs):
+    def __init__(self, coefficients, rge_dict=None, **kwargs):
         """
         Constructor that allows one to set attributes that can be called in the compute_chi2 method
         Parameters
         ----------
         coefficients:  smefit.coefficients.CoefficientManager
             attributes: name, value
-        rgemat: numpy.ndarray
-            solution matrix of the RGE
+        rge_dict: dict
+            RGE dictionary from the runcard
         **kwargs: Additional keyword arguments.
         """
         self.coefficients_names = coefficients.name
-        self.rgemat = rgemat
         self.param1 = kwargs["param1"]
         self.param2 = kwargs["param2"]
         ...
@@ -227,7 +225,8 @@ class ExternalChi2:
         return chi2_value
 ```
 One is free to pass an arbitrary number of parameters in the runcard and later set custom attributes in
-the constructor. The coefficient values during optimisation are accesible via ``coefficient_values`` in
+the constructor. Note that the RGE matrix has to be computed inside the constructor. Some examples are available
+in `external_chi2/`. The coefficient values during optimisation are accesible via ``coefficient_values`` in
 the ``compute_chi2`` method. In order for the external chi2 to work, it is important one does not change
 the name of the ``compute_chi2`` method!
 
