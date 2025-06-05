@@ -195,7 +195,7 @@ import numpy as np
 
 
 class ExternalChi2:
-    def __init__(self, coefficients, rge_dict=None, **kwargs):
+    def __init__(self, coefficients, rge_dict=None, param1=None, param2=None):
         """
         Constructor that allows one to set attributes that can be called in the compute_chi2 method
         Parameters
@@ -215,7 +215,7 @@ class ExternalChi2:
         """
         Parameters
         ----------
-         coefficients_values : numpy.ndarray
+         coefficient_values : numpy.ndarray
             |EFT| coefficients values
 
         """
@@ -224,9 +224,10 @@ class ExternalChi2:
         chi2_value = np.sum(coefficient_values**2)
         return chi2_value
 ```
-One is free to pass an arbitrary number of parameters in the runcard and later set custom attributes in
-the constructor. Note that the RGE matrix has to be computed inside the constructor. Some examples are available
-in `external_chi2/`. The coefficient values during optimisation are accesible via ``coefficient_values`` in
+The parameters ``coefficients`` and ``rge_dict`` are mandatory, while the following ones are optional.  One
+is free to pass an arbitrary number of parameters in the runcard and later set custom attributes in the constructor.
+Note that the RGE matrix has to be computed inside the constructor. Some examples are available
+in ``external_chi2/``. The coefficient values during optimisation are accessible via ``coefficient_values`` in
 the ``compute_chi2`` method. In order for the external chi2 to work, it is important one does not change
 the name of the ``compute_chi2`` method!
 
