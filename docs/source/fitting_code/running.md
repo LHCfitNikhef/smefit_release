@@ -207,8 +207,8 @@ class ExternalChi2:
         **kwargs: Additional keyword arguments.
         """
         self.coefficients_names = coefficients.name
-        self.param1 = kwargs["param1"]
-        self.param2 = kwargs["param2"]
+        self.param1 = param1
+        self.param2 = param2
         ...
 
     def compute_chi2(self, coefficient_values):
