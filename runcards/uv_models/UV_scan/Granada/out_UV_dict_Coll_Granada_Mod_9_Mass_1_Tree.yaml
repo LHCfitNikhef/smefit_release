@@ -1,0 +1,70 @@
+# UV dictionary with WCs in terms of UV variables
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV Collection : Granada
+UV model : 9
+Model name : \text{$\Theta $3}
+# ~~~~~~~~~~~~~~~~~~~~~~
+UV couplings : [lamTheta3]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Loop level of the results : 0
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Setting of the UV mass in TeV:
+m : 1 # TeV
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Expressions for all the WCs in SMEFiT basis
+cpG : [{lamTheta3: [0.,0]}]
+cpB : [{lamTheta3: [0.,0]}]
+cpW : [{lamTheta3: [0.,0]}]
+cpWB : [{lamTheta3: [0.,0]}]
+cpd : [{lamTheta3: [0.,0]}]
+cpD : [{lamTheta3: [0.,0]}]
+cWWW : [{lamTheta3: [0.,0]}]
+cpqMi : [{lamTheta3: [0.,0]}]
+cpQM : [{lamTheta3: [0.,0]}]
+c3pq : [{lamTheta3: [0.,0]}]
+c3pQ3 : [{lamTheta3: [0.,0]}]
+cpl1 : [{lamTheta3: [0.,0]}]
+cpl2 : [{lamTheta3: [0.,0]}]
+cpl3 : [{lamTheta3: [0.,0]}]
+c3pl1 : [{lamTheta3: [0.,0]}]
+c3pl2 : [{lamTheta3: [0.,0]}]
+c3pl3 : [{lamTheta3: [0.,0]}]
+cpui : [{lamTheta3: [0.,0]}]
+cpdi : [{lamTheta3: [0.,0]}]
+cpt : [{lamTheta3: [0.,0]}]
+cpe : [{lamTheta3: [0.,0]}]
+cpmu : [{lamTheta3: [0.,0]}]
+cpta : [{lamTheta3: [0.,0]}]
+c81qq : [{lamTheta3: [0.,0]}]
+c11qq : [{lamTheta3: [0.,0]}]
+c83qq : [{lamTheta3: [0.,0]}]
+c13qq : [{lamTheta3: [0.,0]}]
+c8qt : [{lamTheta3: [0.,0]}]
+c1qt : [{lamTheta3: [0.,0]}]
+c8ut : [{lamTheta3: [0.,0]}]
+c1ut : [{lamTheta3: [0.,0]}]
+c8qu : [{lamTheta3: [0.,0]}]
+c1qu : [{lamTheta3: [0.,0]}]
+c8dt : [{lamTheta3: [0.,0]}]
+c1dt : [{lamTheta3: [0.,0]}]
+c8qd : [{lamTheta3: [0.,0]}]
+c1qd : [{lamTheta3: [0.,0]}]
+cQQ1 : [{lamTheta3: [0.,0]}]
+cQQ8 : [{lamTheta3: [0.,0]}]
+cQt1 : [{lamTheta3: [0.,0]}]
+cQt8 : [{lamTheta3: [0.,0]}]
+ctt1 : [{lamTheta3: [0.,0]}]
+cll : [{lamTheta3: [0.,0]}]
+cll1111 : [{lamTheta3: [0.,0]}]
+cbp : [{lamTheta3: [0.,0]}]
+ctp : [{lamTheta3: [0.,0]}]
+ctG : [{lamTheta3: [0.,0]}]
+ccp : [{lamTheta3: [0.,0]}]
+ctap : [{lamTheta3: [0.,0]}]
+ctW : [{lamTheta3: [0.,0]}]
+ctZ : [{lamTheta3: [0.,0]}]
+cp : [{lamTheta3: [0.16666666666666666,2]}]
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Miscellaneous information
+# Tree-level dictionary: D:\Users\Alejo\OneDrive - The University of Manchester\UVcomp-GlobalFits\dict_all_SMEFiT_Local_New_Yukas_indepcll1111_Upto48_02_11_2024.wxf
+# Export date: Fri 8 Nov 2024 10:32:22
