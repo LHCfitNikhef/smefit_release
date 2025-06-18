@@ -293,14 +293,66 @@ class Report:
             bar_cl = confidence_level_bar["confidence_level"]
             confidence_level_bar.pop("confidence_level")
             zero_sol = 0
-            coeff_plt.plot_coeffs_bar(
-                {
-                    name: -bound_df.loc[zero_sol, f"low{bar_cl}"]
-                    + bound_df.loc[zero_sol, f"high{bar_cl}"]
-                    for name, bound_df in bounds_dict.items()
-                },
-                **confidence_level_bar,
-            )
+            if ci_type == "hdi":
+                for name, bound_df in bounds_dict.items():
+                    print(
+                        np.sum(
+                            [
+                                -1.0
+                                * bound_df.loc[zero_sol, f"hdi_{bar_cl}_low"].iloc[0][j]
+                                + bound_df.loc[zero_sol, f"hdi_{bar_cl}_high"].iloc[0][
+                                    j
+                                ]
+                                for j in range(
+                                    len(
+                                        bound_df.loc[
+                                            zero_sol, f"hdi_{bar_cl}_low"
+                                        ].iloc[0]
+                                    )
+                                )
+                            ]
+                        )
+                    )
+                coeff_plt.plot_coeffs_bar(
+                    {
+                        name: np.sum(
+                            [
+                                -1.0
+                                * bound_df.loc[zero_sol, f"hdi_{bar_cl}_low"].iloc[0][j]
+                                + bound_df.loc[zero_sol, f"hdi_{bar_cl}_high"].iloc[0][
+                                    j
+                                ]
+                                for j in range(
+                                    len(
+                                        bound_df.loc[
+                                            zero_sol, f"hdi_{bar_cl}_low"
+                                        ].iloc[0]
+                                    )
+                                )
+                            ]
+                        )
+                        for name, bound_df in bounds_dict.items()
+                    },
+                    **confidence_level_bar,
+                )
+            elif ci_type == "hdi_mono":
+                coeff_plt.plot_coeffs_bar(
+                    {
+                        name: -bound_df.loc[zero_sol, f"hdi_mono_{bar_cl}_low"]
+                        + bound_df.loc[zero_sol, f"hdi_mono_{bar_cl}_high"]
+                        for name, bound_df in bounds_dict.items()
+                    },
+                    **confidence_level_bar,
+                )
+            else:
+                coeff_plt.plot_coeffs_bar(
+                    {
+                        name: -bound_df.loc[zero_sol, f"low{bar_cl}"]
+                        + bound_df.loc[zero_sol, f"high{bar_cl}"]
+                        for name, bound_df in bounds_dict.items()
+                    },
+                    **confidence_level_bar,
+                )
             figs_list.append("coefficient_bar")
 
         # when we plot the 95% CL we show the 95% CL for null solutions.
