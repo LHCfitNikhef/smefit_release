@@ -378,7 +378,7 @@ class Report:
 
         if table is not None:
             _logger.info("Writing : Confidence level table")
-            lines = coeff_plt.write_cl_table(bounds_dict, **table)
+            lines = coeff_plt.write_cl_table(bounds_dict, **table, ci_type=ci_type)
             compile_tex(self.report, lines, "coefficients_table")
             links_list = [("coefficients_table", "CL table")]
 
