@@ -17,49 +17,9 @@ from .latex_tools import latex_packages, multicolum_table_header
 from .spider import radar_factory
 
 
-def find_mode_hdis(post, intervs):
-    """
-    Function to find the modes inside disjoint HDI intervals
-    """
-    peaks = []
-    for int in intervs:
-        if abs(int[0] - int[1]) > 0:
-            idx_max = np.argwhere(post < int[1])[-1][0]
-            idx_min = np.argwhere(post > int[0])[0][0]
-            subpost = sorted(post[idx_min:idx_max])
-            mid_pos = len(subpost) // 2
-            peaks.append(subpost[mid_pos])
-        else:
-            peaks.append(int[0])
-    return peaks
-
-
 def get_confidence_values(dist, has_posterior=True):
     """
     Get confidence level bounds given the distribution
-    Computes the 68% and 95% confidence levels with ETIs and HDIs
-    For the HDIs, we compute in both multimodal and unimodal modes.
-    Returns
-    -------
-    cl_vals: dict, where the keys are:
-    - low68: lower bound of the 68% CI ETI
-    - high68: upper bound of the 68% CI ETI
-    - low95: lower bound of the 95% CI ETI
-    - high95: upper bound of the 95% CI ETI
-    - mid: mean value of the distribution (or best fit point)
-    - mean_err{cl}: Half-width of the {cl}% CI ETI
-    - err{cl}_low: distance between mid and lower end of the {cl}% CI ETI
-    - err{cl}_high: distance between mid and higher end {cl}% CI ETI
-    - hdi_{cl}_low: list of the lower end of the interval(s) that form the {cl}% CI HDI
-    - hdi_{cl}_high: list of the higher end of the interval(s) that form the {cl}% CI HDI
-    - hdi_{cl}_mids: list of the 1st mode of the distribution inside each of the interval(s) that form the {cl}% CI HDI
-    - hdi_{cl}: sum of the widths of the intervals that form the {cl}% CI HDI
-    - hdi_mono_{cl}_low: lower end of the {cl}% CI HDI in unimodal mode.
-    - hdi_mono_{cl}_high: higher end of the {cl}% CI HDI in unimodal mode.
-    - hdi_mono_{cl}_mids: 1st mode of the distribution inside the {cl}% CI HDI in unimodal mode.
-    - hdi_mono_{cl}: width of the {cl}% CI HDI in unimodal mode.
-    - pull: ratio of the mid value to the half-width of the 68% CI ETI
-
     """
     cl_vals = {}
     if has_posterior:
@@ -82,23 +42,10 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals[f"err{cl}_high"] = cl_vals[f"high{cl}"] - cl_vals["mid"]
 
         # highest density intervals
-        hdi_interval = np.array(
-            arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=True)
+        hdi_widths = np.diff(
+            arviz.hdi(dist.values, hdi=cl * 1e-2, multimodal=True), axis=1
         )
-        hdi_widths = np.diff(hdi_interval.flatten(), axis=0)
-        cl_vals[f"hdi_{cl}_low"] = hdi_interval[:, 0].tolist()
-        cl_vals[f"hdi_{cl}_high"] = hdi_interval[:, 1].tolist()
-        cl_vals[f"hdi_{cl}_mids"] = find_mode_hdis(sorted(dist.values), hdi_interval)
         cl_vals[f"hdi_{cl}"] = np.sum(hdi_widths.flatten())
-        hdi_interval_mono = np.array(
-            arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=False)
-        )
-        cl_vals[f"hdi_mono_{cl}_low"] = hdi_interval_mono[0]
-        cl_vals[f"hdi_mono_{cl}_high"] = hdi_interval_mono[1]
-        cl_vals[f"hdi_mono_{cl}_mids"] = find_mode_hdis(
-            sorted(dist.values), [hdi_interval_mono]
-        )
-        cl_vals[f"hdi_mono_{cl}"] = np.sum(abs(hdi_interval_mono))
 
     cl_vals["pull"] = cl_vals["mid"] / cl_vals["mean_err68"]
 
@@ -213,14 +160,7 @@ class CoefficientsPlotter:
         return groups, axs
 
     def plot_coeffs(
-        self,
-        bounds,
-        figsize=(10, 15),
-        x_min=-400,
-        x_max=400,
-        x_log=True,
-        lin_thr=1e-1,
-        ci_type="eti",
+        self, bounds, figsize=(10, 15), x_min=-400, x_max=400, x_log=True, lin_thr=1e-1
     ):
         """
         Plot central value + 95% CL errors
@@ -241,91 +181,20 @@ class CoefficientsPlotter:
 
         def plot_error_bars(ax, vals, cnt, i, label=None):
 
-            if ci_type == "eti":
-                # ETIs
-                ax.errorbar(
-                    x=vals.mid,
-                    y=Y[cnt] + y_shift[i],
-                    xerr=[[vals.err95_low], [vals.err95_high]],
-                    color=colors(2 * i + 1),
-                )
-                ax.errorbar(
-                    x=vals.mid,
-                    y=Y[cnt] + y_shift[i],
-                    xerr=[[vals.err68_low], [vals.err68_high]],
-                    color=colors(2 * i),
-                    fmt=".",
-                    label=label,
-                )
-            elif ci_type == "hdi":
-                # HDIs in multimodal mode
-                # loop over 95% HDI intervals, since they can be disjointed
-                for intNum in range(len(vals.hdi_95_mids)):
-                    ax.errorbar(
-                        x=vals.hdi_95_mids[intNum],
-                        y=Y[cnt] + y_shift[i],
-                        xerr=[
-                            [
-                                np.abs(
-                                    vals.hdi_95_low[intNum] - vals.hdi_95_mids[intNum]
-                                )
-                            ],
-                            [
-                                np.abs(
-                                    vals.hdi_95_high[intNum] - vals.hdi_95_mids[intNum]
-                                )
-                            ],
-                        ],
-                        color=colors(2 * i + 1),
-                    )
-                # loop over 68% HDI intervals, since they can be disjointed
-                for intNum in range(len(vals.hdi_68_mids)):
-                    ax.errorbar(
-                        x=vals.hdi_68_mids[intNum],
-                        y=Y[cnt] + y_shift[i],
-                        xerr=[
-                            [
-                                np.abs(
-                                    vals.hdi_68_low[intNum] - vals.hdi_68_mids[intNum]
-                                )
-                            ],
-                            [
-                                np.abs(
-                                    vals.hdi_68_high[intNum] - vals.hdi_68_mids[intNum]
-                                )
-                            ],
-                        ],
-                        color=colors(2 * i),
-                        fmt=".",
-                        label=label,
-                    )
-            elif ci_type == "hdi_mono":
-                # HDIs in unimodal mode
-                ax.errorbar(
-                    x=vals.hdi_mono_95_mids[0],
-                    y=Y[cnt] + y_shift[i],
-                    xerr=[
-                        [np.abs(vals.hdi_mono_95_low - vals.hdi_mono_95_mids)],
-                        [np.abs(vals.hdi_mono_95_high - vals.hdi_mono_95_mids)],
-                    ],
-                    color=colors(2 * i + 1),
-                )
-                ax.errorbar(
-                    x=vals.hdi_mono_68_mids[0],
-                    y=Y[cnt] + y_shift[i],
-                    xerr=[
-                        [np.abs(vals.hdi_mono_68_low - vals.hdi_mono_68_mids)],
-                        [np.abs(vals.hdi_mono_68_high - vals.hdi_mono_68_mids)],
-                    ],
-                    color=colors(2 * i),
-                    fmt=".",
-                    label=label,
-                )
-            else:
-                raise ValueError(
-                    f"Unknown confidence interval type {ci_type}. "
-                    "Use 'eti', 'hdi' or 'hdi_mono'."
-                )
+            ax.errorbar(
+                x=vals.mid,
+                y=Y[cnt] + y_shift[i],
+                xerr=[[vals.err95_low], [vals.err95_high]],
+                color=colors(2 * i + 1),
+            )
+            ax.errorbar(
+                x=vals.mid,
+                y=Y[cnt] + y_shift[i],
+                xerr=[[vals.err68_low], [vals.err68_high]],
+                color=colors(2 * i),
+                fmt=".",
+                label=label,
+            )
 
         # loop on gropus
         cnt_plot = 0
@@ -427,6 +296,7 @@ class CoefficientsPlotter:
                 Maximum x-value, 500 by default
             legend_loc: string, optional
                 Legend location, "best" by default
+
         """
         df = pd.DataFrame(error)
         groups, axs = self._get_suplblots(figsize)
@@ -1095,7 +965,7 @@ class CoefficientsPlotter:
         fig.savefig(f"{self.report_folder}/contours_2d.pdf", bbox_inches="tight")
         fig.savefig(f"{self.report_folder}/contours_2d.png", bbox_inches="tight")
 
-    def write_cl_table(self, bounds, round_val=3, ci_type="eti"):
+    def write_cl_table(self, bounds, round_val=3):
         """Coefficients latex table"""
         nfits = len(bounds)
         L = latex_packages()
@@ -1122,99 +992,36 @@ class CoefficientsPlotter:
             # loop on coefficients
             for latex_name in coeff_group.values:
                 temp = f" & {latex_name}"
-                if ci_type == "hdi":
-                    temp2 = [" & "]
-                    # loop on fits
-                    for nf, bound_df in enumerate(bounds.values()):
-                        try:
-                            cl_vals = bound_df[(group, latex_name)].dropna()[0]
-                        except KeyError:
-                            # not fitted
-                            if bound_df[(group, latex_name)].dropna().empty:
-                                temp += r" & \textemdash & \textemdash & \textemdash "
-                                continue
-                            raise KeyError(f"{latex_name} is not found in posterior")
-                        temp += f" & {np.round(cl_vals['mid'],round_val)} \
-                                & [{np.round(cl_vals['hdi_68_low'][0],round_val)},{np.round(cl_vals['hdi_68_high'][0],round_val)}] \
-                                    & [{np.round(cl_vals['hdi_95_low'][0],round_val)},{np.round(cl_vals['hdi_95_high'][0],round_val)}]"
-                        # Additional peaks
-                        num_peaks = np.max(
-                            [len(cl_vals["hdi_68_low"]), len(cl_vals["hdi_95_low"])]
-                        )
-                        if num_peaks > 1:
-                            for peak in range(1, num_peaks):
-                                # for the case this is the first fit with this many peaks
-                                if peak > len(temp2):
-                                    temp2.append(r" & " + r" &  &" * (nf))
-                                if peak < len(cl_vals["hdi_68_low"]) and peak < len(
-                                    cl_vals["hdi_95_low"]
-                                ):
-                                    temp2[
-                                        peak - 1
-                                    ] += f" &  \
-                                            & $\\cup$ [{np.round(cl_vals['hdi_68_low'][peak],round_val)},{np.round(cl_vals['hdi_68_high'][peak],round_val)}] \
-                                                & $\\cup$ [{np.round(cl_vals['hdi_95_low'][peak],round_val)},{np.round(cl_vals['hdi_95_high'][peak],round_val)}]"
-                                elif peak < len(cl_vals["hdi_68_low"]):
-                                    temp2[
-                                        peak - 1
-                                    ] += f" &  \
-                                            & $\\cup$ [{np.round(cl_vals['hdi_68_low'][peak],round_val)},{np.round(cl_vals['hdi_68_high'][peak],round_val)}] \
-                                                & -"
-                                elif peak < len(cl_vals["hdi_95_low"]):
-                                    temp2[
-                                        peak - 1
-                                    ] += f" &  \
-                                            & - \
-                                                & $\\cup$ [{np.round(cl_vals['hdi_95_low'][peak],round_val)},{np.round(cl_vals['hdi_95_high'][peak],round_val)}]"
-                        # if there are no double solutions, append empty
-                        if len(temp2) > num_peaks - 1:
-                            for i in range(num_peaks - 1, len(temp2)):
-                                temp2[i] += r" & & -& -"
-                    # if there are no double solutions, append empty
-                    # append double solution
-                    if temp2 != [" & "]:
-                        for i in range(len(temp2)):
-                            #                            temp += f" \\\\ \\cline{{3-{(2 + 3 * nfits)}}}"
-                            temp += f" \\\\"
-                            temp += "".join(temp2[i])
-                    temp += f" \\\\ \\cline{{2-{(2 + 3 * nfits)}}}"
-                else:
-                    temp2 = " &"
-                    # loop on fits
-                    for bound_df in bounds.values():
-                        try:
-                            cl_vals = bound_df[(group, latex_name)].dropna()[0]
-                        except KeyError:
-                            # not fitted
-                            if bound_df[(group, latex_name)].dropna().empty:
-                                temp += r" & \textemdash & \textemdash & \textemdash "
-                                continue
-                            raise KeyError(f"{latex_name} is not found in posterior")
+                temp2 = " &"
+                # loop on fits
+                for bound_df in bounds.values():
+                    try:
+                        cl_vals = bound_df[(group, latex_name)].dropna()[0]
+                    except KeyError:
+                        # not fitted
+                        if bound_df[(group, latex_name)].dropna().empty:
+                            temp += r" & \textemdash & \textemdash & \textemdash "
+                            continue
+                        raise KeyError(f"{latex_name} is not found in posterior")
 
-                        if ci_type == "eti":
-                            temp += f" & {np.round(cl_vals['mid'],round_val)} \
-                                    & [{np.round(cl_vals['low68'],round_val)},{np.round(cl_vals['high68'],round_val)}] \
-                                        & [{np.round(cl_vals['low95'],round_val)},{np.round(cl_vals['high95'],round_val)}]"
-                            # double solution
-                            try:
-                                cl_vals_2 = bound_df[(group, latex_name)].dropna()[1]
-                                temp2 += f" & {np.round(cl_vals_2['mid'],round_val)} \
-                                        & [{np.round(cl_vals_2['low68'],round_val)},{np.round(cl_vals_2['high68'],round_val)}] \
-                                            & [{np.round(cl_vals_2['low95'],round_val)},{np.round(cl_vals_2['high95'],round_val)}]"
-                            except KeyError:
-                                temp2 += r" & & &"
-                        elif ci_type == "hdi_mono":
-                            temp += f" & {np.round(cl_vals['hdi_mono_68_mids'][0],round_val)} \
-                                    & [{np.round(cl_vals['hdi_mono_68_low'],round_val)},{np.round(cl_vals['hdi_mono_68_high'],round_val)}] \
-                                        & [{np.round(cl_vals['hdi_mono_95_low'],round_val)},{np.round(cl_vals['hdi_mono_95_high'],round_val)}]"
-                            temp2 += r" & & &"
-                    # append double solution
-                    if temp2 != " &" * (3 * nfits + 1):
-                        temp += f" \\\\ \\cline{{3-{(2 + 3 * nfits)}}}"
-                        temp += temp2
+                    temp += f" & {np.round(cl_vals['mid'],round_val)} \
+                            & [{np.round(cl_vals['low68'],round_val)},{np.round(cl_vals['high68'],round_val)}] \
+                                & [{np.round(cl_vals['low95'],round_val)},{np.round(cl_vals['high95'],round_val)}]"
+                    # double solution
+                    try:
+                        cl_vals_2 = bound_df[(group, latex_name)].dropna()[1]
+                        temp2 += f" & {np.round(cl_vals_2['mid'],round_val)} \
+                                & [{np.round(cl_vals_2['low68'],round_val)},{np.round(cl_vals_2['high68'],round_val)}] \
+                                    & [{np.round(cl_vals_2['low95'],round_val)},{np.round(cl_vals_2['high95'],round_val)}]"
+                    except KeyError:
+                        temp2 += r" & & &"
 
-                    temp += f" \\\\ \\cline{{2-{(2 + 3 * nfits)}}}"
-                # append the coefficient line
+                # append double solution
+                if temp2 != " &" * (3 * nfits + 1):
+                    temp += f" \\\\ \\cline{{3-{(2 + 3 * nfits)}}}"
+                    temp += temp2
+
+                temp += f" \\\\ \\cline{{2-{(2 + 3 * nfits)}}}"
                 L.append(temp)
             L.append(r"\hline")
         L.extend(
