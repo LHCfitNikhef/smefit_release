@@ -83,9 +83,12 @@ wcxf_translate = {
     "OQt1": {"wc": ["qu1_3333"]},
     "OQt8": {"wc": ["qu8_3333"]},
     "Ott1": {"wc": ["uu_3333"]},
+    "Obb": {"wc": ["dd_3333"]},
     # 4 leptons
     "Oll": {"wc": ["ll_1221"]},
     "Oll1111": {"wc": ["ll_1111"]},
+    "Oll3333": {"wc": ["ll_3333"]},
+    "Olta3": {"wc": ["le_3333"]},
     # 2 quark 2 lepton operators
     "Oeu": {"wc": ["eu_1111", "eu_1122"]},
     "Oed": {"wc": ["ed_1111", "ed_1122"]},
@@ -101,6 +104,12 @@ wcxf_translate = {
     "Olb": {"wc": ["ld_1133"]},
     "Oqe": {"wc": ["qe_1111", "qe_2211"]},
     "OQe": {"wc": ["qe_3311"]},
+    "Otat": {"wc": ["eu_3333"]},
+    "OQta": {"wc": ["qe_3333"]},
+    "Otl3": {"wc": ["lu_3333"]},
+    "Otl2": {"wc": ["lu_2233"]},
+    "OQl13": {"wc": ["lq1_3333"]},
+    "OQl33": {"wc": ["lq3_3333"]},
 }
 
 # This creates a dictionary to go from Warsaw to SMEFiT.
@@ -180,6 +189,8 @@ inverse_wcxf_translate = {
     # 4 leptons
     "Oll": {"wc": ["ll_1221"]},
     "Oll1111": {"wc": ["ll_1111"]},
+    "Oll3333": {"wc": ["ll_3333"]},
+    "Olta3": {"wc": ["le_3333"]},
     # 2 quark 2 lepton operators
     "Oeu": {"wc": ["eu_1111"]},
     "Oed": {"wc": ["ed_1111"]},
@@ -195,4 +206,10 @@ inverse_wcxf_translate = {
     "Olb": {"wc": ["ld_1133"]},
     "Oqe": {"wc": ["qe_1111"]},
     "OQe": {"wc": ["qe_3311"]},
+    "Otat": {"wc": ["eu_3333"]},
+    "OQta": {"wc": ["qe_3333"]},
+    "Otl3": {"wc": ["lu_3333"]},
+    "Otl2": {"wc": ["lu_2233"]},
+    "OQl13": {"wc": ["lq1_3333"]},
+    "OQl33": {"wc": ["lq3_3333"]},
 }
