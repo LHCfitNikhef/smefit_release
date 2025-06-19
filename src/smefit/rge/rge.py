@@ -372,9 +372,12 @@ class RGE:
         name: str
             name of the file to save the RGE matrix
         """
-        if path is not None:
-            with open(path / f"{name}.pkl", "wb") as f:
-                pickle.dump(rgemat, f)
+        # check that the path exists
+        if not path.exists():
+            path.mkdir(parents=True, exist_ok=True)
+
+        with open(path / f"{name}.pkl", "wb") as f:
+            pickle.dump(rgemat, f)
 
 
 def load_scales(
