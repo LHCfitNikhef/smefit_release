@@ -185,13 +185,21 @@ def post_fit(result_folder: pathlib.Path, n_replica: int, clean_rep: bool):
     default=False,
     help="compute also the chi2 bounds",
 )
-def scan(fit_card: pathlib.Path, n_replica: int, bounds: bool):
+@click.option(
+    "-s",
+    "--scan_points",
+    type=int,
+    default=100,
+    required=False,
+    help="number of points to scan",
+)
+def scan(fit_card: pathlib.Path, n_replica: int, bounds: bool, scan_points: int):
     r"""Plot individual :math:`\chi^2` profiles for all the free parameters.
 
     Usage: smefit SCAN [OPTIONS] path_to_runcard
     """
     runner = Runner.from_file(fit_card.absolute())
-    runner.chi2_scan(n_replica, bounds)
+    runner.chi2_scan(n_replica, bounds, scan_points)
 
 
 @base_command.command("R")
@@ -217,24 +225,19 @@ def report(report_card: pathlib.Path):
     type=float,
     default=None,
     required=False,
-    help="Adjusts the statistical uncertainties according to the specified luminosity",
+    help="Adjusts the statistical uncertainties according to the specified luminosity. "
+    "If not specified, the original uncertainties are kept "
+    "and the central values are fluctuates according to the specified noise level.",
 )
 @click.option(
-    "--closure",
-    type=bool,
-    is_flag=True,
-    default=False,
-    help="Produces datasets under the SM",
+    "--noise",
+    type=click.Choice(["L0", "L1"], case_sensitive=True),
+    default="L0",
+    required=False,
+    help="Noise level for the projection, choose between L0 or L1. Assumes L0 by default.",
 )
-def projection(projection_card: pathlib.Path, lumi: float, closure: bool):
+def projection(projection_card: pathlib.Path, lumi: float, noise: str):
     r"""Compute projection for specified dataset"""
 
-    if (lumi is not None) ^ closure:
-        projection_setup = Projection.from_config(projection_card)
-        projection_setup.build_projection(lumi, closure)
-    else:
-        print(lumi, closure)
-        print(
-            "Usage: specify exclusively either a luminosity in fb-1 after --lumi or run a SM closure test with --closure"
-        )
-        sys.exit()
+    projection_setup = Projection.from_config(projection_card)
+    projection_setup.build_projection(lumi, noise)
