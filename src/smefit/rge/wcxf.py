@@ -186,6 +186,7 @@ inverse_wcxf_translate = {
     "OQt1": {"wc": ["qu1_3333"]},
     "OQt8": {"wc": ["qu8_3333"]},
     "Ott1": {"wc": ["uu_3333"]},
+    "Obb": {"wc": ["dd_3333"]},
     # 4 leptons
     "Oll": {"wc": ["ll_1221"]},
     "Oll1111": {"wc": ["ll_1111"]},
