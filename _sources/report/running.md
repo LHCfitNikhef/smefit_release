@@ -167,12 +167,6 @@ fisher:
 
   # heatmap plot
   plot:
-    summary_only: True # if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset
-    figsize: [11, 15] # figure size
-    title: true # if True display the fit label as title
-
-    plot:
-    summary_only: True # if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset
     figsize: [11, 15] # figure size
     title: true # if True display the fit label as title
     column_names: # list of column names to be displayed, default is all
