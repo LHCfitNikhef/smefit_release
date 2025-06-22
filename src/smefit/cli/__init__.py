@@ -236,8 +236,15 @@ def report(report_card: pathlib.Path):
     required=False,
     help="Noise level for the projection, choose between L0 or L1. Assumes L0 by default.",
 )
-def projection(projection_card: pathlib.Path, lumi: float, noise: str):
+@click.option(
+    "--seed",
+    type=int,
+    default=None,
+    required=False,
+    help="Seed for the random number generator, if not specified, a random seed is used.",
+)
+def projection(projection_card: pathlib.Path, lumi: float, noise: str, seed: int):
     r"""Compute projection for specified dataset"""
 
     projection_setup = Projection.from_config(projection_card)
-    projection_setup.build_projection(lumi, noise)
+    projection_setup.build_projection(lumi, noise, seed)
