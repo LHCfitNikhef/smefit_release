@@ -228,7 +228,7 @@ class Projection:
         fred_stat = np.sqrt(lumi_old / lumi_new)
         return stat * fred_stat
 
-    def build_projection(self, lumi_new=None, noise="L0"):
+    def build_projection(self, lumi_new=None, noise="L0", seed=None):
         """
         Constructs runcard for projection by updating the central value and statistical and
         systematic uncertainties
@@ -241,10 +241,11 @@ class Projection:
             according to the noise level
         noise: str
             Noise level for the projection, choose between L0 or L1
-        closure: bool
-            Set to true for a L1 closure test (no rescaling, only cv gets fluctuated according to
-            original uncertainties)
+        seed: int, optional
+            Seed for the random number generator, if not specified, a random seed is used
         """
+        if seed is not None:
+            np.random.seed(seed)
 
         # compute central values under projection
         cv = self.compute_cv_projection()
@@ -374,7 +375,9 @@ class Projection:
                 data_dict["data_central"] = float(cv_projection[0])
 
             projection_folder = self.projections_path
-            projection_folder.mkdir(exist_ok=True)
+            if seed is not None:
+                projection_folder = projection_folder / f"seed_{seed}"
+            projection_folder.mkdir(exist_ok=True, parents=True)
 
             if projection_folder != self.commondata_path:
                 if lumi_new is not None:
