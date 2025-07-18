@@ -87,8 +87,13 @@ wcxf_translate = {
     # 4 leptons
     "Oll": {"wc": ["ll_1221"]},
     "Oll1111": {"wc": ["ll_1111"]},
+    "Oll1122": {"wc": ["ll_1122","ll_2211"]}, #Notice the sum over the 2 combinations.
+    "Oll1133": {"wc": ["ll_1133","ll_3311"]}, #Notice the sum over the 2 combinations.
+    "Oll2233": {"wc": ["ll_2233", "ll_3322"]},
+    "Oll2222": {"wc": ["ll_2222"]},
     "Oll3333": {"wc": ["ll_3333"]},
-    "Olta3": {"wc": ["le_3333"]},
+    "Ole3333": {"wc": ["le_3333"]},
+
     # 2 quark 2 lepton operators
     "Oeu": {"wc": ["eu_1111", "eu_1122"]},
     "Oed": {"wc": ["ed_1111", "ed_1122"]},
@@ -190,8 +195,17 @@ inverse_wcxf_translate = {
     # 4 leptons
     "Oll": {"wc": ["ll_1221"]},
     "Oll1111": {"wc": ["ll_1111"]},
+    "Oll1122": {"wc": ["ll_1122"],"coeff": [1.0/2.0]}, # Notice the factor of 1/2. See table 28 of arXiv:2012.11343
+    "Oll1133": {"wc": ["ll_1133"],"coeff": [1.0/2.0]},
+    "Oll2233": {"wc": ["ll_2233"],"coeff": [1.0/2.0]},
+    "Oll2222": {"wc": ["ll_2222"]},
     "Oll3333": {"wc": ["ll_3333"]},
-    "Olta3": {"wc": ["le_3333"]},
+    "Ole1111": {"wc": ["le_1111"]},
+    "Ole2222": {"wc": ["le_2222"]},
+    "Ole3333": {"wc": ["le_3333"]},
+    "Ole1133": {"wc": ["le_1133"]},
+    "Ole1122": {"wc": ["le_1122"]},
+    "Ole2233": {"wc": ["le_2233"]},
     # 2 quark 2 lepton operators
     "Oeu": {"wc": ["eu_1111"]},
     "Oed": {"wc": ["ed_1111"]},
