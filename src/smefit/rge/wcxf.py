@@ -84,7 +84,7 @@ wcxf_translate = {
     "OQt8": {"wc": ["qu8_3333"]},
     "Ott1": {"wc": ["uu_3333"]},
     # 4 leptons
-    "Oll": {"wc": ["ll_1221"]},
+    "Oll": {"wc": ["ll_1221"], "value": [2.0]},
     "Oll1111": {"wc": ["ll_1111"]},
     # 2 quark 2 lepton operators
     "Oeu": {"wc": ["eu_1111", "eu_1122"]},
@@ -178,7 +178,7 @@ inverse_wcxf_translate = {
     "OQt8": {"wc": ["qu8_3333"]},
     "Ott1": {"wc": ["uu_3333"]},
     # 4 leptons
-    "Oll": {"wc": ["ll_1221"]},
+    "Oll": {"wc": ["ll_1221"], "coeff": [1.0 / 2.0]},
     "Oll1111": {"wc": ["ll_1111"]},
     # 2 quark 2 lepton operators
     "Oeu": {"wc": ["eu_1111"]},
