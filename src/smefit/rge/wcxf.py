@@ -108,10 +108,11 @@ wcxf_translate = {
     "Oee2222": {"wc": ["ee_2222"]},
     "Oee3333": {"wc": ["ee_3333"]},
     "Oee1122": {
-        "wc": ["ee_1122"]
-    },  # Notice the factor of 1/2. See table 28 of arXiv:2012.11343
-    "Oee1133": {"wc": ["ee_1133"]},
-    "Oee2233": {"wc": ["ee_2233"]},
+        "wc": ["ee_1122"],
+        "value": [4.0],
+    },  # Factor of 4 to agree with SMEFTsim general convention.
+    "Oee1133": {"wc": ["ee_1133"], "value": [4.0]},
+    "Oee2233": {"wc": ["ee_2233"], "value": [4.0]},
     # 2 quark 2 lepton operators
     "Oeu": {"wc": ["eu_1111", "eu_1122"]},
     "Oed": {"wc": ["ed_1111", "ed_1122"]},
@@ -238,10 +239,10 @@ inverse_wcxf_translate = {
     "Oee3333": {"wc": ["ee_3333"]},
     "Oee1122": {
         "wc": ["ee_1122"],
-        "coeff": [1.0 / 2.0],
-    },  # Notice the factor of 1/2. See table 28 of arXiv:2012.11343
-    "Oee1133": {"wc": ["ee_1133"], "coeff": [1.0 / 2.0]},
-    "Oee2233": {"wc": ["ee_2233"], "coeff": [1.0 / 2.0]},
+        "coeff": [1.0 / 4.0],
+    },  # Factor 1/4 to agree with SMEFTsim general convention.
+    "Oee1133": {"wc": ["ee_1133"], "coeff": [1.0 / 4.0]},
+    "Oee2233": {"wc": ["ee_2233"], "coeff": [1.0 / 4.0]},
     # 2 quark 2 lepton operators
     "Oeu": {"wc": ["eu_1111"]},
     "Oed": {"wc": ["ed_1111"]},
