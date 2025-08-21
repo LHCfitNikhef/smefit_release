@@ -435,7 +435,7 @@ class TestOptimize_MC:
             )
 
             for idx in range(free_coeffs.shape[0]):
-                params = np.zeros_like(free_coeffs)
+                params = np.zeros_like(free_coeffs, dtype=float)
                 params[idx] = 1.0
                 temp_coeff.set_free_parameters(params)
                 temp_coeff.set_constraints()
