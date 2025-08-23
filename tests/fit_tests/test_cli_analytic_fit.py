@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 import pathlib
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 import pytest
