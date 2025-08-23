@@ -29,7 +29,6 @@ def _dump_yaml(path: pathlib.Path, data: dict[str, Any]) -> None:
         yaml.safe_dump(data, f, sort_keys=False)
 
 
-@pytest.mark.integration
 def test_cli_analytic_fit_matches_precomputed(tmp_path: pathlib.Path):
     # Paths to fixtures and runcard
     # The fixtures (runcard, data, theory, expected results) live under tests/fit_tests
