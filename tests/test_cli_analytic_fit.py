@@ -9,10 +9,10 @@ from __future__ import annotations
 
 import json
 import pathlib
+import pickle
 from typing import Any
 
 import numpy as np
-import pytest
 import yaml
 from click.testing import CliRunner
 
@@ -69,6 +69,110 @@ def test_cli_analytic_fit_matches_precomputed(tmp_path: pathlib.Path):
         got = json.load(f)
     with open(precomputed_file, encoding="utf-8") as f:
         exp = json.load(f)
+
+    # Compare deterministic content
+    # - free parameter names (set equality, order-insensitive)
+    assert set(got["free_parameters"]) == set(
+        exp["free_parameters"]
+    ), "Free parameters mismatch"
+
+    # - best-fit point per parameter
+    for name in exp["best_fit_point"].keys():
+        assert name in got["best_fit_point"], f"Missing best-fit for {name}"
+        np.testing.assert_allclose(
+            got["best_fit_point"][name],
+            exp["best_fit_point"][name],
+            rtol=1e-4,
+        )
+
+    # - max log-likelihood should match within tolerance
+    np.testing.assert_allclose(
+        got["max_loglikelihood"], exp["max_loglikelihood"], rtol=1e-4
+    )
+
+    # - evidence (logZ) is deterministic for the analytic solution
+    np.testing.assert_allclose(got["logz"], exp["logz"], rtol=1e-4)
+
+    # compare mean and standard deviation of posterior samples
+    # They should match within a reasonable tolerance, set to 10%
+    # since it depends on the samples that experience fluctuations
+    for name in exp["samples"].keys():
+        assert name in got["samples"], f"Missing samples for {name}"
+        np.testing.assert_allclose(
+            np.mean(got["samples"][name]),
+            np.mean(exp["samples"][name]),
+            rtol=1e-1,
+        )
+        np.testing.assert_allclose(
+            np.std(got["samples"][name]),
+            np.std(exp["samples"][name]),
+            rtol=1e-1,
+        )
+
+
+def test_cli_analytic_fit_with_rge_matches_precomputed(tmp_path: pathlib.Path):
+    # Paths to fixtures and runcard
+    # The fixtures (runcard, data, theory, expected results) live under tests/fit_tests
+    base_dir = pathlib.Path(__file__).parent / "fit_tests"
+    runcard_src = base_dir / "analytic_fit_glob_with_rge.yaml"
+    precomputed_file = (
+        base_dir / "test_results" / "analytic_fit_glob_with_rge" / "fit_results.json"
+    )
+    rge_matrix_file = (
+        base_dir / "test_results" / "analytic_fit_glob_with_rge" / "rge_matrix.pkl"
+    )
+
+    assert runcard_src.is_file(), "Expected test runcard not found"
+    assert precomputed_file.is_file(), "Expected precomputed results not found"
+    assert rge_matrix_file.is_file(), "Expected RGE matrix not found"
+
+    # Prepare a copy of the runcard with absolute paths and a temp results folder.
+    rc = _load_yaml(runcard_src)
+
+    rc["data_path"] = str((base_dir / "test_commondata").resolve())
+    rc["theory_path"] = str((base_dir / "test_theory").resolve())
+    rc["result_path"] = str(tmp_path / "fit_results")
+    # Keep the same result_ID so we can also compare with the precomputed folder name
+    result_id = rc.get("result_ID", "analytic_fit_glob_with_rge")
+
+    # Write the adjusted runcard
+    runcard_dst = tmp_path / "analytic_fit_glob_with_rge.yaml"
+    _dump_yaml(runcard_dst, rc)
+
+    # Run the CLI: smefit A <runcard>
+    runner = CliRunner()
+    result = runner.invoke(
+        base_command, ["A", str(runcard_dst)], catch_exceptions=False
+    )
+    assert result.exit_code == 0, f"CLI failed: {result.output}"
+
+    # Load our produced results
+    produced_fit = tmp_path / "fit_results" / result_id / "fit_results.json"
+    assert produced_fit.is_file(), "fit_results.json was not produced"
+    produced_rge = tmp_path / "fit_results" / result_id / "rge_matrix.pkl"
+    assert produced_rge.is_file(), "rge_matrix.pkl was not produced"
+
+    with open(produced_fit, encoding="utf-8") as f:
+        got = json.load(f)
+    with open(precomputed_file, encoding="utf-8") as f:
+        exp = json.load(f)
+
+    # load rge_matrix.pkl
+    with open(rge_matrix_file, "rb") as f:
+        rge_matrix_precomp = pickle.load(f)
+    with open(produced_rge, "rb") as f:
+        rge_matrix_produced = pickle.load(f)
+
+    # Compare RGE matrices (lists of pandas.DataFrame)
+    assert isinstance(rge_matrix_produced, list)
+    assert isinstance(rge_matrix_precomp, list)
+    assert len(rge_matrix_produced) == len(rge_matrix_precomp)
+    for got_df, exp_df in zip(rge_matrix_produced, rge_matrix_precomp):
+        # Same shape and labels
+        assert list(got_df.index) == list(exp_df.index)
+        assert list(got_df.columns) == list(exp_df.columns)
+        # Numeric closeness
+        np.testing.assert_allclose(got_df.values, exp_df.values, rtol=1e-4)
 
     # Compare deterministic content
     # - free parameter names (set equality, order-insensitive)
