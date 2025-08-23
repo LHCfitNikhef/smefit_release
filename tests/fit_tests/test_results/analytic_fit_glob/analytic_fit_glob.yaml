@@ -1,13 +1,14 @@
 # Input YAML configurations for SMEFiT code
 result_ID: analytic_fit_glob
 # absolute path where results are stored
-result_path: ./
+result_path: ./test_results
 # path to common data
 data_path: ./test_commondata
 # path to theory tables, default same as data path
 theory_path: ./test_theory
 use_theory_covmat: True
 use_t0: True
+float64: True
 # SMEFT Expansion Order (False = Lambda^-2 , True = Lambda^-4)
 use_quad: False
 # Set parameter bounds to previous SCAN result
