@@ -32,7 +32,8 @@ def _dump_yaml(path: pathlib.Path, data: dict[str, Any]) -> None:
 @pytest.mark.integration
 def test_cli_analytic_fit_matches_precomputed(tmp_path: pathlib.Path):
     # Paths to fixtures and runcard
-    base_dir = pathlib.Path(__file__).parent
+    # The fixtures (runcard, data, theory, expected results) live under tests/fit_tests
+    base_dir = pathlib.Path(__file__).parent / "fit_tests"
     runcard_src = base_dir / "analytic_fit_glob.yaml"
     precomputed_file = (
         base_dir / "test_results" / "analytic_fit_glob" / "fit_results.json"
