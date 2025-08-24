@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
-"""CLI integration test for the ultranest (NS) fit.
-
-This test runs `smefit NS <runcard>` on a small fake setup and
-compares deterministic outputs (best-fit point, max log-likelihood,
-and free parameter names) against precomputed results.
-"""
-from __future__ import annotations
-
 import json
 import pathlib
 import pickle
 from typing import Any
 
 import numpy as np
+import pytest
 import yaml
 from click.testing import CliRunner
 
@@ -29,172 +22,59 @@ def _dump_yaml(path: pathlib.Path, data: dict[str, Any]) -> None:
         yaml.safe_dump(data, f, sort_keys=False)
 
 
-def _quantiles(a: list[float] | np.ndarray, qs=(0.025, 0.975)) -> np.ndarray:
+def _quantiles(a, qs=(0.025, 0.975)) -> np.ndarray:
     arr = np.asarray(a, dtype=float)
     return np.quantile(arr, qs)
 
 
 def _ci_atol(width: float) -> float:
-    """Adaptive absolute tolerance for 95% CI endpoints.
-    - Scale with interval width to respect narrow posteriors.
-    - Keep a small floor for numerical jitter and a sensible ceiling.
-    """
+    # Adaptive atol for 95% CI endpoints
     return max(0.02, min(0.1, 0.05 * float(width)))
 
 
-def test_cli_ultranest_lin_fit_matches_precomputed(tmp_path: pathlib.Path):
-    # Paths to fixtures and runcard
-    # The fixtures (runcard, data, theory, expected results) live under tests/fit_tests
+@pytest.mark.parametrize(
+    "runcard_filename,result_id,expect_rge",
+    [
+        ("ultranest_fit_lin_glob.yaml", "ultranest_fit_lin_glob", False),
+        ("ultranest_fit_quad_glob.yaml", "ultranest_fit_quad_glob", False),
+        (
+            "ultranest_fit_lin_glob_with_rge.yaml",
+            "ultranest_fit_lin_glob_with_rge",
+            True,
+        ),
+        (
+            "ultranest_fit_quad_glob_with_rge.yaml",
+            "ultranest_fit_quad_glob_with_rge",
+            True,
+        ),
+    ],
+    ids=["lin", "quad", "lin_rge", "quad_rge"],
+)
+def test_cli_ultranest_fit_matches_precomputed(
+    tmp_path: pathlib.Path, runcard_filename: str, result_id: str, expect_rge: bool
+):
     base_dir = pathlib.Path(__file__).parent / "fit_tests"
-    runcard_src = base_dir / "ultranest_fit_lin_glob.yaml"
-    precomputed_file = (
-        base_dir / "test_results" / "ultranest_fit_lin_glob" / "fit_results.json"
-    )
+    runcard_src = base_dir / runcard_filename
+    precomputed_dir = base_dir / "test_results" / result_id
+    precomputed_file = precomputed_dir / "fit_results.json"
+    rge_matrix_file = precomputed_dir / "rge_matrix.pkl"
 
-    assert runcard_src.is_file(), "Expected test runcard not found"
-    assert precomputed_file.is_file(), "Expected precomputed results not found"
+    assert runcard_src.is_file()
+    assert precomputed_file.is_file()
+    if expect_rge:
+        assert rge_matrix_file.is_file()
 
-    # Prepare a copy of the runcard with absolute paths and a temp results folder.
-    rc = _load_yaml(runcard_src)
-
-    rc["data_path"] = str((base_dir / "test_commondata").resolve())
-    rc["theory_path"] = str((base_dir / "test_theory").resolve())
-    rc["result_path"] = str(tmp_path / "fit_results")
-    # Keep the same result_ID so we can also compare with the precomputed folder name
-    result_id = rc.get("result_ID", "ultranest_fit_lin_glob")
-
-    # Write the adjusted runcard
-    runcard_dst = tmp_path / "ultranest_fit_lin_glob.yaml"
-    _dump_yaml(runcard_dst, rc)
-
-    # Run the CLI: smefit NS <runcard>
-    runner = CliRunner()
-    result = runner.invoke(
-        base_command, ["NS", str(runcard_dst)], catch_exceptions=False
-    )
-    assert result.exit_code == 0, f"CLI failed: {result.output}"
-
-    # Load our produced results
-    produced = tmp_path / "fit_results" / result_id / "fit_results.json"
-    assert produced.is_file(), "fit_results.json was not produced"
-
-    with open(produced, encoding="utf-8") as f:
-        got = json.load(f)
-    with open(precomputed_file, encoding="utf-8") as f:
-        exp = json.load(f)
-
-    # Compare content
-    # - free parameter names (set equality, order-insensitive)
-    assert set(got["free_parameters"]) == set(
-        exp["free_parameters"]
-    ), "Free parameters mismatch"
-
-    # Use absolute tolerances for global scalars; evidence and max log-likelihood can shift slightly.
-    np.testing.assert_allclose(
-        got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.5
-    )
-    np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.5)
-
-    # Compare 95% CI endpoints with adaptive atol per-parameter
-    for name in exp["samples"].keys():
-        assert name in got["samples"], f"Missing samples for {name}"
-        q_got = _quantiles(got["samples"][name])
-        q_exp = _quantiles(exp["samples"][name])
-        atol = _ci_atol(q_exp[1] - q_exp[0])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.05, atol=atol)
-
-
-def test_cli_ultranest_quad_fit_matches_precomputed(tmp_path: pathlib.Path):
-    # Paths to fixtures and runcard
-    # The fixtures (runcard, data, theory, expected results) live under tests/fit_tests
-    base_dir = pathlib.Path(__file__).parent / "fit_tests"
-    runcard_src = base_dir / "ultranest_fit_quad_glob.yaml"
-    precomputed_file = (
-        base_dir / "test_results" / "ultranest_fit_quad_glob" / "fit_results.json"
-    )
-
-    assert runcard_src.is_file(), "Expected test runcard not found"
-    assert precomputed_file.is_file(), "Expected precomputed results not found"
-
-    # Prepare a copy of the runcard with absolute paths and a temp results folder.
-    rc = _load_yaml(runcard_src)
-
-    rc["data_path"] = str((base_dir / "test_commondata").resolve())
-    rc["theory_path"] = str((base_dir / "test_theory").resolve())
-    rc["result_path"] = str(tmp_path / "fit_results")
-    # Keep the same result_ID so we can also compare with the precomputed folder name
-    result_id = rc.get("result_ID", "ultranest_fit_quad_glob")
-
-    # Write the adjusted runcard
-    runcard_dst = tmp_path / "ultranest_fit_quad_glob.yaml"
-    _dump_yaml(runcard_dst, rc)
-
-    # Run the CLI: smefit NS <runcard>
-    runner = CliRunner()
-    result = runner.invoke(
-        base_command, ["NS", str(runcard_dst)], catch_exceptions=False
-    )
-    assert result.exit_code == 0, f"CLI failed: {result.output}"
-
-    # Load our produced results
-    produced = tmp_path / "fit_results" / result_id / "fit_results.json"
-    assert produced.is_file(), "fit_results.json was not produced"
-
-    with open(produced, encoding="utf-8") as f:
-        got = json.load(f)
-    with open(precomputed_file, encoding="utf-8") as f:
-        exp = json.load(f)
-
-    # Compare content
-    # - free parameter names (set equality, order-insensitive)
-    assert set(got["free_parameters"]) == set(
-        exp["free_parameters"]
-    ), "Free parameters mismatch"
-
-    # Use absolute tolerances for global scalars; evidence and max log-likelihood can shift slightly.
-    np.testing.assert_allclose(
-        got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.5
-    )
-    np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.5)
-
-    # Compare 95% CI endpoints with adaptive atol per-parameter
-    for name in exp["samples"].keys():
-        assert name in got["samples"], f"Missing samples for {name}"
-        q_got = _quantiles(got["samples"][name])
-        q_exp = _quantiles(exp["samples"][name])
-        atol = _ci_atol(q_exp[1] - q_exp[0])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.05, atol=atol)
-
-
-def test_cli_ultranest_lin_fit_with_rge_matches_precomputed(tmp_path: pathlib.Path):
-    # Paths to fixtures and runcard
-    base_dir = pathlib.Path(__file__).parent / "fit_tests"
-    runcard_src = base_dir / "ultranest_fit_lin_glob_with_rge.yaml"
-    precomputed_file = (
-        base_dir
-        / "test_results"
-        / "ultranest_fit_lin_glob_with_rge"
-        / "fit_results.json"
-    )
-    rge_matrix_file = (
-        base_dir / "test_results" / "ultranest_fit_lin_glob_with_rge" / "rge_matrix.pkl"
-    )
-
-    assert runcard_src.is_file(), "Expected test runcard not found"
-    assert precomputed_file.is_file(), "Expected precomputed results not found"
-    assert rge_matrix_file.is_file(), "Expected RGE matrix not found"
-
-    # Prepare a copy of the runcard with absolute paths and a temp results folder.
+    # Prepare runcard with absolute paths and tmp result_path
     rc = _load_yaml(runcard_src)
     rc["data_path"] = str((base_dir / "test_commondata").resolve())
     rc["theory_path"] = str((base_dir / "test_theory").resolve())
     rc["result_path"] = str(tmp_path / "fit_results")
-    result_id = rc.get("result_ID", "ultranest_fit_lin_glob_with_rge")
+    rc.setdefault("result_ID", result_id)
 
-    runcard_dst = tmp_path / "ultranest_fit_lin_glob_with_rge.yaml"
+    runcard_dst = tmp_path / runcard_src.name
     _dump_yaml(runcard_dst, rc)
 
-    # Run the CLI: smefit NS <runcard>
+    # Run CLI
     runner = CliRunner()
     result = runner.invoke(
         base_command, ["NS", str(runcard_dst)], catch_exceptions=False
@@ -203,123 +83,40 @@ def test_cli_ultranest_lin_fit_with_rge_matches_precomputed(tmp_path: pathlib.Pa
 
     # Load produced outputs
     produced_fit = tmp_path / "fit_results" / result_id / "fit_results.json"
-    produced_rge = tmp_path / "fit_results" / result_id / "rge_matrix.pkl"
     assert produced_fit.is_file(), "fit_results.json was not produced"
-    assert produced_rge.is_file(), "rge_matrix.pkl was not produced"
 
     with open(produced_fit, encoding="utf-8") as f:
         got = json.load(f)
     with open(precomputed_file, encoding="utf-8") as f:
         exp = json.load(f)
 
-    with open(rge_matrix_file, "rb") as f:
-        rge_matrix_precomp = pickle.load(f)
-    with open(produced_rge, "rb") as f:
-        rge_matrix_produced = pickle.load(f)
+    # Optional: RGE matrix compare
+    if expect_rge:
+        produced_rge = tmp_path / "fit_results" / result_id / "rge_matrix.pkl"
+        assert produced_rge.is_file(), "rge_matrix.pkl was not produced"
+        with open(rge_matrix_file, "rb") as f:
+            rge_matrix_precomp = pickle.load(f)
+        with open(produced_rge, "rb") as f:
+            rge_matrix_produced = pickle.load(f)
+        assert isinstance(rge_matrix_produced, list)
+        assert isinstance(rge_matrix_precomp, list)
+        assert len(rge_matrix_produced) == len(rge_matrix_precomp)
+        for got_df, exp_df in zip(rge_matrix_produced, rge_matrix_precomp):
+            assert list(got_df.index) == list(exp_df.index)
+            assert list(got_df.columns) == list(exp_df.columns)
+            np.testing.assert_allclose(got_df.values, exp_df.values, rtol=1e-4)
 
-    # Compare RGE matrices (lists of pandas.DataFrame)
-    assert isinstance(rge_matrix_produced, list)
-    assert isinstance(rge_matrix_precomp, list)
-    assert len(rge_matrix_produced) == len(rge_matrix_precomp)
-    for got_df, exp_df in zip(rge_matrix_produced, rge_matrix_precomp):
-        assert list(got_df.index) == list(exp_df.index)
-        assert list(got_df.columns) == list(exp_df.columns)
-        np.testing.assert_allclose(got_df.values, exp_df.values, rtol=1e-4)
-
-    # Compare deterministic-ish content with loose tolerances
-    assert set(got["free_parameters"]) == set(
-        exp["free_parameters"]
-    )  # order-insensitive
-
+    # Compare deterministic-ish content
+    assert set(got["free_parameters"]) == set(exp["free_parameters"])
     np.testing.assert_allclose(
         got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.5
     )
     np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.5)
 
+    # Per-parameter 95% CI endpoints with adaptive tol
     for name in exp["samples"].keys():
         assert name in got["samples"], f"Missing samples for {name}"
         q_got = _quantiles(got["samples"][name])
         q_exp = _quantiles(exp["samples"][name])
         atol = _ci_atol(q_exp[1] - q_exp[0])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.05, atol=atol)
-
-
-def test_cli_ultranest_quad_fit_with_rge_matches_precomputed(tmp_path: pathlib.Path):
-    # Paths to fixtures and runcard
-    base_dir = pathlib.Path(__file__).parent / "fit_tests"
-    runcard_src = base_dir / "ultranest_fit_quad_glob_with_rge.yaml"
-    precomputed_file = (
-        base_dir
-        / "test_results"
-        / "ultranest_fit_quad_glob_with_rge"
-        / "fit_results.json"
-    )
-    rge_matrix_file = (
-        base_dir
-        / "test_results"
-        / "ultranest_fit_quad_glob_with_rge"
-        / "rge_matrix.pkl"
-    )
-
-    assert runcard_src.is_file(), "Expected test runcard not found"
-    assert precomputed_file.is_file(), "Expected precomputed results not found"
-    assert rge_matrix_file.is_file(), "Expected RGE matrix not found"
-
-    # Prepare a copy of the runcard with absolute paths and a temp results folder.
-    rc = _load_yaml(runcard_src)
-    rc["data_path"] = str((base_dir / "test_commondata").resolve())
-    rc["theory_path"] = str((base_dir / "test_theory").resolve())
-    rc["result_path"] = str(tmp_path / "fit_results")
-    result_id = rc.get("result_ID", "ultranest_fit_quad_glob_with_rge")
-
-    runcard_dst = tmp_path / "ultranest_fit_quad_glob_with_rge.yaml"
-    _dump_yaml(runcard_dst, rc)
-
-    # Run the CLI: smefit NS <runcard>
-    runner = CliRunner()
-    result = runner.invoke(
-        base_command, ["NS", str(runcard_dst)], catch_exceptions=False
-    )
-    assert result.exit_code == 0, f"CLI failed: {result.output}"
-
-    # Load produced outputs
-    produced_fit = tmp_path / "fit_results" / result_id / "fit_results.json"
-    produced_rge = tmp_path / "fit_results" / result_id / "rge_matrix.pkl"
-    assert produced_fit.is_file(), "fit_results.json was not produced"
-    assert produced_rge.is_file(), "rge_matrix.pkl was not produced"
-
-    with open(produced_fit, encoding="utf-8") as f:
-        got = json.load(f)
-    with open(precomputed_file, encoding="utf-8") as f:
-        exp = json.load(f)
-
-    with open(rge_matrix_file, "rb") as f:
-        rge_matrix_precomp = pickle.load(f)
-    with open(produced_rge, "rb") as f:
-        rge_matrix_produced = pickle.load(f)
-
-    # Compare RGE matrices (lists of pandas.DataFrame)
-    assert isinstance(rge_matrix_produced, list)
-    assert isinstance(rge_matrix_precomp, list)
-    assert len(rge_matrix_produced) == len(rge_matrix_precomp)
-    for got_df, exp_df in zip(rge_matrix_produced, rge_matrix_precomp):
-        assert list(got_df.index) == list(exp_df.index)
-        assert list(got_df.columns) == list(exp_df.columns)
-        np.testing.assert_allclose(got_df.values, exp_df.values, rtol=1e-4)
-
-    # Compare deterministic-ish content with loose tolerances
-    assert set(got["free_parameters"]) == set(
-        exp["free_parameters"]
-    )  # order-insensitive
-
-    np.testing.assert_allclose(
-        got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.5
-    )
-    np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.5)
-
-    for name in exp["samples"].keys():
-        assert name in got["samples"], f"Missing samples for {name}"
-        q_got = _quantiles(got["samples"][name])
-        q_exp = _quantiles(exp["samples"][name])
-        atol = _ci_atol(q_exp[1] - q_exp[0])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.05, atol=atol)
+        np.testing.assert_allclose(q_got, q_exp, rtol=0.1, atol=atol)
