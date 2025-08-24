@@ -35,8 +35,23 @@ def _dump_yaml(path: pathlib.Path, data: dict[str, Any]) -> None:
     [
         ("analytic_fit_glob.yaml", "analytic_fit_glob", False),
         ("analytic_fit_glob_with_rge.yaml", "analytic_fit_glob_with_rge", True),
+        (
+            "analytic_fit_glob_with_constraints.yaml",
+            "analytic_fit_glob_with_constraints",
+            False,
+        ),
+        (
+            "analytic_fit_glob_with_constraints_and_rge.yaml",
+            "analytic_fit_glob_with_constraints_and_rge",
+            True,
+        ),
     ],
-    ids=["analytic_glob", "analytic_glob_rge"],
+    ids=[
+        "analytic_glob",
+        "analytic_glob_rge",
+        "analytic_glob_constraints",
+        "analytic_glob_constraints_rge",
+    ],
 )
 def test_cli_analytic_fit_matches_precomputed(
     tmp_path: pathlib.Path, runcard_filename: str, result_id: str, expect_rge: bool

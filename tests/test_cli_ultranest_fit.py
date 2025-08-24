@@ -47,8 +47,25 @@ def _ci_atol(width: float) -> float:
             "ultranest_fit_quad_glob_with_rge",
             True,
         ),
+        (
+            "ultranest_fit_quad_glob_with_constraints.yaml",
+            "ultranest_fit_quad_glob_with_constraints",
+            False,
+        ),
+        (
+            "ultranest_fit_quad_glob_with_constraints_and_rge.yaml",
+            "ultranest_fit_quad_glob_with_constraints_and_rge",
+            True,
+        ),
     ],
-    ids=["lin", "quad", "lin_rge", "quad_rge"],
+    ids=[
+        "lin",
+        "quad",
+        "lin_rge",
+        "quad_rge",
+        "quad_constraints",
+        "quad_constraints_rge",
+    ],
 )
 def test_cli_ultranest_fit_matches_precomputed(
     tmp_path: pathlib.Path, runcard_filename: str, result_id: str, expect_rge: bool
