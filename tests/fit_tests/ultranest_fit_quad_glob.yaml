@@ -1,0 +1,31 @@
+# Input YAML configurations for SMEFiT code
+result_ID: ultranest_fit_quad_glob
+# absolute path where results are stored
+result_path: ./test_results
+# path to common data
+data_path: ./test_commondata
+# path to theory tables, default same as data path
+theory_path: ./test_theory
+use_theory_covmat: True
+use_t0: True
+float64: True
+# SMEFT Expansion Order (False = Lambda^-2 , True = Lambda^-4)
+use_quad: True
+# Set parameter bounds to previous SCAN result
+bounds: Null
+# NS settings
+nlive: 1000
+lepsilon: 0.001
+target_evidence_unc: 0.03
+target_post_unc: 0.001
+frac_remain: 0.01
+# Datasets to include
+datasets:
+  - {name: ATLAS_ZH_Hbb_13TeV, order: NLO_QCD}
+  - {name: CMS_ggF_aa_13TeV, order: NLO_QCD}
+
+# Coefficients to fit
+coefficients:
+  OtZ: {'min': -10, 'max': 10}
+  OpWB: {'min': -10, 'max': 10}
+  OpqMi: {'min': -10, 'max': 10}
