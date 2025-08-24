@@ -29,9 +29,7 @@ def _dump_yaml(path: pathlib.Path, data: dict[str, Any]) -> None:
         yaml.safe_dump(data, f, sort_keys=False)
 
 
-def _quantiles(
-    a: list[float] | np.ndarray, qs=(0.05, 0.10, 0.16, 0.50, 0.84, 0.90, 0.95)
-) -> np.ndarray:
+def _quantiles(a: list[float] | np.ndarray, qs=(0.025, 0.975)) -> np.ndarray:
     arr = np.asarray(a, dtype=float)
     return np.quantile(arr, qs)
 
