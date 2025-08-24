@@ -101,7 +101,7 @@ def test_cli_ultranest_lin_fit_matches_precomputed(tmp_path: pathlib.Path):
         q_got = _quantiles(got["samples"][name])
         q_exp = _quantiles(exp["samples"][name])
         atol = _ci_atol(q_exp[1] - q_exp[0])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=atol)
+        np.testing.assert_allclose(q_got, q_exp, rtol=0.05, atol=atol)
 
 
 def test_cli_ultranest_quad_fit_matches_precomputed(tmp_path: pathlib.Path):
@@ -163,7 +163,7 @@ def test_cli_ultranest_quad_fit_matches_precomputed(tmp_path: pathlib.Path):
         q_got = _quantiles(got["samples"][name])
         q_exp = _quantiles(exp["samples"][name])
         atol = _ci_atol(q_exp[1] - q_exp[0])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=atol)
+        np.testing.assert_allclose(q_got, q_exp, rtol=0.05, atol=atol)
 
 
 def test_cli_ultranest_lin_fit_with_rge_matches_precomputed(tmp_path: pathlib.Path):
@@ -241,7 +241,7 @@ def test_cli_ultranest_lin_fit_with_rge_matches_precomputed(tmp_path: pathlib.Pa
         q_got = _quantiles(got["samples"][name])
         q_exp = _quantiles(exp["samples"][name])
         atol = _ci_atol(q_exp[1] - q_exp[0])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=atol)
+        np.testing.assert_allclose(q_got, q_exp, rtol=0.05, atol=atol)
 
 
 def test_cli_ultranest_quad_fit_with_rge_matches_precomputed(tmp_path: pathlib.Path):
@@ -322,4 +322,4 @@ def test_cli_ultranest_quad_fit_with_rge_matches_precomputed(tmp_path: pathlib.P
         q_got = _quantiles(got["samples"][name])
         q_exp = _quantiles(exp["samples"][name])
         atol = _ci_atol(q_exp[1] - q_exp[0])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=atol)
+        np.testing.assert_allclose(q_got, q_exp, rtol=0.05, atol=atol)
