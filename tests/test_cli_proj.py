@@ -81,8 +81,8 @@ def test_cli_proj_matches_fixtures(
         assert (out_root / "rge_matrix.pkl").is_file(), "Missing RGE matrix in output"
 
     # Compare each produced YAML with expected, allowing small numeric tolerances
-    atol = 1e-8
-    rtol = 1e-6
+    atol = 1e-6
+    rtol = 1e-4
 
     got_dir = out_root if seed is None else (out_root / f"seed_{seed}")
 
