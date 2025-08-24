@@ -26,6 +26,6 @@ datasets:
 
 # Coefficients to fit
 coefficients:
-  OtZ: {'min': -10, 'max': 10}
+  OtZ: {'min': -100, 'max': 100}
   OpWB: {'min': -10, 'max': 10}
   OpqMi: {'min': -10, 'max': 10}
