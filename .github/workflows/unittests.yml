@@ -22,15 +22,17 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install TeX deps for matplotlib usetex
+      - name: Install system packages (LaTeX for matplotlib usetex)
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
+          sudo apt-get install -y \
             texlive-latex-base \
             texlive-latex-recommended \
-            cm-super \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
             dvipng \
-            ghostscript
+            ghostscript \
+            cm-super
       - name: Install smefit
         run: |
           pip install .
