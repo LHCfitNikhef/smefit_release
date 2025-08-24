@@ -34,6 +34,14 @@ def _quantiles(a: list[float] | np.ndarray, qs=(0.025, 0.975)) -> np.ndarray:
     return np.quantile(arr, qs)
 
 
+def _ci_atol(width: float) -> float:
+    """Adaptive absolute tolerance for 95% CI endpoints.
+    - Scale with interval width to respect narrow posteriors.
+    - Keep a small floor for numerical jitter and a sensible ceiling.
+    """
+    return max(0.02, min(0.1, 0.05 * float(width)))
+
+
 def test_cli_ultranest_lin_fit_matches_precomputed(tmp_path: pathlib.Path):
     # Paths to fixtures and runcard
     # The fixtures (runcard, data, theory, expected results) live under tests/fit_tests
@@ -83,16 +91,17 @@ def test_cli_ultranest_lin_fit_matches_precomputed(tmp_path: pathlib.Path):
 
     # Use absolute tolerances for global scalars; evidence and max log-likelihood can shift slightly.
     np.testing.assert_allclose(
-        got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.8
+        got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.5
     )
-    np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.8)
+    np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.5)
 
-    # Compare posterior quantiles instead of mean/std to be robust to tails and RNG differences
+    # Compare 95% CI endpoints with adaptive atol per-parameter
     for name in exp["samples"].keys():
         assert name in got["samples"], f"Missing samples for {name}"
         q_got = _quantiles(got["samples"][name])
         q_exp = _quantiles(exp["samples"][name])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=0.1)
+        atol = _ci_atol(q_exp[1] - q_exp[0])
+        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=atol)
 
 
 def test_cli_ultranest_quad_fit_matches_precomputed(tmp_path: pathlib.Path):
@@ -144,16 +153,17 @@ def test_cli_ultranest_quad_fit_matches_precomputed(tmp_path: pathlib.Path):
 
     # Use absolute tolerances for global scalars; evidence and max log-likelihood can shift slightly.
     np.testing.assert_allclose(
-        got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.8
+        got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.5
     )
-    np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.8)
+    np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.5)
 
-    # Compare posterior quantiles instead of mean/std to be robust to tails and RNG differences
+    # Compare 95% CI endpoints with adaptive atol per-parameter
     for name in exp["samples"].keys():
         assert name in got["samples"], f"Missing samples for {name}"
         q_got = _quantiles(got["samples"][name])
         q_exp = _quantiles(exp["samples"][name])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=0.1)
+        atol = _ci_atol(q_exp[1] - q_exp[0])
+        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=atol)
 
 
 def test_cli_ultranest_lin_fit_with_rge_matches_precomputed(tmp_path: pathlib.Path):
@@ -222,15 +232,16 @@ def test_cli_ultranest_lin_fit_with_rge_matches_precomputed(tmp_path: pathlib.Pa
     )  # order-insensitive
 
     np.testing.assert_allclose(
-        got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.8
+        got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.5
     )
-    np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.8)
+    np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.5)
 
     for name in exp["samples"].keys():
         assert name in got["samples"], f"Missing samples for {name}"
         q_got = _quantiles(got["samples"][name])
         q_exp = _quantiles(exp["samples"][name])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=0.1)
+        atol = _ci_atol(q_exp[1] - q_exp[0])
+        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=atol)
 
 
 def test_cli_ultranest_quad_fit_with_rge_matches_precomputed(tmp_path: pathlib.Path):
@@ -302,12 +313,13 @@ def test_cli_ultranest_quad_fit_with_rge_matches_precomputed(tmp_path: pathlib.P
     )  # order-insensitive
 
     np.testing.assert_allclose(
-        got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.8
+        got["max_loglikelihood"], exp["max_loglikelihood"], atol=0.5
     )
-    np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.8)
+    np.testing.assert_allclose(got["logz"], exp["logz"], atol=0.5)
 
     for name in exp["samples"].keys():
         assert name in got["samples"], f"Missing samples for {name}"
         q_got = _quantiles(got["samples"][name])
         q_exp = _quantiles(exp["samples"][name])
-        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=0.1)
+        atol = _ci_atol(q_exp[1] - q_exp[0])
+        np.testing.assert_allclose(q_got, q_exp, rtol=0.2, atol=atol)
