@@ -144,13 +144,24 @@ def test_cli_analytic_fit_matches_precomputed(
         )
 
 
-def test_cli_analytic_fit_indiv_matches_precomputed(tmp_path: pathlib.Path):
+@pytest.mark.parametrize(
+    "runcard_filename,result_id",
+    [
+        ("analytic_fit_indiv.yaml", "analytic_fit_indiv"),
+        (
+            "analytic_fit_indiv_with_constraints.yaml",
+            "analytic_fit_indiv_with_constraints",
+        ),
+    ],
+    ids=["indiv", "indiv_with_constraints"],
+)
+def test_cli_analytic_fit_indiv_matches_precomputed(
+    tmp_path: pathlib.Path, runcard_filename: str, result_id: str
+):
     # Paths to fixtures and runcard
     base_dir = pathlib.Path(__file__).parent / "fit_tests"
-    runcard_src = base_dir / "analytic_fit_indiv.yaml"
-    precomputed_file = (
-        base_dir / "test_results" / "analytic_fit_indiv" / "fit_results.json"
-    )
+    runcard_src = base_dir / runcard_filename
+    precomputed_file = base_dir / "test_results" / result_id / "fit_results.json"
 
     assert runcard_src.is_file(), "Expected test runcard not found"
     assert precomputed_file.is_file(), "Expected precomputed results not found"
@@ -160,9 +171,8 @@ def test_cli_analytic_fit_indiv_matches_precomputed(tmp_path: pathlib.Path):
     rc["data_path"] = str((base_dir / "test_commondata").resolve())
     rc["theory_path"] = str((base_dir / "test_theory").resolve())
     rc["result_path"] = str(tmp_path / "fit_results")
-    result_id = rc.get("result_ID", "analytic_fit_indiv")
 
-    runcard_dst = tmp_path / "analytic_fit_indiv.yaml"
+    runcard_dst = tmp_path / runcard_filename
     _dump_yaml(runcard_dst, rc)
 
     # Run the CLI: smefit A <runcard>

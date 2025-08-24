@@ -144,8 +144,12 @@ def test_cli_ultranest_fit_matches_precomputed(
     [
         ("ultranest_fit_indiv_lin.yaml", "ultranest_fit_indiv_lin"),
         ("ultranest_fit_indiv_quad.yaml", "ultranest_fit_indiv_quad"),
+        (
+            "ultranest_fit_indiv_quad_with_constraints.yaml",
+            "ultranest_fit_indiv_quad_with_constraints",
+        ),
     ],
-    ids=["indiv_lin", "indiv_quad"],
+    ids=["indiv_lin", "indiv_quad", "indiv_quad_with_constraints"],
 )
 def test_cli_ultranest_fit_indiv_matches_precomputed(
     tmp_path: pathlib.Path, runcard_filename: str, result_id: str
