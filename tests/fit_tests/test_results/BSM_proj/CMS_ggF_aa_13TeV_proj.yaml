@@ -1,0 +1,33 @@
+dataset_name: CMS_ggF_aa_13TeV
+doi: none
+location: Table 6, first 6 entries. See Table 1 for bin definitions.
+arxiv: https://inspirehep.net/files/82aa29e742f4324970d810e88817b0ac
+hepdata: none
+units: fb
+description: Higgs boson production via gluon fusion in the diphoton decay channel.
+luminosity: 3000.0
+num_data: 6
+num_sys: 1
+data_central:
+- 8.739280700683594
+- 5.878854751586914
+- 3.742633819580078
+- 0.5310677289962769
+- 4.9179911613464355
+- 0.06877553462982178
+statistical_error:
+- 0.6118596406084561
+- 0.6889386535771391
+- 0.45087037480974385
+- 0.07842095058524974
+- 0.6759689957177603
+- 0.019081349052968682
+systematics:
+- - 2.745
+  - 1.5
+  - 0.5
+  - 0.2125
+  - 0.55
+  - 0.2275
+sys_names: CORR
+sys_type: ADD

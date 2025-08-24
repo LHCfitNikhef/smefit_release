@@ -1,0 +1,18 @@
+# path to save projections
+projections_path: ./test_results/SM_proj
+# path to common data
+commondata_path: ./test_commondata
+# path to theory tables, default same as data path
+theory_path: ./test_theory
+use_theory_covmat: False
+use_t0: True
+float64: True
+# SMEFT Expansion Order (False = Lambda^-2 , True = Lambda^-4)
+use_quad: False
+# Datasets to include
+datasets:
+  - {name: ATLAS_ZH_Hbb_13TeV, order: NLO_QCD}
+  - {name: CMS_ggF_aa_13TeV, order: NLO_QCD}
+
+fred_sys: 0.5 # systematics get reduced by 1/2
+fred_tot: 0.333 # total errors get reduced by 1/3
