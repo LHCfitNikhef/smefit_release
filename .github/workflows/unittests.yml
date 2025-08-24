@@ -26,7 +26,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            texlive-latex-base dvipng ghostscript cm-super
+            texlive-latex-base \
+            texlive-latex-recommended \
+            cm-super \
+            dvipng \
+            ghostscript
       - name: Install smefit
         run: |
           pip install .
