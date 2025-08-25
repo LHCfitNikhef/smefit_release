@@ -83,9 +83,40 @@ wcxf_translate = {
     "OQt1": {"wc": ["qu1_3333"]},
     "OQt8": {"wc": ["qu8_3333"]},
     "Ott1": {"wc": ["uu_3333"]},
+    "Obb": {"wc": ["dd_3333"]},
     # 4 leptons
-    "Oll": {"wc": ["ll_1221"], "value": [2.0]},
+    "Oll": {
+        "wc": ["ll_1221"],
+        "value": [2.0],
+    },  # Notice the factor of 1/2. See table 28 of arXiv:2012.11343
+    "Oll1331": {
+        "wc": ["ll_1331"],
+        "value": [2.0],
+    },
     "Oll1111": {"wc": ["ll_1111"]},
+    "Oll1122": {"wc": ["ll_1122"], "value": [2.0]},
+    "Oll1133": {"wc": ["ll_1133"], "value": [2.0]},
+    "Oll2233": {"wc": ["ll_2233"], "value": [2.0]},
+    "Oll2222": {"wc": ["ll_2222"]},
+    "Oll3333": {"wc": ["ll_3333"]},
+    "Ole1111": {"wc": ["le_1111"]},
+    "Ole2222": {"wc": ["le_2222"]},
+    "Ole3333": {"wc": ["le_3333"]},
+    "Ole1133": {"wc": ["le_1133"]},
+    "Ole1122": {"wc": ["le_1122"]},
+    "Ole2233": {"wc": ["le_2233"]},
+    "Ole3322": {"wc": ["le_3322"]},
+    "Ole3311": {"wc": ["le_3311"]},
+    "Ole2211": {"wc": ["le_2211"]},
+    "Oee1111": {"wc": ["ee_1111"]},
+    "Oee2222": {"wc": ["ee_2222"]},
+    "Oee3333": {"wc": ["ee_3333"]},
+    "Oee1122": {
+        "wc": ["ee_1122"],
+        "value": [4.0],
+    },  # Factor of 4 to agree with SMEFTsim general convention.
+    "Oee1133": {"wc": ["ee_1133"], "value": [4.0]},
+    "Oee2233": {"wc": ["ee_2233"], "value": [4.0]},
     # 2 quark 2 lepton operators
     "Oeu": {"wc": ["eu_1111", "eu_1122"]},
     "Oed": {"wc": ["ed_1111", "ed_1122"]},
@@ -101,6 +132,12 @@ wcxf_translate = {
     "Olb": {"wc": ["ld_1133"]},
     "Oqe": {"wc": ["qe_1111", "qe_2211"]},
     "OQe": {"wc": ["qe_3311"]},
+    "Otta": {"wc": ["eu_3333"]},
+    "OQta": {"wc": ["qe_3333"]},
+    "Otl3": {"wc": ["lu_3333"]},
+    "Otl2": {"wc": ["lu_2233"]},
+    "OQl13": {"wc": ["lq1_3333"]},
+    "OQl33": {"wc": ["lq3_3333"]},
 }
 
 # This creates a dictionary to go from Warsaw to SMEFiT.
@@ -177,9 +214,43 @@ inverse_wcxf_translate = {
     "OQt1": {"wc": ["qu1_3333"]},
     "OQt8": {"wc": ["qu8_3333"]},
     "Ott1": {"wc": ["uu_3333"]},
+    "Obb": {"wc": ["dd_3333"]},
     # 4 leptons
-    "Oll": {"wc": ["ll_1221"], "coeff": [1.0 / 2.0]},
+    "Oll": {
+        "wc": ["ll_1221"],
+        "coeff": [1.0 / 2.0],
+    },  # Notice the factor of 1/2. See table 28 of arXiv:2012.11343
+    "Oll1331": {
+        "wc": ["ll_1331"],
+        "coeff": [1.0 / 2.0],
+    },
     "Oll1111": {"wc": ["ll_1111"]},
+    "Oll1122": {
+        "wc": ["ll_1122"],
+        "coeff": [1.0 / 2.0],
+    },  # Notice the factor of 1/2. See table 28 of arXiv:2012.11343
+    "Oll1133": {"wc": ["ll_1133"], "coeff": [1.0 / 2.0]},
+    "Oll2233": {"wc": ["ll_2233"], "coeff": [1.0 / 2.0]},
+    "Oll2222": {"wc": ["ll_2222"]},
+    "Oll3333": {"wc": ["ll_3333"]},
+    "Ole1111": {"wc": ["le_1111"]},
+    "Ole2222": {"wc": ["le_2222"]},
+    "Ole3333": {"wc": ["le_3333"]},
+    "Ole1133": {"wc": ["le_1133"]},
+    "Ole1122": {"wc": ["le_1122"]},
+    "Ole2233": {"wc": ["le_2233"]},
+    "Ole3322": {"wc": ["le_3322"]},
+    "Ole3311": {"wc": ["le_3311"]},
+    "Ole2211": {"wc": ["le_2211"]},
+    "Oee1111": {"wc": ["ee_1111"]},
+    "Oee2222": {"wc": ["ee_2222"]},
+    "Oee3333": {"wc": ["ee_3333"]},
+    "Oee1122": {
+        "wc": ["ee_1122"],
+        "coeff": [1.0 / 4.0],
+    },  # Factor 1/4 to agree with SMEFTsim general convention.
+    "Oee1133": {"wc": ["ee_1133"], "coeff": [1.0 / 4.0]},
+    "Oee2233": {"wc": ["ee_2233"], "coeff": [1.0 / 4.0]},
     # 2 quark 2 lepton operators
     "Oeu": {"wc": ["eu_1111"]},
     "Oed": {"wc": ["ed_1111"]},
@@ -195,4 +266,10 @@ inverse_wcxf_translate = {
     "Olb": {"wc": ["ld_1133"]},
     "Oqe": {"wc": ["qe_1111"]},
     "OQe": {"wc": ["qe_3311"]},
+    "Otat": {"wc": ["eu_3333"]},
+    "OQta": {"wc": ["qe_3333"]},
+    "Otl3": {"wc": ["lu_3333"]},
+    "Otl2": {"wc": ["lu_2233"]},
+    "OQlM3": {"wc": ["lq1_3333", "lq3_3333"], "coeff": [1.0, -1.0]},
+    "OQl33": {"wc": ["lq3_3333"]},
 }
