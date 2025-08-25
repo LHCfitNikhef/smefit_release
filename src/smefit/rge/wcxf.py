@@ -89,6 +89,10 @@ wcxf_translate = {
         "wc": ["ll_1221"],
         "value": [2.0],
     },  # Notice the factor of 1/2. See table 28 of arXiv:2012.11343
+    "Oll1331": {
+        "wc": ["ll_1331"],
+        "value": [2.0],
+    },
     "Oll1111": {"wc": ["ll_1111"]},
     "Oll1122": {"wc": ["ll_1122"], "value": [2.0]},
     "Oll1133": {"wc": ["ll_1133"], "value": [2.0]},
@@ -216,6 +220,10 @@ inverse_wcxf_translate = {
         "wc": ["ll_1221"],
         "coeff": [1.0 / 2.0],
     },  # Notice the factor of 1/2. See table 28 of arXiv:2012.11343
+    "Oll1331": {
+        "wc": ["ll_1331"],
+        "coeff": [1.0 / 2.0],
+    },
     "Oll1111": {"wc": ["ll_1111"]},
     "Oll1122": {
         "wc": ["ll_1122"],
