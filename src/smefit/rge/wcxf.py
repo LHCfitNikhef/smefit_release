@@ -85,7 +85,7 @@ wcxf_translate = {
     "Ott1": {"wc": ["uu_3333"]},
     "Obb": {"wc": ["dd_3333"]},
     # 4 leptons
-    "Oll": {
+    "Oll1221": {
         "wc": ["ll_1221"],
         "value": [2.0],
     },  # Notice the factor of 1/2. See table 28 of arXiv:2012.11343
@@ -123,13 +123,13 @@ wcxf_translate = {
     "Oeb": {"wc": ["ed_1133"]},
     "Otl1": {"wc": ["lu_1133"]},
     "Ote": {"wc": ["eu_1133"]},
-    "Oql31": {"wc": ["lq1_1111", "lq1_1122", "lq3_1111", "lq3_1122"]},
-    "OqlM1": {"wc": ["lq1_1111", "lq1_1122"]},
-    "OQl31": {"wc": ["lq1_1133", "lq3_1133"]},
-    "OQlM1": {"wc": ["lq1_1133"]},
-    "Olu": {"wc": ["lu_1111", "lu_1122"]},
+    "Oql13": {"wc": ["lq1_1111", "lq1_1122", "lq3_1111", "lq3_1122"]},
+    "Oql1M": {"wc": ["lq1_1111", "lq1_1122"]},
+    "Oql13": {"wc": ["lq1_1133", "lq3_1133"]},
+    "OQl1M": {"wc": ["lq1_1133"]},
+    "Ol1u": {"wc": ["lu_1111", "lu_1122"]},
     "Old": {"wc": ["ld_1111", "ld_1122"]},
-    "Olb": {"wc": ["ld_1133"]},
+    "Ol1b": {"wc": ["ld_1133"]},
     "Oqe": {"wc": ["qe_1111", "qe_2211"]},
     "OQe": {"wc": ["qe_3311"]},
     "Otta": {"wc": ["eu_3333"]},
@@ -216,7 +216,7 @@ inverse_wcxf_translate = {
     "Ott1": {"wc": ["uu_3333"]},
     "Obb": {"wc": ["dd_3333"]},
     # 4 leptons
-    "Oll": {
+    "Oll1221": {
         "wc": ["ll_1221"],
         "coeff": [1.0 / 2.0],
     },  # Notice the factor of 1/2. See table 28 of arXiv:2012.11343
@@ -257,13 +257,13 @@ inverse_wcxf_translate = {
     "Oeb": {"wc": ["ed_1133"]},
     "Otl1": {"wc": ["lu_1133"]},
     "Ote": {"wc": ["eu_1133"]},
-    "Oql31": {"wc": ["lq3_1111"]},
-    "OqlM1": {"wc": ["lq1_1111", "lq3_1111"], "coeff": [1.0, -1.0]},
-    "OQl31": {"wc": ["lq3_1133"]},
-    "OQlM1": {"wc": ["lq1_1133", "lq3_1133"], "coeff": [1.0, -1.0]},
-    "Olu": {"wc": ["lu_1111"]},
+    "Oql13": {"wc": ["lq3_1111"]},
+    "Oql1M": {"wc": ["lq1_1111", "lq3_1111"], "coeff": [1.0, -1.0]},
+    "OQl13": {"wc": ["lq3_1133"]},
+    "OQl1M": {"wc": ["lq1_1133", "lq3_1133"], "coeff": [1.0, -1.0]},
+    "Ol1u": {"wc": ["lu_1111"]},
     "Old": {"wc": ["ld_1111"]},
-    "Olb": {"wc": ["ld_1133"]},
+    "Ol1b": {"wc": ["ld_1133"]},
     "Oqe": {"wc": ["qe_1111"]},
     "OQe": {"wc": ["qe_3311"]},
     "Otta": {"wc": ["eu_3333"]},
