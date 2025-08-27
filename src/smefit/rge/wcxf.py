@@ -266,7 +266,7 @@ inverse_wcxf_translate = {
     "Olb": {"wc": ["ld_1133"]},
     "Oqe": {"wc": ["qe_1111"]},
     "OQe": {"wc": ["qe_3311"]},
-    "Otat": {"wc": ["eu_3333"]},
+    "Otta": {"wc": ["eu_3333"]},
     "OQta": {"wc": ["qe_3333"]},
     "Otl3": {"wc": ["lu_3333"]},
     "Otl2": {"wc": ["lu_2233"]},
