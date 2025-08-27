@@ -130,14 +130,14 @@ wcxf_translate = {
     "OQl13": {"wc": ["lq1_1133", "lq3_1133"]},
     "OQl1M": {"wc": ["lq1_1133"]},
     "Ol1u": {"wc": ["lu_1111", "lu_1122"]},
-    "Old": {"wc": ["ld_1111", "ld_1122"]},
+    "Ol1d": {"wc": ["ld_1111", "ld_1122"]},
     "Ol1b": {"wc": ["ld_1133"]},
     "Oqe": {"wc": ["qe_1111", "qe_2211"]},
     "OQe": {"wc": ["qe_3311"]},
     "Otta": {"wc": ["eu_3333"]},
     "OQta": {"wc": ["qe_3333"]},
-    "OQl13": {"wc": ["lq1_3333"]},
-    "OQl33": {"wc": ["lq3_3333"]},
+    "OQl3M": {"wc": ["lq1_3333"]},
+    "OQl33": {"wc": ["lq1_3333", "lq3_3333"]},
 }
 
 # This creates a dictionary to go from Warsaw to SMEFiT.
@@ -264,7 +264,7 @@ inverse_wcxf_translate = {
     "OQl13": {"wc": ["lq3_1133"]},
     "OQl1M": {"wc": ["lq1_1133", "lq3_1133"], "coeff": [1.0, -1.0]},
     "Ol1u": {"wc": ["lu_1111"]},
-    "Old": {"wc": ["ld_1111"]},
+    "Ol1d": {"wc": ["ld_1111"]},
     "Ol1b": {"wc": ["ld_1133"]},
     "Oqe": {"wc": ["qe_1111"]},
     "OQe": {"wc": ["qe_3311"]},
