@@ -85,11 +85,15 @@ def get_confidence_values(dist, has_posterior=True):
         hdi_interval = np.array(
             arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=True)
         )
-        hdi_widths = np.diff(hdi_interval.flatten(), axis=0)
         cl_vals[f"hdi_{cl}_low"] = hdi_interval[:, 0].tolist()
         cl_vals[f"hdi_{cl}_high"] = hdi_interval[:, 1].tolist()
         cl_vals[f"hdi_{cl}_mids"] = find_mode_hdis(sorted(dist.values), hdi_interval)
-        cl_vals[f"hdi_{cl}"] = np.sum(hdi_widths.flatten())
+        cl_vals[f"hdi_{cl}"] = np.sum(
+            [
+                cl_vals[f"hdi_{cl}_high"][i] - cl_vals[f"hdi_{cl}_low"][i]
+                for i in range(len(cl_vals[f"hdi_{cl}_high"]))
+            ]
+        )
         hdi_interval_mono = np.array(
             arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=False)
         )
@@ -97,7 +101,7 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals[f"hdi_mono_{cl}_high"] = hdi_interval_mono[1]
         cl_vals[f"hdi_mono_{cl}_mids"] = find_mode_hdis(
             sorted(dist.values), [hdi_interval_mono]
-        )
+        )[0]
         cl_vals[f"hdi_mono_{cl}"] = np.sum(abs(hdi_interval_mono))
 
     cl_vals["pull"] = cl_vals["mid"] / cl_vals["mean_err68"]
@@ -1204,7 +1208,7 @@ class CoefficientsPlotter:
                             except KeyError:
                                 temp2 += r" & & &"
                         elif ci_type == "hdi_mono":
-                            temp += f" & {np.round(cl_vals['hdi_mono_68_mids'][0],round_val)} \
+                            temp += f" & {np.round(cl_vals['hdi_mono_68_mids'],round_val)} \
                                     & [{np.round(cl_vals['hdi_mono_68_low'],round_val)},{np.round(cl_vals['hdi_mono_68_high'],round_val)}] \
                                         & [{np.round(cl_vals['hdi_mono_95_low'],round_val)},{np.round(cl_vals['hdi_mono_95_high'],round_val)}]"
                             temp2 += r" & & &"
