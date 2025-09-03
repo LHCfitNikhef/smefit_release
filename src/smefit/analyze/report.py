@@ -283,7 +283,7 @@ class Report:
 
         if scatter_plot is not None:
             _logger.info("Plotting : Central values and Confidence Level bounds")
-            coeff_plt.plot_coeffs(bounds_dict, **scatter_plot)
+            coeff_plt.plot_coeffs(bounds_dict, **scatter_plot, ci_type=ci_type)
             figs_list.append("coefficient_central")
 
         # when we plot the 95% CL we show the 95% CL for null solutions.
