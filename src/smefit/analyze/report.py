@@ -325,9 +325,12 @@ class Report:
         if pull_bar is not None:
             _logger.info("Plotting : Pull ")
             zero_sol = 0
+            string_to_find = (
+                "pull_hdi" if (ci_type == "hdi_mono" or ci_type == "hdi") else "pull"
+            )
             coeff_plt.plot_pull(
                 {
-                    name: bound_df.loc[zero_sol, "pull"]
+                    name: bound_df.loc[zero_sol, string_to_find]
                     for name, bound_df in bounds_dict.items()
                 },
                 **pull_bar,
@@ -342,30 +345,34 @@ class Report:
 
             spider_bounds = {}
             for name, bound_df in bounds_dict.items():
-                dbl_solution = bound_df.index.get_level_values(0)
+                # dbl_solution = bound_df.index.get_level_values(0)
                 # if dbl solution requested, add the confidence intervals, otherwise just
                 # use the sum of the hdi intervals
-                if 1 in dbl_solution:
-                    dbl_op = double_solution.get(fit.name, None)
-                    idx = [
-                        np.argwhere(
-                            self.coeff_info.index.get_level_values(1) == op
-                        ).flatten()[0]
-                        for op in dbl_op
-                    ]
-                    bound_df_dbl = bound_df.iloc[:, idx]
+                # if 1 in dbl_solution:
+                #    dbl_op = double_solution.get(fit.name, None)
+                #    idx = [
+                #        np.argwhere(
+                #            self.coeff_info.index.get_level_values(1) == op
+                #        ).flatten()[0]
+                #        for op in dbl_op
+                #    ]
+                #    bound_df_dbl = bound_df.iloc[:, idx]
+                #    width_0 = bound_df_dbl.loc[0, f"hdi_{spider_cl}"]
+                #    width_1 = bound_df_dbl.loc[1, f"hdi_{spider_cl}"]
+                #    width_tot = width_0 + width_1
 
-                    width_0 = bound_df_dbl.loc[0, f"hdi_{spider_cl}"]
-                    width_1 = bound_df_dbl.loc[1, f"hdi_{spider_cl}"]
-                    width_tot = width_0 + width_1
+                # update bound df
+                #    bound_df.loc[0, f"hdi_{spider_cl}"].iloc[idx] = width_tot
 
-                    # update bound df
-                    bound_df.loc[0, f"hdi_{spider_cl}"].iloc[idx] = width_tot
-
+                #    spider_bounds[name] = bound_df.loc[0, f"hdi_{spider_cl}"]
+                if ci_type == "hdi":
                     spider_bounds[name] = bound_df.loc[0, f"hdi_{spider_cl}"]
-
+                elif ci_type == "hdi_mono":
+                    spider_bounds[name] = bound_df.loc[0, f"hdi_mono_{spider_cl}"]
                 else:
-                    spider_bounds[name] = bound_df.loc[0, f"hdi_{spider_cl}"]
+                    spider_bounds[name] = bound_df.loc[0, f"mean_err{spider_cl}"] * 2.0
+
+            print(spider_bounds)
 
             coeff_plt.plot_spider(
                 spider_bounds,
