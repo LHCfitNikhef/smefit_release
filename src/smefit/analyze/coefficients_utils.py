@@ -59,6 +59,7 @@ def get_confidence_values(dist, has_posterior=True):
     - hdi_mono_{cl}_mids: 1st mode of the distribution inside the {cl}% CI HDI in unimodal mode.
     - hdi_mono_{cl}: width of the {cl}% CI HDI in unimodal mode.
     - pull: ratio of the mid value to the half-width of the 68% CI ETI
+    - pull_hdi: ratio of the mid value to the half-width of the 68% CI HDI in unimodal mode.
 
     """
     cl_vals = {}
@@ -105,6 +106,11 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals[f"hdi_mono_{cl}"] = np.sum(abs(hdi_interval_mono))
 
     cl_vals["pull"] = cl_vals["mid"] / cl_vals["mean_err68"]
+    cl_vals["pull_hdi"] = (
+        cl_vals["hdi_mono_68_mids"]
+        / (cl_vals["hdi_mono_68_high"] - cl_vals["hdi_mono_68_low"])
+        * 2
+    )
 
     return cl_vals
 
@@ -605,6 +611,7 @@ class CoefficientsPlotter:
 
         # normalise to first fit
         ratio = df.iloc[:, 1:].values / df.iloc[:, 0].values.reshape(-1, 1) * 100
+        print(ratio)
         delta = np.abs(np.log10(min(ratio.flatten())))
 
         if log_scale:
