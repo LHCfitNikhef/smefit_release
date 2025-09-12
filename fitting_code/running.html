@@ -544,7 +544,11 @@ add the following flag</p>
 and one would like to combine it with the one constructed internally in SMEFiT. To make use of this feature, one should add
 the following to the runcard:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">external_chi2</span><span class="p">:</span>
-<span class="w">  </span><span class="s">&#39;ExternalChi2&#39;</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/external/chi2.py</span>
+<span class="w">  </span><span class="nt">ExternalChi2</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/external/chi2.py</span>
+<span class="w">    </span><span class="nt">param1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">val1</span>
+<span class="w">    </span><span class="nt">param2</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">val2</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </pre></div>
 </div>
 <p>Here, <code class="docutils literal notranslate"><span class="pre">ExternalChi2</span></code> is the name of the class that must be defined in the referenced python file as follows:</p>
@@ -552,21 +556,27 @@ the following to the runcard:</p>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">ExternalChi2</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">rge_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">param1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">param2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructor that allows one to set attributes that can be called in the compute_chi2 method</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        coefficients:  smefit.coefficients.CoefficientManager</span>
 <span class="sd">            attributes: name, value</span>
+<span class="sd">        rge_dict: dict</span>
+<span class="sd">            RGE dictionary from the runcard</span>
+<span class="sd">        **kwargs: Additional keyword arguments.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">example_attribute</span> <span class="o">=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coefficients_names</span> <span class="o">=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param1</span> <span class="o">=</span> <span class="n">param1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param2</span> <span class="o">=</span> <span class="n">param2</span>
+        <span class="o">...</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_chi2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficient_values</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">         coefficients_values : numpy.ndarray</span>
+<span class="sd">         coefficient_values : numpy.ndarray</span>
 <span class="sd">            |EFT| coefficients values</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -576,9 +586,12 @@ the following to the runcard:</p>
         <span class="k">return</span> <span class="n">chi2_value</span>
 </pre></div>
 </div>
-<p>One is free to set custom attributes in the constructor. The coefficient values during optimisation
-are accesible via <code class="docutils literal notranslate"><span class="pre">coefficient_values</span></code> in the <code class="docutils literal notranslate"><span class="pre">compute_chi2</span></code> method. In order for the external chi2
-to work, it is important one does not change the name of the <code class="docutils literal notranslate"><span class="pre">compute_chi2</span></code> method!</p>
+<p>The parameters <code class="docutils literal notranslate"><span class="pre">coefficients</span></code> and <code class="docutils literal notranslate"><span class="pre">rge_dict</span></code> are mandatory, while the following ones are optional.  One
+is free to pass an arbitrary number of parameters in the runcard and later set custom attributes in the constructor.
+Note that the RGE matrix has to be computed inside the constructor. Some examples are available
+in <code class="docutils literal notranslate"><span class="pre">external_chi2/</span></code>. The coefficient values during optimisation are accessible via <code class="docutils literal notranslate"><span class="pre">coefficient_values</span></code> in
+the <code class="docutils literal notranslate"><span class="pre">compute_chi2</span></code> method. In order for the external chi2 to work, it is important one does not change
+the name of the <code class="docutils literal notranslate"><span class="pre">compute_chi2</span></code> method!</p>
 </section>
 <section id="adding-rg-evolution">
 <h3>Adding RG evolution<a class="headerlink" href="#adding-rg-evolution" title="Link to this heading">#</a></h3>
