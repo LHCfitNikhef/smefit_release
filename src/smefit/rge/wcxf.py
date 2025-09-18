@@ -53,6 +53,7 @@ wcxf_translate = {
     "Ocp": {"wc": ["uphi_22"]},
     "Obp": {"wc": ["dphi_33"]},
     "Otap": {"wc": ["ephi_33"]},
+    "Omup": {"wc": ["ephi_22"]},
     # 2L2H quark operators
     "O81qq": {
         "wc": ["qq1_1331", "qq1_2332", "qq1_1133", "qq1_2233", "qq3_1331", "qq3_2332"],
@@ -185,6 +186,7 @@ inverse_wcxf_translate = {
     "Ocp": {"wc": ["uphi_22"]},
     "Obp": {"wc": ["dphi_33"]},
     "Otap": {"wc": ["ephi_33"]},
+    "Omup": {"wc": ["ephi_22"]},
     # 2L2H quark operators
     "O81qq": {"wc": ["qq1_1331", "qq3_1331"], "coeff": [1.0, 3.0]},
     "O11qq": {
