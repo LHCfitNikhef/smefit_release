@@ -376,7 +376,7 @@ document.write(`
 <h1>SMEFiT Tutorial<a class="headerlink" href="#SMEFiT-Tutorial" title="Link to this heading">#</a></h1>
 <p>Author: Jaco ter Hoeve</p>
 <p>To run this notebook remotely in Google Colab, click the button below</p>
-<p><a class="reference external" href="https://colab.research.google.com/github/LHCfitNikhef/smefit_release/blob/main/tutorial/tutorial.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p><a class="reference external" href="https://colab.research.google.com/github/LHCfitNikhef/smefit_release/blob/main/docs/source/fitting_code/tutorial.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <p>and make sure to click “Copy to drive” at the top to create a copy that you may edit.</p>
 <section id="What-is-SMEFiT?">
 <h2>What is SMEFiT?<a class="headerlink" href="#What-is-SMEFiT?" title="Link to this heading">#</a></h2>
@@ -396,6 +396,14 @@ SMEFT potential for indirect New Physics searches from precision measurements re
 <section id="Exercise-0---Installing-SMEFiT">
 <h2>Exercise 0 - Installing SMEFiT<a class="headerlink" href="#Exercise-0---Installing-SMEFiT" title="Link to this heading">#</a></h2>
 <p>First things first, let us install SMEFiT:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!pip install smefit
+</pre></div>
+</div>
+</div>
 <p>For the purpose of this tutorial, we also need the following additional packages</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
@@ -427,10 +435,10 @@ mpl.rcParams.update(mpl.rcParamsDefault)
     return file
 
 smefit_database = file_downloader(&#39;https://github.com/LHCfitNikhef/smefit_database/archive/refs/heads/main.zip&#39;)
-runcards = file_downloader(&#39;https://smefit.science/downloads/runcards_tutorial.tgz&#39;)
+runcards = file_downloader(&#39;https://smefit.science/_static/runcards_tutorial.tgz&#39;)
 
 subprocess.run([f&quot;unzip {smefit_database} -d ./downloads&quot;], capture_output=False, shell=True, text=False)
-subprocess.run([f&quot;tar xzf runcards_tutorial.tgz -C ./downloads&quot;], capture_output=False, shell=True, text=False)
+subprocess.run([f&quot;tar xzf ./downloads/runcards_tutorial.tgz -C ./downloads&quot;], capture_output=False, shell=True, text=False)
 </pre></div>
 </div>
 </div>
@@ -544,7 +552,7 @@ Image(filename=&#39;./reports/report_ttV/meta/contours_2d.png&#39;)
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/fitting_code_tutorial_22_0.png" src="../_images/fitting_code_tutorial_22_0.png" />
+<img alt="../_images/fitting_code_tutorial_23_0.png" src="../_images/fitting_code_tutorial_23_0.png" />
 </div>
 </div>
 <p><strong>Question 1C</strong></p>
@@ -596,7 +604,7 @@ Image(filename=&#39;./reports/report_tt_mtt/meta/contours_2d.png&#39;)
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/fitting_code_tutorial_30_0.png" src="../_images/fitting_code_tutorial_30_0.png" />
+<img alt="../_images/fitting_code_tutorial_31_0.png" src="../_images/fitting_code_tutorial_31_0.png" />
 </div>
 </div>
 <p><strong>Question 2A</strong></p>
@@ -625,7 +633,7 @@ Image(filename=&#39;./reports/report_combined/meta/contours_2d.png&#39;)
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/fitting_code_tutorial_34_0.png" src="../_images/fitting_code_tutorial_34_0.png" />
+<img alt="../_images/fitting_code_tutorial_35_0.png" src="../_images/fitting_code_tutorial_35_0.png" />
 </div>
 </div>
 <p><strong>Question 2C</strong></p>
