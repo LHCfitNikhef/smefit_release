@@ -360,7 +360,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Exercise-0---Installing-SMEFiT">Exercise 0 - Installing SMEFiT</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Exercise-1---Our-first-fit-with-SMEFiT">Exercise 1 - Our first fit with SMEFiT</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Exercise-2---Adding-more-measurements">Exercise 2 - Adding more measurements</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Exercise-3---quadratic-fits-(optional)">Exercise 3 - quadratic fits (optional)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Exercise-3---quadratic-fits">Exercise 3 - quadratic fits</a></li>
 </ul>
             </nav>
         </div>
@@ -376,7 +376,7 @@ document.write(`
 <h1>SMEFiT Tutorial<a class="headerlink" href="#SMEFiT-Tutorial" title="Link to this heading">#</a></h1>
 <p>Author: Jaco ter Hoeve</p>
 <p>To run this notebook remotely in Google Colab, click the button below</p>
-<p><a class="reference external" href="https://colab.research.google.com/github/LHCfitNikhef/smefit_release/blob/tutorial/tutorial/tutorial.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p><a class="reference external" href="https://colab.research.google.com/github/LHCfitNikhef/smefit_release/blob/main/tutorial/tutorial.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
 <p>and make sure to click “Copy to drive” at the top to create a copy that you may edit.</p>
 <section id="What-is-SMEFiT?">
 <h2>What is SMEFiT?<a class="headerlink" href="#What-is-SMEFiT?" title="Link to this heading">#</a></h2>
@@ -396,52 +396,20 @@ SMEFT potential for indirect New Physics searches from precision measurements re
 <section id="Exercise-0---Installing-SMEFiT">
 <h2>Exercise 0 - Installing SMEFiT<a class="headerlink" href="#Exercise-0---Installing-SMEFiT" title="Link to this heading">#</a></h2>
 <p>First things first, let us install SMEFiT:</p>
+<p>For the purpose of this tutorial, we also need the following additional packages</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!pip install smefit
-</pre></div>
-</div>
-</div>
-<p>Note to google colab users, you may ignore the error related to pandas in case it shows up.</p>
-<p>For the purpose of this tutorial, we also need the following additional packages</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!pip install wget
 !pip install ipywidgets
-import sys
 import os
 import wget
 import subprocess
-import pathlib
-import yaml
 import matplotlib as mpl
 from IPython.display import Image
 
 mpl.rcParams.update(mpl.rcParamsDefault)
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Requirement already satisfied: wget in /Users/jaco/opt/anaconda3/envs/smefit_tutorial/lib/python3.12/site-packages (3.2)
-</pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import smefit
-import smefit.runner
-from smefit.analyze.report import Report
-
-smefit.log.setup_console(None)
 </pre></div>
 </div>
 </div>
@@ -459,10 +427,10 @@ smefit.log.setup_console(None)
     return file
 
 smefit_database = file_downloader(&#39;https://github.com/LHCfitNikhef/smefit_database/archive/refs/heads/main.zip&#39;)
-runcards = file_downloader(&#39;https://github.com/LHCfitNikhef/smefit_release/raw/tutorial/tutorial/runcards.zip&#39;)
+runcards = file_downloader(&#39;https://smefit.science/downloads/runcards_tutorial.tgz&#39;)
 
 subprocess.run([f&quot;unzip {smefit_database} -d ./downloads&quot;], capture_output=False, shell=True, text=False)
-subprocess.run([f&quot;unzip {runcards} -d ./downloads&quot;], capture_output=False, shell=True, text=False)
+subprocess.run([f&quot;tar xzf runcards_tutorial.tgz -C ./downloads&quot;], capture_output=False, shell=True, text=False)
 </pre></div>
 </div>
 </div>
@@ -523,18 +491,18 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <span class="c1"># Datasets to include</span>
 <span class="nt">datasets</span><span class="p">:</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_ttZ_13TeV</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_ttZ_13TeV_pTZ</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_ttZ_8TeV</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttZ_13TeV</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttZ_13TeV_2016</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttZ_13TeV_pTZ</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttZ_8TeV</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_ttW_13TeV</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CMS_ttW_8TeV</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttW_13TeV</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttW_13TeV_2016</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_ttW_8TeV</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">CMS_ttZ_13TeV</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">CMS_ttZ_13TeV_pTZ</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">CMS_ttZ_8TeV</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">ATLAS_ttZ_13TeV</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">ATLAS_ttZ_13TeV_2016</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">ATLAS_ttZ_13TeV_pTZ</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">ATLAS_ttZ_8TeV</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">CMS_ttW_13TeV</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">CMS_ttW_8TeV</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">ATLAS_ttW_13TeV</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">ATLAS_ttW_13TeV_2016</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">ATLAS_ttW_8TeV</span><span class="p p-Indicator">,</span><span class="nt"> order</span><span class="p">:</span><span class="w"> </span><span class="nv">NLO_QCD</span><span class="p p-Indicator">}</span>
 
 
 <span class="c1"># Coefficients to fit</span>
@@ -549,40 +517,16 @@ c_{Qq}^{3,8} &amp;= c_{qq}^{1(i33i)} - c_{qq}^{3(i33i)} \, ,
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>runner_ttV = smefit.runner.Runner.from_file(pathlib.Path(&quot;./downloads/runcards/runcard_ttV.yaml&quot;))
-runner_ttV.global_analysis(&quot;A&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!smefit A ./downloads/runcards/runcard_ttV.yaml
 </pre></div>
 </div>
 </div>
 <p>The fit should have finished, and the 95% exclusion contour can now be displayed by</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def make_report(runcard_report):
-
-    mpl.rcParams.update(mpl.rcParamsDefault)
-
-    with open(runcard_report, encoding=&quot;utf-8&quot;) as f:
-        report_config = yaml.safe_load(f)
-
-    report_name = report_config[&quot;name&quot;]
-    report_path = pathlib.Path(report_config[&quot;report_path&quot;]).absolute()
-    report_folder = report_path.joinpath(f&quot;{report_name}&quot;)
-
-    report_folder.mkdir(exist_ok=True, parents=True)
-
-    report = Report(report_path, report_config[&quot;result_path&quot;], report_config)
-
-    report.coefficients(**report_config[&quot;coefficients_plots&quot;])
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>make_report(&quot;./downloads/runcards/runcard_report_ttV.yaml&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!smefit R ./downloads/runcards/runcard_report_ttV.yaml
 </pre></div>
 </div>
 </div>
@@ -591,7 +535,7 @@ runner_ttV.global_analysis(&quot;A&quot;)
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># show the exclusion contour
-Image(filename=&#39;./reports/report_ttV/contours_2d.png&#39;)
+Image(filename=&#39;./reports/report_ttV/meta/contours_2d.png&#39;)
 </pre></div>
 </div>
 </div>
@@ -600,7 +544,7 @@ Image(filename=&#39;./reports/report_ttV/contours_2d.png&#39;)
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/fitting_code_tutorial_26_0.png" src="../_images/fitting_code_tutorial_26_0.png" />
+<img alt="../_images/fitting_code_tutorial_22_0.png" src="../_images/fitting_code_tutorial_22_0.png" />
 </div>
 </div>
 <p><strong>Question 1C</strong></p>
@@ -617,8 +561,7 @@ Image(filename=&#39;./reports/report_ttV/contours_2d.png&#39;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>runner_tt_mtt = smefit.runner.Runner.from_file(pathlib.Path(&quot;./downloads/runcards/runcard_tt_mtt.yaml&quot;))
-runner_tt_mtt.global_analysis(&quot;A&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!smefit A ./downloads/runcards/runcard_tt_mtt.yaml
 </pre></div>
 </div>
 </div>
@@ -631,21 +574,29 @@ runner_tt_mtt.global_analysis(&quot;A&quot;)
 </pre></div>
 </div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!smefit R ./downloads/runcards/runcard_report_tt_mtt.yaml
+</pre></div>
+</div>
+</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># show the exclusion contour
-Image(filename=&#39;./reports/report_tt_mtt/contours_2d.png&#39;)
+Image(filename=&#39;./reports/report_tt_mtt/meta/contours_2d.png&#39;)
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/fitting_code_tutorial_33_0.png" src="../_images/fitting_code_tutorial_33_0.png" />
+<img alt="../_images/fitting_code_tutorial_30_0.png" src="../_images/fitting_code_tutorial_30_0.png" />
 </div>
 </div>
 <p><strong>Question 2A</strong></p>
@@ -661,20 +612,20 @@ Image(filename=&#39;./reports/report_tt_mtt/contours_2d.png&#39;)
 </ul>
 <p>Hint: you should find</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># show the exclusion contour
-Image(filename=&#39;./reports/report_combined/contours_2d.png&#39;)
+Image(filename=&#39;./reports/report_combined/meta/contours_2d.png&#39;)
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/fitting_code_tutorial_37_0.png" src="../_images/fitting_code_tutorial_37_0.png" />
+<img alt="../_images/fitting_code_tutorial_34_0.png" src="../_images/fitting_code_tutorial_34_0.png" />
 </div>
 </div>
 <p><strong>Question 2C</strong></p>
@@ -683,15 +634,14 @@ Image(filename=&#39;./reports/report_combined/contours_2d.png&#39;)
 <li><p>What lesson do you take from this?</p></li>
 </ul>
 </section>
-<section id="Exercise-3---quadratic-fits-(optional)">
-<h2>Exercise 3 - quadratic fits (optional)<a class="headerlink" href="#Exercise-3---quadratic-fits-(optional)" title="Link to this heading">#</a></h2>
+<section id="Exercise-3---quadratic-fits">
+<h2>Exercise 3 - quadratic fits<a class="headerlink" href="#Exercise-3---quadratic-fits" title="Link to this heading">#</a></h2>
 <p>So far all the fits have been linear in the EFT expansion. In this last exercise you will study how the previous results change under the effect of quadratic EFT corrections. For this, you should set <code class="docutils literal notranslate"><span class="pre">use_quad:</span> <span class="pre">True</span></code> in the fit runcard and run the fit with <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code> replaced by <code class="docutils literal notranslate"><span class="pre">&quot;NS&quot;</span></code>:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>runner_tt_mtt_quad = smefit.runner.Runner.from_file(pathlib.Path(&quot;./downloads/runcards/runcard_tt_mtt_quad.yaml&quot;))
-runner_tt_mtt_quad.global_analysis(&quot;NS&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>!smefit NS ./downloads/runcards/runcard_tt_mtt_quad.yaml
 </pre></div>
 </div>
 </div>
@@ -747,7 +697,7 @@ runner_tt_mtt_quad.global_analysis(&quot;NS&quot;)
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Exercise-0---Installing-SMEFiT">Exercise 0 - Installing SMEFiT</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Exercise-1---Our-first-fit-with-SMEFiT">Exercise 1 - Our first fit with SMEFiT</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Exercise-2---Adding-more-measurements">Exercise 2 - Adding more measurements</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Exercise-3---quadratic-fits-(optional)">Exercise 3 - quadratic fits (optional)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Exercise-3---quadratic-fits">Exercise 3 - quadratic fits</a></li>
 </ul>
   </nav></div>
 
