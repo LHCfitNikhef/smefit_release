@@ -583,16 +583,18 @@ class CoefficientsPlotter:
         def log_transform(x, delta_shift):
             """
             Log transform plus possible shift to map to semi-positive value
-
             Parameters
             ----------
             x: array_like
             delta_shift: float
-
             Returns
             -------
             Log transformed data
             """
+            # Convert to proper numeric numpy array if it's an object array
+            if hasattr(x, "dtype") and x.dtype == object:
+                x = np.asarray(x, dtype=np.float64)
+
             return np.log10(x) + delta_shift
 
         df = pd.DataFrame(error)
@@ -611,12 +613,10 @@ class CoefficientsPlotter:
 
         # normalise to first fit
         ratio = df.iloc[:, 1:].values / df.iloc[:, 0].values.reshape(-1, 1) * 100
-        # print(ratio.flatten())
         delta = np.abs(np.log10(np.min(ratio)))
 
         if log_scale:
             # in case the ratio < 1 %, its log transform is negative, so we add the absolute minimum
-            print(ratio)
             data = log_transform(ratio, delta)
         else:
             data = ratio
@@ -635,7 +635,6 @@ class CoefficientsPlotter:
 
         perc_labels = [rf"$\mathbf{{{(perc / 100):.3g}}}$" for perc in radial_lines]
         if log_scale:
-            print(radial_lines)
             radial_lines = log_transform(radial_lines, delta)
 
         # take first axis as main, the rest only serve to show the remaining percentage axes
