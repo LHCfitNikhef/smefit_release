@@ -5,33 +5,33 @@ on:
     branches:
       - main
 
+
 jobs:
   deploy-ghpages:
     runs-on: ubuntu-latest
     strategy:
       #max-parallel: 3
       matrix:
-        python-version: [3.9]
+        python-version: [3.12]
       fail-fast: false
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set up Python ${{ matrix.python-version }} 🐍
-        uses: actions/setup-python@v1
+      - name: Set up Miniconda 🐍
+        uses: conda-incubator/setup-miniconda@v3
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install package
-        run: |
-          chmod +x install.sh
-          bash -l ./install.sh -n smefit_installation
+          auto-update-conda: true
+          activate-environment: docsenv
       - name: Build docs  🔨
+        shell: bash -l {0}
         run: |
-          source /usr/share/miniconda/bin/activate /usr/share/miniconda/envs/smefit_installation
           pip install sphinx
           pip install sphinx-rtd-theme
+          pip install sphinx-book-theme
           pip install sphinxcontrib-bibtex
           pip install nbsphinx
           pip install recommonmark

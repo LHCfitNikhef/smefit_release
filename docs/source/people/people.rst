@@ -8,12 +8,12 @@ People
 - Fabio Maltoni
 - Luca Mantani
 - Giacomo Magni
-- Emanuele R. Nocera
 - Juan Rojo
 - Alejo Rossia
-- Claudio Severi
 - Marion Thomas
 - Eleni Vryonidou
+- Simone Tentori
+- Tommaso Armadillo
 
 Former members
 ==============
@@ -21,3 +21,5 @@ Former members
 - Jacob J. Ethier
 - Nathan P. Hartland
 - Emma Slade
+- Claudio Severi
+- Emanuele R. Nocera

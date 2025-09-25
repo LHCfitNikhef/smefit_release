@@ -1,52 +1,52 @@
 
 <p align="center">
-  <a href="https://lhcfitnikhef.github.io/smefit_release/"><img alt="SMEFiT" src=https://github.com/LHCfitNikhef/smefit_release/blob/main/docs/_assets/logo.png width=300>
+  <a href="https://lhcfitnikhef.github.io/smefit_release/"><img alt="SMEFiT" src="docs/_assets/logo.png" width="300">
 </a>
 </p>
 
 <p align="center">
   <a href="https://github.com/lhcfitnikhef/smefit_release/actions/workflows/unittests.yml"><img alt="Tests" src="https://github.com/lhcfitnikhef/smefit_release/actions/workflows/unittests.yml/badge.svg" /></a>
-  <a href="https://codecov.io/gh/LHCfitNikhef/smefit_release"><img src="https://codecov.io/gh/LHCfitNikhef/smefit_release/branch/main/graph/badge.svg?token=MRTEXUP8XU"/></a>
   <a href="https://www.codefactor.io/repository/github/lhcfitnikhef/smefit_release"><img src="https://www.codefactor.io/repository/github/lhcfitnikhef/smefit_release/badge" alt="CodeFactor" /></a>
 </p>
 
 [SMEFiT](https://lhcfitnikhef.github.io/smefit_release/index.html) is a python program for Standard Model Effective Field Theory fits
 ## Installation
 
-To install smefit you can do:
+To install the smefit release on PYPI you can do:
 
 ```bash
 pip install smefit
 ```
 
+### Installation for developers
 
-## Installation from source using conda
-You can install smefit from source using a conda environnement.
-To install it you need a [conda](https://docs.conda.io/en/latest/) installation and run:
+If you are interested in developing smefit or having the latest smefit code not yet released, you should clone the smefit repository and then install in editable mode:
 
 ```bash
-./install.sh -n <env_name='smefit_installation'>
+cd smefit_release
+pip install -e .
 ```
-The installed package will be available in an environnement called `smefit_installation`, to activate it
-you can do:
+
+If one is interested in having smefit installed in a conda environment, this can be done by creating the environment (for example with python 3.12), activating it and then installing inside the environment.
 
 ```bash
-conda activate <env_name='smefit_installation'>
-smefit -h
+conda create python=3.12 -n smefit-dev
+conda activate smefit-dev
+pip install -e .
 ```
 
 ## Running
-The fitting code provide two equivalent fitting strategies.
+The fitting code provide two fitting strategies.
 To run the code with `Nested Sampling` you can do:
 
 ```bash
 smefit NS <path_to_runcard>
 ```
 
-To run the code suing the `Monte Carlo replica` method you can do:
+To run the code suing the analytic method (valid only for linear fits) you can do:
 
 ```bash
-smefit MC <path_to_runcard> -n <replica_number>
+smefit A <path_to_runcard>
 ```
 
 An runcard example is provided in `runcards/test_runcard.yaml`.
