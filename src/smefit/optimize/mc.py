@@ -17,6 +17,7 @@ _logger = log.logging.getLogger(__name__)
 
 
 class MCOptimizer(Optimizer):
+
     """Optimizer specification for |MC|.
 
     Parameters
@@ -125,11 +126,11 @@ class MCOptimizer(Optimizer):
             config["data_path"],
             config["datasets"],
             config["coefficients"],
+            config["order"],
             config["use_quad"],
             config["use_theory_covmat"],
             config["use_t0"],
             config.get("use_multiplicative_prescription", False),
-            config.get("default_order", "LO"),
             config.get("theory_path", None),
             config.get("rot_to_fit_basis", None),
             config.get("uv_couplings", False),
@@ -191,6 +192,7 @@ class MCOptimizer(Optimizer):
         )
 
     def get_status(self, chi2):
+
         if len(self.chi2_values) == 0:
             self.chi2_values.append(chi2)
 
@@ -319,11 +321,4 @@ class MCOptimizer(Optimizer):
             / f"replica_{self.replica}/coefficients_rep_{self.replica}.json"
         )
 
-        fit_result = {
-            "samples": values,
-            "logz": None,
-            "max_loglikelihood": None,
-            "best_fit_point": None,
-        }
-
-        self.dump_fit_result(posterior_file, fit_result)
+        self.dump_posterior(posterior_file, values)

@@ -6,6 +6,7 @@ from .html_utils import run_htlatex
 
 
 def latex_packages():
+
     L = [
         r"\documentclass{article}",
         r"\usepackage{float}",

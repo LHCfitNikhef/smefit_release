@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import numpy as np
 import pandas as pd
 
@@ -21,24 +22,13 @@ class Coefficient:
             - if False, the parameter is free, default option
             - if True, the parameter is fixed to the given value
             - if dict the parameter is fixed to a function of other coefficients
-        is_mass : bool
-            if True, the coefficient is a mass parameter
-            default False
 
     """
 
-    def __init__(
-        self, name, minimum, maximum, value=None, constrain=False, is_mass=False
-    ):
+    def __init__(self, name, minimum, maximum, value=None, constrain=False):
         self.name = name
-        # Temporary check for deprecated operator
-        if name == "Opd":
-            raise ValueError(
-                "The operator Opd is deprecated and has been renamed. Use OpBox instead."
-            )
         self.minimum = minimum
         self.maximum = maximum
-        self.is_mass = is_mass
 
         # determine if the parameter is free
         self.is_free = False
@@ -153,7 +143,6 @@ class CoefficientManager:
         )
         self._table.index = np.array([o.name for o in input_array], dtype=str)
         self.is_free = np.array([o.is_free for o in input_array], dtype=bool)
-        self.is_mass = np.array([o.is_mass for o in input_array], dtype=bool)
 
         # NOTE: this will not be updated.
         self._objlist = input_array
@@ -205,7 +194,6 @@ class CoefficientManager:
                     property_dict["max"],
                     constrain=constrain,
                     value=property_dict.get("value", None),
-                    is_mass=property_dict.get("is_mass", False),
                 )
             )
         # make sure elements are sorted by names
@@ -238,6 +226,7 @@ class CoefficientManager:
 
         # loop pn fixed coefficients
         for coefficient_fixed in self._objlist[np.invert(self.is_free)]:
+
             # skip coefficient fixed to a single value
             if coefficient_fixed.constrain is None:
                 continue
@@ -264,6 +253,7 @@ class CoefficientManager:
                 rotation matrix from the original basis to the new_basis
         """
         for coefficient_fixed in self._objlist[~self.is_free]:
+
             # skip coefficient fixed to a single value
             if coefficient_fixed.constrain is None:
                 continue

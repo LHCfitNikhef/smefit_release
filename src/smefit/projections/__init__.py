@@ -19,10 +19,10 @@ class Projection:
         self,
         commondata_path,
         theory_path,
-        datasets,
+        dataset_names,
         projections_path,
         coefficients,
-        default_order,
+        order,
         use_quad,
         use_theory_covmat,
         rot_to_fit_basis,
@@ -30,12 +30,13 @@ class Projection:
         fred_sys,
         use_t0,
     ):
+
         self.commondata_path = commondata_path
         self.theory_path = theory_path
-        self.datasets = datasets
+        self.dataset_names = dataset_names
         self.projections_path = projections_path
         self.coefficients = coefficients
-        self.default_order = default_order
+        self.order = order
         self.use_quad = use_quad
         self.use_theory_covmat = use_theory_covmat
         self.rot_to_fit_basis = rot_to_fit_basis
@@ -45,19 +46,19 @@ class Projection:
 
         self.datasets = load_datasets(
             self.commondata_path,
-            self.datasets,
+            self.dataset_names,
             self.coefficients,
+            self.order,
             self.use_quad,
             self.use_theory_covmat,
             self.use_t0,
             False,
-            self.default_order,
             theory_path=self.theory_path,
         )
 
         if self.coefficients:
             _logger.info(
-                "Some coefficients are specified in the runcard: EFT correction will be used for the central values"
+                f"Some coefficients are specified in the runcard: EFT correction will be used for the central values"
             )
 
     @classmethod
@@ -82,10 +83,10 @@ class Projection:
         projections_path = pathlib.Path(
             projection_config["projections_path"]
         ).absolute()
-        datasets = projection_config["datasets"]
+        dataset_names = projection_config["datasets"]
 
         coefficients = projection_config.get("coefficients", [])
-        default_order = projection_config.get("default_order", "LO")
+        order = projection_config.get("order", "LO")
         use_quad = projection_config.get("use_quad", False)
         use_theory_covmat = projection_config.get("use_theory_covmat", True)
         rot_to_fit_basis = projection_config.get("rot_to_fit_basis", None)
@@ -98,10 +99,10 @@ class Projection:
         return cls(
             commondata_path,
             theory_path,
-            datasets,
+            dataset_names,
             projections_path,
             coefficients,
-            default_order,
+            order,
             use_quad,
             use_theory_covmat,
             rot_to_fit_basis,
@@ -152,6 +153,7 @@ class Projection:
         is_artificial = is_square & np.any(sys < 0)
 
         if is_artificial:
+
             # reconstruct covmat and keep only diagonal components
             cov_tot = sys @ sys.T
             sys_diag = np.sqrt(np.diagonal(cov_tot))
@@ -164,6 +166,7 @@ class Projection:
 
     @staticmethod
     def rescale_stat(stat, lumi_old, lumi_new):
+
         """
         Projects the statistical uncertainties from lumi_old to lumi_new
 
@@ -183,19 +186,15 @@ class Projection:
         fred_stat = np.sqrt(lumi_old / lumi_new)
         return stat * fred_stat
 
-    def build_projection(self, lumi_new=None, noise="L0"):
+    def build_projection(self, lumi_new, closure):
         """
         Constructs runcard for projection by updating the central value and statistical and
         systematic uncertainties
 
         Parameters
         ----------
-        lumi_new: float, optional
-            Adjusts the statistical uncertainties according to the specified luminosity lumi_new.
-            If not specified, the uncertainties are left unchanged and the central values are fluctuated
-            according to the noise level
-        noise: str
-            Noise level for the projection, choose between L0 or L1
+        lumi_new: float
+            Adjusts the statistical uncertainties according to the specified luminosity
         closure: bool
             Set to true for a L1 closure test (no rescaling, only cv gets fluctuated according to
             original uncertainties)
@@ -206,6 +205,7 @@ class Projection:
 
         cnt = 0
         for dataset_idx, num_data in enumerate(self.datasets.NdataExp):
+
             dataset_name = self.datasets.ExpNames[dataset_idx]
             path_to_dataset = self.commondata_path / f"{dataset_name}.yaml"
 
@@ -270,7 +270,7 @@ class Projection:
 
             th_covmat = self.datasets.ThCovMat[idxs, idxs]
 
-            if lumi_new is not None:
+            if not closure:
                 # if all stats are zero, we only have access to the total error which we rescale by 1/3 (compromise)
                 no_stats = not np.any(stat)
                 if no_stats:
@@ -296,9 +296,8 @@ class Projection:
 
                 # build covmat for projections. Use rescaled uncertainties
                 newcov = covmat_from_systematics([stat_red], [sys_red])
-                # Replace old luminosity with new one in the dataset
-                data_dict["luminosity"] = lumi_new
             else:  # closure test
+
                 # we store absolute uncertainties and convert all multipicative uncertainties to additive ones
 
                 if num_data > 1:
@@ -316,11 +315,8 @@ class Projection:
             if self.use_theory_covmat:
                 newcov += th_covmat
 
-            # add Gaussian noise to central values in case of L1
-            # and leave them unchanged in case of L0
-            cv_projection = cv[idxs]
-            if noise == "L1":
-                cv_projection = np.random.multivariate_normal(cv[idxs], newcov)
+            # add L1 noise to cv
+            cv_projection = np.random.multivariate_normal(cv[idxs], newcov)
 
             # replace cv with updated central values
             if len(cv_projection) > 1:
@@ -332,7 +328,7 @@ class Projection:
             projection_folder.mkdir(exist_ok=True)
 
             if projection_folder != self.commondata_path:
-                if lumi_new is not None:
+                if not closure:
                     with open(
                         f"{projection_folder}/{dataset_name}_proj.yaml", "w"
                     ) as file:
@@ -347,7 +343,7 @@ class Projection:
                 sys.exit()
 
             # copy corresponding theory predictions with _proj appended to filename
-            if lumi_new is not None:
+            if not closure:
                 shutil.copy(
                     self.theory_path / f"{dataset_name}.json",
                     self.theory_path / f"{dataset_name}_proj.json",
