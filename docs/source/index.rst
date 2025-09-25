@@ -32,6 +32,16 @@ When using the code please cite:
 
 - *SMEFiT: a flexible toolbox for global interpretations of particle physics data with effective field theories*, T. Giani, G. Magni and J. Rojo, :cite:`Giani:2023gfq`
 
+An introductory overview of SMEFiT was recently presented at the following workshop:
+
+.. raw:: html
+
+    <video
+      controls
+      style="width:100%; max-width:700px; height:auto; display:block;">
+      <source src="https://indico.cern.ch/event/1587395/attachments/3142763/5578327/GMT20250924-120121_Recording_1920x1200.mp4" type="video/mp4">
+    </video>
+
 Installation
 ------------
 
