@@ -372,8 +372,6 @@ class Report:
                 else:
                     spider_bounds[name] = bound_df.loc[0, f"mean_err{spider_cl}"] * 2.0
 
-            print(spider_bounds)
-
             coeff_plt.plot_spider(
                 spider_bounds,
                 labels=[fit.label for fit in self.fits],
