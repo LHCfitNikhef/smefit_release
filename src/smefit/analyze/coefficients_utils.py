@@ -22,15 +22,15 @@ def find_mode_hdis(post, intervs):
     Function to find the modes inside disjoint HDI intervals
     """
     peaks = []
-    for int in intervs:
-        if abs(int[0] - int[1]) > 0:
-            idx_max = np.argwhere(post < int[1])[-1][0]
-            idx_min = np.argwhere(post > int[0])[0][0]
+    for inter in intervs:
+        if abs(inter[0] - inter[1]) > 0:
+            idx_max = np.argwhere(post < inter[1])[-1][0]
+            idx_min = np.argwhere(post > inter[0])[0][0]
             subpost = sorted(post[idx_min:idx_max])
             mid_pos = len(subpost) // 2
             peaks.append(subpost[mid_pos])
         else:
-            peaks.append(int[0])
+            peaks.append(inter[0])
     return peaks
 
 
@@ -52,11 +52,11 @@ def get_confidence_values(dist, has_posterior=True):
     - err{cl}_high: distance between mid and higher end {cl}% CI ETI
     - hdi_{cl}_low: list of the lower end of the interval(s) that form the {cl}% CI HDI
     - hdi_{cl}_high: list of the higher end of the interval(s) that form the {cl}% CI HDI
-    - hdi_{cl}_mids: list of the 1st mode of the distribution inside each of the interval(s) that form the {cl}% CI HDI
+    - hdi_{cl}_mids: list of the 1st mode inside each interval that forms the {cl}% CI HDI
     - hdi_{cl}: sum of the widths of the intervals that form the {cl}% CI HDI
     - hdi_mono_{cl}_low: lower end of the {cl}% CI HDI in unimodal mode.
     - hdi_mono_{cl}_high: higher end of the {cl}% CI HDI in unimodal mode.
-    - hdi_mono_{cl}_mids: 1st mode of the distribution inside the {cl}% CI HDI in unimodal mode.
+    - hdi_mono_{cl}_mids: 1st mode in the {cl}% CI HDI in unimodal mode.
     - hdi_mono_{cl}: width of the {cl}% CI HDI in unimodal mode.
     - pull: ratio of the mid value to the half-width of the 68% CI ETI
     - pull_hdi: ratio of the mid value to the half-width of the 68% CI HDI in unimodal mode.
