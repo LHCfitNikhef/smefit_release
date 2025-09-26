@@ -292,8 +292,8 @@ class Projection:
                 # Identify add and mult systematics
                 # and replace the mult ones with corresponding value computed
                 # from data central value. Required for implementation of t0 prescription
-                indx_add = np.where(type_sys == "ADD")[0]
-                indx_mult = np.where(type_sys == "MULT")[0]
+                indx_add = np.flatnonzero(type_sys == "ADD")
+                indx_mult = np.flatnonzero(type_sys == "MULT")
                 sys_t0 = np.zeros((num_sys, num_data))
                 sys_t0[indx_add] = sys_add[indx_add].reshape(sys_t0[indx_add].shape)
                 sys_t0[indx_mult] = (

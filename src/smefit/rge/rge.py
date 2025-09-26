@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import pathlib
 import pickle
-import warnings
 from copy import deepcopy
 from functools import partial, wraps
 
@@ -10,7 +9,6 @@ import jax.numpy as jnp
 import numpy as np
 import pandas as pd
 import wilson
-from numpy import ComplexWarning
 
 from smefit import log
 from smefit.loader import Loader
@@ -96,9 +94,6 @@ def _to_wcxf_no_rotation(self, C_out, scale_out):
 # Monkey-patch the method
 wilson.run.smeft.classes.SMEFT._to_wcxf = _to_wcxf_no_rotation
 ##################### END OF MONKEY PATCH
-
-# Suppress the ComplexWarning
-warnings.filterwarnings("ignore", category=ComplexWarning)
 
 _logger = log.logging.getLogger(__name__)
 
