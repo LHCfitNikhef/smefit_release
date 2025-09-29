@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import itertools
 import pathlib
-import shutil
 import subprocess
 import sys
 from shutil import copyfile
@@ -68,7 +67,8 @@ class Runner:
 
         if res_folder_fit.exists():
             _logger.warning(
-                f"{res_folder_fit} already found, cleaning old results (keeping ultranest_logs and subfolders)"
+                f"{res_folder_fit} already found, "
+                f"cleaning old results (keeping ultranest_logs and subfolders)"
             )
             for item in res_folder_fit.iterdir():
                 # delete only top-level files (designed to keep ultranest_logs)
