@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import itertools
 import pathlib
-import shutil
 import subprocess
 import sys
 from shutil import copyfile
@@ -67,8 +66,14 @@ class Runner:
             res_folder_fit = result_folder / result_ID
 
         if res_folder_fit.exists():
-            _logger.warning(f"{res_folder_fit} already found, overwriting old results")
-            shutil.rmtree(res_folder_fit)
+            _logger.warning(
+                f"{res_folder_fit} already found, "
+                f"cleaning old results (keeping ultranest_logs and subfolders)"
+            )
+            for item in res_folder_fit.iterdir():
+                # delete only top-level files (designed to keep ultranest_logs)
+                if item.is_file():
+                    item.unlink()
         subprocess.call(f"mkdir -p {res_folder_fit}", shell=True)
 
         # Copy yaml runcard to results folder or dump it
