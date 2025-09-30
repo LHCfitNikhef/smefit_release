@@ -381,6 +381,9 @@ class USOptimizer(Optimizer):
             loglikelihood = self.gaussian_loglikelihood
             flat_prior = self.flat_prior
 
+        _logger.info(
+            f"Running fit with backend: {jax.lib.xla_bridge.get_backend().platform}"
+        )
         t1 = time.time()
         sampler = ultranest.ReactiveNestedSampler(
             self.free_parameters.index.tolist(),
