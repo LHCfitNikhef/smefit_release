@@ -60,7 +60,6 @@ def get_confidence_values(dist, has_posterior=True):
     - hdi_mono_{cl}: width of the {cl}% CI HDI in unimodal mode.
     - pull: ratio of the mid value to the half-width of the 68% CI ETI
     - pull_hdi: ratio of the mid value to the half-width of the 68% CI HDI in unimodal mode.
-
     """
     cl_vals = {}
     if has_posterior:
@@ -69,19 +68,16 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals["low95"] = np.nanpercentile(dist, 2.5)
         cl_vals["high95"] = np.nanpercentile(dist, 97.5)
         cl_vals["mid"] = np.mean(dist, axis=0)
-
     else:
         cl_vals["low68"] = dist["68CL"][0]
         cl_vals["high68"] = dist["68CL"][1]
         cl_vals["low95"] = dist["95CL"][0]
         cl_vals["high95"] = dist["95CL"][1]
         cl_vals["mid"] = dist["bestfit"]
-
     for cl in [68, 95]:
         cl_vals[f"mean_err{cl}"] = (cl_vals[f"high{cl}"] - cl_vals[f"low{cl}"]) / 2.0
         cl_vals[f"err{cl}_low"] = cl_vals["mid"] - cl_vals[f"low{cl}"]
         cl_vals[f"err{cl}_high"] = cl_vals[f"high{cl}"] - cl_vals["mid"]
-
         # highest density intervals
         hdi_interval = np.array(
             arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=True)
@@ -104,7 +100,6 @@ def get_confidence_values(dist, has_posterior=True):
             sorted(dist.values), [hdi_interval_mono]
         )[0]
         cl_vals[f"hdi_mono_{cl}"] = np.sum(abs(hdi_interval_mono))
-
     cl_vals["pull"] = cl_vals["mid"] / cl_vals["mean_err68"]
     cl_vals["pull_hdi"] = (
         cl_vals["hdi_mono_68_mids"]
@@ -129,7 +124,6 @@ def compute_confidence_level(
             coefficients list for which the bounds are computed with latex names
         disjointed_list: list, optional
             list of coefficients with double solutions
-
     Returns
     -------
         bounds: pandas.DataFrame
@@ -162,19 +156,15 @@ class CoefficientsPlotter:
     Plots central values + 95% CL errors, 95% CL bounds,
     probability distributions, residuals,
     residual distribution, and energy reach.
-
     Also writes a table displaying values for
     68% CL bounds and central value + 95% errors.
-
     Takes into account parameter constraints and displays
     all non-zero parameters.
-
     Note: coefficients that are known to have disjoint
     probability distributions (i.e. multiple solutions)
     are manually separated by including the coefficient name
     in disjointed_list for disjointed_list2
     for global and single fit results, respectively.
-
     Parameters
     ----------
     report_path: pathlib.Path, str
@@ -183,13 +173,11 @@ class CoefficientsPlotter:
         coefficients latex names by gropup type
     logo : bool
         if True dispaly the logo on scatter and bar plots
-
     """
 
     def __init__(self, report_path, coeff_config, logo=False):
         self.report_folder = report_path
         self.coeff_info = coeff_config
-
         # SMEFiT logo
         if logo:
             self.logo = plt.imread(
@@ -197,7 +185,6 @@ class CoefficientsPlotter:
             )
         else:
             self.logo = None
-
         self.npar = self.coeff_info.shape[0]
 
     def _plot_logo(self, ax, extent=[0.8, 0.999, 0.001, 0.30]):
@@ -234,7 +221,6 @@ class CoefficientsPlotter:
     ):
         """
         Plot central value + 95% CL errors
-
         Parameters
         ----------
             bounds: dict
@@ -243,7 +229,6 @@ class CoefficientsPlotter:
         """
         groups, axs = self._get_suplblots(figsize)
         bas10 = np.concatenate([-np.logspace(-4, 2, 7), np.logspace(-4, 2, 7)])
-
         # Spacing between fit results
         nfits = len(bounds)
         y_shift = np.linspace(-0.2 * nfits, 0.2 * nfits, nfits)
@@ -267,9 +252,8 @@ class CoefficientsPlotter:
                     fmt=".",
                     label=label,
                 )
-            elif ci_type == "hdi":
-                # HDIs in multimodal mode
-                # loop over 95% HDI intervals, since they can be disjointed
+            elif ci_type == "hdi":  # HDIs in multimodal mode
+                # loop over HDI intervals, since they can be disjointed
                 for intNum in range(len(vals.hdi_95_mids)):
                     ax.errorbar(
                         x=vals.hdi_95_mids[intNum],
@@ -288,7 +272,6 @@ class CoefficientsPlotter:
                         ],
                         color=colors(2 * i + 1),
                     )
-                # loop over 68% HDI intervals, since they can be disjointed
                 for intNum in range(len(vals.hdi_68_mids)):
                     ax.errorbar(
                         x=vals.hdi_68_mids[intNum],
@@ -368,10 +351,8 @@ class CoefficientsPlotter:
                         plot_error_bars(ax, vals_2, cnt, i)
                     except KeyError:
                         pass
-
-            # y ticks
+            # y ticks, lims and pos
             ax.set_ylim(-2, Y[-1] + 2)
-            # also position y tick labels from top to bottom
             ax.set_yticks(Y[::-1], self.coeff_info[g], fontsize=13)
             # x grid
             ax.vlines(0, -2, Y[-1] + 2, ls="dashed", color="black", alpha=0.7)
@@ -389,10 +370,8 @@ class CoefficientsPlotter:
                 ax.set_xlim(x_min[g], x_max[g])
             else:
                 ax.set_xlim(x_min, x_max)
-
             ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
             cnt_plot += npar
-
         self._plot_logo(axs[-1])
         axs[-1].set_xlabel(r"$c_i/\Lambda^2\ ({\rm TeV}^{-2})$", fontsize=20)
         handles, labels = axs[-1].get_legend_handles_labels()
@@ -809,17 +788,14 @@ class CoefficientsPlotter:
         ncols : int
             Number of columns in the plot layout.
         """
-
         if nrows == -1 and ncols == -1:  # square layout
             nrows = ncols = int(np.sqrt(self.npar)) + 1
         elif ncols != -1:  # calculate nrows based on ncols
             nrows = int(np.ceil(self.npar / ncols))
         else:  # calculate ncols based on nrows
             ncols = int(np.ceil(self.npar / nrows))
-
         if (nrows * ncols) % self.npar == 0:
             nrows += 1  # add an extra row to fit the logo
-
         return nrows, ncols
 
     def plot_posteriors(self, posteriors, labels, **kwargs):
@@ -1064,21 +1040,17 @@ class CoefficientsPlotter:
                         which="both",  # both major and minor ticks are affected
                         labelleft=False,
                     )
-
             hndls_sm_point = ax.scatter(0, 0, c="k", marker="+", s=50, zorder=10)
             hndls_all.append(hndls_sm_point)
-
             col_idx -= 1
             ax.locator_params(axis="x", nbins=5)
             ax.locator_params(axis="y", nbins=6)
             ax.minorticks_on()
             ax.grid(linestyle="dotted", linewidth=0.5)
-
         # in case n_par > 2, put legend outside subplot
         if n_par > 2:
             ax = fig.add_subplot(grid[0, 1])
             ax.axis("off")
-
         ax.legend(
             labels=labels + [r"$\mathrm{SM}$"],
             handles=hndls_all,
@@ -1090,11 +1062,9 @@ class CoefficientsPlotter:
             handletextpad=1,
             title_fontsize=24,
         )
-
         ax_logo = fig.add_subplot(grid[0, -1])
         ax_logo.axis("off")
         self._plot_logo(ax_logo, extent=[0.05, 0.95, 0.7, 1])
-
         ax.text(
             0.05,
             0.95,
@@ -1103,7 +1073,6 @@ class CoefficientsPlotter:
             transform=ax.transAxes,
             verticalalignment="top",
         )
-
         fig.savefig(f"{self.report_folder}/contours_2d.pdf", bbox_inches="tight")
         fig.savefig(f"{self.report_folder}/contours_2d.png", bbox_inches="tight")
 
@@ -1127,7 +1096,6 @@ class CoefficientsPlotter:
             + r" & best & 68\% CL Bounds & 95\% CL Bounds" * nfits
             + r"\\ \hline"
         )
-
         for group, coeff_group in self.coeff_info.groupby(level=0):
             coeff_group = coeff_group.droplevel(0)
             L.append(f"\\multirow{{{coeff_group.shape[0]}}}{{*}}{{{group}}}")
@@ -1182,11 +1150,9 @@ class CoefficientsPlotter:
                         if len(temp2) > num_peaks - 1:
                             for i in range(num_peaks - 1, len(temp2)):
                                 temp2[i] += r" & & -& -"
-                    # if there are no double solutions, append empty
                     # append double solution
                     if temp2 != [" & "]:
                         for i in range(len(temp2)):
-                            #                            temp += f" \\\\ \\cline{{3-{(2 + 3 * nfits)}}}"
                             temp += f" \\\\"
                             temp += "".join(temp2[i])
                     temp += f" \\\\ \\cline{{2-{(2 + 3 * nfits)}}}"
@@ -1202,11 +1168,10 @@ class CoefficientsPlotter:
                                 temp += r" & \textemdash & \textemdash & \textemdash "
                                 continue
                             raise KeyError(f"{latex_name} is not found in posterior")
-
                         if ci_type == "eti":
                             temp += f" & {np.round(cl_vals['mid'],round_val)} \
-                                    & [{np.round(cl_vals['low68'],round_val)},{np.round(cl_vals['high68'],round_val)}] \
-                                        & [{np.round(cl_vals['low95'],round_val)},{np.round(cl_vals['high95'],round_val)}]"
+                                    & [{np.round(cl_vals['low68'],round_val)}, {np.round(cl_vals['high68'],round_val)}] \
+                                    & [{np.round(cl_vals['low95'],round_val)}, {np.round(cl_vals['high95'],round_val)}]"
                             # double solution
                             try:
                                 cl_vals_2 = bound_df[(group, latex_name)].dropna()[1]
