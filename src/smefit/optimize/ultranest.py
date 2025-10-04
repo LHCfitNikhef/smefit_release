@@ -419,6 +419,8 @@ class USOptimizer(Optimizer):
             log.console.log(f"Time : {((t2 - t1) / 60.0):.3f} minutes")
             log.console.log(f"Number of samples: {result['samples'].shape[0]}")
 
+            self.save(result)
+
             if self.store_raw:
                 _logger.info("Ultranest plots being produced...")
                 sampler.plot()
@@ -433,8 +435,6 @@ class USOptimizer(Optimizer):
             for par, col in zip(self.free_parameters.index, result["samples"].T):
                 table.add_row(f"{par}", f"{col.mean():.3f}", f"{col.std():.3f}")
             log.console.print(table)
-
-            self.save(result)
 
     def save(self, result):
         """Save |NS| replicas to json inside a dictionary: {coff: [replicas values]}.
