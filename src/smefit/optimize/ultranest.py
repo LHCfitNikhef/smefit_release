@@ -226,7 +226,7 @@ class USOptimizer(Optimizer):
         n_samples = config.get("n_samples", 10000)
         if "n_samples" not in config:
             _logger.warning(
-                f"Number of samples (n_samples) not set in the input card."
+                f"Number of samples (n_samples) not set in the input card. "
                 f"Using default: {n_samples}"
             )
 
