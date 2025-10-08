@@ -92,6 +92,7 @@ class USOptimizer(Optimizer):
         target_evidence_unc=0.5,
         target_post_unc=0.5,
         frac_remain=0.01,
+        n_samples=10000,
         store_raw=False,
         vectorized=False,
         float64=False,
@@ -115,6 +116,7 @@ class USOptimizer(Optimizer):
         self.target_evidence_unc = target_evidence_unc
         self.target_post_unc = target_post_unc
         self.frac_remain = frac_remain
+        self.n_samples = n_samples
         self.vectorized = vectorized
         self.npar = self.free_parameters.shape[0]
         self.result_ID = result_ID
@@ -221,6 +223,11 @@ class USOptimizer(Optimizer):
             _logger.warning(
                 f"Remaining fraction (frac_remain) not set in the input card. Using default: {frac_remain}"
             )
+        n_samples = config.get("n_samples", 10000)
+        if "n_samples" not in config:
+            _logger.warning(
+                f"Number of samples (n_samples) not set in the input card. Using default: {n_samples}"
+            )
 
         store_raw = config.get("store_raw", False)
         vectorized = config.get("vectorized", False)
@@ -246,6 +253,7 @@ class USOptimizer(Optimizer):
             target_evidence_unc=target_evidence_unc,
             target_post_unc=target_post_unc,
             frac_remain=frac_remain,
+            n_samples=n_samples,
             store_raw=store_raw,
             vectorized=vectorized,
             float64=float64,
@@ -410,6 +418,15 @@ class USOptimizer(Optimizer):
         )
 
         t2 = time.time()
+
+        # Keep only the requested number of samples.
+        # If they are less, it keeps all of them.
+        if len(result["samples"]) < self.n_samples:
+            _logger.warning(
+                f"Only {len(result['samples'])} samples were produced, less than the requested {self.n_samples}"
+            )
+        result["samples"] = result["samples"][: self.n_samples]
+
         rank = 0
         if run_parallel:
             comm = MPI.COMM_WORLD
