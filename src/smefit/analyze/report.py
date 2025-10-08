@@ -486,7 +486,7 @@ class Report:
 
                 # TODO: check why **fit_plot got removed (see PR)
                 pca_cal.plot_heatmap(
-                    f"{self.report}/pca_heatmap_{fit.name}", title=title
+                    f"{self.report}/pca_heatmap_{fit.name}", title=title, figsize=plot["figsize"]
                 )
                 figs_list.append(f"pca_heatmap_{fit.name}")
         self._append_section("PCA", figs=figs_list, links=links_list)
