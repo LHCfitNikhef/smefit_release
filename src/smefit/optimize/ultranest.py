@@ -226,7 +226,8 @@ class USOptimizer(Optimizer):
         n_samples = config.get("n_samples", 10000)
         if "n_samples" not in config:
             _logger.warning(
-                f"Number of samples (n_samples) not set in the input card. Using default: {n_samples}"
+                f"Number of samples (n_samples) not set in the input card."
+                f"Using default: {n_samples}"
             )
 
         store_raw = config.get("store_raw", False)
@@ -423,7 +424,8 @@ class USOptimizer(Optimizer):
         # If they are less, it keeps all of them.
         if len(result["samples"]) < self.n_samples:
             _logger.warning(
-                f"Only {len(result['samples'])} samples were produced, less than the requested {self.n_samples}"
+                f"Only {len(result['samples'])} samples were produced, "
+                f"less than the requested {self.n_samples}"
             )
         result["samples"] = result["samples"][: self.n_samples]
 
