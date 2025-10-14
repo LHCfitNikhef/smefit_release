@@ -102,6 +102,9 @@ class RotateToPca:
         id_df = pd.DataFrame(
             np.eye(fixed_dofs.size), columns=fixed_dofs, index=fixed_dofs
         )
+        singular_values = pca.SVs.copy()
+        # normalize by the singular values to have unit variance in the PCs directions
+        pca.pc_matrix = pca.pc_matrix.divide(singular_values, axis=1)
         self.rotation = pd.concat([pca.pc_matrix, id_df]).replace(np.nan, 0)
         # sort both index and columns
         self.rotation.sort_index(inplace=True)
@@ -116,7 +119,7 @@ class RotateToPca:
         pca_min = self.coefficients.minimum @ self.rotation
         pca_max = self.coefficients.maximum @ self.rotation
         for pc in self.rotation.columns:
-            new_coeffs[pc] = {"min": float(pca_min[pc]), "max": float(pca_max[pc])}
+            new_coeffs[pc] = {"min": -5.0, "max": 5.0}
 
         for coef_obj in self.coefficients._objlist:
             # fixed coefficients
