@@ -72,6 +72,17 @@ def nested_sampling(
         setup_console(log_file)
         print_banner()
         runner = Runner.from_file(fit_card.absolute())
+        if "prior_bounds" in runner.run_card:
+            prior_bounds = runner.run_card["prior_bounds"]
+            if "fit" not in prior_bounds:
+                raise KeyError("The 'fit' key is missing in prior_bounds.")
+            else:
+                previous_fit = prior_bounds["fit"]
+            n_sigma = prior_bounds.get("n_sigma", 3)
+            log.console.log(
+                f"Prior bounds will be set to posterior bounds from fit {previous_fit}"
+            )
+            runner.update_prior_from_fit(previous_fit, n_sigma)
         if rotate_to_pca:
             runner.rotate_to_pca()
         log.console.log("Running : Nested Sampling Fit ")

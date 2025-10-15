@@ -7,8 +7,10 @@ from shutil import copyfile
 
 import yaml
 
+from .analyze.coefficients_utils import get_confidence_values
 from .analyze.pca import RotateToPca
 from .chi2 import Scanner
+from .fit_manager import FitManager
 from .log import logging
 from .optimize import Optimizer
 from .optimize.analytic import ALOptimizer
@@ -49,7 +51,7 @@ class Runner:
         self.runcard_file = runcard_file
         self.single_parameter_fits = single_parameter_fits
         self.pairwise_fits = pairwise_fits
-        self.setup_result_folder()
+        self.result_folder = self.setup_result_folder()
 
     def setup_result_folder(self):
         """
@@ -87,6 +89,7 @@ class Runner:
                 self.runcard_file,
                 runcard_copy,
             )
+        return result_folder
 
     @classmethod
     def from_file(cls, runcard_file, replica=None):
@@ -326,3 +329,34 @@ class Runner:
         scan.compute_scan()
         scan.write_scan()
         scan.plot_scan()
+
+    def update_prior_from_fit(self, previous_fit, n_sigma=2):
+        r"""Update the priors of the coefficients in the runcard
+        using the results of a previous fit.
+        Parameters
+        ----------
+            previous_fit: `str`
+                result_ID of the previous fit
+        """
+
+        fit = FitManager(self.result_folder, previous_fit, label=previous_fit)
+        fit.load_results()
+        posterior = fit.results["samples"]
+        updated_prior_bounds = {}
+        for op in posterior.columns:
+            posterior_bounds = get_confidence_values(posterior[op], has_posterior=True)
+            sigma = posterior_bounds["hdi_68"] / 2.0
+            updated_prior_max = n_sigma * sigma
+            updated_prior_min = -n_sigma * sigma
+            updated_prior_bounds[op] = (updated_prior_min, updated_prior_max)
+
+        # update runcard
+        old_prior_bounds = self.run_card["coefficients"]
+        for op, value in old_prior_bounds.items():
+            if "constrain" in value:
+                continue
+            old_prior_bounds[op] = {
+                "min": updated_prior_bounds[op][0],
+                "max": updated_prior_bounds[op][1],
+            }
+        self.run_card["coefficients"] = old_prior_bounds
