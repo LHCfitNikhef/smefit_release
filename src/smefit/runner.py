@@ -5,7 +5,9 @@ import subprocess
 import sys
 from shutil import copyfile
 
-import yaml
+import ruyaml
+
+yaml = ruyaml.YAML()
 
 from .analyze.coefficients_utils import get_confidence_values
 from .analyze.pca import RotateToPca
@@ -51,7 +53,7 @@ class Runner:
         self.runcard_file = runcard_file
         self.single_parameter_fits = single_parameter_fits
         self.pairwise_fits = pairwise_fits
-        self.result_folder = self.setup_result_folder()
+        self.result_ID, self.result_folder = self.setup_result_folder()
 
     def setup_result_folder(self):
         """
@@ -89,7 +91,7 @@ class Runner:
                 self.runcard_file,
                 runcard_copy,
             )
-        return result_folder
+        return result_ID, result_folder
 
     @classmethod
     def from_file(cls, runcard_file, replica=None):
@@ -111,7 +113,7 @@ class Runner:
         config = {}
         # load file
         with open(runcard_file, encoding="utf-8") as f:
-            config = yaml.safe_load(f)
+            config = yaml.load(f)
 
         config["replica"] = replica
         # set result ID to runcard name by default
@@ -356,7 +358,11 @@ class Runner:
             if "constrain" in value:
                 continue
             old_prior_bounds[op] = {
-                "min": updated_prior_bounds[op][0],
-                "max": updated_prior_bounds[op][1],
+                "min": float(updated_prior_bounds[op][0]),
+                "max": float(updated_prior_bounds[op][1]),
             }
         self.run_card["coefficients"] = old_prior_bounds
+
+        runcard_copy = self.result_folder / self.result_ID / f"{self.result_ID}.yaml"
+        with open(runcard_copy, "w", encoding="utf-8") as f:
+            yaml.dump(self.run_card, f)
