@@ -252,13 +252,21 @@ class PcaCalculator:
         free_parameters = self.coefficients.free_parameters.index
 
         new_LinearCorrections = impose_constrain(self.datasets, self.coefficients)
-        X = new_LinearCorrections @ self.datasets.InvCovMat @ new_LinearCorrections.T
-        # Decompose matrix with SVD and identify PCs
-        _, W, Vt = np.linalg.svd(X)
 
-        pca_labels = [f"PC{i:02d}" for i in range(W.size)]
-        self.pc_matrix = pd.DataFrame(Vt.T, index=free_parameters, columns=pca_labels)
-        self.SVs = pd.Series(W, index=pca_labels)
+        # new_LinearCorrections_centered = new_LinearCorrections.T - new_LinearCorrections.T.mean(axis=0)
+
+        # X = new_LinearCorrections @ self.datasets.InvCovMat @ new_LinearCorrections.T
+
+        # Decompose matrix with SVD and identify PCs
+        U, S, Vh = np.linalg.svd(new_LinearCorrections.T)
+
+        # 1/S is the 68% CL interval for a single parameter
+        # _, W, Vt = np.linalg.svd(new_LinearCorrections_centered)
+
+        pca_labels = [f"PC{i:02d}" for i in range(S.size)]
+
+        self.pc_matrix = pd.DataFrame(Vh, index=free_parameters, columns=pca_labels)
+        self.SVs = pd.Series(S, index=pca_labels)
 
     def write(self, fit_label, thr_show=1e-2):
         """Write PCA latex table.

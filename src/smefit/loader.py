@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import scipy.linalg as la
 import yaml
+from matplotlib import pyplot as plt
 
 from .basis_rotation import rotate_to_fit_basis
 from .covmat import construct_covmat, covmat_from_systematics
@@ -536,7 +537,31 @@ def construct_corrections_matrix_linear(
     if rgemat is not None:
         corr_values = jnp.einsum("ij, ijk -> ik", corr_values, rgemat)
 
+    corr_values_df = pd.DataFrame(corr_values, columns=sorted_keys)
+
+    # if 'PC00' in corr_values_df.columns:
+    #     plot_corrections("PCA", corr_values_df)
+    # else:
+    #     plot_corrections("SMEFiT basis", corr_values_df)
+    #
+    # TODO: The RG rotation should act before the PCA, now it acts after.
     return corr_values
+
+
+def plot_corrections(basis_name, corr_values_df):
+
+    fig, ax = plt.subplots()
+    ax.scatter(corr_values_df.iloc[:, 0], corr_values_df.iloc[:, 1])
+    ax.set_xlabel(corr_values_df.columns[0])
+    ax.set_ylabel(corr_values_df.columns[1])
+    ax.set_title(f"Linear corrections in {basis_name}")
+    plt.grid()
+    # ax.set_xlim(-5, 5)
+    # ax.set_ylim(-5, 5)
+    plt.savefig(
+        f"/Users/jaco/Documents/smefit_release/results/esppu_paper/pca_rotation/linear_corrections_{basis_name}.pdf"
+    )
+    plt.close()
 
 
 def construct_corrections_matrix_quadratic(
@@ -729,6 +754,20 @@ def load_datasets(
         )
     else:
         fit_covmat = exp_covmat
+
+    diagonal = True
+    if diagonal:
+        eigval, eigvec = np.linalg.eigh(fit_covmat)
+        rotate_data_basis = eigvec
+        rescale_data_basis = np.diag(1.0 / np.sqrt(eigval))
+        transform_data_basis = rotate_data_basis @ rescale_data_basis
+        exp_data = transform_data_basis.T @ exp_data
+        sm_theory = transform_data_basis.T @ np.array(sm_theory)
+        lin_corr_values = transform_data_basis.T @ lin_corr_values
+        fit_covmat = np.eye(fit_covmat.shape[0])
+        if use_quad:
+            print("Not implemented quadratic corrections diagonalization")
+            # throw error
 
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
