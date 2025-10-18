@@ -326,6 +326,7 @@ class Loader:
 
         # rotate corrections to fitting basis
         if rotation_matrix is not None:
+
             lin_dict_fit_basis, quad_dict_fit_basis = rotate_to_fit_basis(
                 lin_dict, quad_dict, rotation_matrix
             )
@@ -755,19 +756,19 @@ def load_datasets(
     else:
         fit_covmat = exp_covmat
 
-    diagonal = True
-    if diagonal:
-        eigval, eigvec = np.linalg.eigh(fit_covmat)
-        rotate_data_basis = eigvec
-        rescale_data_basis = np.diag(1.0 / np.sqrt(eigval))
-        transform_data_basis = rotate_data_basis @ rescale_data_basis
-        exp_data = transform_data_basis.T @ exp_data
-        sm_theory = transform_data_basis.T @ np.array(sm_theory)
-        lin_corr_values = transform_data_basis.T @ lin_corr_values
-        fit_covmat = np.eye(fit_covmat.shape[0])
-        if use_quad:
-            print("Not implemented quadratic corrections diagonalization")
-            # throw error
+    # diagonalise covmat and rotate data and theory to the eigenbasis
+    eigval, eigvec = np.linalg.eigh(fit_covmat)
+    rotate_data_basis = eigvec
+    rescale_data_basis = np.diag(1.0 / np.sqrt(eigval))
+    transform_data_basis = rotate_data_basis @ rescale_data_basis
+    exp_data = transform_data_basis.T @ exp_data
+    sm_theory = transform_data_basis.T @ np.array(sm_theory)
+    fit_covmat = np.eye(fit_covmat.shape[0])
+    lin_corr_values = transform_data_basis.T @ lin_corr_values
+    if use_quad:
+        quad_corr_values = np.einsum(
+            "ij,jkl->ikl", transform_data_basis.T, quad_corr_values
+        )
 
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(

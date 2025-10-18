@@ -84,8 +84,17 @@ class RotateToPca:
         # update coefficient contraints
         new_coeffs = {}
         self.coefficients.update_constrain(self.rotation.T)
-        pca_min = self.coefficients.minimum @ self.rotation
-        pca_max = self.coefficients.maximum @ self.rotation
+        pca_min = self.coefficients.minimum @ pd.DataFrame(
+            np.ones(self.rotation.shape),
+            index=self.rotation.index,
+            columns=self.rotation.columns,
+        )
+        pca_max = self.coefficients.maximum @ pd.DataFrame(
+            np.ones(self.rotation.shape),
+            index=self.rotation.index,
+            columns=self.rotation.columns,
+        )
+
         for pc in self.rotation.columns:
             new_coeffs[pc] = {"min": float(pca_min[pc]), "max": float(pca_max[pc])}
 
@@ -259,7 +268,11 @@ class PcaCalculator:
 
         pca_labels = [f"PC{i:02d}" for i in range(S.size)]
 
-        self.pc_matrix = pd.DataFrame(Vh.T, index=free_parameters, columns=pca_labels)
+        param_rotation = Vh.T @ np.diag(1 / S)
+
+        self.pc_matrix = pd.DataFrame(
+            param_rotation, index=free_parameters, columns=pca_labels
+        )
         self.SVs = pd.Series(S, index=pca_labels)
 
     def write(self, fit_label, thr_show=1e-2):
