@@ -325,7 +325,6 @@ class Loader:
             return op1 in operators_to_keep and op2 in operators_to_keep
 
         # rotate corrections to fitting basis
-        # TODO: apply rotation matrix after RG
         if rotation_matrix is not None:
 
             lin_dict_fit_basis, quad_dict_fit_basis = rotate_to_fit_basis(
@@ -759,6 +758,8 @@ def load_datasets(
     sm_theory = transform_data_basis.T @ np.array(sm_theory)
     fit_covmat = np.eye(fit_covmat.shape[0])
     lin_corr_values = transform_data_basis.T @ lin_corr_values
+
+    # act on the n_dat axis
     if use_quad:
         quad_corr_values = np.einsum(
             "ij,jkl->ikl", transform_data_basis.T, quad_corr_values
@@ -769,8 +770,12 @@ def load_datasets(
     U, S, Vh = np.linalg.svd(lin_corr_values)
     param_rotation = Vh.T @ np.diag(1 / S)
     lin_corr_values = lin_corr_values @ param_rotation
+
+    # act on param axis
     if use_quad:
-        quad_corr_values = np.einsum("ijk,kl->ijl", quad_corr_values, param_rotation)
+        quad_corr_values = np.einsum(
+            "ij,kjl,lm->kim", param_rotation.T, quad_corr_values, param_rotation
+        )
 
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
