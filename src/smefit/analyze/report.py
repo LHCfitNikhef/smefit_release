@@ -525,7 +525,12 @@ class Report:
         fishers = {}
         for fit in fit_list:
             compute_quad = fit.config["use_quad"]
-            fisher_cal = FisherCalculator(fit.coefficients, fit.datasets, compute_quad)
+            fisher_cal = FisherCalculator(
+                fit.coefficients,
+                fit.datasets,
+                fit.results["best_fit_point"],
+                compute_quad,
+            )
             fisher_cal.compute_linear()
             fisher_cal.lin_fisher = fisher_cal.normalize(
                 fisher_cal.lin_fisher, norm=norm, log=log
@@ -537,9 +542,7 @@ class Report:
 
             # if necessary compute the quadratic Fisher
             if compute_quad:
-                fisher_cal.compute_quadratic(
-                    fit.results["samples"], fit.smeft_predictions
-                )
+                fisher_cal.compute_quadratic()
                 fisher_cal.quad_fisher = fisher_cal.normalize(
                     fisher_cal.quad_fisher, norm=norm, log=log
                 )
