@@ -325,6 +325,7 @@ class Loader:
             return op1 in operators_to_keep and op2 in operators_to_keep
 
         # rotate corrections to fitting basis
+        # TODO: apply rotation matrix after RG
         if rotation_matrix is not None:
 
             lin_dict_fit_basis, quad_dict_fit_basis = rotate_to_fit_basis(
@@ -538,13 +539,6 @@ def construct_corrections_matrix_linear(
     if rgemat is not None:
         corr_values = jnp.einsum("ij, ijk -> ik", corr_values, rgemat)
 
-    corr_values_df = pd.DataFrame(corr_values, columns=sorted_keys)
-
-    # if 'PC00' in corr_values_df.columns:
-    #     plot_corrections("PCA", corr_values_df)
-    # else:
-    #     plot_corrections("SMEFiT basis", corr_values_df)
-    #
     # TODO: The RG rotation should act before the PCA, now it acts after.
     return corr_values
 
@@ -769,6 +763,12 @@ def load_datasets(
         quad_corr_values = np.einsum(
             "ij,jkl->ikl", transform_data_basis.T, quad_corr_values
         )
+
+    # Decompose matrix with SVD and identify PCs
+    U, S, Vh = np.linalg.svd(lin_corr_values)
+    param_rotation = Vh.T @ np.diag(1 / S)
+    lin_corr_values = lin_corr_values @ param_rotation
+    quad_corr_values = np.einsum("ijk,kl->ijl", quad_corr_values, param_rotation)
 
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
