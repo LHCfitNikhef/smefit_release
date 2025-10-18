@@ -769,7 +769,8 @@ def load_datasets(
     U, S, Vh = np.linalg.svd(lin_corr_values)
     param_rotation = Vh.T @ np.diag(1 / S)
     lin_corr_values = lin_corr_values @ param_rotation
-    quad_corr_values = np.einsum("ijk,kl->ijl", quad_corr_values, param_rotation)
+    if use_quad:
+        quad_corr_values = np.einsum("ijk,kl->ijl", quad_corr_values, param_rotation)
 
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
