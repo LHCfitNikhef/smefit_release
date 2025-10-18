@@ -29,7 +29,7 @@ DataTuple = namedtuple(
         "InvCovMat",
         "ThCovMat",
         "Luminosity",
-        "Replica",
+        "ParamRotation",
     ),
 )
 
@@ -764,7 +764,8 @@ def load_datasets(
             "ij,jkl->ikl", transform_data_basis.T, quad_corr_values
         )
 
-    # Decompose matrix with SVD and identify PCs
+    # rotate predictions to the PCA basis
+    # param rotation : (smefit_database basis, pca basis)
     U, S, Vh = np.linalg.svd(lin_corr_values)
     param_rotation = Vh.T @ np.diag(1 / S)
     lin_corr_values = lin_corr_values @ param_rotation
@@ -782,7 +783,7 @@ def load_datasets(
         np.linalg.inv(fit_covmat),
         theory_covariance,
         np.array(lumi_exp),
-        replica,
+        param_rotation,
     )
 
 
@@ -808,5 +809,5 @@ def get_dataset(datasets, data_name):
         datasets.InvCovMat[posix_in:posix_out].T[posix_in:posix_out],
         datasets.ThCovMat[posix_in:posix_out].T[posix_in:posix_out],
         lumi,
-        datasets.Replica[posix_in:posix_out],
+        datasets.param_rotation,
     )

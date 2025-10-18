@@ -394,6 +394,12 @@ class USOptimizer(Optimizer):
             f"Running fit with backend: {jax.lib.xla_bridge.get_backend().platform}"
         )
         t1 = time.time()
+
+        hessian = -1 * jax.hessian(loglikelihood)(jnp.zeros(self.npar))
+        inv = jnp.linalg.inv(hessian)
+        sigma = jnp.sqrt(jnp.diag(inv))
+        # import pdb; pdb.set_trace()
+        # print(sigma)
         sampler = ultranest.ReactiveNestedSampler(
             self.free_parameters.index.tolist(),
             loglikelihood,
@@ -428,6 +434,10 @@ class USOptimizer(Optimizer):
                 f"less than the requested {self.n_samples}"
             )
         result["samples"] = result["samples"][: self.n_samples]
+
+        # rotate samples back from pca basis to smefit_database basis
+        # ParamRotation : (smefit_database basis, pca basis)
+        result["samples"] = result["samples"] @ self.loaded_datasets.ParamRotation.T
 
         rank = 0
         if run_parallel:
