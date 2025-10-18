@@ -330,8 +330,11 @@ class Loader:
             )
 
             lin_dict_to_keep = {
-                k: val for k, val in lin_dict_fit_basis.items() if is_to_keep(k)
+                k: val
+                for k, val in lin_dict_fit_basis.items()
+                if is_to_keep(k) and len(val) > 0
             }
+
             quad_dict_to_keep = {
                 k: val
                 for k, val in quad_dict_fit_basis.items()
