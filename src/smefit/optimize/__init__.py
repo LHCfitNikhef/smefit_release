@@ -3,12 +3,14 @@ import importlib
 import json
 import pathlib
 
+import jax.numpy as jnp
 from rich.style import Style
 from rich.table import Table
 
 from smefit.utils import NumpyEncoder
 
 from .. import chi2, log
+from ..analyze.pca import impose_constrain
 from ..loader import get_dataset
 
 try:
@@ -62,14 +64,8 @@ class Optimizer:
         rge_dict=None,
     ):
         self.results_path = pathlib.Path(results_path)
-        self.loaded_datasets = loaded_datasets
         self.coefficients = coefficients
         self.use_quad = use_quad
-        self.npts = (
-            self.loaded_datasets.Commondata.size
-            if self.loaded_datasets is not None
-            else 0
-        )
         self.single_parameter_fits = single_parameter_fits
         self.use_multiplicative_prescription = use_multiplicative_prescription
         self.counter = 0
@@ -81,6 +77,46 @@ class Optimizer:
         # load external chi2 modules as amortized objects (fast to evaluate)
         self.chi2_ext = (
             self.load_external_chi2(external_chi2) if external_chi2 else None
+        )
+
+        # rotate
+        if use_quad:
+            newLinearCorrections, newQuadraticCorrections = impose_constrain(
+                loaded_datasets, coefficients, update_quad=use_quad
+            )
+            loaded_datasets = loaded_datasets._replace(
+                LinearCorrections=newLinearCorrections.T,
+                QuadraticCorrections=newQuadraticCorrections.T,
+            )
+        else:
+            newLinearCorrections = impose_constrain(
+                loaded_datasets, coefficients, update_quad=use_quad
+            )
+            loaded_datasets = loaded_datasets._replace(
+                LinearCorrections=newLinearCorrections.T
+            )
+
+        U, S, Vh = jnp.linalg.svd(loaded_datasets.LinearCorrections)
+        self.param_rotation = Vh.T @ jnp.diag(1 / S)
+        loaded_datasets = loaded_datasets._replace(
+            LinearCorrections=loaded_datasets.LinearCorrections @ self.param_rotation
+        )
+        # act on param axis
+        if use_quad:
+            loaded_datasets = loaded_datasets._replace(
+                QuadraticCorrections=jnp.einsum(
+                    "ij,kjl,lm->kim",
+                    self.param_rotation.T,
+                    loaded_datasets.QuadraticCorrections,
+                    self.param_rotation,
+                )
+            )
+
+        self.loaded_datasets = loaded_datasets
+        self.npts = (
+            self.loaded_datasets.Commondata.size
+            if self.loaded_datasets is not None
+            else 0
         )
 
     def load_external_chi2(self, external_chi2):

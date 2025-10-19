@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import copy
 import json
 import pathlib
 from collections import namedtuple
@@ -11,6 +12,9 @@ import yaml
 from matplotlib import pyplot as plt
 
 from .basis_rotation import rotate_to_fit_basis
+
+# from .analyze.pca import impose_constrain
+from .coefficients import CoefficientManager
 from .covmat import construct_covmat, covmat_from_systematics
 from .log import logging
 
@@ -29,7 +33,6 @@ DataTuple = namedtuple(
         "InvCovMat",
         "ThCovMat",
         "Luminosity",
-        "ParamRotation",
     ),
 )
 
@@ -741,7 +744,6 @@ def load_datasets(
     exp_covmat = covmat_from_systematics(stat_error, sys_error) + theory_covariance
 
     # replicas always generated using the experimental covmat, no t0
-    replica = np.random.multivariate_normal(exp_data, exp_covmat)
     if use_t0:
         fit_covmat = (
             covmat_from_systematics(stat_error, sys_error_t0) + theory_covariance
@@ -767,15 +769,25 @@ def load_datasets(
 
     # rotate predictions to the PCA basis
     # param rotation : (smefit_database basis, pca basis)
-    U, S, Vh = np.linalg.svd(lin_corr_values)
-    param_rotation = Vh.T @ np.diag(1 / S)
-    lin_corr_values = lin_corr_values @ param_rotation
 
-    # act on param axis
-    if use_quad:
-        quad_corr_values = np.einsum(
-            "ij,kjl,lm->kim", param_rotation.T, quad_corr_values, param_rotation
-        )
+    # coefficients = CoefficientManager.from_dict(operators_to_keep)
+    #
+    # # if use_quad:
+    # #     lin_corr_values, quad_corr_values = impose_constrain(
+    # #         lin_corr_values, quad_corr_values, coefficients, update_quad=use_quad
+    # #     )
+    # # else:
+    # #     lin_corr_values = impose_constrain(lin_corr_values, quad_corr_values, coefficients, update_quad=use_quad)
+    #
+    # U, S, Vh = np.linalg.svd(lin_corr_values)
+    # param_rotation = Vh.T @ np.diag(1 / S)
+    # lin_corr_values = lin_corr_values @ param_rotation
+    #
+    # # act on param axis
+    # if use_quad:
+    #     quad_corr_values = np.einsum(
+    #         "ij,kjl,lm->kim", param_rotation.T, quad_corr_values, param_rotation
+    #     )
 
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
@@ -789,8 +801,112 @@ def load_datasets(
         np.linalg.inv(fit_covmat),
         theory_covariance,
         np.array(lumi_exp),
-        param_rotation,
     )
+
+
+def impose_constrain(
+    lin_corr_values, quad_corr_values, coefficients, update_quad=False
+):
+    """Propagate coefficient constraint into the theory tables.
+
+    Note: only linear contraints are allowed in this method.
+    Non linear contrains not always make sense here.
+
+    Parameters
+    ----------
+    dataset: smefit.loader.DataTuple
+        loaded datasets
+    coefficient: smefit.coefficients.CoefficienManager
+        coefficient manager
+    update_quad: bool, optional
+        if True update also quadratic corrections
+
+    Returns
+    -------
+    np.ndarray
+        array of updated linear corrections (n_free_op, n_dat)
+    np.ndarray, optional
+        array of updated quadratic corrections (n_free_op, n_free_op, n_dat)
+
+    """
+    temp_coeffs = copy.deepcopy(coefficients)
+    free_coeffs = temp_coeffs.free_parameters.index
+    n_free_params = free_coeffs.size
+    new_linear_corrections = []
+    new_quad_corrections = []
+    # loop on the free op and add the corrections
+    for idx in range(n_free_params):
+        # update all the free coefficents to 0 except from 1 and propagate
+        params = np.zeros_like(free_coeffs, dtype=float)
+        params[idx] = 1.0
+        temp_coeffs.set_free_parameters(params)
+        temp_coeffs.set_constraints()
+
+        # update linear corrections
+
+        new_linear_corrections.append(temp_coeffs.value @ lin_corr_values.T)
+
+        # update quadratic corrections, this will include some double counting in the mixed corrections
+        if update_quad:
+            for jdx in range(free_coeffs[idx:].size):
+                params = np.zeros_like(free_coeffs, dtype=float)
+                params[idx + jdx] = 1.0
+                params[idx] = 1.0
+                temp_coeffs.set_free_parameters(params)
+                temp_coeffs.set_constraints()
+                new_quad_corrections.append(
+                    np.einsum(
+                        "ijk,j,k -> i",
+                        quad_corr_values,
+                        temp_coeffs.value,
+                        temp_coeffs.value,
+                    )
+                )
+
+    if update_quad:
+        # subrtact the squuared corrections from the mixed ones
+        new_quad_corrections = make_sym_matrix(
+            np.array(new_quad_corrections).T, n_free_params
+        )
+        for idx in range(n_free_params):
+            for jdx in range(n_free_params):
+                if jdx != idx:
+                    new_quad_corrections[idx, jdx, :] -= (
+                        new_quad_corrections[idx, idx, :]
+                        + new_quad_corrections[jdx, jdx, :]
+                    )
+        return np.array(new_linear_corrections).T, new_quad_corrections.T
+
+    return np.array(new_linear_corrections).T
+
+
+def make_sym_matrix(vals, n_op):
+    """Build a square tensor (n_op,n_op,vals.shape[0]), starting from the upper tiangular part.
+
+    Parameters
+    ----------
+        vals : np.ndarray
+            traingular part
+        n_op : int
+            dimension of the final matrix
+
+    Returns
+    -------
+    np.ndarry:
+        square tensor.
+
+    Examples
+    --------
+        `make_sym_matrix(array([1,2,3,4,5,6]), 3) -> array([[1,2,3],[0,4,5],[0,0,6]])`
+
+    """
+    n_dat = vals.shape[0]
+    m = np.zeros((n_op, n_op, n_dat))
+    xs, ys = np.triu_indices(n_op)
+    for i, l in enumerate(vals):
+        m[xs, ys, i] = l
+        m[ys, xs, i] = l
+    return m
 
 
 def get_dataset(datasets, data_name):

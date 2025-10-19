@@ -353,10 +353,9 @@ class USOptimizer(Optimizer):
         -0.5 * chi2 : np.ndarray
             multi gaussian log likelihood
         """
+        # all_params = self.produce_all_params(params)
 
-        all_params = self.produce_all_params(params)
-
-        return -0.5 * self.chi2_func_ns(all_params)
+        return -0.5 * self.chi2_func_ns(params)
 
     @partial(jax.jit, static_argnames=["self"])
     def flat_prior(self, hypercube):
@@ -395,9 +394,9 @@ class USOptimizer(Optimizer):
         )
         t1 = time.time()
 
-        hessian = -1 * jax.hessian(loglikelihood)(jnp.zeros(self.npar))
-        inv = jnp.linalg.inv(hessian)
-        sigma = jnp.sqrt(jnp.diag(inv))
+        # hessian = -1 * jax.hessian(loglikelihood)(jnp.zeros(self.npar))
+        # inv = jnp.linalg.inv(hessian)
+        # sigma = jnp.sqrt(jnp.diag(inv))
         # import pdb; pdb.set_trace()
         # print(sigma)
         sampler = ultranest.ReactiveNestedSampler(
@@ -437,7 +436,7 @@ class USOptimizer(Optimizer):
 
         # rotate samples back from pca basis to smefit_database basis
         # ParamRotation : (smefit_database basis, pca basis)
-        result["samples"] = result["samples"] @ self.loaded_datasets.ParamRotation.T
+        result["samples"] = result["samples"] @ self.param_rotation.T
 
         rank = 0
         if run_parallel:
