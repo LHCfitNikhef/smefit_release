@@ -763,7 +763,7 @@ def load_datasets(
 
     # act on the n_dat axis
     if use_quad:
-        quad_corr_values = np.einsum(
+        quad_corr_values = jnp.einsum(
             "ij,jkl->ikl", transform_data_basis.T, quad_corr_values
         )
 
