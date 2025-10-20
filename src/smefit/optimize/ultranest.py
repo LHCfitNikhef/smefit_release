@@ -373,7 +373,12 @@ class USOptimizer(Optimizer):
         """
         min_val = self.free_parameters.minimum.values
         max_val = self.free_parameters.maximum.values
-        return hypercube * (max_val - min_val) + min_val
+
+        eps = 1e-5
+        jitter = eps * jnp.sin(1e6 * hypercube)  # deterministic small perturbation
+        u_jittered = jnp.clip(hypercube + jitter, 0.0, 1.0)
+        return u_jittered * (max_val - min_val) + min_val
+
 
     def run_sampling(self):
         """Run the minimization with Ultra nest."""
@@ -407,6 +412,7 @@ class USOptimizer(Optimizer):
             resume=True,
             vectorized=self.vectorized,
         )
+        
         if self.npar > 10:
             # set up step sampler. Here, we use a differential evolution slice sampler:
             sampler.stepsampler = stepsampler.SliceSampler(
@@ -421,6 +427,7 @@ class USOptimizer(Optimizer):
             Lepsilon=self.lepsilon,
             update_interval_volume_fraction=0.8 if self.npar > 20 else 0.2,
             max_num_improvement_loops=0,
+            cluster_num_live_points=3 * self.npar
         )
 
         t2 = time.time()
