@@ -92,8 +92,9 @@ def Higgs_gg(mq):  # SM Resolved loop, collecting a mq outside to isolate the yu
         return 3 / 2 * t / mq * (1 + (1 - t) * func**2)
     else:
         rad = np.sqrt(1 - t)
-        ratio = (1 + rad) / (1 - rad)  # noqa
-        func = np.log(ratio)
+        radplus = 1 + rad
+        radminus = 1 - rad
+        func = np.log(radplus / radminus)
         ipi = complex(0, np.pi)
         return 3 / 2 * t / mq * (1 - 1 / 4 * (1 - t) * (func - ipi) ** 2)
 
