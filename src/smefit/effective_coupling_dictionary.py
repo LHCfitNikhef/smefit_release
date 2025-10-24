@@ -93,7 +93,8 @@ def Higgs_gg(mq):  # SM Resolved loop, collecting a mq outside to isolate the yu
     else:
         rad = np.sqrt(1 - t)
         func = np.log((1 + rad) / (1 - rad))
-        return 3 / 2 * t / mq * (1 - 1 / 4 * (1 - t) * (func - complex(0, np.pi)) ** 2)
+        ipi = complex(0, np.pi)
+        return 3 / 2 * t / mq * (1 - 1 / 4 * (1 - t) * (func - ipi) ** 2)
 
 
 # Rotating function
