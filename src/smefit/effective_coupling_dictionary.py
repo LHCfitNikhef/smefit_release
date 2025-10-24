@@ -20,7 +20,7 @@ all_operators = [
     "OWWW",
     "Obp",
     "Ocp",
-    "Oll",
+    "Oll1221",
     "OpB",
     "OpBox",
     "OpD",
@@ -48,8 +48,7 @@ Gf = 0.0000116638
 MZ = 91.1876
 MW = 80.385
 vev = 1 / (2**0.5 * Gf) ** 0.5
-gs = 1.21772
-alpha_s = gs**2 / 4 / np.pi
+alpha_s = (1.21772) ** 2 / 4 / np.pi
 # Masses
 MH = 125
 MT = 172.5
@@ -58,23 +57,13 @@ MC = 1.27
 MTAU = 1.777
 MMU = 0.105
 # Derived EW quantities
-aew = 2**0.5 * MW**2 * (1 - MW**2 / MZ**2) * Gf / np.pi
-gew = 2 * MW / vev
 cw = MW / MZ
 sw = (1 - (MW / MZ) ** 2) ** 0.5
-ee0 = (4 * np.pi * aew) ** 0.5
 g = 2 * MW / vev
-gprime = ee0 / cw
 
-# SU2 CHARGES
-QU = 2 / 3
-QD = -1 / 3
-Qe = -1
-TU = 1 / 2
-TD = -1 / 2
 # Scales
 LambdaNP2 = 1000**2
-v2_over_LambdaNP2 = vev**2 / 1000**2
+v2_over_LambdaNP2 = vev**2 / LambdaNP2
 
 
 def particle_charges(particle):
@@ -134,6 +123,8 @@ def new_post(SMEFT_posteriors, smeft_coefficients, weights):
 
 
 # operator check
+
+
 def check_labels(SMEFT_posteriors):
     missing_operators = set(all_operators) - set(SMEFT_posteriors.keys())
     if len(missing_operators) > 0:
@@ -206,7 +197,7 @@ def delta_v(SMEFT_posteriors):
     return (
         1
         / 2
-        * new_post(SMEFT_posteriors, ["O3pl1", "O3pl2", "Oll"], [1, 1, -1])
+        * new_post(SMEFT_posteriors, ["O3pl1", "O3pl2", "Oll1221"], [1, 1, -1])
         * v2_over_LambdaNP2
     )
 
@@ -611,16 +602,16 @@ def build_eff_coupling_dictionary(SMEFT_posteriors):
 
 
 def main():
-    # initializ reading PATH
+    # initialize reading PATH
     if len(sys.argv) == 1:
         PATH = "./"
     else:
         PATH = sys.argv[1]
-    with open(PATH + "/fit_results.json", "r") as r:
+    with open(PATH + "/fit_results.json", "r", encoding="utf8") as r:
         SMEFT_posteriors = json.load(r)["samples"]
     check_labels(SMEFT_posteriors)
     new_dict = build_eff_coupling_dictionary(SMEFT_posteriors)
-    with open(PATH + "/fit_eff_coupling.json", "w") as w:
+    with open(PATH + "/fit_eff_coupling.json", "w", encoding="utf8") as w:
         json.dump(new_dict, w)
     return 1
 
