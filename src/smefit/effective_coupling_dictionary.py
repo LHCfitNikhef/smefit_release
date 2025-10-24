@@ -88,7 +88,7 @@ def particle_charges(particle):
 def Higgs_gg(mq):  # SM Resolved loop, collecting a mq outside to isolate the yukawa
     t = 4 * mq**2 / MH**2
     if t > 1:
-        func = np.arcsin(1 / (np.sqrt(t)))
+        func = np.arcsin(1 / np.sqrt(t))
         return 3 / 2 * t / mq * (1 + (1 - t) * func**2)
     else:
         rad = np.sqrt(1 - t)
@@ -291,27 +291,29 @@ Qr = 0.529  # sticking to peskin
 
 def compute_CZ(SMEFT_posteriors):
     pref = v2_over_LambdaNP2 / 2
-    el = -pref * new_post(
-        SMEFT_posteriors, ["Opl1", "O3pl1"], [1, 1]
-    )  # check sign of prefactor
-    mul = -pref * new_post(SMEFT_posteriors, ["Opl2", "O3pl2"], [1, 1])
-    taul = -pref * new_post(SMEFT_posteriors, ["Opl3", "O3pl3"], [1, 1])
-    vel = -pref * new_post(SMEFT_posteriors, ["Opl1", "O3pl1"], [1, -1])
-    vmul = -pref * new_post(SMEFT_posteriors, ["Opl2", "O3pl2"], [1, -1])
-    vtaul = -pref * new_post(SMEFT_posteriors, ["Opl3", "O3pl3"], [1, -1])
-    ul = -pref * new_post(SMEFT_posteriors, ["Opq1", "O3pqprime"], [1, -1])
-    dl = -pref * new_post(SMEFT_posteriors, ["Opq1", "O3pqprime"], [1, 1])
-    sl = -pref * new_post(SMEFT_posteriors, ["Opq1", "O3pqprime"], [1, 1])
-    cl = -pref * new_post(SMEFT_posteriors, ["Opq1", "O3pqprime"], [1, -1])
-    bl = -pref * new_post(SMEFT_posteriors, ["Opq3", "O3pQ3prime"], [1, 1])
-    er = -pref * new_post(SMEFT_posteriors, ["Ope"], [1])
-    mur = -pref * new_post(SMEFT_posteriors, ["Opmu"], [1])
-    taur = -pref * new_post(SMEFT_posteriors, ["Opta"], [1])
-    ur = -pref * new_post(SMEFT_posteriors, ["Opui"], [1])
-    dr = -pref * new_post(SMEFT_posteriors, ["Opdi"], [1])
-    sr = -pref * new_post(SMEFT_posteriors, ["Opdi"], [1])
-    cr = -pref * new_post(SMEFT_posteriors, ["Opui"], [1])
-    br = -pref * new_post(SMEFT_posteriors, ["Opdi"], [1])
+    left_SMEFT = {
+        "el": -pref * new_post(SMEFT_posteriors, ["Opl1", "O3pl1"], [1, 1]),
+        "mul": -pref * new_post(SMEFT_posteriors, ["Opl2", "O3pl2"], [1, 1]),
+        "taul": -pref * new_post(SMEFT_posteriors, ["Opl3", "O3pl3"], [1, 1]),
+        "vel": -pref * new_post(SMEFT_posteriors, ["Opl1", "O3pl1"], [1, -1]),
+        "vmul": -pref * new_post(SMEFT_posteriors, ["Opl2", "O3pl2"], [1, -1]),
+        "vtaul": -pref * new_post(SMEFT_posteriors, ["Opl3", "O3pl3"], [1, -1]),
+        "ul": -pref * new_post(SMEFT_posteriors, ["Opq1", "O3pqprime"], [1, -1]),
+        "dl": -pref * new_post(SMEFT_posteriors, ["Opq1", "O3pqprime"], [1, 1]),
+        "sl": -pref * new_post(SMEFT_posteriors, ["Opq1", "O3pqprime"], [1, 1]),
+        "cl": -pref * new_post(SMEFT_posteriors, ["Opq1", "O3pqprime"], [1, -1]),
+        "bl": -pref * new_post(SMEFT_posteriors, ["Opq3", "O3pQ3prime"], [1, 1]),
+    }
+    right_SMEFT = {
+        "er": -pref * new_post(SMEFT_posteriors, ["Ope"], [1]),
+        "mur": -pref * new_post(SMEFT_posteriors, ["Opmu"], [1]),
+        "taur": -pref * new_post(SMEFT_posteriors, ["Opta"], [1]),
+        "ur": -pref * new_post(SMEFT_posteriors, ["Opui"], [1]),
+        "dr": -pref * new_post(SMEFT_posteriors, ["Opdi"], [1]),
+        "sr": -pref * new_post(SMEFT_posteriors, ["Opdi"], [1]),
+        "cr": -pref * new_post(SMEFT_posteriors, ["Opui"], [1]),
+        "br": -pref * new_post(SMEFT_posteriors, ["Opdi"], [1]),
+    }
     uplcharge = 1 / 2 - sw**2 * 2 / 3
     downlcharge = -1 / 2 + sw**2 * 1 / 3
     llcharge = -1 / 2 + sw**2
@@ -320,13 +322,13 @@ def compute_CZ(SMEFT_posteriors):
     lrcharge = +(sw**2)
     nucharge = 1 / 2
     CZ = (
-        3 * uplcharge * (ul + cl)
-        + 3 * downlcharge * (dl + sl + bl)
-        + 3 * uprcharge * (ur + cr)
-        + 3 * downrcharge * (dr + sr + br)
-        + nucharge * (vel + vmul + vtaul)
-        + llcharge * (el + mul + taul)
-        + lrcharge * (er + mur + taur)
+        3 * uplcharge * (left_SMEFT["ul"] + left_SMEFT["cl"])
+        + 3 * downlcharge * (left_SMEFT["dl"] + left_SMEFT["sl"] + left_SMEFT["bl"])
+        + 3 * uprcharge * (right_SMEFT["ur"] + right_SMEFT["cr"])
+        + 3 * downrcharge * (right_SMEFT["dr"] + right_SMEFT["sr"] + right_SMEFT["br"])
+        + nucharge * (left_SMEFT["vel"] + left_SMEFT["vmul"] + left_SMEFT["vtaul"])
+        + llcharge * (left_SMEFT["el"] + left_SMEFT["mul"] + left_SMEFT["taul"])
+        + lrcharge * (right_SMEFT["er"] + right_SMEFT["mur"] + right_SMEFT["taur"])
     ) / (QQ)
     return CZ
 
