@@ -88,22 +88,12 @@ def particle_charges(particle):
 def Higgs_gg(mq):  # SM Resolved loop, collecting a mq outside to isolate the yukawa
     t = 4 * mq**2 / MH**2
     if t > 1:
-        return 3 / 2 * t / mq * (1 + (1 - t) * np.arcsin(1 / (np.sqrt(t))) ** 2)
+        func = np.arcsin(1 / (np.sqrt(t)))
+        return 3 / 2 * t / mq * (1 + (1 - t) * func**2)
     else:
         rad = np.sqrt(1 - t)
-        return (
-            3
-            / 2
-            * t
-            / mq
-            * (
-                1
-                - 1
-                / 4
-                * (1 - t)
-                * (np.log((1 + rad) / (1 - rad)) - complex(0, np.pi)) ** 2
-            )
-        )
+        func = np.log((1 + rad) / (1 - rad))
+        return 3 / 2 * t / mq * (1 - 1 / 4 * (1 - t) * (func - complex(0, np.pi)) ** 2)
 
 
 # Rotating function
