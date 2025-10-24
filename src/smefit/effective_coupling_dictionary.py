@@ -91,8 +91,8 @@ def Higgs_gg(mq):  # SM Resolved loop, collecting a mq outside to isolate the yu
         func = np.arcsin(1 / np.sqrt(t))
         return 3 / 2 * t / mq * (1 + (1 - t) * func**2)
     else:
-        rad = np.sqrt(1 - t)
-        func = np.log((1 + rad) / (1 - rad))
+        radical = np.sqrt(1 - t)
+        func = np.log((1 + radical) / (1 - radical))
         ipi = complex(0, np.pi)
         return 3 / 2 * t / mq * (1 - 1 / 4 * (1 - t) * (func - ipi) ** 2)
 
