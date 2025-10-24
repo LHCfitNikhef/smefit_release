@@ -63,7 +63,7 @@ g = 2 * MW / vev
 
 # Scales
 LambdaNP2 = 1000**2
-v2_over_LambdaNP2 = vev**2 / LambdaNP2
+v2_over_L2 = vev**2 / LambdaNP2
 
 
 def particle_charges(particle):
@@ -128,22 +128,22 @@ def check_labels(SMEFT_posteriors):
 
 # Wavefunctions
 def delta_ZA(SMEFT_posteriors):
-    return -2 * v2_over_LambdaNP2 * new_post(SMEFT_posteriors, ["OpWB"], [sw * cw])
+    return -2 * v2_over_L2 * new_post(SMEFT_posteriors, ["OpWB"], [sw * cw])
 
 
 def delta_ZAZ(SMEFT_posteriors):
-    return v2_over_LambdaNP2 * new_post(SMEFT_posteriors, ["OpWB"], [sw**2 - cw**2])
+    return v2_over_L2 * new_post(SMEFT_posteriors, ["OpWB"], [sw**2 - cw**2])
 
 
 def delta_ZZ(SMEFT_posteriors):
-    return 2 * sw * cw * new_post(SMEFT_posteriors, ["OpWB"], [v2_over_LambdaNP2])
+    return 2 * sw * cw * new_post(SMEFT_posteriors, ["OpWB"], [v2_over_L2])
 
 
 # Higgs contact
 def zeta_A(SMEFT_posteriors):
     return (
         2
-        * v2_over_LambdaNP2
+        * v2_over_L2
         * new_post(
             SMEFT_posteriors, ["OpB", "OpWB", "OpW"], [cw**2, -cw * sw, sw**2]
         )
@@ -151,13 +151,13 @@ def zeta_A(SMEFT_posteriors):
 
 
 def zeta_W(SMEFT_posteriors):
-    return 2 * new_post(SMEFT_posteriors, ["OpW"], [v2_over_LambdaNP2])
+    return 2 * new_post(SMEFT_posteriors, ["OpW"], [v2_over_L2])
 
 
 def zeta_Z(SMEFT_posteriors):
     return (
         2
-        * v2_over_LambdaNP2
+        * v2_over_L2
         * new_post(
             SMEFT_posteriors, ["OpB", "OpWB", "OpW"], [sw**2, +cw * sw, cw**2]
         )
@@ -165,7 +165,7 @@ def zeta_Z(SMEFT_posteriors):
 
 
 def zeta_ZA(SMEFT_posteriors):
-    return v2_over_LambdaNP2 * new_post(
+    return v2_over_L2 * new_post(
         SMEFT_posteriors,
         ["OpB", "OpWB", "OpW"],
         [-2 * sw * cw, sw**2 - cw**2, 2 * cw * sw],
@@ -174,13 +174,11 @@ def zeta_ZA(SMEFT_posteriors):
 
 # input
 def cH(SMEFT_posteriors):
-    return new_post(SMEFT_posteriors, ["OpBox", "OpD"], [1, +0.25]) * (
-        2 * v2_over_LambdaNP2
-    )
+    return new_post(SMEFT_posteriors, ["OpBox", "OpD"], [1, +0.25]) * (2 * v2_over_L2)
 
 
 def cT(SMEFT_posteriors):
-    return -1 / 2 * new_post(SMEFT_posteriors, ["OpD"], [v2_over_LambdaNP2])
+    return -1 / 2 * new_post(SMEFT_posteriors, ["OpD"], [v2_over_L2])
 
 
 def delta_v(SMEFT_posteriors):
@@ -188,7 +186,7 @@ def delta_v(SMEFT_posteriors):
         1
         / 2
         * new_post(SMEFT_posteriors, ["O3pl1", "O3pl2", "Oll1221"], [1, 1, -1])
-        * v2_over_LambdaNP2
+        * v2_over_L2
     )
 
 
@@ -199,7 +197,7 @@ def delta_g(SMEFT_posteriors):
 def delta_gprime(SMEFT_posteriors):
     return (
         -delta_v(SMEFT_posteriors)
-        - new_post(SMEFT_posteriors, ["OpWB"], [cw / sw]) * v2_over_LambdaNP2
+        - new_post(SMEFT_posteriors, ["OpWB"], [cw / sw]) * v2_over_L2
         + cT(SMEFT_posteriors) / 2 / sw**2
     )
 
@@ -209,7 +207,7 @@ def delta_e(SMEFT_posteriors):
     return (
         -delta_v(SMEFT_posteriors)
         + cw**2 / sw**2 * cT_ / 2
-        - new_post(SMEFT_posteriors, ["OpWB"], [cw / sw]) * v2_over_LambdaNP2
+        - new_post(SMEFT_posteriors, ["OpWB"], [cw / sw]) * v2_over_L2
     )
 
 
@@ -235,8 +233,7 @@ def delta_gl(SMEFT_posteriors, smeft1, smeft3, Q=-1, T3=-1 / 2):
         * (
             cw**2 * dg * (T3 + Q * sw**2)
             + sw**2 * dgprime * (T3 - Q - cw**2 * Q)
-            + new_post(SMEFT_posteriors, [smeft1, smeft3], [-1 / 2, T3])
-            * v2_over_LambdaNP2
+            + new_post(SMEFT_posteriors, [smeft1, smeft3], [-1 / 2, T3]) * v2_over_L2
             + Q * sw * cw * d_ZAZ
         )
         + d_ZZ / 2
@@ -251,21 +248,14 @@ def delta_gr(SMEFT_posteriors, smeft, Qf=-1):
     return (
         -(cw**2) * dg
         + (1 + cw**2) * dgprime
-        + 1
-        / 2
-        / Qf
-        / sw**2
-        * new_post(SMEFT_posteriors, [smeft], [1])
-        * v2_over_LambdaNP2
+        + 1 / 2 / Qf / sw**2 * new_post(SMEFT_posteriors, [smeft], [1]) * v2_over_L2
         + (d_ZZ / 2 - cw / sw * d_ZAZ)
     )
 
 
 # gW definition
 def delta_gW(SMEFT_posteriors, smeft):
-    return delta_g(SMEFT_posteriors) + new_post(
-        SMEFT_posteriors, [smeft], [v2_over_LambdaNP2]
-    )
+    return delta_g(SMEFT_posteriors) + new_post(SMEFT_posteriors, [smeft], [v2_over_L2])
 
 
 # WW and ZZ decay definitions
@@ -290,7 +280,7 @@ Qr = 0.529  # sticking to peskin
 
 
 def compute_CZ(SMEFT_posteriors):
-    pref = v2_over_LambdaNP2 / 2
+    pref = v2_over_L2 / 2
     left_SMEFT = {
         "el": -pref * new_post(SMEFT_posteriors, ["Opl1", "O3pl1"], [1, 1]),
         "mul": -pref * new_post(SMEFT_posteriors, ["Opl2", "O3pl2"], [1, 1]),
@@ -335,7 +325,7 @@ def compute_CZ(SMEFT_posteriors):
 
 def compute_CW(SMEFT_posteriors):
     return (
-        v2_over_LambdaNP2
+        v2_over_L2
         * new_post(
             SMEFT_posteriors, ["O3pl1", "O3pl2", "O3pl3", "O3pqprime"], [1, 1, 1, 6]
         )
@@ -431,7 +421,7 @@ def delta_gHgg(SMEFT_posteriors):
         -cH_ / 2
         - dv
         - SM_pref
-        * v2_over_LambdaNP2
+        * v2_over_L2
         * np.real(
             (MT / vev * Higgs_tt + MB / vev * Higgs_bb + MC / vev * Higgs_cc)
             * (
@@ -450,7 +440,7 @@ def delta_gHgg(SMEFT_posteriors):
 
 # TGC
 def delta_lambdaZ(SMEFT_posteriors):
-    return new_post(SMEFT_posteriors, ["OWWW"], [3 / 2 * g]) * v2_over_LambdaNP2
+    return new_post(SMEFT_posteriors, ["OWWW"], [3 / 2 * g]) * v2_over_L2
 
 
 def delta_gz(SMEFT_posteriors):
@@ -463,7 +453,7 @@ def delta_gz(SMEFT_posteriors):
 
 def delta_kgamma(SMEFT_posteriors):
     d_e = delta_e(SMEFT_posteriors)
-    return d_e + cw / sw * new_post(SMEFT_posteriors, ["OpWB"], [v2_over_LambdaNP2])
+    return d_e + cw / sw * new_post(SMEFT_posteriors, ["OpWB"], [v2_over_L2])
 
 
 # gL coupling
@@ -536,7 +526,7 @@ def delta_gHff(SMEFT_posteriors, smeft, mf):
     return 0.5 * (
         -cH_
         - new_post(SMEFT_posteriors, [smeft], [2])
-        * v2_over_LambdaNP2
+        * v2_over_L2
         / (np.sqrt(2) * mf / vev)
         - 2 * dv
     )
