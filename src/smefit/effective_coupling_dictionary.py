@@ -81,7 +81,7 @@ def particle_charges(particle):
             T3 = -0.5
             Q = -1 / 3
         case _:
-            raise (ValueError("Unknown particle"))
+            raise ValueError("Unknown particle")
     return T3, Q
 
 
@@ -110,7 +110,8 @@ def new_post(SMEFT_posteriors, smeft_coefficients, weights):
         stack = traceback.extract_stack()
         caller = stack[-3].name
         warnings.warn(
-            f"Setting 0 posteriors due to absence of {set(smeft_coefficients)-set(SMEFT_posteriors.keys())} needed in {caller}"
+            f"Setting 0 posteriors due to absence of\
+            {set(smeft_coefficients)-set(SMEFT_posteriors.keys())} needed in {caller}"
         )
     return new_posteriors
 
@@ -122,7 +123,8 @@ def check_labels(SMEFT_posteriors):
     missing_operators = set(all_operators) - set(SMEFT_posteriors.keys())
     if len(missing_operators) > 0:
         warnings.warn(
-            f"Missing operators: {list(missing_operators)}, setting to 0 the effective couplings in which they are involved"
+            f"Missing operators: {list(missing_operators)},\
+            setting to 0 the effective couplings in which they are involved"
         )
         return 0
     else:
