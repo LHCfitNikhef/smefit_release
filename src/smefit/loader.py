@@ -626,6 +626,7 @@ def load_datasets(
     has_external_chi2=False,
     rgemat=None,
     cutoff_scale=None,
+    remove_variance=1e-14,
 ):
     """
     Loads experimental data, theory and |SMEFT| corrections into a namedtuple
@@ -751,15 +752,39 @@ def load_datasets(
     else:
         fit_covmat = exp_covmat
 
-    # diagonalise covmat and rotate data and theory to the eigenbasis
-    eigval, eigvec = np.linalg.eigh(fit_covmat)
-    rotate_data_basis = eigvec
-    rescale_data_basis = np.diag(1.0 / np.sqrt(eigval))
-    transform_data_basis = rotate_data_basis @ rescale_data_basis
+    # Step 1: SVD of covariance matrix
+    U, s, _ = np.linalg.svd(fit_covmat)
+    beta = 1 / s  # precision
+
+    # Sort descending to get high precision modes first
+    idx = np.argsort(beta)[::-1]
+    beta = beta[idx]
+    U = U[:, idx]
+
+    # Step 3: choose cutoff by explained variance
+    var_explained = beta / np.sum(beta)
+    cum_var_explained = np.cumsum(var_explained)
+    target_variance = 1 - remove_variance
+    k = np.argwhere(cum_var_explained > target_variance).flatten()[0] + 1
+    print(
+        f"Keeping {k}/{len(s)} components ({cum_var_explained[k - 1] * 100:.2f}% variance)"
+    )
+
+    # Step 4: truncate to top-k components
+    U_k = U[:, :k]
+    beta_k = beta[:k]
+
+    rescale_data_basis = np.diag(np.sqrt(beta_k))
+    transform_data_basis = U_k @ rescale_data_basis
+
+    # Step 6: rotate & rescale data/theory into PCA-whitened space
     exp_data = transform_data_basis.T @ exp_data
     sm_theory = transform_data_basis.T @ np.array(sm_theory)
-    fit_covmat = np.eye(fit_covmat.shape[0])
     lin_corr_values = transform_data_basis.T @ lin_corr_values
+
+    # Step 7: replace covariance with identity in reduced space
+    # fit_covmat = np.eye(k)
+    fit_covmat = np.eye(len(sm_theory))
 
     # act on the n_dat axis
     if use_quad:
