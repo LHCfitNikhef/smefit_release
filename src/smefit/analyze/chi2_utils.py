@@ -108,6 +108,36 @@ class Chi2tableCalculator:
         )
 
     @staticmethod
+    def compute_ext_chi2(external_chi2_dict, best_fit):
+        r"""Compute the external likelihood for each dataset.
+
+        Parameters
+        ----------
+            external_chi2: dict
+                dictionary whose keys are the different datasets and the values
+                the compute_chi2 function of the external likelihood module. Obtained
+                by fit.external_chi2
+            best_fit: pd.core.series.Series
+                best fit value for all the Wilson coefficients. Obtained by
+                the fit.best_fit property
+
+        Returns
+        -------
+        pd.DataFrame:
+            External chi2 for each dataset
+        """
+        ext_chi2_values = [
+            ext_chi2_func(best_fit) for ext_chi2_func in external_chi2_dict.values()
+        ]
+
+        return pd.DataFrame(
+            {
+                "ext_chi2": np.array(ext_chi2_values),
+            },
+            index=external_chi2_dict.keys(),
+        )
+
+    @staticmethod
     def add_normalized_chi2(chi2_df):
         r"""Add the normalized :math:`\chi^2` to the table.
 
@@ -185,7 +215,7 @@ class Chi2tableCalculator:
         ]
         self.chi2_df_sm_grouped = self.chi2_df_sm_grouped.drop_duplicates()
 
-    def write(self, chi2_dict, chi2_dict_group):
+    def write(self, chi2_dict, chi2_dict_group, chi2_ext_dict):
         r"""Write the :math:`\chi^2` latex tables.
 
         Parameters
@@ -194,6 +224,8 @@ class Chi2tableCalculator:
             tables computed with compute() method for each fit
         chi2_dict_group: dict
             tables obtained with group_chi2_df() method for each fit
+        chi2_ext_dict: dict
+            tables computed with compute_ext_chi2() method for each fit
 
         Returns
         -------
@@ -206,6 +238,72 @@ class Chi2tableCalculator:
         L.extend(self.write_chi2_grouped(chi2_dict, chi2_dict_group))
         L.extend(["\n", "\n"])
         L.extend(self.write_chi2_summary(chi2_dict_group))
+
+        if chi2_ext_dict != {}:
+            L.extend(["\n", "\n"])
+            L.extend(self.write_external_chi2(chi2_ext_dict))
+
+        return L
+
+    def write_external_chi2(self, ext_chi2_dict):
+        r"""Write the external likelihood latex tables for each dataset.
+
+        Parameters
+        ----------
+        ext_chi2_dict : dict
+            tables computed with compute_ext_chi2() method per each fit
+
+        Returns
+        -------
+        list(str)
+            list with the latex commands
+        """
+        L = [
+            r"\begin{table}[H]",
+            r"\centering",
+            r"\begin{tabular}{|l|" + "c|" * len(ext_chi2_dict) + "}",
+            r"\hline",
+        ]
+        temp = r""
+        for label in ext_chi2_dict:
+            temp += f" & {label}"
+        temp += r"\\ \hline"
+        L.append(temp)
+        L.append(
+            r"Process " + r" & ext. likelihood" * len(ext_chi2_dict) + r"\\ \hline",
+        )
+
+        # Extract unique ext. likelihood datasets
+        datasets = set()
+        for df in ext_chi2_dict.values():
+            datasets.update(df.index)
+        datasets = list(datasets)
+
+        total_chi2 = {group: 0 for group in ext_chi2_dict.keys()}
+        for dataset in datasets:
+            temp = f"{dataset}"
+            for group, ext_chi2_df in ext_chi2_dict.items():
+                if dataset in ext_chi2_df.index:
+                    temp += f" & {ext_chi2_df.loc[dataset, 'ext_chi2']:.3f}"
+                    total_chi2[group] += ext_chi2_df.loc[dataset, "ext_chi2"]
+                else:
+                    temp += " & "
+            temp += r" \\ \hline"
+            L.append(temp)
+
+        temp = r" \hline Total"
+        for group in ext_chi2_dict.keys():
+            temp += f" & {total_chi2[group]:.3f}"
+        temp += r" \\ \hline"
+
+        L.extend(
+            [
+                temp,
+                r"\end{tabular}",
+                r"\caption{External likelihood table for each dataset.}",
+                r"\end{table}",
+            ]
+        )
         return L
 
     def write_chi2_grouped(self, chi2_dict, chi2_dict_group):
