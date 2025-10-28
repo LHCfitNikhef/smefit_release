@@ -51,13 +51,13 @@ def check_missing_operators(loaded_corrections, coeff_config):
         )
 
 
-def check_condition_number(fit_covmat, CRITICAL_COND=15.5):
+def check_condition_number(fit_covmat, critical_cond=15.5):
     condition_number = np.linalg.cond(fit_covmat)
     digits = round(np.log10(condition_number), 2)
-    if digits > CRITICAL_COND:
+    if digits > critical_cond:
         _logger.warning(
             f"Covariance matrix log10 condition number = {digits} "
-            + f"larger than critical threshold = {(CRITICAL_COND)}"
+            + f"larger than critical threshold = {critical_cond}"
         )
     return condition_number
 
