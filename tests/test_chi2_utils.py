@@ -95,4 +95,4 @@ class Test_Chi2tableCalculator(mock_FitManager):
         )
         chi2_ext_test = np.sum(self.post_df.values**2)
 
-        np.testing.assert_allclose(chi2_ext_test, chi2_ext_df["ext_chi2"][0])
+        np.testing.assert_allclose(chi2_ext_test, chi2_ext_df["ext_chi2"].iloc[0])

@@ -165,9 +165,10 @@ class FitManager:
                 chi2_module = importlib.import_module(stem)
             except ModuleNotFoundError:
                 print(
-                    f"Module {data_name} not found in {module_path}. Adjust and rerun. Exiting the code."
+                    f"""Module {data_name} not found in {module_path}. Adjust and
+                    rerun. Exiting the code."""
                 )
-                exit(1)
+                sys.exit(1)
 
             my_chi2_class = getattr(chi2_module, data_name)
 
