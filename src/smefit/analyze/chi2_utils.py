@@ -264,10 +264,9 @@ class Chi2tableCalculator:
             r"\begin{tabular}{|l|" + "c|" * len(ext_chi2_dict) + "}",
             r"\hline",
         ]
-        temp = r""
-        for label in ext_chi2_dict:
-            temp += f" & {label}"
-        temp += r"\\ \hline"
+
+        temp = " & ".join(ext_chi2_dict.keys())
+        temp = f"& {temp}\\\\ \\hline"
         L.append(temp)
         L.append(
             r"Process " + r" & ext. likelihood" * len(ext_chi2_dict) + r"\\ \hline",
