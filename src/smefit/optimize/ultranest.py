@@ -92,6 +92,7 @@ class USOptimizer(Optimizer):
         target_post_unc=0.5,
         frac_remain=0.01,
         n_samples=10000,
+        cluster_num_live_points=None,
         store_raw=False,
         vectorized=False,
         external_chi2=None,
@@ -117,6 +118,7 @@ class USOptimizer(Optimizer):
         self.n_samples = n_samples
         self.vectorized = vectorized
         self.npar = self.free_parameters.shape[0]
+        self.cluster_num_live_points = cluster_num_live_points if cluster_num_live_points is not None else 3 * self.npar
         self.result_ID = result_ID
         self.pairwise_fits = pairwise_fits
         self.store_raw = store_raw
@@ -406,6 +408,7 @@ class USOptimizer(Optimizer):
             Lepsilon=self.lepsilon,
             update_interval_volume_fraction=0.8 if self.npar > 20 else 0.2,
             max_num_improvement_loops=0,
+            cluster_num_live_points=self.cluster_num_live_points,
         )
 
         t2 = time.time()
