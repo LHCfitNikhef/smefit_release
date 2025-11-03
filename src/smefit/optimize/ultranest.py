@@ -66,8 +66,6 @@ class USOptimizer(Optimizer):
         if True store the result to eventually resume the job
     vectorized: bool
         if True use jax vectorization
-    float32: bool
-        if True use float32 precision
     external_chi2: dict
         dict of external chi2
     rgemat: numpy.ndarray
@@ -96,7 +94,6 @@ class USOptimizer(Optimizer):
         n_samples=10000,
         store_raw=False,
         vectorized=False,
-        float32=False,
         external_chi2=None,
         rgemat=None,
         rge_dict=None,
@@ -127,7 +124,6 @@ class USOptimizer(Optimizer):
         # Set coefficients relevant quantities
         self.fixed_coeffs = self.coefficients._objlist[~self.coefficients.is_free]
         self.coeffs_index = self.coefficients._table.index
-
 
     @classmethod
     def from_dict(cls, config):
