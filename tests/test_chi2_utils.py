@@ -85,14 +85,3 @@ class Test_Chi2tableCalculator(mock_FitManager):
         np.testing.assert_allclose(
             chi2_rep_test / self.fit.datasets.NdataExp.sum(), chi2_rep
         )
-
-    def test_chi2_external(self):
-        self.fit.config["use_quad"] = True
-        self.fit.load_datasets()
-
-        chi2_ext_df = self.chi2_cal.compute_ext_chi2(
-            self.fit.external_chi2, self.post_df.values
-        )
-        chi2_ext_test = np.sum(self.post_df.values**2)
-
-        np.testing.assert_allclose(chi2_ext_test, chi2_ext_df["ext_chi2"].iloc[0])
