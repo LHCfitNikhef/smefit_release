@@ -51,11 +51,20 @@ rotate_to_pca = click.option(
     help="Run the fit in the PCA basis",
 )
 
+float32 = click.option(
+    "--float32",
+    type=bool,
+    is_flag=True,
+    default=False,
+    help="Run the fit using float32, only in NS",
+)
+
 
 @base_command.command("NS")
 @fit_card
 @log_file
 @rotate_to_pca
+@float32
 def nested_sampling(
     fit_card: pathlib.Path, log_file: pathlib.Path, rotate_to_pca: bool
 ):
@@ -80,6 +89,7 @@ def nested_sampling(
 
     if run_parallel:
         runner = comm.bcast(runner, root=0)
+    jax.config.update("jax_enable_x64", not(float32))
     runner.run_analysis("NS")
 
 
@@ -87,6 +97,7 @@ def nested_sampling(
 @fit_card
 @log_file
 @rotate_to_pca
+@float32
 def analytic_linear(
     fit_card: pathlib.Path, log_file: pathlib.Path, rotate_to_pca: bool
 ):
