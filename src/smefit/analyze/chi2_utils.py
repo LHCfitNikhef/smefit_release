@@ -130,8 +130,15 @@ class Chi2tableCalculator:
             ext_chi2_func(best_fit) for ext_chi2_func in external_chi2_dict.values()
         ]
 
+        # The SM ext. likelihood can be obtained through the ext. likelihood module by setting all the WCs to zero
+        sm_coeff = pd.Series(0, index=best_fit.index, dtype=best_fit.dtype)
+        ext_chi2_sm_values = [
+            ext_chi2_func(sm_coeff) for ext_chi2_func in external_chi2_dict.values()
+        ]
+
         return pd.DataFrame(
             {
+                "sm_chi2": np.array(ext_chi2_sm_values),
                 "ext_chi2": np.array(ext_chi2_values),
             },
             index=external_chi2_dict.keys(),
@@ -261,15 +268,19 @@ class Chi2tableCalculator:
         L = [
             r"\begin{table}[H]",
             r"\centering",
-            r"\begin{tabular}{|l|" + "c|" * len(ext_chi2_dict) + "}",
+            r"\begin{tabular}{|l|" + "c|c|" * len(ext_chi2_dict) + "}",
             r"\hline",
         ]
 
-        temp = " & ".join(ext_chi2_dict.keys())
-        temp = f"& {temp}\\\\ \\hline"
+        temp = r""
+        for label in ext_chi2_dict.keys():
+            temp += f"& \\multicolumn{{2}}{{c|}}{{{label}}}"
+        temp += r"\\ \hline"
         L.append(temp)
         L.append(
-            r"Process " + r" & ext. likelihood" * len(ext_chi2_dict) + r"\\ \hline",
+            r"Process "
+            + r" & SM & ext. likelihood" * len(ext_chi2_dict)
+            + r"\\ \hline",
         )
 
         # Extract unique ext. likelihood datasets
@@ -279,12 +290,14 @@ class Chi2tableCalculator:
         datasets = list(datasets)
 
         total_chi2 = {group: 0 for group in ext_chi2_dict.keys()}
+        total_chi2_sm = {group: 0 for group in ext_chi2_dict.keys()}
         for dataset in datasets:
             temp = f"{dataset}"
             for group, ext_chi2_df in ext_chi2_dict.items():
                 if dataset in ext_chi2_df.index:
-                    temp += f" & {ext_chi2_df.loc[dataset, 'ext_chi2']:.3f}"
+                    temp += f" & {ext_chi2_df.loc[dataset, 'sm_chi2']:.3f} & {ext_chi2_df.loc[dataset, 'ext_chi2']:.3f}"
                     total_chi2[group] += ext_chi2_df.loc[dataset, "ext_chi2"]
+                    total_chi2_sm[group] += ext_chi2_df.loc[dataset, "sm_chi2"]
                 else:
                     temp += " & "
             temp += r" \\ \hline"
@@ -292,7 +305,7 @@ class Chi2tableCalculator:
 
         temp = r" \hline Total"
         for group in ext_chi2_dict.keys():
-            temp += f" & {total_chi2[group]:.3f}"
+            temp += f" & {total_chi2_sm[group]:.3f} & {total_chi2[group]:.3f}"
         temp += r" \\ \hline"
 
         L.extend(
