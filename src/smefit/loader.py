@@ -63,7 +63,7 @@ def check_condition_number(fit_covmat, critical_cond=15.5):
 
 
 def check_covmat_positivity(fit_covmat):
-    eigvals, _ = jnp.linalg.eig(fit_covmat)
+    eigvals = jnp.linalg.eigvalsh(fit_covmat)
     if min(eigvals) <= 0:
         raise ValueError("Fit covariance matrix is not positive definite")
 
