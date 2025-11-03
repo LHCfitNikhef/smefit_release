@@ -130,7 +130,8 @@ class Chi2tableCalculator:
             ext_chi2_func(best_fit) for ext_chi2_func in external_chi2_dict.values()
         ]
 
-        # The SM ext. likelihood can be obtained through the ext. likelihood module by setting all the WCs to zero
+        # The SM ext. likelihood can be obtained through the ext. likelihood module
+        # by setting all the WCs to zero
         sm_coeff = pd.Series(0, index=best_fit.index, dtype=best_fit.dtype)
         ext_chi2_sm_values = [
             ext_chi2_func(sm_coeff) for ext_chi2_func in external_chi2_dict.values()
@@ -295,7 +296,8 @@ class Chi2tableCalculator:
             temp = f"{dataset}"
             for group, ext_chi2_df in ext_chi2_dict.items():
                 if dataset in ext_chi2_df.index:
-                    temp += f" & {ext_chi2_df.loc[dataset, 'sm_chi2']:.3f} & {ext_chi2_df.loc[dataset, 'ext_chi2']:.3f}"
+                    temp += f" & {ext_chi2_df.loc[dataset, 'sm_chi2']:.3f}"
+                    temp += f" & {ext_chi2_df.loc[dataset, 'ext_chi2']:.3f}"
                     total_chi2[group] += ext_chi2_df.loc[dataset, "ext_chi2"]
                     total_chi2_sm[group] += ext_chi2_df.loc[dataset, "sm_chi2"]
                 else:
@@ -399,15 +401,19 @@ class Chi2tableCalculator:
             r"\begin{tabular}{|l|" + "c|c|" * len(chi2_dict_group) + "}",
             r"\hline",
         ]
-        temp = r""
-        for label in chi2_dict_group:
-            temp += f"& \\multicolumn{{2}}{{c|}}{{{label}}}"
+        temp_parts = [
+            f"& \\multicolumn{{2}}{{c|}}{{{label}}}" for label in chi2_dict_group
+        ]
+        temp = "".join(temp_parts)
         temp += r"\\ \hline"
         L.append(temp)
+
         L.append(
             r"Process "
-            + r" & $N_{\rm data}$ & $\chi^2/N_{\rm data}$" * len(chi2_dict_group)
-            + r"\\ \hline",
+            + " ".join(
+                [r"& $N_{\rm data}$ & $\chi^2/N_{\rm data}$" for _ in chi2_dict_group]
+            )
+            + r"\\ \hline"
         )
 
         for group in self.data_info.index.levels[0]:
