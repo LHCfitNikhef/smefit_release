@@ -66,8 +66,6 @@ class USOptimizer(Optimizer):
         if True store the result to eventually resume the job
     vectorized: bool
         if True use jax vectorization
-    float64: bool
-        if True use float64 precision
     external_chi2: dict
         dict of external chi2
     rgemat: numpy.ndarray
@@ -96,7 +94,6 @@ class USOptimizer(Optimizer):
         n_samples=10000,
         store_raw=False,
         vectorized=False,
-        float64=False,
         external_chi2=None,
         rgemat=None,
         rge_dict=None,
@@ -127,10 +124,6 @@ class USOptimizer(Optimizer):
         # Set coefficients relevant quantities
         self.fixed_coeffs = self.coefficients._objlist[~self.coefficients.is_free]
         self.coeffs_index = self.coefficients._table.index
-
-        # Ultranest requires float64 below 11 dof
-        if float64 or self.npar < 11:
-            jax.config.update("jax_enable_x64", True)
 
     @classmethod
     def from_dict(cls, config):
@@ -233,7 +226,6 @@ class USOptimizer(Optimizer):
 
         store_raw = config.get("store_raw", False)
         vectorized = config.get("vectorized", False)
-        float64 = config.get("float64", False)
 
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
@@ -258,7 +250,6 @@ class USOptimizer(Optimizer):
             n_samples=n_samples,
             store_raw=store_raw,
             vectorized=vectorized,
-            float64=float64,
             external_chi2=external_chi2,
             rgemat=rgemat,
             rge_dict=rge_dict,

@@ -8,7 +8,6 @@ data_path: ./test_commondata
 theory_path: ./test_theory
 use_theory_covmat: True
 use_t0: True
-float64: True
 # SMEFT Expansion Order (False = Lambda^-2 , True = Lambda^-4)
 use_quad: True
 # Set parameter bounds to previous SCAN result
