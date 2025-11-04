@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """Module for the computation of chi-squared values."""
-import importlib
 import json
-import pathlib
 
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
@@ -10,6 +8,7 @@ import numpy as np
 import scipy.optimize as opt
 from rich.progress import track
 
+from smefit.external_chi2 import load_external_chi2
 from smefit.rge.rge import load_rge_matrix
 from smefit.utils import NumpyEncoder
 
@@ -140,7 +139,9 @@ class Scanner:
         external_chi2 = run_card.get("external_chi2", None)
 
         self.chi2_ext = (
-            self.load_external_chi2(external_chi2) if external_chi2 else None
+            load_external_chi2(external_chi2, self.coefficients, self.rge_dict)
+            if external_chi2
+            else None
         )
 
         # build empty dict to store results
@@ -151,52 +152,6 @@ class Scanner:
                 row.minimum, row.maximum, scan_points
             )
             self.chi2_dict[name]["n_datapoints"] = self.datasets.Commondata.size
-
-    def load_external_chi2(self, external_chi2):
-        """
-        Loads the external chi2 modules
-
-        Parameters
-        ----------
-        external_chi2: dict
-            dict of external chi2s, with the name of the function object as key and the path to the external script
-            as value
-
-        Returns
-        -------
-        ext_chi2_modules: list
-             List of external chi2 objects that can be evaluated by passing a coefficients instance
-        """
-        # TODO: this is copied from the Optimiser class, should be moved to a common place
-
-        # dynamical import
-        ext_chi2_modules = []
-
-        for class_name, module in external_chi2.items():
-            _logger.info("Loading external chi2 module: %s", class_name)
-
-            module_path = module["path"]
-            path = pathlib.Path(module_path)
-            base_path, stem = path.parent, path.stem
-            try:
-                chi2_module = importlib.import_module(stem)
-            except ModuleNotFoundError:
-                print(
-                    f"Module {stem} not found in {base_path}. Adjust and rerun. Exiting the code."
-                )
-                exit(1)
-
-            my_chi2_class = getattr(chi2_module, class_name)
-
-            extra_keys = {key: value for key, value in module.items() if key != "path"}
-
-            chi2_ext = my_chi2_class(
-                coefficients=self.coefficients, rge_dict=self.rge_dict, **extra_keys
-            )
-
-            ext_chi2_modules.append(chi2_ext.compute_chi2)
-
-        return ext_chi2_modules
 
     def regularized_chi2_func(self, coeff, xs, use_replica):
         r"""Individual :math:`\chi^2` wrappper over series of values.

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-import importlib
 import json
 import pathlib
 
 from rich.style import Style
 from rich.table import Table
 
+from smefit.external_chi2 import load_external_chi2
 from smefit.utils import NumpyEncoder
 
 from .. import chi2, log
@@ -80,56 +80,10 @@ class Optimizer:
 
         # load external chi2 modules as amortized objects (fast to evaluate)
         self.chi2_ext = (
-            self.load_external_chi2(external_chi2) if external_chi2 else None
+            load_external_chi2(external_chi2, self.coefficients, self.rge_dict)
+            if external_chi2
+            else None
         )
-
-    def load_external_chi2(self, external_chi2):
-        """
-        Loads the external chi2 modules.
-        We assume that the external chi2 only need to know which coefficients we want to
-        fit and the RGE dictionary, which specifies the reference scale and the theory settings
-        for the RGE evolution.
-
-        Parameters
-        ----------
-        external_chi2: dict
-            dict of external chi2s.
-            Each key is a dictionary with the name of the chi2 class, specifying the
-            path to the module and the parameters to be passed to the chi2 class.
-
-        Returns
-        -------
-        ext_chi2_modules: list
-             List of external chi2 objects that can be evaluated by passing a coefficients instance
-        """
-        # dynamical import
-        ext_chi2_modules = []
-
-        for class_name, module in external_chi2.items():
-            _logger.info("Loading external chi2 module: %s", class_name)
-
-            module_path = module["path"]
-            path = pathlib.Path(module_path)
-            base_path, stem = path.parent, path.stem
-            try:
-                chi2_module = importlib.import_module(stem)
-            except ModuleNotFoundError:
-                print(
-                    f"Module {stem} not found in {base_path}. Adjust and rerun. Exiting the code."
-                )
-                exit(1)
-
-            my_chi2_class = getattr(chi2_module, class_name)
-
-            extra_keys = {key: value for key, value in module.items() if key != "path"}
-
-            chi2_ext = my_chi2_class(
-                coefficients=self.coefficients, rge_dict=self.rge_dict, **extra_keys
-            )
-
-            ext_chi2_modules.append(chi2_ext.compute_chi2)
-
-        return ext_chi2_modules
 
     @property
     def free_parameters(self):
