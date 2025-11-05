@@ -3,9 +3,12 @@ import itertools
 import pathlib
 import subprocess
 import sys
+from pathlib import Path
 from shutil import copyfile
 
 import yaml
+
+from smefit.rge.rge import load_rge_matrix
 
 from .analyze.pca import RotateToPca
 from .chi2 import Scanner
@@ -326,3 +329,18 @@ class Runner:
         scan.compute_scan()
         scan.write_scan()
         scan.plot_scan()
+
+    def run_rge_matrix_calculation(self):
+        """Run RGE matrix calculation."""
+        rge_dict = self.run_card.get("rge", None)
+        operators_to_keep = self.run_card["coefficients"]
+        cutoff_scale = self.run_card.get("cutoff_scale", None)
+        save_path = Path(self.run_card["result_path"]) / self.run_card["result_ID"]
+        rgemat, operators_to_keep = load_rge_matrix(
+            rge_dict,
+            list(operators_to_keep.keys()),
+            self.run_card["datasets"],
+            self.run_card.get("theory_path", None),
+            cutoff_scale,
+            save_path=save_path,
+        )
