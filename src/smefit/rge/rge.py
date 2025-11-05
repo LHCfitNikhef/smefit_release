@@ -499,7 +499,8 @@ def load_rge_matrix(
             rgemats_precomp = pickle.load(f)
         if rge_settings != rgemats_precomp.get("rge_settings", {}):
             _logger.warning(
-                "RGE settings do not match precomputed settings. Ignoring it and using the current settings."
+                "RGE settings do not match precomputed settings. "
+                "Ignoring it and using the current settings."
             )
         else:
             rge_cache = {

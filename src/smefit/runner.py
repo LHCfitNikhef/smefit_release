@@ -336,7 +336,7 @@ class Runner:
         operators_to_keep = self.run_card["coefficients"]
         cutoff_scale = self.run_card.get("cutoff_scale", None)
         save_path = Path(self.run_card["result_path"]) / self.run_card["result_ID"]
-        rgemat, operators_to_keep = load_rge_matrix(
+        _, operators_to_keep = load_rge_matrix(
             rge_dict,
             list(operators_to_keep.keys()),
             self.run_card["datasets"],
