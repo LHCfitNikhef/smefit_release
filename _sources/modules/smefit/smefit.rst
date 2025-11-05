@@ -63,6 +63,14 @@ smefit.covmat module
    :undoc-members:
    :show-inheritance:
 
+smefit.effective\_coupling\_dictionary module
+---------------------------------------------
+
+.. automodule:: smefit.effective_coupling_dictionary
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 smefit.fit\_manager module
 --------------------------
 
