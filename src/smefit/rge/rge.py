@@ -370,6 +370,10 @@ class RGE:
             path to the result folder
         rgemat: list
             List of RGE matrices for each datapoint
+        scales: list
+            List of scales for each datapoint
+        rge_settings: dict
+            dictionary with the RGE settings
         name: str
             name of the file to save the RGE matrix
         """
