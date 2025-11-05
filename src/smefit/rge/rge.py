@@ -505,6 +505,13 @@ def load_rge_matrix(
             rge_cache = {
                 k: v for k, v in rgemats_precomp.items() if k != "rge_settings"
             }
+            # get the coeff_list for precomputed matrix
+            coeff_list_precomputed = next(iter(rge_cache.values())).columns.tolist()
+            if coeff_list_precomputed != sorted(coeff_list):
+                raise ValueError(
+                    "Coefficient list does not match precomputed RGE matrix coefficients.",
+                    f"Precomputed: {coeff_list_precomputed}, Given: {sorted(coeff_list)}",
+                )
             _logger.info(f"Loaded precomputed RGE matrix from {path_to_rge_mat}.")
 
     # Load scales
