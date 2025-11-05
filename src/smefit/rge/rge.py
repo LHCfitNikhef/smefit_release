@@ -500,9 +500,9 @@ def load_rge_matrix(
         with open(path_to_rge_mat, "rb") as f:
             rgemats_precomp = pickle.load(f)
         if rge_settings != rgemats_precomp.get("rge_settings", {}):
-            _logger.warning(
+            raise ValueError(
                 "RGE settings do not match precomputed settings. "
-                "Ignoring it and using the current settings."
+                "Ignoring them and using the current settings."
             )
         else:
             rge_cache = {
@@ -512,8 +512,8 @@ def load_rge_matrix(
             coeff_list_precomputed = next(iter(rge_cache.values())).columns.tolist()
             if coeff_list_precomputed != coeff_list:
                 raise ValueError(
-                    "Coefficient list does not match precomputed RGE matrix coefficients.",
-                    f"Precomputed: {coeff_list_precomputed}, Given: {coeff_list}",
+                    "Coefficient list does not match precomputed RGE matrix coefficients. "
+                    f"Precomputed: {coeff_list_precomputed}, Given: {coeff_list}"
                 )
             _logger.info(f"Loaded precomputed RGE matrix from {path_to_rge_mat}.")
 
