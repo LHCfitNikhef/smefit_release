@@ -51,6 +51,34 @@ def check_missing_operators(loaded_corrections, coeff_config):
         )
 
 
+def check_condition_number(fit_covmat, critical_cond=15.5):
+    condition_number = np.linalg.cond(fit_covmat)
+    digits = round(np.log10(condition_number), 2)
+    if digits > critical_cond:
+        _logger.warning(
+            f"Covariance matrix log10 condition number = {digits} "
+            + f"larger than critical threshold = {critical_cond}"
+        )
+    return condition_number
+
+
+def check_covmat_positivity(fit_covmat):
+    eigvals = jnp.linalg.eigvalsh(fit_covmat)
+    if min(eigvals) <= 0:
+        raise ValueError("Fit covariance matrix is not positive definite")
+
+
+def check_covmat_invertibility(fit_covmat, inv_covmat, threshold=1e-3):
+    if (
+        jnp.max(np.abs(inv_covmat @ fit_covmat - np.eye(fit_covmat.shape[0])))
+        > threshold
+    ):
+        raise ValueError(
+            "Failed inverting fit covariance matrix. "
+            + "Check matrix condition number and using float64"
+        )
+
+
 class Loader:
     """Class to check, load commondata and corresponding theory predictions.
 

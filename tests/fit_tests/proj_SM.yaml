@@ -6,7 +6,6 @@ commondata_path: ./test_commondata
 theory_path: ./test_theory
 use_theory_covmat: False
 use_t0: True
-float64: True
 # SMEFT Expansion Order (False = Lambda^-2 , True = Lambda^-4)
 use_quad: False
 # Datasets to include
