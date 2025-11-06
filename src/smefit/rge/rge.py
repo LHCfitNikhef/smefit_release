@@ -505,13 +505,6 @@ def load_rge_matrix(
             )
 
         rge_cache = {k: v for k, v in rgemats_precomp.items() if k != "rge_settings"}
-        # get the coeff_list for precomputed matrix
-        coeff_list_precomputed = next(iter(rge_cache.values())).columns.tolist()
-        if coeff_list_precomputed != coeff_list:
-            raise ValueError(
-                "Coefficient list does not match precomputed RGE matrix coefficients. "
-                f"Precomputed: {coeff_list_precomputed}, Given: {coeff_list}"
-            )
         _logger.info(f"Loaded precomputed RGE matrix from {path_to_rge_mat}.")
 
     # Load scales
@@ -536,6 +529,28 @@ def load_rge_matrix(
         # Check if the RGE matrix has already been computed
         if scale in rge_cache:
             rgemat_scale = rge_cache[scale]
+            coeff_list_cache = rgemat_scale.columns.tolist()
+            # Compute difference in coeff_list
+            diff_coeffs = set(coeff_list) - set(coeff_list_cache)
+            if diff_coeffs:
+                rge_runner_reduced = RGE(
+                    diff_coeffs, init_scale, smeft_accuracy, adm_QCD, yukawa
+                )
+                _logger.warning(
+                    f"The cached RGE matrix does not contain all the requested coefficients. "
+                    f"Missing coefficients: {diff_coeffs}. "
+                    f"These will be computed from scratch and added to the cached matrix."
+                )
+                rgemat_new = rge_runner_reduced.RGEmatrix(scale)
+                # concatenate the new matrix to the cached one, filling missing values with zeros
+                rgemat_scale = pd.concat([rgemat_scale, rgemat_new], axis=1).fillna(0)
+                # reorder columns
+                rgemat_scale = rgemat_scale[sorted(rgemat_scale.columns.tolist())]
+                # cache the updated RGE matrix
+                rge_cache[scale] = rgemat_scale
+            else:
+                # take the columns corresponding to the requested coefficients
+                rgemat_scale = rgemat_scale[coeff_list]
         else:
             rgemat_scale = rge_runner.RGEmatrix(scale)
             # cache the RGE matrix
