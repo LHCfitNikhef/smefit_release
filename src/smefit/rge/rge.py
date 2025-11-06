@@ -486,17 +486,20 @@ def load_rge_mats_from_scales(scales, coeff_list, rge_runner, rge_cache):
             rgemat_scale = rge_cache[scale]
             coeff_list_cache = rgemat_scale.columns.tolist()
             # Compute difference in coeff_list
-            diff_coeffs = list(set(coeff_list) - set(coeff_list_cache))
-            if diff_coeffs:
-                rge_runner_missing = rge_runner.clone_runner(diff_coeffs)
+            missing_coeffs = list(set(coeff_list) - set(coeff_list_cache))
+            present_coeffs = list(set(coeff_list) & set(coeff_list_cache))
+            if missing_coeffs:
+                rge_runner_missing = rge_runner.clone_runner(missing_coeffs)
                 _logger.warning(
                     f"The cached RGE matrix does not contain all the requested coefficients. "
-                    f"Missing coefficients: {diff_coeffs}. "
+                    f"Missing coefficients: {missing_coeffs}. "
                     f"These will be computed from scratch and added to the cached matrix."
                 )
                 rgemat_new = rge_runner_missing.RGEmatrix(scale)
                 # concatenate the new matrix to the cached one, filling missing values with zeros
-                rgemat_scale = pd.concat([rgemat_scale, rgemat_new], axis=1).fillna(0)
+                rgemat_scale = pd.concat(
+                    [rgemat_scale[present_coeffs], rgemat_new], axis=1
+                ).fillna(0)
                 # reorder columns
                 rgemat_scale = rgemat_scale[sorted(rgemat_scale.columns.tolist())]
                 # cache the updated RGE matrix
