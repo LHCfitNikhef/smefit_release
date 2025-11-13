@@ -136,11 +136,11 @@ class Scanner:
             cutoff_scale=self.cutoff_scale,
         )
 
-        external_chi2 = run_card.get("external_chi2", None)
+        self.external_chi2 = run_card.get("external_chi2", None)
 
         self.chi2_ext = (
-            load_external_chi2(external_chi2, self.coefficients, self.rge_dict)
-            if external_chi2
+            load_external_chi2(self.external_chi2, self.coefficients, self.rge_dict)
+            if self.external_chi2
             else None
         )
 
@@ -233,6 +233,13 @@ class Scanner:
                 self.use_quad,
                 self.use_multiplicative_prescription,
                 use_replica=False,
+            )
+
+            # update external chi2 with new rge dict
+            self.chi2_ext = (
+                load_external_chi2(self.external_chi2, self.coefficients, self.rge_dict)
+                if self.external_chi2
+                else None
             )
 
             if self.chi2_ext is not None:
