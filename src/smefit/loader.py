@@ -756,44 +756,6 @@ def load_datasets(
     else:
         fit_covmat = exp_covmat
 
-    # diagonalise covmat and rotate data and theory to the eigenbasis
-    eigval, eigvec = np.linalg.eigh(fit_covmat)
-    rotate_data_basis = eigvec
-    rescale_data_basis = np.diag(1.0 / np.sqrt(eigval))
-    transform_data_basis = rotate_data_basis @ rescale_data_basis
-    exp_data = transform_data_basis.T @ exp_data
-    sm_theory = transform_data_basis.T @ np.array(sm_theory)
-    fit_covmat = np.eye(fit_covmat.shape[0])
-    lin_corr_values = transform_data_basis.T @ lin_corr_values
-
-    # act on the n_dat axis
-    if use_quad:
-        quad_corr_values = jnp.einsum(
-            "ij,jkl->ikl", transform_data_basis.T, quad_corr_values
-        )
-
-    # rotate predictions to the PCA basis
-    # param rotation : (smefit_database basis, pca basis)
-
-    # coefficients = CoefficientManager.from_dict(operators_to_keep)
-    #
-    # # if use_quad:
-    # #     lin_corr_values, quad_corr_values = impose_constrain(
-    # #         lin_corr_values, quad_corr_values, coefficients, update_quad=use_quad
-    # #     )
-    # # else:
-    # #     lin_corr_values = impose_constrain(lin_corr_values, quad_corr_values, coefficients, update_quad=use_quad)
-    #
-    # U, S, Vh = np.linalg.svd(lin_corr_values)
-    # param_rotation = Vh.T @ np.diag(1 / S)
-    # lin_corr_values = lin_corr_values @ param_rotation
-    #
-    # # act on param axis
-    # if use_quad:
-    #     quad_corr_values = np.einsum(
-    #         "ij,kjl,lm->kim", param_rotation.T, quad_corr_values, param_rotation
-    #     )
-
     # Check fit_covmat condition number
     check_condition_number(fit_covmat)
     check_covmat_positivity(fit_covmat)

@@ -96,22 +96,6 @@ class Optimizer:
                 LinearCorrections=newLinearCorrections.T
             )
 
-        U, S, Vh = jnp.linalg.svd(loaded_datasets.LinearCorrections)
-        self.param_rotation = Vh.T @ jnp.diag(1 / S)
-        loaded_datasets = loaded_datasets._replace(
-            LinearCorrections=loaded_datasets.LinearCorrections @ self.param_rotation
-        )
-        # act on param axis
-        if use_quad:
-            loaded_datasets = loaded_datasets._replace(
-                QuadraticCorrections=jnp.einsum(
-                    "ij,kjl,lm->kim",
-                    self.param_rotation.T,
-                    loaded_datasets.QuadraticCorrections,
-                    self.param_rotation,
-                )
-            )
-
         self.loaded_datasets = loaded_datasets
         self.npts = (
             self.loaded_datasets.Commondata.size
