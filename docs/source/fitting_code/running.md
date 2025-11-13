@@ -59,6 +59,11 @@ If ``single_parameter_fits`` is set to ``True``, the Wilson coefficient specifie
 will be fit one at time, setting all the others to 0. See [here](./example.html#single-parameter-fits) for more details.
 If ``pairwise_fits`` is set to ``True``, the minimizer carries out an automated series of pair-wise fits to all possible pairs of
 Wilson coefficients that  are specified in the run-card.
+
+Float32 format is supported only with |NS|.
+```bash
+smefit NS --float32 path/to/the/runcard/runcard.yaml
+```
 Pairwise fits are supported only with |NS|.
 
 ```yaml
@@ -74,7 +79,7 @@ target_post_unc: 0.5 # target posterior uncertanty
 frac_remain: 0.01 # Set to a higher number (0.5) if you know the posterior is simple.
 store_raw: false # if true, store the raw result and enable resuming the job.
 vectorized: false # if true, ultranest samples a vector from the prior (recommended for large scale problems)
-float64: false # double precision
+cluster_num_live_points: 150 # number of live points per cluster, set to 3 * npar by default
 
 
 #MC settings

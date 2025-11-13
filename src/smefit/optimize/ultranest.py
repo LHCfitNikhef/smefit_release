@@ -7,6 +7,7 @@ from pathlib import Path
 import jax
 import jax.numpy as jnp
 import ultranest
+from jax.extend import backend as jbackend
 from rich.style import Style
 from rich.table import Table
 from ultranest import stepsampler
@@ -65,8 +66,6 @@ class USOptimizer(Optimizer):
         if True store the result to eventually resume the job
     vectorized: bool
         if True use jax vectorization
-    float64: bool
-        if True use float64 precision
     external_chi2: dict
         dict of external chi2
     rgemat: numpy.ndarray
@@ -93,9 +92,9 @@ class USOptimizer(Optimizer):
         target_post_unc=0.5,
         frac_remain=0.01,
         n_samples=10000,
+        cluster_num_live_points=None,
         store_raw=False,
         vectorized=False,
-        float64=False,
         external_chi2=None,
         rgemat=None,
         rge_dict=None,
@@ -119,6 +118,11 @@ class USOptimizer(Optimizer):
         self.n_samples = n_samples
         self.vectorized = vectorized
         self.npar = self.free_parameters.shape[0]
+        self.cluster_num_live_points = (
+            cluster_num_live_points
+            if cluster_num_live_points is not None
+            else 3 * self.npar
+        )
         self.result_ID = result_ID
         self.pairwise_fits = pairwise_fits
         self.store_raw = store_raw
@@ -126,10 +130,6 @@ class USOptimizer(Optimizer):
         # Set coefficients relevant quantities
         self.fixed_coeffs = self.coefficients._objlist[~self.coefficients.is_free]
         self.coeffs_index = self.coefficients._table.index
-
-        # Ultranest requires float64 below 11 dof
-        if float64 or self.npar < 11:
-            jax.config.update("jax_enable_x64", True)
 
     @classmethod
     def from_dict(cls, config):
@@ -194,6 +194,7 @@ class USOptimizer(Optimizer):
         single_parameter_fits = config.get("single_parameter_fits", False)
         pairwise_fits = config.get("pairwise_fits", False)
         nlive = config.get("nlive", 500)
+        cluster_num_live_points = config.get("cluster_num_live_points", None)
 
         if "nlive" not in config:
             _logger.warning(
@@ -232,7 +233,6 @@ class USOptimizer(Optimizer):
 
         store_raw = config.get("store_raw", False)
         vectorized = config.get("vectorized", False)
-        float64 = config.get("float64", False)
 
         use_multiplicative_prescription = config.get(
             "use_multiplicative_prescription", False
@@ -250,6 +250,7 @@ class USOptimizer(Optimizer):
             pairwise_fits,
             use_multiplicative_prescription,
             live_points=nlive,
+            cluster_num_live_points=cluster_num_live_points,
             lepsilon=lepsilon,
             target_evidence_unc=target_evidence_unc,
             target_post_unc=target_post_unc,
@@ -257,7 +258,6 @@ class USOptimizer(Optimizer):
             n_samples=n_samples,
             store_raw=store_raw,
             vectorized=vectorized,
-            float64=float64,
             external_chi2=external_chi2,
             rgemat=rgemat,
             rge_dict=rge_dict,
@@ -389,9 +389,7 @@ class USOptimizer(Optimizer):
             loglikelihood = self.gaussian_loglikelihood
             flat_prior = self.flat_prior
 
-        _logger.info(
-            f"Running fit with backend: {jax.lib.xla_bridge.get_backend().platform}"
-        )
+        _logger.info(f"Running fit with backend: {jbackend.get_backend().platform}")
         t1 = time.time()
 
         # hessian = -1 * jax.hessian(loglikelihood)(jnp.zeros(self.npar))
@@ -421,6 +419,7 @@ class USOptimizer(Optimizer):
             Lepsilon=self.lepsilon,
             update_interval_volume_fraction=0.8 if self.npar > 20 else 0.2,
             max_num_improvement_loops=0,
+            cluster_num_live_points=self.cluster_num_live_points,
         )
 
         t2 = time.time()

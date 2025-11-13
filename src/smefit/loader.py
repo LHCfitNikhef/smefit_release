@@ -9,12 +9,8 @@ import numpy as np
 import pandas as pd
 import scipy.linalg as la
 import yaml
-from matplotlib import pyplot as plt
 
 from .basis_rotation import rotate_to_fit_basis
-
-# from .analyze.pca import impose_constrain
-from .coefficients import CoefficientManager
 from .covmat import construct_covmat, covmat_from_systematics
 from .log import logging
 
@@ -52,6 +48,34 @@ def check_missing_operators(loaded_corrections, coeff_config):
             f"{missing_operators} not in the theory. Comment it out in setup script and restart.\n"
             "In case a cutoff was applied "
             f"the operator(s) {missing_operators} did not survive the mask."
+        )
+
+
+def check_condition_number(fit_covmat, critical_cond=15.5):
+    condition_number = np.linalg.cond(fit_covmat)
+    digits = round(np.log10(condition_number), 2)
+    if digits > critical_cond:
+        _logger.warning(
+            f"Covariance matrix log10 condition number = {digits} "
+            + f"larger than critical threshold = {critical_cond}"
+        )
+    return condition_number
+
+
+def check_covmat_positivity(fit_covmat):
+    eigvals = jnp.linalg.eigvalsh(fit_covmat)
+    if min(eigvals) <= 0:
+        raise ValueError("Fit covariance matrix is not positive definite")
+
+
+def check_covmat_invertibility(fit_covmat, inv_covmat, threshold=1e-3):
+    if (
+        jnp.max(np.abs(inv_covmat @ fit_covmat - np.eye(fit_covmat.shape[0])))
+        > threshold
+    ):
+        raise ValueError(
+            "Failed inverting fit covariance matrix. "
+            + "Check matrix condition number and using float64"
         )
 
 
@@ -329,7 +353,6 @@ class Loader:
 
         # rotate corrections to fitting basis
         if rotation_matrix is not None:
-
             lin_dict_fit_basis, quad_dict_fit_basis = rotate_to_fit_basis(
                 lin_dict, quad_dict, rotation_matrix
             )
@@ -339,7 +362,6 @@ class Loader:
                 for k, val in lin_dict_fit_basis.items()
                 if is_to_keep(k) and len(val) > 0
             }
-
             quad_dict_to_keep = {
                 k: val
                 for k, val in quad_dict_fit_basis.items()
@@ -541,24 +563,7 @@ def construct_corrections_matrix_linear(
     if rgemat is not None:
         corr_values = jnp.einsum("ij, ijk -> ik", corr_values, rgemat)
 
-    # TODO: The RG rotation should act before the PCA, now it acts after.
     return corr_values
-
-
-def plot_corrections(basis_name, corr_values_df):
-
-    fig, ax = plt.subplots()
-    ax.scatter(corr_values_df.iloc[:, 0], corr_values_df.iloc[:, 1])
-    ax.set_xlabel(corr_values_df.columns[0])
-    ax.set_ylabel(corr_values_df.columns[1])
-    ax.set_title(f"Linear corrections in {basis_name}")
-    plt.grid()
-    # ax.set_xlim(-5, 5)
-    # ax.set_ylim(-5, 5)
-    plt.savefig(
-        f"/Users/jaco/Documents/smefit_release/results/esppu_paper/pca_rotation/linear_corrections_{basis_name}.pdf"
-    )
-    plt.close()
 
 
 def construct_corrections_matrix_quadratic(
@@ -789,6 +794,11 @@ def load_datasets(
     #         "ij,kjl,lm->kim", param_rotation.T, quad_corr_values, param_rotation
     #     )
 
+    # Check fit_covmat condition number
+    check_condition_number(fit_covmat)
+    check_covmat_positivity(fit_covmat)
+    inv_cov_mat = np.linalg.inv(fit_covmat)
+    check_covmat_invertibility(fit_covmat, inv_cov_mat)
     # Make one large datatuple containing all data, SM theory, corrections, etc.
     return DataTuple(
         exp_data,
@@ -798,115 +808,10 @@ def load_datasets(
         quad_corr_values,
         np.array(exp_name),
         np.array(n_data_exp),
-        np.linalg.inv(fit_covmat),
+        inv_cov_mat,
         theory_covariance,
         np.array(lumi_exp),
     )
-
-
-def impose_constrain(
-    lin_corr_values, quad_corr_values, coefficients, update_quad=False
-):
-    """Propagate coefficient constraint into the theory tables.
-
-    Note: only linear contraints are allowed in this method.
-    Non linear contrains not always make sense here.
-
-    Parameters
-    ----------
-    dataset: smefit.loader.DataTuple
-        loaded datasets
-    coefficient: smefit.coefficients.CoefficienManager
-        coefficient manager
-    update_quad: bool, optional
-        if True update also quadratic corrections
-
-    Returns
-    -------
-    np.ndarray
-        array of updated linear corrections (n_free_op, n_dat)
-    np.ndarray, optional
-        array of updated quadratic corrections (n_free_op, n_free_op, n_dat)
-
-    """
-    temp_coeffs = copy.deepcopy(coefficients)
-    free_coeffs = temp_coeffs.free_parameters.index
-    n_free_params = free_coeffs.size
-    new_linear_corrections = []
-    new_quad_corrections = []
-    # loop on the free op and add the corrections
-    for idx in range(n_free_params):
-        # update all the free coefficents to 0 except from 1 and propagate
-        params = np.zeros_like(free_coeffs, dtype=float)
-        params[idx] = 1.0
-        temp_coeffs.set_free_parameters(params)
-        temp_coeffs.set_constraints()
-
-        # update linear corrections
-
-        new_linear_corrections.append(temp_coeffs.value @ lin_corr_values.T)
-
-        # update quadratic corrections, this will include some double counting in the mixed corrections
-        if update_quad:
-            for jdx in range(free_coeffs[idx:].size):
-                params = np.zeros_like(free_coeffs, dtype=float)
-                params[idx + jdx] = 1.0
-                params[idx] = 1.0
-                temp_coeffs.set_free_parameters(params)
-                temp_coeffs.set_constraints()
-                new_quad_corrections.append(
-                    np.einsum(
-                        "ijk,j,k -> i",
-                        quad_corr_values,
-                        temp_coeffs.value,
-                        temp_coeffs.value,
-                    )
-                )
-
-    if update_quad:
-        # subrtact the squuared corrections from the mixed ones
-        new_quad_corrections = make_sym_matrix(
-            np.array(new_quad_corrections).T, n_free_params
-        )
-        for idx in range(n_free_params):
-            for jdx in range(n_free_params):
-                if jdx != idx:
-                    new_quad_corrections[idx, jdx, :] -= (
-                        new_quad_corrections[idx, idx, :]
-                        + new_quad_corrections[jdx, jdx, :]
-                    )
-        return np.array(new_linear_corrections).T, new_quad_corrections.T
-
-    return np.array(new_linear_corrections).T
-
-
-def make_sym_matrix(vals, n_op):
-    """Build a square tensor (n_op,n_op,vals.shape[0]), starting from the upper tiangular part.
-
-    Parameters
-    ----------
-        vals : np.ndarray
-            traingular part
-        n_op : int
-            dimension of the final matrix
-
-    Returns
-    -------
-    np.ndarry:
-        square tensor.
-
-    Examples
-    --------
-        `make_sym_matrix(array([1,2,3,4,5,6]), 3) -> array([[1,2,3],[0,4,5],[0,0,6]])`
-
-    """
-    n_dat = vals.shape[0]
-    m = np.zeros((n_op, n_op, n_dat))
-    xs, ys = np.triu_indices(n_op)
-    for i, l in enumerate(vals):
-        m[xs, ys, i] = l
-        m[ys, xs, i] = l
-    return m
 
 
 def get_dataset(datasets, data_name):
