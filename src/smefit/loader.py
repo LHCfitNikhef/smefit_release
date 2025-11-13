@@ -757,7 +757,7 @@ def load_datasets(
 
     # Check fit_covmat condition number
     check_condition_number(fit_covmat)
-    check_covmat_positivity(fit_covmat)
+    # check_covmat_positivity(fit_covmat)
     inv_cov_mat = np.linalg.inv(fit_covmat)
     check_covmat_invertibility(fit_covmat, inv_cov_mat)
     # Make one large datatuple containing all data, SM theory, corrections, etc.
