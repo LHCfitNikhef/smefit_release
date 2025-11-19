@@ -279,9 +279,7 @@ class Chi2tableCalculator:
         temp += r"\\ \hline"
         L.append(temp)
         L.append(
-            r"Process "
-            + r" & SM & ext. likelihood" * len(ext_chi2_dict)
-            + r"\\ \hline",
+            r"Process " + r" & SM & Best fit" * len(ext_chi2_dict) + r"\\ \hline",
         )
 
         # Extract unique ext. likelihood datasets
