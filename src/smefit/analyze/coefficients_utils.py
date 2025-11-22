@@ -507,7 +507,7 @@ class CoefficientsPlotter:
         if self.logo is not None:
             fig = axs[0].figure
             # place logo in its own small axes outside main plotting area (figure coordinates)
-            ax_logo = fig.add_axes([0.05, 0.956, 0.15, 0.04])
+            ax_logo = fig.add_axes([0.05, 0.96, 0.15, 0.04])
             ax_logo.imshow(self.logo, aspect="auto")
             ax_logo.axis("off")
         # if self.logo is not None:
@@ -527,7 +527,7 @@ class CoefficientsPlotter:
             loc="lower center",
             bbox_to_anchor=(0.7, 1.1, 1.0, 0.05),
             frameon=False,
-            prop={"size": 13},
+            prop={"size": 17},
             ncol=len(groups),
         )
 
