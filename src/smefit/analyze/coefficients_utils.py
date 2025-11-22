@@ -149,15 +149,69 @@ class CoefficientsPlotter:
 
     def _get_suplblots(self, figsize):
         groups = self.coeff_info.groupby(level=0, sort=False).count()
-        _, axs = plt.subplots(
-            groups.size,
-            1,
-            gridspec_kw={"height_ratios": groups.values},
-            figsize=figsize,
+        heights = groups.values.astype(float)
+        n = len(groups)
+
+        # Column assignment (alternating)
+        left_idx = [i for i in range(n) if i % 2 == 0]
+        right_idx = [i for i in range(n) if i % 2 == 1]
+
+        left_heights = heights[left_idx]
+        right_heights = heights[right_idx]
+
+        # Total height sums
+        total_left = left_heights.sum()
+        total_right = right_heights.sum()
+
+        fig = plt.figure(figsize=figsize)
+
+        # Columns must share the same top
+        top = 0.95
+
+        # But each column gets its own bottom according to its total height
+        # Normalize both columns into the same available vertical space
+        available = 0.9  # vertical height for the tallest column
+
+        # Column with greater content uses full available space
+        max_total = max(total_left, total_right)
+
+        # Each column gets bottom = top - available * (column_total / max_total)
+        left_bottom = top - available * (total_left / max_total)
+        right_bottom = top - available * (total_right / max_total)
+
+        # Independent GridSpecs
+        gs_left = fig.add_gridspec(
+            nrows=len(left_idx),
+            ncols=1,
+            left=0.05,
+            right=0.48,
+            top=top,
+            bottom=left_bottom,
+            height_ratios=left_heights,
+            hspace=0.15,
         )
-        if not isinstance(axs, Iterable):
-            axs = np.array([axs])
-        return groups, axs
+
+        gs_right = fig.add_gridspec(
+            nrows=len(right_idx),
+            ncols=1,
+            left=0.52,
+            right=0.95,
+            top=top,
+            bottom=right_bottom,
+            height_ratios=right_heights,
+            hspace=0.15,
+        )
+
+        # Axes in correct order
+        axs = [None] * n
+
+        for r, idx in enumerate(left_idx):
+            axs[idx] = fig.add_subplot(gs_left[r, 0])
+
+        for r, idx in enumerate(right_idx):
+            axs[idx] = fig.add_subplot(gs_right[r, 0])
+
+        return groups, np.array(axs)
 
     def plot_coeffs(
         self, bounds, figsize=(10, 15), x_min=-400, x_max=400, x_log=True, lin_thr=1e-1
@@ -276,6 +330,7 @@ class CoefficientsPlotter:
         x_log=True,
         x_min=1e-2,
         x_max=500,
+        color=None,
     ):
         """
         Plot error bars at given confidence level
@@ -300,7 +355,6 @@ class CoefficientsPlotter:
         """
         df = pd.DataFrame(error)
         groups, axs = self._get_suplblots(figsize)
-
         for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
             bars_top_to_bottom = bars.iloc[
                 ::-1
@@ -313,6 +367,7 @@ class CoefficientsPlotter:
                 logx=x_log,
                 xlim=(x_min, x_max),
                 fontsize=13,
+                color=color,
             )
             ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
             ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
@@ -328,18 +383,36 @@ class CoefficientsPlotter:
                     alpha=0.7,
                 )
 
-        self._plot_logo(axs[-1])
+        # self._plot_logo(axs[-1])
+
+        if self.logo is not None:
+            fig = axs[0].figure
+            # place logo in its own small axes outside main plotting area (figure coordinates)
+            ax_logo = fig.add_axes([0.05, 0.956, 0.15, 0.04])
+            ax_logo.imshow(self.logo, aspect="auto")
+            ax_logo.axis("off")
+        # if self.logo is not None:
+        #     axs[0].imshow(
+        #     self.logo,
+        #     aspect = "auto",
+        #     transform = axs[0].transAxes,
+        #     extent = extent,
+        #     zorder = -1)
         axs[-1].set_xlabel(
-            r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
+            r"$95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
+        )
+        axs[-2].set_xlabel(
+            r"$95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
         )
         axs[0].legend(
             loc="lower center",
-            bbox_to_anchor=(0, 1.1, 1.0, 0.05),
+            bbox_to_anchor=(0.7, 1.1, 1.0, 0.05),
             frameon=False,
             prop={"size": 13},
-            ncol=2,
+            ncol=len(groups),
         )
-        plt.tight_layout()
+
+        # plt.tight_layout()
         plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_bar.png")
 
