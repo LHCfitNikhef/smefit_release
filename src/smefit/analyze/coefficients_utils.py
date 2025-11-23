@@ -354,12 +354,18 @@ class CoefficientsPlotter:
 
         """
         df = pd.DataFrame(error)
+        n_runs = int(len(df.columns) / 2)
+        color = color[:n_runs]
+
         groups, axs = self._get_suplblots(figsize)
         for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
             bars_top_to_bottom = bars.iloc[
                 ::-1
             ]  # reverse order to plot from top to bottom in ax
-            bars_top_to_bottom.droplevel(0).plot(
+            bars_top_to_bottom_glob = bars_top_to_bottom.iloc[:, :n_runs]
+            bars_top_to_bottom_ind = bars_top_to_bottom.iloc[:, n_runs:]
+
+            bars_top_to_bottom_glob.droplevel(0).plot(
                 kind="barh",
                 width=0.6,
                 ax=ax,
@@ -369,6 +375,22 @@ class CoefficientsPlotter:
                 fontsize=13,
                 color=color,
             )
+
+            # Loop through the bar patches created by pandas/Matplotlib
+            for i, (patch, v) in enumerate(
+                zip(ax.patches, bars_top_to_bottom_ind.values.flatten(order="F"))
+            ):
+                y = patch.get_y() + patch.get_height() / 2
+                ax.plot(
+                    v,
+                    y,
+                    marker="<",
+                    markersize=4,
+                    color=color[i // bars.shape[0]],
+                    markeredgecolor="k",
+                    markerfacecolor=color[i // bars.shape[0]],
+                    zorder=10,
+                )
             ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
             ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
 
