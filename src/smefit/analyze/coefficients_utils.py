@@ -445,7 +445,7 @@ class CoefficientsPlotter:
     def plot_coeffs_bar(
         self,
         error,
-        figsize=(10, 15),
+        figsize=(15, 20),
         plot_cutoff=400,
         x_log=True,
         x_min=1e-2,
@@ -483,6 +483,9 @@ class CoefficientsPlotter:
             ]  # reverse order to plot from top to bottom in ax
             bars_top_to_bottom_glob = bars_top_to_bottom.iloc[:, :n_runs]
             bars_top_to_bottom_ind = bars_top_to_bottom.iloc[:, n_runs:]
+
+            bars_top_to_bottom_glob = 1 / np.sqrt(bars_top_to_bottom_glob)
+            bars_top_to_bottom_ind = 1 / np.sqrt(bars_top_to_bottom_ind)
 
             bars_top_to_bottom_glob.droplevel(0).plot(
                 kind="barh",
@@ -524,27 +527,16 @@ class CoefficientsPlotter:
                     alpha=0.7,
                 )
 
-        # self._plot_logo(axs[-1])
-
         if self.logo is not None:
             fig = axs[0].figure
             # place logo in its own small axes outside main plotting area (figure coordinates)
             ax_logo = fig.add_axes([0.05, 0.96, 0.15, 0.04])
             ax_logo.imshow(self.logo, aspect="auto")
             ax_logo.axis("off")
-        # if self.logo is not None:
-        #     axs[0].imshow(
-        #     self.logo,
-        #     aspect = "auto",
-        #     transform = axs[0].transAxes,
-        #     extent = extent,
-        #     zorder = -1)
-        axs[-1].set_xlabel(
-            r"$95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
-        )
-        axs[-2].set_xlabel(
-            r"$95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
-        )
+
+        axs[-1].set_xlabel(r"$\Lambda/\sqrt{c_i}\;[{\rm TeV}]$", fontsize=20)
+        axs[-2].set_xlabel(r"$\Lambda/\sqrt{c_i}\;[{\rm TeV}]$", fontsize=20)
+
         axs[0].legend(
             loc="lower center",
             bbox_to_anchor=(0.7, 1.1, 1.0, 0.05),
