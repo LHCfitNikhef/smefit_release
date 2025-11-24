@@ -362,38 +362,99 @@ class CoefficientsPlotter:
             bars_top_to_bottom = bars.iloc[
                 ::-1
             ]  # reverse order to plot from top to bottom in ax
-            bars_top_to_bottom_glob = bars_top_to_bottom.iloc[:, :n_runs]
-            bars_top_to_bottom_ind = bars_top_to_bottom.iloc[:, n_runs:]
 
-            bars_top_to_bottom_glob = 1 / np.sqrt(bars_top_to_bottom_glob)
-            bars_top_to_bottom_ind = 1 / np.sqrt(bars_top_to_bottom_ind)
+            df_glob_no_th = 1 / np.sqrt(
+                bars_top_to_bottom.loc[:, df.columns.str.contains("notheounc")]
+            )
+            df_glob_cons_th = 1 / np.sqrt(
+                bars_top_to_bottom.loc[:, df.columns.str.contains("conservative")]
+            )
+            df_glob_agg_th = 1 / np.sqrt(
+                bars_top_to_bottom.loc[:, df.columns.str.contains("aggressive")]
+            )
+            df_glob_current_th = 1 / np.sqrt(
+                bars_top_to_bottom.loc[:, df.columns.str.contains("current")]
+            )
 
-            bars_top_to_bottom_glob.droplevel(0).plot(
+            # bars_top_to_bottom_glob = bars_top_to_bottom.iloc[:, :n_runs]
+            # bars_top_to_bottom_ind = bars_top_to_bottom.iloc[:, n_runs:]
+            #
+            # bars_top_to_bottom_glob = 1 / np.sqrt(bars_top_to_bottom_glob)
+            # bars_top_to_bottom_ind = 1 / np.sqrt(bars_top_to_bottom_ind)
+
+            df_max = (1 / np.sqrt(bars_top_to_bottom)).values.max()
+            df_min = (1 / np.sqrt(bars_top_to_bottom)).values.min()
+            delta = 0.1 * (df_max - df_min)
+
+            ax.set_xlim(max(0, df_min - delta), df_max + delta)
+
+            df_glob_current_th.droplevel(0).plot(
                 kind="barh",
                 width=0.6,
                 ax=ax,
                 legend=None,
                 logx=x_log,
-                xlim=(x_min, x_max),
                 fontsize=13,
                 color=color,
+                edgecolor="k",
+                zorder=4,
             )
 
-            # Loop through the bar patches created by pandas/Matplotlib
-            for i, (patch, v) in enumerate(
-                zip(ax.patches, bars_top_to_bottom_ind.values.flatten(order="F"))
-            ):
-                y = patch.get_y() + patch.get_height() / 2
-                ax.plot(
-                    v,
-                    y,
-                    marker="<",
-                    markersize=4,
-                    color=color[i // bars.shape[0]],
-                    markeredgecolor="k",
-                    markerfacecolor=color[i // bars.shape[0]],
-                    zorder=10,
-                )
+            df_glob_cons_th.droplevel(0).plot(
+                kind="barh",
+                width=0.6,
+                ax=ax,
+                hatch="///////",
+                legend=None,
+                logx=x_log,
+                fontsize=13,
+                color=color,
+                edgecolor="k",
+                zorder=3,
+            )
+
+            df_glob_agg_th.droplevel(0).plot(
+                kind="barh",
+                width=0.6,
+                ax=ax,
+                hatch="xx",
+                legend=None,
+                logx=x_log,
+                fontsize=13,
+                color=color,
+                edgecolor="k",
+                zorder=2,
+            )
+
+            df_glob_no_th.droplevel(0).plot(
+                kind="barh",
+                width=0.6,
+                ax=ax,
+                hatch="..",
+                legend=None,
+                logx=x_log,
+                fontsize=13,
+                color=color,
+                edgecolor="k",
+                zorder=1,
+            )
+
+            ax.spines["left"].set_zorder(10)
+
+            # for i, (patch, v) in enumerate(
+            #     zip(ax.patches, df_ind.values.flatten(order="F"))
+            # ):
+            #     y = patch.get_y() + patch.get_height() / 2
+            #     ax.plot(
+            #         v,
+            #         y,
+            #         marker="<",
+            #         markersize=4,
+            #         color=color[i // bars.shape[0]],
+            #         markeredgecolor="k",
+            #         markerfacecolor=color[i // bars.shape[0]],
+            #         zorder=10,
+            #     )
             ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
             ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
 
@@ -408,6 +469,22 @@ class CoefficientsPlotter:
                     alpha=0.7,
                 )
 
+        handles = [
+            patches.Patch(alpha=0.8, fill=True, label="No Th. unc.", color="black"),
+            patches.Patch(
+                alpha=0.8, hatch="///////", fill=None, label="Aggr. Th. unc."
+            ),
+            patches.Patch(alpha=0.8, hatch="xxx", fill=None, label="Cons. Th. unc."),
+            patches.Patch(alpha=0.8, hatch="...", fill=None, label="Curr. Th. unc."),
+        ]
+
+        axs[-1].legend(
+            handles=handles,
+            ncols=2,
+            loc="lower center",
+            fontsize="x-small",
+            bbox_to_anchor=(1, 1.1, 1.0, 0.05),
+        )
         if self.logo is not None:
             fig = axs[0].figure
             # place logo in its own small axes outside main plotting area (figure coordinates)
@@ -415,8 +492,8 @@ class CoefficientsPlotter:
             ax_logo.imshow(self.logo, aspect="auto")
             ax_logo.axis("off")
 
-        axs[-1].set_xlabel(r"$\Lambda/\sqrt{c_i}\;[{\rm TeV}]$", fontsize=20)
-        axs[-2].set_xlabel(r"$\Lambda/\sqrt{c_i}\;[{\rm TeV}]$", fontsize=20)
+        axs[-1].set_xlabel(r"$\Lambda/\sqrt{c_i(\mu_0)}\;[{\rm TeV}]$", fontsize=20)
+        axs[-2].set_xlabel(r"$\Lambda/\sqrt{c_i(\mu_0)}\;[{\rm TeV}]$", fontsize=20)
 
         axs[0].legend(
             loc="lower center",
