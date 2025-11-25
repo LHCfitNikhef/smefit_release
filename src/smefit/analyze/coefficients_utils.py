@@ -375,87 +375,76 @@ class CoefficientsPlotter:
             df_glob_current_th = 1 / np.sqrt(
                 bars_top_to_bottom.loc[:, df.columns.str.contains("current")]
             )
-
-            # bars_top_to_bottom_glob = bars_top_to_bottom.iloc[:, :n_runs]
-            # bars_top_to_bottom_ind = bars_top_to_bottom.iloc[:, n_runs:]
-            #
-            # bars_top_to_bottom_glob = 1 / np.sqrt(bars_top_to_bottom_glob)
-            # bars_top_to_bottom_ind = 1 / np.sqrt(bars_top_to_bottom_ind)
+            df_glob_current_th.columns = df_glob_current_th.columns.str.replace(
+                "\\,current", ""
+            )
 
             df_max = (1 / np.sqrt(bars_top_to_bottom)).values.max()
             df_min = (1 / np.sqrt(bars_top_to_bottom)).values.min()
-            delta = 0.1 * (df_max - df_min)
+            delta = 0.05 * (df_max - df_min)
 
-            ax.set_xlim(max(0, df_min - delta), df_max + delta)
+            ax.set_xlim(0, df_max + delta)
 
             df_glob_current_th.droplevel(0).plot(
                 kind="barh",
-                width=0.6,
+                width=0.8,
                 ax=ax,
                 legend=None,
                 logx=x_log,
-                fontsize=13,
+                fontsize=18,
                 color=color,
                 edgecolor="k",
+                linewidth=0.3,
                 zorder=4,
             )
 
+            handles_current, labels_current = ax.get_legend_handles_labels()
+
             df_glob_cons_th.droplevel(0).plot(
                 kind="barh",
-                width=0.6,
+                width=0.8,
                 ax=ax,
                 hatch="///////",
-                legend=None,
+                legend=False,
                 logx=x_log,
-                fontsize=13,
+                fontsize=18,
                 color=color,
                 edgecolor="k",
+                linewidth=0.3,
                 zorder=3,
             )
 
             df_glob_agg_th.droplevel(0).plot(
                 kind="barh",
-                width=0.6,
+                width=0.8,
                 ax=ax,
                 hatch="xx",
-                legend=None,
+                legend=False,
                 logx=x_log,
-                fontsize=13,
+                fontsize=18,
                 color=color,
                 edgecolor="k",
+                linewidth=0.3,
                 zorder=2,
             )
 
             df_glob_no_th.droplevel(0).plot(
                 kind="barh",
-                width=0.6,
+                width=0.8,
                 ax=ax,
-                hatch="..",
-                legend=None,
+                hatch="...",
+                legend=False,
                 logx=x_log,
-                fontsize=13,
+                fontsize=18,
                 color=color,
                 edgecolor="k",
+                linewidth=0.3,
                 zorder=1,
             )
 
             ax.spines["left"].set_zorder(10)
 
-            # for i, (patch, v) in enumerate(
-            #     zip(ax.patches, df_ind.values.flatten(order="F"))
-            # ):
-            #     y = patch.get_y() + patch.get_height() / 2
-            #     ax.plot(
-            #         v,
-            #         y,
-            #         marker="<",
-            #         markersize=4,
-            #         color=color[i // bars.shape[0]],
-            #         markeredgecolor="k",
-            #         markerfacecolor=color[i // bars.shape[0]],
-            #         zorder=10,
-            #     )
-            ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
+            ax.set_title(f"\\rm {g}", x=0.95, y=1.0, fontsize=16)
             ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
 
             # Hard cutoff
@@ -470,20 +459,35 @@ class CoefficientsPlotter:
                 )
 
         handles = [
-            patches.Patch(alpha=0.8, fill=True, label="No Th. unc.", color="black"),
             patches.Patch(
-                alpha=0.8, hatch="///////", fill=None, label="Aggr. Th. unc."
+                alpha=0.8,
+                fill=True,
+                label=r"$\rm{Current\;Theory\;unc.}$",
+                color="black",
             ),
-            patches.Patch(alpha=0.8, hatch="xxx", fill=None, label="Cons. Th. unc."),
-            patches.Patch(alpha=0.8, hatch="...", fill=None, label="Curr. Th. unc."),
+            patches.Patch(
+                alpha=0.8,
+                hatch="///////",
+                fill=None,
+                label=r"$\rm{Conservative\;Theory\;unc.}$",
+            ),
+            patches.Patch(
+                alpha=0.8,
+                hatch="xxx",
+                fill=None,
+                label=r"$\rm{Aggressive\;Theory\,unc.}$",
+            ),
+            patches.Patch(
+                alpha=0.8, hatch="...", fill=None, label=r"$\rm{Ideal\;Theory\;unc.}$"
+            ),
         ]
 
         axs[-1].legend(
             handles=handles,
-            ncols=2,
-            loc="lower center",
-            fontsize="x-small",
-            bbox_to_anchor=(1, 1.1, 1.0, 0.05),
+            ncols=1,
+            loc="center",
+            fontsize=20,
+            bbox_to_anchor=(1.1, 0.5, 1.0, 0.05),
         )
         if self.logo is not None:
             fig = axs[0].figure
@@ -496,6 +500,8 @@ class CoefficientsPlotter:
         axs[-2].set_xlabel(r"$\Lambda/\sqrt{c_i(\mu_0)}\;[{\rm TeV}]$", fontsize=20)
 
         axs[0].legend(
+            handles=handles_current,
+            labels=labels_current,
             loc="lower center",
             bbox_to_anchor=(0.7, 1.1, 1.0, 0.05),
             frameon=False,
