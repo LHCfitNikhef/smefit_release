@@ -47,7 +47,7 @@ def load_external_chi2(external_chi2, coefficients, rge_dict):
             print(
                 f"Module {stem} not found in {base_path}. Adjust and rerun. Exiting the code."
             )
-            exit(1)
+            sys.exit(1)
 
         my_chi2_class = getattr(chi2_module, class_name)
 
