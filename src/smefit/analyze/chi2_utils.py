@@ -298,7 +298,7 @@ class Chi2tableCalculator:
                     total_chi2[group] += ext_chi2_df.loc[dataset, "ext_chi2"]
                     total_chi2_sm[group] += ext_chi2_df.loc[dataset, "sm_chi2"]
                 else:
-                    temp += " & "
+                    temp += " & &"
             temp += r" \\ \hline"
             L.append(temp)
 
