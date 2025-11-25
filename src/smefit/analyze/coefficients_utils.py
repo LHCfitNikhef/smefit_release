@@ -534,8 +534,8 @@ class CoefficientsPlotter:
             ax_logo.imshow(self.logo, aspect="auto")
             ax_logo.axis("off")
 
-        axs[-1].set_xlabel(r"$\Lambda/\sqrt{c_i}\;[{\rm TeV}]$", fontsize=20)
-        axs[-2].set_xlabel(r"$\Lambda/\sqrt{c_i}\;[{\rm TeV}]$", fontsize=20)
+        axs[-1].set_xlabel(r"$\Lambda/\sqrt{c_i(\mu_0)}\;[{\rm TeV}]$", fontsize=20)
+        axs[-2].set_xlabel(r"$\Lambda/\sqrt{c_i(\mu_0)}\;[{\rm TeV}]$", fontsize=20)
 
         axs[0].legend(
             loc="lower center",
