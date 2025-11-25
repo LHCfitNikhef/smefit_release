@@ -108,7 +108,7 @@ class Chi2tableCalculator:
         )
 
     @staticmethod
-    def compute_ext_chi2(external_chi2_dict, best_fit):
+    def compute_ext_chi2(external_chi2, best_fit):
         r"""Compute the external likelihood for each dataset.
 
         Parameters
@@ -126,23 +126,22 @@ class Chi2tableCalculator:
         pd.DataFrame:
             External chi2 for each dataset
         """
-        ext_chi2_values = [
-            ext_chi2_func(best_fit) for ext_chi2_func in external_chi2_dict.values()
-        ]
+        ext_chi2_values = [ext_chi2_func(best_fit) for ext_chi2_func in external_chi2]
 
         # The SM ext. likelihood can be obtained through the ext. likelihood module
         # by setting all the WCs to zero
         sm_coeff = pd.Series(0, index=best_fit.index, dtype=best_fit.dtype)
         ext_chi2_sm_values = [
-            ext_chi2_func(sm_coeff) for ext_chi2_func in external_chi2_dict.values()
+            ext_chi2_func(sm_coeff) for ext_chi2_func in external_chi2
         ]
 
+        indices = [ext_func.__self__.__class__.__name__ for ext_func in external_chi2]
         return pd.DataFrame(
             {
                 "sm_chi2": np.array(ext_chi2_sm_values),
                 "ext_chi2": np.array(ext_chi2_values),
             },
-            index=external_chi2_dict.keys(),
+            index=indices,
         )
 
     @staticmethod

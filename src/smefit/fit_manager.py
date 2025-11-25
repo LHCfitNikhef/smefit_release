@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-import importlib
 import json
-import pathlib
 import pickle
-import sys
 
 import jax.numpy as jnp
 import numpy as np
@@ -13,6 +10,7 @@ from rich.progress import track
 
 from .coefficients import CoefficientManager
 from .compute_theory import make_predictions
+from .external_chi2 import load_external_chi2
 from .loader import load_datasets
 
 
@@ -149,43 +147,14 @@ class FitManager:
             rgemat=self.rgemat,
         )
 
-        if self.config.get("external_chi2", False):
-            self.external_chi2 = self._load_external_chi2()
-
-    def _load_external_chi2(self):
-        """Load all the external chi2 modules."""
-
-        external_chi2 = {}
-        for data_name, data_info in self.config["external_chi2"].items():
-            module_path = data_info["path"]
-            path = pathlib.Path(module_path)
-            base_path, stem = path.parent, path.stem
-            sys.path = [str(base_path)] + sys.path
-            try:
-                chi2_module = importlib.import_module(stem)
-            except ModuleNotFoundError:
-                print(
-                    f"""Module {data_name} not found in {module_path}. Adjust and
-                    rerun. Exiting the code."""
-                )
-                sys.exit(1)
-
-            my_chi2_class = getattr(chi2_module, data_name)
-
-            extra_keys = {
-                key: value for key, value in data_info.items() if key != "path"
-            }
-
-            rge_dict = self.config.get("rge", None)
-            coefficients = CoefficientManager.from_dict(self.config["coefficients"])
-
-            chi2_ext = my_chi2_class(
-                coefficients=coefficients, rge_dict=rge_dict, **extra_keys
+        external_chi2_dict = self.config.get("external_chi2", None)
+        self.external_chi2 = (
+            load_external_chi2(
+                external_chi2_dict, self.coefficients, self.config.get("rge", None)
             )
-
-            external_chi2.update({data_name: chi2_ext.compute_chi2})
-
-        return external_chi2
+            if external_chi2_dict
+            else None
+        )
 
     @property
     def best_fit(self):
