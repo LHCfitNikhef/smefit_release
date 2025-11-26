@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import importlib
 import pathlib
+import sys
 
 from smefit import log
 
@@ -39,13 +40,14 @@ def load_external_chi2(external_chi2, coefficients, rge_dict):
         module_path = module["path"]
         path = pathlib.Path(module_path)
         base_path, stem = path.parent, path.stem
+        sys.path = [str(base_path)] + sys.path
         try:
             chi2_module = importlib.import_module(stem)
         except ModuleNotFoundError:
             print(
                 f"Module {stem} not found in {base_path}. Adjust and rerun. Exiting the code."
             )
-            exit(1)
+            sys.exit(1)
 
         my_chi2_class = getattr(chi2_module, class_name)
 
