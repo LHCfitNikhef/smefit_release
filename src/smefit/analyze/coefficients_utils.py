@@ -442,7 +442,7 @@ class CoefficientsPlotter:
         plt.savefig(f"{self.report_folder}/coefficient_central.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_central.png")
 
-    def plot_coeffs_bar(
+    def plot_coeffs_bar_glob_vs_ind_lambda(
         self,
         error,
         figsize=(15, 20),
@@ -478,24 +478,26 @@ class CoefficientsPlotter:
 
         groups, axs = self._get_suplblots(figsize)
         for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
+            ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
+
             bars_top_to_bottom = bars.iloc[
                 ::-1
             ]  # reverse order to plot from top to bottom in ax
             bars_top_to_bottom_glob = bars_top_to_bottom.iloc[:, :n_runs]
             bars_top_to_bottom_ind = bars_top_to_bottom.iloc[:, n_runs:]
 
-            bars_top_to_bottom_glob = 1 / np.sqrt(bars_top_to_bottom_glob)
-            bars_top_to_bottom_ind = 1 / np.sqrt(bars_top_to_bottom_ind)
-
             bars_top_to_bottom_glob.droplevel(0).plot(
                 kind="barh",
-                width=0.6,
+                width=0.8,
                 ax=ax,
                 legend=None,
                 logx=x_log,
                 xlim=(x_min, x_max),
-                fontsize=13,
+                fontsize=18,
+                edgecolor="k",
+                linewidth=0.3,
                 color=color,
+                zorder=9,
             )
 
             # Loop through the bar patches created by pandas/Matplotlib
@@ -510,11 +512,11 @@ class CoefficientsPlotter:
                     markersize=4,
                     color=color[i // bars.shape[0]],
                     markeredgecolor="k",
-                    markerfacecolor=color[i // bars.shape[0]],
+                    markerfacecolor="k",  # color[i // bars.shape[0]],
+                    markeredgewidth=0.8,
                     zorder=10,
                 )
-            ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
-            ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
+            ax.set_title(f"\\rm {g}", x=0.95, y=1.0, fontsize=16)
 
             # Hard cutoff
             if plot_cutoff is not None:
@@ -546,8 +548,124 @@ class CoefficientsPlotter:
         )
 
         # plt.tight_layout()
-        plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
-        plt.savefig(f"{self.report_folder}/coefficient_bar.png")
+        plt.savefig(
+            f"{self.report_folder}/coefficient_bar_glob_vs_ind_lambda.pdf", dpi=500
+        )
+        plt.savefig(f"{self.report_folder}/coefficient_bar_glob_vs_ind_lambda.png")
+
+    def plot_coeffs_bar_glob_vs_ind(
+        self,
+        error,
+        figsize=(15, 20),
+        plot_cutoff=400,
+        x_log=True,
+        x_min=1e-2,
+        x_max=500,
+        color=None,
+    ):
+        """
+        Plot error bars at given confidence level
+
+        Parameters
+        ----------
+            error: dict
+               confidence level bounds per fit and coefficient
+            figsize: list, optional
+                Figure size, (10, 15) by default
+            plot_cutoff: float
+                Only show bounds up to here
+            x_log: bool, optional
+                Use a log scale on the x-axis, true by default
+            x_min: float, optional
+                Minimum x-value, 1e-2 by default
+            x_max: float, optional
+                Maximum x-value, 500 by default
+            legend_loc: string, optional
+                Legend location, "best" by default
+
+        """
+        df = pd.DataFrame(error)
+        n_runs = int(len(df.columns) / 2)
+        color = color[:n_runs]
+
+        groups, axs = self._get_suplblots(figsize)
+        for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
+            ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
+
+            bars_top_to_bottom = bars.iloc[
+                ::-1
+            ]  # reverse order to plot from top to bottom in ax
+            bars_top_to_bottom_glob = bars_top_to_bottom.iloc[:, :n_runs]
+            bars_top_to_bottom_ind = bars_top_to_bottom.iloc[:, n_runs:]
+
+            bars_top_to_bottom_glob.droplevel(0).plot(
+                kind="barh",
+                width=0.8,
+                ax=ax,
+                legend=None,
+                logx=x_log,
+                xlim=(x_min, x_max),
+                fontsize=18,
+                edgecolor="k",
+                linewidth=0.3,
+                color=color,
+                zorder=9,
+            )
+
+            # Loop through the bar patches created by pandas/Matplotlib
+            for i, (patch, v) in enumerate(
+                zip(ax.patches, bars_top_to_bottom_ind.values.flatten(order="F"))
+            ):
+                y = patch.get_y() + patch.get_height() / 2
+                ax.plot(
+                    v,
+                    y,
+                    marker="<",
+                    markersize=4,
+                    color=color[i // bars.shape[0]],
+                    markeredgecolor="k",
+                    markerfacecolor="k",  # color[i // bars.shape[0]],
+                    markeredgewidth=0.8,
+                    zorder=10,
+                )
+            ax.set_title(f"\\rm {g}", x=0.95, y=1.0, fontsize=16)
+
+            # Hard cutoff
+            if plot_cutoff is not None:
+                ax.vlines(
+                    plot_cutoff,
+                    -2,
+                    3 * groups[g] + 2,
+                    ls="dashed",
+                    color="black",
+                    alpha=0.7,
+                )
+
+        if self.logo is not None:
+            fig = axs[0].figure
+            # place logo in its own small axes outside main plotting area (figure coordinates)
+            ax_logo = fig.add_axes([0.05, 0.96, 0.15, 0.04])
+            ax_logo.imshow(self.logo, aspect="auto")
+            ax_logo.axis("off")
+
+        axs[-1].set_xlabel(
+            r"$95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
+        )
+        axs[-2].set_xlabel(
+            r"$95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
+        )
+
+        axs[0].legend(
+            loc="lower center",
+            bbox_to_anchor=(0.7, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 17},
+            ncol=len(groups),
+        )
+
+        # plt.tight_layout()
+        plt.savefig(f"{self.report_folder}/coefficient_bar_glob_vs_ind.pdf", dpi=500)
+        plt.savefig(f"{self.report_folder}/coefficient_bar_glob_vs_ind.png")
 
     def plot_pull(self, pull, x_min=-3, x_max=3, figsize=(10, 15)):
         """

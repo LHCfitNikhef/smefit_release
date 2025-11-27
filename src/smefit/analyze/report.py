@@ -218,6 +218,8 @@ class Report:
         self,
         scatter_plot=None,
         confidence_level_bar=None,
+        confidence_level_bar_glob_vs_ind=None,
+        confidence_level_bar_glob_vs_ind_lambda=None,
         pull_bar=None,
         spider_plot=None,
         posterior_histograms=True,
@@ -318,6 +320,36 @@ class Report:
                     },
                     **confidence_level_bar,
                 )
+            figs_list.append("coefficient_bar")
+
+        if confidence_level_bar_glob_vs_ind is not None:
+            _logger.info("Plotting : Confidence Level error bars")
+            bar_cl = confidence_level_bar_glob_vs_ind["confidence_level"]
+            confidence_level_bar_glob_vs_ind.pop("confidence_level")
+            zero_sol = 0
+            coeff_plt.plot_coeffs_bar_glob_vs_ind(
+                {
+                    name: -bound_df.loc[zero_sol, f"low{bar_cl}"]
+                    + bound_df.loc[zero_sol, f"high{bar_cl}"]
+                    for name, bound_df in bounds_dict.items()
+                },
+                **confidence_level_bar_glob_vs_ind,
+            )
+            figs_list.append("coefficient_bar")
+
+        if confidence_level_bar_glob_vs_ind_lambda is not None:
+            _logger.info("Plotting : Confidence Level error bars")
+            bar_cl = confidence_level_bar_glob_vs_ind_lambda["confidence_level"]
+            confidence_level_bar_glob_vs_ind_lambda.pop("confidence_level")
+            zero_sol = 0
+            coeff_plt.plot_coeffs_bar_glob_vs_ind_lambda(
+                {
+                    name: -bound_df.loc[zero_sol, f"low{bar_cl}_lambda"]
+                    + bound_df.loc[zero_sol, f"high{bar_cl}_lambda"]
+                    for name, bound_df in bounds_dict.items()
+                },
+                **confidence_level_bar_glob_vs_ind_lambda,
+            )
             figs_list.append("coefficient_bar")
 
         # when we plot the 95% CL we show the 95% CL for null solutions.
