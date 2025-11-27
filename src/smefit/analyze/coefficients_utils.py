@@ -631,10 +631,10 @@ class CoefficientsPlotter:
                     v,
                     y,
                     marker="<",
-                    markersize=4,
+                    markersize=7 if lambda_bound else 4,
                     color=color[i // bars.shape[0]],
                     markeredgecolor="k",
-                    markerfacecolor="k",  # color[i // bars.shape[0]],
+                    markerfacecolor=color[i // bars.shape[0]] if lambda_bound else "k",
                     markeredgewidth=0.8,
                     zorder=10,
                 )
