@@ -79,18 +79,18 @@ def get_confidence_values(dist, has_posterior=True):
         cl_vals[f"err{cl}_low"] = cl_vals["mid"] - cl_vals[f"low{cl}"]
         cl_vals[f"err{cl}_high"] = cl_vals[f"high{cl}"] - cl_vals["mid"]
         # highest density intervals
-        hdi_interval = np.array(
-            arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=True)
-        )
-        cl_vals[f"hdi_{cl}_low"] = hdi_interval[:, 0].tolist()
-        cl_vals[f"hdi_{cl}_high"] = hdi_interval[:, 1].tolist()
-        cl_vals[f"hdi_{cl}_mids"] = find_mode_hdis(sorted(dist.values), hdi_interval)
-        cl_vals[f"hdi_{cl}"] = np.sum(
-            [
-                cl_vals[f"hdi_{cl}_high"][i] - cl_vals[f"hdi_{cl}_low"][i]
-                for i in range(len(cl_vals[f"hdi_{cl}_high"]))
-            ]
-        )
+        # hdi_interval = np.array(
+        #     arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=True)
+        # )
+        # cl_vals[f"hdi_{cl}_low"] = hdi_interval[:, 0].tolist()
+        # cl_vals[f"hdi_{cl}_high"] = hdi_interval[:, 1].tolist()
+        # cl_vals[f"hdi_{cl}_mids"] = find_mode_hdis(sorted(dist.values), hdi_interval)
+        # cl_vals[f"hdi_{cl}"] = np.sum(
+        #     [
+        #         cl_vals[f"hdi_{cl}_high"][i] - cl_vals[f"hdi_{cl}_low"][i]
+        #         for i in range(len(cl_vals[f"hdi_{cl}_high"]))
+        #     ]
+        # )
         hdi_interval_mono = np.array(
             arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=False)
         )
@@ -106,7 +106,6 @@ def get_confidence_values(dist, has_posterior=True):
         / (cl_vals["hdi_mono_68_high"] - cl_vals["hdi_mono_68_low"])
         * 2
     )
-
     return cl_vals
 
 
@@ -148,6 +147,7 @@ def compute_confidence_level(
                 bounds[(group, latex_name)] = pd.DataFrame(
                     [get_confidence_values(posterior[name], has_posterior)]
                 ).stack()
+
     return pd.DataFrame(bounds)
 
 
@@ -562,6 +562,7 @@ class CoefficientsPlotter:
         x_min=1e-2,
         x_max=500,
         color=None,
+        lambda_bound=False,
     ):
         """
         Plot error bars at given confidence level
@@ -597,6 +598,15 @@ class CoefficientsPlotter:
             ]  # reverse order to plot from top to bottom in ax
             bars_top_to_bottom_glob = bars_top_to_bottom.iloc[:, :n_runs]
             bars_top_to_bottom_ind = bars_top_to_bottom.iloc[:, n_runs:]
+
+            if lambda_bound:
+                # convert to lambda bounds
+                bars_top_to_bottom_glob = 1 / np.sqrt(
+                    bars_top_to_bottom_glob.replace(0, np.nan)
+                )
+                bars_top_to_bottom_ind = 1 / np.sqrt(
+                    bars_top_to_bottom_ind.replace(0, np.nan)
+                )
 
             bars_top_to_bottom_glob.droplevel(0).plot(
                 kind="barh",
@@ -648,12 +658,18 @@ class CoefficientsPlotter:
             ax_logo.imshow(self.logo, aspect="auto")
             ax_logo.axis("off")
 
-        axs[-1].set_xlabel(
-            r"$95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
-        )
-        axs[-2].set_xlabel(
-            r"$95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
-        )
+        if lambda_bound:
+            axs[-1].set_xlabel(r"$\Lambda/\sqrt{c_i(\mu_0)}\;[{\rm TeV}]$", fontsize=20)
+            axs[-2].set_xlabel(r"$\Lambda/\sqrt{c_i(\mu_0)}\;[{\rm TeV}]$", fontsize=20)
+        else:
+            axs[-1].set_xlabel(
+                r"${\rm Halfwidth\ }95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$",
+                fontsize=20,
+            )
+            axs[-2].set_xlabel(
+                r"${\rm Halfwidth\ }95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$",
+                fontsize=20,
+            )
 
         axs[0].legend(
             loc="lower center",

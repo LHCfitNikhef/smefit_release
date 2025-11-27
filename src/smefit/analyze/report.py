@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import copy
 import pathlib
+import sys
 
 import numpy as np
 import pandas as pd
@@ -255,6 +256,7 @@ class Report:
             type of confidence interval to compute, either 'eti', 'hdi' or 'hdi_mono'
 
         """
+
         links_list = None
         figs_list = []
         coeff_config = self.coeff_info
@@ -270,7 +272,7 @@ class Report:
         )
 
         # compute confidence level bounds
-        bounds_dict = {}
+        bounds_dict, bounds_dict_lambda = {}, {}
         for fit in self.fits:
             bounds_dict[fit.label] = compute_confidence_level(
                 fit.results["samples"],
@@ -290,32 +292,30 @@ class Report:
 
         # when we plot the 95% CL we show the 95% CL for null solutions.
         # the error coming from a degenerate solution is not taken into account.
+
         if confidence_level_bar is not None:
             _logger.info("Plotting : Confidence Level error bars")
             bar_cl = confidence_level_bar["confidence_level"]
             confidence_level_bar.pop("confidence_level")
             zero_sol = 0
-            if ci_type == "hdi":
+
+            if ci_type in ["hdi", "hdi_mono"]:
+
                 coeff_plt.plot_coeffs_bar(
                     {
-                        name: bound_df.loc[zero_sol, f"hdi_{bar_cl}"]
+                        name: bound_df.loc[zero_sol, f"{ci_type}_{bar_cl}"]
                         for name, bound_df in bounds_dict.items()
                     },
                     **confidence_level_bar,
                 )
-            elif ci_type == "hdi_mono":
+            else:  # Halfwidth ETI
                 coeff_plt.plot_coeffs_bar(
                     {
-                        name: bound_df.loc[zero_sol, f"hdi_mono_{bar_cl}"]
-                        for name, bound_df in bounds_dict.items()
-                    },
-                    **confidence_level_bar,
-                )
-            else:
-                coeff_plt.plot_coeffs_bar(
-                    {
-                        name: -bound_df.loc[zero_sol, f"low{bar_cl}"]
-                        + bound_df.loc[zero_sol, f"high{bar_cl}"]
+                        name: (
+                            -bound_df.loc[zero_sol, f"low{bar_cl}"]
+                            + bound_df.loc[zero_sol, f"high{bar_cl}"]
+                        )
+                        / 2.0
                         for name, bound_df in bounds_dict.items()
                     },
                     **confidence_level_bar,
@@ -327,30 +327,19 @@ class Report:
             bar_cl = confidence_level_bar_glob_vs_ind["confidence_level"]
             confidence_level_bar_glob_vs_ind.pop("confidence_level")
             zero_sol = 0
-            coeff_plt.plot_coeffs_bar_glob_vs_ind(
-                {
-                    name: -bound_df.loc[zero_sol, f"low{bar_cl}"]
-                    + bound_df.loc[zero_sol, f"high{bar_cl}"]
-                    for name, bound_df in bounds_dict.items()
-                },
-                **confidence_level_bar_glob_vs_ind,
-            )
-            figs_list.append("coefficient_bar")
+            if ci_type in ["hdi", "hdi_mono"]:
+                coeff_plt.plot_coeffs_bar_glob_vs_ind(
+                    {
+                        name: bound_df.loc[zero_sol, f"{ci_type}_{bar_cl}"]
+                        for name, bound_df in bounds_dict.items()
+                    },
+                    **confidence_level_bar_glob_vs_ind,
+                )
+            else:
+                print("ETI not supported for barplot yet")
+                sys.exit(1)
 
-        if confidence_level_bar_glob_vs_ind_lambda is not None:
-            _logger.info("Plotting : Confidence Level error bars")
-            bar_cl = confidence_level_bar_glob_vs_ind_lambda["confidence_level"]
-            confidence_level_bar_glob_vs_ind_lambda.pop("confidence_level")
-            zero_sol = 0
-            coeff_plt.plot_coeffs_bar_glob_vs_ind_lambda(
-                {
-                    name: -bound_df.loc[zero_sol, f"low{bar_cl}_lambda"]
-                    + bound_df.loc[zero_sol, f"high{bar_cl}_lambda"]
-                    for name, bound_df in bounds_dict.items()
-                },
-                **confidence_level_bar_glob_vs_ind_lambda,
-            )
-            figs_list.append("coefficient_bar")
+            figs_list.append("coefficient_bar_glob_vs_ind")
 
         # when we plot the 95% CL we show the 95% CL for null solutions.
         # the error coming from a degenerate solution is not taken into account.
