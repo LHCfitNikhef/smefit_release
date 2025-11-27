@@ -91,6 +91,10 @@ def get_confidence_values(dist, has_posterior=True):
         #         for i in range(len(cl_vals[f"hdi_{cl}_high"]))
         #     ]
         # )
+        # # delete keys to no have mixed types in the dataframe
+        # del(cl_vals[f"hdi_{cl}_low"])
+        # del(cl_vals[f"hdi_{cl}_high"])
+        # del(cl_vals[f"hdi_{cl}_mids"])
         hdi_interval_mono = np.array(
             arviz.hdi(dist.values, hdi_prob=cl * 1e-2, multimodal=False)
         )
@@ -663,11 +667,11 @@ class CoefficientsPlotter:
             axs[-2].set_xlabel(r"$\Lambda/\sqrt{c_i(\mu_0)}\;[{\rm TeV}]$", fontsize=20)
         else:
             axs[-1].set_xlabel(
-                r"${\rm Halfwidth\ }95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$",
+                r"$95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$",
                 fontsize=20,
             )
             axs[-2].set_xlabel(
-                r"${\rm Halfwidth\ }95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$",
+                r"$95\%\ {\rm Credible\ Interval\ Bounds}\ (1/{\rm TeV}^2)$",
                 fontsize=20,
             )
 
@@ -746,6 +750,7 @@ class CoefficientsPlotter:
         legend_loc="best",
         radial_lines=None,
         class_order=None,
+        custom_colors=None,
     ):
         """
         Creates a spider plot that displays the ratio of uncertainties to a baseline fit,
@@ -848,7 +853,9 @@ class CoefficientsPlotter:
         angles = np.arange(start_angle, start_angle + 360, 360.0 / n_axis)
 
         prop_cycle = plt.rcParams["axes.prop_cycle"]
-        colors = prop_cycle.by_key()["color"]
+        colors = (
+            custom_colors if custom_colors is not None else prop_cycle.by_key()["color"]
+        )
 
         if marker_styles is None:
             marker_styles = list(markers.MarkerStyle.markers.keys())
@@ -907,7 +914,7 @@ class CoefficientsPlotter:
                 axis.set_ylim(0, ymax)
 
         ax.set_varlabels(spoke_labels, fontsize=fontsize)
-        ax.tick_params(axis="x", pad=17)
+        ax.tick_params(axis="x", pad=26)
 
         ax2 = fig.add_axes(rect=[0, 0, 1, 1])
         width_disk = 0.055
@@ -964,7 +971,7 @@ class CoefficientsPlotter:
             plt.Line2D(
                 [0],
                 [0],
-                color=colors[i],
+                color=custom_colors[i] if custom_colors is not None else colors[i],
                 linewidth=3,
                 marker=next(marker_styles),
                 markersize=10,
