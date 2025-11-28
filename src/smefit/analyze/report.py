@@ -370,10 +370,12 @@ class Report:
                 )
                 for fit in self.fits
             ]
+            posterior_histograms["disjointed_lists"] = disjointed_lists
+
             coeff_plt.plot_posteriors(
                 [fit.results["samples"] for fit in self.fits],
                 labels=[fit.label for fit in self.fits],
-                disjointed_lists=disjointed_lists,
+                **posterior_histograms,
             )
             figs_list.append("coefficient_histo")
 
@@ -490,7 +492,9 @@ class Report:
 
                 # TODO: check why **fit_plot got removed (see PR)
                 pca_cal.plot_heatmap(
-                    f"{self.report}/pca_heatmap_{fit.name}", title=title
+                    f"{self.report}/pca_heatmap_{fit.name}",
+                    title=title,
+                    figsize=plot["figsize"],
                 )
                 figs_list.append(f"pca_heatmap_{fit.name}")
         self._append_section("PCA", figs=figs_list, links=links_list)
@@ -564,7 +568,7 @@ class Report:
 
             if plot is not None:
                 fit_plot = copy.deepcopy(plot)
-                fit_plot.pop("together")
+                fit_plot.pop("together", None)
                 title = fit.label if fit_plot.pop("title") else None
                 fisher_cal.plot_heatmap(
                     self.coeff_info,
@@ -592,6 +596,7 @@ class Report:
                 f"{self.report}/fisher_heatmap_both",
                 title=title,
                 other=fisher_1,
+                labels=[fit.label for fit in self.fits],
                 **fit_plot,
             )
             figs_list.append(f"fisher_heatmap_both")

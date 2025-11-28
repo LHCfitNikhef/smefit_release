@@ -101,7 +101,10 @@ coefficients_plots:
     dofs_show: ["Op1", "Op2"] # list of operator to be displayed (will include all the possible pairs), default is Null
 
   # show the posterior histograms
-  posterior_histograms: True
+  posterior_histograms:
+    # if both nrows and ncols are set, nrows will be inferred from ncols
+    # use nrows: -1 and ncols: -1 to use a square grid
+    nrows: 8 # number of rows in the histogram grid
 
   # show a summary table with all the given bounds
   table:
@@ -164,12 +167,6 @@ fisher:
 
   # heatmap plot
   plot:
-    summary_only: True # if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset
-    figsize: [11, 15] # figure size
-    title: true # if True display the fit label as title
-
-    plot:
-    summary_only: True # if True display only the fisher information per dataset group. If False will show the fine grained dataset per dataset
     figsize: [11, 15] # figure size
     title: true # if True display the fit label as title
     column_names: # list of column names to be displayed, default is all

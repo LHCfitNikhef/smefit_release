@@ -5,7 +5,7 @@
   :alt: SMEFIT logo
 
 Project description
-~~~~~~~~~~~~~~~~~~~
+===================
 
 |SMEFiT| is a Python package for global analyses of particle physics data in the framework of the Standard Model Effective Field Theory (|SMEFT|).
 The |SMEFT| represents a powerful model-independent framework to constrain, identify,
@@ -24,13 +24,59 @@ The SMEFiT framework has been used in the following **scientific publications**:
 - *Combined SMEFT interpretation of Higgs, diboson, and top quark data from the LHC*, J. Ethier, G.Magni, F. Maltoni, L. Mantani, E. R. Nocera, J. Rojo, E. Slade, E. Vryonidou, C. Zhang :cite:`ethier2021combined`.
 - *The automation of SMEFT-assisted constraints on UV-complete models*, J. ter Hoeve, G. Magni, J. Rojo, A. N. Rossia, E. Vryonidou :cite:`terHoeve:2023pvs`.
 - *Mapping the SMEFT at High-Energy Colliders: from LEP and the (HL-)LHC to the FCC-ee*, E.Celada, T. Giani, J. ter Hoeve, L. Mantani, J. Rojo, A. N. Rossia, M. O. A. Thomas, E. Vryonidou :cite:`Celada:2024mcf`.
-
+- *Connecting Scales: RGE Effects in the SMEFT at the LHC and Future Colliders*, J. ter Hoeve, L. Mantani, A. N. Rossia, J. Rojo, E. Vryonidou :cite:`terHoeve:2025gey`.
+- *The Higgs trilinear coupling in the SMEFT at the HL-LHC and the FCC-ee*, J. ter Hoeve, L. Mantani, A. N. Rossia, J. Rojo, E. Vryonidou :cite:`Hoeve:2025yup`.
 Results from these publications, including driver and analysis scripts, are available in the *Previous studies* section.
-
 
 When using the code please cite:
 
 - *SMEFiT: a flexible toolbox for global interpretations of particle physics data with effective field theories*, T. Giani, G. Magni and J. Rojo, :cite:`Giani:2023gfq`
+
+An introductory overview of SMEFiT was recently presented at the following workshop:
+
+.. raw:: html
+
+    <video
+      controls
+      style="width:100%; max-width:700px; height:auto; display:block;">
+      <source src="https://indico.cern.ch/event/1587395/attachments/3142763/5578327/GMT20250924-120121_Recording_1920x1200.mp4" type="video/mp4">
+    </video>
+
+Installation
+------------
+
+To install the smefit release on PYPI you can do:
+
+.. code-block:: bash
+
+    pip install smefit
+
+Installation for Developers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you are interested in developing smefit or having the latest smefit code not yet released, you should clone the smefit repository and then install in editable mode:
+
+1. Clone the repository:
+
+   .. code-block:: bash
+
+       git clone https://github.com/LHCfitNikhef/smefit_release.git
+       cd smefit_release
+
+2. Install in editable mode:
+
+   .. code-block:: bash
+
+       pip install -e .
+
+To use a Conda environment (e.g., Python 3.12):
+
+.. code-block:: bash
+
+    conda create -n smefit-dev python=3.12
+    conda activate smefit-dev
+    pip install -e .
+
 
 .. toctree::
     :caption: Theory:

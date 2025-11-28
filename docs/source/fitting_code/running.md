@@ -3,31 +3,28 @@
 ```
 # How to run the code
 
-In the following we provide detailed instructions on how to use the code in its different
-running modes and on how to analyse the results.
+Here we provide some instructions on how to use the code for the various
+running modes and on how to analyse its results.
 
 ```eval_rst
 .. _runcard:
 ```
 ## Runcard specifications
-The basic object required to run the code is a runcard.
-In this section we document the different parameters which have to be specified here.
-As example we will refer to the runcard to reproduce ``smefit2.0``,
-available from the repository [smefit_database](https://github.com/LHCfitNikhef/smefit_database)
-together with the files containing experimental data and the corresponding theory predictions.
-After cloning the repository, run
+First of all, the basic object required to run the code is the runcard.
+In this section we document the settings that need to be specified here. Example runcards are available from the separate
+repository [smefit_database](https://github.com/LHCfitNikhef/smefit_database). This repository also contains the theory predictions and experimental data files used in the
+latest smefit publications.
+
+Clone the `smefit_database` repository, and run
 ```yaml
-python update_runcards_path.py -d /path/to/runcard/destination/ runcards/NS_GLOBAL_NLO_NHO.yaml
+python update_runcards_path.py -d /path/to/runcard/destination/ runcards/A_LHC_NLO_LIN_GLOB.yaml
 ```
-This will create in ``/path/to/runcard/destination/`` a ``smefit2.0`` runcard ready to be used on the local machine of the user, pointing to the experimental data and an theory tables in the repository smefit_database.
-In the folder ``smefit_database/runcards`` the input runcards for MC and NS fits with both linear (NHO)
-and linear+quadratic corrections (HO) are available.
+This will create a ``smefit`` runcard in ``/path/to/runcard/destination/`` ready to be used,
+pointing to the experimental data and theory tables in the repository `smefit_database`.
+The user can change this manually if other datasets are desired.
 
 
 ### Input and output path
-The path to where the experimental data and the corresponding theory tables are stored
-is automatically set to those contained in ``smefit_dayabase`` by the script ``update_runcards_path.py``.
-The user can change them manually if other set of data are desired.
 The folder where the results will be saved can be set using ``result_path``. The file containing
 the posterior of the fitted Wilson coefficient will be saved in ``resulth_path/result_ID``.
 If ``result_ID`` is not provided, it will be automatically set to the name of the runcard (and any already existing result will be overwritten).
@@ -62,6 +59,11 @@ If ``single_parameter_fits`` is set to ``True``, the Wilson coefficient specifie
 will be fit one at time, setting all the others to 0. See [here](./example.html#single-parameter-fits) for more details.
 If ``pairwise_fits`` is set to ``True``, the minimizer carries out an automated series of pair-wise fits to all possible pairs of
 Wilson coefficients that  are specified in the run-card.
+
+Float32 format is supported only with |NS|.
+```bash
+smefit NS --float32 path/to/the/runcard/runcard.yaml
+```
 Pairwise fits are supported only with |NS|.
 
 ```yaml
@@ -77,7 +79,7 @@ target_post_unc: 0.5 # target posterior uncertanty
 frac_remain: 0.01 # Set to a higher number (0.5) if you know the posterior is simple.
 store_raw: false # if true, store the raw result and enable resuming the job.
 vectorized: false # if true, ultranest samples a vector from the prior (recommended for large scale problems)
-float64: false # double precision
+cluster_num_live_points: 150 # number of live points per cluster, set to 3 * npar by default
 
 
 #MC settings
@@ -185,7 +187,11 @@ the following to the runcard:
 
 ```yaml
 external_chi2:
-  'ExternalChi2': /path/to/external/chi2.py
+  ExternalChi2:
+    path: /path/to/external/chi2.py
+    param1: val1
+    param2: val2
+    ...
 ```
 Here, ``ExternalChi2`` is the name of the class that must be defined in the referenced python file as follows:
 
@@ -194,21 +200,27 @@ import numpy as np
 
 
 class ExternalChi2:
-    def __init__(self, coefficients):
+    def __init__(self, coefficients, rge_dict=None, param1=None, param2=None):
         """
         Constructor that allows one to set attributes that can be called in the compute_chi2 method
         Parameters
         ----------
         coefficients:  smefit.coefficients.CoefficientManager
             attributes: name, value
+        rge_dict: dict
+            RGE dictionary from the runcard
+        **kwargs: Additional keyword arguments.
         """
-        self.example_attribute = coefficients.name
+        self.coefficients_names = coefficients.name
+        self.param1 = param1
+        self.param2 = param2
+        ...
 
     def compute_chi2(self, coefficient_values):
         """
         Parameters
         ----------
-         coefficients_values : numpy.ndarray
+         coefficient_values : numpy.ndarray
             |EFT| coefficients values
 
         """
@@ -217,9 +229,12 @@ class ExternalChi2:
         chi2_value = np.sum(coefficient_values**2)
         return chi2_value
 ```
-One is free to set custom attributes in the constructor. The coefficient values during optimisation
-are accesible via ``coefficient_values`` in the ``compute_chi2`` method. In order for the external chi2
-to work, it is important one does not change the name of the ``compute_chi2`` method!
+The parameters ``coefficients`` and ``rge_dict`` are mandatory, while the following ones are optional.  One
+is free to pass an arbitrary number of parameters in the runcard and later set custom attributes in the constructor.
+Note that the RGE matrix has to be computed inside the constructor. Some examples are available
+in ``external_chi2/``. The coefficient values during optimisation are accessible via ``coefficient_values`` in
+the ``compute_chi2`` method. In order for the external chi2 to work, it is important one does not change
+the name of the ``compute_chi2`` method!
 
 ### Adding RG evolution
 Renormalisation group evolution can be turned on in the fit by adding the following to the runcard.
@@ -286,8 +301,30 @@ To do this add to the runcard
 single_parameter_fits: True
 ```
 and proceed as documented above for a normal fit.
-For both NS, MC and A the final output will be the file ``posterior.json``
-containing the independent posterior of the fitted Wilson coefficients, obtained by a series os independent single parameter fits.
+For both `NS` and `A` the final output will be the file ``fit_results.json``
+containing the independent posterior of the fitted Wilson coefficients, obtained by a series of independent single parameter fits.
+
+It is possible to perform single paramters in the presence of multiple constraints. For example
+
+```yaml
+
+single_parameter_fits: True
+uv_couplings: true
+
+coefficients:
+  # Free params
+  OWWW: {'min': -3, 'max': 3}
+  Opq1: {'min': -3, 'max': 3}
+  Opq3: {'min': -3, 'max': 3}
+
+  ## To fix ##
+  OpqMi: {'constrain': [{'Opq1': 1}, {'Opq3': -1}], 'min': -2, 'max': 2 }
+  O3pq: {'constrain': [{'Opq3': 1}], 'min': -1, 'max': 1 }
+
+```
+performs a single parameter fit for ``OWWW``, ``Opq1`` and ``Opq3``. Note that this requires `uv_couplings` to be set to
+True (this allows you to fit parameters that do not appear in the theory tables). The naming `uv_couplings` stems from fitting with
+constraints among Wilson coefficients and UV parameters.
 
 
 
@@ -300,3 +337,18 @@ The command
 ```
 will produce in the results folder a series of pdf files containing plots for
 1-dimensional scans of the chi2 with respect to each parameter in the runcard.
+
+This is in general done for Wilson coefficients, but if one is interested in a specific UV model and in particular to perform a mass scan, SMEFiT allows for this specific case.
+The way it works is that in the runcard, one specifies
+
+```yaml
+uv_couplings: true
+
+coefficients:
+  ## To fix ##
+  OpqMi: {'constrain': [{'m': [0.24, -2]}, {'m': [0.5, -4]}], 'min': -2, 'max': 2 }
+
+  # Mass parameter
+  m: {is_mass: True, 'min': 0.2, 'max': 100.0}
+```
+and when performing the scan, it will recognise that this is a mass scan and only the mass will be scanned. Note that the mass values are assumed to be specified in TeV.

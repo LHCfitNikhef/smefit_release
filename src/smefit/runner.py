@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import importlib
 import itertools
 import pathlib
 import subprocess
@@ -11,6 +10,7 @@ import yaml
 from .analyze.pca import RotateToPca
 from .chi2 import Scanner
 from .log import logging
+from .optimize import Optimizer
 from .optimize.analytic import ALOptimizer
 from .optimize.mc import MCOptimizer
 from .optimize.ultranest import USOptimizer
@@ -65,9 +65,15 @@ class Runner:
         else:
             res_folder_fit = result_folder / result_ID
 
-        subprocess.call(f"mkdir -p {result_folder}", shell=True)
         if res_folder_fit.exists():
-            _logger.warning(f"{res_folder_fit} already found, overwriting old results")
+            _logger.warning(
+                f"{res_folder_fit} already found, "
+                f"cleaning old results (keeping ultranest_logs and subfolders)"
+            )
+            for item in res_folder_fit.iterdir():
+                # delete only top-level files (designed to keep ultranest_logs)
+                if item.is_file():
+                    item.unlink()
         subprocess.call(f"mkdir -p {res_folder_fit}", shell=True)
 
         # Copy yaml runcard to results folder or dump it
@@ -195,11 +201,6 @@ class Runner:
             optimizer to be used (NS, MC or A)
         """
 
-        def MultipleConstrainError():
-            raise ValueError(
-                "Constrain with multiple coefficients do not make sense, in sigle parameter fits."
-            )
-
         config = self.run_card
 
         # loop on all the coefficients
@@ -209,16 +210,15 @@ class Runner:
 
             # skip contrained coeffs
             if "constrain" in config["coefficients"][coeff]:
-                _logger.info("Skipping contrained coefficient %s", coeff)
+                _logger.info("Skipping constrained coefficient %s", coeff)
                 continue
 
-            # if there are constrained coefficients, only
-            # relations in which appears a single indepentent
-            # coefficient make sense.
+            # We define the new coefficient config for the individual fit
             new_coeff_config = {}
 
-            # seach for a realtion: loop on all the coefficients
+            # seach for a relation: loop on all the coefficients
             for coeff2, vals in config["coefficients"].items():
+                # skip free coefficients
                 if "constrain" not in vals:
                     continue
 
@@ -234,19 +234,21 @@ class Runner:
                     else [vals["constrain"]]
                 )
 
-                # only single coefficient constrain are supported
                 new_constrain = []
+                # Now we redefine the constraints
+                # We only keep constraints proportional to the current coeff,
+                # if not we skip the contribution as it is not relevant
+                # for the current individual fit
                 for addend in constrain:
-                    if len(addend) > 1:
-                        MultipleConstrainError()
                     if coeff in addend:
                         new_constrain.append(addend)
-                    # check that the coefficient appearing in all the addends is the same
-                    elif new_constrain:
-                        MultipleConstrainError()
 
                 if new_constrain:
-                    new_coeff_config[coeff2] = vals
+                    new_coeff_config[coeff2] = {
+                        "constrain": new_constrain,
+                        "min": vals["min"],
+                        "max": vals["max"],
+                    }
 
             # add fitted coefficient
             new_coeff_config[coeff] = config["coefficients"][coeff]
@@ -292,7 +294,7 @@ class Runner:
         else:
             self.global_analysis(optimizer)
 
-    def chi2_scan(self, n_replica, compute_bounds):
+    def chi2_scan(self, n_replica, compute_bounds, scan_points=100):
         r"""Run an individual :math:`\chi^2` scan.
 
         Parameters
@@ -304,8 +306,23 @@ class Runner:
         compute_bounds: bool
             if True compute and save the :math:`\chi^2` bounds.
         """
-        scan = Scanner(self.run_card, n_replica)
+
+        if "external_chi2" in self.run_card:
+            external_chi2 = self.run_card["external_chi2"]
+            for _, module in external_chi2.items():
+                module_path = module["path"]
+                path = pathlib.Path(module_path)
+                base_path, stem = path.parent, path.stem
+                if not base_path.exists():
+                    raise FileNotFoundError(
+                        f"Path {base_path} does not exist. Modify the runcard and rerun. Exiting"
+                    )
+                else:
+                    sys.path = [str(base_path)] + sys.path
+
+        scan = Scanner(self.run_card, n_replica, scan_points)
         if compute_bounds:
             scan.compute_bounds()
         scan.compute_scan()
+        scan.write_scan()
         scan.plot_scan()

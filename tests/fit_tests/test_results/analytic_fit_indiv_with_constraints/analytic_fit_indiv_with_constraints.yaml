@@ -1,0 +1,35 @@
+# Input YAML configurations for SMEFiT code
+result_ID: analytic_fit_indiv_with_constraints
+# absolute path where results are stored
+result_path: ./test_results
+# path to common data
+data_path: ./test_commondata
+# path to theory tables, default same as data path
+theory_path: ./test_theory
+use_theory_covmat: True
+use_t0: True
+# SMEFT Expansion Order (False = Lambda^-2 , True = Lambda^-4)
+use_quad: False
+# Set parameter bounds to previous SCAN result
+bounds: Null
+# A settings
+n_samples: 10000
+# Single parameter fits
+single_parameter_fits: True
+# Datasets to include
+datasets:
+  - {name: ATLAS_ZH_Hbb_13TeV, order: NLO_QCD}
+  - {name: CMS_ggF_aa_13TeV, order: NLO_QCD}
+
+uv_couplings: true
+
+coefficients:
+  # Free params
+  OtZ: {'min': -2, 'max': 2}
+  OpWB: {'min': -2, 'max': 2}
+  Opq1: {'min': -3, 'max': 3}
+  Opq3: {'min': -3, 'max': 3}
+
+  ## To fix ##
+  OpqMi: {'constrain': [{'Opq1': 1}, {'Opq3': -1}], 'min': -2, 'max': 2 }
+  O3pq: {'constrain': [{'Opq3': 1}], 'min': -1, 'max': 1 }

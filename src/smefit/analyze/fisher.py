@@ -430,7 +430,7 @@ class FisherCalculator:
         ax.grid(visible=True, which="minor", alpha=0.2)
 
     @staticmethod
-    def plot_values(ax, dfs, cmap, norm):
+    def plot_values(ax, dfs, cmap, norm, labels=None):
         """
         Plot the values of the Fisher information.
 
@@ -444,6 +444,8 @@ class FisherCalculator:
             colour map
         norm: matplotlib.colors.BoundaryNorm
             normalisation of colorbar
+        labels: list, optional
+            label elements for legend
         """
 
         df_1 = dfs[0]
@@ -478,7 +480,7 @@ class FisherCalculator:
                             f"{elem_2:.1f}",
                             va="center",
                             ha="center",
-                            fontsize=8,
+                            fontsize=10,
                         )
 
                         # Create a triangle patch for the second element
@@ -502,7 +504,7 @@ class FisherCalculator:
                         f"{elem_1:.1f}",
                         va="center",
                         ha="center",
-                        fontsize=8,
+                        fontsize=10,
                     )
                     if df_2 is not None:
 
@@ -526,14 +528,14 @@ class FisherCalculator:
                                 closed=True,
                                 fc="none",
                                 edgecolor="black",
-                                label="$\\rm w/\\;RGE$",
+                                label=labels[0],
                             ),
                             mpatches.Polygon(
                                 [[0.5, -0.5], [0.5, 0.5], [0.5, 0.5]],
                                 closed=True,
                                 fc="none",
                                 edgecolor="black",
-                                label="$\\rm w/o\\;RGE$",
+                                label=labels[1],
                             ),
                         ]
                         # Add the legend to the plot
@@ -575,6 +577,7 @@ class FisherCalculator:
         other=None,
         summary_only=True,
         figsize=(11, 15),
+        labels=None,
         column_names=None,
         wc_fisher=False,
         wc_to_latex=None,
@@ -592,7 +595,6 @@ class FisherCalculator:
             )
             # unify the fisher tables and fill missing values by zeros
             fisher_dfs = self.unify_fishers(fisher_df, fisher_df_other)
-            quad_fisher_dfs = self.unify_fishers(quad_fisher_df, quad_fisher_df_other)
 
             # reshuffle the tables according to the latex names ordering
             fisher_dfs = [
@@ -600,10 +602,16 @@ class FisherCalculator:
                 for fisher in fisher_dfs
             ]
 
-            quad_fisher_dfs = [
-                fisher[latex_names.index.get_level_values(level=1)]
-                for fisher in quad_fisher_dfs
-            ]
+            if quad_fisher_df is not None:
+                quad_fisher_dfs = self.unify_fishers(
+                    quad_fisher_df, quad_fisher_df_other
+                )
+
+                # reshuffle the tables according to the latex names ordering
+                quad_fisher_dfs = [
+                    fisher[latex_names.index.get_level_values(level=1)]
+                    for fisher in quad_fisher_dfs
+                ]
 
         else:
             fisher_dfs = [fisher_df[latex_names.index.get_level_values(level=1)]]

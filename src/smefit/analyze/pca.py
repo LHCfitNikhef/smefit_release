@@ -181,7 +181,7 @@ def impose_constrain(dataset, coefficients, update_quad=False, norge=False):
     # loop on the free op and add the corrections
     for idx in range(n_free_params):
         # update all the free coefficents to 0 except from 1 and propagate
-        params = np.zeros_like(free_coeffs)
+        params = np.zeros_like(free_coeffs, dtype=float)
         params[idx] = 1.0
         temp_coeffs.set_free_parameters(params)
         temp_coeffs.set_constraints()
@@ -199,7 +199,7 @@ def impose_constrain(dataset, coefficients, update_quad=False, norge=False):
         # update quadratic corrections, this will include some double counting in the mixed corrections
         if update_quad:
             for jdx in range(free_coeffs[idx:].size):
-                params = np.zeros_like(free_coeffs)
+                params = np.zeros_like(free_coeffs, dtype=float)
                 params[idx + jdx] = 1.0
                 params[idx] = 1.0
                 temp_coeffs.set_free_parameters(params)
