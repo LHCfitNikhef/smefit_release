@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
-import pickle
+import os
 
-import jax.numpy as jnp
 import numpy as np
 import pandas as pd
 import yaml
 from rich.progress import track
+
+from smefit.rge.rge import load_rge_matrix
 
 from .coefficients import CoefficientManager
 from .compute_theory import make_predictions
@@ -77,13 +78,18 @@ class FitManager:
             results = json.load(f)
 
         # load the rge matrix in the result dir if it exists
-        try:
-            with open(f"{self.path}/{self.name}/rge_matrix.pkl", "rb") as f:
-                rgemats = pickle.load(f)
-                self.operators_to_keep = {op: {} for op in rgemats[0].index}
-                self.rgemat = jnp.stack([rgemat.values for rgemat in rgemats])
+        path_rge_matrix = f"{self.path}/{self.name}/rge_matrix.pkl"
+        if os.path.exists(path_rge_matrix):
+            self.config["rge"]["rg_matrix"] = path_rge_matrix
+            self.rgemat, self.operators_to_keep = load_rge_matrix(
+                self.config["rge"],
+                self.config["coefficients"],
+                self.config["datasets"],
+                self.config["theory_path"],
+                self.config.get("cutoff_scale", None),
+            )
 
-        except FileNotFoundError:
+        else:
             print("No RGE matrix found in the result folder, skipping...")
 
         # if the posterior is from single parameter fits
@@ -130,9 +136,11 @@ class FitManager:
         self.datasets = load_datasets(
             self.config["data_path"],
             self.config["datasets"],
-            self.config["coefficients"]
-            if self.rgemat is None
-            else self.operators_to_keep,
+            (
+                self.config["coefficients"]
+                if self.rgemat is None
+                else self.operators_to_keep
+            ),
             self.config["use_quad"],
             self.config["use_theory_covmat"],
             False,  # t0 is not used here because in the report we look at the experimental chi2
