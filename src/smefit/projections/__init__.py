@@ -225,6 +225,7 @@ class Projection:
         -------
         Updated statistical uncertainties after projection
         """
+        print(lumi_old, lumi_new)
         fred_stat = np.sqrt(lumi_old / lumi_new)
         return stat * fred_stat
 
@@ -326,7 +327,7 @@ class Projection:
                 # if separate stat and sys
                 else:
                     fred = self.fred_sys
-                    lumi_old = self.datasets.Luminosity[dataset_idx]
+                    lumi_old = self.datasets.Luminosity[idxs]
                     stat_red = self.rescale_stat(stat, lumi_old, lumi_new)
                     sys_red = self.rescale_sys(sys, fred)
 

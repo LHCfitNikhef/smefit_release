@@ -700,7 +700,16 @@ def load_datasets(
 
         exp_name.append(dataset_name)
         n_data_exp.append(dataset.n_data)
-        lumi_exp.append(dataset.lumi)
+        if np.isscalar(dataset.lumi):
+            lumi_exp.extend([dataset.lumi] * dataset.n_data)
+        elif dataset.lumi is None:
+            lumi_exp.extend([np.nan] * dataset.n_data)
+        else:
+            if len(dataset.lumi) != dataset.n_data:
+                raise ValueError(
+                    f"Length of luminosity list does not match number of data points for dataset {dataset_name}."
+                )
+            lumi_exp.extend(dataset.lumi)
         exp_data.extend(dataset.central_values)
         sm_theory.extend(dataset.sm_prediction)
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
