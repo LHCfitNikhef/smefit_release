@@ -707,7 +707,8 @@ def load_datasets(
         else:
             if len(dataset.lumi) != dataset.n_data:
                 raise ValueError(
-                    f"Length of luminosity list does not match number of data points for dataset {dataset_name}."
+                    f"Length of luminosity list does not match number "
+                    f"of data points for dataset {dataset_name}."
                 )
             lumi_exp.extend(dataset.lumi)
         exp_data.extend(dataset.central_values)
