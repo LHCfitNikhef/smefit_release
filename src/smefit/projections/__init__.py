@@ -225,7 +225,6 @@ class Projection:
         -------
         Updated statistical uncertainties after projection
         """
-        print(lumi_old, lumi_new)
         fred_stat = np.sqrt(lumi_old / lumi_new)
         return stat * fred_stat
 
