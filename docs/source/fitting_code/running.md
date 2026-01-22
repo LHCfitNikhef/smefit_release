@@ -95,7 +95,9 @@ n_samples: 1000 # number of the required samples of the posterior distribution
 ### Datasets to consider and coefficients to fit
 The datasets and Wilson coefficients to be included in the analysis must be listed under ``datasets``
 and ``coefficients`` respectively. The default order for each dataset is taken from  ``default_order``. However, it is
-possible to specify specific orders per dataset. To do this, add the key ``order`` to the dataset entry as follows.
+possible to specify specific settings per dataset. For each data set, one may specify the perturbative order (``order``) and/or the
+theory covariance variant (``theory_cov``) to be used. The latter is useful for fits to future collider data where different theory
+uncertainty scenarios may be explored. For example,
 
 ```yaml
 datasets:
@@ -119,9 +121,12 @@ datasets:
     order: NLO_QCD
   - name: ATLAS_CMS_tt_AC_8TeV
     order: NLO_QCD
-  - name: ATLAS_tt_AC_13TeV
+  - name: FCCee_Zdata
+    order: LO
+    theory_cov: aggressive
   ...
   ...
+
 
 # Coefficients to fit
 coefficients:
@@ -137,7 +142,8 @@ coefficients:
 
 As exemplified above, the syntax to specify the Wilson coefficient corresponding to the operator
 ``O1`` is ``O1 : {'min': , 'max':} `` where ``min`` and ``max`` indicate the bounds within
-the sampling is performed.
+the sampling is performed. The theory covariance variant specified in this case is ``theory_cov_aggressive``, which
+should be defined in the theory files.
 
 ### Constrains between coefficients
 Some Wilson coefficients are not directly fit, but rather constrained to be linear combinations
