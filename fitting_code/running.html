@@ -38,8 +38,8 @@
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=2d67777c"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'fitting_code/running';</script>
@@ -467,7 +467,9 @@ Wilson coefficients that  are specified in the run-card.</p>
 <h3>Datasets to consider and coefficients to fit<a class="headerlink" href="#datasets-to-consider-and-coefficients-to-fit" title="Link to this heading">#</a></h3>
 <p>The datasets and Wilson coefficients to be included in the analysis must be listed under <code class="docutils literal notranslate"><span class="pre">datasets</span></code>
 and <code class="docutils literal notranslate"><span class="pre">coefficients</span></code> respectively. The default order for each dataset is taken from  <code class="docutils literal notranslate"><span class="pre">default_order</span></code>. However, it is
-possible to specify specific orders per dataset. To do this, add the key <code class="docutils literal notranslate"><span class="pre">order</span></code> to the dataset entry as follows.</p>
+possible to specify specific settings per dataset. For each data set, one may specify the perturbative order (<code class="docutils literal notranslate"><span class="pre">order</span></code>) and/or the
+theory covariance variant (<code class="docutils literal notranslate"><span class="pre">theory_cov</span></code>) to be used. The latter is useful for fits to future collider data where different theory
+uncertainty scenarios may be explored. For example,</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">datasets</span><span class="p">:</span>
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_8TeV_ljets_Mtt</span>
@@ -489,9 +491,12 @@ possible to specify specific orders per dataset. To do this, add the key <code c
 <span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO_QCD</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_CMS_tt_AC_8TeV</span>
 <span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NLO_QCD</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ATLAS_tt_AC_13TeV</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FCCee_Zdata</span>
+<span class="w">    </span><span class="nt">order</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LO</span>
+<span class="w">    </span><span class="nt">theory_cov</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aggressive</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+
 
 <span class="c1"># Coefficients to fit</span>
 <span class="nt">coefficients</span><span class="p">:</span>
@@ -506,7 +511,8 @@ possible to specify specific orders per dataset. To do this, add the key <code c
 </div>
 <p>As exemplified above, the syntax to specify the Wilson coefficient corresponding to the operator
 <code class="docutils literal notranslate"><span class="pre">O1</span></code> is <code class="docutils literal notranslate"><span class="pre">O1</span> <span class="pre">:</span> <span class="pre">{'min':</span> <span class="pre">,</span> <span class="pre">'max':}</span> </code> where <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code> indicate the bounds within
-the sampling is performed.</p>
+the sampling is performed. The theory covariance variant specified in this case is <code class="docutils literal notranslate"><span class="pre">theory_cov_aggressive</span></code>, which
+should be defined in the theory files.</p>
 </section>
 <section id="constrains-between-coefficients">
 <h3>Constrains between coefficients<a class="headerlink" href="#constrains-between-coefficients" title="Link to this heading">#</a></h3>

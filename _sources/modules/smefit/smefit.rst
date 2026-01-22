@@ -3,8 +3,8 @@ smefit package
 
 .. automodule:: smefit
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Subpackages
 -----------
@@ -28,85 +28,85 @@ smefit.basis\_rotation module
 
 .. automodule:: smefit.basis_rotation
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 smefit.chi2 module
 ------------------
 
 .. automodule:: smefit.chi2
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 smefit.coefficients module
 --------------------------
 
 .. automodule:: smefit.coefficients
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 smefit.compute\_theory module
 -----------------------------
 
 .. automodule:: smefit.compute_theory
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 smefit.covmat module
 --------------------
 
 .. automodule:: smefit.covmat
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 smefit.effective\_coupling\_dictionary module
 ---------------------------------------------
 
 .. automodule:: smefit.effective_coupling_dictionary
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 smefit.fit\_manager module
 --------------------------
 
 .. automodule:: smefit.fit_manager
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 smefit.loader module
 --------------------
 
 .. automodule:: smefit.loader
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 smefit.log module
 -----------------
 
 .. automodule:: smefit.log
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 smefit.runner module
 --------------------
 
 .. automodule:: smefit.runner
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 smefit.utils module
 -------------------
 
 .. automodule:: smefit.utils
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
