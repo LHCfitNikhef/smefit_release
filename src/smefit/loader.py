@@ -92,8 +92,8 @@ class Loader:
         EFT perturbative order
     use_quad : bool
         if True loads also |HO| corrections
-    use_theory_covmat: bool
-    if True add the theory covariance matrix to the experimental one
+    use_theory_covmat: str
+        If specified, add the given theory covariance matrix to the experimental one.
     rot_to_fit_basis: dict, None
         matrix rotation to fit basis or None
 
@@ -118,9 +118,7 @@ class Loader:
         self._data_folder = self.commondata_path
         self._sys_folder = self.commondata_path / "systypes"
         self._theory_folder = self.theory_path
-
         self.setname = setname
-
         self.dataspec = {}
         (
             self.dataspec["SM_predictions"],
@@ -302,8 +300,8 @@ class Loader:
                 EFT perturbative order
             use_quad: bool
                 if True returns also |HO| corrections
-            use_theory_covmat: bool
-                if True add the theory covariance matrix to the experimental one
+            use_theory_covmat: str
+                If specified, add the given theory covariance matrix to the experimental one
             rotation_matrix: numpy.ndarray
                 rotation matrix from tables basis to fitting basis
 
@@ -374,7 +372,10 @@ class Loader:
             }
         best_sm = np.array(raw_th_data["best_sm"])
         if use_theory_covmat:
-            th_cov = np.array(raw_th_data["theory_cov"])
+            theory_covmat_key = (
+                use_theory_covmat if use_theory_covmat in raw_th_data else "theory_cov"
+            )
+            th_cov = np.array(raw_th_data[theory_covmat_key])
         else:
             th_cov = np.zeros((best_sm.size, best_sm.size))
 
@@ -683,12 +684,19 @@ def load_datasets(
     for sset in datasets:
         dataset_name = sset.get("name")
 
+        # determine which theory covariance matrix to use
+        theory_cov = (
+            f"theory_cov_{sset.get('theory_cov', 'current')}"
+            if use_theory_covmat
+            else None
+        )
+
         dataset = Loader(
             dataset_name,
             operators_to_keep,
             sset.get("order", default_order),
             use_quad,
-            use_theory_covmat,
+            theory_cov,
             use_multiplicative_prescription,
             rot_to_fit_basis,
             cutoff_scale,
