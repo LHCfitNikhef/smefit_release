@@ -271,7 +271,6 @@ class Projection:
 
             # ratio SM to experimental central value
             ratio_sm_exp = cv_theory / central_values
-            print(cv_theory, central_values)
             # set negative ratios to one
             ratio_sm_exp = jnp.where(ratio_sm_exp < 0, 1, ratio_sm_exp)
             # set nan ratios to one
@@ -279,7 +278,6 @@ class Projection:
 
             # rescale the statistical uncertainty to the SM
             stat = np.asarray(data_dict["statistical_error"]) * np.sqrt(ratio_sm_exp)
-            print(stat)
             # load systematics
             num_sys = data_dict["num_sys"]
             sys_add = np.array(data_dict["systematics"])
