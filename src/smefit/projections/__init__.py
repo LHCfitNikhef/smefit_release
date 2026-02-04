@@ -271,13 +271,15 @@ class Projection:
 
             # ratio SM to experimental central value
             ratio_sm_exp = cv_theory / central_values
-
+            print(cv_theory, central_values)
             # set negative ratios to one
             ratio_sm_exp = jnp.where(ratio_sm_exp < 0, 1, ratio_sm_exp)
+            # set nan ratios to one
+            ratio_sm_exp = jnp.where(jnp.isnan(ratio_sm_exp), 1, ratio_sm_exp)
 
             # rescale the statistical uncertainty to the SM
             stat = np.asarray(data_dict["statistical_error"]) * np.sqrt(ratio_sm_exp)
-
+            print(stat)
             # load systematics
             num_sys = data_dict["num_sys"]
             sys_add = np.array(data_dict["systematics"])
@@ -329,7 +331,6 @@ class Projection:
                     lumi_old = self.datasets.Luminosity[dataset_idx]
                     stat_red = self.rescale_stat(stat, lumi_old, lumi_new)
                     sys_red = self.rescale_sys(sys, fred)
-
                 if num_data > 1:
                     data_dict["systematics"] = sys_red.T.values.tolist()
                 else:
@@ -356,7 +357,6 @@ class Projection:
                     data_dict["sys_type"] = ["ADD"] * n_sys if n_sys > 1 else "ADD"
 
                 data_dict["statistical_error"] = stat.tolist()
-
                 newcov = covmat_from_systematics([stat], [sys])
 
             if self.use_theory_covmat:

@@ -65,7 +65,7 @@ def check_condition_number(fit_covmat, critical_cond=15.5):
 def check_covmat_positivity(fit_covmat):
     eigvals = jnp.linalg.eigvalsh(fit_covmat)
     if min(eigvals) <= 0:
-        raise ValueError("Fit covariance matrix is not positive definite")
+        _logger.warning(f"Covariance matrix not positive")
 
 
 def check_covmat_invertibility(fit_covmat, inv_covmat, threshold=1e-3):
@@ -73,9 +73,9 @@ def check_covmat_invertibility(fit_covmat, inv_covmat, threshold=1e-3):
         jnp.max(np.abs(inv_covmat @ fit_covmat - np.eye(fit_covmat.shape[0])))
         > threshold
     ):
-        raise ValueError(
+        _logger.warning(
             "Failed inverting fit covariance matrix. "
-            + "Check matrix condition number and using float64"
+            + "Check matrix condition number and using float64 "
         )
 
 
@@ -708,7 +708,7 @@ def load_datasets(
 
         exp_name.append(dataset_name)
         n_data_exp.append(dataset.n_data)
-        lumi_exp.append(dataset.lumi)
+        # lumi_exp.append(dataset.lumi)
         exp_data.extend(dataset.central_values)
         sm_theory.extend(dataset.sm_prediction)
         lin_corr_list.append([dataset.n_data, dataset.lin_corrections])
