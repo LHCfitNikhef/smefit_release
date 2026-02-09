@@ -230,7 +230,7 @@ class RGE:
 
             # Remove small values
             wc_final_vals = {
-                key: value for key, value in wc_final.dict.items() if abs(value) > 1e-10
+                key: value for key, value in wc_final.dict.items() if abs(value) > 1e-14
             }
 
             # check that imaginary values are small
