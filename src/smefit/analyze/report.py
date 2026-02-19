@@ -365,10 +365,29 @@ class Report:
                 for fit in self.fits
             ]
             posterior_histograms["disjointed_lists"] = disjointed_lists
+            closure_truth_points = posterior_histograms.pop(
+                "closure_truth_points", None
+            )
+            if closure_truth_points is None:
+                closure_truth_points = []
+                coeff_names = coeff_plt.coeff_info.index.get_level_values(1)
+                for fit in self.fits:
+                    fit_truth = {}
+                    coeff_cfg = fit.config.get("coefficients", {})
+                    for coeff_name in coeff_names:
+                        coeff_entry = coeff_cfg.get(coeff_name, {})
+                        if isinstance(coeff_entry, dict):
+                            fit_truth[coeff_name] = coeff_entry.get("value", 0.0)
+                        elif isinstance(coeff_entry, (int, float, np.floating)):
+                            fit_truth[coeff_name] = float(coeff_entry)
+                        else:
+                            fit_truth[coeff_name] = 0.0
+                    closure_truth_points.append(fit_truth)
 
             coeff_plt.plot_posteriors(
                 [fit.results["samples"] for fit in self.fits],
                 labels=[fit.label for fit in self.fits],
+                closure_truth_points=closure_truth_points,
                 **posterior_histograms,
             )
             figs_list.append("coefficient_histo")
