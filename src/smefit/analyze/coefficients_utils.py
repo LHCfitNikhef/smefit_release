@@ -815,7 +815,11 @@ class CoefficientsPlotter:
 
         lines = list(lines)
         labels = list(labels)
-        if show_closure_truth and show_closure_legend and closure_line_label not in labels:
+        if (
+            show_closure_truth
+            and show_closure_legend
+            and closure_line_label not in labels
+        ):
             lines.append(
                 mlines.Line2D(
                     [],
