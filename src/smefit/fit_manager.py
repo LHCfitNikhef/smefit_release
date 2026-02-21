@@ -7,11 +7,14 @@ import pandas as pd
 import yaml
 from rich.progress import track
 
+from smefit import log
 from smefit.rge.rge import load_rge_matrix
 
 from .coefficients import CoefficientManager
 from .compute_theory import make_predictions
 from .loader import load_datasets
+
+_logger = log.logging.getLogger(__name__)
 
 
 class FitManager:
@@ -77,24 +80,33 @@ class FitManager:
         with open(f"{self.path}/{self.name}/{file}.json", encoding="utf-8") as f:
             results = json.load(f)
 
-        # load the rge matrix in the result dir if it exists
-        path_rge_matrix = f"{self.path}/{self.name}/rge_matrix.pkl"
-        if os.path.exists(path_rge_matrix):
-            self.config["rge"]["rg_matrix"] = path_rge_matrix
-            self.rgemat, self.operators_to_keep = load_rge_matrix(
-                self.config["rge"],
-                self.config["coefficients"],
-                self.config["datasets"],
-                self.config["theory_path"],
-                self.config.get("cutoff_scale", None),
+        is_single_param = results.get("single_parameter_fits", False)
+        if is_single_param:
+            _logger.warning(
+                f"The fit {self.name} is from single parameter fits, some report features are not available."
             )
-
+            _logger.warning(f"Ignoring load of rge matrix for fit {self.name}.")
         else:
-            print("No RGE matrix found in the result folder, skipping...")
+            # load the rge matrix in the result dir if it exists
+            _logger.info(f"Loading RGE matrix for fit {self.name}.")
+            path_rge_matrix = f"{self.path}/{self.name}/rge_matrix.pkl"
+            if os.path.exists(path_rge_matrix):
+                self.config["rge"]["rg_matrix"] = path_rge_matrix
+                self.rgemat, self.operators_to_keep = load_rge_matrix(
+                    self.config["rge"],
+                    self.config["coefficients"],
+                    self.config["datasets"],
+                    self.config["theory_path"],
+                    self.config.get("cutoff_scale", None),
+                )
+
+            else:
+                _logger.warning(
+                    f"No RGE matrix found in the result folder for fit {self.name}, skipping..."
+                )
 
         # if the posterior is from single parameter fits
         # then each distribution might have a different number of samples
-        is_single_param = results.get("single_parameter_fits", False)
         if is_single_param:
             del results["single_parameter_fits"]
 
