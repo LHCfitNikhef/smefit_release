@@ -468,6 +468,27 @@ def load_scales(
 
 
 def load_precomputed_rge_matrix(path_to_rge_mat, rge_settings):
+    """
+    Load a precomputed RGE matrix pickle and validate its settings.
+
+    Parameters
+    ----------
+    path_to_rge_mat : str or pathlib.Path
+        Path to the pickle file containing the precomputed RGE matrices.
+    rge_settings : dict
+        Expected RGE settings to validate against the stored file.
+
+    Returns
+    -------
+    dict
+        A dictionary containing cached RGE matrices keyed by scale. The
+        returned dictionary excludes the `'rge_settings'` entry.
+
+    Raises
+    ------
+    ValueError
+        If the settings in the precomputed file do not match `rge_settings`.
+    """
     with open(path_to_rge_mat, "rb") as f:
         rgemats_precomp = pickle.load(f)
     if rge_settings != rgemats_precomp["rge_settings"]:
@@ -479,6 +500,37 @@ def load_precomputed_rge_matrix(path_to_rge_mat, rge_settings):
 
 
 def load_rge_mats_from_scales(scales, coeff_list, rge_runner, rge_cache):
+    """
+    Load or compute RGE matrices for the given list of scales.
+
+    For each scale in *scales* this function:
+    - Returns a pandas DataFrame containing the RGE matrix for the requested
+      coefficients in *coeff_list*.
+    - Uses matrices from *rge_cache* when available.
+    - If a cached matrix is missing some requested coefficients, computes only
+      the missing coefficients with a cloned runner and merges them into the
+      cached matrix. The cache is updated in-place.
+    - If no cached matrix exists for a scale, computes the full matrix and
+      stores it in the cache.
+
+    Parameters
+    ----------
+    scales : iterable of float
+        Energy scales at which to fetch/compute RGE matrices.
+    coeff_list : list of str
+        Requested Wilson coefficient names (columns) to return for each matrix.
+    rge_runner : RGE
+        An instance of the RGE runner
+    rge_cache : dict
+        Mapping scale -> pandas.DataFrame for previously computed RGE matrices.
+        This dict will be updated in-place when new or extended RGE matrices are
+        computed.
+
+    Returns
+    -------
+    list of pandas.DataFrame
+        List of RGE matrices (one per input scale)
+    """
     rgemats = []
     for scale in scales:
         # Check if the RGE matrix has already been computed
