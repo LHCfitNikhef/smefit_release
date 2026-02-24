@@ -3,6 +3,7 @@ import pathlib
 import shutil
 import subprocess
 import sys
+import os
 import yaml
 from matplotlib import rc, use
 
