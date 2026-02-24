@@ -155,7 +155,7 @@ class FitManager:
             ),
             self.config["use_quad"],
             self.config["use_theory_covmat"],
-            False,  # t0 is not used here because in the report we look at the experimental chi2
+            self.config.get("use_t0", False),
             self.config.get("use_multiplicative_prescription", False),
             self.config.get("default_order", "LO"),
             self.config.get("theory_path", None),

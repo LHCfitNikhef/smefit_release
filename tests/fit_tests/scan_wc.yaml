@@ -7,7 +7,7 @@ data_path: ./test_commondata
 # path to theory tables, default same as data path
 theory_path: ./test_theory
 use_theory_covmat: True
-use_t0: True
+use_t0: False
 # SMEFT Expansion Order (False = Lambda^-2 , True = Lambda^-4)
 use_quad: True
 # Set parameter bounds to previous SCAN result
