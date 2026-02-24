@@ -612,7 +612,12 @@ the name of the <code class="docutils literal notranslate"><span class="pre">com
 <span class="w">  </span><span class="nt">smeft_accuracy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">integrate</span><span class="w"> </span><span class="c1"># options: integrate, leadinglog</span>
 <span class="w">  </span><span class="nt">yukawa</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">top</span><span class="w"> </span><span class="c1"># options: top, full or none</span>
 <span class="w">  </span><span class="nt">adm_QCD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span><span class="w"> </span><span class="c1"># if true, the EW couplings are set to zero</span>
-<span class="w">  </span><span class="nt">rg_matrix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path/to/rge_matrix.pkl&gt;</span>
+<span class="w">  </span><span class="nt">rg_matrix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path/to/rge_matrix.pkl&gt;</span><span class="w">  </span><span class="c1"># path to a stored RGE matrix.</span>
+</pre></div>
+</div>
+<p>In addition to letting the RGE matrix be computed as part of the fit, it is also possible to pre-compute a RGE matrix and
+link it in the runcard using the <code class="docutils literal notranslate"><span class="pre">rg_matrix</span></code> key above. To pre-compute the RGE matrix, one can use the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>smefit<span class="w"> </span>RGE<span class="w"> </span>path/to/the/runcard/runcard.yaml
 </pre></div>
 </div>
 </section>
