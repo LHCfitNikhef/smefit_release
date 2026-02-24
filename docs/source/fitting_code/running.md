@@ -252,7 +252,14 @@ rge:
   smeft_accuracy: integrate # options: integrate, leadinglog
   yukawa: top # options: top, full or none
   adm_QCD: False # if true, the EW couplings are set to zero
-  rg_matrix: <path/to/rge_matrix.pkl>
+  rg_matrix: <path/to/rge_matrix.pkl>  # path to a stored RGE matrix.
+```
+
+In addition to letting the RGE matrix be computed as part of the fit, it is also possible to pre-compute a RGE matrix and
+link it in the runcard using the ``rg_matrix`` key above. To pre-compute the RGE matrix, one can use the command
+
+```bash
+smefit RGE path/to/the/runcard/runcard.yaml
 ```
 
 ## Running a fit with NS
