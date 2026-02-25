@@ -71,6 +71,14 @@ smefit.effective\_coupling\_dictionary module
    :show-inheritance:
    :undoc-members:
 
+smefit.external\_chi2 module
+----------------------------
+
+.. automodule:: smefit.external_chi2
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 smefit.fit\_manager module
 --------------------------
 
