@@ -136,7 +136,6 @@ def compute_blocks_inverse(covmat, tol=1e-25):
     # In this case I raise a warning that the dataset should be reordered to
     # have full optimization in the decomposition and inversion algo
     if jnp.any(running_max != combined_reach):
-        print(jnp.where(running_max != combined_reach))
         _logger.warning(
             "In the runcard some intercorrelated datasets are not written next to each other."
             + "To increase efficiency and stability in covmat inversion\n please consider reordering"
