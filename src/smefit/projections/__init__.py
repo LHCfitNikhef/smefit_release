@@ -285,13 +285,18 @@ class Projection:
 
             if num_sys != 0:
                 type_sys = np.array(data_dict["sys_type"])
-                name_sys = np.array(data_dict["sys_names"])
-                # change names of intercorrealted systematics
-                data_dict["sys_names"] = np.where(
-                    np.isin(name_sys, INTRA_DATASET_SYS_NAME),
-                    name_sys,
-                    name_sys + "_PROJ",
-                ).tolist()
+                # limit case with 1 sys
+                if num_sys == 1:
+                    name_sys = data_dict["sys_names"]
+                    name_sys = [name_sys]
+                else:
+                    name_sys = np.array(data_dict["sys_names"])
+                    # change names of intercorrealted systematics
+                    data_dict["sys_names"] = np.where(
+                        np.isin(name_sys, INTRA_DATASET_SYS_NAME),
+                        name_sys,
+                        name_sys + "_PROJ",
+                    ).tolist()
                 # express systematics as percentage values of the central values
                 sys_mult = sys_add / central_values * 1e2
 
@@ -308,9 +313,6 @@ class Projection:
                     * 1e-2
                 )
 
-                # limit case with 1 sys
-                if num_sys == 1:
-                    name_sys = [name_sys]
             # limit case no sys
             else:
                 name_sys = ["UNCORR"]
