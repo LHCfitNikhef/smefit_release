@@ -8,6 +8,7 @@ import pandas as pd
 import yaml
 
 from smefit.coefficients import CoefficientManager
+from smefit.covmat import INTRA_DATASET_SYS_NAME
 from smefit.rge.rge import load_rge_matrix
 
 from ..compute_theory import make_predictions
@@ -284,8 +285,13 @@ class Projection:
 
             if num_sys != 0:
                 type_sys = np.array(data_dict["sys_type"])
-                name_sys = data_dict["sys_names"]
-
+                name_sys = np.array(data_dict["sys_names"])
+                # change names of intercorrealted systematics
+                data_dict["sys_names"] = np.where(
+                    np.isin(name_sys, INTRA_DATASET_SYS_NAME),
+                    name_sys,
+                    name_sys + "_PROJ",
+                ).tolist()
                 # express systematics as percentage values of the central values
                 sys_mult = sys_add / central_values * 1e2
 
@@ -404,5 +410,4 @@ class Projection:
                     self.theory_path / f"{dataset_name}.json",
                     self.theory_path / f"{dataset_name}_proj.json",
                 )
-
             cnt += num_data
