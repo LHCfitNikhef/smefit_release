@@ -13,7 +13,7 @@ import pandas as pd
 import scipy.linalg as la
 from scipy.linalg import block_diag
 
-from .log import logging
+from smefit.log import logging
 
 INTRA_DATASET_SYS_NAME = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
 _logger = logging.getLogger(__name__)
