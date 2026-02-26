@@ -10,7 +10,7 @@ import scipy.linalg as la
 import yaml
 
 from .basis_rotation import rotate_to_fit_basis
-from .covmat import compute_blocks_inverse, construct_covmat, covmat_from_systematics
+from smefit.covmat import compute_blocks_inverse, construct_covmat, covmat_from_systematics
 from .log import logging
 
 _logger = logging.getLogger(__name__)
