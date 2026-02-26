@@ -153,6 +153,6 @@ def compute_blocks_inverse(covmat, tol=1e-25):
         end = start + s
         block = covmat[start:end, start:end]
         block_cond.append(jnp.linalg.cond(block))
-        block_inverses.append(np.linalg.inv(block))
+        block_inverses.append(jnp.linalg.inv(block))
         start = end
     return block_diag(*block_inverses), max(block_cond)
