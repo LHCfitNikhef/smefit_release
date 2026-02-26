@@ -772,7 +772,6 @@ def load_datasets(
         fit_covmat = exp_covmat
 
     # Check fit_covmat condition number
-    # check_condition_number(fit_covmat)
     check_covmat_positivity(fit_covmat)
     inv_cov_mat, cond_number = compute_blocks_inverse(fit_covmat)
     check_condition_number(cond_number)
