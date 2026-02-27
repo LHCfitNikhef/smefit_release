@@ -8,7 +8,6 @@ import pandas as pd
 import yaml
 
 from smefit.coefficients import CoefficientManager
-from smefit.covmat import INTRA_DATASET_SYS_NAME
 from smefit.rge.rge import load_rge_matrix
 
 from ..compute_theory import make_predictions
@@ -17,6 +16,8 @@ from ..loader import load_datasets
 from ..log import logging
 
 _logger = logging.getLogger(__name__)
+FIXED_SYS_NAMES = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
+# name of the sys to which the _PROJ suffix is not added
 
 
 class Projection:
@@ -293,7 +294,7 @@ class Projection:
                     name_sys = np.array(data_dict["sys_names"])
                     # change names of intercorrealted systematics
                     data_dict["sys_names"] = np.where(
-                        np.isin(name_sys, INTRA_DATASET_SYS_NAME),
+                        np.isin(name_sys, FIXED_SYS_NAMES),
                         name_sys,
                         name_sys + "_PROJ",
                     ).tolist()
