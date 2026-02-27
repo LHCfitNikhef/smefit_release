@@ -16,6 +16,8 @@ from ..loader import load_datasets
 from ..log import logging
 
 _logger = logging.getLogger(__name__)
+FIXED_SYS_NAMES = ("UNCORR", "CORR", "THEORYUNCORR", "THEORYCORR")
+# name of the sys to which the _PROJ suffix is not added
 
 
 class Projection:
@@ -284,8 +286,18 @@ class Projection:
 
             if num_sys != 0:
                 type_sys = np.array(data_dict["sys_type"])
-                name_sys = data_dict["sys_names"]
-
+                # limit case with 1 sys
+                if num_sys == 1:
+                    name_sys = data_dict["sys_names"]
+                    name_sys = [name_sys]
+                else:
+                    name_sys = np.array(data_dict["sys_names"])
+                    # change names of intercorrealted systematics
+                    data_dict["sys_names"] = np.where(
+                        np.isin(name_sys, FIXED_SYS_NAMES),
+                        name_sys,
+                        name_sys + "_PROJ",
+                    ).tolist()
                 # express systematics as percentage values of the central values
                 sys_mult = sys_add / central_values * 1e2
 
@@ -302,9 +314,6 @@ class Projection:
                     * 1e-2
                 )
 
-                # limit case with 1 sys
-                if num_sys == 1:
-                    name_sys = [name_sys]
             # limit case no sys
             else:
                 name_sys = ["UNCORR"]
@@ -404,5 +413,4 @@ class Projection:
                     self.theory_path / f"{dataset_name}.json",
                     self.theory_path / f"{dataset_name}_proj.json",
                 )
-
             cnt += num_data
