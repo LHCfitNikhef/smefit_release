@@ -279,7 +279,6 @@ class Projection:
                 1,
                 ratio_sm_exp,
             )
-            print(ratio_sm_exp)
             # rescale the statistical uncertainty to the SM
             stat = np.asarray(data_dict["statistical_error"]) * np.sqrt(ratio_sm_exp)
             # load systematics
