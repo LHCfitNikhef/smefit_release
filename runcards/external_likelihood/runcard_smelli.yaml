@@ -9,6 +9,10 @@ coefficients:
   OpD: {'min': -10.0, 'max' : 10.0}
 
 external_chi2:
-  smelli_chi2: 
-      path: path/to/smelli_chi2.py
-      dataset: ["likelihood_ewpt.yaml"]
+  SmelliChi2:
+    path: /abs/path/to/smefit/smefit_release/src/smefit/external_chi2_smelli.py
+    # path: /Users/eliehammou/Software/smefit/smefit_release/src/smefit/external_chi2_smelli.py
+    include_likelihoods:
+      - likelihood_ewpt.yaml
+    # optional override:
+    # initial_scale: 1000.0
