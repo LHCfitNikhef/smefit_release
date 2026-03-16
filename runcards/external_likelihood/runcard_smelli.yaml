@@ -1,0 +1,14 @@
+rge:
+   init_scale: 1000.0
+   obs_scale: dynamic # float or "dynamic"
+   smeft_accuracy: integrate # options: integrate, leadinglog
+   yukawa: top # options: top, full or none
+   adm_QCD: False # if true, the EW couplings are set to zero
+
+coefficients:
+  OpD: {'min': -10.0, 'max' : 10.0}
+
+external_chi2:
+  smelli_chi2: 
+      path: path/to/smelli_chi2.py
+      dataset: ["likelihood_ewpt.yaml"]
