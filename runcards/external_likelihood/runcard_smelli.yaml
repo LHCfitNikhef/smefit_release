@@ -4,7 +4,9 @@ theory_path: "/Users/eliehammou/Software/smefit/smefit_database/theory"
 
 use_quad: False
 
-nlive: 10
+nlive: 5
+n_samples: 10
+maxiter: 100
 
 rge:
    init_scale: 1000.0
