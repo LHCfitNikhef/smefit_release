@@ -1,3 +1,11 @@
+result_path: "/Users/eliehammou/Software/smefit/smefit_release/results"
+data_path: "/Users/eliehammou/Software/smefit/smefit_database/commondata"
+theory_path: "/Users/eliehammou/Software/smefit/smefit_database/theory"
+
+use_quad: False
+
+nlive: 10
+
 rge:
    init_scale: 1000.0
    obs_scale: dynamic # float or "dynamic"
@@ -10,8 +18,8 @@ coefficients:
 
 external_chi2:
   SmelliChi2:
-    path: /abs/path/to/smefit/smefit_release/src/smefit/external_chi2_smelli.py
-    # path: /Users/eliehammou/Software/smefit/smefit_release/src/smefit/external_chi2_smelli.py
+    # path: /abs/path/to/smefit/smefit_release/src/smefit/external_chi2_smelli.py
+    path: /Users/eliehammou/Software/smefit/smefit_release/src/smefit/external_chi2_smelli.py
     include_likelihoods:
       - likelihood_ewpt.yaml
     # optional override:
