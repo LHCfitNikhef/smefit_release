@@ -913,7 +913,7 @@ class CoefficientsPlotter:
                 axis.set_ylim(0, ymax)
 
         ax.set_varlabels(spoke_labels, fontsize=fontsize)
-        ax.tick_params(axis="x", pad=26)
+        ax.tick_params(axis="x", pad=30)
 
         ax2 = fig.add_axes(rect=[0, 0, 1, 1])
         width_disk = 0.055
