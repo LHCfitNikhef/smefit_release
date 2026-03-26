@@ -134,7 +134,7 @@ class Report:
 
             if len(out_dict[group]) == 0:
                 out_dict.pop(group)
-        return pd.DataFrame(out_dict).stack().swaplevel()
+        return pd.DataFrame(out_dict).stack().dropna().swaplevel()
 
     def _append_section(self, title, links=None, figs=None, tables=None):
         self.html_index += html_link(f"#{title}", title, add_meta=False)
