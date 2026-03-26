@@ -62,6 +62,21 @@ float32 = click.option(
 )
 
 
+@base_command.command("RGE")
+@fit_card
+@log_file
+def rge_mat_calculation(fit_card: pathlib.Path, log_file: pathlib.Path):
+    """Run RGE matrix calculation.
+
+    Usage: smefit RGE [OPTIONS] path_to_runcard
+    """
+    setup_console(log_file)
+    print_banner()
+    runner = Runner.from_file(fit_card.absolute())
+    log.console.log("Running : RGE Matrix Calculation ")
+    runner.run_rge_matrix_calculation()
+
+
 @base_command.command("NS")
 @fit_card
 @log_file
