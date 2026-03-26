@@ -188,20 +188,22 @@ class RGE:
         self.wc_names = sorted(wc_names)
         self.init_scale = init_scale
         self.accuracy = accuracy
+        self.adm_QCD = adm_QCD
+        self.yukawa = yukawa
 
         # set the anomalous dimension matrix parameters
-        if yukawa == "top":
+        if self.yukawa == "top":
             wilson.run.smeft.smpar.p.update(**top_yukawa)
-        elif yukawa == "none":
+        elif self.yukawa == "none":
             wilson.run.smeft.smpar.p.update(**no_yukawa)
-        elif yukawa == "full":
+        elif self.yukawa == "full":
             wilson.run.smeft.smpar.p.update(**default_params)
         else:
             raise ValueError(f"Yukawa parameter not supported: {yukawa}")
 
         _logger.info(f"Using Yukawa parameterization: {yukawa}.")
 
-        if adm_QCD:
+        if self.adm_QCD:
             wilson.run.smeft.smpar.p.update(**QCD_only)
             _logger.info("Using anomalous dimension order: QCD.")
         else:
@@ -228,7 +230,7 @@ class RGE:
 
             # Remove small values
             wc_final_vals = {
-                key: value for key, value in wc_final.dict.items() if abs(value) > 1e-10
+                key: value for key, value in wc_final.dict.items() if abs(value) > 1e-14
             }
 
             # check that imaginary values are small
@@ -354,7 +356,13 @@ class RGE:
         return self.map_to_smefit(wc_final, scale)
 
     @staticmethod
-    def save_rg(path, rgemat, name="rge_matrix"):
+    def save_rg(
+        path,
+        rgemat,
+        scales,
+        rge_settings,
+        name="rge_matrix",
+    ):
         """
         Save the RGE matrix to the result folder.
 
@@ -364,15 +372,46 @@ class RGE:
             path to the result folder
         rgemat: list
             List of RGE matrices for each datapoint
+        scales: list
+            List of scales for each datapoint
+        rge_settings: dict
+            dictionary with the RGE settings
         name: str
             name of the file to save the RGE matrix
         """
+        to_dump = {}
+        to_dump["rge_settings"] = rge_settings
+        # put together the scales and the RGE matrices, having the scale as key for the matrix.
+        for scale, matrix in zip(scales, rgemat):
+            to_dump[scale] = matrix
         # check that the path exists
         if not path.exists():
             path.mkdir(parents=True, exist_ok=True)
 
         with open(path / f"{name}.pkl", "wb") as f:
-            pickle.dump(rgemat, f)
+            pickle.dump(to_dump, f)
+
+    def clone_runner(self, coeff_list):
+        """
+        Clone the RGE runner with a different coefficient list.
+
+        Parameters
+        ----------
+        coeff_list: list
+            list of Wilson coefficient names to be included in the RGE matrix
+
+        Returns
+        -------
+        RGE
+            cloned RGE runner
+        """
+        return RGE(
+            coeff_list,
+            self.init_scale,
+            self.accuracy,
+            self.adm_QCD,
+            self.yukawa,
+        )
 
 
 def load_scales(
@@ -428,6 +467,107 @@ def load_scales(
     return scales
 
 
+def load_precomputed_rge_matrix(path_to_rge_mat, rge_settings):
+    """
+    Load a precomputed RGE matrix pickle and validate its settings.
+
+    Parameters
+    ----------
+    path_to_rge_mat : str or pathlib.Path
+        Path to the pickle file containing the precomputed RGE matrices.
+    rge_settings : dict
+        Expected RGE settings to validate against the stored file.
+
+    Returns
+    -------
+    dict
+        A dictionary containing cached RGE matrices keyed by scale. The
+        returned dictionary excludes the `'rge_settings'` entry.
+
+    Raises
+    ------
+    ValueError
+        If the settings in the precomputed file do not match `rge_settings`.
+    """
+    with open(path_to_rge_mat, "rb") as f:
+        rgemats_precomp = pickle.load(f)
+    if rge_settings != rgemats_precomp["rge_settings"]:
+        raise ValueError("RGE settings do not match RGE matrix precomputed settings.")
+
+    rge_cache = {k: v for k, v in rgemats_precomp.items() if k != "rge_settings"}
+    _logger.info(f"Loaded precomputed RGE matrix from {path_to_rge_mat}.")
+    return rge_cache
+
+
+def load_rge_mats_from_scales(scales, coeff_list, rge_runner, rge_cache):
+    """
+    Load or compute RGE matrices for the given list of scales.
+
+    For each scale in *scales* this function:
+    - Returns a pandas DataFrame containing the RGE matrix for the requested
+      coefficients in *coeff_list*.
+    - Uses matrices from *rge_cache* when available.
+    - If a cached matrix is missing some requested coefficients, computes only
+      the missing coefficients with a cloned runner and merges them into the
+      cached matrix. The cache is updated in-place.
+    - If no cached matrix exists for a scale, computes the full matrix and
+      stores it in the cache.
+
+    Parameters
+    ----------
+    scales : iterable of float
+        Energy scales at which to fetch/compute RGE matrices.
+    coeff_list : list of str
+        Requested Wilson coefficient names (columns) to return for each matrix.
+    rge_runner : RGE
+        An instance of the RGE runner
+    rge_cache : dict
+        Mapping scale -> pandas.DataFrame for previously computed RGE matrices.
+        This dict will be updated in-place when new or extended RGE matrices are
+        computed.
+
+    Returns
+    -------
+    list of pandas.DataFrame
+        List of RGE matrices (one per input scale)
+    """
+    rgemats = []
+    for scale in scales:
+        # Check if the RGE matrix has already been computed
+        if scale in rge_cache:
+            rgemat_scale = rge_cache[scale]
+            coeff_list_cache = rgemat_scale.columns.tolist()
+            # Compute difference in coeff_list
+            missing_coeffs = list(set(coeff_list) - set(coeff_list_cache))
+            present_coeffs = list(set(coeff_list) & set(coeff_list_cache))
+            if missing_coeffs:
+                rge_runner_missing = rge_runner.clone_runner(missing_coeffs)
+                _logger.warning(
+                    f"The cached RGE matrix does not contain all the requested coefficients. "
+                    f"Missing coefficients: {missing_coeffs}. "
+                    f"These will be computed from scratch and added to the cached matrix."
+                )
+                rgemat_new = rge_runner_missing.RGEmatrix(scale)
+                # concatenate the new matrix to the cached one, filling missing values with zeros
+                rgemat_scale = pd.concat(
+                    [rgemat_scale[present_coeffs], rgemat_new], axis=1
+                ).fillna(0)
+                # reorder columns
+                rgemat_scale = rgemat_scale[sorted(rgemat_scale.columns.tolist())]
+                # cache the updated RGE matrix
+                rge_cache[scale] = rgemat_scale
+            else:
+                # take the columns corresponding to the requested coefficients
+                rgemat_scale = rgemat_scale[coeff_list]
+        else:
+            rgemat_scale = rge_runner.RGEmatrix(scale)
+            # cache the RGE matrix
+            rge_cache[scale] = rgemat_scale
+
+        rgemats.append(rgemat_scale)
+    return rgemats
+
+
 def load_rge_matrix(
     rge_dict,
     coeff_list,
@@ -461,41 +601,32 @@ def load_rge_matrix(
     operators_to_keep: dict
         dictionary with the operators generated by the RGE, to be kept in the fit
     """
+    # Sort the coefficient list alphabetically
+    coeff_list = sorted(coeff_list)
     init_scale = rge_dict.get("init_scale", 1e3)
     obs_scale = rge_dict.get("obs_scale", 91.1876)
     smeft_accuracy = rge_dict.get("smeft_accuracy", "integrate")
     adm_QCD = rge_dict.get("adm_QCD", "full")
     yukawa = rge_dict.get("yukawa", "top")
     scale_variation = rge_dict.get("scale_variation", 1.0)
+    rge_settings = {
+        "init_scale": init_scale,
+        "smeft_accuracy": smeft_accuracy,
+        "adm_QCD": adm_QCD,
+        "yukawa": yukawa,
+    }
+    rge_cache = {}
+    # set to keep the operators generated by the RGE
     rge_runner = RGE(coeff_list, init_scale, smeft_accuracy, adm_QCD, yukawa)
 
     # load precomputed RGE matrix if it exists
     path_to_rge_mat = rge_dict.get("rg_matrix", False)
     if path_to_rge_mat:
-        with open(path_to_rge_mat, "rb") as f:
-            rgemats = pickle.load(f)
-        # If save_path is not None, save the RGE matrix in the new location
-        if save_path is not None:
-            RGE.save_rg(save_path, rgemat=rgemats)
-        stacked_mats = jnp.stack([rgemat.values for rgemat in rgemats])
-        operators_to_keep = {op: {} for op in rgemats[0].index}
-        return stacked_mats, operators_to_keep
+        rge_cache = load_precomputed_rge_matrix(path_to_rge_mat, rge_settings)
 
-    # if it is a float, it is a static scale
-    if type(obs_scale) is float or type(obs_scale) is int:
-        rgemat = rge_runner.RGEmatrix(obs_scale)
-        gen_operators = list(rgemat.index)
-        operators_to_keep = {k: {} for k in gen_operators}
-
-        # prepend additional dimension for consistency with the dynamic scale case
-        stacked_mats = jnp.stack([rgemat.values])
-        # save RGE matrix to save_path
-        if save_path is not None:
-            # save the RGE matrix
-            RGE.save_rg(save_path, rgemat=[rgemat])
-
-        return stacked_mats, operators_to_keep
-
+    # Load scales
+    if isinstance(obs_scale, (float, int)):
+        scales = [float(obs_scale)]
     elif obs_scale == "dynamic":
         scales = load_scales(
             datasets,
@@ -504,45 +635,42 @@ def load_rge_matrix(
             cutoff_scale=cutoff_scale,
             scale_variation=scale_variation,
         )
-
-        operators_to_keep = {}
-        rgemat = []
-        rge_cache = {}
-        for scale in scales:
-            # Check if the RGE matrix has already been computed
-            if scale in rge_cache:
-                rgemat_scale = rge_cache[scale]
-            else:
-                rgemat_scale = rge_runner.RGEmatrix(scale)
-                gen_operators = list(rgemat_scale.index)
-                # Fill with the operators if not already present in the dictionary
-                for op in gen_operators:
-                    if op not in operators_to_keep:
-                        operators_to_keep[op] = {}
-                rge_cache[scale] = rgemat_scale
-
-            rgemat.append(rgemat_scale)
-
-        # now loop through the rgemat and if there are operators
-        # that are not present in the matrix, fill them with zeros
-        for mat in rgemat:
-            for op in operators_to_keep:
-                if op not in mat.index:
-                    mat.loc[op] = np.zeros(len(mat.columns))
-            # order the rows alphabetically in the index
-            mat.sort_index(inplace=True)
-
-        # now stack the matrices in a 3D array
-        stacked_mats = jnp.stack([mat.values for mat in rgemat])
-
-        # save RGE matrix to save_path
-        if save_path is not None:
-            # save the RGE matrix
-            RGE.save_rg(save_path, rgemat=rgemat)
-
-        return stacked_mats, operators_to_keep
-
     else:
         raise ValueError(
             f"obs_scale must be either a float/int or 'dynamic'. Passed: {obs_scale}"
         )
+
+    # compute or fetch the RGE matrix for each scale
+    rgemats = load_rge_mats_from_scales(scales, coeff_list, rge_runner, rge_cache)
+
+    # Get union of all generated operators
+    gen_operators = set()
+    for df in rgemats:
+        gen_operators.update(df.index)
+    # Create the dictionary of operators to keep
+    operators_to_keep = {}
+    for op in gen_operators:
+        operators_to_keep[op] = {}
+    # now loop through the rgemat and if there are operators
+    # that are not present in the matrix, fill them with zeros
+    for mat in rgemats:
+        for op in operators_to_keep:
+            if op not in mat.index:
+                mat.loc[op] = np.zeros(len(mat.columns))
+        # order the rows alphabetically in the index
+        mat.sort_index(inplace=True)
+
+    # now stack the matrices in a 3D array
+    stacked_mats = jnp.stack([mat.values for mat in rgemats])
+
+    # save RGE matrix to save_path
+    if save_path is not None:
+        # save the RGE matrix
+        RGE.save_rg(
+            save_path,
+            rgemat=rgemats,
+            scales=scales,
+            rge_settings=rge_settings,
+        )
+
+    return stacked_mats, operators_to_keep

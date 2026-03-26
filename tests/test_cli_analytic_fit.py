@@ -13,6 +13,7 @@ import pickle
 from typing import Any
 
 import numpy as np
+import pandas as pd
 import pytest
 import yaml
 from click.testing import CliRunner
@@ -104,13 +105,20 @@ def test_cli_analytic_fit_matches_precomputed(
         with open(produced_rge, "rb") as f:
             rge_matrix_produced = pickle.load(f)
 
-        assert isinstance(rge_matrix_produced, list)
-        assert isinstance(rge_matrix_precomp, list)
-        assert len(rge_matrix_produced) == len(rge_matrix_precomp)
-        for got_df, exp_df in zip(rge_matrix_produced, rge_matrix_precomp):
-            assert list(got_df.index) == list(exp_df.index)
-            assert list(got_df.columns) == list(exp_df.columns)
-            np.testing.assert_allclose(got_df.values, exp_df.values, rtol=1e-4)
+        assert isinstance(rge_matrix_produced, dict)
+        assert isinstance(rge_matrix_precomp, dict)
+        # get keys match
+        assert set(rge_matrix_produced.keys()) == set(rge_matrix_precomp.keys())
+        # compare each object
+        for key in rge_matrix_precomp.keys():
+            obj_precomp = rge_matrix_precomp[key]
+            obj_produced = rge_matrix_produced[key]
+            if isinstance(obj_precomp, pd.DataFrame):
+                pd.testing.assert_frame_equal(obj_precomp, obj_produced)
+            else:
+                assert (
+                    obj_precomp == obj_produced
+                ), f"RGE matrix object mismatch for key {key}"
 
     # Compare deterministic content
     # - free parameter names (set equality, order-insensitive)
