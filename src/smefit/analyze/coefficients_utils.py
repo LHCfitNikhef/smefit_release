@@ -483,7 +483,6 @@ class CoefficientsPlotter:
         groups, axs = self._get_suplblots(figsize)
         for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
             ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
-
             bars_top_to_bottom = bars.iloc[
                 ::-1
             ]  # reverse order to plot from top to bottom in ax
@@ -596,7 +595,7 @@ class CoefficientsPlotter:
         groups, axs = self._get_suplblots(figsize)
         for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
             ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
-
+            ax.spines["left"].set_zorder(10)
             bars_top_to_bottom = bars.iloc[
                 ::-1
             ]  # reverse order to plot from top to bottom in ax
@@ -1026,7 +1025,7 @@ class CoefficientsPlotter:
             nrows += 1  # add an extra row to fit the logo
         return nrows, ncols
 
-    def plot_posteriors(self, posteriors, labels, **kwargs):
+    def plot_posteriors(self, posteriors, name, labels, **kwargs):
         """Plot posteriors histograms.
 
         Parameters
@@ -1134,8 +1133,8 @@ class CoefficientsPlotter:
             ]  # make room for the legend at the top of the figure
         )
 
-        plt.savefig(f"{self.report_folder}/coefficient_histo.pdf")
-        plt.savefig(f"{self.report_folder}/coefficient_histo.png")
+        plt.savefig(f"{self.report_folder}/coefficient_histo_{name[0]}.pdf")
+        plt.savefig(f"{self.report_folder}/coefficient_histo_{name[0]}.png")
 
     def plot_contours_2d(
         self,
