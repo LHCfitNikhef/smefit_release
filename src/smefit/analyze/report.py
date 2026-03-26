@@ -135,7 +135,10 @@ class Report:
 
             if len(out_dict[group]) == 0:
                 out_dict.pop(group)
-        return pd.DataFrame(out_dict).stack().swaplevel()
+
+        #return pd.DataFrame(out_dict).stack().swaplevel()
+        # needed for pandas 3 
+        return pd.DataFrame(out_dict).stack().dropna().swaplevel()
 
     def _append_section(self, title, links=None, figs=None, tables=None):
         self.html_index += html_link(f"#{title}", title, add_meta=False)
@@ -412,12 +415,19 @@ class Report:
             ]
             posterior_histograms["disjointed_lists"] = disjointed_lists
 
-            coeff_plt.plot_posteriors(
-                [fit.results["samples"] for fit in self.fits],
-                labels=[fit.label for fit in self.fits],
-                **posterior_histograms,
-            )
-            figs_list.append("coefficient_histo")
+            # coeff_plt.plot_posteriors(
+            #     [fit.results["samples"] for fit in self.fits],
+            #     labels=[fit.label for fit in self.fits],
+            #     **posterior_histograms,
+            # )
+            for fit in self.fits:
+                coeff_plt.plot_posteriors(
+                    [fit.results["samples"]],
+                    name=[fit.name],
+                    labels=[fit.label],
+                    **posterior_histograms,
+                )
+                figs_list.append(f"posterior_histograms_{fit.name}")
 
         if table is not None:
             _logger.info("Writing : Confidence level table")
