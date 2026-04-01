@@ -686,6 +686,197 @@ class CoefficientsPlotter:
         plt.savefig(f"{self.report_folder}/coefficient_bar_glob_vs_ind.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_bar_glob_vs_ind.png")
 
+    def plot_coeffs_bar_theory_unc(
+        self,
+        error,
+        figsize=(15, 20),
+        plot_cutoff=400,
+        x_log=True,
+        x_min=1e-2,
+        x_max=500,
+        color=None,
+    ):
+        """
+        Plot error bars at given confidence level
+
+        Parameters
+        ----------
+            error: dict
+               confidence level bounds per fit and coefficient
+            figsize: list, optional
+                Figure size, (10, 15) by default
+            plot_cutoff: float
+                Only show bounds up to here
+            x_log: bool, optional
+                Use a log scale on the x-axis, true by default
+            x_min: float, optional
+                Minimum x-value, 1e-2 by default
+            x_max: float, optional
+                Maximum x-value, 500 by default
+            legend_loc: string, optional
+                Legend location, "best" by default
+
+        """
+        df = pd.DataFrame(error)
+        n_runs = int(len(df.columns) / 2)
+        color = color[:n_runs]
+
+        groups, axs = self._get_suplblots(figsize)
+        for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
+            bars_top_to_bottom = bars.iloc[
+                ::-1
+            ]  # reverse order to plot from top to bottom in ax
+
+            df_glob_no_th = 1 / np.sqrt(
+                bars_top_to_bottom.loc[:, df.columns.str.contains("notheounc")]
+            )
+            df_glob_cons_th = 1 / np.sqrt(
+                bars_top_to_bottom.loc[:, df.columns.str.contains("conservative")]
+            )
+            df_glob_agg_th = 1 / np.sqrt(
+                bars_top_to_bottom.loc[:, df.columns.str.contains("aggressive")]
+            )
+            df_glob_current_th = 1 / np.sqrt(
+                bars_top_to_bottom.loc[:, df.columns.str.contains("current")]
+            )
+            df_glob_current_th.columns = df_glob_current_th.columns.str.replace(
+                "\\,current", ""
+            )
+
+            df_max = (1 / np.sqrt(bars_top_to_bottom)).values.max()
+            df_min = (1 / np.sqrt(bars_top_to_bottom)).values.min()
+            delta = 0.05 * (df_max - df_min)
+
+            ax.set_xlim(0, df_max + delta)
+
+            df_glob_current_th.droplevel(0).plot(
+                kind="barh",
+                width=0.8,
+                ax=ax,
+                legend=None,
+                logx=x_log,
+                fontsize=18,
+                color=color,
+                edgecolor="k",
+                linewidth=0.3,
+                zorder=4,
+            )
+
+            handles_current, labels_current = ax.get_legend_handles_labels()
+
+            df_glob_cons_th.droplevel(0).plot(
+                kind="barh",
+                width=0.8,
+                ax=ax,
+                hatch="///////",
+                legend=False,
+                logx=x_log,
+                fontsize=18,
+                color=color,
+                edgecolor="k",
+                linewidth=0.3,
+                zorder=3,
+            )
+
+            df_glob_agg_th.droplevel(0).plot(
+                kind="barh",
+                width=0.8,
+                ax=ax,
+                hatch="xx",
+                legend=False,
+                logx=x_log,
+                fontsize=18,
+                color=color,
+                edgecolor="k",
+                linewidth=0.3,
+                zorder=2,
+            )
+
+            df_glob_no_th.droplevel(0).plot(
+                kind="barh",
+                width=0.8,
+                ax=ax,
+                hatch="...",
+                legend=False,
+                logx=x_log,
+                fontsize=18,
+                color=color,
+                edgecolor="k",
+                linewidth=0.3,
+                zorder=1,
+            )
+
+            ax.spines["left"].set_zorder(10)
+
+            ax.set_title(f"\\rm {g}", x=0.95, y=1.0, fontsize=16)
+            ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
+
+            # Hard cutoff
+            if plot_cutoff is not None:
+                ax.vlines(
+                    plot_cutoff,
+                    -2,
+                    3 * groups[g] + 2,
+                    ls="dashed",
+                    color="black",
+                    alpha=0.7,
+                )
+
+        handles = [
+            patches.Patch(
+                alpha=0.8,
+                fill=True,
+                label=r"$\rm{Current\;Theory\;unc.}$",
+                color="black",
+            ),
+            patches.Patch(
+                alpha=0.8,
+                hatch="///////",
+                fill=None,
+                label=r"$\rm{Conservative\;Theory\;unc.}$",
+            ),
+            patches.Patch(
+                alpha=0.8,
+                hatch="xxx",
+                fill=None,
+                label=r"$\rm{Aggressive\;Theory\,unc.}$",
+            ),
+            patches.Patch(
+                alpha=0.8, hatch="...", fill=None, label=r"$\rm{Ideal\;Theory\;unc.}$"
+            ),
+        ]
+
+        axs[-1].legend(
+            handles=handles,
+            ncols=1,
+            loc="center",
+            fontsize=20,
+            bbox_to_anchor=(1.1, 0.5, 1.0, 0.05),
+        )
+        if self.logo is not None:
+            fig = axs[0].figure
+            # place logo in its own small axes outside main plotting area (figure coordinates)
+            ax_logo = fig.add_axes([0.05, 0.96, 0.15, 0.04])
+            ax_logo.imshow(self.logo, aspect="auto")
+            ax_logo.axis("off")
+
+        axs[-1].set_xlabel(r"$\Lambda/\sqrt{c_i(\mu_0)}\;[{\rm TeV}]$", fontsize=20)
+        axs[-2].set_xlabel(r"$\Lambda/\sqrt{c_i(\mu_0)}\;[{\rm TeV}]$", fontsize=20)
+
+        axs[0].legend(
+            handles=handles_current,
+            labels=labels_current,
+            loc="lower center",
+            bbox_to_anchor=(0.7, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 17},
+            ncol=len(groups),
+        )
+
+        # plt.tight_layout()
+        plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
+        plt.savefig(f"{self.report_folder}/coefficient_bar.png")
+
     def plot_pull(self, pull, x_min=-3, x_max=3, figsize=(10, 15)):
         """
         Plot error bars at given confidence level

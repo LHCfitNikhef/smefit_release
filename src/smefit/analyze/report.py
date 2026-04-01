@@ -135,9 +135,6 @@ class Report:
 
             if len(out_dict[group]) == 0:
                 out_dict.pop(group)
-
-        #return pd.DataFrame(out_dict).stack().swaplevel()
-        # needed for pandas 3 
         return pd.DataFrame(out_dict).stack().dropna().swaplevel()
 
     def _append_section(self, title, links=None, figs=None, tables=None):
