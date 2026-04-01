@@ -478,9 +478,9 @@ class Report:
 
         for fit in fit_list:
             _logger.info(f"Plotting correlations for: {fit.name}")
-            coeff_to_keep = fit.coefficients.free_parameters.index
+            #coeff_to_keep = fit.coefficients.free_parameters.index
             plot_correlations(
-                fit.results["samples"][coeff_to_keep],
+                fit.results["samples"],
                 latex_names=self.coeff_info.droplevel(0),
                 fig_name=f"{self.report}/correlations_{fit.name}",
                 title=fit.label if title else None,
