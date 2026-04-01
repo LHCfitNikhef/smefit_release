@@ -7,6 +7,7 @@ import arviz
 import matplotlib.lines as mlines
 import matplotlib.markers as markers
 import matplotlib.patches as patches
+from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -566,6 +567,8 @@ class CoefficientsPlotter:
         x_max=500,
         color=None,
         lambda_bound=False,
+        label1="",
+        label2="",
     ):
         """
         Plot error bars at given confidence level
@@ -643,6 +646,8 @@ class CoefficientsPlotter:
                 )
             ax.set_title(f"\\rm {g}", x=0.95, y=1.0, fontsize=16)
 
+
+
             # Hard cutoff
             if plot_cutoff is not None:
                 ax.vlines(
@@ -653,6 +658,34 @@ class CoefficientsPlotter:
                     color="black",
                     alpha=0.7,
                 )
+
+        handles = [
+            patches.Patch(
+                facecolor="none",
+                edgecolor="k",
+                linewidth=1,
+                label=label1,  # bars
+            ),
+            Line2D(
+                [0], [0],
+                marker="<",
+                linestyle="None",
+                markersize=10,
+                markeredgecolor="k",
+                markerfacecolor="k",
+                markeredgewidth=0.8,
+                color="k",
+                label=label2,  #  triangles
+            ),
+        ]
+
+        axs[-1].legend(
+            handles=handles,
+            ncols=1,
+            loc="center",
+            fontsize=20,
+            bbox_to_anchor=(1.1, 0.5, 1.0, 0.05),
+        )
 
         if self.logo is not None:
             fig = axs[0].figure
@@ -695,6 +728,7 @@ class CoefficientsPlotter:
         x_min=1e-2,
         x_max=500,
         color=None,
+        legend_title=None,
     ):
         """
         Plot error bars at given confidence level
@@ -823,6 +857,11 @@ class CoefficientsPlotter:
                 )
 
         handles = [
+            Line2D(
+                [], [],
+                linestyle="None",
+                label=legend_title,
+            ),
             patches.Patch(
                 alpha=0.8,
                 fill=True,
@@ -851,7 +890,7 @@ class CoefficientsPlotter:
             ncols=1,
             loc="center",
             fontsize=20,
-            bbox_to_anchor=(1.1, 0.5, 1.0, 0.05),
+            bbox_to_anchor=(1.1, 0.4, 1.0, 0.05),
         )
         if self.logo is not None:
             fig = axs[0].figure

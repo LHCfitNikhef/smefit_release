@@ -221,6 +221,7 @@ class Report:
         confidence_level_bar=None,
         confidence_level_bar_glob_vs_ind=None,
         confidence_level_bar_glob_vs_ind_lambda=None,
+        confidence_level_bar_theory_unc=None,
         pull_bar=None,
         spider_plot=None,
         posterior_histograms=True,
@@ -298,29 +299,44 @@ class Report:
             bar_cl = confidence_level_bar["confidence_level"]
             confidence_level_bar.pop("confidence_level")
             zero_sol = 0
+            coeff_plt.plot_coeffs_bar(
+                {
+                    name: -bound_df.loc[zero_sol, f"low{bar_cl}"]
+                          + bound_df.loc[zero_sol, f"high{bar_cl}"]
+                    for name, bound_df in bounds_dict.items()
+                },
+                **confidence_level_bar,
+            )
+            figs_list.append("coefficient_bar")
+            
+        if confidence_level_bar_theory_unc is not None:
+            _logger.info("Plotting : Confidence Level error bars")
+            bar_cl = confidence_level_bar_theory_unc["confidence_level"]
+            confidence_level_bar_theory_unc.pop("confidence_level")
+            zero_sol = 0
 
             if ci_type in ["hdi", "hdi_mono"]:
 
-                coeff_plt.plot_coeffs_bar(
+                coeff_plt.plot_coeffs_bar_theory_unc(
                     {
                         name: bound_df.loc[zero_sol, f"{ci_type}_{bar_cl}"]
                         for name, bound_df in bounds_dict.items()
                     },
-                    **confidence_level_bar,
+                    **confidence_level_bar_theory_unc,
                 )
             else:  # Halfwidth ETI
-                coeff_plt.plot_coeffs_bar(
+                coeff_plt.plot_coeffs_bar_theory_unc(
                     {
                         name: (
-                            -bound_df.loc[zero_sol, f"low{bar_cl}"]
-                            + bound_df.loc[zero_sol, f"high{bar_cl}"]
-                        )
-                        / 2.0
+                                      -bound_df.loc[zero_sol, f"low{bar_cl}"]
+                                      + bound_df.loc[zero_sol, f"high{bar_cl}"]
+                              )
+                              / 2.0
                         for name, bound_df in bounds_dict.items()
                     },
-                    **confidence_level_bar,
+                    **confidence_level_bar_theory_unc,
                 )
-            figs_list.append("coefficient_bar")
+            figs_list.append("coefficient_bar_theory_unc")
 
         if confidence_level_bar_glob_vs_ind is not None:
             _logger.info("Plotting : Confidence Level error bars")
