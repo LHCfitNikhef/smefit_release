@@ -208,7 +208,7 @@ class FisherCalculator:
         )
         summary_table = summary_table.groupby("level_0").sum(numeric_only=True)
         summary_table.index.name = "data_group"
-
+        
         return self.normalize(summary_table, norm, log)
 
     def write_grouped(self, coeff_config, data_groups, summary_only):
@@ -604,7 +604,7 @@ class FisherCalculator:
             latex_names,
             x_labels,
         )
-        ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
+        #ax.set_title(r"\rm Linear", fontsize=20, y=-0.08)
         cax1 = make_axes_locatable(ax).append_axes("right", size="5%", pad=0.5)
         colour_bar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), cax=cax1)
 
@@ -634,7 +634,7 @@ class FisherCalculator:
             rotation=270,
         )
 
-        plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25, y=0.98)
+        #plt.suptitle(f"\\rm Fisher\\ information:\\ {title}", fontsize=25, y=0.98)
 
         plt.savefig(f"{fig_name}.pdf")
         plt.savefig(f"{fig_name}.png")

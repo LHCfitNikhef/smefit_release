@@ -108,7 +108,7 @@ class Report:
 
             if len(out_dict[group]) == 0:
                 out_dict.pop(group)
-        return pd.DataFrame(out_dict).stack().swaplevel()
+        return pd.DataFrame(out_dict).stack().dropna().swaplevel()
 
     def _load_grouped_coeff_info(self, raw_dict):
         """Load grouped info of coefficients.
@@ -596,9 +596,9 @@ class Report:
             compute_quad = fit.config["use_quad"]
             fisher_cal = FisherCalculator(fit.coefficients, fit.datasets, compute_quad)
             fisher_cal.compute_linear()
-            fisher_cal.lin_fisher = fisher_cal.normalize(
-                fisher_cal.lin_fisher, norm=norm, log=log
-            )
+
+            fisher_cal.lin_fisher = fisher_cal.normalize(fisher_cal.lin_fisher, norm=norm, log=log)
+
             fisher_cal.summary_table = fisher_cal.groupby_data(
                 fisher_cal.lin_fisher, self.data_info, norm, log
             )
