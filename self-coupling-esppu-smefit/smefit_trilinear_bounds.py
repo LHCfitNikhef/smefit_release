@@ -2,6 +2,7 @@ import numpy as np
 import arviz as az
 import pathlib
 import json
+import matplotlib.pyplot as plt
 from matplotlib import rc
 from matplotlib.lines import Line2D
 import pandas as pd
@@ -9,7 +10,7 @@ import pandas as pd
 rc('font', **{'family': 'sans-serif', 'sans-serif': ['Helvetica'], 'size': 20})
 rc('text', usetex=True)
 
-compute_bounds = True
+compute_bounds = False
 
 result_dir = pathlib.Path(
     "/data/theorie/jthoeve/smefit_release/results/esppu_paper")
@@ -110,6 +111,70 @@ def find_bounds(runs, hdi=True, th_scenario="aggressive"):
     return bounds_df
 
 
+def build_latex_bounds_table(df_aggressive, df_conservative, output_path="trilinear_bounds_table.tex"):
+    """Write a grouped LaTeX table of kappa bounds for aggressive/conservative scenarios."""
+    collider_order = ["HLLHC", "LEP3", "FCCee", "LCF500", "LCF1000"]
+    eft_order = ["LIN", "QUAD"]
+    fit_order = ["IND", "GLOB"]
+
+    collider_labels = {
+        "HLLHC": r"${\rm HL}\textnormal{-}{\rm LHC}$",
+        "LEP3": r"${\rm LEP3}$",
+        "FCCee": r"${\rm FCC}\textnormal{-}{\rm ee}$",
+        "LCF500": r"${\rm LCF550}$",
+        "LCF1000": r"${\rm LCF1000}$",
+    }
+    eft_labels = {
+        "LIN": r"$\mathcal{O}(\Lambda^{-2})$",
+        "QUAD": r"$\mathcal{O}(\Lambda^{-4})$",
+    }
+    fit_labels = {
+        "IND": r"${\rm Individual}$",
+        "GLOB": r"${\rm Marginalised}$",
+    }
+
+    # Ensure a consistent 3-level index layout.
+    if not isinstance(df_aggressive.index, pd.MultiIndex):
+        df_aggressive.index = pd.MultiIndex.from_tuples(df_aggressive.index, names=["collider", "order", "fit"])
+    if not isinstance(df_conservative.index, pd.MultiIndex):
+        df_conservative.index = pd.MultiIndex.from_tuples(df_conservative.index, names=["collider", "order", "fit"])
+
+    rows = []
+    idx_rows = []
+    for collider in collider_order:
+        for order in eft_order:
+            for fit in fit_order:
+                idx = (collider, order, fit)
+                if idx not in df_aggressive.index or idx not in df_conservative.index:
+                    continue
+
+                row_aggr = df_aggressive.loc[idx]
+                row_cons = df_conservative.loc[idx]
+                aggr_interval = rf"$[{row_aggr['low_kappa']:.3f},\,{row_aggr['high_kappa']:.3f}]$"
+                cons_interval = rf"$[{row_cons['low_kappa']:.3f},\,{row_cons['high_kappa']:.3f}]$"
+
+                idx_rows.append((collider_labels.get(collider, collider), eft_labels[order], fit_labels[fit]))
+                rows.append({
+                    r"Aggressive": aggr_interval,
+                    r"Conservative": cons_interval,
+                })
+
+    table_df = pd.DataFrame(
+        rows,
+        index=pd.MultiIndex.from_tuples(idx_rows, names=["Collider", "EFT order", "Fit"]),
+    )
+
+    latex_table = table_df.to_latex(
+        escape=False,
+        multirow=True,
+        column_format="lllcc",
+        caption=r"Bounds on $\delta\kappa_3$ grouped by collider, EFT order, and fit strategy.",
+        label="tab:trilinear-bounds",
+    )
+    pathlib.Path(output_path).write_text(latex_table)
+    return latex_table
+
+
 if compute_bounds:
     bounds_trilinear_aggressive = find_bounds(runs_all, hdi=True, th_scenario="aggressive")
     bounds_trilinear_conservative = find_bounds(runs_all, hdi=True, th_scenario="conservative")
@@ -123,8 +188,14 @@ else:
     bounds_trilinear_conservative = pd.read_csv(f"trilinear_bounds_conservative.csv", index_col=[0, 1, 2])
 
 
-import matplotlib.pyplot as plt
-import numpy as np
+latex_table = build_latex_bounds_table(
+    bounds_trilinear_aggressive,
+    bounds_trilinear_conservative,
+    output_path="trilinear_bounds_table.tex",
+)
+
+
+
 
 # Styling
 colors = {
