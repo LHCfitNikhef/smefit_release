@@ -447,6 +447,81 @@ class CoefficientsPlotter:
         plt.savefig(f"{self.report_folder}/coefficient_central.pdf", dpi=500)
         plt.savefig(f"{self.report_folder}/coefficient_central.png")
 
+    def plot_coeffs_bar(
+        self,
+        error,
+        figsize=(10, 15),
+        plot_cutoff=400,
+        x_log=True,
+        x_min=1e-2,
+        x_max=500,
+    ):
+        """
+        Plot error bars at given confidence level
+
+        Parameters
+        ----------
+            error: dict
+               confidence level bounds per fit and coefficient
+            figsize: list, optional
+                Figure size, (10, 15) by default
+            plot_cutoff: float
+                Only show bounds up to here
+            x_log: bool, optional
+                Use a log scale on the x-axis, true by default
+            x_min: float, optional
+                Minimum x-value, 1e-2 by default
+            x_max: float, optional
+                Maximum x-value, 500 by default
+            legend_loc: string, optional
+                Legend location, "best" by default
+
+        """
+        df = pd.DataFrame(error)
+        groups, axs = self._get_suplblots(figsize)
+
+        for ax, (g, bars) in zip(axs, df.groupby(level=0, sort=False)):
+            bars_top_to_bottom = bars.iloc[
+                ::-1
+            ]  # reverse order to plot from top to bottom in ax
+            bars_top_to_bottom.droplevel(0).plot(
+                kind="barh",
+                width=0.6,
+                ax=ax,
+                legend=None,
+                logx=x_log,
+                xlim=(x_min, x_max),
+                fontsize=13,
+            )
+            ax.set_title(f"\\rm {g}", x=0.95, y=1.0)
+            ax.grid(True, which="both", ls="dashed", axis="x", lw=0.5)
+
+            # Hard cutoff
+            if plot_cutoff is not None:
+                ax.vlines(
+                    plot_cutoff,
+                    -2,
+                    3 * groups[g] + 2,
+                    ls="dashed",
+                    color="black",
+                    alpha=0.7,
+                )
+
+        self._plot_logo(axs[-1])
+        axs[-1].set_xlabel(
+            r"$95\%\ {\rm Confidence\ Level\ Bounds}\ (1/{\rm TeV}^2)$", fontsize=20
+        )
+        axs[0].legend(
+            loc="lower center",
+            bbox_to_anchor=(0, 1.1, 1.0, 0.05),
+            frameon=False,
+            prop={"size": 13},
+            ncol=2,
+        )
+        plt.tight_layout()
+        plt.savefig(f"{self.report_folder}/coefficient_bar.pdf", dpi=500)
+        plt.savefig(f"{self.report_folder}/coefficient_bar.png")
+
     def plot_coeffs_bar_glob_vs_ind_lambda(
         self,
         error,
