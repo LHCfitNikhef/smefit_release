@@ -5,6 +5,7 @@ import subprocess
 
 import yaml
 from matplotlib import rc, use
+from pypdf import PdfWriter
 
 from ..log import logging
 from .html_utils import dump_html_index
@@ -72,11 +73,14 @@ def run_report(report_card_file):
     subprocess.call(f"mv {report_folder}/*.* {meta_path}", shell=True)
 
     # Combine PDF files together into raw pdf report
-    subprocess.call(
-        f"gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite \
-                -sOutputFile={report_folder}/report_{report_name}.pdf `ls -rt {meta_path}/*.pdf`",
-        shell=True,
-    )
+    merger = PdfWriter()
+    for pdf_file in sorted(meta_path.glob("*.pdf"), key=lambda p: p.stat().st_mtime):
+        merger.append(str(pdf_file))
+
+    with open(report_folder / f"report_{report_name}.pdf", "wb") as output_file:
+        merger.write(output_file)
+
+    merger.close()
 
     # dump html index
     dump_html_index(
