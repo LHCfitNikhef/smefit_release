@@ -18,7 +18,7 @@ cw = np.sqrt(1 - sw**2)
 # O_{SMEFiT} = sum_i value_i * O_{Warsaw, i}
 wcxf_translate = {
     # Bosonic
-    "OWWW": {"wc": ["W"]},
+    "OWWW": {"wc": ["W"], "value": [-1.0]},
     "OpBox": {"wc": ["phiBox"]},
     "OpD": {"wc": ["phiD"]},
     "OpWB": {"wc": ["phiWB"]},
@@ -27,9 +27,9 @@ wcxf_translate = {
     "OpB": {"wc": ["phiB"]},
     "Op": {"wc": ["phi"]},
     # Dipoles
-    "OtG": {"wc": ["uG_33"], "value": ["gs"]},
-    "OtW": {"wc": ["uB_33", "uW_33"], "value": [cw / sw, 1.0]},
-    "OtZ": {"wc": ["uB_33"], "value": [-1.0 / sw]},
+    "OtG": {"wc": ["uG_33"], "value": ["-gs"]},
+    "OtW": {"wc": ["uB_33", "uW_33"], "value": [-cw / sw, -1.0]},
+    "OtZ": {"wc": ["uB_33"], "value": [1.0 / sw]},
     # Quark Currents
     "O3pq": {"wc": ["phiq1_11", "phiq1_22", "phiq3_11", "phiq3_22"]},
     "OpqMi": {"wc": ["phiq1_11", "phiq1_22"]},
@@ -176,7 +176,7 @@ wcxf_translate = {
 # are inferred only from the 11 components.
 inverse_wcxf_translate = {
     # Bosonic
-    "OWWW": {"wc": ["W"]},
+    "OWWW": {"wc": ["W"], "coeff": [-1.0]},
     "OpBox": {"wc": ["phiBox"]},
     "OpD": {"wc": ["phiD"]},
     "OpWB": {"wc": ["phiWB"]},
@@ -185,9 +185,9 @@ inverse_wcxf_translate = {
     "OpB": {"wc": ["phiB"]},
     "Op": {"wc": ["phi"]},
     # Dipoles
-    "OtG": {"wc": ["uG_33"], "coeff": ["1/gs"]},
-    "OtW": {"wc": ["uW_33"], "coeff": [1.0]},
-    "OtZ": {"wc": ["uB_33", "uW_33"], "coeff": [-sw, cw]},
+    "OtG": {"wc": ["uG_33"], "coeff": ["-1/gs"]},
+    "OtW": {"wc": ["uW_33"], "coeff": [-1.0]},
+    "OtZ": {"wc": ["uB_33", "uW_33"], "coeff": [sw, -cw]},
     # Quark Currents
     "O3pq": {"wc": ["phiq3_11"]},
     "OpqMi": {"wc": ["phiq1_11", "phiq3_11"], "coeff": [1.0, -1.0]},
