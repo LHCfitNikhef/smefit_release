@@ -80,7 +80,11 @@ class Optimizer:
 
         # load external chi2 modules as amortized objects (fast to evaluate)
         self.chi2_ext = (
-            load_external_chi2(external_chi2, self.coefficients, self.rge_dict)
+            load_external_chi2(
+                external_chi2,
+                self.coefficients,
+                self.rge_dict.copy() if self.rge_dict is not None else None,
+            )
             if external_chi2
             else None
         )
