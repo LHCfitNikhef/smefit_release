@@ -145,15 +145,6 @@ class Runner:
     def ultranest(self, config):
         """Run a fit with Ultra Nest."""
 
-        # add external modules to paths
-        if "external_chi2" in config:
-            external_chi2 = config["external_chi2"]
-            for _, module in external_chi2.items():
-                module_path = module["path"]
-                path = pathlib.Path(module_path)
-                base_path, stem = path.parent, path.stem
-                sys.path = [str(base_path)] + sys.path
-
         if run_parallel:
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()

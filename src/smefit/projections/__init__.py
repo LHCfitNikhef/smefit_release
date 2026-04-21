@@ -274,8 +274,11 @@ class Projection:
             # set negative ratios to one
             ratio_sm_exp = jnp.where(ratio_sm_exp < 0, 1, ratio_sm_exp)
             # set nan ratios to one
-            ratio_sm_exp = jnp.where(jnp.isnan(ratio_sm_exp), 1, ratio_sm_exp)
-
+            ratio_sm_exp = jnp.where(
+                jnp.logical_or(jnp.isnan(ratio_sm_exp), jnp.isinf(ratio_sm_exp)),
+                1,
+                ratio_sm_exp,
+            )
             # rescale the statistical uncertainty to the SM
             stat = np.asarray(data_dict["statistical_error"]) * np.sqrt(ratio_sm_exp)
             # load systematics
