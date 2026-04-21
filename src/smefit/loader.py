@@ -668,7 +668,7 @@ def load_datasets(
         cutoff_scale: float, optional
             kinematic cutoff scale
     """
-
+    datasets.sort(key=lambda d: d["name"].lower())
     exp_data = []
     sm_theory = []
     sys_error_t0 = []
