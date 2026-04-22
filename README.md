@@ -1,15 +1,15 @@
 
 <p align="center">
-  <a href="https://lhcfitnikhef.github.io/smefit_release/"><img alt="SMEFiT" src="docs/_assets/logo.png" width="300">
+  <a href="https://lhcfitnikhef.github.io/smefit/"><img alt="SMEFiT" src="docs/_assets/logo.png" width="300">
 </a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/lhcfitnikhef/smefit_release/actions/workflows/unittests.yml"><img alt="Tests" src="https://github.com/lhcfitnikhef/smefit_release/actions/workflows/unittests.yml/badge.svg" /></a>
-  <a href="https://www.codefactor.io/repository/github/lhcfitnikhef/smefit_release"><img src="https://www.codefactor.io/repository/github/lhcfitnikhef/smefit_release/badge" alt="CodeFactor" /></a>
+  <a href="https://github.com/lhcfitnikhef/smefit/actions/workflows/unittests.yml"><img alt="Tests" src="https://github.com/lhcfitnikhef/smefit/actions/workflows/unittests.yml/badge.svg" /></a>
+  <a href="https://www.codefactor.io/repository/github/lhcfitnikhef/smefit"><img src="https://www.codefactor.io/repository/github/lhcfitnikhef/smefit/badge" alt="CodeFactor" /></a>
 </p>
 
-[SMEFiT](https://lhcfitnikhef.github.io/smefit_release/index.html) is a python program for Standard Model Effective Field Theory fits
+[SMEFiT](https://lhcfitnikhef.github.io/smefit/index.html) is a python program for Standard Model Effective Field Theory fits
 ## Installation
 
 To install the smefit release on PYPI you can do:
